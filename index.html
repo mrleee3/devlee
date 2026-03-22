@@ -440,7 +440,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_206_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_207_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -855,13 +855,53 @@ function normaliseBlisterScanItems(items){
 async function fileToDataUrl(file){
   return await new Promise((resolve,reject)=>{ const reader=new FileReader(); reader.onload=()=>resolve(String(reader.result||'')); reader.onerror=()=>reject(new Error('Could not read image.')); reader.readAsDataURL(file); });
 }
+async function normaliseBlisterScanImage(file){
+  const type=String(file?.type||'').toLowerCase();
+  if(type && !['image/jpeg','image/jpg','image/png'].includes(type)) throw new Error('Unsupported image type. Use JPG or PNG.');
+  if((file?.size||0) > 20*1024*1024) throw new Error('Image is larger than 20 MB. Try a smaller photo.');
+  let dataUrl=await fileToDataUrl(file);
+  try{
+    if(typeof createImageBitmap==='function'){
+      const bmp=await createImageBitmap(file);
+      const maxSide=1800;
+      const scale=Math.min(1, maxSide/Math.max(bmp.width||1,bmp.height||1));
+      const w=Math.max(1, Math.round((bmp.width||1)*scale));
+      const h=Math.max(1, Math.round((bmp.height||1)*scale));
+      const canvas=document.createElement('canvas');
+      canvas.width=w; canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      if(ctx){
+        ctx.drawImage(bmp,0,0,w,h);
+        dataUrl=canvas.toDataURL('image/jpeg',0.82);
+      }
+      if(bmp.close) bmp.close();
+    }
+  }catch(err){
+    console.warn('Image normalisation skipped', err);
+  }
+  return dataUrl;
+}
+function getXaiErrorMessage(status, data, rawText=''){
+  const apiMsg=String(data?.error?.message || data?.message || '').trim();
+  const suffix=apiMsg || rawText || '';
+  if(status===400) return suffix ? 'xAI rejected the request (400): '+suffix : 'xAI rejected the request (400). This is usually a request-format issue.';
+  if(status===401) return suffix ? 'xAI rejected the API key (401): '+suffix : 'xAI rejected the API key (401). Check the key in Options.';
+  if(status===403) return suffix ? 'xAI blocked this request (403): '+suffix : 'xAI blocked this request (403). The key may not have permission for the Responses endpoint or this model.';
+  if(status===404) return suffix ? 'xAI could not find the endpoint or model (404): '+suffix : 'xAI could not find the endpoint or model (404).';
+  if(status===413) return 'Image too large for upload (413). Try a tighter crop.';
+  if(status===415) return 'Unsupported upload format (415). Use JPG or PNG.';
+  if(status===422) return suffix ? 'xAI could not process this request (422): '+suffix : 'xAI could not process this request (422).';
+  if(status===429) return suffix ? 'xAI rate limit reached (429): '+suffix : 'xAI rate limit reached (429). Try again in a moment.';
+  if(status>=500) return suffix ? 'xAI server error ('+status+'): '+suffix : 'xAI server error ('+status+'). Try again.';
+  return suffix ? 'Scan failed ('+status+'): '+suffix : 'Scan failed ('+status+').';
+}
 async function runBlisterScan(file){
   const apiKey=getXaiApiKey();
   if(!apiKey){ setBlisterScanStatus('Please add your xAI API key in Options first.',true); return; }
   blisterScanState.busy=true;
   setBlisterScanStatus('Reading photo…');
   try{
-    const dataUrl=await fileToDataUrl(file);
+    const dataUrl=await normaliseBlisterScanImage(file);
     blisterScanState.file=file; blisterScanState.dataUrl=dataUrl;
     const preview=$('blisterScanPreview'); if(preview){ preview.src=dataUrl; preview.classList.remove('hidden'); }
     setBlisterScanStatus('Scanning label…');
@@ -873,21 +913,29 @@ async function runBlisterScan(file){
       text:{format:{type:'json_schema',name:'blister_pack_meds',schema:BLISTER_SCAN_SCHEMA,strict:true}}
     };
     const res=await fetch('https://api.x.ai/v1/responses',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify(body)});
-    const data=await res.json().catch(()=>({}));
-    if(!res.ok){ throw new Error(data?.error?.message || 'Scan failed.'); }
+    const rawResponse=await res.text();
+    let data={};
+    try{ data=rawResponse ? JSON.parse(rawResponse) : {}; }catch(_err){ data={}; }
+    if(!res.ok){ throw new Error(getXaiErrorMessage(res.status, data, rawResponse.slice(0,220))); }
     const rawText=extractStructuredTextFromXaiResponse(data);
-    const parsed=rawText?JSON.parse(rawText):(data?.items?data:{});
+    let parsed={};
+    try{ parsed=rawText?JSON.parse(rawText):(data?.items?data:{}); }catch(parseErr){ throw new Error('xAI returned unreadable scan JSON. Try again with a clearer crop.'); }
     const items=normaliseBlisterScanItems(parsed?.items);
     blisterScanState.items=items;
     renderBlisterScanRows();
     if(items.length){
       setBlisterScanStatus('Review the rows below, then add the accepted meds.');
     }else{
-      setBlisterScanStatus('No medication rows were found. Try a clearer photo.',true);
+      setBlisterScanStatus('No medication rows were found. Try a closer, clearer photo of just the label.',true);
     }
   }catch(err){
     console.error(err);
-    setBlisterScanStatus(err?.message || 'Scan failed.',true);
+    const message=String(err?.message||'').trim() || 'Scan failed.';
+    if(/Failed to fetch|Load failed|NetworkError/i.test(message)){
+      setBlisterScanStatus('Network/CORS error talking to xAI. Check connection, then try again. If it persists, the browser may be blocking direct API calls from the app.',true);
+    }else{
+      setBlisterScanStatus(message,true);
+    }
     blisterScanState.items=[];
     renderBlisterScanRows();
   }finally{
@@ -4531,7 +4579,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_206_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_207_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
