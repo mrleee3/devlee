@@ -140,6 +140,27 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 #medsCollapsedSummary{display:flex;flex-wrap:wrap;gap:8px}#medsCollapsedSummary.hidden{display:none!important}#medsCollapsedSummary .summary-chip{margin:0}.meds-inline-open{margin-top:8px}.meds-header-row{align-items:center}.meds-quick-add{margin-left:auto;padding:7px 12px;font-size:20px;line-height:1;min-width:44px}
 .scoremode-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;margin-bottom:8px}.scoremode-btn.active{background:#0a84ff;color:#fff}
 #medsToggleText,#ivToggleText{font-size:15px;font-weight:600}
+.blister-scan-btn{margin-left:8px;padding:7px 12px;font-size:14px;font-weight:600;border-radius:10px;border:1px solid #d1d5db;background:#fff;color:#111}
+.blister-scan-overlay{position:fixed;inset:0;z-index:10060}
+.blister-scan-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.blister-scan-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:max(14px,calc(env(safe-area-inset-bottom) + 14px));padding:14px;border-radius:18px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.blister-scan-modal h3{margin:0}
+.blister-scan-preview{width:100%;max-height:140px;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:#f8fafc}
+.blister-scan-body{min-height:0;overflow:auto;padding-right:2px}
+.blister-scan-status{font-size:13px;color:#6b7280}
+.blister-scan-status.error{color:#b42318}
+.blister-scan-rows{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.blister-row{border:1px solid var(--line);border-radius:14px;padding:10px;background:#fff}
+.blister-row.rejected{opacity:.48}
+.blister-row-main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(72px,.9fr) minmax(88px,1fr) auto auto;gap:8px;align-items:center}
+.blister-row input{margin:0;padding:10px 12px;font-size:15px}
+.blister-row-toggle{min-width:42px;height:42px;padding:0;border-radius:11px;border:1px solid #d1d5db;background:#fff;color:#111;font-size:20px;line-height:1}
+.blister-row-toggle.active{background:#0a84ff;border-color:#0a84ff;color:#fff}
+.blister-row-toggle.reject.active{background:#eef2f7;border-color:#cfd8e3;color:#111}
+.blister-row-meta{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:12px;color:#6b7280}
+.blister-scan-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
+.blister-inline-note{font-size:12px;color:#6b7280}
+
 .linklike{background:none;padding:0;border:none;color:inherit;font:inherit;cursor:pointer;text-align:left}
 .med-entry{border:1px solid var(--line);border-radius:14px;background:#fff;margin-top:12px;overflow:hidden}.med-entry:first-child{margin-top:0}.med-entry-head{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f8fafc;padding:12px 14px}.med-entry-summary{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.med-entry-delete{background:none;color:#6b7280;padding:2px 4px;border-radius:8px;font-size:22px;line-height:1.1;min-width:auto}.med-entry-body{padding:0 14px 14px}.med-entry-body label{margin-top:12px}.med-entry-body .med-dose-row,.med-entry-body .med-frequency-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 10px}.med-entry-body .med-details-label{margin-top:14px}.med-dose-btn,.med-frequency-btn,.med-prn-btn{padding:8px 10px;font-size:13px;border-radius:10px;border:1px solid #d1d5db;background:#fff;color:#111}.med-dose-btn.active,.med-frequency-btn.active,.med-prn-btn.active{background:#0a84ff;color:#fff;border-color:#0a84ff}.done-green{background:var(--green)!important;color:#fff!important}.meds-inline-open #medsContainer{margin-top:12px}.log-item{padding:8px 0;border-top:1px solid var(--line)}.log-item:first-child{border-top:none}.restore-btn{margin-top:6px;padding:8px 10px;font-size:13px;border-radius:10px;background:#eef2f7}
 @keyframes pinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
@@ -330,6 +351,21 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="add-patient-backdrop" id="addPatientBackdrop"></div>
 <div class="card add-patient-modal hidden" id="addPatientCard" autocomplete="off"><h3>Add patient</h3><label>Name</label><input id="newName" name="patient_name_entry" placeholder="" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text" enterkeyhint="next"/><div class="add-patient-top-grid"><div><label>Age</label><input id="newAge" name="patient_age_entry" placeholder="" type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="numeric" enterkeyhint="next"/></div><div class="admission-field-wrap"><label>Admission</label><button aria-haspopup="dialog" class="date-display-btn" id="newDoaBtn" type="button"><span class="date-display-placeholder" id="newDoaText">Select date</span></button><input id="newDoa" name="patient_admission_date_entry" type="hidden"/></div><div><label>Sex</label><div class="choice-row compact-choice-row"><button class="choice-btn compact-choice-btn" id="newSexF" type="button">F</button><button class="choice-btn compact-choice-btn" id="newSexM" type="button">M</button></div></div></div><div aria-hidden="true" class="hidden add-date-popover" id="addDatePopover"><div class="add-date-header"><button aria-label="Previous month" class="add-date-nav" id="addDatePrevBtn" type="button">‹</button><button aria-label="Choose month and year" class="add-date-title-btn" id="addDateTitleBtn" type="button"><span id="addDateTitle"></span></button><button aria-label="Next month" class="add-date-nav" id="addDateNextBtn" type="button">›</button></div><div class="hidden add-date-month-year-picker" id="addDateMonthYearPicker"><div class="add-date-year-row"><button aria-label="Previous year" class="add-date-nav" id="addDatePrevYearBtn" type="button">‹</button><div class="add-date-year-label" id="addDateYearLabel"></div><button aria-label="Next year" class="add-date-nav" id="addDateNextYearBtn" type="button">›</button></div><div class="add-date-months" id="addDateMonths"></div></div><div class="add-date-weekdays"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="add-date-grid" id="addDateGrid"></div></div><label>Referral source</label><div class="choice-row"><button class="choice-btn" data-ref="GSTT" type="button">GSTT</button><button class="choice-btn" data-ref="KCH" type="button">KCH</button><button class="choice-btn" data-ref="PRUH" type="button">PRUH</button><button class="choice-btn" data-ref="GP" type="button">GP</button><button class="choice-btn" data-ref="LAS" type="button">LAS</button><button class="choice-btn" data-ref="RR" type="button">RR</button><input class="choice-btn referral-other-input" id="newReferralOther" name="patient_referral_other_entry" placeholder="Other" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text" enterkeyhint="done"/></div><label>Acuity</label><div class="choice-row compact-choice-row"><button class="choice-btn compact-choice-btn acuity-choice-btn" data-acuity="GREEN" type="button">Green</button><button class="choice-btn compact-choice-btn acuity-choice-btn" data-acuity="AMBER" type="button">Amber</button><button class="choice-btn compact-choice-btn acuity-choice-btn" data-acuity="RED" type="button">Red</button></div><div class="top-actions" style="margin-top:12px"><button id="cancelAddBtn">Cancel</button><button class="primary" id="saveAddBtn">Add patient</button></div></div>
 </div>
+<div aria-hidden="true" class="hidden blister-scan-overlay" id="blisterScanOverlay">
+<div class="blister-scan-backdrop" id="blisterScanBackdrop"></div>
+<div class="card blister-scan-modal" id="blisterScanCard">
+<div class="top-actions" style="margin-top:0;margin-bottom:0;align-items:center"><h3>Scan blister pack</h3><button id="closeBlisterScanBtn" type="button">Close</button></div>
+<div class="blister-inline-note">Photo → review rows → add accepted meds. Check before saving.</div>
+<img alt="Selected blister pack" class="blister-scan-preview hidden" id="blisterScanPreview"/>
+<div class="blister-scan-body" id="blisterScanBody">
+<div class="blister-scan-status" id="blisterScanStatus">Choose a photo of the blister pack / dosette label.</div>
+<div class="top-actions" id="blisterScanStartActions" style="margin-top:10px"><button class="primary fullwidth" id="chooseBlisterPhotoBtn" type="button">Take / choose photo</button></div>
+<div class="blister-scan-rows hidden" id="blisterScanRows"></div>
+</div>
+<div class="blister-scan-actions hidden" id="blisterScanActions"><button id="retakeBlisterPhotoBtn" type="button">Retake</button><button class="primary" id="addAcceptedMedsBtn" type="button">Add accepted meds</button></div>
+</div>
+<input accept="image/*" capture="environment" class="hidden" id="blisterScanInput" type="file"/>
+</div>
 <section class="container hidden" id="tasks"><div class="card"><h3>Today’s tasks</h3><p><strong>Mrs Law-test</strong><br/><span class="muted small">Give IV ceftriaxone and review temperature / oral intake.</span></p><p><strong>Mrs Coo-test</strong><br/><span class="muted small">Reassess delirium, chase urine sample, confirm escalation plan.</span></p><p><strong>Mr Doy-test</strong><br/><span class="muted small">Repeat U&amp;E, review fluid balance and oral intake.</span></p></div></section>
 <section class="container hidden" id="handover">
 <div class="card">
@@ -404,7 +440,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_205_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_206_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -428,6 +464,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="toggle-row meds-header-row">
 <input id="medsGiven" style="width:auto;margin:0" type="checkbox"/>
 <button class="linklike" id="medsToggleText" style="font-weight:600" type="button">Medications</button>
+<button class="blister-scan-btn" id="scanBlisterBtn" type="button">Scan</button>
 <button aria-label="Add medication" class="plus-btn meds-quick-add" id="medsQuickAddBtn" type="button">＋</button>
 </div>
 <div class="hidden" id="medsCollapsedSummary"></div>
@@ -754,6 +791,125 @@ function fillXaiSettingsUI(){
 }
 function getXaiApiKey(){
   return String(loadXaiSettings().apiKey||'').trim();
+}
+const BLISTER_SCAN_SCHEMA={type:'object',additionalProperties:false,required:['items'],properties:{items:{type:'array',items:{type:'object',additionalProperties:false,required:['medication','dose','frequency','confidence','notes'],properties:{medication:{type:'string'},dose:{type:'string'},frequency:{type:'string'},confidence:{type:'number'},notes:{type:'string'}}}}}};
+let blisterScanState={file:null,dataUrl:'',items:[],busy:false};
+function resetBlisterScanState(){
+  blisterScanState={file:null,dataUrl:'',items:[],busy:false};
+  if($('blisterScanInput')) $('blisterScanInput').value='';
+  if($('blisterScanPreview')){ $('blisterScanPreview').src=''; $('blisterScanPreview').classList.add('hidden'); }
+  if($('blisterScanRows')){ $('blisterScanRows').innerHTML=''; $('blisterScanRows').classList.add('hidden'); }
+  if($('blisterScanActions')) $('blisterScanActions').classList.add('hidden');
+  setBlisterScanStatus('Choose a photo of the blister pack / dosette label.',false);
+}
+function setBlisterScanStatus(msg,isError=false){ const el=$('blisterScanStatus'); if(!el) return; el.textContent=msg||''; el.classList.toggle('error',!!isError); }
+function openBlisterScanOverlay(autoChoose=false){
+  const key=getXaiApiKey();
+  if(!key){ showAlert('Please add your xAI API key in Options first.'); showPage('handover'); return; }
+  const overlay=$('blisterScanOverlay'); if(!overlay) return;
+  resetBlisterScanState();
+  overlay.classList.remove('hidden'); overlay.setAttribute('aria-hidden','false');
+}
+function closeBlisterScanOverlay(){ const overlay=$('blisterScanOverlay'); if(!overlay) return; overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); resetBlisterScanState(); }
+function renderBlisterScanRows(){
+  const holder=$('blisterScanRows'); if(!holder) return;
+  holder.innerHTML='';
+  blisterScanState.items.forEach((item,idx)=>{
+    const row=document.createElement('div');
+    row.className='blister-row'+(item.rejected?' rejected':'');
+    row.dataset.index=String(idx);
+    row.innerHTML=`<div class="blister-row-main"><input class="blister-med" type="text" placeholder="Medication" value="${escapeHtml(item.medication||'')}"><input class="blister-dose" type="text" placeholder="Dose" value="${escapeHtml(item.dose||'')}"><input class="blister-frequency" type="text" placeholder="Frequency" value="${escapeHtml(item.frequency||'')}"><button class="blister-row-toggle accept ${item.rejected?'':'active'}" type="button" aria-label="Accept medication">✓</button><button class="blister-row-toggle reject ${item.rejected?'active':''}" type="button" aria-label="Reject medication">×</button></div><div class="blister-row-meta"><span>${item.notes?escapeHtml(item.notes):'Review before adding'}</span><span>${Number.isFinite(item.confidence)?('Confidence '+Math.round(Math.max(0,Math.min(1,Number(item.confidence)))*100)+'%'):''}</span></div>`;
+    holder.appendChild(row);
+    row.querySelector('.accept').onclick=()=>{ item.rejected=false; renderBlisterScanRows(); };
+    row.querySelector('.reject').onclick=()=>{ item.rejected=true; renderBlisterScanRows(); };
+    [['.blister-med','medication'],['.blister-dose','dose'],['.blister-frequency','frequency']].forEach(([sel,key])=>{
+      const inp=row.querySelector(sel); if(!inp) return; inp.addEventListener('input',()=>{ item[key]=inp.value; });
+    });
+  });
+  holder.classList.toggle('hidden', blisterScanState.items.length===0);
+  $('blisterScanActions')?.classList.toggle('hidden', blisterScanState.items.length===0);
+}
+function extractStructuredTextFromXaiResponse(data){
+  if(data && Array.isArray(data.output)){
+    for(const item of data.output){
+      if(item && item.type==='message' && Array.isArray(item.content)){
+        for(const part of item.content){ if(part && (part.type==='output_text' || part.type==='text') && typeof part.text==='string') return part.text; }
+      }
+    }
+  }
+  if(data && typeof data.output_text==='string') return data.output_text;
+  if(data && data.choices && data.choices[0] && data.choices[0].message && typeof data.choices[0].message.content==='string') return data.choices[0].message.content;
+  return '';
+}
+function normaliseBlisterScanItems(items){
+  if(!Array.isArray(items)) return [];
+  return items.map(item=>({
+    medication:String(item?.medication||'').trim(),
+    dose:String(item?.dose||'').trim(),
+    frequency:String(item?.frequency||'').trim(),
+    confidence:Number(item?.confidence||0),
+    notes:String(item?.notes||'').trim(),
+    rejected:false
+  })).filter(item=>item.medication||item.dose||item.frequency);
+}
+async function fileToDataUrl(file){
+  return await new Promise((resolve,reject)=>{ const reader=new FileReader(); reader.onload=()=>resolve(String(reader.result||'')); reader.onerror=()=>reject(new Error('Could not read image.')); reader.readAsDataURL(file); });
+}
+async function runBlisterScan(file){
+  const apiKey=getXaiApiKey();
+  if(!apiKey){ setBlisterScanStatus('Please add your xAI API key in Options first.',true); return; }
+  blisterScanState.busy=true;
+  setBlisterScanStatus('Reading photo…');
+  try{
+    const dataUrl=await fileToDataUrl(file);
+    blisterScanState.file=file; blisterScanState.dataUrl=dataUrl;
+    const preview=$('blisterScanPreview'); if(preview){ preview.src=dataUrl; preview.classList.remove('hidden'); }
+    setBlisterScanStatus('Scanning label…');
+    const prompt='Read this blister pack or dosette label and extract only the current medicines shown on the label. Return one item per medicine. Extract medication, dose, frequency, confidence, and notes. Use UK abbreviations where clear: OD, BD, TDS, QDS, ON, PRN. Ignore patient identifiers, pharmacy address, packaging text, dates, barcodes, and non-medication text. Do not invent medicines. If uncertain, leave the field blank rather than guessing and lower confidence. Keep notes very short.';
+    const body={
+      model:'grok-4.20-reasoning',
+      store:false,
+      input:[{role:'user',content:[{type:'input_image',image_url:dataUrl,detail:'high'},{type:'input_text',text:prompt}]}],
+      text:{format:{type:'json_schema',name:'blister_pack_meds',schema:BLISTER_SCAN_SCHEMA,strict:true}}
+    };
+    const res=await fetch('https://api.x.ai/v1/responses',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify(body)});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok){ throw new Error(data?.error?.message || 'Scan failed.'); }
+    const rawText=extractStructuredTextFromXaiResponse(data);
+    const parsed=rawText?JSON.parse(rawText):(data?.items?data:{});
+    const items=normaliseBlisterScanItems(parsed?.items);
+    blisterScanState.items=items;
+    renderBlisterScanRows();
+    if(items.length){
+      setBlisterScanStatus('Review the rows below, then add the accepted meds.');
+    }else{
+      setBlisterScanStatus('No medication rows were found. Try a clearer photo.',true);
+    }
+  }catch(err){
+    console.error(err);
+    setBlisterScanStatus(err?.message || 'Scan failed.',true);
+    blisterScanState.items=[];
+    renderBlisterScanRows();
+  }finally{
+    blisterScanState.busy=false;
+  }
+}
+function importAcceptedBlisterMeds(){
+  const accepted=blisterScanState.items.filter(item=>!item.rejected && (item.medication||item.dose||item.frequency));
+  if(!accepted.length){ showAlert('No accepted medications to add.'); return; }
+  $('medsGiven').checked=true;
+  const existing=getMedEntries();
+  const onlyBlank=existing.length===1 && !((existing[0].name||'').trim() || (existing[0].dose||'').trim() || (existing[0].frequency||'').trim() || (existing[0].details||'').trim());
+  if(onlyBlank) $('medsContainer').innerHTML='';
+  accepted.forEach(item=>createMedEntry({name:item.medication,dose:item.dose,frequency:item.frequency,details:''}));
+  if(patients[currentPatient] && patients[currentPatient].form){ patients[currentPatient].form.medsCollapsed=false; patients[currentPatient].form.medsFocusedIndex=null; }
+  updateMedsFields();
+  refreshAllMedEntryHeaders();
+  updateMedSummary();
+  calculateNews();
+  saveCurrentPatientForm();
+  saveData('Saved locally');
+  closeBlisterScanOverlay();
 }
 
 function updateGraphSignInButtons(){
@@ -4375,7 +4531,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_205_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_206_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -4846,6 +5002,13 @@ document.addEventListener("DOMContentLoaded",function(){
     }
     saveXaiSettings(true);
   };
+  if($("scanBlisterBtn")) $("scanBlisterBtn").onclick=()=>{ openBlisterScanOverlay(false); $("blisterScanInput")?.click(); };
+  if($("chooseBlisterPhotoBtn")) $("chooseBlisterPhotoBtn").onclick=()=>$("blisterScanInput")?.click();
+  if($("retakeBlisterPhotoBtn")) $("retakeBlisterPhotoBtn").onclick=()=>$("blisterScanInput")?.click();
+  if($("closeBlisterScanBtn")) $("closeBlisterScanBtn").onclick=closeBlisterScanOverlay;
+  if($("blisterScanBackdrop")) $("blisterScanBackdrop").onclick=closeBlisterScanOverlay;
+  if($("addAcceptedMedsBtn")) $("addAcceptedMedsBtn").onclick=importAcceptedBlisterMeds;
+  if($("blisterScanInput")) $("blisterScanInput").addEventListener('change',e=>{ const file=e.target.files && e.target.files[0]; if(file) runBlisterScan(file); });
   initPatientPullToRefresh();
   $("sortPatientsBtn").onclick=(e)=>{ e.stopPropagation(); togglePatientSortMenu(); };
   document.querySelectorAll('#sortPatientsMenu [data-sort-mode]').forEach(btn=>btn.onclick=(e)=>{ e.stopPropagation(); setPatientSortMode(btn.dataset.sortMode); });
