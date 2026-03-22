@@ -392,9 +392,19 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="tiny muted" id="graphStatus" style="margin-top:8px"></div>
 </div>
 <div class="card">
+<h3>AI blister-pack scan (beta)</h3>
+<div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Store your xAI API key locally on this device for future blister-pack photo import. The key stays in this browser only.</div>
+<label>xAI API key</label>
+<input autocapitalize="off" autocorrect="off" id="xaiApiKeyInput" placeholder="Paste your xAI API key" spellcheck="false" type="password"/>
+<div class="top-actions" style="margin-top:10px">
+<button class="primary fullwidth" id="saveXaiSettingsBtn">Save key</button>
+</div>
+<div class="tiny muted" id="xaiSettingsStatus" style="margin-top:6px"></div>
+</div>
+<div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_204_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_205_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -492,7 +502,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.core = true;
-const STORAGE_KEY="hah_prototype_v12_36_162_pin_rebuild_data", UNDO_KEY="hah_prototype_v12_36_162_pin_rebuild_undo", NHS_EMAIL_KEY="hah_nhs_email", GRAPH_SETTINGS_KEY="hah_graph_settings", GRAPH_ACCOUNT_KEY="hah_graph_account";
+const STORAGE_KEY="hah_prototype_v12_36_162_pin_rebuild_data", UNDO_KEY="hah_prototype_v12_36_162_pin_rebuild_undo", NHS_EMAIL_KEY="hah_nhs_email", GRAPH_SETTINGS_KEY="hah_graph_settings", GRAPH_ACCOUNT_KEY="hah_graph_account", XAI_SETTINGS_KEY="hah_xai_settings";
 const PIN_KEY='hah_pin_hash', CRED_ID_KEY='hah_cred_id', BIOMETRIC_KEY='hah_biometric', NEDRY_SOUND_KEY='hah_nedry_enabled';
 const LEGACY_STORAGE_KEYS=['hah_prototype_v12_36_156_pin_state_fix_data','hah_prototype_v12_36_153_medlist_update_only_data','hah_prototype_v12_36_140_pin_loop_fix2_data','hah_prototype_v12_36_139_bg_underlay_fix_data','hah_prototype_v12_36_138_pull_refresh_icon_restore_data','hah_prototype_v12_36_137_pin_loop_fix_data','hah_prototype_v12_36_134_safe_update_banner_data','hah_prototype_v12_36_133_reorder_activate_only_data','hah_prototype_v12_36_104_weight_overlay_parsefix_data','hah_prototype_v12_36_103_weight_overlay_historyfix_data','hah_prototype_v12_36_102_weight_overlay_data','hah_prototype_v12_36_101_flush2_data','hah_prototype_v12_36_96_fresh_demo_patients_data','hah_prototype_v12_36_78_pull_refresh_softgrey_data','hah_prototype_v12_36_77_pull_refresh_underlay_glyph_tuned_data','hah_prototype_v12_36_76_pull_refresh_underlay_glyph_data','hah_prototype_v12_36_75_pull_refresh_feedback_from71_data','hah_prototype_v12_36_74_pull_refresh_feedback_fix_data','hah_prototype_v12_36_73_pull_refresh_feedback_data','hah_prototype_v12_36_72_pull_refresh_data','hah_prototype_v12_36_71_search_toggleclose_data','hah_prototype_v12_36_70_search_keyboardfix_data','hah_prototype_v12_36_69_search_autofocus_data','hah_prototype_v12_36_68_search_fullwidth_data','hah_prototype_v12_36_68_search_fullwidth_undo','hah_prototype_v12_36_67_search_style60_data','hah_prototype_v12_36_67_search_style60_undo','hah_prototype_v12_36_66_search_from58_data','hah_prototype_v12_36_66_search_from58_undo',"hah_prototype_v12_36_58_sortsurname_toggle_data","hah_prototype_v12_36_57_data","hah_prototype_v12_36_55_data","hah_prototype_v12_36_49_data","hah_prototype_v12_36_48_data","hah_prototype_v12_36_47_data","hah_prototype_v12_36_46_data","hah_prototype_v12_36_45_data","hah_prototype_v12_36_36_data","hah_prototype_v12_36_19_data","hah_prototype_v12_35_3_data"];
 const LEGACY_UNDO_KEYS=['hah_prototype_v12_36_156_pin_state_fix_undo',"hah_prototype_v12_36_140_pin_loop_fix2_undo","hah_prototype_v12_36_139_bg_underlay_fix_undo","hah_prototype_v12_36_137_pin_loop_fix_undo","hah_prototype_v12_36_134_safe_update_banner_undo","hah_prototype_v12_36_133_reorder_activate_only_undo","hah_prototype_v12_36_104_weight_overlay_parsefix_undo","hah_prototype_v12_36_103_weight_overlay_historyfix_undo","hah_prototype_v12_36_102_weight_overlay_undo","hah_prototype_v12_36_101_flush2_undo","hah_prototype_v12_36_96_fresh_demo_patients_undo","hah_prototype_v12_36_78_pull_refresh_softgrey_undo","hah_prototype_v12_36_77_pull_refresh_underlay_glyph_tuned_undo","hah_prototype_v12_36_76_pull_refresh_underlay_glyph_undo","hah_prototype_v12_36_75_pull_refresh_feedback_from71_undo","hah_prototype_v12_36_74_pull_refresh_feedback_fix_undo","hah_prototype_v12_36_73_pull_refresh_feedback_undo","hah_prototype_v12_36_72_pull_refresh_undo","hah_prototype_v12_36_71_search_toggleclose_undo","hah_prototype_v12_36_70_search_keyboardfix_undo","hah_prototype_v12_36_69_search_autofocus_undo","hah_prototype_v12_36_58_sortsurname_toggle_undo","hah_prototype_v12_36_57_undo","hah_prototype_v12_36_55_undo","hah_prototype_v12_36_49_undo","hah_prototype_v12_36_48_undo","hah_prototype_v12_36_47_undo","hah_prototype_v12_36_46_undo","hah_prototype_v12_36_45_undo","hah_prototype_v12_36_36_undo","hah_prototype_v12_36_19_undo","hah_prototype_v12_35_3_undo"];
@@ -558,6 +568,7 @@ function clearAppLocalData(){
     NHS_EMAIL_KEY,
     GRAPH_SETTINGS_KEY,
     GRAPH_ACCOUNT_KEY,
+    XAI_SETTINGS_KEY,
     PIN_KEY,
     BIOMETRIC_KEY,
     CRED_ID_KEY,
@@ -700,6 +711,51 @@ function fillGraphSettingsUI(){
     setGraphStatus(`Signed in as ${graphAccount.username}.`);
   }
 }
+function defaultXaiSettings(){
+  return {apiKey:""};
+}
+function loadXaiSettings(){
+  try{return {...defaultXaiSettings(), ...(JSON.parse(localStorage.getItem(XAI_SETTINGS_KEY)||"{}"))};}
+  catch(e){return defaultXaiSettings();}
+}
+function setXaiStatus(msg, isError=false){
+  const el=$("xaiSettingsStatus");
+  if(!el) return;
+  el.textContent=msg||"";
+  el.style.color=isError?'#b91c1c':'#6b7280';
+}
+function setXaiSettingsLocked(locked){
+  const inp=$("xaiApiKeyInput");
+  const btn=$("saveXaiSettingsBtn");
+  if(inp){
+    inp.readOnly=locked;
+    inp.type=locked?'password':'text';
+    inp.style.background=locked?'#f3f4f6':'';
+    inp.style.color=locked?'#6b7280':'';
+  }
+  if(btn){
+    btn.textContent=locked?'Edit key':'Save key';
+    btn.classList.toggle('primary', !locked);
+  }
+}
+function saveXaiSettings(showMsg=true){
+  const settings={apiKey:($("xaiApiKeyInput")?.value||"").trim()};
+  localStorage.setItem(XAI_SETTINGS_KEY, JSON.stringify(settings));
+  if(showMsg){
+    setXaiSettingsLocked(true);
+    setXaiStatus(settings.apiKey?'Key saved on this device.':'Key removed.');
+  }
+  return settings;
+}
+function fillXaiSettingsUI(){
+  const s=loadXaiSettings();
+  if($("xaiApiKeyInput")) $("xaiApiKeyInput").value=s.apiKey||"";
+  setXaiSettingsLocked(!!(s.apiKey));
+}
+function getXaiApiKey(){
+  return String(loadXaiSettings().apiKey||'').trim();
+}
+
 function updateGraphSignInButtons(){
   const signedIn=!!(graphAccount && graphAccount.username);
   const signInBtn=$("graphSignInBtn");
@@ -4319,7 +4375,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_204_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_205_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -4639,7 +4695,7 @@ function initPatientCardReorder(){
 }
 
 document.addEventListener("DOMContentLoaded",function(){
-  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -4733,7 +4789,7 @@ document.addEventListener("DOMContentLoaded",function(){
     };
 });
   $("plan").addEventListener("keydown",bulletKeyHandler); $("forDischargeSummary").addEventListener("keydown",bulletKeyHandler); $("plan").addEventListener("input",()=>capitalizeBulletStarts($("plan"))); $("forDischargeSummary").addEventListener("input",()=>capitalizeBulletStarts($("forDischargeSummary")));
-  ["newName","newAge","newReferralOther","rr","spo2","temp","bp","hr","weight","bm"].forEach(id=>{const el=$(id); if(el){el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault(); if(id==="newReferralOther") $("saveAddBtn").focus(); else focusNextField(id)}})}});
+  ["newName","newAge","newReferralOther","rr","spo2","temp","bp","hr","weight","bm","xaiApiKeyInput"].forEach(id=>{const el=$(id); if(el){el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault(); if(id==="newReferralOther") $("saveAddBtn").focus(); else if(id==="xaiApiKeyInput") $("saveXaiSettingsBtn")?.click(); else focusNextField(id)}})}});
   function preserveAddPatientInputFocus(e){
     if(!document.body.classList.contains("add-patient-open")) return;
     const active=document.activeElement;
@@ -4779,6 +4835,17 @@ document.addEventListener("DOMContentLoaded",function(){
   window.addEventListener('pageshow',()=>{checkForAppUpdate();});
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkForAppUpdate(); });
   if($("importHandoverBtn")) $("importHandoverBtn").onclick=importHandoverRows;
+  if($("saveXaiSettingsBtn")) $("saveXaiSettingsBtn").onclick=()=>{
+    const btn=$("saveXaiSettingsBtn");
+    const inp=$("xaiApiKeyInput");
+    if(btn && btn.textContent==='Edit key'){
+      setXaiSettingsLocked(false);
+      setXaiStatus('Editing key.');
+      if(inp){ try{inp.focus({preventScroll:true});}catch(_){inp.focus();} inp.select?.(); }
+      return;
+    }
+    saveXaiSettings(true);
+  };
   initPatientPullToRefresh();
   $("sortPatientsBtn").onclick=(e)=>{ e.stopPropagation(); togglePatientSortMenu(); };
   document.querySelectorAll('#sortPatientsMenu [data-sort-mode]').forEach(btn=>btn.onclick=(e)=>{ e.stopPropagation(); setPatientSortMode(btn.dataset.sortMode); });
