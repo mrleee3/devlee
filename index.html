@@ -444,7 +444,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_214_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_215_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -4644,7 +4644,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_214_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_215_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5115,7 +5115,7 @@ document.addEventListener("DOMContentLoaded",function(){
     }
     saveXaiSettings(true);
   };
-  if($("scanBlisterBtn")) $("scanBlisterBtn").onclick=()=>{ openBlisterScanOverlay(false); $("blisterScanInput")?.click(); };
+  if($("scanBlisterBtn")) $("scanBlisterBtn").onclick=()=>{ const input=$("blisterScanInput"); openBlisterScanOverlay(false); if(!input) return; try{ if(typeof input.showPicker==="function") input.showPicker(); else input.click(); }catch(err){ try{ input.click(); }catch(_err){} } };
   if($("blisterPhotoLightbox")) $("blisterPhotoLightbox").onclick=closeBlisterPhotoLightbox;
   if($("chooseBlisterPhotoBtn")) $("chooseBlisterPhotoBtn").onclick=()=>$("blisterScanInput")?.click();
   if($("retakeBlisterPhotoBtn")) $("retakeBlisterPhotoBtn").onclick=closeBlisterScanOverlay;
