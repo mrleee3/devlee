@@ -140,7 +140,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 #medsCollapsedSummary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:10px;row-gap:9px}#medsCollapsedSummary.hidden{display:none!important}#medsCollapsedSummary .summary-chip{margin:0}.meds-inline-open{margin-top:8px}.meds-header-row{align-items:center}.meds-quick-add{margin-left:8px;padding:7px 12px;font-size:20px;line-height:1;min-width:44px}.med-summary-chip{display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:38px;padding:8px 10px;border-radius:11px;background:rgba(248,250,252,.92);border:1px solid rgba(15,23,42,.06)}.med-summary-chip .med-summary-line{display:block;max-width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;font-size:13.5px;letter-spacing:-.01em}.med-edit-overlay{position:fixed;inset:0;z-index:10070}.med-edit-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.med-edit-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:max(14px,calc(env(safe-area-inset-bottom) + 14px));padding:0;background:transparent;border:none;box-shadow:none;display:flex;flex-direction:column;overflow:hidden}.med-edit-actionbtn{display:inline-flex;align-items:center;justify-content:center;min-width:72px;height:34px;padding:0 12px;border-radius:11px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-size:14px;font-weight:600;line-height:1;flex:0 0 auto}.med-edit-actionbtn.primary{background:#0a84ff;color:#fff;border-color:#0a84ff}.med-edit-body{min-height:0;overflow:auto;padding-right:2px}.med-edit-card{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}.med-edit-card .med-entry-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.med-edit-card .med-entry-delete{display:none}.med-edit-head-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}.med-edit-card .med-entry-summary{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .scoremode-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;margin-bottom:8px}.scoremode-btn.active{background:#0a84ff;color:#fff}
 #medsToggleText,#ivToggleText{font-size:15px;font-weight:600}
-.blister-scan-btn{background:#e8f1ff;color:#0a84ff;font-size:20px;line-height:1;padding:7px 12px;border-radius:14px;min-width:44px;margin-left:auto}
+.blister-scan-btn{margin-left:auto;display:flex;align-items:center;justify-content:center;min-width:50px;padding:8px 14px}.blister-scan-btn svg{width:19px;height:19px;display:block;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .blister-scan-overlay{position:fixed;inset:0;z-index:10060}
 .blister-scan-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .blister-scan-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:max(14px,calc(env(safe-area-inset-bottom) + 14px));padding:14px;border-radius:18px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
@@ -445,7 +445,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_223_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_224_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -469,7 +469,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="toggle-row meds-header-row">
 <input id="medsGiven" style="width:auto;margin:0" type="checkbox"/>
 <button class="linklike" id="medsToggleText" style="font-weight:600" type="button">Medications</button>
-<button aria-label="Scan medications from photo" class="plus-btn blister-scan-btn" id="scanBlisterBtn" title="Scan medications from photo" type="button">👁</button>
+<button aria-label="Scan medications from photo" class="plus-btn blister-scan-btn" id="scanBlisterBtn" title="Scan medications from photo" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5h3"></path><path d="M20 8V5h-3"></path><path d="M4 16v3h3"></path><path d="M20 16v3h-3"></path><path d="M8.5 12h7"></path><path d="M17.5 12h.5"></path></svg></button>
 <button aria-label="Add medication" class="plus-btn meds-quick-add" id="medsQuickAddBtn" type="button">＋</button>
 </div>
 <div class="hidden" id="medsCollapsedSummary"></div>
@@ -3184,6 +3184,7 @@ function cleanMedicationNameForDisplay(name){
   const trimmed=(name||'').trim();
   if(!trimmed) return '';
   if(/^levothyroxine sodium$/i.test(trimmed)) return 'Levothyroxine';
+  if(/^bisoprolol(?:\s+fumarate)?$/i.test(trimmed)) return 'Bisoprolol';
   return trimmed;
 }
 function getMedDisplayName(entry,index){
@@ -4730,7 +4731,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_223_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_224_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
