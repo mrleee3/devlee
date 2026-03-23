@@ -137,7 +137,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .flow-btn.active{background:#0a84ff;color:#fff;border-color:#0a84ff}
 .summary-chip{display:inline-block;padding:8px 10px;border-radius:10px;background:#f3f4f6;font-size:13px;margin:4px 6px 0 0}
 .med-summary-chip{border:none;cursor:pointer;color:inherit;font-size:13px;font-weight:400;line-height:1.2}
-#medsCollapsedSummary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}#medsCollapsedSummary.hidden{display:none!important}#medsCollapsedSummary .summary-chip{margin:0}.meds-inline-open{margin-top:8px}.meds-header-row{align-items:center}.meds-quick-add{margin-left:8px;padding:7px 12px;font-size:20px;line-height:1;min-width:44px}.med-summary-chip{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0;min-height:56px;padding:10px 12px;border-radius:12px}.med-summary-chip .med-summary-name,.med-summary-chip .med-summary-meta{display:block;max-width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.med-summary-chip .med-summary-name{font-weight:600}.med-summary-chip .med-summary-meta{margin-top:2px;font-size:12px;color:#6b7280}
+#medsCollapsedSummary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}#medsCollapsedSummary.hidden{display:none!important}#medsCollapsedSummary .summary-chip{margin:0}.meds-inline-open{margin-top:8px}.meds-header-row{align-items:center}.meds-quick-add{margin-left:8px;padding:7px 12px;font-size:20px;line-height:1;min-width:44px}.med-summary-chip{display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:44px;padding:10px 12px;border-radius:12px}.med-summary-chip .med-summary-line{display:block;max-width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}.med-edit-overlay{position:fixed;inset:0;z-index:10070}.med-edit-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.med-edit-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:max(14px,calc(env(safe-area-inset-bottom) + 14px));padding:14px;border-radius:18px;display:flex;flex-direction:column;gap:10px;overflow:hidden}.med-edit-topbar{display:flex;align-items:center;justify-content:flex-end;gap:10px}.med-edit-iconbtn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:12px;border:1px solid var(--line);background:#fff;color:#111;font-size:22px;line-height:1}.med-edit-iconbtn.primary{background:#0a84ff;color:#fff;border-color:#0a84ff}.med-edit-body{min-height:0;overflow:auto;padding-right:2px}.med-edit-card{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}.med-edit-card .med-entry-head{justify-content:flex-start}.med-edit-card .med-entry-delete{display:none}
 .scoremode-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;margin-bottom:8px}.scoremode-btn.active{background:#0a84ff;color:#fff}
 #medsToggleText,#ivToggleText{font-size:15px;font-weight:600}
 .blister-scan-btn{background:#e8f1ff;color:#0a84ff;font-size:20px;line-height:1;padding:7px 12px;border-radius:14px;min-width:44px;margin-left:auto}
@@ -444,7 +444,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_212_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_213_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -3012,6 +3012,8 @@ function updateOxygenFields(){const show=$("oxygen").value==="2"; $("oxygenFlowS
 function setOxygenFlow(value){if(value==="other"){ $("oxygenFlowOther").classList.remove("hidden"); $("oxygenFlowOther").focus(); $("oxygenFlowSection").dataset.flow=""; } else { $("oxygenFlowOther").classList.add("hidden"); $("oxygenFlowOther").value=""; $("oxygenFlowSection").dataset.flow=value; calculateNews(); }}
 
 function attachMedAutocomplete(inp){
+  if(!inp || inp.dataset.autocompleteBound==='1') return;
+  inp.dataset.autocompleteBound='1';
   const wrap=document.createElement('div');
   wrap.className='med-name-wrap';
   inp.parentNode.insertBefore(wrap,inp);
@@ -3179,19 +3181,24 @@ function setMedFocusedIndex(index){
   const total=document.querySelectorAll("#medsContainer .med-entry").length;
   p.form.medsFocusedIndex=Number.isInteger(index) && index>=0 && index<total ? index : null;
 }
+function cleanMedicationNameForDisplay(name){
+  const raw=(name||'').trim();
+  if(!raw) return '';
+  return raw.replace(/^levothyroxine sodium$/i,'Levothyroxine');
+}
 function getMedDisplayName(entry,index){
-  const name=(entry?.name||"").trim();
+  const name=cleanMedicationNameForDisplay((entry?.name||"").trim());
   const details=(entry?.details||"").trim();
   return name || details || `Medication ${index+1}`;
 }
 function getMedEntrySummary(div,index){
-  const name=(div.querySelector('.med-name')?.value||'').trim();
+  const name=cleanMedicationNameForDisplay((div.querySelector('.med-name')?.value||'').trim());
   const dose=(div.querySelector('.med-dose')?.value||'').trim();
   const frequency=(div.querySelector('.med-frequency')?.value||'').trim();
   const details=(div.querySelector('.med-details')?.value||'').trim();
   const title=name || `Medication ${index+1}`;
-  const tail=[dose,frequency,details].filter(Boolean).join(' • ');
-  return tail ? `${title} • ${tail}` : title;
+  const tail=[dose,frequency,details].filter(Boolean).join(' ');
+  return tail ? `${title} ${tail}` : title;
 }
 function refreshMedEntryHeader(div){
   const all=Array.from(document.querySelectorAll('#medsContainer .med-entry'));
@@ -3332,8 +3339,8 @@ function updateMedSummary(){
   $('medsCollapsedSummary').innerHTML=entries.map((e,idx)=>({entry:e,index:idx,label:getMedDisplayName(e,idx)})).filter(item=>item.entry.name||item.entry.dose||item.entry.frequency||item.entry.details).sort((a,b)=>a.label.localeCompare(b.label,undefined,{sensitivity:'base'})).map(item=>{
     const dose=(item.entry.dose||'').trim();
     const frequency=(item.entry.frequency||'').trim();
-    const meta=[dose,frequency].filter(Boolean).join(' • ');
-    return `<button type="button" class="summary-chip med-summary-chip" data-med-index="${item.index}"><span class="med-summary-name">${escapeHtml(item.label)}</span><span class="med-summary-meta">${escapeHtml(meta)}</span></button>`;
+    const line=[item.label,dose,frequency].filter(Boolean).join(' ');
+    return `<button type="button" class="summary-chip med-summary-chip" data-med-index="${item.index}"><span class="med-summary-line">${escapeHtml(line)}</span></button>`;
   }).join('');
 }
 function setMedsCollapsed(collapsed){
@@ -3407,19 +3414,103 @@ function finishMedsEditing(){
   saveCurrentPatientForm();
   saveData();
 }
-function openMedFromSummary(index){
-  if(!patients[currentPatient] || !patients[currentPatient].form) return;
-  patients[currentPatient].form.medsCollapsed=true;
-  setMedFocusedIndex(index);
-  updateMedsFields();
-  const entry=document.querySelectorAll("#medsContainer .med-entry")[index];
-  if(entry){
-    setMedEntryCollapsed(entry,false);
-    const firstInput=entry.querySelector("input");
-    if(firstInput) firstInput.focus();
+let medEditIndex=null;
+function getMedEditDraft(){
+  return {
+    name:($('medEditName')?.value||'').trim(),
+    dose:($('medEditDose')?.value||'').trim(),
+    frequency:($('medEditFrequency')?.value||'').trim(),
+    details:($('medEditDetails')?.value||'').trim()
+  };
+}
+function updateMedEditSummary(){
+  const d=getMedEditDraft();
+  const title=cleanMedicationNameForDisplay(d.name)||'Medication';
+  const tail=[d.dose,d.frequency,d.details].filter(Boolean).join(' ');
+  $('medEditSummary').textContent=tail ? `${title} ${tail}` : title;
+}
+function renderMedEditPresetButtons(){
+  const name=$('medEditName')?.value || '';
+  const doseHolder=$('medEditDoseRow');
+  const freqHolder=$('medEditFrequencyRow');
+  const doseInput=$('medEditDose');
+  const freqInput=$('medEditFrequency');
+  const dosePresets=getDosePresetsForMedication(name);
+  const freqPresets=getFrequencyPresetsForMedication(name);
+  const freqState=splitFrequencyValue(freqInput?.value||'');
+  if(doseHolder){
+    doseHolder.innerHTML='';
+    doseHolder.classList.toggle('hidden', dosePresets.length===0);
+    dosePresets.forEach(value=>{
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.className='med-dose-btn'+((doseInput?.value||'')===value?' active':'');
+      btn.textContent=value;
+      btn.onclick=()=>{ if(doseInput){ doseInput.value=value; } renderMedEditPresetButtons(); updateMedEditSummary(); };
+      doseHolder.appendChild(btn);
+    });
   }
+  if(freqHolder){
+    freqHolder.innerHTML='';
+    freqHolder.classList.toggle('hidden', freqPresets.length===0);
+    freqPresets.forEach(value=>{
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.className='med-frequency-btn'+(freqState.base===value?' active':'');
+      btn.textContent=value;
+      btn.onclick=()=>{ if(freqInput){ freqInput.value=composeFrequencyValue(value, splitFrequencyValue(freqInput.value).prn); } renderMedEditPresetButtons(); updateMedEditSummary(); };
+      freqHolder.appendChild(btn);
+    });
+    const prnBtn=document.createElement('button');
+    prnBtn.type='button';
+    prnBtn.className='med-prn-btn'+(freqState.prn?' active':'');
+    prnBtn.textContent='PRN';
+    prnBtn.onclick=()=>{
+      if(freqInput){
+        const current=splitFrequencyValue(freqInput.value);
+        freqInput.value=composeFrequencyValue(current.base, !current.prn);
+      }
+      renderMedEditPresetButtons(); updateMedEditSummary();
+    };
+    freqHolder.appendChild(prnBtn);
+  }
+  if(doseInput){ doseInput.placeholder=isInsulinMedication(name)?'Enter dose (free text)':'Dose'; }
+}
+function closeMedEditOverlay(){
+  medEditIndex=null;
+  $('medEditOverlay')?.classList.add('hidden');
+  $('medEditOverlay')?.setAttribute('aria-hidden','true');
+}
+function saveMedEditOverlay(){
+  if(medEditIndex===null) return closeMedEditOverlay();
+  const entry=document.querySelectorAll('#medsContainer .med-entry')[medEditIndex];
+  if(!entry) return closeMedEditOverlay();
+  entry.querySelector('.med-name').value=$('medEditName').value;
+  entry.querySelector('.med-dose').value=$('medEditDose').value;
+  entry.querySelector('.med-frequency').value=$('medEditFrequency').value;
+  entry.querySelector('.med-details').value=$('medEditDetails').value;
+  renderMedPresetButtons(entry);
+  refreshMedEntryHeader(entry);
+  updateMedSummary();
+  calculateNews();
   saveCurrentPatientForm();
   saveData();
+  closeMedEditOverlay();
+}
+function openMedFromSummary(index){
+  const entry=document.querySelectorAll('#medsContainer .med-entry')[index];
+  if(!entry) return;
+  medEditIndex=index;
+  $('medEditName').value=entry.querySelector('.med-name')?.value||'';
+  $('medEditDose').value=entry.querySelector('.med-dose')?.value||'';
+  $('medEditFrequency').value=entry.querySelector('.med-frequency')?.value||'';
+  $('medEditDetails').value=entry.querySelector('.med-details')?.value||'';
+  renderMedEditPresetButtons();
+  updateMedEditSummary();
+  $('medEditOverlay')?.classList.remove('hidden');
+  $('medEditOverlay')?.setAttribute('aria-hidden','false');
+  const first=$('medEditName');
+  if(first){ try{ first.focus({preventScroll:true}); }catch(_){ first.focus(); } }
 }
 function getMedicationLines(){
   if(!$('medsGiven').checked) return [];
@@ -4639,7 +4730,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_212_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_213_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5062,11 +5153,16 @@ document.addEventListener("DOMContentLoaded",function(){
   }
   document.querySelectorAll("[data-ref]").forEach(btn=>{btn.addEventListener("pointerdown",preserveAddPatientInputFocus,{passive:false}); btn.addEventListener("mousedown",preserveAddPatientInputFocus,{passive:false}); btn.onclick=()=>setNewReferral(btn.dataset.ref);}); const newReferralOther=$("newReferralOther"); if(newReferralOther){ const focusOtherWithoutShift=e=>{ if(e){ e.preventDefault(); e.stopPropagation(); } selectedNewReferral="Other"; updateReferralButtons(); try{newReferralOther.focus({preventScroll:true})}catch(_){newReferralOther.focus()} }; newReferralOther.addEventListener("pointerdown",focusOtherWithoutShift,{passive:false}); newReferralOther.addEventListener("mousedown",focusOtherWithoutShift,{passive:false}); newReferralOther.addEventListener("touchstart",focusOtherWithoutShift,{passive:false}); newReferralOther.addEventListener("focus",()=>{selectedNewReferral="Other"; updateReferralButtons();}); newReferralOther.addEventListener("input",()=>{selectedNewReferral=newReferralOther.value.trim()?"Other":""; updateReferralButtons();}); } [$("newSexF"),$("newSexM"),...document.querySelectorAll("[data-acuity]")].forEach(btn=>{ if(!btn) return; btn.addEventListener("pointerdown",preserveAddPatientInputFocus,{passive:false}); btn.addEventListener("mousedown",preserveAddPatientInputFocus,{passive:false}); }); $("newSexF").onclick=()=>setNewSex("F"); $("newSexM").onclick=()=>setNewSex("M"); document.querySelectorAll("[data-acuity]").forEach(btn=>btn.onclick=()=>setNewAcuity(btn.dataset.acuity));
   $("addMedBtn").onclick=()=>{addMedEntry(); calculateNews()};
+  attachMedAutocomplete($("medEditName"));
   $("medsQuickAddBtn").onclick=()=>{addMedEntry(); calculateNews()};
   $("clearMedBtn").onclick=()=>{const focusedIndex=getMedFocusedIndex(); const compact=!!(patients[currentPatient] && patients[currentPatient].form && patients[currentPatient].form.medsCollapsed); if(compact && focusedIndex!==null){const entry=document.querySelectorAll("#medsContainer .med-entry")[focusedIndex]; if(entry){entry.querySelectorAll("input").forEach(i=>i.value=""); renderMedPresetButtons(entry); refreshMedEntryHeader(entry); updateMedSummary();}} else {document.querySelectorAll("#medsContainer .med-entry").forEach(entry=>{entry.querySelectorAll("input").forEach(i=>i.value=""); renderMedPresetButtons(entry);}); refreshAllMedEntryHeaders(); updateMedSummary();} calculateNews()};
   $("doneMedBtn").onclick=finishMedsEditing;
   $("medsCollapsedSummary").addEventListener("click",e=>{const chip=e.target.closest("[data-med-index]"); if(!chip) return; openMedFromSummary(Number(chip.dataset.medIndex));});
   $("medsToggleText").onclick=toggleMedsCollapse;
+  $("medEditBackdrop").onclick=closeMedEditOverlay;
+  $("medEditCancelBtn").onclick=closeMedEditOverlay;
+  $("medEditSaveBtn").onclick=saveMedEditOverlay;
+  ["medEditName","medEditDose","medEditFrequency","medEditDetails"].forEach(id=>{$(id)?.addEventListener("input",()=>{renderMedEditPresetButtons(); updateMedEditSummary();}); $(id)?.addEventListener("change",()=>{renderMedEditPresetButtons(); updateMedEditSummary();});});
   $("addIVBtn").onclick=()=>{createIVEntry(); calculateNews()};
   $("crewsBtn").onclick=()=>{const active=$("crewsBtn").classList.contains("active"); setScoreModeButtons(active?"":"CREWS"); calculateNews();};
   $("mewsBtn").onclick=()=>{const active=$("mewsBtn").classList.contains("active"); setScoreModeButtons(active?"":"MEWS"); calculateNews();};
