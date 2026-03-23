@@ -440,7 +440,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_208_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_209_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -841,12 +841,26 @@ function extractStructuredTextFromXaiResponse(data){
   if(data && data.choices && data.choices[0] && data.choices[0].message && typeof data.choices[0].message.content==='string') return data.choices[0].message.content;
   return '';
 }
+function normaliseBlisterScanFrequency(value){
+  let freq=String(value||'').trim();
+  if(!freq) return '';
+  const raw=freq.toLowerCase().replace(/\s+/g,' ').trim();
+  if(/(prn|when required|as needed)/.test(raw)) return 'PRN';
+  if(/(nocte|at night|night|night-time|night time|bedtime|hs)/.test(raw)) return 'ON';
+  if(/(morning|in the morning|mane)/.test(raw)) return 'mane';
+  if(/(midday|noon|lunchtime|lunch time|at lunch|mid-day)/.test(raw)) return 'midday';
+  if(/(qds|four times daily|4 times daily|four times a day|4 times a day)/.test(raw)) return 'QDS';
+  if(/(tds|three times daily|3 times daily|three times a day|3 times a day)/.test(raw)) return 'TDS';
+  if(/(bd|twice daily|2 times daily|twice a day|2 times a day|morning and evening)/.test(raw)) return 'BD';
+  if(/(od|once daily|daily|every day|once a day|1 daily)/.test(raw)) return 'OD';
+  return freq;
+}
 function normaliseBlisterScanItems(items){
   if(!Array.isArray(items)) return [];
   return items.map(item=>({
     medication:String(item?.medication||'').trim(),
     dose:String(item?.dose||'').trim(),
-    frequency:String(item?.frequency||'').trim(),
+    frequency:normaliseBlisterScanFrequency(item?.frequency||''),
     confidence:Number(item?.confidence||0),
     notes:String(item?.notes||'').trim(),
     rejected:false
@@ -919,7 +933,7 @@ async function runBlisterScan(file){
     blisterScanState.file=file; blisterScanState.dataUrl=dataUrl;
     const preview=$('blisterScanPreview'); if(preview){ preview.src=dataUrl; preview.classList.remove('hidden'); }
     setBlisterScanStatus('Scanning label…');
-    const prompt='Read this blister pack or dosette label and extract only the current medicines shown on the label. Return one item per medicine. Extract medication, dose, frequency, confidence, and notes. Use UK abbreviations where clear: OD, BD, TDS, QDS, ON, PRN. Ignore patient identifiers, pharmacy address, packaging text, dates, barcodes, and non-medication text. Do not invent medicines. If uncertain, leave the field blank rather than guessing and lower confidence. Keep notes very short.';
+    const prompt='Read this blister pack or dosette label and extract only the current medicines shown on the label. Return one item per medicine. Extract medication, dose, frequency, confidence, and notes. Frequency rule: preserve label timing rather than over-normalising. Use ON for night / nocte / at bedtime. Use mane for morning. Use midday if the label specifies noon / lunch / midday. Use OD only when it truly says once daily with no specific time. Use BD, TDS, QDS, PRN where clearly stated. Ignore patient identifiers, pharmacy address, packaging text, dates, barcodes, and non-medication text. Do not invent medicines. If uncertain, leave the field blank rather than guessing and lower confidence. Keep notes very short.';
     const body={
       model:'meta-llama/llama-4-scout-17b-16e-instruct',
       messages:[
@@ -4600,7 +4614,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_208_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_209_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
