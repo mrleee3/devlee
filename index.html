@@ -137,7 +137,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .flow-btn.active{background:#0a84ff;color:#fff;border-color:#0a84ff}
 .summary-chip{display:inline-block;padding:8px 10px;border-radius:10px;background:#f3f4f6;font-size:13px;margin:4px 6px 0 0}
 .med-summary-chip{border:none;cursor:pointer;color:inherit;font-size:13px;font-weight:400;line-height:1.2}
-#medsCollapsedSummary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}#medsCollapsedSummary.hidden{display:none!important}#medsCollapsedSummary .summary-chip{margin:0}.meds-inline-open{margin-top:8px}.meds-header-row{align-items:center}.meds-quick-add{margin-left:8px;padding:7px 12px;font-size:20px;line-height:1;min-width:44px}.med-summary-chip{display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:44px;padding:10px 12px;border-radius:12px}.med-summary-chip .med-summary-line{display:block;max-width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+#medsCollapsedSummary{display:flex;flex-wrap:wrap;gap:8px}#medsCollapsedSummary.hidden{display:none!important}#medsCollapsedSummary .summary-chip{margin:0}.meds-inline-open{margin-top:8px}.meds-header-row{align-items:center}.meds-quick-add{margin-left:8px;padding:7px 12px;font-size:20px;line-height:1;min-width:44px}
 .scoremode-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;margin-bottom:8px}.scoremode-btn.active{background:#0a84ff;color:#fff}
 #medsToggleText,#ivToggleText{font-size:15px;font-weight:600}
 .blister-scan-btn{background:#e8f1ff;color:#0a84ff;font-size:20px;line-height:1;padding:7px 12px;border-radius:14px;min-width:44px;margin-left:auto}
@@ -145,7 +145,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .blister-scan-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .blister-scan-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:max(14px,calc(env(safe-area-inset-bottom) + 14px));padding:14px;border-radius:18px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
 .blister-scan-modal h3{margin:0}
-.blister-scan-preview{width:100%;max-height:140px;display:block;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:#f8fafc;-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+.blister-scan-preview{width:100%;max-height:140px;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:#f8fafc}
 .blister-scan-preview.enlargeable{cursor:zoom-in}
 .blister-photo-lightbox{position:fixed;inset:0;z-index:10080;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(15,23,42,.56);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .blister-photo-lightbox img{max-width:min(100%,960px);max-height:min(100%,calc(100vh - 36px));border-radius:16px;border:1px solid rgba(255,255,255,.28);background:#fff;object-fit:contain;box-shadow:0 16px 48px rgba(15,23,42,.3)}
@@ -369,7 +369,6 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 </div>
 <input accept="image/*" capture="environment" class="hidden" id="blisterScanInput" type="file"/>
 </div>
-<div aria-hidden="true" class="blister-photo-lightbox hidden" id="blisterPhotoLightbox"><img alt="Blister pack photo" id="blisterPhotoLightboxImg"/></div>
 <section class="container hidden" id="tasks"><div class="card"><h3>Today’s tasks</h3><p><strong>Mrs Law-test</strong><br/><span class="muted small">Give IV ceftriaxone and review temperature / oral intake.</span></p><p><strong>Mrs Coo-test</strong><br/><span class="muted small">Reassess delirium, chase urine sample, confirm escalation plan.</span></p><p><strong>Mr Doy-test</strong><br/><span class="muted small">Repeat U&amp;E, review fluid balance and oral intake.</span></p></div></section>
 <section class="container hidden" id="handover">
 <div class="card">
@@ -444,7 +443,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_215_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_216_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -951,7 +950,7 @@ async function runBlisterScan(file){
   try{
     const dataUrl=await normaliseBlisterScanImage(file);
     blisterScanState.file=file; blisterScanState.dataUrl=dataUrl;
-    const preview=$('blisterScanPreview'); if(preview){ preview.src=dataUrl; preview.draggable=false; preview.classList.remove('hidden'); preview.classList.add('enlargeable'); const openPreview=(ev)=>{ if(ev){ ev.preventDefault(); ev.stopPropagation(); } openBlisterPhotoLightbox(); }; preview.onclick=openPreview; preview.onpointerup=openPreview; preview.ontouchend=openPreview; preview.oncontextmenu=(ev)=>{ ev.preventDefault(); }; }
+    const preview=$('blisterScanPreview'); if(preview){ preview.src=dataUrl; preview.classList.remove('hidden'); preview.classList.add('enlargeable'); preview.onclick=()=>openBlisterPhotoLightbox(); }
     setBlisterScanStatus('Scanning label…');
     const prompt='Read this blister pack or dosette label and extract only the current medicines shown on the label. Return one item per medicine. Extract medication, dose, frequency, confidence, and notes. Frequency rule: keep only schedule information and ignore extra administration advice. Use ON for night / nocte / bedtime / evening when night dosing is clearly intended. If it just says once daily in the morning, return OD rather than mane. Use midday for noon / lunch / midday only when midday timing is specifically useful. If the label clearly says morning and midday, preserve that timing. Use OD when it truly means once daily. Use BD, TDS, QDS, PRN, alternate days, weekly, monthly where clearly stated. Ignore extra wording such as with food, before food, after food, take with water, swallow whole, avoid grapefruit, or similar instructions unless it changes the schedule. Ignore patient identifiers, pharmacy address, packaging text, dates, barcodes, and non-medication text. Do not invent medicines. If uncertain, leave the field blank rather than guessing and lower confidence. Keep notes very short.';
     const body={
@@ -1005,7 +1004,7 @@ function importAcceptedBlisterMeds(){
   const onlyBlank=existing.length===1 && !((existing[0].name||'').trim() || (existing[0].dose||'').trim() || (existing[0].frequency||'').trim() || (existing[0].details||'').trim());
   if(onlyBlank) $('medsContainer').innerHTML='';
   accepted.forEach(item=>createMedEntry({name:item.medication,dose:item.dose,frequency:item.frequency,details:''}));
-  if(patients[currentPatient] && patients[currentPatient].form){ patients[currentPatient].form.medsCollapsed=true; patients[currentPatient].form.medsFocusedIndex=null; }
+  if(patients[currentPatient] && patients[currentPatient].form){ patients[currentPatient].form.medsCollapsed=false; patients[currentPatient].form.medsFocusedIndex=null; }
   updateMedsFields();
   refreshAllMedEntryHeaders();
   updateMedSummary();
@@ -3179,24 +3178,19 @@ function setMedFocusedIndex(index){
   const total=document.querySelectorAll("#medsContainer .med-entry").length;
   p.form.medsFocusedIndex=Number.isInteger(index) && index>=0 && index<total ? index : null;
 }
-function cleanMedicationNameForDisplay(name){
-  const raw=(name||'').trim();
-  if(!raw) return '';
-  return raw.replace(/^levothyroxine sodium$/i,'Levothyroxine');
-}
 function getMedDisplayName(entry,index){
-  const name=cleanMedicationNameForDisplay((entry?.name||"").trim());
+  const name=(entry?.name||"").trim();
   const details=(entry?.details||"").trim();
   return name || details || `Medication ${index+1}`;
 }
 function getMedEntrySummary(div,index){
-  const name=cleanMedicationNameForDisplay((div.querySelector('.med-name')?.value||'').trim());
+  const name=(div.querySelector('.med-name')?.value||'').trim();
   const dose=(div.querySelector('.med-dose')?.value||'').trim();
   const frequency=(div.querySelector('.med-frequency')?.value||'').trim();
   const details=(div.querySelector('.med-details')?.value||'').trim();
   const title=name || `Medication ${index+1}`;
-  const tail=[dose,frequency,details].filter(Boolean).join(' ');
-  return tail ? `${title} ${tail}` : title;
+  const tail=[dose,frequency,details].filter(Boolean).join(' • ');
+  return tail ? `${title} • ${tail}` : title;
 }
 function refreshMedEntryHeader(div){
   const all=Array.from(document.querySelectorAll('#medsContainer .med-entry'));
@@ -3334,12 +3328,7 @@ function getMedEntries(){
 }
 function updateMedSummary(){
   const entries=getMedEntries();
-  $('medsCollapsedSummary').innerHTML=entries.map((e,idx)=>({entry:e,index:idx,label:getMedDisplayName(e,idx)})).filter(item=>item.entry.name||item.entry.dose||item.entry.frequency||item.entry.details).sort((a,b)=>a.label.localeCompare(b.label,undefined,{sensitivity:'base'})).map(item=>{
-    const dose=(item.entry.dose||'').trim();
-    const frequency=(item.entry.frequency||'').trim();
-    const line=[item.label,dose,frequency].filter(Boolean).join(' ');
-    return `<button type="button" class="summary-chip med-summary-chip" data-med-index="${item.index}"><span class="med-summary-line">${escapeHtml(line)}</span></button>`;
-  }).join('');
+  $('medsCollapsedSummary').innerHTML=entries.map((e,idx)=>({entry:e,index:idx,label:getMedDisplayName(e,idx)})).filter(item=>item.entry.name||item.entry.dose||item.entry.frequency||item.entry.details).sort((a,b)=>a.label.localeCompare(b.label,undefined,{sensitivity:'base'})).map(item=>`<button type="button" class="summary-chip med-summary-chip" data-med-index="${item.index}">${escapeHtml(item.label)}</button>`).join('');
 }
 function setMedsCollapsed(collapsed){
   const show=$("medsGiven").checked;
@@ -4644,7 +4633,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_215_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_216_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5115,10 +5104,10 @@ document.addEventListener("DOMContentLoaded",function(){
     }
     saveXaiSettings(true);
   };
-  if($("scanBlisterBtn")) $("scanBlisterBtn").onclick=()=>{ const input=$("blisterScanInput"); openBlisterScanOverlay(false); if(!input) return; try{ if(typeof input.showPicker==="function") input.showPicker(); else input.click(); }catch(err){ try{ input.click(); }catch(_err){} } };
+  if($("scanBlisterBtn")) $("scanBlisterBtn").onclick=()=>{ openBlisterScanOverlay(false); $("blisterScanInput")?.click(); };
   if($("blisterPhotoLightbox")) $("blisterPhotoLightbox").onclick=closeBlisterPhotoLightbox;
   if($("chooseBlisterPhotoBtn")) $("chooseBlisterPhotoBtn").onclick=()=>$("blisterScanInput")?.click();
-  if($("retakeBlisterPhotoBtn")) $("retakeBlisterPhotoBtn").onclick=closeBlisterScanOverlay;
+  if($("retakeBlisterPhotoBtn")) $("retakeBlisterPhotoBtn").onclick=()=>$("blisterScanInput")?.click();
   if($("blisterScanBackdrop")) $("blisterScanBackdrop").onclick=closeBlisterScanOverlay;
   if($("addAcceptedMedsBtn")) $("addAcceptedMedsBtn").onclick=importAcceptedBlisterMeds;
   if($("blisterScanInput")) $("blisterScanInput").addEventListener('change',e=>{ const file=e.target.files && e.target.files[0]; if(file) runBlisterScan(file); });
