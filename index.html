@@ -449,7 +449,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_255_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_257_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -3888,7 +3888,8 @@ function generateClinicalOutput() {
   const sections = [];
   if (p.timestamp) sections.push(p.timestamp);
   if (p.referralSource) sections.push(`${p.referralSource} referral`);
-  if ($("issues").value.trim()) sections.push(`Issues: ${String($("issues").value).replace(/\s*\n+\s*/g, " ").replace(/\s{2,}/g, " ").trim()}`);
+  if ($("issues").value.trim()) sections.push(`Issues:
+${normaliseIssuesSpacing($("issues").value)}`);
   const medLines = getMedicationLines();
   if (medLines.length) sections.push(`Medications:\n${medLines.join("\n")}`);
   const obs = obsParts();
@@ -4872,7 +4873,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_255_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_257_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
