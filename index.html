@@ -449,7 +449,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_265_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_266_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -4881,7 +4881,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_265_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_266_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5430,7 +5430,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("examFindingsBackdrop").onclick=closeExamFindingsOverlay;
   $("examFindingsClearBtn").onclick=clearExamFindings;
   $("examFindingsDoneBtn").onclick=applyExamFindingsOverlay;
-  $("examFindingsPresets").addEventListener("click",handleExamFindingsClick);
+  $("examFindingsPresets").addEventListener("pointerdown",ev=>{if(ev.target.closest('[data-exam-finding]')) ev.preventDefault();}); $("examFindingsPresets").addEventListener("click",handleExamFindingsClick);
   $("examFindingsText").addEventListener("input",syncExamFindingChipStates);
   initPatientPullToRefresh();
   $("sortPatientsBtn").onclick=(e)=>{ e.stopPropagation(); togglePatientSortMenu(); };
@@ -5490,8 +5490,8 @@ function syncExamFindingChipStates(){const area=$('examFindingsText'); const cur
 function renderExamFindingsPresets(){const wrap=$('examFindingsPresets'); if(!wrap) return; wrap.innerHTML=Object.entries(EXAM_FINDING_PRESETS).map(([group,items])=>`<div class="exam-findings-group"><div class="exam-findings-group-title">${escapeHtml(group)}</div><div class="exam-findings-chip-row">${items.map(item=>`<button class="exam-findings-chip" data-exam-finding="${escapeHtml(item)}" type="button">${escapeHtml(item)}</button>`).join('')}</div></div>`).join(''); syncExamFindingChipStates();}
 function openExamFindingsOverlay(){const overlay=$('examFindingsOverlay'); const area=$('examFindingsText'); if(!overlay||!area) return; examFindingsLastFocus=document.activeElement; area.value=$('examination')?.value||''; renderExamFindingsPresets(); overlay.classList.remove('hidden'); overlay.setAttribute('aria-hidden','false'); requestAnimationFrame(()=>{try{area.focus({preventScroll:true});}catch(_e){area.focus();} if(area.setSelectionRange){const end=area.value.length; area.setSelectionRange(end,end);} syncExamFindingChipStates();});}
 function closeExamFindingsOverlay(){const overlay=$('examFindingsOverlay'); if(!overlay) return; overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); const target=$('openExamFindingsBtn'); if(target){try{target.focus({preventScroll:true});}catch(_e){target.focus();}}}
-function appendExamFinding(text){const area=$('examFindingsText'); if(!area||!text) return; const clean=String(text).trim(); if(!clean) return; const current=String(area.value||'').replace(/\r\n/g,'\n'); area.value=current.trim()?`${current.replace(/\s+$/,'')}\n\n${clean}`:clean; try{area.focus({preventScroll:true});}catch(_e){area.focus();} const end=area.value.length; if(area.setSelectionRange) area.setSelectionRange(end,end); syncExamFindingChipStates();}
-function clearExamFindings(){const area=$('examFindingsText'); if(!area) return; area.value=''; try{area.focus({preventScroll:true});}catch(_e){area.focus();} syncExamFindingChipStates();}
+function appendExamFinding(text){const area=$('examFindingsText'); if(!area||!text) return; const clean=String(text).trim(); if(!clean) return; const active=document.activeElement; if(active&&typeof active.blur==='function'&&(active===area||active.tagName==='TEXTAREA'||active.tagName==='INPUT')){try{active.blur();}catch(_e){}} const current=String(area.value||'').replace(/\r\n/g,'\n'); area.value=current.trim()?`${current.replace(/\s+$/,'')}\n\n${clean}`:clean; const end=area.value.length; if(area.setSelectionRange) area.setSelectionRange(end,end); syncExamFindingChipStates();}
+function clearExamFindings(){const area=$('examFindingsText'); if(!area) return; const active=document.activeElement; if(active&&typeof active.blur==='function'&&(active===area||active.tagName==='TEXTAREA'||active.tagName==='INPUT')){try{active.blur();}catch(_e){}} area.value=''; syncExamFindingChipStates();}
 function applyExamFindingsOverlay(){const area=$('examFindingsText'); const exam=$('examination'); if(!area||!exam) return; exam.value=area.value; saveCurrentPatientForm(); saveData('Examination updated'); generateClinicalOutput(); closeExamFindingsOverlay();}
 function handleExamFindingsClick(ev){const chip=ev.target.closest('[data-exam-finding]'); if(chip){appendExamFinding(chip.getAttribute('data-exam-finding')||'');}}
 function renderCfsChoices(){const wrap=$('cfsChoiceGrid'); if(!wrap) return; wrap.innerHTML=CFS_OPTIONS.map(opt=>`<button class="score-choice-btn${scoreToolsState.cfs.score===opt.score?' active':''}" data-cfs-score="${opt.score}" type="button"><span class="num">${opt.score}</span><span class="score-choice-content"><span class="lbl">${opt.label}</span><span class="desc">${opt.desc}</span></span></button>`).join('');}
