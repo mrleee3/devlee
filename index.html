@@ -449,7 +449,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_248_release.html</div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;">hospital_at_home_v12_36_249_release.html</div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -3878,8 +3878,7 @@ function generateClinicalOutput() {
 ${normaliseParagraphSpacing($("issues").value)}`);
   const medLines = getMedicationLines();
   if (medLines.length) sections.push(`Medications:
-${medLines.join("
-")}`);
+${medLines.join("\n")}`);
   const obs = obsParts();
   if (obs.length) sections.push(obs.join(", "));
   const scoreSummary = getScoreSummaryLine();
@@ -3889,20 +3888,14 @@ ${medLines.join("
   const examText = normaliseParagraphSpacing(getExaminationWithoutScores());
   const examParts = [];
   if (examText) examParts.push(examText);
-  if (ivLines.length || vipText) examParts.push(normaliseParagraphSpacing([ivLines.join("
-"), vipText].filter(Boolean).join("
-")));
+  if (ivLines.length || vipText) examParts.push(normaliseParagraphSpacing([ivLines.join("\n"), vipText].filter(Boolean).join("\n")));
   if (examParts.length) sections.push(`Examination:
-${examParts.join("
-
-")}`);
+${examParts.join("\n\n")}`);
   if ($("plan").value.trim()) sections.push(`Plan:
 ${$("plan").value.trim()}`);
   if ($("forDischargeSummary").value.trim()) sections.push(`For discharge summary:
 ${$("forDischargeSummary").value.trim()}`);
-  $("clinicalOutput").textContent = sections.join("
-
-") || "Enter obs and plan to generate a note.";
+  $("clinicalOutput").textContent = sections.join("\n\n") || "Enter obs and plan to generate a note.";
 }
 
 async function copyClinicalText(){generateClinicalOutput(); try{await navigator.clipboard.writeText($("clinicalOutput").textContent); alert("Clinical note copied.")}catch(e){alert("Clipboard copy is blocked in this view. You can still select the text manually.")}}
@@ -4870,7 +4863,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_248_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_249_release.html';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
