@@ -3889,6 +3889,7 @@ function generateClinicalOutput() {
   if (p.timestamp) sections.push(p.timestamp);
   if (p.referralSource) sections.push(`${p.referralSource} referral`);
   if ($("issues").value.trim()) sections.push(`Issues:
+
 ${normaliseIssuesSpacing($("issues").value)}`);
   const medLines = getMedicationLines();
   if (medLines.length) sections.push(`Medications:\n${medLines.join("\n")}`);
