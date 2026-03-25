@@ -281,43 +281,36 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 
 
 .date-display-btn{width:100%;min-height:46px;border:1px solid #d1d5db;border-radius:12px;background:#fff;text-align:left;padding:12px;font-size:16px;font-weight:400;color:var(--text);display:flex;align-items:center;box-sizing:border-box}.date-display-btn:active{transform:none}.date-display-placeholder{color:transparent;font-weight:400}.date-display-value{color:var(--text);font-weight:400}.admission-field-wrap{position:relative}.add-date-popover{position:absolute;left:0;right:0;top:100%;margin-top:10px;padding:12px;border:1px solid rgba(60,130,246,.18);border-radius:20px;background:rgba(255,255,255,.98);box-shadow:0 18px 48px rgba(17,24,39,.18);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:8;touch-action:pan-y}.add-date-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.add-date-title-btn{font-size:16px;font-weight:700;text-align:center;flex:1;border:none;background:transparent;padding:6px 8px;border-radius:12px;color:var(--text)}.add-date-title-btn:active{transform:none}.add-date-nav{width:36px;height:36px;border-radius:12px;border:1px solid var(--line);background:#fff;padding:0;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center}.add-date-weekdays,.add-date-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.add-date-weekdays{margin-bottom:6px}.add-date-weekdays span{font-size:11px;font-weight:700;color:var(--muted);text-align:center}.add-date-day{height:34px;border-radius:12px;border:1px solid transparent;background:#fff;font-size:14px;font-weight:600;color:var(--text);padding:0}.add-date-day.is-outside{color:#c4c8d0}.add-date-day.is-today{border-color:rgba(60,130,246,.28)}.add-date-day.is-selected{background:var(--blue);color:#fff}.add-date-day:active{transform:none}.add-date-month-year-picker{margin-top:8px;padding-top:10px;border-top:1px solid rgba(148,163,184,.18)}.add-date-year-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.add-date-year-label{font-size:16px;font-weight:700;flex:1;text-align:center}.add-date-months{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.add-date-month-btn{height:38px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:14px;font-weight:600;color:var(--text)}.add-date-month-btn.selected{background:#e8f1ff;border-color:#0a84ff;color:#0a84ff}.add-patient-modal.date-popover-open{overflow:visible}
-.obs-picker-btn{width:100%;min-height:46px;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #d1d5db;background:#fff;display:flex;align-items:center;gap:10px;text-align:left;box-shadow:none;box-sizing:border-box;-webkit-appearance:none;appearance:none}
-.obs-picker-btn:focus-visible{outline:none;border-color:#7fc3ff;box-shadow:0 0 0 1px #7fc3ff inset}
-.obs-picker-main{min-width:0;flex:1;font-size:16px;font-weight:400;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.obs-picker-btn.is-empty .obs-picker-main{font-weight:400;color:#9ca3af}
-.obs-picker-tag{display:inline-flex;align-items:center;justify-content:center;min-height:24px;padding:0 9px;border-radius:999px;background:#eef4ff;color:#0a3d91;font-size:11.5px;font-weight:800;line-height:1;white-space:nowrap;flex:0 0 auto}
-.obs-picker-arrow{color:#98a2b3;font-size:16px;line-height:1;flex:0 0 auto;transform:translateY(-1px)}
+.obs-picker-btn{width:100%;min-height:44px;border-radius:14px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;gap:10px;padding:0 12px;text-align:left;box-shadow:0 1px 1px rgba(15,23,42,.02)}
+.obs-picker-btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
+.obs-picker-main{min-width:0;flex:1;font-size:15px;font-weight:700;color:#101828;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.obs-picker-btn.is-empty .obs-picker-main{font-weight:600;color:#98a2b3}
+.obs-picker-tag{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:0 10px;border-radius:999px;background:#eef4ff;color:#0a3d91;font-size:11.5px;font-weight:800;line-height:1;white-space:nowrap;flex:0 0 auto}
+.obs-picker-arrow{color:#98a2b3;font-size:18px;line-height:1;flex:0 0 auto;transform:translateY(-1px)}
 .bm-overlay{position:fixed;inset:0;z-index:10086}
 .bm-overlay-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.bm-overlay-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 16px);padding:12px;border-radius:20px;display:flex;flex-direction:column;gap:12px;max-height:calc(100dvh - var(--shared-header-offset,0px) - max(26px,calc(env(safe-area-inset-bottom) + 26px)));overflow:hidden}
+.bm-overlay-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 16px);padding:14px;border-radius:20px;display:flex;flex-direction:column;gap:14px;max-height:calc(100dvh - var(--shared-header-offset,0px) - max(26px,calc(env(safe-area-inset-bottom) + 26px)));overflow:hidden}
 .bm-overlay-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .bm-overlay-head h3{margin:0;font-size:20px;line-height:1.1}
 .bm-overlay-close{width:34px;height:34px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#475467;font-size:18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;flex:0 0 auto}
 .bm-overlay-body{min-height:0;overflow:auto;padding-right:2px;-webkit-overflow-scrolling:touch}
-.bm-overlay-layout{display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);gap:12px;align-items:stretch}
-.bm-overlay-left-col{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;min-width:0;height:100%;min-height:252px}
-.bm-overlay-value-card,.bm-overlay-target-card,.bm-overlay-timing-card{border:1px solid rgba(15,23,42,.08);border-radius:18px;background:#fff;padding:12px;display:flex;flex-direction:column;gap:10px}
-.bm-overlay-value-card{min-height:0;flex:1 1 auto}
-.bm-overlay-timing-card{min-height:252px;height:100%}
-.bm-overlay-target-card{justify-content:flex-start}
-.bm-overlay-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:18px}
-.bm-overlay-timing-label,.bm-overlay-card-label,.bm-overlay-card-title{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}.bm-overlay-card-title{text-align:center}
-.bm-overlay-value-wrap{display:flex;align-items:center;justify-content:center;flex:1 1 auto}
-#bmOverlayValue{width:100%;min-height:96px;font-size:42px;line-height:1.05;font-weight:800;text-align:center;padding:14px 12px;border-radius:18px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none;margin-top:0}
-#bmOverlayValue:focus,#bmOverlayTarget:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
-.bm-overlay-value-caption{text-align:center;font-size:13px;font-weight:700;color:#667085}
-.bm-overlay-target-wrap{display:flex;flex-direction:column;gap:4px}
-#bmOverlayTarget{margin-top:0;min-height:42px;padding:10px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
-.bm-overlay-timing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;align-content:start}
-.bm-timing-chip{min-height:39px;padding:8px 10px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-size:12px;font-weight:700;line-height:1.2;text-align:center;display:inline-flex;align-items:center;justify-content:center}
+.bm-overlay-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:12px;align-items:start}
+.bm-overlay-value-card,.bm-overlay-timing-card{border:1px solid rgba(15,23,42,.08);border-radius:16px;background:#fff;padding:12px}
+.bm-overlay-value-card{display:flex;flex-direction:column;gap:12px;min-height:208px;justify-content:center}
+.bm-overlay-value-label,.bm-overlay-timing-label{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}
+#bmOverlayValue{min-height:88px;font-size:42px;line-height:1.1;font-weight:800;text-align:center;padding:14px 12px;border-radius:16px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
+#bmOverlayValue:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
+.bm-overlay-unit{text-align:center;font-size:12px;color:#667085;font-weight:700;letter-spacing:.02em}
+.bm-overlay-timing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.bm-timing-chip{min-height:42px;padding:9px 10px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-size:12.5px;font-weight:700;line-height:1.2;text-align:center;display:inline-flex;align-items:center;justify-content:center}
 .bm-timing-chip.active{background:#eaf4ff;border-color:#0a84ff;color:#0a3d91;box-shadow:0 0 0 1px rgba(10,132,255,.12) inset}
 .bm-timing-chip:active{transform:scale(.98)}
-.bm-overlay-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.bm-overlay-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
 .bm-overlay-footer button{height:40px}
-@media (max-width:390px){.bm-overlay-layout{grid-template-columns:1fr}.bm-overlay-left-col{grid-template-rows:auto auto}.bm-overlay-value-card,.bm-overlay-timing-card{min-height:0}#bmOverlayValue{min-height:84px;font-size:36px}.obs-picker-main{font-size:15px}}
+@media (max-width:390px){.bm-overlay-layout{grid-template-columns:1fr}.bm-overlay-value-card{min-height:0}#bmOverlayValue{min-height:72px;font-size:36px}.obs-picker-main{font-size:14px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_278_release.html; source=hospital_at_home_v12_36_278_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_274_release.html; source=hospital_at_home_v12_36_274_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -509,7 +502,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_278_release.html</div><div>Source: hospital_at_home_v12_36_278_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_274_release.html</div><div>Source: hospital_at_home_v12_36_274_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -527,7 +520,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 </section>
 <section class="container hidden" id="patientDetail">
 <div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div></div>
-<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><input id="hr" type="number"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><button aria-haspopup="dialog" class="obs-picker-btn bm-picker-btn" id="openBmEditorBtn" type="button"><span class="obs-picker-main" id="bmDisplayValue">Tap to enter</span><span class="obs-picker-tag hidden" id="bmDisplayTag"></span><span aria-hidden="true" class="obs-picker-arrow">›</span></button><input id="bm" type="hidden"/><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
+<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><input id="hr" type="number"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><button aria-haspopup="dialog" class="obs-picker-btn bm-picker-btn" id="openBmEditorBtn" type="button"><span class="obs-picker-main" id="bmDisplayValue">Tap to enter</span><span class="obs-picker-tag hidden" id="bmDisplayTag"></span><span aria-hidden="true" class="obs-picker-arrow">›</span></button><input id="bm" type="hidden"/><input id="bmTiming" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button></div><label>Issues</label><textarea id="issues"></textarea><div class="field-label-row"><label for="examination">Examination</label><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button></div><textarea id="examination"></textarea><label>Plan</label><textarea autocapitalize="sentences" id="plan"></textarea><label>For discharge summary</label><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
 <div class="card patient-reorder-card" data-card-key="meds">
 <div class="toggle-row meds-header-row">
@@ -603,22 +596,16 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div aria-hidden="true" class="bm-overlay hidden" id="bmOverlay">
 <div class="bm-overlay-backdrop" id="bmOverlayBackdrop"></div>
 <div aria-labelledby="bmOverlayTitle" aria-modal="true" class="card bm-overlay-modal" id="bmOverlayModal" role="dialog">
-<div class="bm-overlay-head"><h3 id="bmOverlayTitle">Boehringer Mannheim</h3><button aria-label="Close BM editor" class="bm-overlay-close" id="bmOverlayCloseBtn" type="button">×</button></div>
+<div class="bm-overlay-head"><h3 id="bmOverlayTitle">BM</h3><button aria-label="Close BM editor" class="bm-overlay-close" id="bmOverlayCloseBtn" type="button">×</button></div>
 <div class="bm-overlay-body">
 <div class="bm-overlay-layout">
-<div class="bm-overlay-left-col">
 <div class="bm-overlay-value-card">
-<div class="bm-overlay-card-title">Blood glucose</div>
-<div class="bm-overlay-value-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="done" id="bmOverlayValue" inputmode="decimal" placeholder="" spellcheck="false" type="text"/></div>
-<div class="bm-overlay-value-caption">mmol/L</div>
-</div>
-<div class="bm-overlay-target-card">
-<div class="bm-overlay-card-label">Target range</div>
-<div class="bm-overlay-target-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="done" id="bmOverlayTarget" placeholder="Optional" spellcheck="false" type="text"/></div>
-</div>
+<div class="bm-overlay-value-label">Blood glucose</div>
+<input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="done" id="bmOverlayValue" inputmode="decimal" placeholder="e.g. 6.8" spellcheck="false" type="text"/>
+<div class="bm-overlay-unit">mmol/L</div>
 </div>
 <div class="bm-overlay-timing-card">
-<div class="bm-overlay-section-head"><div class="bm-overlay-timing-label">Timing</div></div>
+<div class="bm-overlay-timing-label">Timing</div>
 <div class="bm-overlay-timing-grid" id="bmOverlayTimingGrid">
 <button class="bm-timing-chip" data-bm-timing="pre" type="button">Pre-meal</button>
 <button class="bm-timing-chip" data-bm-timing="post" type="button">Post-meal</button>
@@ -628,8 +615,8 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <button class="bm-timing-chip" data-bm-timing="post-lunch" type="button">Post-lunch</button>
 <button class="bm-timing-chip" data-bm-timing="pre-dinner" type="button">Pre-dinner</button>
 <button class="bm-timing-chip" data-bm-timing="post-dinner" type="button">Post-dinner</button>
-<button class="bm-timing-chip" data-bm-timing="random" type="button">Random</button>
-<button class="bm-timing-chip" data-bm-timing="fasting" type="button">Fasting</button>
+<button class="bm-timing-chip" data-bm-timing="bedtime" type="button">Bedtime</button>
+<button class="bm-timing-chip" data-bm-timing="other" type="button">Other</button>
 </div>
 </div>
 </div>
@@ -3155,7 +3142,7 @@ function updateIVDeleteButton(){
 }
 
 function getOxygenFlowDisplay(){if($("oxygen").value!=="2") return ""; const val=$("oxygenFlowOther").classList.contains("hidden") ? ($("oxygenFlowSection").dataset.flow || "") : $("oxygenFlowOther").value.trim(); return val}
-function setFieldValues(f){$("rr").value=f.rr||""; $("spo2").value=f.spo2||""; $("oxygen").value=f.oxygen||"0"; setScoreModeButtons(f.scoreMode||""); $("temp").value=f.temp||""; $("bp").value=f.bp||""; $("hr").value=f.hr||""; $("weight").value=f.weight||""; $("bm").value=f.bm||""; if($("bmTiming")) $("bmTiming").value=f.bmTiming||""; if($("bmTimingTime")) $("bmTimingTime").value=f.bmTimingTime||""; if($("bmTarget")) $("bmTarget").value=f.bmTarget||""; if(window.syncBmTriggerDisplay) window.syncBmTriggerDisplay(); $("conscious").value=f.conscious||"0"; $("confusion").value=f.confusion||"0"; $("issues").value=f.issues||""; $("examination").value=f.examination||""; $("plan").value=f.plan||""; $("forDischargeSummary").value=f.forDischargeSummary||""; $("medsGiven").checked=!!f.medsGiven; $("medsContainer").innerHTML=""; const medEntries=(f.medEntries&&f.medEntries.length?f.medEntries:[{name:"",dose:"",frequency:"",details:""}]); medEntries.forEach(e=>{if(f.medsGiven) createMedEntry(e)}); $("ivGiven").checked=!!f.ivGiven; $("ivVIP").value=f.ivVIP||""; $("ivContainer").innerHTML=""; (f.ivEntries&&f.ivEntries.length?f.ivEntries:[{medication:"",dose:"",serialExpiry:""}]).forEach(e=>{if(f.ivGiven) createIVEntry(e)}); $("oxygenFlowSection").dataset.flow=f.oxygenFlow||""; $("oxygenFlowOther").value=""; $("oxygenFlowOther").classList.add("hidden"); updateOxygenFields(); if(patients[currentPatient] && patients[currentPatient].form){ const pf=patients[currentPatient].form; pf.medsFocusedIndex=Number.isInteger(f.medsFocusedIndex)?f.medsFocusedIndex:null; if(typeof pf._medsCollapseTouched==='undefined') pf.medsCollapsed=!!f.medsGiven; if(typeof pf._ivCollapseTouched==='undefined') pf.ivCollapsed=!!f.ivGiven; } setMedsCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.medsCollapsed:f.medsCollapsed)); updateMedsFields(); setIVCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.ivCollapsed:f.ivCollapsed)); updateIVFields()}
+function setFieldValues(f){$("rr").value=f.rr||""; $("spo2").value=f.spo2||""; $("oxygen").value=f.oxygen||"0"; setScoreModeButtons(f.scoreMode||""); $("temp").value=f.temp||""; $("bp").value=f.bp||""; $("hr").value=f.hr||""; $("weight").value=f.weight||""; $("bm").value=f.bm||""; if($("bmTiming")) $("bmTiming").value=f.bmTiming||""; if(window.syncBmTriggerDisplay) window.syncBmTriggerDisplay(); $("conscious").value=f.conscious||"0"; $("confusion").value=f.confusion||"0"; $("issues").value=f.issues||""; $("examination").value=f.examination||""; $("plan").value=f.plan||""; $("forDischargeSummary").value=f.forDischargeSummary||""; $("medsGiven").checked=!!f.medsGiven; $("medsContainer").innerHTML=""; const medEntries=(f.medEntries&&f.medEntries.length?f.medEntries:[{name:"",dose:"",frequency:"",details:""}]); medEntries.forEach(e=>{if(f.medsGiven) createMedEntry(e)}); $("ivGiven").checked=!!f.ivGiven; $("ivVIP").value=f.ivVIP||""; $("ivContainer").innerHTML=""; (f.ivEntries&&f.ivEntries.length?f.ivEntries:[{medication:"",dose:"",serialExpiry:""}]).forEach(e=>{if(f.ivGiven) createIVEntry(e)}); $("oxygenFlowSection").dataset.flow=f.oxygenFlow||""; $("oxygenFlowOther").value=""; $("oxygenFlowOther").classList.add("hidden"); updateOxygenFields(); if(patients[currentPatient] && patients[currentPatient].form){ const pf=patients[currentPatient].form; pf.medsFocusedIndex=Number.isInteger(f.medsFocusedIndex)?f.medsFocusedIndex:null; if(typeof pf._medsCollapseTouched==='undefined') pf.medsCollapsed=!!f.medsGiven; if(typeof pf._ivCollapseTouched==='undefined') pf.ivCollapsed=!!f.ivGiven; } setMedsCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.medsCollapsed:f.medsCollapsed)); updateMedsFields(); setIVCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.ivCollapsed:f.ivCollapsed)); updateIVFields()}
 function updateOxygenFields(){const show=$("oxygen").value==="2"; $("oxygenFlowSection").classList.toggle("hidden",!show)}
 function setOxygenFlow(value){if(value==="other"){ $("oxygenFlowOther").classList.remove("hidden"); $("oxygenFlowOther").focus(); $("oxygenFlowSection").dataset.flow=""; } else { $("oxygenFlowOther").classList.add("hidden"); $("oxygenFlowOther").value=""; $("oxygenFlowSection").dataset.flow=value; calculateNews(); }}
 
@@ -3781,7 +3768,7 @@ function focusIVOverlayTarget(){const selector=ivOverlayFocusIndex===null ? '#iv
 function openIVEditOverlay(focusIndex=null){const overlay=$("ivEditOverlay"); const section=$("ivSection"); const host=$("ivEditCardInner"); if(!overlay||!section||!host) return; ivOverlayRestoreState={given:!!$("ivGiven").checked, collapsed:!!(patients[currentPatient]&&patients[currentPatient].form&&patients[currentPatient].form.ivCollapsed)}; $("ivGiven").checked=true; if(!$("ivContainer").children.length) createIVEntry(); if(patients[currentPatient]&&patients[currentPatient].form){ patients[currentPatient].form.ivCollapsed=true; patients[currentPatient].form._ivCollapseTouched=true; } ivOverlayFocusIndex=Number.isInteger(focusIndex)?focusIndex:null; section.classList.remove('hidden'); host.appendChild(section); overlay.classList.remove('hidden'); overlay.setAttribute('aria-hidden','false'); document.body.classList.add('iv-edit-open'); renderIVOverlayEntryFocus(); updateIVDeleteButton(); attachIVOverlayFieldNav(); calculateNews(); saveCurrentPatientForm(); saveData(); focusIVOverlayTarget();}
 function closeIVEditOverlay(){const overlay=$("ivEditOverlay"); const section=$("ivSection"); if(!overlay||!section) return; ivOverlayFocusIndex=null; $("ivCollapsedSummary").after(section); renderIVOverlayEntryFocus(); overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); document.body.classList.remove('iv-edit-open'); const hasMeaningful=getIVOverlayHasMeaningfulData(); if(hasMeaningful){$("ivGiven").checked=true; if(patients[currentPatient]&&patients[currentPatient].form){ patients[currentPatient].form.ivCollapsed=true; patients[currentPatient].form._ivCollapseTouched=true; }} else if(ivOverlayRestoreState){$("ivGiven").checked=!!ivOverlayRestoreState.given; if(patients[currentPatient]&&patients[currentPatient].form){ patients[currentPatient].form.ivCollapsed=!!ivOverlayRestoreState.collapsed; patients[currentPatient].form._ivCollapseTouched=true; }} updateIVFields(); calculateNews(); saveCurrentPatientForm(); saveData(); ivOverlayRestoreState=null;}
 function openIVFromSummary(index){openIVEditOverlay(index);}
-function getBMTimingText(){const val=$("bmTiming") ? $("bmTiming").value : ""; const timeVal=$("bmTimingTime") ? $("bmTimingTime").value : ""; if(window.getBMTimingClinicalSuffix) return window.getBMTimingClinicalSuffix(val, timeVal); if(val==="pre") return " pre-meal"; if(val==="post") return " post-meal"; if(val==="time" && String(timeVal||"").trim()) return ` at ${timeVal}`; return "";}
+function getBMTimingText(){const val=$("bmTiming") ? $("bmTiming").value : ""; if(window.getBMTimingClinicalSuffix) return window.getBMTimingClinicalSuffix(val); if(val==="pre") return " pre-meal"; if(val==="post") return " post-meal"; return "";}
 function obsParts(){const parts=[]; const add=(label,val,suffix="")=>{if(String(val||"").trim()) parts.push(`${label} ${val}${suffix}`)}; add("RR",$("rr").value," /min"); if(String($("spo2").value).trim()){const ox=$("oxygen").value==="2" ? ` on ${getOxygenFlowDisplay()||"oxygen"}` : " on air"; parts.push(`SpO₂ ${$("spo2").value}%${ox}`)} add("T",$("temp").value,"°C"); add("BP",$("bp").value," mmHg"); add("HR",$("hr").value," bpm"); add("Weight",$("weight").value," kg"); if(String($("bm").value||"").trim()) parts.push(`BM ${$("bm").value}${getBMTimingText()}`); return parts}
 function getIVSentenceList(){if(!$("ivGiven").checked) return []; return getIVEntries().filter(e=>e.medication||e.dose||e.serialExpiry).map(e=>`IV ${e.medication||"-"} ${e.dose||"-"} (${e.serialExpiry||"-"}) administered without incident`)}
 function saveCurrentPatientForm() {
@@ -3802,8 +3789,6 @@ function saveCurrentPatientForm() {
     weight: $("weight").value,
     bm: $("bm").value,
     bmTiming: $("bmTiming") ? $("bmTiming").value : "",
-    bmTimingTime: $("bmTimingTime") ? $("bmTimingTime").value : "",
-    bmTarget: $("bmTarget") ? $("bmTarget").value : "",
     conscious: $("conscious").value,
     confusion: $("confusion").value,
     issues: $("issues").value,
@@ -4227,7 +4212,7 @@ function addPatient() {
     referralSource, timestamp: "", listDetails: "", createdAt: new Date().toISOString(),
     form: {
       rr:"", spo2:"", oxygen:"0", oxygenFlow:"", scoreMode:"", temp:"", bp:"", hr:"",
-      weight:"", bm:"", bmTiming:"", bmTimingTime:"", bmTarget:"", conscious:"0", confusion:"0", issues:"", examination:"",
+      weight:"", bm:"", bmTiming:"", conscious:"0", confusion:"0", issues:"", examination:"",
       medsGiven: false, medsCollapsed: true, _medsCollapseTouched: false, medsFocusedIndex: null, medEntries: [],
       ivGiven: false, ivCollapsed: true, _ivCollapseTouched: false, ivVIP: "", ivEntries: [],
       plan: "1. ", forDischargeSummary: "1. "
@@ -5014,8 +4999,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_278_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_278_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_274_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_274_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5427,7 +5412,7 @@ document.addEventListener("DOMContentLoaded",function(){
       updateKeyboardInset();
     }, 50);
   });
-  ["rr","spo2","oxygen","temp","bp","hr","weight","bm","bmTiming","bmTimingTime","bmTarget","conscious","confusion","issues","examination","medsGiven","ivGiven","ivVIP","plan","forDischargeSummary","oxygenFlowOther"].forEach(id=>{$(id).addEventListener("input",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()}); $(id).addEventListener("change",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()})});
+  ["rr","spo2","oxygen","temp","bp","hr","weight","bm","bmTiming","conscious","confusion","issues","examination","medsGiven","ivGiven","ivVIP","plan","forDischargeSummary","oxygenFlowOther"].forEach(id=>{$(id).addEventListener("input",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()}); $(id).addEventListener("change",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()})});
   document.querySelectorAll("[data-flow]").forEach(btn=>{
     btn.onclick=()=>{
         document.querySelectorAll(".flow-btn").forEach(b=>b.classList.remove("active"));
@@ -5671,26 +5656,18 @@ const BM_TIMING_META={
   'post-lunch': {label:'post-lunch', short:'Post-L'},
   'pre-dinner': {label:'pre-dinner', short:'Pre-D'},
   'post-dinner': {label:'post-dinner', short:'Post-D'},
-  'random': {label:'random', short:'Random'},
-  'fasting': {label:'fasting', short:'Fasting'},
   'bedtime': {label:'bedtime', short:'Bedtime'},
-  'time': {label:'time', short:'Time'}
+  'other': {label:'other', short:'Other'}
 };
 let bmOverlayLastFocus=null;
-let bmOverlayDraft={value:'', timing:'', time:'', target:''};
+let bmOverlayDraft={value:'', timing:''};
 
-function getBMTimingClinicalSuffix(value, customTime=''){
-  const key=String(value||'').trim();
-  const timeText=String(customTime||'').trim();
-  if(key==='time') return timeText ? ` at ${timeText}` : '';
-  const meta=BM_TIMING_META[key] || null;
+function getBMTimingClinicalSuffix(value){
+  const meta=BM_TIMING_META[String(value||'').trim()] || null;
   return meta && meta.label ? ` ${meta.label}` : '';
 }
-function getBMTimingShortLabel(value, customTime=''){
-  const key=String(value||'').trim();
-  const timeText=String(customTime||'').trim();
-  if(key==='time') return timeText || 'Time';
-  const meta=BM_TIMING_META[key] || null;
+function getBMTimingShortLabel(value){
+  const meta=BM_TIMING_META[String(value||'').trim()] || null;
   return meta && meta.short ? meta.short : '';
 }
 window.getBMTimingClinicalSuffix=getBMTimingClinicalSuffix;
@@ -5698,8 +5675,6 @@ window.getBMTimingShortLabel=getBMTimingShortLabel;
 
 function bmFieldValue(){ return ($('bm') && $('bm').value) ? String($('bm').value).trim() : ''; }
 function bmTimingValue(){ return ($('bmTiming') && $('bmTiming').value) ? String($('bmTiming').value).trim() : ''; }
-function bmTimingTimeValue(){ return ($('bmTimingTime') && $('bmTimingTime').value) ? String($('bmTimingTime').value).trim() : ''; }
-function bmTargetValue(){ return ($('bmTarget') && $('bmTarget').value) ? String($('bmTarget').value).trim() : ''; }
 
 function syncBmTriggerDisplay(){
   const btn=$('openBmEditorBtn');
@@ -5707,7 +5682,7 @@ function syncBmTriggerDisplay(){
   const tag=$('bmDisplayTag');
   if(!btn || !main || !tag) return;
   const value=bmFieldValue();
-  const shortLabel=getBMTimingShortLabel(bmTimingValue(), bmTimingTimeValue());
+  const shortLabel=getBMTimingShortLabel(bmTimingValue());
   const hasValue=!!value;
   btn.classList.toggle('is-empty', !hasValue && !shortLabel);
   main.textContent=hasValue ? value : 'Tap to enter';
@@ -5722,18 +5697,15 @@ function syncBmTriggerDisplay(){
 window.syncBmTriggerDisplay=syncBmTriggerDisplay;
 
 function renderBmOverlay(){
-  const valueInput=$('bmOverlayValue');
-  const targetInput=$('bmOverlayTarget');
-  if(valueInput) valueInput.value=bmOverlayDraft.value || '';
-  if(targetInput) targetInput.value=bmOverlayDraft.target || '';
+  const input=$('bmOverlayValue');
+  if(input) input.value=bmOverlayDraft.value || '';
   document.querySelectorAll('#bmOverlayTimingGrid [data-bm-timing]').forEach(btn=>{
     btn.classList.toggle('active', btn.dataset.bmTiming===bmOverlayDraft.timing);
   });
 }
 function setBmOverlayTiming(value){
   const next=String(value||'').trim();
-  bmOverlayDraft.timing = (bmOverlayDraft.timing===next) ? '' : next;
-  if(bmOverlayDraft.timing!=='time') bmOverlayDraft.time='';
+  bmOverlayDraft.timing = bmOverlayDraft.timing===next ? '' : next;
   renderBmOverlay();
 }
 function openBmOverlay(){
@@ -5741,7 +5713,7 @@ function openBmOverlay(){
   const input=$('bmOverlayValue');
   if(!overlay || !input) return;
   bmOverlayLastFocus=document.activeElement;
-  bmOverlayDraft={ value: bmFieldValue(), timing: bmTimingValue(), time: bmTimingTimeValue(), target: bmTargetValue() };
+  bmOverlayDraft={ value: bmFieldValue(), timing: bmTimingValue() };
   renderBmOverlay();
   overlay.classList.remove('hidden');
   overlay.setAttribute('aria-hidden','false');
@@ -5763,13 +5735,9 @@ function closeBmOverlay(restoreFocus=true){
 function commitBmOverlay(closeAfter=true){
   const bm=$('bm');
   const bmTiming=$('bmTiming');
-  const bmTimingTime=$('bmTimingTime');
-  const bmTarget=$('bmTarget');
-  if(!bm || !bmTiming || !bmTimingTime || !bmTarget) return;
+  if(!bm || !bmTiming) return;
   bm.value=String(bmOverlayDraft.value||'').trim();
   bmTiming.value=String(bmOverlayDraft.timing||'').trim();
-  bmTimingTime.value=bmTiming.value==='time' ? String(bmOverlayDraft.time||'').trim() : '';
-  bmTarget.value=String(bmOverlayDraft.target||'').trim();
   syncBmTriggerDisplay();
   calculateNews();
   saveCurrentPatientForm();
@@ -5777,7 +5745,7 @@ function commitBmOverlay(closeAfter=true){
   if(closeAfter) closeBmOverlay(true);
 }
 function clearBmOverlayDraft(){
-  bmOverlayDraft={value:'', timing:'', time:'', target:''};
+  bmOverlayDraft={value:'', timing:''};
   renderBmOverlay();
   const input=$('bmOverlayValue');
   if(input){ try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); } }
@@ -5795,8 +5763,6 @@ function initBmOverlay(){
   $('bmOverlayClearBtn')?.addEventListener('click', clearBmOverlayDraft);
   $('bmOverlayValue')?.addEventListener('input', e=>{ bmOverlayDraft.value=String(e.target.value||'').trim(); });
   $('bmOverlayValue')?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); commitBmOverlay(true); } });
-  $('bmOverlayTarget')?.addEventListener('input', e=>{ bmOverlayDraft.target=String(e.target.value||'').trim(); });
-  $('bmOverlayTarget')?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); commitBmOverlay(true); } });
   $('bmOverlayTimingGrid')?.addEventListener('click', e=>{
     const btn=e.target.closest('[data-bm-timing]');
     if(!btn) return;
