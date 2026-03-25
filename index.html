@@ -289,35 +289,35 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .obs-picker-arrow{color:#98a2b3;font-size:16px;line-height:1;flex:0 0 auto;transform:translateY(-1px)}
 .bm-overlay{position:fixed;inset:0;z-index:10086}
 .bm-overlay-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.bm-overlay-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 16px);padding:14px;border-radius:20px;display:flex;flex-direction:column;gap:14px;max-height:calc(100dvh - var(--shared-header-offset,0px) - max(26px,calc(env(safe-area-inset-bottom) + 26px)));overflow:hidden}
+.bm-overlay-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 16px);padding:12px;border-radius:20px;display:flex;flex-direction:column;gap:12px;max-height:calc(100dvh - var(--shared-header-offset,0px) - max(26px,calc(env(safe-area-inset-bottom) + 26px)));overflow:hidden}
 .bm-overlay-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .bm-overlay-head h3{margin:0;font-size:20px;line-height:1.1}
 .bm-overlay-close{width:34px;height:34px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#475467;font-size:18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;flex:0 0 auto}
 .bm-overlay-body{min-height:0;overflow:auto;padding-right:2px;-webkit-overflow-scrolling:touch}
-.bm-overlay-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:stretch}
-.bm-overlay-left-col{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:14px;min-width:0}
-.bm-overlay-value-card,.bm-overlay-target-card,.bm-overlay-timing-card{border:1px solid rgba(15,23,42,.08);border-radius:18px;background:#fff;padding:14px;display:flex;flex-direction:column;gap:12px}
-.bm-overlay-value-card{min-height:248px}
-.bm-overlay-timing-card{min-height:248px}
+.bm-overlay-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}
+.bm-overlay-left-col{display:grid;grid-template-rows:auto auto;gap:12px;min-width:0}
+.bm-overlay-value-card,.bm-overlay-target-card,.bm-overlay-timing-card{border:1px solid rgba(15,23,42,.08);border-radius:18px;background:#fff;padding:12px;display:flex;flex-direction:column;gap:10px}
+.bm-overlay-value-card{min-height:208px}
+.bm-overlay-timing-card{min-height:208px}
 .bm-overlay-target-card{justify-content:flex-start}
 .bm-overlay-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:18px}
-.bm-overlay-timing-label,.bm-overlay-card-label{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}
+.bm-overlay-timing-label,.bm-overlay-card-label,.bm-overlay-card-title{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}.bm-overlay-card-title{text-align:center}
 .bm-overlay-value-wrap{display:flex;align-items:center;justify-content:center;flex:1 1 auto}
-#bmOverlayValue{width:100%;min-height:112px;font-size:44px;line-height:1.05;font-weight:800;text-align:center;padding:16px 12px;border-radius:18px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none;margin-top:0}
+#bmOverlayValue{width:100%;min-height:96px;font-size:42px;line-height:1.05;font-weight:800;text-align:center;padding:14px 12px;border-radius:18px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none;margin-top:0}
 #bmOverlayValue:focus,#bmOverlayTarget:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
-.bm-overlay-value-caption{margin-top:2px;text-align:center;font-size:13px;font-weight:700;color:#667085}
-.bm-overlay-target-wrap{display:flex;flex-direction:column;gap:6px}
-#bmOverlayTarget{margin-top:0;min-height:44px;padding:11px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
-.bm-overlay-timing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
-.bm-timing-chip{min-height:42px;padding:9px 10px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-size:12.5px;font-weight:700;line-height:1.2;text-align:center;display:inline-flex;align-items:center;justify-content:center}
+.bm-overlay-value-caption{text-align:center;font-size:13px;font-weight:700;color:#667085}
+.bm-overlay-target-wrap{display:flex;flex-direction:column;gap:4px}
+#bmOverlayTarget{margin-top:0;min-height:42px;padding:10px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
+.bm-overlay-timing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;align-content:start}
+.bm-timing-chip{min-height:39px;padding:8px 10px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-size:12px;font-weight:700;line-height:1.2;text-align:center;display:inline-flex;align-items:center;justify-content:center}
 .bm-timing-chip.active{background:#eaf4ff;border-color:#0a84ff;color:#0a3d91;box-shadow:0 0 0 1px rgba(10,132,255,.12) inset}
 .bm-timing-chip:active{transform:scale(.98)}
-.bm-overlay-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
+.bm-overlay-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .bm-overlay-footer button{height:40px}
-@media (max-width:390px){.bm-overlay-layout{grid-template-columns:1fr}.bm-overlay-left-col{grid-template-rows:auto auto}.bm-overlay-value-card,.bm-overlay-timing-card{min-height:0}#bmOverlayValue{min-height:88px;font-size:38px}.obs-picker-main{font-size:15px}}
+@media (max-width:390px){.bm-overlay-layout{grid-template-columns:1fr}.bm-overlay-left-col{grid-template-rows:auto auto}.bm-overlay-value-card,.bm-overlay-timing-card{min-height:0}#bmOverlayValue{min-height:84px;font-size:36px}.obs-picker-main{font-size:15px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_276_release.html; source=hospital_at_home_v12_36_276_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_277_release.html; source=hospital_at_home_v12_36_277_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -509,7 +509,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_276_release.html</div><div>Source: hospital_at_home_v12_36_276_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_277_release.html</div><div>Source: hospital_at_home_v12_36_277_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -527,7 +527,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 </section>
 <section class="container hidden" id="patientDetail">
 <div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div></div>
-<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><input id="hr" type="number"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>Boehringer Mannheim</label><button aria-haspopup="dialog" class="obs-picker-btn bm-picker-btn" id="openBmEditorBtn" type="button"><span class="obs-picker-main" id="bmDisplayValue">Tap to enter</span><span class="obs-picker-tag hidden" id="bmDisplayTag"></span><span aria-hidden="true" class="obs-picker-arrow">›</span></button><input id="bm" type="hidden"/><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
+<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><input id="hr" type="number"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><button aria-haspopup="dialog" class="obs-picker-btn bm-picker-btn" id="openBmEditorBtn" type="button"><span class="obs-picker-main" id="bmDisplayValue">Tap to enter</span><span class="obs-picker-tag hidden" id="bmDisplayTag"></span><span aria-hidden="true" class="obs-picker-arrow">›</span></button><input id="bm" type="hidden"/><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button></div><label>Issues</label><textarea id="issues"></textarea><div class="field-label-row"><label for="examination">Examination</label><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button></div><textarea id="examination"></textarea><label>Plan</label><textarea autocapitalize="sentences" id="plan"></textarea><label>For discharge summary</label><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
 <div class="card patient-reorder-card" data-card-key="meds">
 <div class="toggle-row meds-header-row">
@@ -608,8 +608,9 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="bm-overlay-layout">
 <div class="bm-overlay-left-col">
 <div class="bm-overlay-value-card">
+<div class="bm-overlay-card-title">Blood glucose</div>
 <div class="bm-overlay-value-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="done" id="bmOverlayValue" inputmode="decimal" placeholder="" spellcheck="false" type="text"/></div>
-<div class="bm-overlay-value-caption">Blood glucose mmol/L</div>
+<div class="bm-overlay-value-caption">mmol/L</div>
 </div>
 <div class="bm-overlay-target-card">
 <div class="bm-overlay-card-label">Target range</div>
@@ -5013,8 +5014,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_276_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_276_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_277_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_277_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
