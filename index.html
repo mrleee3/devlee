@@ -284,8 +284,8 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .obs-picker-btn{width:100%;min-height:46px;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #d1d5db;background:#fff;display:flex;align-items:center;gap:10px;text-align:left;box-shadow:none;box-sizing:border-box;-webkit-appearance:none;appearance:none}
 .obs-picker-btn:focus-visible{outline:none;border-color:#7fc3ff;box-shadow:0 0 0 1px #7fc3ff inset}
 .obs-picker-main{min-width:0;flex:1;font-size:16px;font-weight:400;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.obs-picker-main.is-alert{color:var(--red)}
 .obs-picker-btn.is-empty .obs-picker-main{font-weight:400;color:#9ca3af}
-.obs-picker-tag{display:inline-flex;align-items:center;justify-content:flex-start;min-height:0;padding:0;background:none;color:#667085;font-size:13px;font-weight:500;line-height:1;white-space:nowrap;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis}
 .obs-picker-arrow{color:#98a2b3;font-size:16px;line-height:1;flex:0 0 auto;transform:translateY(-1px)}
 .bm-overlay{position:fixed;inset:0;z-index:10086}
 .bm-overlay-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
@@ -317,7 +317,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:390px){.bm-overlay-layout{grid-template-columns:1fr}.bm-overlay-left-col{grid-template-rows:auto auto}.bm-overlay-value-card,.bm-overlay-timing-card{min-height:0}#bmOverlayValue{min-height:84px;font-size:36px}.obs-picker-main{font-size:15px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_280_release.html; source=hospital_at_home_v12_36_280_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_281_release.html; source=hospital_at_home_v12_36_281_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -509,7 +509,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: index.html</div><div>Source: hospital_at_home_v12_36_278_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_281_release.html</div><div>Source: hospital_at_home_v12_36_281_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -527,7 +527,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 </section>
 <section class="container hidden" id="patientDetail">
 <div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div></div>
-<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><input id="hr" type="number"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><button aria-haspopup="dialog" class="obs-picker-btn bm-picker-btn" id="openBmEditorBtn" type="button"><span class="obs-picker-main" id="bmDisplayValue"></span><span class="obs-picker-tag hidden" id="bmDisplayTag"></span><span aria-hidden="true" class="obs-picker-arrow">›</span></button><input id="bm" type="hidden"/><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
+<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><input id="hr" type="number"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><button aria-haspopup="dialog" class="obs-picker-btn bm-picker-btn" id="openBmEditorBtn" type="button"><span class="obs-picker-main" id="bmDisplayValue"></span><span aria-hidden="true" class="obs-picker-arrow">›</span></button><input id="bm" type="hidden"/><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button></div><label>Issues</label><textarea id="issues"></textarea><div class="field-label-row"><label for="examination">Examination</label><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button></div><textarea id="examination"></textarea><label>Plan</label><textarea autocapitalize="sentences" id="plan"></textarea><label>For discharge summary</label><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
 <div class="card patient-reorder-card" data-card-key="meds">
 <div class="toggle-row meds-header-row">
@@ -5014,8 +5014,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_280_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_280_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_281_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_281_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5709,23 +5709,32 @@ function bmTimingValue(){ return ($('bmTiming') && $('bmTiming').value) ? String
 function bmTimingTimeValue(){ return ($('bmTimingTime') && $('bmTimingTime').value) ? String($('bmTimingTime').value).trim() : ''; }
 function bmTargetValue(){ return ($('bmTarget') && $('bmTarget').value) ? String($('bmTarget').value).trim() : ''; }
 
+function parseBmTargetRange(raw){
+  const text=String(raw||'').trim().replace(/mmol\/?l/ig,'').replace(/\s+/g,' ');
+  if(!text) return null;
+  const match=text.match(/(-?\d+(?:[.,]\d+)?)\s*(?:-|–|—|to)\s*(-?\d+(?:[.,]\d+)?)/i);
+  if(!match) return null;
+  const low=Number(match[1].replace(',', '.'));
+  const high=Number(match[2].replace(',', '.'));
+  if(!Number.isFinite(low) || !Number.isFinite(high)) return null;
+  return {min:Math.min(low, high), max:Math.max(low, high)};
+}
+function isBmOutsideTarget(value, target){
+  const numeric=Number(String(value||'').trim().replace(',', '.'));
+  if(!Number.isFinite(numeric)) return false;
+  const range=parseBmTargetRange(target);
+  if(!range) return false;
+  return numeric < range.min || numeric > range.max;
+}
 function syncBmTriggerDisplay(){
   const btn=$('openBmEditorBtn');
   const main=$('bmDisplayValue');
-  const tag=$('bmDisplayTag');
-  if(!btn || !main || !tag) return;
+  if(!btn || !main) return;
   const value=bmFieldValue();
-  const shortLabel=getBMTimingTriggerLabel(bmTimingValue(), bmTimingTimeValue());
   const hasValue=!!value;
-  btn.classList.toggle('is-empty', !hasValue && !shortLabel);
+  btn.classList.toggle('is-empty', !hasValue);
   main.textContent=hasValue ? value : '';
-  if(shortLabel){
-    tag.textContent=(hasValue ? '· ' : '') + shortLabel;
-    tag.classList.remove('hidden');
-  }else{
-    tag.textContent='';
-    tag.classList.add('hidden');
-  }
+  main.classList.toggle('is-alert', isBmOutsideTarget(value, bmTargetValue()));
 }
 window.syncBmTriggerDisplay=syncBmTriggerDisplay;
 
