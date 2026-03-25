@@ -285,7 +285,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .obs-picker-btn:focus-visible{outline:none;border-color:#7fc3ff;box-shadow:0 0 0 1px #7fc3ff inset}
 .obs-picker-main{min-width:0;flex:1;font-size:16px;font-weight:400;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .obs-picker-btn.is-empty .obs-picker-main{font-weight:400;color:#9ca3af}
-.obs-picker-tag{display:inline-flex;align-items:center;justify-content:center;min-height:24px;padding:0 9px;border-radius:999px;background:#eef4ff;color:#0a3d91;font-size:11.5px;font-weight:800;line-height:1;white-space:nowrap;flex:0 0 auto}
+.obs-picker-tag{display:inline-flex;align-items:center;justify-content:flex-start;min-height:0;padding:0;background:none;color:#667085;font-size:13px;font-weight:500;line-height:1;white-space:nowrap;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis}
 .obs-picker-arrow{color:#98a2b3;font-size:16px;line-height:1;flex:0 0 auto;transform:translateY(-1px)}
 .bm-overlay{position:fixed;inset:0;z-index:10086}
 .bm-overlay-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
@@ -317,7 +317,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:390px){.bm-overlay-layout{grid-template-columns:1fr}.bm-overlay-left-col{grid-template-rows:auto auto}.bm-overlay-value-card,.bm-overlay-timing-card{min-height:0}#bmOverlayValue{min-height:84px;font-size:36px}.obs-picker-main{font-size:15px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_279_release.html; source=hospital_at_home_v12_36_279_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_280_release.html; source=hospital_at_home_v12_36_280_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -5014,8 +5014,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_279_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_279_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_280_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_280_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5662,19 +5662,19 @@ window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.bmOverlay = true;
 
 const BM_TIMING_META={
-  '': {label:'', short:''},
-  'pre': {label:'pre-meal', short:'Pre'},
-  'post': {label:'post-meal', short:'Post'},
-  'pre-breakfast': {label:'pre-breakfast', short:'Pre-B'},
-  'post-breakfast': {label:'post-breakfast', short:'Post-B'},
-  'pre-lunch': {label:'pre-lunch', short:'Pre-L'},
-  'post-lunch': {label:'post-lunch', short:'Post-L'},
-  'pre-dinner': {label:'pre-dinner', short:'Pre-D'},
-  'post-dinner': {label:'post-dinner', short:'Post-D'},
-  'random': {label:'random', short:'Random'},
-  'fasting': {label:'fasting', short:'Fasting'},
-  'bedtime': {label:'bedtime', short:'Bedtime'},
-  'time': {label:'time', short:'Time'}
+  '': {label:'', short:'', trigger:''},
+  'pre': {label:'pre-meal', short:'Pre', trigger:'pre'},
+  'post': {label:'post-meal', short:'Post', trigger:'post'},
+  'pre-breakfast': {label:'pre-breakfast', short:'Pre-B', trigger:'pre-B'},
+  'post-breakfast': {label:'post-breakfast', short:'Post-B', trigger:'post-B'},
+  'pre-lunch': {label:'pre-lunch', short:'Pre-L', trigger:'pre-L'},
+  'post-lunch': {label:'post-lunch', short:'Post-L', trigger:'post-L'},
+  'pre-dinner': {label:'pre-dinner', short:'Pre-D', trigger:'pre-D'},
+  'post-dinner': {label:'post-dinner', short:'Post-D', trigger:'post-D'},
+  'random': {label:'random', short:'Random', trigger:'random'},
+  'fasting': {label:'fasting', short:'Fasting', trigger:'fasting'},
+  'bedtime': {label:'bedtime', short:'Bedtime', trigger:'bedtime'},
+  'time': {label:'time', short:'Time', trigger:'time'}
 };
 let bmOverlayLastFocus=null;
 let bmOverlayDraft={value:'', timing:'', time:'', target:''};
@@ -5693,8 +5693,16 @@ function getBMTimingShortLabel(value, customTime=''){
   const meta=BM_TIMING_META[key] || null;
   return meta && meta.short ? meta.short : '';
 }
+function getBMTimingTriggerLabel(value, customTime=''){
+  const key=String(value||'').trim();
+  const timeText=String(customTime||'').trim();
+  if(key==='time') return timeText || 'time';
+  const meta=BM_TIMING_META[key] || null;
+  return meta && meta.trigger ? meta.trigger : '';
+}
 window.getBMTimingClinicalSuffix=getBMTimingClinicalSuffix;
 window.getBMTimingShortLabel=getBMTimingShortLabel;
+window.getBMTimingTriggerLabel=getBMTimingTriggerLabel;
 
 function bmFieldValue(){ return ($('bm') && $('bm').value) ? String($('bm').value).trim() : ''; }
 function bmTimingValue(){ return ($('bmTiming') && $('bmTiming').value) ? String($('bmTiming').value).trim() : ''; }
@@ -5707,12 +5715,12 @@ function syncBmTriggerDisplay(){
   const tag=$('bmDisplayTag');
   if(!btn || !main || !tag) return;
   const value=bmFieldValue();
-  const shortLabel=getBMTimingShortLabel(bmTimingValue(), bmTimingTimeValue());
+  const shortLabel=getBMTimingTriggerLabel(bmTimingValue(), bmTimingTimeValue());
   const hasValue=!!value;
   btn.classList.toggle('is-empty', !hasValue && !shortLabel);
   main.textContent=hasValue ? value : '';
   if(shortLabel){
-    tag.textContent=shortLabel;
+    tag.textContent=(hasValue ? '· ' : '') + shortLabel;
     tag.classList.remove('hidden');
   }else{
     tag.textContent='';
@@ -5745,11 +5753,16 @@ function openBmOverlay(){
   renderBmOverlay();
   overlay.classList.remove('hidden');
   overlay.setAttribute('aria-hidden','false');
+  try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
+  try{ const len=(input.value||'').length; if(input.setSelectionRange) input.setSelectionRange(len,len); }catch(_e){}
   requestAnimationFrame(()=>{
-    try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
-    try{ const len=(input.value||'').length; if(input.setSelectionRange) input.setSelectionRange(len,len); }catch(_e){}
+    if(document.activeElement!==input){
+      try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
+      try{ const len=(input.value||'').length; if(input.setSelectionRange) input.setSelectionRange(len,len); }catch(_e){}
+    }
   });
 }
+
 function closeBmOverlay(restoreFocus=true){
   const overlay=$('bmOverlay');
   if(!overlay) return;
