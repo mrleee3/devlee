@@ -294,7 +294,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 #bm:focus{outline:none;box-shadow:none}
 #bm::placeholder{color:#9ca3af}
 .obs-split-field.is-alert #bm{color:var(--red)}
-.obs-split-trigger{margin:0;min-width:42px;width:42px;border:none;border-left:1px solid #e5e7eb;border-radius:0;background:transparent;padding:0;display:inline-flex;align-items:center;justify-content:center;box-shadow:none;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
+.obs-split-trigger{margin:0;min-width:42px;width:42px;border:none;border-left:none;border-radius:0;background:transparent;padding:0;display:inline-flex;align-items:center;justify-content:center;box-shadow:none;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
 .obs-split-trigger:focus-visible{outline:none;box-shadow:none}
 .obs-split-trigger:active{transform:none}
 .bm-overlay{position:fixed;inset:0;z-index:10086}
@@ -325,9 +325,18 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .bm-overlay-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .bm-overlay-footer button{height:40px}
 @media (max-width:390px){.bm-overlay-layout{grid-template-columns:1fr}.bm-overlay-left-col{grid-template-rows:auto auto}.bm-overlay-value-card,.bm-overlay-timing-card{min-height:0}#bmOverlayValue{min-height:84px;font-size:36px}.obs-picker-main{font-size:15px}}
+#hr{margin-top:0;border:none;border-radius:0;background:transparent;box-shadow:none;min-height:46px;padding:12px;line-height:1.2}
+#hr:focus{outline:none;box-shadow:none}
+#hrFieldShell.is-alert #hr{color:var(--red)}
+.hr-overlay-layout{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+.hr-overlay-left-col{min-height:210px}
+.hr-overlay-pulse-card{min-height:210px}
+.hr-overlay-pulse-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
+@media (max-width:390px){.hr-overlay-layout{grid-template-columns:1fr}.hr-overlay-left-col,.hr-overlay-pulse-card{min-height:0}}
+
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_282_release.html; source=hospital_at_home_v12_36_282_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_283_release.html; source=hospital_at_home_v12_36_283_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -519,7 +528,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_282_release.html</div><div>Source: hospital_at_home_v12_36_282_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: index.html</div><div>Source: hospital_at_home_v12_36_282_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -537,7 +546,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 </section>
 <section class="container hidden" id="patientDetail">
 <div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div></div>
-<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><input id="hr" type="number"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
+<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button></div><label>Issues</label><textarea id="issues"></textarea><div class="field-label-row"><label for="examination">Examination</label><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button></div><textarea id="examination"></textarea><label>Plan</label><textarea autocapitalize="sentences" id="plan"></textarea><label>For discharge summary</label><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
 <div class="card patient-reorder-card" data-card-key="meds">
 <div class="toggle-row meds-header-row">
@@ -610,6 +619,35 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 </div>
 </div>
 
+<div aria-hidden="true" class="bm-overlay hidden" id="hrOverlay">
+<div class="bm-overlay-backdrop" id="hrOverlayBackdrop"></div>
+<div aria-labelledby="hrOverlayTitle" aria-modal="true" class="card bm-overlay-modal" id="hrOverlayModal" role="dialog">
+<div class="bm-overlay-head"><h3 id="hrOverlayTitle">Heart rate</h3><button aria-label="Close heart rate editor" class="bm-overlay-close" id="hrOverlayCloseBtn" type="button">×</button></div>
+<div class="bm-overlay-body">
+<div class="bm-overlay-layout hr-overlay-layout">
+<div class="bm-overlay-left-col hr-overlay-left-col">
+<div class="bm-overlay-value-card">
+<div class="bm-overlay-card-title">Heart rate</div>
+<div class="bm-overlay-value-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="done" id="hrOverlayValue" inputmode="numeric" placeholder="" spellcheck="false" type="number"/></div>
+<div class="bm-overlay-value-caption">bpm</div>
+</div>
+</div>
+<div class="bm-overlay-timing-card hr-overlay-pulse-card">
+<div class="bm-overlay-section-head"><div class="bm-overlay-timing-label">Pulse</div></div>
+<div class="bm-overlay-timing-grid hr-overlay-pulse-grid" id="hrOverlayPulseGrid">
+<button class="bm-timing-chip hr-pulse-chip" data-hr-pulse="regular" type="button">Regular</button>
+<button class="bm-timing-chip hr-pulse-chip" data-hr-pulse="irregular" type="button">Irregular</button>
+<button class="bm-timing-chip hr-pulse-chip" data-hr-pulse="ectopic" type="button">Ectopic</button>
+<button class="bm-timing-chip hr-pulse-chip" data-hr-pulse="weak" type="button">Weak</button>
+<button class="bm-timing-chip hr-pulse-chip" data-hr-pulse="bounding" type="button">Bounding</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bm-overlay-footer"><button id="hrOverlayClearBtn" type="button">Clear</button><button class="primary" id="hrOverlayDoneBtn" type="button">Done</button></div>
+</div>
+</div>
+
 <div aria-hidden="true" class="bm-overlay hidden" id="bmOverlay">
 <div class="bm-overlay-backdrop" id="bmOverlayBackdrop"></div>
 <div aria-labelledby="bmOverlayTitle" aria-modal="true" class="card bm-overlay-modal" id="bmOverlayModal" role="dialog">
@@ -665,7 +703,7 @@ const INSULIN_NAMES=new Set(["Abasaglar","Admelog","Fiasp","Humalog","Humalog Mi
 const MED_DOSE_PRESETS={"Amlodipine":["2.5mg","5mg","10mg"],"Amoxicillin":["500mg","1g"],"Apixaban":["2.5mg","5mg"],"Aspirin":["75mg","300mg"],"Atorvastatin":["10mg","20mg","40mg","80mg"],"Azithromycin":["250mg","500mg"],"Bendroflumethiazide":["2.5mg"],"Bisacodyl":["5mg","10mg"],"Bisoprolol":["1.25mg","2.5mg","3.75mg","5mg","7.5mg","10mg"],"Budesonide nebules":["500micrograms","1mg","2mg"],"Bumetanide":["0.5mg","1mg","2mg","3mg","4mg"],"Carbocisteine":["375mg","750mg"],"Cefalexin":["500mg"],"Cetirizine":["10mg"],"Clarithromycin":["250mg","500mg"],"Clopidogrel":["75mg"],"Codeine":["15mg","30mg","60mg"],"Co-codamol":["8/500","15/500","30/500"],"Cyclizine":["50mg"],"Dexamethasone":["2mg","4mg","6mg","8mg"],"Diazepam":["2mg","5mg","10mg"],"Digoxin":["62.5micrograms","125micrograms","250micrograms"],"Diltiazem":["60mg","120mg","180mg","240mg"],"Docusate":["100mg"],"Doxycycline":["100mg","200mg"],"Empagliflozin":["10mg","25mg"],"Esomeprazole":["20mg","40mg"],"Ferrous sulfate":["200mg"],"Flucloxacillin":["500mg","1g"],"Fluconazole":["50mg","100mg","150mg","200mg"],"Folic acid":["400micrograms","5mg"],"Frusemide":["20mg","40mg","80mg","120mg"],"Furosemide":["20mg","40mg","80mg","120mg"],"Gabapentin":["100mg","300mg","400mg"],"Gliclazide":["40mg","80mg","160mg"],"Haloperidol":["500micrograms","1.5mg","5mg"],"Hydrocortisone":["10mg","20mg"],"Hyoscine butylbromide":["10mg","20mg"],"Ibuprofen":["200mg","400mg"],"Ipratropium nebules":["250micrograms","500micrograms"],"Lactulose":["15ml","30ml"],"Lansoprazole":["15mg","30mg"],"Levetiracetam":["250mg","500mg","750mg","1g"],"Levothyroxine":["25micrograms","50micrograms","75micrograms","100micrograms"],"Loperamide":["2mg"],"Lorazepam":["500micrograms","1mg"],"Losartan":["25mg","50mg","100mg"],"Metformin":["500mg","850mg","1000mg"],"Metoclopramide":["10mg"],"Metolazone":["2.5mg","5mg","10mg"],"Mirtazapine":["15mg","30mg","45mg"],"Morphine sulfate":["2.5mg","5mg","10mg"],"Movicol":["1 sachet","2 sachets"],"Nitrofurantoin":["50mg","100mg"],"Omeprazole":["10mg","20mg","40mg"],"Ondansetron":["4mg","8mg"],"Oxycodone":["2.5mg","5mg","10mg"],"Paracetamol":["500mg","1g","2 tablets"],"Penicillin V":["250mg","500mg"],"Phenoxymethylpenicillin":["250mg","500mg"],"Prednisolone":["5mg","10mg","20mg","30mg","40mg"],"Pregabalin":["25mg","50mg","75mg","150mg","300mg"],"Ramipril":["1.25mg","2.5mg","5mg","10mg"],"Rivaroxaban":["10mg","15mg","20mg"],"Salbutamol inhaler":["1 puff","2 puffs","4 puffs"],"Salbutamol nebules":["2.5mg","5mg"],"Senna":["7.5mg","15mg"],"Sertraline":["25mg","50mg","100mg","150mg","200mg"],"Simvastatin":["10mg","20mg","40mg"],"Spironolactone":["12.5mg","25mg","50mg","100mg"],"Tamsulosin":["400micrograms"],"Temazepam":["10mg","20mg"],"Torasemide":["5mg","10mg","20mg","40mg"],"Trimethoprim":["100mg","200mg"],"Warfarin":["0.5mg","1mg","2mg","3mg","5mg"],"Zopiclone":["3.75mg","7.5mg"],"Adcal-D3":["1 tablet","2 tablets"],"Alendronic acid":["70mg"],"Allopurinol":["100mg","300mg"],"Amiodarone":["100mg","200mg"],"Budesonide inhaler":["1 puff","2 puffs"],"Calcichew D3":["1 tablet","2 tablets"],"Colecalciferol":["800units","1600units","20000units"],"Dapagliflozin":["5mg","10mg"],"Donepezil":["5mg","10mg"],"Ferrous fumarate":["210mg"],"Fusidic acid cream":["apply thin layer"],"Glyceryl trinitrate spray":["1 spray","2 sprays"],"Indapamide":["1.5mg","2.5mg"],"Ipratropium inhaler":["1 puff","2 puffs"],"Isosorbide mononitrate":["10mg","20mg","30mg","60mg"],"Linagliptin":["5mg"],"Macrogol":["1 sachet","2 sachets"],"Magnesium oxide":["160mg","250mg","500mg"],"Mebeverine":["135mg"],"Metronidazole":["200mg","400mg","500mg"],"Nystatin":["1ml","5ml"],"Pravastatin":["10mg","20mg","40mg"],"Prochlorperazine":["5mg"],"Quetiapine":["25mg","50mg","100mg"],"Sitagliptin":["25mg","50mg","100mg"],"Valproate":["200mg","500mg"],"Co-amoxiclav":["375mg","625mg"]};
 const MED_FREQUENCY_PRESETS={"Amlodipine":["OD"],"Amoxicillin":["OD","BD","TDS","QDS"],"Apixaban":["BD"],"Aspirin":["OD"],"Atorvastatin":["ON"],"Azithromycin":["OD"],"Bendroflumethiazide":["OD"],"Bisacodyl":["ON"],"Bisoprolol":["OD"],"Budesonide nebules":["BD","QDS"],"Bumetanide":["OD","BD"],"Carbocisteine":["TDS","QDS"],"Cefalexin":["BD","TDS","QDS"],"Cetirizine":["OD"],"Clarithromycin":["BD"],"Clopidogrel":["OD"],"Codeine":["OD","BD","TDS","QDS"],"Co-codamol":["OD","BD","TDS","QDS"],"Cyclizine":["TDS"],"Dexamethasone":["OD","BD"],"Diazepam":["OD","BD","TDS","ON"],"Digoxin":["OD"],"Diltiazem":["BD","TDS","OD"],"Docusate":["BD","TDS"],"Doxycycline":["OD","BD"],"Empagliflozin":["OD"],"Esomeprazole":["OD","BD"],"Ferrous sulfate":["OD","BD","TDS"],"Flucloxacillin":["QDS"],"Fluconazole":["OD"],"Folic acid":["OD"],"Frusemide":["OD","BD","alternate days"],"Furosemide":["OD","BD","alternate days"],"Gabapentin":["OD","BD","TDS"],"Gliclazide":["OD","BD"],"Haloperidol":["OD","BD","TDS","ON"],"Hydrocortisone":["OD","BD","TDS"],"Hyoscine butylbromide":["QDS"],"Ibuprofen":["OD","BD","TDS"],"Ipratropium nebules":["QDS"],"Lactulose":["BD","TDS"],"Lansoprazole":["OD","BD"],"Levetiracetam":["BD"],"Levothyroxine":["OD"],"Loperamide":["OD","BD","TDS","QDS"],"Lorazepam":["OD","BD","TDS","ON"],"Losartan":["OD"],"Metformin":["OD","BD","TDS"],"Metoclopramide":["TDS"],"Metolazone":["OD","alternate days"],"Mirtazapine":["ON"],"Morphine sulfate":["OD","BD","QDS"],"Movicol":["OD","BD","TDS"],"Nitrofurantoin":["BD","QDS"],"Omeprazole":["OD","BD"],"Ondansetron":["BD","TDS"],"Oxycodone":["BD","QDS"],"Paracetamol":["OD","BD","TDS","QDS"],"Penicillin V":["QDS"],"Phenoxymethylpenicillin":["QDS"],"Prednisolone":["OD"],"Pregabalin":["BD","TDS"],"Ramipril":["OD","BD"],"Rivaroxaban":["OD","BD"],"Salbutamol inhaler":["OD","BD","TDS","QDS"],"Salbutamol nebules":["OD","BD","TDS","QDS"],"Senna":["ON","BD"],"Sertraline":["OD"],"Simvastatin":["ON"],"Spironolactone":["OD"],"Tamsulosin":["ON"],"Temazepam":["ON"],"Torasemide":["OD","BD"],"Trimethoprim":["BD"],"Warfarin":["OD"],"Zopiclone":["ON"],"Adcal-D3":["OD","BD"],"Alendronic acid":["weekly"],"Allopurinol":["OD"],"Amiodarone":["OD","BD"],"Budesonide inhaler":["BD"],"Calcichew D3":["OD","BD"],"Colecalciferol":["OD","weekly","monthly"],"Dapagliflozin":["OD"],"Donepezil":["ON"],"Ferrous fumarate":["OD","BD","TDS"],"Fusidic acid cream":["BD","TDS"],"Glyceryl trinitrate spray":["PRN"],"Indapamide":["OD"],"Ipratropium inhaler":["QDS"],"Isosorbide mononitrate":["OD","BD"],"Linagliptin":["OD"],"Macrogol":["OD","BD","TDS"],"Magnesium oxide":["OD","BD","TDS"],"Mebeverine":["TDS"],"Metronidazole":["TDS"],"Nystatin":["QDS"],"Pravastatin":["ON"],"Prochlorperazine":["TDS"],"Quetiapine":["OD","BD","ON"],"Sitagliptin":["OD"],"Valproate":["BD","TDS"],"Co-amoxiclav":["TDS"]};
 const DEFAULT_MED_FREQUENCIES=["OD","BD","TDS","QDS","ON"];
-const defaultPatients={"1":{"name":"Mrs Law-test","age":82,"sex":"F","summary":"LRTI • IV ceftriaxone day 1","acuity":"AMBER","acuityClass":"amber","referralSource":"GSTT","timestamp":"","doa":"10 Mar 2026","listDetails":"Obs: T 37.8°C, BP 116/68, HR 94, SpO₂ 94% RA, RR 20","form":{"rr":"20","spo2":"94","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"37.8","bp":"116/68","hr":"94","weight":"64.2","bm":"6.8","conscious":"0","confusion":"0","issues":"1. LRTI cough\n2. Poor intake\n3. Pleuritic pain","examination":"Alert and engaging. Mild tachypnoea but speaking in full sentences. Scattered right basal crackles with no wheeze. Warm peripheries and no new oedema.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For fever / pleuritic discomfort"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"ceftriaxone","dose":"2g","serialExpiry":"A4821 / 10/27"}],"plan":"1. Give IV ceftriaxone today.\n2. Encourage fluids and monitor oral intake.\n3. Repeat obs later today and review if worsening breathlessness.","forDischargeSummary":"1. Complete antibiotic course.\n2. Safety-net re worsening breathlessness, fever or confusion.\n3. Consider CXR / hospital review if not improving."}},"2":{"name":"Mr Ree-test","age":76,"sex":"M","summary":"Heart failure • weight / diuresis review","acuity":"GREEN","acuityClass":"green","referralSource":"GP","timestamp":"","doa":"11 Mar 2026","listDetails":"Obs: T 36.6°C, BP 122/70, HR 80, SpO₂ 95% RA, RR 18","form":{"rr":"18","spo2":"95","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.6","bp":"122/70","hr":"80","weight":"83.5","bm":"6.2","conscious":"0","confusion":"0","issues":"1. Oedema\n2. Diuresis review\n3. No CP/syncope","examination":"Comfortable at rest. Mild bilateral ankle oedema only. Bibasal crackles minimal and improved from yesterday. JVP not obviously elevated.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Furosemide","dose":"80mg","frequency":"OD","details":"Current oral dose"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue current oral diuretic plan.\n2. Repeat weight and U&E tomorrow.\n3. Escalate if dizziness, hypotension or worsening dyspnoea.","forDischargeSummary":"1. Community HF follow-up.\n2. Repeat renal function in 1 week.\n3. Continue daily weights if possible."}},"3":{"name":"Mrs Coo-test","age":89,"sex":"F","summary":"Delirium • suspected UTI","acuity":"RED","acuityClass":"red","referralSource":"LAS","timestamp":"","doa":"12 Mar 2026","listDetails":"Obs: T 38.4°C, BP 96/54, HR 110, SpO₂ 91% RA, RR 24","form":{"rr":"24","spo2":"91","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"38.4","bp":"96/54","hr":"110","weight":"57.0","bm":"8.9","conscious":"0","confusion":"3","issues":"1. Acute delirium\n2. Suspected UTI\n3. Poor intake","examination":"Drowsy but rousable. Disorientated to place and time. Suprapubic tenderness present. No meningism. Peripheral perfusion slightly reduced.","medsGiven":false,"medsCollapsed":false,"medsFocusedIndex":null,"medEntries":[],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Senior clinical review today.\n2. Send urine sample if obtainable and check bloods.\n3. Low threshold for hospital conveyance if BP remains low or confusion worsens.","forDischargeSummary":"1. Update family and document escalation plan.\n2. Review culture results when available.\n3. Reassess need for admission if not settling."}},"4":{"name":"Mr Sha-test","age":68,"sex":"M","summary":"Cellulitis • oral step-down review","acuity":"GREEN","acuityClass":"green","referralSource":"PRUH","timestamp":"","doa":"13 Mar 2026","listDetails":"Obs: T 36.9°C, BP 128/74, HR 82, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.9","bp":"128/74","hr":"82","weight":"79.4","bm":"7.1","conscious":"0","confusion":"0","issues":"1. L leg cellulitis\n2. Pain improved\n3. Systemically well","examination":"Bright and comfortable. Erythema receding within marker line. Mild warmth only. No fluctuance, crepitus or discharge.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Flucloxacillin","dose":"1g","frequency":"QDS","details":"Day 4 oral step-down"},{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For pain"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue oral flucloxacillin.\n2. Elevate leg and continue emollient / skin care.\n3. Review for discharge if improving again tomorrow.","forDischargeSummary":"1. Complete oral antibiotic course.\n2. Safety-net re spreading erythema, fever or increasing pain."}},"5":{"name":"Mrs Tur-test","age":73,"sex":"F","summary":"COPD exacerbation • oxygen / steroids","acuity":"AMBER","acuityClass":"amber","referralSource":"KCH","timestamp":"","doa":"15 Mar 2026","listDetails":"Obs: T 37.2°C, BP 134/78, HR 92, SpO₂ 90% 1.5L, RR 22","form":{"rr":"22","spo2":"90","oxygen":"2","oxygenFlow":"1.5L","scoreMode":"","temp":"37.2","bp":"134/78","hr":"92","weight":"69.0","bm":"9.8","conscious":"0","confusion":"0","issues":"1. Infective COPD\n2. O2 requirement\n3. Wheeze improved","examination":"Mild work of breathing on 1.5L oxygen. Widespread expiratory wheeze with prolonged expiratory phase. No central cyanosis. Able to speak in full sentences.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Prednisolone","dose":"30mg","frequency":"OD","details":"Day 2"},{"name":"Salbutamol nebules","dose":"2.5mg","frequency":"QDS","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue controlled oxygen aiming 88-92%.\n2. Continue rescue medications.\n3. Review later today if increased work of breathing or rising oxygen requirement.","forDischargeSummary":"1. Complete rescue pack course.\n2. Check inhaler technique and smoking status.\n3. COPD nurse follow-up if available."}},"6":{"name":"Mr Doy-test","age":84,"sex":"M","summary":"AKI / dehydration monitoring","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"17 Mar 2026","listDetails":"Obs: T 36.7°C, BP 104/62, HR 96, SpO₂ 96% RA, RR 19","form":{"rr":"19","spo2":"96","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.7","bp":"104/62","hr":"96","weight":"71.0","bm":"5.7","conscious":"0","confusion":"0","issues":"1. AKI\n2. Postural symptoms\n3. Nephrotoxics held","examination":"Alert and cooperative. Mucous membranes dry. Chest clear and no peripheral oedema. Abdomen soft and non-tender.","medsGiven":false,"medsCollapsed":false,"medsFocusedIndex":null,"medEntries":[],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"normal saline","dose":"500ml","serialExpiry":"NS284 / 08/27"}],"plan":"1. Give 500 mL normal saline slowly as prescribed.\n2. Encourage oral fluids and document intake.\n3. Repeat renal function tomorrow and review BP.","forDischargeSummary":"1. Reintroduce longer-term medicines only when renal function stable.\n2. Safety-net re reduced urine output, vomiting or dizziness."}},"7":{"name":"Mrs Ben-test","age":70,"sex":"F","summary":"Diabetic foot infection • IV co-amoxiclav","acuity":"AMBER","acuityClass":"amber","referralSource":"GSTT","timestamp":"","doa":"19 Mar 2026","listDetails":"Obs: T 37.5°C, BP 118/72, HR 88, SpO₂ 98% RA, RR 18","form":{"rr":"18","spo2":"98","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"37.5","bp":"118/72","hr":"88","weight":"86.4","bm":"12.6","conscious":"0","confusion":"0","issues":"1. R diabetic foot\n2. Hyperglycaemia\n3. Podiatry involved","examination":"Systemically well. Dressing dry with no strike-through. Surrounding erythema mild and improving. Foot warm and perfused with no spreading streaking.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For pain"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"co-amoxiclav","dose":"1.2g","serialExpiry":"CA771 / 11/27"}],"plan":"1. Continue IV co-amoxiclav today.\n2. Recheck glucose profile and encourage hydration.\n3. Review with podiatry plan and consider oral step-down if improving.","forDischargeSummary":"1. Podiatry follow-up arranged.\n2. Continue off-loading and dressing plan.\n3. Step down to oral antibiotics when clinically appropriate."}},"8":{"name":"Mr Hug-test","age":91,"sex":"M","summary":"Constipation / frailty review","acuity":"GREEN","acuityClass":"green","referralSource":"RR","timestamp":"","doa":"21 Mar 2026","listDetails":"Obs: T 36.4°C, BP 130/76, HR 76, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.4","bp":"130/76","hr":"76","weight":"61.5","bm":"6.1","conscious":"0","confusion":"0","issues":"1. Frailty\n2. Constipation\n3. No red flags","examination":"Well in self and comfortable in chair. Abdomen soft, non-distended and non-tender. Bowel sounds present. Hydration reasonable today.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Movicol","dose":"2 sachets","frequency":"BD","details":""},{"name":"Senna","dose":"15mg","frequency":"ON","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue laxatives and encourage fluids.\n2. Mobilise as able with support.\n3. Review bowel action and abdominal symptoms tomorrow.","forDischargeSummary":"1. Continue bowel regimen short term then titrate down.\n2. Safety-net re pain, vomiting or failure to open bowels."}}};
+const defaultPatients={"1":{"name":"Mrs Law-test","age":82,"sex":"F","summary":"LRTI • IV ceftriaxone day 1","acuity":"AMBER","acuityClass":"amber","referralSource":"GSTT","timestamp":"","doa":"10 Mar 2026","listDetails":"Obs: T 37.8°C, BP 116/68, HR 94, SpO₂ 94% RA, RR 20","form":{"rr":"20","spo2":"94","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"37.8","bp":"116/68","hr":"94","weight":"64.2","bm":"6.8","hrPulse":"","conscious":"0","confusion":"0","issues":"1. LRTI cough\n2. Poor intake\n3. Pleuritic pain","examination":"Alert and engaging. Mild tachypnoea but speaking in full sentences. Scattered right basal crackles with no wheeze. Warm peripheries and no new oedema.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For fever / pleuritic discomfort"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"ceftriaxone","dose":"2g","serialExpiry":"A4821 / 10/27"}],"plan":"1. Give IV ceftriaxone today.\n2. Encourage fluids and monitor oral intake.\n3. Repeat obs later today and review if worsening breathlessness.","forDischargeSummary":"1. Complete antibiotic course.\n2. Safety-net re worsening breathlessness, fever or confusion.\n3. Consider CXR / hospital review if not improving."}},"2":{"name":"Mr Ree-test","age":76,"sex":"M","summary":"Heart failure • weight / diuresis review","acuity":"GREEN","acuityClass":"green","referralSource":"GP","timestamp":"","doa":"11 Mar 2026","listDetails":"Obs: T 36.6°C, BP 122/70, HR 80, SpO₂ 95% RA, RR 18","form":{"rr":"18","spo2":"95","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.6","bp":"122/70","hr":"80","weight":"83.5","bm":"6.2","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Oedema\n2. Diuresis review\n3. No CP/syncope","examination":"Comfortable at rest. Mild bilateral ankle oedema only. Bibasal crackles minimal and improved from yesterday. JVP not obviously elevated.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Furosemide","dose":"80mg","frequency":"OD","details":"Current oral dose"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue current oral diuretic plan.\n2. Repeat weight and U&E tomorrow.\n3. Escalate if dizziness, hypotension or worsening dyspnoea.","forDischargeSummary":"1. Community HF follow-up.\n2. Repeat renal function in 1 week.\n3. Continue daily weights if possible."}},"3":{"name":"Mrs Coo-test","age":89,"sex":"F","summary":"Delirium • suspected UTI","acuity":"RED","acuityClass":"red","referralSource":"LAS","timestamp":"","doa":"12 Mar 2026","listDetails":"Obs: T 38.4°C, BP 96/54, HR 110, SpO₂ 91% RA, RR 24","form":{"rr":"24","spo2":"91","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"38.4","bp":"96/54","hr":"110","weight":"57.0","bm":"8.9","hrPulse":"","conscious":"0","confusion":"3","issues":"1. Acute delirium\n2. Suspected UTI\n3. Poor intake","examination":"Drowsy but rousable. Disorientated to place and time. Suprapubic tenderness present. No meningism. Peripheral perfusion slightly reduced.","medsGiven":false,"medsCollapsed":false,"medsFocusedIndex":null,"medEntries":[],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Senior clinical review today.\n2. Send urine sample if obtainable and check bloods.\n3. Low threshold for hospital conveyance if BP remains low or confusion worsens.","forDischargeSummary":"1. Update family and document escalation plan.\n2. Review culture results when available.\n3. Reassess need for admission if not settling."}},"4":{"name":"Mr Sha-test","age":68,"sex":"M","summary":"Cellulitis • oral step-down review","acuity":"GREEN","acuityClass":"green","referralSource":"PRUH","timestamp":"","doa":"13 Mar 2026","listDetails":"Obs: T 36.9°C, BP 128/74, HR 82, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.9","bp":"128/74","hr":"82","weight":"79.4","bm":"7.1","hrPulse":"","conscious":"0","confusion":"0","issues":"1. L leg cellulitis\n2. Pain improved\n3. Systemically well","examination":"Bright and comfortable. Erythema receding within marker line. Mild warmth only. No fluctuance, crepitus or discharge.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Flucloxacillin","dose":"1g","frequency":"QDS","details":"Day 4 oral step-down"},{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For pain"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue oral flucloxacillin.\n2. Elevate leg and continue emollient / skin care.\n3. Review for discharge if improving again tomorrow.","forDischargeSummary":"1. Complete oral antibiotic course.\n2. Safety-net re spreading erythema, fever or increasing pain."}},"5":{"name":"Mrs Tur-test","age":73,"sex":"F","summary":"COPD exacerbation • oxygen / steroids","acuity":"AMBER","acuityClass":"amber","referralSource":"KCH","timestamp":"","doa":"15 Mar 2026","listDetails":"Obs: T 37.2°C, BP 134/78, HR 92, SpO₂ 90% 1.5L, RR 22","form":{"rr":"22","spo2":"90","oxygen":"2","oxygenFlow":"1.5L","scoreMode":"","temp":"37.2","bp":"134/78","hr":"92","weight":"69.0","bm":"9.8","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Infective COPD\n2. O2 requirement\n3. Wheeze improved","examination":"Mild work of breathing on 1.5L oxygen. Widespread expiratory wheeze with prolonged expiratory phase. No central cyanosis. Able to speak in full sentences.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Prednisolone","dose":"30mg","frequency":"OD","details":"Day 2"},{"name":"Salbutamol nebules","dose":"2.5mg","frequency":"QDS","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue controlled oxygen aiming 88-92%.\n2. Continue rescue medications.\n3. Review later today if increased work of breathing or rising oxygen requirement.","forDischargeSummary":"1. Complete rescue pack course.\n2. Check inhaler technique and smoking status.\n3. COPD nurse follow-up if available."}},"6":{"name":"Mr Doy-test","age":84,"sex":"M","summary":"AKI / dehydration monitoring","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"17 Mar 2026","listDetails":"Obs: T 36.7°C, BP 104/62, HR 96, SpO₂ 96% RA, RR 19","form":{"rr":"19","spo2":"96","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.7","bp":"104/62","hr":"96","weight":"71.0","bm":"5.7","hrPulse":"","conscious":"0","confusion":"0","issues":"1. AKI\n2. Postural symptoms\n3. Nephrotoxics held","examination":"Alert and cooperative. Mucous membranes dry. Chest clear and no peripheral oedema. Abdomen soft and non-tender.","medsGiven":false,"medsCollapsed":false,"medsFocusedIndex":null,"medEntries":[],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"normal saline","dose":"500ml","serialExpiry":"NS284 / 08/27"}],"plan":"1. Give 500 mL normal saline slowly as prescribed.\n2. Encourage oral fluids and document intake.\n3. Repeat renal function tomorrow and review BP.","forDischargeSummary":"1. Reintroduce longer-term medicines only when renal function stable.\n2. Safety-net re reduced urine output, vomiting or dizziness."}},"7":{"name":"Mrs Ben-test","age":70,"sex":"F","summary":"Diabetic foot infection • IV co-amoxiclav","acuity":"AMBER","acuityClass":"amber","referralSource":"GSTT","timestamp":"","doa":"19 Mar 2026","listDetails":"Obs: T 37.5°C, BP 118/72, HR 88, SpO₂ 98% RA, RR 18","form":{"rr":"18","spo2":"98","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"37.5","bp":"118/72","hr":"88","weight":"86.4","bm":"12.6","hrPulse":"","conscious":"0","confusion":"0","issues":"1. R diabetic foot\n2. Hyperglycaemia\n3. Podiatry involved","examination":"Systemically well. Dressing dry with no strike-through. Surrounding erythema mild and improving. Foot warm and perfused with no spreading streaking.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For pain"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"co-amoxiclav","dose":"1.2g","serialExpiry":"CA771 / 11/27"}],"plan":"1. Continue IV co-amoxiclav today.\n2. Recheck glucose profile and encourage hydration.\n3. Review with podiatry plan and consider oral step-down if improving.","forDischargeSummary":"1. Podiatry follow-up arranged.\n2. Continue off-loading and dressing plan.\n3. Step down to oral antibiotics when clinically appropriate."}},"8":{"name":"Mr Hug-test","age":91,"sex":"M","summary":"Constipation / frailty review","acuity":"GREEN","acuityClass":"green","referralSource":"RR","timestamp":"","doa":"21 Mar 2026","listDetails":"Obs: T 36.4°C, BP 130/76, HR 76, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.4","bp":"130/76","hr":"76","weight":"61.5","bm":"6.1","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Frailty\n2. Constipation\n3. No red flags","examination":"Well in self and comfortable in chair. Abdomen soft, non-distended and non-tender. Bowel sounds present. Hydration reasonable today.","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Movicol","dose":"2 sachets","frequency":"BD","details":""},{"name":"Senna","dose":"15mg","frequency":"ON","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue laxatives and encourage fluids.\n2. Mobilise as able with support.\n3. Review bowel action and abdominal symptoms tomorrow.","forDischargeSummary":"1. Continue bowel regimen short term then titrate down.\n2. Safety-net re pain, vomiting or failure to open bowels."}}};
 let patients={}, currentPatient=null, deletedPatients=[], eventLogEntries=[], undoState=null, detailLoadedForCurrentPatient=false, selectedNewReferral="", selectedNewSex="", editingPatientId=null, patientSortMode="dateImported", patientSortDirection="desc", patientSearchQuery="", patientSearchVisible=false;
 const $=id=>document.getElementById(id), clone=obj=>JSON.parse(JSON.stringify(obj));
 function currentState(){return {patients:clone(patients),deletedPatients:clone(deletedPatients),eventLogEntries:clone(eventLogEntries),currentPatient}}
@@ -3165,7 +3203,7 @@ function updateIVDeleteButton(){
 }
 
 function getOxygenFlowDisplay(){if($("oxygen").value!=="2") return ""; const val=$("oxygenFlowOther").classList.contains("hidden") ? ($("oxygenFlowSection").dataset.flow || "") : $("oxygenFlowOther").value.trim(); return val}
-function setFieldValues(f){$("rr").value=f.rr||""; $("spo2").value=f.spo2||""; $("oxygen").value=f.oxygen||"0"; setScoreModeButtons(f.scoreMode||""); $("temp").value=f.temp||""; $("bp").value=f.bp||""; $("hr").value=f.hr||""; $("weight").value=f.weight||""; $("bm").value=f.bm||""; if($("bmTiming")) $("bmTiming").value=f.bmTiming||""; if($("bmTimingTime")) $("bmTimingTime").value=f.bmTimingTime||""; if($("bmTarget")) $("bmTarget").value=f.bmTarget||""; if(window.syncBmTriggerDisplay) window.syncBmTriggerDisplay(); $("conscious").value=f.conscious||"0"; $("confusion").value=f.confusion||"0"; $("issues").value=f.issues||""; $("examination").value=f.examination||""; $("plan").value=f.plan||""; $("forDischargeSummary").value=f.forDischargeSummary||""; $("medsGiven").checked=!!f.medsGiven; $("medsContainer").innerHTML=""; const medEntries=(f.medEntries&&f.medEntries.length?f.medEntries:[{name:"",dose:"",frequency:"",details:""}]); medEntries.forEach(e=>{if(f.medsGiven) createMedEntry(e)}); $("ivGiven").checked=!!f.ivGiven; $("ivVIP").value=f.ivVIP||""; $("ivContainer").innerHTML=""; (f.ivEntries&&f.ivEntries.length?f.ivEntries:[{medication:"",dose:"",serialExpiry:""}]).forEach(e=>{if(f.ivGiven) createIVEntry(e)}); $("oxygenFlowSection").dataset.flow=f.oxygenFlow||""; $("oxygenFlowOther").value=""; $("oxygenFlowOther").classList.add("hidden"); updateOxygenFields(); if(patients[currentPatient] && patients[currentPatient].form){ const pf=patients[currentPatient].form; pf.medsFocusedIndex=Number.isInteger(f.medsFocusedIndex)?f.medsFocusedIndex:null; if(typeof pf._medsCollapseTouched==='undefined') pf.medsCollapsed=!!f.medsGiven; if(typeof pf._ivCollapseTouched==='undefined') pf.ivCollapsed=!!f.ivGiven; } setMedsCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.medsCollapsed:f.medsCollapsed)); updateMedsFields(); setIVCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.ivCollapsed:f.ivCollapsed)); updateIVFields()}
+function setFieldValues(f){$("rr").value=f.rr||""; $("spo2").value=f.spo2||""; $("oxygen").value=f.oxygen||"0"; setScoreModeButtons(f.scoreMode||""); $("temp").value=f.temp||""; $("bp").value=f.bp||""; $("hr").value=f.hr||""; if($("hrPulse")) $("hrPulse").value=f.hrPulse||""; if(window.syncHrTriggerDisplay) window.syncHrTriggerDisplay(); $("weight").value=f.weight||""; $("bm").value=f.bm||""; if($("bmTiming")) $("bmTiming").value=f.bmTiming||""; if($("bmTimingTime")) $("bmTimingTime").value=f.bmTimingTime||""; if($("bmTarget")) $("bmTarget").value=f.bmTarget||""; if(window.syncBmTriggerDisplay) window.syncBmTriggerDisplay(); $("conscious").value=f.conscious||"0"; $("confusion").value=f.confusion||"0"; $("issues").value=f.issues||""; $("examination").value=f.examination||""; $("plan").value=f.plan||""; $("forDischargeSummary").value=f.forDischargeSummary||""; $("medsGiven").checked=!!f.medsGiven; $("medsContainer").innerHTML=""; const medEntries=(f.medEntries&&f.medEntries.length?f.medEntries:[{name:"",dose:"",frequency:"",details:""}]); medEntries.forEach(e=>{if(f.medsGiven) createMedEntry(e)}); $("ivGiven").checked=!!f.ivGiven; $("ivVIP").value=f.ivVIP||""; $("ivContainer").innerHTML=""; (f.ivEntries&&f.ivEntries.length?f.ivEntries:[{medication:"",dose:"",serialExpiry:""}]).forEach(e=>{if(f.ivGiven) createIVEntry(e)}); $("oxygenFlowSection").dataset.flow=f.oxygenFlow||""; $("oxygenFlowOther").value=""; $("oxygenFlowOther").classList.add("hidden"); updateOxygenFields(); if(patients[currentPatient] && patients[currentPatient].form){ const pf=patients[currentPatient].form; pf.medsFocusedIndex=Number.isInteger(f.medsFocusedIndex)?f.medsFocusedIndex:null; if(typeof pf._medsCollapseTouched==='undefined') pf.medsCollapsed=!!f.medsGiven; if(typeof pf._ivCollapseTouched==='undefined') pf.ivCollapsed=!!f.ivGiven; } setMedsCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.medsCollapsed:f.medsCollapsed)); updateMedsFields(); setIVCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.ivCollapsed:f.ivCollapsed)); updateIVFields()}
 function updateOxygenFields(){const show=$("oxygen").value==="2"; $("oxygenFlowSection").classList.toggle("hidden",!show)}
 function setOxygenFlow(value){if(value==="other"){ $("oxygenFlowOther").classList.remove("hidden"); $("oxygenFlowOther").focus(); $("oxygenFlowSection").dataset.flow=""; } else { $("oxygenFlowOther").classList.add("hidden"); $("oxygenFlowOther").value=""; $("oxygenFlowSection").dataset.flow=value; calculateNews(); }}
 
@@ -3792,7 +3830,8 @@ function openIVEditOverlay(focusIndex=null){const overlay=$("ivEditOverlay"); co
 function closeIVEditOverlay(){const overlay=$("ivEditOverlay"); const section=$("ivSection"); if(!overlay||!section) return; ivOverlayFocusIndex=null; $("ivCollapsedSummary").after(section); renderIVOverlayEntryFocus(); overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); document.body.classList.remove('iv-edit-open'); const hasMeaningful=getIVOverlayHasMeaningfulData(); if(hasMeaningful){$("ivGiven").checked=true; if(patients[currentPatient]&&patients[currentPatient].form){ patients[currentPatient].form.ivCollapsed=true; patients[currentPatient].form._ivCollapseTouched=true; }} else if(ivOverlayRestoreState){$("ivGiven").checked=!!ivOverlayRestoreState.given; if(patients[currentPatient]&&patients[currentPatient].form){ patients[currentPatient].form.ivCollapsed=!!ivOverlayRestoreState.collapsed; patients[currentPatient].form._ivCollapseTouched=true; }} updateIVFields(); calculateNews(); saveCurrentPatientForm(); saveData(); ivOverlayRestoreState=null;}
 function openIVFromSummary(index){openIVEditOverlay(index);}
 function getBMTimingText(){const val=$("bmTiming") ? $("bmTiming").value : ""; const timeVal=$("bmTimingTime") ? $("bmTimingTime").value : ""; if(window.getBMTimingClinicalSuffix) return window.getBMTimingClinicalSuffix(val, timeVal); if(val==="pre") return " pre-meal"; if(val==="post") return " post-meal"; if(val==="time" && String(timeVal||"").trim()) return ` at ${timeVal}`; return "";}
-function obsParts(){const parts=[]; const add=(label,val,suffix="")=>{if(String(val||"").trim()) parts.push(`${label} ${val}${suffix}`)}; add("RR",$("rr").value," /min"); if(String($("spo2").value).trim()){const ox=$("oxygen").value==="2" ? ` on ${getOxygenFlowDisplay()||"oxygen"}` : " on air"; parts.push(`SpO₂ ${$("spo2").value}%${ox}`)} add("T",$("temp").value,"°C"); add("BP",$("bp").value," mmHg"); add("HR",$("hr").value," bpm"); add("Weight",$("weight").value," kg"); if(String($("bm").value||"").trim()) parts.push(`BM ${$("bm").value}${getBMTimingText()}`); return parts}
+function getHRPulseText(){const val=$("hrPulse") ? $("hrPulse").value : ""; if(window.getHRPulseClinicalSuffix) return window.getHRPulseClinicalSuffix(val); return String(val||"").trim() ? ` ${String(val).trim()}` : "";}
+function obsParts(){const parts=[]; const add=(label,val,suffix="")=>{if(String(val||"").trim()) parts.push(`${label} ${val}${suffix}`)}; add("RR",$("rr").value," /min"); if(String($("spo2").value).trim()){const ox=$("oxygen").value==="2" ? ` on ${getOxygenFlowDisplay()||"oxygen"}` : " on air"; parts.push(`SpO₂ ${$("spo2").value}%${ox}`)} add("T",$("temp").value,"°C"); add("BP",$("bp").value," mmHg"); if(String($("hr").value||"").trim()) parts.push(`HR ${$("hr").value} bpm${getHRPulseText()}`); add("Weight",$("weight").value," kg"); if(String($("bm").value||"").trim()) parts.push(`BM ${$("bm").value}${getBMTimingText()}`); return parts}
 function getIVSentenceList(){if(!$("ivGiven").checked) return []; return getIVEntries().filter(e=>e.medication||e.dose||e.serialExpiry).map(e=>`IV ${e.medication||"-"} ${e.dose||"-"} (${e.serialExpiry||"-"}) administered without incident`)}
 function saveCurrentPatientForm() {
   if (!detailLoadedForCurrentPatient || !patients[currentPatient]) return;
@@ -3809,6 +3848,7 @@ function saveCurrentPatientForm() {
     temp: $("temp").value,
     bp: $("bp").value,
     hr: $("hr").value,
+    hrPulse: $("hrPulse") ? $("hrPulse").value : "",
     weight: $("weight").value,
     bm: $("bm").value,
     bmTiming: $("bmTiming") ? $("bmTiming").value : "",
@@ -3843,7 +3883,7 @@ function saveCurrentPatientForm() {
     const parts = [];
     if ($("temp").value) parts.push(`T ${$("temp").value}°C`);
     if ($("bp").value) parts.push(`BP ${$("bp").value}`);
-    if ($("hr").value) parts.push(`HR ${$("hr").value}`);
+    if ($("hr").value) parts.push(`HR ${$("hr").value}${getHRPulseText()}`);
     if ($("spo2").value) parts.push(`SpO₂ ${$("spo2").value}% ${onOx}`);
     if ($("rr").value) parts.push(`RR ${$("rr").value}`);
     p.listDetails = `Obs: ${parts.join(', ')}`;
@@ -4237,7 +4277,7 @@ function addPatient() {
     referralSource, timestamp: "", listDetails: "", createdAt: new Date().toISOString(),
     form: {
       rr:"", spo2:"", oxygen:"0", oxygenFlow:"", scoreMode:"", temp:"", bp:"", hr:"",
-      weight:"", bm:"", bmTiming:"", bmTimingTime:"", bmTarget:"", conscious:"0", confusion:"0", issues:"", examination:"",
+      weight:"", bm:"", bmTiming:"", bmTimingTime:"", bmTarget:"", hrPulse:"", conscious:"0", confusion:"0", issues:"", examination:"",
       medsGiven: false, medsCollapsed: true, _medsCollapseTouched: false, medsFocusedIndex: null, medEntries: [],
       ivGiven: false, ivCollapsed: true, _ivCollapseTouched: false, ivVIP: "", ivEntries: [],
       plan: "1. ", forDischargeSummary: "1. "
@@ -5024,8 +5064,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_282_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_282_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_283_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_283_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5437,7 +5477,7 @@ document.addEventListener("DOMContentLoaded",function(){
       updateKeyboardInset();
     }, 50);
   });
-  ["rr","spo2","oxygen","temp","bp","hr","weight","bm","bmTiming","bmTimingTime","bmTarget","conscious","confusion","issues","examination","medsGiven","ivGiven","ivVIP","plan","forDischargeSummary","oxygenFlowOther"].forEach(id=>{$(id).addEventListener("input",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()}); $(id).addEventListener("change",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()})});
+  ["rr","spo2","oxygen","temp","bp","hr","hrPulse","weight","bm","bmTiming","bmTimingTime","bmTarget","conscious","confusion","issues","examination","medsGiven","ivGiven","ivVIP","plan","forDischargeSummary","oxygenFlowOther"].forEach(id=>{$(id).addEventListener("input",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()}); $(id).addEventListener("change",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()})});
   document.querySelectorAll("[data-flow]").forEach(btn=>{
     btn.onclick=()=>{
         document.querySelectorAll(".flow-btn").forEach(b=>b.classList.remove("active"));
@@ -5843,6 +5883,125 @@ function initBmOverlay(){
 }
 
 initBmOverlay();
+
+</script><script>
+window.HAH = window.HAH || { modules: {} };
+window.HAH.modules.hrOverlay = true;
+
+const HR_PULSE_META={
+  '': {label:'', clinical:''},
+  'regular': {label:'Regular', clinical:' regular'},
+  'irregular': {label:'Irregular', clinical:' irregular'},
+  'ectopic': {label:'Ectopic', clinical:' ectopic'},
+  'weak': {label:'Weak', clinical:' weak'},
+  'bounding': {label:'Bounding', clinical:' bounding'}
+};
+let hrOverlayLastFocus=null;
+let hrOverlayDraft={value:'', pulse:''};
+
+function hrFieldValue(){ return ($('hr') && $('hr').value) ? String($('hr').value).trim() : ''; }
+function hrPulseValue(){ return ($('hrPulse') && $('hrPulse').value) ? String($('hrPulse').value).trim() : ''; }
+function getHRPulseClinicalSuffix(value=''){
+  const key=String(value||'').trim();
+  const meta=HR_PULSE_META[key] || null;
+  return meta && meta.clinical ? meta.clinical : '';
+}
+window.getHRPulseClinicalSuffix=getHRPulseClinicalSuffix;
+
+function syncHrTriggerDisplay(){
+  const input=$('hr');
+  if(!input) return;
+  const value=hrFieldValue();
+  if(document.activeElement!==input && input.value!==value) input.value=value;
+}
+window.syncHrTriggerDisplay=syncHrTriggerDisplay;
+
+function renderHrOverlay(){
+  const valueInput=$('hrOverlayValue');
+  if(valueInput) valueInput.value=hrOverlayDraft.value || '';
+  document.querySelectorAll('#hrOverlayPulseGrid [data-hr-pulse]').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.hrPulse===hrOverlayDraft.pulse);
+  });
+}
+function setHrOverlayPulse(value){
+  const next=String(value||'').trim();
+  hrOverlayDraft.pulse = (hrOverlayDraft.pulse===next) ? '' : next;
+  renderHrOverlay();
+}
+function openHrOverlay(){
+  const overlay=$('hrOverlay');
+  const input=$('hrOverlayValue');
+  if(!overlay || !input) return;
+  hrOverlayLastFocus=document.activeElement;
+  hrOverlayDraft={ value: hrFieldValue(), pulse: hrPulseValue() };
+  renderHrOverlay();
+  overlay.classList.remove('hidden');
+  overlay.setAttribute('aria-hidden','false');
+  try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
+  try{ const len=(input.value||'').length; if(input.setSelectionRange) input.setSelectionRange(len,len); }catch(_e){}
+  requestAnimationFrame(()=>{
+    if(document.activeElement!==input){
+      try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
+      try{ const len=(input.value||'').length; if(input.setSelectionRange) input.setSelectionRange(len,len); }catch(_e){}
+    }
+  });
+}
+function closeHrOverlay(restoreFocus=true){
+  const overlay=$('hrOverlay');
+  if(!overlay) return;
+  overlay.classList.add('hidden');
+  overlay.setAttribute('aria-hidden','true');
+  if(restoreFocus){
+    const target=(hrOverlayLastFocus && hrOverlayLastFocus.focus) ? hrOverlayLastFocus : $('openHrEditorBtn');
+    if(target){ try{ target.focus({preventScroll:true}); }catch(_e){ target.focus(); } }
+  }
+}
+function commitHrOverlay(closeAfter=true){
+  const hr=$('hr');
+  const hrPulse=$('hrPulse');
+  if(!hr || !hrPulse) return;
+  hr.value=String(hrOverlayDraft.value||'').trim();
+  hrPulse.value=String(hrOverlayDraft.pulse||'').trim();
+  syncHrTriggerDisplay();
+  calculateNews();
+  saveCurrentPatientForm();
+  saveData();
+  if(closeAfter) closeHrOverlay(true);
+}
+function clearHrOverlayDraft(){
+  hrOverlayDraft={value:'', pulse:''};
+  renderHrOverlay();
+  const input=$('hrOverlayValue');
+  if(input){ try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); } }
+}
+function initHrOverlay(){
+  const trigger=$('openHrEditorBtn');
+  const overlay=$('hrOverlay');
+  if(!trigger || !overlay || overlay.dataset.bound==='1') return;
+  overlay.dataset.bound='1';
+  syncHrTriggerDisplay();
+  trigger.addEventListener('click', openHrOverlay);
+  $('hrOverlayBackdrop')?.addEventListener('click', ()=>closeHrOverlay(true));
+  $('hrOverlayCloseBtn')?.addEventListener('click', ()=>closeHrOverlay(true));
+  $('hrOverlayDoneBtn')?.addEventListener('click', ()=>commitHrOverlay(true));
+  $('hrOverlayClearBtn')?.addEventListener('click', clearHrOverlayDraft);
+  $('hrOverlayValue')?.addEventListener('input', e=>{ hrOverlayDraft.value=String(e.target.value||'').trim(); });
+  $('hrOverlayValue')?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); commitHrOverlay(true); } });
+  $('hr')?.addEventListener('input', ()=>{ syncHrTriggerDisplay(); saveCurrentPatientForm(); saveData(); calculateNews(); });
+  $('hr')?.addEventListener('change', ()=>{ syncHrTriggerDisplay(); saveCurrentPatientForm(); saveData(); calculateNews(); });
+  $('hrOverlayPulseGrid')?.addEventListener('click', e=>{
+    const btn=e.target.closest('[data-hr-pulse]');
+    if(!btn) return;
+    setHrOverlayPulse(btn.dataset.hrPulse || '');
+  });
+  document.addEventListener('keydown', e=>{
+    if(e.key!=='Escape') return;
+    if(overlay.classList.contains('hidden')) return;
+    closeHrOverlay(true);
+  });
+}
+
+initHrOverlay();
 
 </script></body>
 </html>
