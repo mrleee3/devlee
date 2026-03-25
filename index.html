@@ -315,6 +315,8 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .bm-overlay-value-wrap{display:flex;align-items:center;justify-content:center;flex:1 1 auto}
 #bmOverlayValue{width:100%;min-height:96px;font-size:42px;line-height:1.05;font-weight:800;text-align:center;padding:14px 12px;border-radius:18px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none;margin-top:0}
 #bmOverlayValue:focus,#bmOverlayTarget:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
+#hrOverlayValue{width:100%;min-height:96px;font-size:42px;line-height:1.05;font-weight:800;text-align:center;padding:14px 12px;border-radius:18px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none;margin-top:0}
+#hrOverlayValue:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
 .bm-overlay-value-caption{text-align:center;font-size:13px;font-weight:700;color:#667085}
 .bm-overlay-target-wrap{display:flex;flex-direction:column;gap:4px}
 #bmOverlayTarget{margin-top:0;min-height:42px;padding:10px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
@@ -331,14 +333,18 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 #hr:focus{outline:none;box-shadow:none}
 #hrFieldShell.is-alert #hr{color:var(--red)}
 .hr-overlay-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}
-.hr-overlay-left-col{min-height:218px;height:100%}
-.hr-overlay-pulse-card{min-height:218px;height:100%}
+.hr-overlay-left-col{display:flex;min-height:258px;height:100%}
+.hr-overlay-pulse-card{min-height:258px;height:100%}
 .hr-overlay-pulse-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
 @media (max-width:390px){.hr-overlay-layout{grid-template-columns:1fr}.hr-overlay-left-col,.hr-overlay-pulse-card{min-height:0}}
 
 
+.hr-overlay-left-col .bm-overlay-value-card{flex:1 1 auto;min-height:258px;justify-content:center}
+.hr-overlay-pulse-card .bm-overlay-timing-label{text-align:center;line-height:1.2}
+@media (max-width:390px){#hrOverlayValue{min-height:84px;font-size:36px}}
+
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_285_release.html; source=hospital_at_home_v12_36_285_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_286_release.html; source=hospital_at_home_v12_36_286_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -530,7 +536,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_285_release.html</div><div>Source: hospital_at_home_v12_36_285_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: index.html</div><div>Source: hospital_at_home_v12_36_285_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -629,13 +635,13 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="bm-overlay-layout hr-overlay-layout">
 <div class="bm-overlay-left-col hr-overlay-left-col">
 <div class="bm-overlay-value-card">
-<div class="bm-overlay-card-title">Heart rate</div>
+<div class="bm-overlay-card-title">Rate</div>
 <div class="bm-overlay-value-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="done" id="hrOverlayValue" inputmode="numeric" placeholder="" spellcheck="false" type="number"/></div>
 <div class="bm-overlay-value-caption">bpm</div>
 </div>
 </div>
 <div class="bm-overlay-timing-card hr-overlay-pulse-card">
-<div class="bm-overlay-section-head"><div class="bm-overlay-timing-label">Pulse</div></div>
+<div class="bm-overlay-section-head"><div class="bm-overlay-timing-label">Rhythm/character</div></div>
 <div class="bm-overlay-timing-grid hr-overlay-pulse-grid" id="hrOverlayPulseGrid">
 <button class="bm-timing-chip hr-pulse-chip" data-hr-pulse="regular" type="button">Regular</button>
 <button class="bm-timing-chip hr-pulse-chip" data-hr-pulse="irregular" type="button">Irregular</button>
@@ -5070,8 +5076,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_285_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_285_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_286_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_286_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
