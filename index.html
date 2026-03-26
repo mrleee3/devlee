@@ -346,8 +346,50 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .hr-overlay-pulse-card .bm-overlay-timing-label{text-align:center;line-height:1.2}
 @media (max-width:390px){#hrOverlayValue{min-height:84px;font-size:36px}}
 
+/* v12_36_291: header standardisation + clinical review spacing tidy */
+.meds-header-row #medsToggleText,
+.iv-header-row #ivToggleText,
+.patient-reorder-card[data-card-key="output"] h3,
+.clinical-review-header h3{
+  font-size:17px;
+  font-weight:600;
+  line-height:1.25;
+  letter-spacing:0;
+  color:#1c1c1e;
+}
+
+.clinical-review-header{
+  margin-bottom:6px;
+}
+
+.patient-reorder-card[data-card-key="clinical"] label{
+  display:block;
+  margin-top:18px;
+  margin-bottom:0;
+  line-height:1.25;
+}
+
+.patient-reorder-card[data-card-key="clinical"] .clinical-review-header + label{
+  margin-top:8px;
+}
+
+.patient-reorder-card[data-card-key="clinical"] textarea{
+  margin-top:8px;
+}
+
+.patient-reorder-card[data-card-key="clinical"] #issues,
+.patient-reorder-card[data-card-key="clinical"] #examination,
+.patient-reorder-card[data-card-key="clinical"] #plan{
+  margin-bottom:4px;
+}
+
+.field-label-row{
+  margin-top:18px;
+  margin-bottom:0;
+}
+
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_290_release.html; source=hospital_at_home_v12_36_290_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_291_release.html; source=hospital_at_home_v12_36_291_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -539,7 +581,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_290_release.html</div><div>Source: hospital_at_home_v12_36_290_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_291_release.html</div><div>Source: hospital_at_home_v12_36_291_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -5085,8 +5127,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_290_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_290_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_291_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_291_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
