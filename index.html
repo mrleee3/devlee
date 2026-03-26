@@ -118,6 +118,7 @@ button{border:none;border-radius:12px;padding:12px 14px;font-size:15px;font-weig
 input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #d1d5db;background:#fff;font-size:16px;margin-top:6px}
 label{display:block;margin-top:2px}
 textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#patientDetail textarea.clinical-review-textarea-expanded{resize:none;overflow:auto}
 .news-box{text-align:center;padding:16px;border-radius:16px;color:#fff;font-weight:700;margin-bottom:8px}
 .news-score{font-size:36px;line-height:1;margin-bottom:6px}.news-low{background:var(--green)} .news-medium{background:var(--amber)} .news-high{background:var(--red)}
 .result-box{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;min-height:160px;margin-bottom:8px;touch-action:pan-y}
@@ -344,7 +345,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:390px){#hrOverlayValue{min-height:84px;font-size:36px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_286_release.html; source=hospital_at_home_v12_36_286_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_287_release.html; source=hospital_at_home_v12_36_287_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -5076,7 +5077,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_286_release.html';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_287_release.html';
 const APP_SOURCE_FILENAME='hospital_at_home_v12_36_286_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
@@ -5239,6 +5240,7 @@ function resetPatientDetailSwipe(){
 }
 function goBackToPatientList(){
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
+  if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
   detailSwipeCompleting=false;
   resetPatientDetailSwipe();
   detailEdgeSwipeState=null;
@@ -5409,6 +5411,36 @@ document.addEventListener("DOMContentLoaded",function(){
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
   }
+  const clinicalReviewTextareaIds=new Set(['issues','examination','plan','forDischargeSummary']);
+  function isClinicalReviewTextarea(el){
+    return !!(el && el.tagName==='TEXTAREA' && clinicalReviewTextareaIds.has(el.id));
+  }
+  function expandClinicalReviewTextarea(el){
+    if(!isClinicalReviewTextarea(el) || el.dataset.expanded==='1') return;
+    el.dataset.expanded='1';
+    el.dataset.prevInlineHeight=el.style.height || '';
+    el.dataset.prevInlineMinHeight=el.style.minHeight || '';
+    const currentHeight=Math.max(Math.round(el.getBoundingClientRect().height || 0), 100);
+    const expandedHeight=Math.max(200, currentHeight * 2);
+    el.style.height=`${expandedHeight}px`;
+    el.style.minHeight=`${expandedHeight}px`;
+    el.classList.add('clinical-review-textarea-expanded');
+  }
+  function collapseClinicalReviewTextarea(el){
+    if(!isClinicalReviewTextarea(el) || el.dataset.expanded!=='1') return;
+    el.style.height=el.dataset.prevInlineHeight || '';
+    el.style.minHeight=el.dataset.prevInlineMinHeight || '';
+    delete el.dataset.prevInlineHeight;
+    delete el.dataset.prevInlineMinHeight;
+    delete el.dataset.expanded;
+    el.classList.remove('clinical-review-textarea-expanded');
+  }
+  function collapseAllClinicalReviewTextareas(exceptEl=null){
+    clinicalReviewTextareaIds.forEach(id=>{
+      const el=$(id);
+      if(el && el!==exceptEl) collapseClinicalReviewTextarea(el);
+    });
+  }
   function syncPatientDetailViewportPosition(force=false){
     const detail=$("patientDetail");
     if(!detail || detail.classList.contains("hidden") || !detail.classList.contains("detail-overlay-active")) return;
@@ -5425,7 +5457,10 @@ document.addEventListener("DOMContentLoaded",function(){
       const visibleTop=detailRect.top + 12;
       const visibleBottom=((keyboardInset > 0 ? (layoutHeight - keyboardInset) : detailRect.bottom) - 12);
       let delta=0;
-      if(force || fieldRect.top < visibleTop){
+      if(force){
+        if(fieldRect.top < visibleTop) delta=fieldRect.top - visibleTop;
+        else if(fieldRect.bottom > visibleBottom) delta=fieldRect.bottom - visibleBottom;
+      } else if(fieldRect.top < visibleTop){
         delta=fieldRect.top - visibleTop;
       } else if(fieldRect.bottom > visibleBottom){
         delta=fieldRect.bottom - visibleBottom;
@@ -5455,17 +5490,19 @@ document.addEventListener("DOMContentLoaded",function(){
       updateKeyboardInset();
       const active=document.activeElement;
       if(active && $("addPatientCard") && $("addPatientCard").contains(active)) syncAddPatientViewportPosition(true);
-      if(active && $("patientDetail") && $("patientDetail").contains(active)) syncPatientDetailViewportPosition(true);
+      if(active && $("patientDetail") && $("patientDetail").contains(active)) syncPatientDetailViewportPosition(false);
     });
   }
 
-  document.addEventListener('mousedown', e => {
+  const preservePatientDetailInputFocus=e => {
     const target=e.target;
     if(!(target && target.matches && target.matches('input, textarea, select'))) return;
     const detail=$("patientDetail");
     if(!(detail && detail.classList.contains("detail-overlay-active") && detail.contains(target))) return;
     try{ target.focus({preventScroll:true}); }catch(_){ }
-  }, true);
+  };
+  document.addEventListener('mousedown', preservePatientDetailInputFocus, true);
+  document.addEventListener('pointerdown', preservePatientDetailInputFocus, true);
   document.addEventListener('focusin', e => {
     if (!e.target.matches('input, textarea, select')) return;
     setKeyboardOpenState(true);
@@ -5476,15 +5513,23 @@ document.addEventListener("DOMContentLoaded",function(){
       setTimeout(()=>syncAddPatientViewportPosition(force),220);
     }
     if($("patientDetail") && $("patientDetail").contains(e.target)){
-      syncPatientDetailViewportPosition(true);
-      setTimeout(()=>syncPatientDetailViewportPosition(true),80);
-      setTimeout(()=>syncPatientDetailViewportPosition(true),220);
+      collapseAllClinicalReviewTextareas(isClinicalReviewTextarea(e.target) ? e.target : null);
+      if(isClinicalReviewTextarea(e.target)){
+        expandClinicalReviewTextarea(e.target);
+        requestAnimationFrame(()=>syncPatientDetailViewportPosition(false));
+      }
+      syncPatientDetailViewportPosition(false);
+      setTimeout(()=>syncPatientDetailViewportPosition(false),80);
+      setTimeout(()=>syncPatientDetailViewportPosition(false),220);
     }
   });
   document.addEventListener('focusout', e => {
     if (!e.target.matches('input, textarea, select')) return;
+    const target=e.target;
     setTimeout(() => {
       const active=document.activeElement;
+      if(isClinicalReviewTextarea(target) && active!==target) collapseClinicalReviewTextarea(target);
+      if(!isClinicalReviewTextarea(active)) collapseAllClinicalReviewTextareas();
       setKeyboardOpenState(!!(active && active.matches && active.matches('input, textarea, select')));
       updateKeyboardInset();
     }, 50);
