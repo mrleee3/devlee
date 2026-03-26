@@ -345,7 +345,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:390px){#hrOverlayValue{min-height:84px;font-size:36px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_288_release.html; source=hospital_at_home_v12_36_288_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_289_release.html; source=hospital_at_home_v12_36_289_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -537,7 +537,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_288_release.html</div><div>Source: hospital_at_home_v12_36_288_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_289_release.html</div><div>Source: hospital_at_home_v12_36_289_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -5077,8 +5077,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_288_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_288_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_289_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_289_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5327,13 +5327,20 @@ let patientCardOrder=(function(){
 })();
 let patientReorderState=null;
 function getPatientReorderCards(){ return Array.from(document.querySelectorAll('#patientDetail .patient-reorder-card')); }
-function getCardHeaderEl(card){ return card.querySelector('.toggle-row, h3') || card.firstElementChild || card; }
+function getCardHeaderEl(card){
+  const first=card.firstElementChild;
+  if(first){
+    if(first.classList && (first.classList.contains('toggle-row') || first.classList.contains('clinical-review-header'))) return first;
+    if(first.tagName==='H3') return first;
+  }
+  return card.querySelector('.toggle-row, .clinical-review-header, h3') || first || card;
+}
 function ensureCardGrip(card){
   let grip=card.querySelector('.reorder-grip');
   if(grip) return grip;
   const header=getCardHeaderEl(card); if(!header) return null;
   grip=document.createElement('span'); grip.className='reorder-grip'; grip.setAttribute('aria-hidden','true'); grip.textContent='≡';
-  if(header.matches('.toggle-row')){ header.appendChild(grip); }
+  if(header.matches('.toggle-row, .clinical-review-header')){ header.appendChild(grip); }
   else if(header.tagName==='H3'){
     const wrap=document.createElement('div'); wrap.className='toggle-row'; wrap.style.margin='0';
     header.parentNode.insertBefore(wrap, header); wrap.appendChild(header); wrap.appendChild(grip);
