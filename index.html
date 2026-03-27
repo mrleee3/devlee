@@ -293,15 +293,15 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .obs-split-field{display:flex;align-items:stretch;width:100%;margin-top:6px;border:1px solid #d1d5db;border-radius:12px;background:#fff;overflow:hidden;box-sizing:border-box}
 .obs-split-field:focus-within{border-color:#7fc3ff;box-shadow:0 0 0 1px #7fc3ff inset}
 .obs-split-field.is-alert{border-color:rgba(220,38,38,.34);background:#fff7f7}
-#bm{margin-top:0;border:none;border-radius:0;background:transparent;box-shadow:none;min-height:46px;padding:12px;line-height:1.2}
-#bm:focus{outline:none;box-shadow:none}
-#bm::placeholder{color:#9ca3af}
-.obs-split-field.is-alert #bm{color:var(--red)}
-.obs-split-trigger{margin:0;min-width:42px;width:42px;border:none;border-left:none;border-radius:0;background:transparent;padding:0;display:inline-flex;align-items:center;justify-content:center;box-shadow:none;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
+#bm,#bp,#hr{margin-top:0;border:none;border-radius:0;background:transparent;box-shadow:none;min-height:46px;padding:12px;line-height:1.2}
+#bm:focus,#bp:focus,#hr:focus{outline:none;box-shadow:none}
+#bm::placeholder,#bp::placeholder,#hr::placeholder{color:#9ca3af}
+#hr{appearance:textfield;-moz-appearance:textfield}
+#hr::-webkit-outer-spin-button,#hr::-webkit-inner-spin-button{margin:0;-webkit-appearance:none}
+.obs-split-field.is-alert #bm,.obs-split-field.is-alert #bp,.obs-split-field.is-alert #hr{color:var(--red)}
+.obs-split-trigger{margin:0;min-width:42px;width:42px;border:none;border-left:none;border-radius:0;background:transparent;padding:0;display:inline-flex;align-items:center;justify-content:center;box-shadow:none;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent;position:relative}
 .obs-split-trigger:focus-visible{outline:none;box-shadow:none}
 .obs-split-trigger:active{transform:none}
-.obs-split-field.has-detail{border-color:rgba(10,132,255,.28);background:#f7fbff}
-.obs-split-field.has-detail .obs-split-trigger{position:relative;background:linear-gradient(180deg,rgba(10,132,255,.04),rgba(10,132,255,.08))}
 .obs-split-field.has-detail .obs-split-trigger::after{content:"";position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:999px;background:#0a84ff;box-shadow:0 0 0 2px #fff}
 .bm-overlay{position:fixed;inset:0;z-index:10086}
 .bm-overlay-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
@@ -343,10 +343,9 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .hr-overlay-pulse-card{min-height:258px;height:100%}
 .hr-overlay-pulse-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
 @media (max-width:390px){.hr-overlay-layout{grid-template-columns:1fr}.hr-overlay-left-col,.hr-overlay-pulse-card{min-height:0}}
-
-
 .hr-overlay-left-col .bm-overlay-value-card{flex:1 1 auto;min-height:258px;justify-content:center}
 .hr-overlay-pulse-card .bm-overlay-timing-label{text-align:center;line-height:1.2}
+.hr-overlay-optional{font-size:11px;font-weight:700;color:#98a2b3;text-transform:uppercase;letter-spacing:.04em}
 @media (max-width:390px){#hrOverlayValue{min-height:84px;font-size:36px}}
 .bp-overlay-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}
 .bp-overlay-left-col{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;min-width:0;height:100%;min-height:246px}
@@ -358,6 +357,8 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .bp-overlay-reading-field{display:flex;flex-direction:column;gap:6px}
 .bp-overlay-reading-field label{margin:0;font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}
 .bp-overlay-reading-field input{margin-top:0;min-height:44px;padding:10px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
+.bp-overlay-reading-field.is-alert input{border-color:rgba(220,38,38,.34);background:#fff7f7;color:var(--red)}
+.bp-overlay-reading-field.is-alert label{color:#b42318}
 .bp-overlay-reading-field input:focus,#bpOverlayValue:focus,#bpOverlaySymptoms:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
 #bpOverlayValue{width:100%;min-height:96px;font-size:40px;line-height:1.05;font-weight:800;text-align:center;padding:14px 12px;border-radius:18px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none;margin-top:0}
 #bpOverlaySymptoms{margin-top:0;min-height:42px;padding:10px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
@@ -434,7 +435,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-lead-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_307_release.html; source=hospital_at_home_v12_36_307_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_308_release.html; source=hospital_at_home_v12_36_308_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -632,7 +633,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_307_release.html</div><div>Source: hospital_at_home_v12_36_307_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_308_release.html</div><div>Source: hospital_at_home_v12_36_308_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -734,7 +735,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="bm-overlay-value-card bp-overlay-primary-card">
 <div class="bm-overlay-card-title">Main reading</div>
 <div class="bm-overlay-value-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="next" id="bpOverlayValue" inputmode="text" placeholder="e.g. 118/72" spellcheck="false" type="text"/></div>
-<div class="bm-overlay-value-caption">Shown on obs line</div>
+<div class="bm-overlay-value-caption">mm Hg</div>
 </div>
 <div class="bm-overlay-target-card bp-overlay-symptom-card">
 <div class="bm-overlay-card-label">Symptoms on standing</div>
@@ -763,13 +764,13 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="bm-overlay-layout hr-overlay-layout">
 <div class="bm-overlay-left-col hr-overlay-left-col">
 <div class="bm-overlay-value-card">
-<div class="bm-overlay-card-title">Rate</div>
-<div class="bm-overlay-value-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="done" id="hrOverlayValue" inputmode="numeric" placeholder="" spellcheck="false" type="number"/></div>
+<div class="bm-overlay-card-title">Main reading</div>
+<div class="bm-overlay-value-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="done" id="hrOverlayValue" inputmode="numeric" placeholder="e.g. 84" spellcheck="false" type="number"/></div>
 <div class="bm-overlay-value-caption">bpm</div>
 </div>
 </div>
 <div class="bm-overlay-timing-card hr-overlay-pulse-card">
-<div class="bm-overlay-section-head"><div class="bm-overlay-timing-label">Rhythm/character</div></div>
+<div class="bm-overlay-section-head"><div class="bm-overlay-timing-label">Rhythm / character</div><div class="hr-overlay-optional">Optional</div></div>
 <div class="bm-overlay-timing-grid hr-overlay-pulse-grid" id="hrOverlayPulseGrid">
 <button class="bm-timing-chip hr-pulse-chip" data-hr-pulse="regular" type="button">Regular</button>
 <button class="bm-timing-chip hr-pulse-chip" data-hr-pulse="irregular" type="button">Irregular</button>
@@ -5281,8 +5282,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_307_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_307_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_308_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_308_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6185,9 +6186,18 @@ window.getHRPulseClinicalSuffix=getHRPulseClinicalSuffix;
 
 function syncHrTriggerDisplay(){
   const input=$('hr');
+  const shell=$('hrFieldShell');
+  const trigger=$('openHrEditorBtn');
   if(!input) return;
   const value=hrFieldValue();
+  const pulse=hrPulseValue();
   if(document.activeElement!==input && input.value!==value) input.value=value;
+  if(shell) shell.classList.toggle('has-detail', !!pulse);
+  if(trigger){
+    const label=value ? `Edit heart rate${pulse ? `, rhythm recorded: ${pulse}` : ''}` : `Add heart rate${pulse ? `, rhythm recorded: ${pulse}` : ''}`;
+    trigger.setAttribute('aria-label', label);
+    trigger.title=pulse ? `Rhythm / character: ${pulse}` : 'Add heart rate details';
+  }
 }
 window.syncHrTriggerDisplay=syncHrTriggerDisplay;
 
@@ -6292,6 +6302,32 @@ function normaliseBPText(raw){
   if(/^\d{2,3}\s+\d{2,3}$/.test(text)) text=text.replace(/\s+/,'/');
   return text;
 }
+function lowerFirstText(raw){
+  const text=String(raw||'').trim();
+  if(!text) return '';
+  return text.charAt(0).toLowerCase() + text.slice(1);
+}
+function parseBP(text){
+  const match=String(text||'').trim().match(/^(\d{2,3})\/(\d{2,3})$/);
+  if(!match) return null;
+  return { systolic:Number(match[1]), diastolic:Number(match[2]) };
+}
+function isSignificantPosturalDrop(baseText, standingText){
+  const base=parseBP(baseText);
+  const standing=parseBP(standingText);
+  if(!base || !standing) return false;
+  return (base.systolic - standing.systolic) >= 20 || (base.diastolic - standing.diastolic) >= 10;
+}
+function getBpBaselineForComparison(){
+  return bpLyingValue();
+}
+function updateBpOverlayAlertState(){
+  const baseline=getBpBaselineForComparison();
+  const standing1Field=$('bpOverlayStanding1')?.closest('.bp-overlay-reading-field');
+  const standing3Field=$('bpOverlayStanding3')?.closest('.bp-overlay-reading-field');
+  if(standing1Field) standing1Field.classList.toggle('is-alert', isSignificantPosturalDrop(baseline, bpOverlayDraft.standing1));
+  if(standing3Field) standing3Field.classList.toggle('is-alert', isSignificantPosturalDrop(baseline, bpOverlayDraft.standing3));
+}
 function bpFieldValue(){ return ($('bp') && $('bp').value) ? normaliseBPText($('bp').value) : ''; }
 function bpLyingValue(){ return ($('bpLying') && $('bpLying').value) ? normaliseBPText($('bpLying').value) : ''; }
 function bpStanding1Value(){ return ($('bpStanding1') && $('bpStanding1').value) ? normaliseBPText($('bpStanding1').value) : ''; }
@@ -6306,8 +6342,8 @@ function getBPPosturalClinicalSuffix(){
   if(bpLyingValue()) parts.push(`lying ${bpLyingValue()}`);
   if(bpStanding1Value()) parts.push(`standing 1 min ${bpStanding1Value()}`);
   if(bpStanding3Value()) parts.push(`standing 3 min ${bpStanding3Value()}`);
-  const symptoms=bpPosturalSymptomsValue();
-  if(symptoms) parts.push(`symptoms ${symptoms}`);
+  const symptoms=lowerFirstText(bpPosturalSymptomsValue());
+  if(symptoms) parts.push(symptoms);
   return parts.length ? ` (${parts.join(', ')})` : '';
 }
 window.hasBPPosturalData=hasBPPosturalData;
@@ -6318,7 +6354,8 @@ function getBPPosturalSummaryText(){
   if(bpLyingValue()) parts.push(`lying ${bpLyingValue()}`);
   if(bpStanding1Value()) parts.push(`standing 1 min ${bpStanding1Value()}`);
   if(bpStanding3Value()) parts.push(`standing 3 min ${bpStanding3Value()}`);
-  if(bpPosturalSymptomsValue()) parts.push(`symptoms ${bpPosturalSymptomsValue()}`);
+  const symptoms=lowerFirstText(bpPosturalSymptomsValue());
+  if(symptoms) parts.push(symptoms);
   return parts.join(', ');
 }
 function syncBpTriggerDisplay(){
@@ -6345,6 +6382,7 @@ function renderBpOverlay(){
   if($('bpOverlayStanding1')) $('bpOverlayStanding1').value=bpOverlayDraft.standing1 || '';
   if($('bpOverlayStanding3')) $('bpOverlayStanding3').value=bpOverlayDraft.standing3 || '';
   if($('bpOverlaySymptoms')) $('bpOverlaySymptoms').value=bpOverlayDraft.symptoms || '';
+  updateBpOverlayAlertState();
 }
 function openBpOverlay(){
   const overlay=$('bpOverlay');
@@ -6385,7 +6423,7 @@ function commitBpOverlay(closeAfter=true){
   lying.value=normaliseBPText(bpOverlayDraft.lying||'');
   standing1.value=normaliseBPText(bpOverlayDraft.standing1||'');
   standing3.value=normaliseBPText(bpOverlayDraft.standing3||'');
-  symptoms.value=String(bpOverlayDraft.symptoms||'').trim();
+  symptoms.value=lowerFirstText(bpOverlayDraft.symptoms||'');
   syncBpTriggerDisplay();
   calculateNews();
   saveCurrentPatientForm();
@@ -6410,7 +6448,7 @@ function initBpOverlay(){
   $('bpOverlayDoneBtn')?.addEventListener('click', ()=>commitBpOverlay(true));
   $('bpOverlayClearBtn')?.addEventListener('click', clearBpOverlayDraft);
   [['bpOverlayValue','value'],['bpOverlayLying','lying'],['bpOverlayStanding1','standing1'],['bpOverlayStanding3','standing3'],['bpOverlaySymptoms','symptoms']].forEach(([id,key])=>{
-    $(id)?.addEventListener('input', e=>{ bpOverlayDraft[key]=key==='symptoms' ? String(e.target.value||'').trim() : normaliseBPText(e.target.value||''); });
+    $(id)?.addEventListener('input', e=>{ bpOverlayDraft[key]=key==='symptoms' ? String(e.target.value||'').trim() : normaliseBPText(e.target.value||''); updateBpOverlayAlertState(); });
     $(id)?.addEventListener('keydown', e=>{ if(e.key==='Enter' && id!=='bpOverlaySymptoms'){ e.preventDefault(); const order=['bpOverlayValue','bpOverlayLying','bpOverlayStanding1','bpOverlayStanding3','bpOverlaySymptoms']; const next=order[order.indexOf(id)+1]; if(next && $(next)){ try{ $(next).focus({preventScroll:true}); }catch(_e){ $(next).focus(); } } else { commitBpOverlay(true); } } else if(e.key==='Enter' && id==='bpOverlaySymptoms'){ e.preventDefault(); commitBpOverlay(true); } });
   });
   $('bp')?.addEventListener('input', ()=>{ syncBpTriggerDisplay(); saveCurrentPatientForm(); saveData(); calculateNews(); });
