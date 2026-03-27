@@ -417,7 +417,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-lead-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_303_release.html; source=hospital_at_home_v12_36_303_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_304_release.html; source=hospital_at_home_v12_36_304_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -615,7 +615,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_303_release.html</div><div>Source: hospital_at_home_v12_36_303_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_304_release.html</div><div>Source: hospital_at_home_v12_36_304_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -1186,21 +1186,25 @@ function normaliseBlisterScanItems(items){
 async function fileToDataUrl(file){
   return await new Promise((resolve,reject)=>{ const reader=new FileReader(); reader.onload=()=>resolve(String(reader.result||'')); reader.onerror=()=>reject(new Error('Could not read image.')); reader.readAsDataURL(file); });
 }
-async function normaliseBlisterScanImage(file){
+async function normaliseImageForBase64Upload(file, options={}){
   const type=String(file?.type||'').toLowerCase();
   if(type && !['image/jpeg','image/jpg','image/png'].includes(type)) throw new Error('Unsupported image type. Use JPG or PNG.');
   if((file?.size||0) > 20*1024*1024) throw new Error('Image is larger than 20 MB. Try a smaller photo.');
   let dataUrl=await fileToDataUrl(file);
-  const maxBase64Bytes=Math.floor(3.8*1024*1024);
+  const maxBase64Bytes=Math.floor(Number(options.maxBase64Bytes||Math.floor(3.8*1024*1024)));
+  const minSide=Math.max(320, Math.round(Number(options.minSide||900)));
+  const steps=Math.max(4, Math.round(Number(options.steps||6)));
+  const errorLabel=String(options.errorLabel||'base64 upload');
   try{
     if(typeof createImageBitmap==='function'){
       const bmp=await createImageBitmap(file);
       const canvas=document.createElement('canvas');
       const ctx=canvas.getContext('2d');
       if(ctx){
-        let maxSide=1600;
-        let quality=0.82;
-        for(let attempt=0; attempt<6; attempt+=1){
+        let maxSide=Math.max(minSide, Math.round(Number(options.maxSide||1600)));
+        let quality=Math.min(0.92, Math.max(0.35, Number(options.qualityStart||0.82)));
+        const qualityFloor=Math.min(quality, Math.max(0.2, Number(options.qualityFloor||0.5)));
+        for(let attempt=0; attempt<steps; attempt+=1){
           const scale=Math.min(1, maxSide/Math.max(bmp.width||1,bmp.height||1));
           const w=Math.max(1, Math.round((bmp.width||1)*scale));
           const h=Math.max(1, Math.round((bmp.height||1)*scale));
@@ -1211,8 +1215,8 @@ async function normaliseBlisterScanImage(file){
           const base64Part=(dataUrl.split(',')[1]||'');
           const estimatedBytes=Math.floor((base64Part.length*3)/4);
           if(estimatedBytes<=maxBase64Bytes) break;
-          maxSide=Math.max(900, Math.round(maxSide*0.82));
-          quality=Math.max(0.5, quality-0.08);
+          maxSide=Math.max(minSide, Math.round(maxSide*0.82));
+          quality=Math.max(qualityFloor, quality-0.08);
         }
       }
       if(bmp.close) bmp.close();
@@ -1222,8 +1226,14 @@ async function normaliseBlisterScanImage(file){
   }
   const base64Part=(dataUrl.split(',')[1]||'');
   const estimatedBytes=Math.floor((base64Part.length*3)/4);
-  if(estimatedBytes>maxBase64Bytes) throw new Error('Image is still too large after compression for Groq base64 upload. Try a tighter crop of just the label.');
+  if(estimatedBytes>maxBase64Bytes) throw new Error(`Image is still too large after compression for ${errorLabel}. Try a tighter crop.`);
   return dataUrl;
+}
+async function normaliseBlisterScanImage(file){
+  return await normaliseImageForBase64Upload(file,{ maxBase64Bytes:3.8*1024*1024, maxSide:1600, minSide:900, qualityStart:0.82, qualityFloor:0.5, steps:6, errorLabel:'Groq base64 upload of just the label' });
+}
+async function normaliseGeminiScanImage(file, overrides={}){
+  return await normaliseImageForBase64Upload(file,Object.assign({ maxBase64Bytes:1.8*1024*1024, maxSide:1280, minSide:760, qualityStart:0.78, qualityFloor:0.4, steps:7, errorLabel:'Gemini image upload' }, overrides||{}));
 }
 function getXaiErrorMessage(status, data, rawText=''){
   const apiMsg=String(data?.error?.message || data?.message || '').trim();
@@ -5212,8 +5222,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_303_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_303_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_304_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_304_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6853,6 +6863,23 @@ initHrOverlay();
     const message = String(err?.message || '');
     return /MAX_TOKENS|MALFORMED_RESPONSE|OTHER|STOP/.test(reason) || /cut off before the ECG JSON finished|unexpected format|unreadable ECG JSON/i.test(message);
   }
+  function isGeminiTransportFailure(err){
+    const message = String(err?.message || err || '');
+    return /Failed to fetch|Load failed|NetworkError|network request failed|fetch failed/i.test(message);
+  }
+  async function requestGeminiEcgDraft({ apiKey, dataUrl, model, maxTokens, mediaResolution }){
+    const primaryRaw = await callGeminiStructured({
+      apiKey,
+      model: model || getPreferredGeminiModel(),
+      imageUrl:dataUrl,
+      schema:ECG_ASSIST_SCHEMA,
+      maxTokens:maxTokens || 1300,
+      mediaResolution: mediaResolution || 'MEDIA_RESOLUTION_HIGH',
+      system:'Return only JSON matching the schema. Do a strict lead-by-lead ECG review first. leadReview must include each lead exactly once in this order: I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6. For each lead, set st to elevation, depression, none, or unclear; t to hyperacute, inversion, peaked, normal, or unclear; q to present, absent, or unclear; and note to a very short factual phrase or empty string. Use unclear rather than guessing. Never describe reciprocal ST depression in the same leads that you have called elevated. Be specific about rate, rhythm, PR, QRS, QTc, and visible image limitations. Only say single rhythm strip / lead II only if the image truly shows only a rhythm strip rather than a 12-lead ECG. Use short factual phrases and UK spelling.',
+      userText:'Review this ECG image and return JSON only. Lead-by-lead analysis comes first, then the summary fields. Keep strings short. whyInterpretation max 5 items, redFlags max 4 items, differentials max 3 items. If a territory pattern is present, support it with the actual leads. If the image is limited, say why, but do not claim single rhythm strip only when multiple leads are visible.'
+    });
+    return normaliseResult(primaryRaw);
+  }
   async function callGeminiStructured(args){
     const attempts = [
       {
@@ -7034,21 +7061,31 @@ initHrOverlay();
     state.busy=true;
     try{
       setStatus('Preparing ECG image…');
-      const dataUrl=await normaliseBlisterScanImage(file);
+      const prepareImage = typeof normaliseGeminiScanImage==='function' ? normaliseGeminiScanImage : normaliseBlisterScanImage;
+      let dataUrl=await prepareImage(file);
       state.dataUrl=dataUrl;
       render();
 
-      setStatus('Scanning ECG with Gemini…');
-      const primaryRaw = await callGeminiStructured({
-        apiKey,
-        model: getPreferredGeminiModel(),
-        imageUrl:dataUrl,
-        schema:ECG_ASSIST_SCHEMA,
-        maxTokens:1300,
-        system:'Return only JSON matching the schema. Do a strict lead-by-lead ECG review first. leadReview must include each lead exactly once in this order: I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6. For each lead, set st to elevation, depression, none, or unclear; t to hyperacute, inversion, peaked, normal, or unclear; q to present, absent, or unclear; and note to a very short factual phrase or empty string. Use unclear rather than guessing. Never describe reciprocal ST depression in the same leads that you have called elevated. Be specific about rate, rhythm, PR, QRS, QTc, and visible image limitations. Only say single rhythm strip / lead II only if the image truly shows only a rhythm strip rather than a 12-lead ECG. Use short factual phrases and UK spelling.',
-        userText:'Review this ECG image and return JSON only. Lead-by-lead analysis comes first, then the summary fields. Keep strings short. whyInterpretation max 5 items, redFlags max 4 items, differentials max 3 items. If a territory pattern is present, support it with the actual leads. If the image is limited, say why, but do not claim single rhythm strip only when multiple leads are visible.'
-      });
-      state.result = normaliseResult(primaryRaw);
+      let result;
+      try{
+        setStatus('Scanning ECG with Gemini…');
+        result = await requestGeminiEcgDraft({ apiKey, dataUrl, model:getPreferredGeminiModel(), maxTokens:1300, mediaResolution:'MEDIA_RESOLUTION_HIGH' });
+      }catch(err){
+        if(!isGeminiTransportFailure(err)) throw err;
+        setStatus('Retrying with a smaller ECG image…');
+        const fallbackPrepare = typeof normaliseGeminiScanImage==='function'
+          ? () => normaliseGeminiScanImage(file,{ maxBase64Bytes:1.1*1024*1024, maxSide:960, minSide:640, qualityStart:0.68, qualityFloor:0.34, steps:7, errorLabel:'Gemini image upload' })
+          : () => prepareImage(file);
+        const smallerDataUrl = await fallbackPrepare();
+        if(smallerDataUrl && smallerDataUrl !== dataUrl){
+          dataUrl = smallerDataUrl;
+          state.dataUrl = dataUrl;
+          render();
+        }
+        result = await requestGeminiEcgDraft({ apiKey, dataUrl, model:'gemini-3-flash-preview', maxTokens:1500, mediaResolution:'MEDIA_RESOLUTION_MEDIUM' });
+      }
+
+      state.result = result;
       render();
 
       const flags=Array.from(new Set([...(state.result.redFlags||[]),...safetyFlags(state.result)]));
@@ -7056,7 +7093,7 @@ initHrOverlay();
     }catch(err){
       console.error(err);
       const message=String(err&&err.message||'').trim()||'ECG scan failed.';
-      if(/Failed to fetch|Load failed|NetworkError/i.test(message)) setStatus('Network/CORS error talking to Gemini. Check connection, then try again. If it persists, the browser may be blocking direct API calls from the app.',true);
+      if(isGeminiTransportFailure(err)) setStatus('Could not reach Gemini from this browser just now. Check connection and try again. The app already retried once with a smaller ECG image. If it keeps happening, direct browser API calls may be blocked in this view.',true);
       else setStatus(message,true);
     }finally{
       state.busy=false;
