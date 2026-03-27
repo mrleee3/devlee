@@ -415,7 +415,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_300_release.html; source=hospital_at_home_v12_36_300_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_301_release.html; source=hospital_at_home_v12_36_301_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -613,7 +613,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_300_release.html</div><div>Source: hospital_at_home_v12_36_300_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_301_release.html</div><div>Source: hospital_at_home_v12_36_301_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -1031,7 +1031,7 @@ function getXaiApiKey(){
   return String(loadXaiSettings().apiKey||'').trim();
 }
 function defaultGeminiSettings(){
-  return {apiKey:'', model:'gemini-2.5-flash'};
+  return {apiKey:'', model:'gemini-3-flash-preview'};
 }
 function loadGeminiSettings(){
   try{return {...defaultGeminiSettings(), ...(JSON.parse(localStorage.getItem(GEMINI_SETTINGS_KEY)||"{}"))};}
@@ -1076,7 +1076,9 @@ function getGeminiApiKey(){
   return String(loadGeminiSettings().apiKey||'').trim();
 }
 function getGeminiModel(){
-  return String(loadGeminiSettings().model||'gemini-2.5-flash').trim() || 'gemini-2.5-flash';
+  const model = String(loadGeminiSettings().model||'').trim();
+  if(!model || model==='gemini-2.5-flash') return 'gemini-3-flash-preview';
+  return model;
 }
 const BLISTER_SCAN_SCHEMA={type:'object',additionalProperties:false,required:['items'],properties:{items:{type:'array',items:{type:'object',additionalProperties:false,required:['medication','dose','frequency','confidence','notes'],properties:{medication:{type:'string'},dose:{type:'string'},frequency:{type:'string'},confidence:{type:'number'},notes:{type:'string'}}}}}};
 let blisterScanState={file:null,dataUrl:'',items:[],busy:false};
@@ -5208,8 +5210,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_300_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_300_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_301_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_301_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6207,6 +6209,12 @@ initHrOverlay();
 
 </script><script>
 (function(){
+  const SHORT_STRING = { type: 'string', maxLength: 140 };
+  const MEDIUM_STRING = { type: 'string', maxLength: 220 };
+  const LONG_STRING = { type: 'string', maxLength: 420 };
+  const SHORT_LIST = { type: 'array', maxItems: 5, items: { type: 'string', maxLength: 140 } };
+  const DIFFERENTIAL_LIST = { type: 'array', maxItems: 4, items: { type: 'string', maxLength: 120 } };
+
   const ECG_ASSIST_SCHEMA = {
     type: 'object',
     additionalProperties: false,
@@ -6215,27 +6223,27 @@ initHrOverlay();
       'whyInterpretation','limitations','redFlags','impression','differentials','action','copyText','confidence','uncertainty'
     ],
     properties: {
-      rate: { type: 'string' },
-      rhythm: { type: 'string' },
-      axis: { type: 'string' },
-      prInterval: { type: 'string' },
-      qrsDuration: { type: 'string' },
-      qtc: { type: 'string' },
-      stSegments: { type: 'string' },
-      tWaves: { type: 'string' },
-      rWaveProgression: { type: 'string' },
-      ectopy: { type: 'string' },
-      conduction: { type: 'string' },
-      morphology: { type: 'string' },
-      whyInterpretation: { type: 'array', items: { type: 'string' } },
-      limitations: { type: 'string' },
-      redFlags: { type: 'array', items: { type: 'string' } },
-      impression: { type: 'string' },
-      differentials: { type: 'array', items: { type: 'string' } },
-      action: { type: 'string' },
-      copyText: { type: 'string' },
-      confidence: { type: 'string' },
-      uncertainty: { type: 'string' }
+      rate: SHORT_STRING,
+      rhythm: SHORT_STRING,
+      axis: SHORT_STRING,
+      prInterval: SHORT_STRING,
+      qrsDuration: SHORT_STRING,
+      qtc: SHORT_STRING,
+      stSegments: MEDIUM_STRING,
+      tWaves: MEDIUM_STRING,
+      rWaveProgression: SHORT_STRING,
+      ectopy: SHORT_STRING,
+      conduction: SHORT_STRING,
+      morphology: MEDIUM_STRING,
+      whyInterpretation: SHORT_LIST,
+      limitations: MEDIUM_STRING,
+      redFlags: SHORT_LIST,
+      impression: MEDIUM_STRING,
+      differentials: DIFFERENTIAL_LIST,
+      action: MEDIUM_STRING,
+      copyText: LONG_STRING,
+      confidence: SHORT_STRING,
+      uncertainty: SHORT_STRING
     }
   };
 
@@ -6247,15 +6255,15 @@ initHrOverlay();
     ],
     properties: {
       highRisk: { type: 'boolean' },
-      summary: { type: 'string' },
-      inferiorPattern: { type: 'string' },
-      anteriorPattern: { type: 'string' },
-      lateralPattern: { type: 'string' },
-      reciprocalChange: { type: 'string' },
-      concerningFeatures: { type: 'array', items: { type: 'string' } },
-      urgentDifferentials: { type: 'array', items: { type: 'string' } },
-      actionBias: { type: 'string' },
-      uncertainty: { type: 'string' }
+      summary: MEDIUM_STRING,
+      inferiorPattern: MEDIUM_STRING,
+      anteriorPattern: MEDIUM_STRING,
+      lateralPattern: MEDIUM_STRING,
+      reciprocalChange: MEDIUM_STRING,
+      concerningFeatures: SHORT_LIST,
+      urgentDifferentials: DIFFERENTIAL_LIST,
+      actionBias: MEDIUM_STRING,
+      uncertainty: SHORT_STRING
     }
   };
 
@@ -6275,6 +6283,14 @@ initHrOverlay();
   }
   function titleCase(label){
     return String(label || '').replace(/\b\w/g, c => c.toUpperCase());
+  }
+  function getPreferredGeminiModel(){
+    const configured = typeof getGeminiModel==='function' ? String(getGeminiModel() || '').trim() : '';
+    if(!configured || configured === 'gemini-2.5-flash') return 'gemini-3-flash-preview';
+    return configured;
+  }
+  function shouldUseGeminiThinkingConfig(model){
+    return /^gemini-3/i.test(String(model || '').trim());
   }
   function tightenRateText(rate){
     const text = cleanText(rate);
@@ -6572,8 +6588,20 @@ initHrOverlay();
     return out;
   }
 
-  async function callGeminiStructured({ apiKey, model, system, userText, imageUrl, schema, maxTokens }){
+  async function callGeminiStructuredOnce({ apiKey, model, system, userText, imageUrl, schema, maxTokens, mediaResolution }){
     const { mimeType, base64 } = splitDataUrl(imageUrl);
+    const generationConfig = {
+      responseMimeType:'application/json',
+      responseJsonSchema:toGeminiJsonSchema(schema),
+      candidateCount:1,
+      temperature:0,
+      maxOutputTokens:maxTokens || 1100,
+      mediaResolution: mediaResolution || 'MEDIA_RESOLUTION_HIGH',
+      seed:1
+    };
+    if(shouldUseGeminiThinkingConfig(model)){
+      generationConfig.thinkingConfig = { thinkingLevel:'low' };
+    }
     const body = {
       system_instruction: { parts:[{ text: system }] },
       contents: [{
@@ -6583,15 +6611,9 @@ initHrOverlay();
           { inline_data:{ mime_type: mimeType, data: base64 } }
         ]
       }],
-      generationConfig:{
-        responseMimeType:'application/json',
-        responseJsonSchema:toGeminiJsonSchema(schema),
-        temperature:0.1,
-        maxOutputTokens:maxTokens || 1100,
-        mediaResolution:'MEDIA_RESOLUTION_HIGH'
-      }
+      generationConfig
     };
-    const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model || 'gemini-2.5-flash') + ':generateContent?key=' + encodeURIComponent(apiKey);
+    const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model || 'gemini-3-flash-preview') + ':generateContent?key=' + encodeURIComponent(apiKey);
     const res = await fetch(endpoint, {
       method:'POST',
       headers:{ 'Content-Type':'application/json' },
@@ -6601,19 +6623,74 @@ initHrOverlay();
     let data = {};
     try{ data = rawResponse ? JSON.parse(rawResponse) : {}; }catch(_e){ data = {}; }
     if(!res.ok) throw new Error(getGeminiErrorMessage(res.status, data, rawResponse.slice(0,260)));
+    const finishReason = cleanText(data?.candidates?.[0]?.finishReason);
+    const finishMessage = cleanText(data?.candidates?.[0]?.finishMessage);
     const rawText = extractGeminiStructuredText(data);
     if(!rawText){
-      const blockReason = cleanText(data?.promptFeedback?.blockReason || data?.candidates?.[0]?.finishReason);
-      if(blockReason) throw new Error('Gemini did not return ECG JSON: ' + blockReason);
-      throw new Error('Gemini returned unreadable ECG JSON. Try again with a clearer crop.');
+      const blockReason = cleanText(data?.promptFeedback?.blockReason || finishReason || finishMessage);
+      const err = new Error(blockReason ? 'Gemini did not return ECG JSON: ' + blockReason : 'Gemini returned unreadable ECG JSON. Try again with a clearer crop.');
+      err.geminiFinishReason = finishReason;
+      err.geminiFinishMessage = finishMessage;
+      throw err;
     }
-    try{ return parseGeminiJsonText(rawText); }
-    catch(_e){
-      const finishReason = cleanText(data?.candidates?.[0]?.finishReason);
-      const preview = cleanText(rawText).slice(0, 180);
-      if(/max/i.test(finishReason)) throw new Error('Gemini output was cut off before the ECG JSON finished. Try again.');
-      throw new Error(preview ? 'Gemini returned ECG output in an unexpected format. The app now expects JSON only, but got: ' + preview : 'Gemini returned unreadable ECG JSON. Try again.');
+    try{
+      return parseGeminiJsonText(rawText);
+    }catch(_e){
+      const preview = cleanText(rawText).slice(0,180);
+      const err = new Error(preview ? 'Gemini returned ECG output in an unexpected format. The app now expects JSON only, but got: ' + preview : 'Gemini returned unreadable ECG JSON. Try again.');
+      err.geminiFinishReason = finishReason;
+      err.geminiFinishMessage = finishMessage;
+      err.geminiPreview = preview;
+      throw err;
     }
+  }
+
+  function shouldRetryGeminiError(err){
+    const reason = String(err?.geminiFinishReason || '').toUpperCase();
+    const message = String(err?.message || '');
+    return /MAX_TOKENS|MALFORMED_RESPONSE|OTHER|STOP/.test(reason)
+      || /cut off before the ECG JSON finished|unexpected format|unreadable ECG JSON/i.test(message);
+  }
+
+  async function callGeminiStructured(args){
+    const attempts = [
+      {
+        model: args.model || 'gemini-3-flash-preview',
+        maxTokens: args.maxTokens || 900,
+        mediaResolution: args.mediaResolution || 'MEDIA_RESOLUTION_HIGH',
+        system: args.system,
+        userText: args.userText
+      },
+      {
+        model: 'gemini-3-flash-preview',
+        maxTokens: Math.max((args.maxTokens || 900) + 400, 1200),
+        mediaResolution: 'MEDIA_RESOLUTION_MEDIUM',
+        system: args.system + ' Keep every field concise. Use short plain phrases. whyInterpretation max 4 items. redFlags max 4 items. differentials max 3 items. No prose before or after the JSON object.',
+        userText: args.userText + ' Return compact JSON only. Keep each string short and factual.'
+      }
+    ];
+    let lastErr = null;
+    for(let i = 0; i < attempts.length; i++){
+      try{
+        return await callGeminiStructuredOnce({
+          apiKey: args.apiKey,
+          imageUrl: args.imageUrl,
+          schema: args.schema,
+          model: attempts[i].model,
+          system: attempts[i].system,
+          userText: attempts[i].userText,
+          maxTokens: attempts[i].maxTokens,
+          mediaResolution: attempts[i].mediaResolution
+        });
+      }catch(err){
+        lastErr = err;
+        if(i >= attempts.length - 1 || !shouldRetryGeminiError(err)) break;
+      }
+    }
+    const reason = String(lastErr?.geminiFinishReason || '').toUpperCase();
+    if(reason === 'MAX_TOKENS') throw new Error('Gemini output was cut off before the ECG JSON finished. The app retried automatically but still did not get a complete JSON result. Try a tighter crop.');
+    if(reason === 'MALFORMED_RESPONSE') throw new Error('Gemini returned malformed ECG JSON twice. Try a tighter crop or clearer screenshot.');
+    throw lastErr;
   }
 
   function reset(patientId){
@@ -6754,13 +6831,13 @@ initHrOverlay();
       setStatus('Scanning ECG with Gemini…');
       const primaryRaw = await callGeminiStructured({
         apiKey,
-        model: typeof getGeminiModel==='function' ? getGeminiModel() : 'gemini-2.5-flash',
+        model: getPreferredGeminiModel(),
         imageUrl:dataUrl,
         schemaName:'ecg_assist',
         schema:ECG_ASSIST_SCHEMA,
-        maxTokens:1200,
-        system:'You are an ECG interpretation assistant for clinicians. Provide a cautious draft review from the visible ECG only. Do not invent findings. Use UK spelling. Never state that the interpretation is definitive. Prefer specific measurable descriptions where visible. Give an exact or close estimated rate such as 68 bpm rather than a broad range like 60-70 bpm unless a closer estimate is genuinely impossible. Explain the visible findings that support the impression. Review the tracing systematically: rhythm strip, inferior leads (II, III, aVF), lateral leads (I, aVL, V5-V6), anterior / septal leads (V1-V4), intervals, QRS width and any reciprocal changes. Do not call the ECG normal if there is any visible ST elevation, ST depression, reciprocal change, hyperacute T wave, pathological Q wave or other clearly abnormal acute morphology. If the ECG appears normal, say so plainly. Do not use boilerplate such as "clinical correlation is recommended to rule out ischaemia" unless there are visible ischaemic features or a clearly stated image limitation that specifically prevents assessment. If image quality or lead visibility is limited, state that in limitations rather than implying unexplained ischaemia.',
-        userText:'Review this ECG image and return a structured cautious draft interpretation. Use only what is visible. Populate the specific fields requested: rhythm, rate, axis, PR interval, QRS duration, QTc, ST segments, T waves, R-wave progression, conduction and ectopy. whyInterpretation should be a concise bullet-style array explaining why you reached the impression using visible ECG features. limitations should state any image quality / crop / lead visibility caveats. Include dangerous alternatives not to miss and concise copy-ready ECG text suitable for clinical notes.'
+        maxTokens:900,
+        system:'Return only JSON matching the schema. Review only visible ECG features. Be specific: close estimated rate, rhythm, axis, PR/QRS/QTc if visible, ST/T-wave changes, conduction, ectopy, and image limitations. Never call the ECG normal if there is visible ST elevation, ST depression, reciprocal change, hyperacute T waves, or pathological Q waves. Use short factual phrases and UK spelling.',
+        userText:'Review this ECG image. Return JSON only. Keep strings short. whyInterpretation max 4 items, redFlags max 4 items, differentials max 3 items. Explain visible features supporting the impression, especially any inferior, anterior, lateral, or reciprocal ST-segment changes. For a normal-looking tracing, say so plainly.'
       });
       let result = normaliseResult(primaryRaw);
       render();
@@ -6768,13 +6845,13 @@ initHrOverlay();
       setStatus('Running Gemini red-flag challenge…');
       const challengeRaw = await callGeminiStructured({
         apiKey,
-        model: typeof getGeminiModel==='function' ? getGeminiModel() : 'gemini-2.5-flash',
+        model: getPreferredGeminiModel(),
         imageUrl:dataUrl,
         schemaName:'ecg_redflag_challenge',
         schema:ECG_CHALLENGE_SCHEMA,
-        maxTokens:700,
-        system:'You are a cautious ECG red-flag checker for clinicians. Your only job is to challenge a possibly reassuring first pass. Inspect the visible ECG for high-risk patterns, especially ST elevation / occlusion, inferior MI patterns in II, III and aVF, reciprocal depression in I or aVL, anterior or lateral ST elevation, marked hyperacute T waves, broad complex tachycardia and high-grade block. Be conservative, but do not miss obvious acute abnormalities. If there is visible concerning ST elevation or reciprocal change, set highRisk true. If the image is too limited, say so clearly.',
-        userText:'Challenge this ECG image for red flags. Focus on whether there is any visible acute occlusion / STEMI pattern, especially inferior ST elevation with reciprocal change. Return only the structured fields requested. summary should be one short sentence. concerningFeatures should list the visible abnormal features that make the ECG high risk. urgentDifferentials should contain only dangerous alternatives not to miss.'
+        maxTokens:500,
+        system:'Return only JSON matching the schema. Challenge a reassuring first pass. Look specifically for inferior ST elevation in II, III, aVF; reciprocal depression in I or aVL; anterior or lateral ST elevation; hyperacute T waves; broad complex tachycardia; and high-grade block. If visible concerning ST elevation or reciprocal change is present, set highRisk true.',
+        userText:'Challenge this ECG image for red flags. Return JSON only. Keep strings short. summary one sentence. concerningFeatures max 4 short items. urgentDifferentials max 3 short items.'
       });
       const challenge = normaliseChallenge(challengeRaw);
       result = mergeChallenge(result, challenge);
