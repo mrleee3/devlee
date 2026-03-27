@@ -417,7 +417,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-lead-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_304_release.html; source=hospital_at_home_v12_36_304_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_305_release.html; source=hospital_at_home_v12_36_305_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -615,7 +615,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_304_release.html</div><div>Source: hospital_at_home_v12_36_304_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_305_release.html</div><div>Source: hospital_at_home_v12_36_305_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -5222,8 +5222,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_304_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_304_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_305_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_305_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6280,6 +6280,50 @@ initHrOverlay();
     }
   };
 
+  const ECG_OVERVIEW_SCHEMA = {
+    type: 'object',
+    additionalProperties: false,
+    required: [
+      'acquisition','patternClass','territory','supportingLeads','reciprocalLeads','keyFindings',
+      'imageQuality','limitations','impression','action','confidence','rate','rhythm','qrsDuration'
+    ],
+    properties: {
+      acquisition: SHORT_STRING,
+      patternClass: SHORT_STRING,
+      territory: SHORT_STRING,
+      supportingLeads: { type: 'array', maxItems: 8, items: { type: 'string', maxLength: 8 } },
+      reciprocalLeads: { type: 'array', maxItems: 6, items: { type: 'string', maxLength: 8 } },
+      keyFindings: SHORT_LIST,
+      imageQuality: SHORT_STRING,
+      limitations: MEDIUM_STRING,
+      impression: MEDIUM_STRING,
+      action: MEDIUM_STRING,
+      confidence: SHORT_STRING,
+      rate: SHORT_STRING,
+      rhythm: SHORT_STRING,
+      qrsDuration: SHORT_STRING
+    }
+  };
+
+  const ECG_PRIMARY_IMAGE_PREP = {
+    maxBase64Bytes: 3.2 * 1024 * 1024,
+    maxSide: 1800,
+    minSide: 1100,
+    qualityStart: 0.88,
+    qualityFloor: 0.62,
+    steps: 5,
+    errorLabel: 'Gemini ECG upload'
+  };
+  const ECG_COMPACT_IMAGE_PREP = {
+    maxBase64Bytes: 2.1 * 1024 * 1024,
+    maxSide: 1320,
+    minSide: 840,
+    qualityStart: 0.8,
+    qualityFloor: 0.5,
+    steps: 6,
+    errorLabel: 'Gemini ECG upload'
+  };
+
   let state = { mode:'scan', dataUrl:'', result:null, busy:false, patientId:'' };
   let bound = false;
 
@@ -6296,12 +6340,23 @@ initHrOverlay();
   }
   function titleCase(label){ return String(label || '').replace(/\b\w/g, c => c.toUpperCase()); }
   function uniqueOrdered(values){ return Array.from(new Set((values || []).filter(Boolean))); }
-  function getPreferredGeminiModel(){
-    const configured = typeof getGeminiModel==='function' ? String(getGeminiModel() || '').trim() : '';
-    if(!configured || configured === 'gemini-2.5-flash') return 'gemini-3-flash-preview';
-    return configured;
+  function getConfiguredGeminiModel(){
+    return typeof getGeminiModel==='function' ? String(getGeminiModel() || '').trim() : '';
   }
-  function shouldUseGeminiThinkingConfig(model){ return /^gemini-3/i.test(String(model || '').trim()); }
+  function getEcgModelAttemptList(){
+    const configured = getConfiguredGeminiModel();
+    if(!configured || configured === 'gemini-2.5-flash' || configured === 'gemini-3-flash-preview'){
+      return ['gemini-3.1-pro-preview','gemini-3-flash-preview'];
+    }
+    return uniqueOrdered([configured,'gemini-3.1-pro-preview','gemini-3-flash-preview']);
+  }
+  function shouldUseGeminiThinkingConfig(model){ return /^gemini-3(\.1)?/i.test(String(model || '').trim()); }
+  function getEcgThinkingLevel(model){
+    const name = String(model || '').trim();
+    if(/^gemini-3\.1-pro-preview$/i.test(name)) return 'medium';
+    if(/^gemini-3-flash-preview$/i.test(name)) return 'medium';
+    return '';
+  }
   function tightenRateText(rate){
     const text = cleanText(rate);
     const m = text.match(/^(\d{2,3})\s*[-–]\s*(\d{2,3})(?:\s*bpm)?$/i);
@@ -6390,6 +6445,30 @@ initHrOverlay();
       };
     }
     return LEAD_ORDER.map(lead => map[lead] || { lead, st:'unclear', t:'unclear', q:'unclear', note:'' });
+  }
+
+  function normaliseLeadCodeList(list, maxItems=8){
+    const raw = Array.isArray(list) ? list : (list == null ? [] : [list]);
+    return uniqueOrdered(raw.map(normaliseLeadCode).filter(Boolean)).slice(0, maxItems);
+  }
+  function normaliseOverview(raw){
+    const src = raw && typeof raw === 'object' ? raw : {};
+    return {
+      acquisition: cleanText(src.acquisition || src.imageType || src.studyType),
+      patternClass: cleanText(src.patternClass || src.pattern || src.classification),
+      territory: cleanText(src.territory || src.location),
+      supportingLeads: normaliseLeadCodeList(src.supportingLeads || src.supportLeads || src.supporting),
+      reciprocalLeads: normaliseLeadCodeList(src.reciprocalLeads || src.reciprocal || src.reciprocalSupport),
+      keyFindings: normaliseList(src.keyFindings || src.findings || src.evidence),
+      imageQuality: cleanText(src.imageQuality || src.quality),
+      limitations: cleanText(src.limitations || src.caveats || src.limits),
+      impression: cleanText(src.impression),
+      action: cleanText(src.action),
+      confidence: cleanText(src.confidence),
+      rate: tightenRateText(src.rate),
+      rhythm: normaliseRhythmText(src.rhythm),
+      qrsDuration: cleanText(src.qrsDuration || src.qrs || src.qrsduration)
+    };
   }
   function leadMap(review){ return Object.fromEntries((review || []).map(entry => [entry.lead, entry])); }
   function intersect(source, group){ return group.filter(lead => source.includes(lead)); }
@@ -6734,6 +6813,55 @@ initHrOverlay();
     return result;
   }
 
+
+  function overviewSuggestsHighRisk(overview){
+    const hay = [overview?.patternClass, overview?.territory, overview?.impression, overview?.action, ...(overview?.keyFindings || [])].join(' | ').toLowerCase();
+    return /stemi|occlusion|acute coronary|inferior|anterior|anteroseptal|lateral|inferolateral|high-risk|hyperkala|broad complex|vt|complete heart block/.test(hay);
+  }
+  function mergeOverviewIntoResult(result, overview){
+    if(!overview || typeof overview !== 'object') return result;
+    if(isMeaningful(overview.rate) && !isMeaningful(result.rate)) result.rate = overview.rate;
+    if(isMeaningful(overview.rhythm) && !isMeaningful(result.rhythm)) result.rhythm = overview.rhythm;
+    if(isMeaningful(overview.qrsDuration) && !isMeaningful(result.qrsDuration)) result.qrsDuration = overview.qrsDuration;
+
+    const overviewReasons = [];
+    if(overview.supportingLeads.length) overviewReasons.push(`Overview pass supports ${leadListText(overview.supportingLeads)}`);
+    if(overview.reciprocalLeads.length) overviewReasons.push(`Overview reciprocal change in ${leadListText(overview.reciprocalLeads)}`);
+    overviewReasons.push(...overview.keyFindings);
+    result.whyInterpretation = uniqueOrdered([...overviewReasons, ...(result.whyInterpretation || [])]).slice(0, 10);
+
+    if(isMeaningful(overview.limitations)){
+      if(isMeaningful(result.limitations) && result.limitations !== overview.limitations) result.limitations = `${overview.limitations} ${result.limitations}`.trim();
+      else result.limitations = overview.limitations;
+    }
+    if(isMeaningful(overview.imageQuality) && !/quality/i.test(result.limitations || '')){
+      result.limitations = `${result.limitations ? result.limitations + ' ' : ''}Image quality: ${overview.imageQuality}.`.trim();
+    }
+
+    const leadSummary = buildLeadDerivedSummary(result.leadReview);
+    const overviewHighRisk = overviewSuggestsHighRisk(overview);
+    const overviewHay = [overview.patternClass, overview.territory, overview.impression].join(' | ').toLowerCase();
+    const leadMismatch = (
+      (/inferior/.test(overviewHay) && overview.supportingLeads.filter(l => INFERIOR_LEADS.includes(l)).length >= 2 && leadSummary.inferiorElevation.length < 2) ||
+      (/anterior|anteroseptal/.test(overviewHay) && overview.supportingLeads.filter(l => ANTERIOR_LEADS.includes(l)).length >= 2 && leadSummary.anteriorElevation.length < 2) ||
+      (/lateral/.test(overviewHay) && overview.supportingLeads.filter(l => LATERAL_LEADS.includes(l)).length >= 2 && leadSummary.lateralElevation.length < 2)
+    );
+    if(leadMismatch) result.consistencyIssues.push('Overview pass and lead-by-lead pass do not fully agree');
+
+    if(overviewHighRisk){
+      if(isMeaningful(overview.impression) && (looksNormalImpression(result.impression) || !isMeaningful(result.impression) || leadMismatch || result.consistencyIssues.length)) result.impression = overview.impression;
+      if(isMeaningful(overview.action) && (!isMeaningful(result.action) || /correlate|compare with prior|review clinically/i.test(result.action))) result.action = overview.action;
+      const flag = cleanText(overview.territory || overview.patternClass || '').trim();
+      if(flag) result.redFlags = uniqueOrdered([flag, ...(result.redFlags || [])]).slice(0, 6);
+    }
+
+    if(result.consistencyIssues.length){
+      result.redFlags = uniqueOrdered([...(result.redFlags || []), 'overview / lead-pass mismatch']).slice(0, 6);
+      result.uncertainty = result.uncertainty ? `${result.uncertainty} Overview and lead-by-lead passes are not fully aligned.` : 'Overview and lead-by-lead passes are not fully aligned.';
+    }
+    return result;
+  }
+
   function splitDataUrl(dataUrl){
     const match = String(dataUrl || '').match(/^data:([^;,]+);base64,(.+)$/);
     if(!match) throw new Error('ECG image could not be prepared for Gemini. Try upload again.');
@@ -6815,8 +6943,19 @@ initHrOverlay();
     return out;
   }
 
-  async function callGeminiStructuredOnce({ apiKey, model, system, userText, imageUrl, schema, maxTokens, mediaResolution }){
-    const { mimeType, base64 } = splitDataUrl(imageUrl);
+  async function callGeminiStructuredOnce({ apiKey, model, system, userText, imageUrl, imageParts, schema, maxTokens, mediaResolution, thinkingLevel }){
+    const parts = [{ text: userText }];
+    const structuredImageParts = Array.isArray(imageParts) && imageParts.length
+      ? imageParts
+      : (imageUrl ? [{ label: 'ECG image', dataUrl: imageUrl }] : []);
+    for(const part of structuredImageParts){
+      const label = cleanText(part?.label || 'ECG image');
+      const dataUrl = String(part?.dataUrl || '').trim();
+      if(!dataUrl) continue;
+      const { mimeType, base64 } = splitDataUrl(dataUrl);
+      if(label) parts.push({ text: label });
+      parts.push({ inline_data:{ mime_type: mimeType, data: base64 } });
+    }
     const generationConfig = {
       responseMimeType:'application/json',
       responseJsonSchema:toGeminiJsonSchema(schema),
@@ -6826,10 +6965,10 @@ initHrOverlay();
       mediaResolution: mediaResolution || 'MEDIA_RESOLUTION_HIGH',
       seed:1
     };
-    if(shouldUseGeminiThinkingConfig(model)) generationConfig.thinkingConfig = { thinkingLevel:'low' };
+    if(thinkingLevel && shouldUseGeminiThinkingConfig(model)) generationConfig.thinkingConfig = { thinkingLevel };
     const body = {
       system_instruction: { parts:[{ text: system }] },
-      contents: [{ role:'user', parts:[{ text: userText }, { inline_data:{ mime_type: mimeType, data: base64 } }] }],
+      contents: [{ role:'user', parts }],
       generationConfig
     };
     const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model || 'gemini-3-flash-preview') + ':generateContent?key=' + encodeURIComponent(apiKey);
@@ -6837,7 +6976,11 @@ initHrOverlay();
     const rawResponse = await res.text();
     let data = {};
     try{ data = rawResponse ? JSON.parse(rawResponse) : {}; }catch(_e){ data = {}; }
-    if(!res.ok) throw new Error(getGeminiErrorMessage(res.status, data, rawResponse.slice(0,260)));
+    if(!res.ok){
+      const err = new Error(getGeminiErrorMessage(res.status, data, rawResponse.slice(0,260)));
+      err.httpStatus = res.status;
+      throw err;
+    }
     const finishReason = cleanText(data?.candidates?.[0]?.finishReason);
     const finishMessage = cleanText(data?.candidates?.[0]?.finishMessage);
     const rawText = extractGeminiStructuredText(data);
@@ -6867,58 +7010,148 @@ initHrOverlay();
     const message = String(err?.message || err || '');
     return /Failed to fetch|Load failed|NetworkError|network request failed|fetch failed/i.test(message);
   }
-  async function requestGeminiEcgDraft({ apiKey, dataUrl, model, maxTokens, mediaResolution }){
-    const primaryRaw = await callGeminiStructured({
-      apiKey,
-      model: model || getPreferredGeminiModel(),
-      imageUrl:dataUrl,
-      schema:ECG_ASSIST_SCHEMA,
-      maxTokens:maxTokens || 1300,
-      mediaResolution: mediaResolution || 'MEDIA_RESOLUTION_HIGH',
-      system:'Return only JSON matching the schema. Do a strict lead-by-lead ECG review first. leadReview must include each lead exactly once in this order: I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6. For each lead, set st to elevation, depression, none, or unclear; t to hyperacute, inversion, peaked, normal, or unclear; q to present, absent, or unclear; and note to a very short factual phrase or empty string. Use unclear rather than guessing. Never describe reciprocal ST depression in the same leads that you have called elevated. Be specific about rate, rhythm, PR, QRS, QTc, and visible image limitations. Only say single rhythm strip / lead II only if the image truly shows only a rhythm strip rather than a 12-lead ECG. Use short factual phrases and UK spelling.',
-      userText:'Review this ECG image and return JSON only. Lead-by-lead analysis comes first, then the summary fields. Keep strings short. whyInterpretation max 5 items, redFlags max 4 items, differentials max 3 items. If a territory pattern is present, support it with the actual leads. If the image is limited, say why, but do not claim single rhythm strip only when multiple leads are visible.'
+  function shouldFallbackToGeminiFlash(err){
+    const status = Number(err?.httpStatus || 0);
+    const message = String(err?.message || '').toLowerCase();
+    return status === 401 || status === 403 || status === 404 || status === 429 || /permission|quota|billing|rate limit|not available|not found|unsupported|free tier|preview model/i.test(message);
+  }
+  async function loadImageElementFromDataUrl(dataUrl){
+    return await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Could not prepare the ECG image for cropping.'));
+      img.src = dataUrl;
     });
-    return normaliseResult(primaryRaw);
+  }
+  function cropImageToDataUrl(img, box, options={}){
+    const naturalWidth = img.naturalWidth || img.width || 1;
+    const naturalHeight = img.naturalHeight || img.height || 1;
+    const sx = Math.max(0, Math.round(naturalWidth * Math.max(0, Math.min(1, Number(box?.x ?? 0)))));
+    const sy = Math.max(0, Math.round(naturalHeight * Math.max(0, Math.min(1, Number(box?.y ?? 0)))));
+    const sw = Math.max(1, Math.min(naturalWidth - sx, Math.round(naturalWidth * Math.max(0.05, Math.min(1, Number(box?.w ?? 1))))));
+    const sh = Math.max(1, Math.min(naturalHeight - sy, Math.round(naturalHeight * Math.max(0.05, Math.min(1, Number(box?.h ?? 1))))));
+    const maxSide = Math.max(480, Math.round(Number(options.maxSide || Math.max(sw, sh))));
+    const quality = Math.min(0.95, Math.max(0.5, Number(options.quality || 0.9)));
+    const scale = Math.min(1, maxSide / Math.max(sw, sh));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(sw * scale));
+    canvas.height = Math.max(1, Math.round(sh * scale));
+    const ctx = canvas.getContext('2d');
+    if(!ctx) throw new Error('Could not crop the ECG image.');
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', quality);
+  }
+  async function buildEcgImageBundle(file, compact=false){
+    const normalise = typeof normaliseGeminiScanImage === 'function' ? normaliseGeminiScanImage : normaliseBlisterScanImage;
+    const prep = compact ? ECG_COMPACT_IMAGE_PREP : ECG_PRIMARY_IMAGE_PREP;
+    const fullDataUrl = await normalise(file, prep);
+    const img = await loadImageElementFromDataUrl(fullDataUrl);
+    const analysisImages = [{ label:'Full 12-lead ECG image', dataUrl: fullDataUrl }];
+    const cropDefs = compact
+      ? [
+          { label:'Left-half crop emphasising limb and augmented leads', box:{ x:0, y:0, w:0.52, h:0.78 }, maxSide:980 },
+          { label:'Right-half crop emphasising precordial leads V1-V6', box:{ x:0.48, y:0, w:0.52, h:0.78 }, maxSide:980 },
+          { label:'Lower rhythm strip crop', box:{ x:0, y:0.73, w:1, h:0.27 }, maxSide:1180 }
+        ]
+      : [
+          { label:'Left-half crop emphasising limb and augmented leads', box:{ x:0, y:0, w:0.52, h:0.78 }, maxSide:1180 },
+          { label:'Right-half crop emphasising precordial leads V1-V6', box:{ x:0.48, y:0, w:0.52, h:0.78 }, maxSide:1180 },
+          { label:'Lower rhythm strip crop', box:{ x:0, y:0.73, w:1, h:0.27 }, maxSide:1400 },
+          { label:'Central crop for ST-T morphology cross-check', box:{ x:0.16, y:0.05, w:0.68, h:0.72 }, maxSide:1280 }
+        ];
+    for(const crop of cropDefs){
+      analysisImages.push({ label: crop.label, dataUrl: cropImageToDataUrl(img, crop.box, { maxSide: crop.maxSide, quality: compact ? 0.84 : 0.9 }) });
+    }
+    return { previewDataUrl: fullDataUrl, analysisImages };
   }
   async function callGeminiStructured(args){
-    const attempts = [
-      {
-        model: args.model || 'gemini-3-flash-preview',
-        maxTokens: args.maxTokens || 1300,
-        mediaResolution: args.mediaResolution || 'MEDIA_RESOLUTION_HIGH',
-        system: args.system,
-        userText: args.userText
-      },
-      {
-        model: 'gemini-3-flash-preview',
-        maxTokens: Math.max((args.maxTokens || 1300) + 300, 1500),
-        mediaResolution: 'MEDIA_RESOLUTION_MEDIUM',
-        system: args.system + ' Keep each field compact. The leadReview must include each lead exactly once in this order: I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6. No prose before or after the JSON object.',
-        userText: args.userText + ' Return compact JSON only. Keep each string short and factual. Use unclear instead of guessing.'
-      }
-    ];
+    const models = Array.isArray(args.models) && args.models.length ? args.models : [args.model || 'gemini-3-flash-preview'];
     let lastErr = null;
-    for(let i = 0; i < attempts.length; i++){
-      try{
-        return await callGeminiStructuredOnce({
-          apiKey: args.apiKey,
-          imageUrl: args.imageUrl,
-          schema: args.schema,
-          model: attempts[i].model,
-          system: attempts[i].system,
-          userText: attempts[i].userText,
-          maxTokens: attempts[i].maxTokens,
-          mediaResolution: attempts[i].mediaResolution
-        });
-      }catch(err){
-        lastErr = err;
-        if(i >= attempts.length - 1 || !shouldRetryGeminiError(err)) break;
+    for(let m = 0; m < models.length; m++){
+      const model = models[m];
+      const attempts = [
+        {
+          model,
+          maxTokens: args.maxTokens || 1300,
+          mediaResolution: args.mediaResolution || 'MEDIA_RESOLUTION_HIGH',
+          system: args.system,
+          userText: args.userText,
+          thinkingLevel: args.thinkingLevel || getEcgThinkingLevel(model)
+        },
+        {
+          model,
+          maxTokens: Math.max((args.maxTokens || 1300) + 300, 1500),
+          mediaResolution: args.mediaResolution || 'MEDIA_RESOLUTION_HIGH',
+          system: args.system + ' Keep each field compact. Use unclear rather than guessing. No prose before or after the JSON object.',
+          userText: args.userText + ' Return compact JSON only. Keep strings short and factual. If directly uncertain, use unclear.',
+          thinkingLevel: args.thinkingLevel || getEcgThinkingLevel(model)
+        }
+      ];
+      for(let i = 0; i < attempts.length; i++){
+        try{
+          return await callGeminiStructuredOnce({
+            apiKey: args.apiKey,
+            imageUrl: args.imageUrl,
+            imageParts: args.imageParts,
+            schema: args.schema,
+            model: attempts[i].model,
+            system: attempts[i].system,
+            userText: attempts[i].userText,
+            maxTokens: attempts[i].maxTokens,
+            mediaResolution: attempts[i].mediaResolution,
+            thinkingLevel: attempts[i].thinkingLevel
+          });
+        }catch(err){
+          lastErr = err;
+          if(i < attempts.length - 1 && shouldRetryGeminiError(err)) continue;
+          break;
+        }
       }
+      if(m < models.length - 1 && (shouldFallbackToGeminiFlash(lastErr) || shouldRetryGeminiError(lastErr))) continue;
+      break;
     }
     const reason = String(lastErr?.geminiFinishReason || '').toUpperCase();
     if(reason === 'MAX_TOKENS') throw new Error('Gemini output was cut off before the ECG JSON finished. The app retried automatically but still did not get a complete JSON result. Try a tighter crop.');
     if(reason === 'MALFORMED_RESPONSE') throw new Error('Gemini returned malformed ECG JSON twice. Try a tighter crop or clearer screenshot.');
     throw lastErr;
+  }
+  async function requestGeminiEcgOverview({ apiKey, imageBundle }){
+    const raw = await callGeminiStructured({
+      apiKey,
+      models: getEcgModelAttemptList(),
+      imageParts: imageBundle.analysisImages,
+      schema: ECG_OVERVIEW_SCHEMA,
+      maxTokens: 900,
+      mediaResolution: 'MEDIA_RESOLUTION_HIGH',
+      system: 'Return only JSON matching the schema. You are reviewing a photographed 12-lead ECG using one full image plus cropped lead groups. Prioritise high-risk pattern recognition over false reassurance. Decide the most likely broad pattern class, likely territory, supporting leads, reciprocal leads, key findings, and any genuine image limitations. Do not invent lead names or claim a rhythm-strip-only study if multiple leads are visible. Use short factual phrases and UK spelling.',
+      userText: 'Review this ECG image bundle and return JSON only. Images are: full 12-lead ECG, crop of limb/augmented leads, crop of precordial leads, rhythm-strip crop, and possibly a central morphology crop. Task: broad classification first, not exhaustive lead-by-lead detail. patternClass should be something like normal, non-specific abnormality, inferior STEMI, anterior / anteroseptal STEMI, lateral STEMI, inferolateral STEMI, diffuse ischaemia with aVR elevation, broad-complex rhythm, paced rhythm, bundle branch block, hyperkalaemia pattern, or unclear.'
+    });
+    return normaliseOverview(raw);
+  }
+  async function requestGeminiEcgLeadDraft({ apiKey, imageBundle, overview }){
+    const overviewText = [
+      overview?.patternClass ? `First-pass candidate pattern: ${overview.patternClass}.` : '',
+      overview?.territory ? `Likely territory: ${overview.territory}.` : '',
+      overview?.supportingLeads?.length ? `Possible supporting leads: ${overview.supportingLeads.join(', ')}.` : '',
+      overview?.reciprocalLeads?.length ? `Possible reciprocal leads: ${overview.reciprocalLeads.join(', ')}.` : '',
+      overview?.keyFindings?.length ? `First-pass findings: ${overview.keyFindings.join(' | ')}.` : ''
+    ].filter(Boolean).join(' ');
+    return await callGeminiStructured({
+      apiKey,
+      models: getEcgModelAttemptList(),
+      imageParts: imageBundle.analysisImages,
+      schema: ECG_ASSIST_SCHEMA,
+      maxTokens: 1400,
+      mediaResolution: 'MEDIA_RESOLUTION_HIGH',
+      system: 'Return only JSON matching the schema. Do a strict lead-by-lead ECG review using the full image plus cropped lead groups. leadReview must include each lead exactly once in this order: I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6. For each lead, set st to elevation, depression, none, or unclear; t to hyperacute, inversion, peaked, normal, or unclear; q to present, absent, or unclear; and note to a very short factual phrase or empty string. Use unclear rather than guessing. Never describe reciprocal ST depression in the same leads that you have called elevated. Do not force a finding into every lead. Be specific about rate, rhythm, PR, QRS, QTc, and genuine visible image limitations. Only say single rhythm strip / lead II only if the image truly shows only a rhythm strip rather than a 12-lead ECG. Use short factual phrases and UK spelling.',
+      userText: `Review this ECG image bundle and return JSON only. Lead-by-lead analysis comes first, then the summary fields. Keep strings short. whyInterpretation max 5 items, redFlags max 4 items, differentials max 3 items. If a territory pattern is present, support it with the actual leads. If the image is limited, say why, but do not claim single rhythm strip only when multiple leads are visible. ${overviewText} Treat the first-pass pattern only as a hypothesis to verify or refute from the images.`
+    });
+  }
+  async function requestGeminiEcgDraft({ apiKey, imageBundle }){
+    const overview = await requestGeminiEcgOverview({ apiKey, imageBundle });
+    const leadRaw = await requestGeminiEcgLeadDraft({ apiKey, imageBundle, overview });
+    const result = normaliseResult(leadRaw);
+    return mergeOverviewIntoResult(result, overview);
   }
 
   function reset(patientId){
@@ -7061,28 +7294,21 @@ initHrOverlay();
     state.busy=true;
     try{
       setStatus('Preparing ECG image…');
-      const prepareImage = typeof normaliseGeminiScanImage==='function' ? normaliseGeminiScanImage : normaliseBlisterScanImage;
-      let dataUrl=await prepareImage(file);
-      state.dataUrl=dataUrl;
+      let imageBundle = await buildEcgImageBundle(file, false);
+      state.dataUrl = imageBundle.previewDataUrl;
       render();
 
       let result;
       try{
         setStatus('Scanning ECG with Gemini…');
-        result = await requestGeminiEcgDraft({ apiKey, dataUrl, model:getPreferredGeminiModel(), maxTokens:1300, mediaResolution:'MEDIA_RESOLUTION_HIGH' });
+        result = await requestGeminiEcgDraft({ apiKey, imageBundle });
       }catch(err){
         if(!isGeminiTransportFailure(err)) throw err;
-        setStatus('Retrying with a smaller ECG image…');
-        const fallbackPrepare = typeof normaliseGeminiScanImage==='function'
-          ? () => normaliseGeminiScanImage(file,{ maxBase64Bytes:1.1*1024*1024, maxSide:960, minSide:640, qualityStart:0.68, qualityFloor:0.34, steps:7, errorLabel:'Gemini image upload' })
-          : () => prepareImage(file);
-        const smallerDataUrl = await fallbackPrepare();
-        if(smallerDataUrl && smallerDataUrl !== dataUrl){
-          dataUrl = smallerDataUrl;
-          state.dataUrl = dataUrl;
-          render();
-        }
-        result = await requestGeminiEcgDraft({ apiKey, dataUrl, model:'gemini-3-flash-preview', maxTokens:1500, mediaResolution:'MEDIA_RESOLUTION_MEDIUM' });
+        setStatus('Retrying with a smaller ECG image bundle…');
+        imageBundle = await buildEcgImageBundle(file, true);
+        state.dataUrl = imageBundle.previewDataUrl;
+        render();
+        result = await requestGeminiEcgDraft({ apiKey, imageBundle });
       }
 
       state.result = result;
