@@ -345,6 +345,18 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .hr-overlay-left-col .bm-overlay-value-card{flex:1 1 auto;min-height:258px;justify-content:center}
 .hr-overlay-pulse-card .bm-overlay-timing-label{text-align:center;line-height:1.2}
 @media (max-width:390px){#hrOverlayValue{min-height:84px;font-size:36px}}
+.bp-overlay-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}
+.bp-overlay-left-col{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;min-width:0;height:100%;min-height:258px}
+.bp-overlay-primary-card{justify-content:center}
+.bp-overlay-postural-card{min-height:258px;height:100%}
+.bp-overlay-reading-grid{display:grid;grid-template-columns:1fr;gap:10px;align-content:start}
+.bp-overlay-reading-field{display:flex;flex-direction:column;gap:6px}
+.bp-overlay-reading-field label{margin:0;font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}
+.bp-overlay-reading-field input{margin-top:0;min-height:44px;padding:10px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
+.bp-overlay-reading-field input:focus,#bpOverlayValue:focus,#bpOverlaySymptoms:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
+#bpOverlayValue{width:100%;min-height:96px;font-size:40px;line-height:1.05;font-weight:800;text-align:center;padding:14px 12px;border-radius:18px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none;margin-top:0}
+#bpOverlaySymptoms{margin-top:0;min-height:42px;padding:10px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
+@media (max-width:390px){.bp-overlay-layout{grid-template-columns:1fr}.bp-overlay-left-col,.bp-overlay-postural-card{min-height:0}#bpOverlayValue{min-height:84px;font-size:34px}}
 
 /* v12_36_291: header standardisation + clinical review spacing tidy */
 .patient-reorder-card[data-card-key="obs"] h3,
@@ -417,7 +429,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-lead-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_305_release.html; source=hospital_at_home_v12_36_305_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_306_release.html; source=hospital_at_home_v12_36_306_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -615,7 +627,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_305_release.html</div><div>Source: hospital_at_home_v12_36_305_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_306_release.html</div><div>Source: hospital_at_home_v12_36_306_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -633,7 +645,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 </section>
 <section class="container hidden" id="patientDetail">
 <div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div></div>
-<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
+<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><div class="obs-split-field" id="bpFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bp" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBpEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bpLying" type="hidden"/><input id="bpStanding1" type="hidden"/><input id="bpStanding3" type="hidden"/><input id="bpPosturalSymptoms" type="hidden"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Prototype clinician tool. Scan, upload or paste an ECG image for a structured draft review and copy-ready text.</div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Lead review</div><div class="ecg-assist-lead-grid" id="ecgAssistLeadGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
 <div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><label>Issues</label><textarea id="issues"></textarea><div class="field-label-row"><label for="examination">Examination</label><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button></div><textarea id="examination"></textarea><label>Plan</label><textarea autocapitalize="sentences" id="plan"></textarea><label>For discharge summary</label><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
 <div class="card patient-reorder-card" data-card-key="meds">
@@ -704,6 +716,37 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="weight-history-chart hidden" id="weightHistoryChart"></div>
 <div class="weight-history-table hidden" id="weightHistoryTable"></div>
 <div class="weight-history-empty hidden" id="weightHistoryEmpty">No imported weight history available yet.</div>
+</div>
+</div>
+
+<div aria-hidden="true" class="bm-overlay hidden" id="bpOverlay">
+<div class="bm-overlay-backdrop" id="bpOverlayBackdrop"></div>
+<div aria-labelledby="bpOverlayTitle" aria-modal="true" class="card bm-overlay-modal" id="bpOverlayModal" role="dialog">
+<div class="bm-overlay-head"><h3 id="bpOverlayTitle">Blood pressure</h3><button aria-label="Close blood pressure editor" class="bm-overlay-close" id="bpOverlayCloseBtn" type="button">×</button></div>
+<div class="bm-overlay-body">
+<div class="bm-overlay-layout bp-overlay-layout">
+<div class="bm-overlay-left-col bp-overlay-left-col">
+<div class="bm-overlay-value-card bp-overlay-primary-card">
+<div class="bm-overlay-card-title">Primary reading</div>
+<div class="bm-overlay-value-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="next" id="bpOverlayValue" inputmode="text" placeholder="e.g. 118/72" spellcheck="false" type="text"/></div>
+<div class="bm-overlay-value-caption">mmHg</div>
+</div>
+<div class="bm-overlay-target-card bp-overlay-symptom-card">
+<div class="bm-overlay-card-label">Symptoms on standing</div>
+<div class="bm-overlay-target-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="sentences" enterkeyhint="done" id="bpOverlaySymptoms" placeholder="Optional" spellcheck="false" type="text"/></div>
+</div>
+</div>
+<div class="bm-overlay-timing-card bp-overlay-postural-card">
+<div class="bm-overlay-section-head"><div class="bm-overlay-timing-label">Lying / standing</div></div>
+<div class="bp-overlay-reading-grid">
+<div class="bp-overlay-reading-field"><label for="bpOverlayLying">Lying</label><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="next" id="bpOverlayLying" inputmode="text" placeholder="e.g. 130/78" spellcheck="false" type="text"/></div>
+<div class="bp-overlay-reading-field"><label for="bpOverlayStanding1">Standing 1 min</label><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="next" id="bpOverlayStanding1" inputmode="text" placeholder="Optional" spellcheck="false" type="text"/></div>
+<div class="bp-overlay-reading-field"><label for="bpOverlayStanding3">Standing 3 min</label><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="done" id="bpOverlayStanding3" inputmode="text" placeholder="Optional" spellcheck="false" type="text"/></div>
+</div>
+</div>
+</div>
+</div>
+<div class="bm-overlay-footer"><button id="bpOverlayClearBtn" type="button">Clear</button><button class="primary" id="bpOverlayDoneBtn" type="button">Done</button></div>
 </div>
 </div>
 
@@ -2138,6 +2181,10 @@ function upgradeStoredPatients(){
     ensureWeightHistoryShape(patient);
     if(patient.form._lastImportedWeight == null) patient.form._lastImportedWeight = String(patient.form.weight||'').trim();
     patient.form.toolScores = normaliseToolScores(patient.form.toolScores || null);
+    if(patient.form.bpLying == null) patient.form.bpLying = "";
+    if(patient.form.bpStanding1 == null) patient.form.bpStanding1 = "";
+    if(patient.form.bpStanding3 == null) patient.form.bpStanding3 = "";
+    if(patient.form.bpPosturalSymptoms == null) patient.form.bpPosturalSymptoms = "";
     if(typeof patient.form._medsCollapseTouched === 'undefined') patient.form.medsCollapsed = !!patient.form.medsGiven;
     if(typeof patient.form._ivCollapseTouched === 'undefined') patient.form.ivCollapsed = !!patient.form.ivGiven;
     if(isLinkedPatient(patient)){
@@ -3351,7 +3398,7 @@ function updateIVDeleteButton(){
 }
 
 function getOxygenFlowDisplay(){if($("oxygen").value!=="2") return ""; const val=$("oxygenFlowOther").classList.contains("hidden") ? ($("oxygenFlowSection").dataset.flow || "") : $("oxygenFlowOther").value.trim(); return val}
-function setFieldValues(f){$("rr").value=f.rr||""; $("spo2").value=f.spo2||""; $("oxygen").value=f.oxygen||"0"; setScoreModeButtons(f.scoreMode||""); $("temp").value=f.temp||""; $("bp").value=f.bp||""; $("hr").value=f.hr||""; if($("hrPulse")) $("hrPulse").value=f.hrPulse||""; if(window.syncHrTriggerDisplay) window.syncHrTriggerDisplay(); $("weight").value=f.weight||""; $("bm").value=f.bm||""; if($("bmTiming")) $("bmTiming").value=f.bmTiming||""; if($("bmTimingTime")) $("bmTimingTime").value=f.bmTimingTime||""; if($("bmTarget")) $("bmTarget").value=f.bmTarget||""; if(window.syncBmTriggerDisplay) window.syncBmTriggerDisplay(); $("conscious").value=f.conscious||"0"; $("confusion").value=f.confusion||"0"; $("issues").value=f.issues||""; $("examination").value=f.examination||""; $("plan").value=f.plan||""; $("forDischargeSummary").value=f.forDischargeSummary||""; $("medsGiven").checked=!!f.medsGiven; $("medsContainer").innerHTML=""; const medEntries=(f.medEntries&&f.medEntries.length?f.medEntries:[{name:"",dose:"",frequency:"",details:""}]); medEntries.forEach(e=>{if(f.medsGiven) createMedEntry(e)}); $("ivGiven").checked=!!f.ivGiven; $("ivVIP").value=f.ivVIP||""; $("ivContainer").innerHTML=""; (f.ivEntries&&f.ivEntries.length?f.ivEntries:[{medication:"",dose:"",serialExpiry:""}]).forEach(e=>{if(f.ivGiven) createIVEntry(e)}); $("oxygenFlowSection").dataset.flow=f.oxygenFlow||""; $("oxygenFlowOther").value=""; $("oxygenFlowOther").classList.add("hidden"); updateOxygenFields(); if(patients[currentPatient] && patients[currentPatient].form){ const pf=patients[currentPatient].form; pf.medsFocusedIndex=Number.isInteger(f.medsFocusedIndex)?f.medsFocusedIndex:null; if(typeof pf._medsCollapseTouched==='undefined') pf.medsCollapsed=!!f.medsGiven; if(typeof pf._ivCollapseTouched==='undefined') pf.ivCollapsed=!!f.ivGiven; } setMedsCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.medsCollapsed:f.medsCollapsed)); updateMedsFields(); setIVCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.ivCollapsed:f.ivCollapsed)); updateIVFields()}
+function setFieldValues(f){$("rr").value=f.rr||""; $("spo2").value=f.spo2||""; $("oxygen").value=f.oxygen||"0"; setScoreModeButtons(f.scoreMode||""); $("temp").value=f.temp||""; $("bp").value=f.bp||""; if($("bpLying")) $("bpLying").value=f.bpLying||""; if($("bpStanding1")) $("bpStanding1").value=f.bpStanding1||""; if($("bpStanding3")) $("bpStanding3").value=f.bpStanding3||""; if($("bpPosturalSymptoms")) $("bpPosturalSymptoms").value=f.bpPosturalSymptoms||""; if(window.syncBpTriggerDisplay) window.syncBpTriggerDisplay(); $("hr").value=f.hr||""; if($("hrPulse")) $("hrPulse").value=f.hrPulse||""; if(window.syncHrTriggerDisplay) window.syncHrTriggerDisplay(); $("weight").value=f.weight||""; $("bm").value=f.bm||""; if($("bmTiming")) $("bmTiming").value=f.bmTiming||""; if($("bmTimingTime")) $("bmTimingTime").value=f.bmTimingTime||""; if($("bmTarget")) $("bmTarget").value=f.bmTarget||""; if(window.syncBmTriggerDisplay) window.syncBmTriggerDisplay(); $("conscious").value=f.conscious||"0"; $("confusion").value=f.confusion||"0"; $("issues").value=f.issues||""; $("examination").value=f.examination||""; $("plan").value=f.plan||""; $("forDischargeSummary").value=f.forDischargeSummary||""; $("medsGiven").checked=!!f.medsGiven; $("medsContainer").innerHTML=""; const medEntries=(f.medEntries&&f.medEntries.length?f.medEntries:[{name:"",dose:"",frequency:"",details:""}]); medEntries.forEach(e=>{if(f.medsGiven) createMedEntry(e)}); $("ivGiven").checked=!!f.ivGiven; $("ivVIP").value=f.ivVIP||""; $("ivContainer").innerHTML=""; (f.ivEntries&&f.ivEntries.length?f.ivEntries:[{medication:"",dose:"",serialExpiry:""}]).forEach(e=>{if(f.ivGiven) createIVEntry(e)}); $("oxygenFlowSection").dataset.flow=f.oxygenFlow||""; $("oxygenFlowOther").value=""; $("oxygenFlowOther").classList.add("hidden"); updateOxygenFields(); if(patients[currentPatient] && patients[currentPatient].form){ const pf=patients[currentPatient].form; pf.medsFocusedIndex=Number.isInteger(f.medsFocusedIndex)?f.medsFocusedIndex:null; if(typeof pf._medsCollapseTouched==='undefined') pf.medsCollapsed=!!f.medsGiven; if(typeof pf._ivCollapseTouched==='undefined') pf.ivCollapsed=!!f.ivGiven; } setMedsCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.medsCollapsed:f.medsCollapsed)); updateMedsFields(); setIVCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.ivCollapsed:f.ivCollapsed)); updateIVFields()}
 function updateOxygenFields(){const show=$("oxygen").value==="2"; $("oxygenFlowSection").classList.toggle("hidden",!show)}
 function setOxygenFlow(value){if(value==="other"){ $("oxygenFlowOther").classList.remove("hidden"); $("oxygenFlowOther").focus(); $("oxygenFlowSection").dataset.flow=""; } else { $("oxygenFlowOther").classList.add("hidden"); $("oxygenFlowOther").value=""; $("oxygenFlowSection").dataset.flow=value; calculateNews(); }}
 
@@ -3979,7 +4026,8 @@ function closeIVEditOverlay(){const overlay=$("ivEditOverlay"); const section=$(
 function openIVFromSummary(index){openIVEditOverlay(index);}
 function getBMTimingText(){const val=$("bmTiming") ? $("bmTiming").value : ""; const timeVal=$("bmTimingTime") ? $("bmTimingTime").value : ""; if(window.getBMTimingClinicalSuffix) return window.getBMTimingClinicalSuffix(val, timeVal); if(val==="pre") return " pre-meal"; if(val==="post") return " post-meal"; if(val==="time" && String(timeVal||"").trim()) return ` at ${timeVal}`; return "";}
 function getHRPulseText(){const val=$("hrPulse") ? $("hrPulse").value : ""; if(window.getHRPulseClinicalSuffix) return window.getHRPulseClinicalSuffix(val); return String(val||"").trim() ? ` ${String(val).trim()}` : "";}
-function obsParts(){const parts=[]; const add=(label,val,suffix="")=>{if(String(val||"").trim()) parts.push(`${label} ${val}${suffix}`)}; add("RR",$("rr").value," /min"); if(String($("spo2").value).trim()){const ox=$("oxygen").value==="2" ? ` on ${getOxygenFlowDisplay()||"oxygen"}` : " on air"; parts.push(`SpO₂ ${$("spo2").value}%${ox}`)} add("T",$("temp").value,"°C"); add("BP",$("bp").value," mmHg"); if(String($("hr").value||"").trim()) parts.push(`HR ${$("hr").value} bpm${getHRPulseText()}`); add("Weight",$("weight").value," kg"); if(String($("bm").value||"").trim()) parts.push(`BM ${$("bm").value}${getBMTimingText()}`); return parts}
+function getBPPosturalText(){ if(window.getBPPosturalClinicalSuffix) return window.getBPPosturalClinicalSuffix(); return ""; }
+function obsParts(){const parts=[]; const add=(label,val,suffix="")=>{if(String(val||"").trim()) parts.push(`${label} ${val}${suffix}`)}; add("RR",$("rr").value," /min"); if(String($("spo2").value).trim()){const ox=$("oxygen").value==="2" ? ` on ${getOxygenFlowDisplay()||"oxygen"}` : " on air"; parts.push(`SpO₂ ${$("spo2").value}%${ox}`)} add("T",$("temp").value,"°C"); const bpValue=String($("bp").value||"").trim(); const bpPostural=getBPPosturalText(); if(bpValue) parts.push(`BP ${bpValue} mmHg${bpPostural}`); else if(bpPostural) parts.push(`Postural BP${bpPostural}`); if(String($("hr").value||"").trim()) parts.push(`HR ${$("hr").value} bpm${getHRPulseText()}`); add("Weight",$("weight").value," kg"); if(String($("bm").value||"").trim()) parts.push(`BM ${$("bm").value}${getBMTimingText()}`); return parts}
 function getIVSentenceList(){if(!$("ivGiven").checked) return []; return getIVEntries().filter(e=>e.medication||e.dose||e.serialExpiry).map(e=>`IV ${e.medication||"-"} ${e.dose||"-"} (${e.serialExpiry||"-"}) administered without incident`)}
 function saveCurrentPatientForm() {
   if (!detailLoadedForCurrentPatient || !patients[currentPatient]) return;
@@ -3995,6 +4043,10 @@ function saveCurrentPatientForm() {
     scoreMode: getScoreMode(),
     temp: $("temp").value,
     bp: $("bp").value,
+    bpLying: $("bpLying") ? $("bpLying").value : "",
+    bpStanding1: $("bpStanding1") ? $("bpStanding1").value : "",
+    bpStanding3: $("bpStanding3") ? $("bpStanding3").value : "",
+    bpPosturalSymptoms: $("bpPosturalSymptoms") ? $("bpPosturalSymptoms").value : "",
     hr: $("hr").value,
     hrPulse: $("hrPulse") ? $("hrPulse").value : "",
     weight: $("weight").value,
@@ -4024,13 +4076,15 @@ function saveCurrentPatientForm() {
     forDischargeSummary: $("forDischargeSummary").value
   };
   const onOx = $("oxygen").value === "2" ? ("on " + (getOxygenFlowDisplay() || "oxygen")) : "RA";
-  const hasObs = $("rr").value || $("spo2").value || $("temp").value || $("bp").value || $("hr").value;
+  const hasPosturalBp = !!(($("bpLying") && $("bpLying").value) || ($("bpStanding1") && $("bpStanding1").value) || ($("bpStanding3") && $("bpStanding3").value) || ($("bpPosturalSymptoms") && $("bpPosturalSymptoms").value));
+  const hasObs = $("rr").value || $("spo2").value || $("temp").value || $("bp").value || $("hr").value || hasPosturalBp;
   p.updatedAt = nowIso;
   maybeRecordLiveWeight(p, previousWeightValue, p.form.weight, nowIso);
   if (hasObs) {
     const parts = [];
     if ($("temp").value) parts.push(`T ${$("temp").value}°C`);
-    if ($("bp").value) parts.push(`BP ${$("bp").value}`);
+    if ($("bp").value) parts.push(`BP ${$("bp").value}${hasPosturalBp ? " (postural)" : ""}`);
+    else if (hasPosturalBp) parts.push(`Postural BP recorded`);
     if ($("hr").value) parts.push(`HR ${$("hr").value}${getHRPulseText()}`);
     if ($("spo2").value) parts.push(`SpO₂ ${$("spo2").value}% ${onOx}`);
     if ($("rr").value) parts.push(`RR ${$("rr").value}`);
@@ -4430,7 +4484,7 @@ function addPatient() {
     acuityClass: acuityClassFromValue(acuity),
     referralSource, timestamp: "", listDetails: "", createdAt: new Date().toISOString(),
     form: {
-      rr:"", spo2:"", oxygen:"0", oxygenFlow:"", scoreMode:"", temp:"", bp:"", hr:"",
+      rr:"", spo2:"", oxygen:"0", oxygenFlow:"", scoreMode:"", temp:"", bp:"", bpLying:"", bpStanding1:"", bpStanding3:"", bpPosturalSymptoms:"", hr:"",
       weight:"", bm:"", bmTiming:"", bmTimingTime:"", bmTarget:"", hrPulse:"", conscious:"0", confusion:"0", issues:"", examination:"",
       medsGiven: false, medsCollapsed: true, _medsCollapseTouched: false, medsFocusedIndex: null, medEntries: [],
       ivGiven: false, ivCollapsed: true, _ivCollapseTouched: false, ivVIP: "", ivEntries: [],
@@ -5222,8 +5276,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_305_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_305_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_306_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_306_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5682,7 +5736,7 @@ document.addEventListener("DOMContentLoaded",function(){
       updateKeyboardInset();
     }, 50);
   });
-  ["rr","spo2","oxygen","temp","bp","hr","hrPulse","weight","bm","bmTiming","bmTimingTime","bmTarget","conscious","confusion","issues","examination","medsGiven","ivGiven","ivVIP","plan","forDischargeSummary","oxygenFlowOther"].forEach(id=>{$(id).addEventListener("input",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()}); $(id).addEventListener("change",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()})});
+  ["rr","spo2","oxygen","temp","bp","bpLying","bpStanding1","bpStanding3","bpPosturalSymptoms","hr","hrPulse","weight","bm","bmTiming","bmTimingTime","bmTarget","conscious","confusion","issues","examination","medsGiven","ivGiven","ivVIP","plan","forDischargeSummary","oxygenFlowOther"].forEach(id=>{$(id).addEventListener("input",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()}); $(id).addEventListener("change",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()})});
   document.querySelectorAll("[data-flow]").forEach(btn=>{
     btn.onclick=()=>{
         document.querySelectorAll(".flow-btn").forEach(b=>b.classList.remove("active"));
@@ -6218,6 +6272,121 @@ function initHrOverlay(){
 }
 
 initHrOverlay();
+
+</script><script>
+window.HAH = window.HAH || { modules: {} };
+window.HAH.modules.bpOverlay = true;
+
+let bpOverlayLastFocus=null;
+let bpOverlayDraft={value:'', lying:'', standing1:'', standing3:'', symptoms:''};
+
+function bpFieldValue(){ return ($('bp') && $('bp').value) ? String($('bp').value).trim() : ''; }
+function bpLyingValue(){ return ($('bpLying') && $('bpLying').value) ? String($('bpLying').value).trim() : ''; }
+function bpStanding1Value(){ return ($('bpStanding1') && $('bpStanding1').value) ? String($('bpStanding1').value).trim() : ''; }
+function bpStanding3Value(){ return ($('bpStanding3') && $('bpStanding3').value) ? String($('bpStanding3').value).trim() : ''; }
+function bpPosturalSymptomsValue(){ return ($('bpPosturalSymptoms') && $('bpPosturalSymptoms').value) ? String($('bpPosturalSymptoms').value).trim() : ''; }
+
+function hasBPPosturalData(){
+  return !!(bpLyingValue() || bpStanding1Value() || bpStanding3Value() || bpPosturalSymptomsValue());
+}
+function getBPPosturalClinicalSuffix(){
+  const parts=[];
+  if(bpLyingValue()) parts.push(`lying ${bpLyingValue()}`);
+  if(bpStanding1Value()) parts.push(`standing 1 min ${bpStanding1Value()}`);
+  if(bpStanding3Value()) parts.push(`standing 3 min ${bpStanding3Value()}`);
+  const symptoms=bpPosturalSymptomsValue();
+  if(symptoms) parts.push(`symptoms ${symptoms}`);
+  return parts.length ? ` (postural: ${parts.join(', ')})` : '';
+}
+window.hasBPPosturalData=hasBPPosturalData;
+window.getBPPosturalClinicalSuffix=getBPPosturalClinicalSuffix;
+
+function syncBpTriggerDisplay(){
+  const input=$('bp');
+  if(!input) return;
+  const value=bpFieldValue();
+  if(document.activeElement!==input && input.value!==value) input.value=value;
+}
+window.syncBpTriggerDisplay=syncBpTriggerDisplay;
+
+function renderBpOverlay(){
+  if($('bpOverlayValue')) $('bpOverlayValue').value=bpOverlayDraft.value || '';
+  if($('bpOverlayLying')) $('bpOverlayLying').value=bpOverlayDraft.lying || '';
+  if($('bpOverlayStanding1')) $('bpOverlayStanding1').value=bpOverlayDraft.standing1 || '';
+  if($('bpOverlayStanding3')) $('bpOverlayStanding3').value=bpOverlayDraft.standing3 || '';
+  if($('bpOverlaySymptoms')) $('bpOverlaySymptoms').value=bpOverlayDraft.symptoms || '';
+}
+function openBpOverlay(){
+  const overlay=$('bpOverlay');
+  const input=$('bpOverlayValue');
+  if(!overlay || !input) return;
+  bpOverlayLastFocus=document.activeElement;
+  bpOverlayDraft={ value: bpFieldValue(), lying: bpLyingValue(), standing1: bpStanding1Value(), standing3: bpStanding3Value(), symptoms: bpPosturalSymptomsValue() };
+  renderBpOverlay();
+  overlay.classList.remove('hidden');
+  overlay.setAttribute('aria-hidden','false');
+  try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
+  try{ const len=(input.value||'').length; if(input.setSelectionRange) input.setSelectionRange(len,len); }catch(_e){}
+}
+function closeBpOverlay(restoreFocus=true){
+  const overlay=$('bpOverlay');
+  if(!overlay) return;
+  overlay.classList.add('hidden');
+  overlay.setAttribute('aria-hidden','true');
+  if(restoreFocus){
+    const target=(bpOverlayLastFocus && bpOverlayLastFocus.focus) ? bpOverlayLastFocus : $('openBpEditorBtn');
+    if(target){ try{ target.focus({preventScroll:true}); }catch(_e){ target.focus(); } }
+  }
+}
+function commitBpOverlay(closeAfter=true){
+  const bp=$('bp');
+  const lying=$('bpLying');
+  const standing1=$('bpStanding1');
+  const standing3=$('bpStanding3');
+  const symptoms=$('bpPosturalSymptoms');
+  if(!bp || !lying || !standing1 || !standing3 || !symptoms) return;
+  bp.value=String(bpOverlayDraft.value||'').trim();
+  lying.value=String(bpOverlayDraft.lying||'').trim();
+  standing1.value=String(bpOverlayDraft.standing1||'').trim();
+  standing3.value=String(bpOverlayDraft.standing3||'').trim();
+  symptoms.value=String(bpOverlayDraft.symptoms||'').trim();
+  syncBpTriggerDisplay();
+  calculateNews();
+  saveCurrentPatientForm();
+  saveData();
+  if(closeAfter) closeBpOverlay(true);
+}
+function clearBpOverlayDraft(){
+  bpOverlayDraft={value:'', lying:'', standing1:'', standing3:'', symptoms:''};
+  renderBpOverlay();
+  const input=$('bpOverlayValue');
+  if(input){ try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); } }
+}
+function initBpOverlay(){
+  const trigger=$('openBpEditorBtn');
+  const overlay=$('bpOverlay');
+  if(!trigger || !overlay || overlay.dataset.bound==='1') return;
+  overlay.dataset.bound='1';
+  syncBpTriggerDisplay();
+  trigger.addEventListener('click', openBpOverlay);
+  $('bpOverlayBackdrop')?.addEventListener('click', ()=>closeBpOverlay(true));
+  $('bpOverlayCloseBtn')?.addEventListener('click', ()=>closeBpOverlay(true));
+  $('bpOverlayDoneBtn')?.addEventListener('click', ()=>commitBpOverlay(true));
+  $('bpOverlayClearBtn')?.addEventListener('click', clearBpOverlayDraft);
+  [['bpOverlayValue','value'],['bpOverlayLying','lying'],['bpOverlayStanding1','standing1'],['bpOverlayStanding3','standing3'],['bpOverlaySymptoms','symptoms']].forEach(([id,key])=>{
+    $(id)?.addEventListener('input', e=>{ bpOverlayDraft[key]=String(e.target.value||'').trim(); });
+    $(id)?.addEventListener('keydown', e=>{ if(e.key==='Enter' && id!=='bpOverlaySymptoms'){ e.preventDefault(); const order=['bpOverlayValue','bpOverlayLying','bpOverlayStanding1','bpOverlayStanding3','bpOverlaySymptoms']; const next=order[order.indexOf(id)+1]; if(next && $(next)){ try{ $(next).focus({preventScroll:true}); }catch(_e){ $(next).focus(); } } else { commitBpOverlay(true); } } else if(e.key==='Enter' && id==='bpOverlaySymptoms'){ e.preventDefault(); commitBpOverlay(true); } });
+  });
+  $('bp')?.addEventListener('input', ()=>{ syncBpTriggerDisplay(); saveCurrentPatientForm(); saveData(); calculateNews(); });
+  $('bp')?.addEventListener('change', ()=>{ syncBpTriggerDisplay(); saveCurrentPatientForm(); saveData(); calculateNews(); });
+  document.addEventListener('keydown', e=>{
+    if(e.key!=='Escape') return;
+    if(overlay.classList.contains('hidden')) return;
+    closeBpOverlay(true);
+  });
+}
+
+initBpOverlay();
 
 </script><script>
 (function(){
