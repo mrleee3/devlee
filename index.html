@@ -415,7 +415,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_298_release.html; source=hospital_at_home_v12_36_298_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_299_release.html; source=hospital_at_home_v12_36_299_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -613,7 +613,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_298_release.html</div><div>Source: hospital_at_home_v12_36_298_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_299_release.html</div><div>Source: hospital_at_home_v12_36_299_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -5208,8 +5208,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_298_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_298_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_299_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_299_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6496,10 +6496,55 @@ initHrOverlay();
   function extractGeminiStructuredText(data){
     const candidate = data && Array.isArray(data.candidates) ? data.candidates[0] : null;
     const parts = candidate && candidate.content && Array.isArray(candidate.content.parts) ? candidate.content.parts : [];
+    const texts = [];
     for(const part of parts){
-      if(part && typeof part.text === 'string' && part.text.trim()) return part.text;
+      if(part && typeof part.text === 'string' && part.text.trim()) texts.push(part.text.trim());
     }
-    return '';
+    return texts.join('\n').trim();
+  }
+  function extractBalancedJsonSnippet(text){
+    const src = String(text || '').trim();
+    if(!src) return '';
+    const fenceMatch = src.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    const fenced = fenceMatch ? fenceMatch[1].trim() : src;
+    if(/^[\[{][\s\S]*[\]}]$/.test(fenced)) return fenced;
+    const starts = [];
+    const objStart = fenced.indexOf('{');
+    const arrStart = fenced.indexOf('[');
+    if(objStart >= 0) starts.push(objStart);
+    if(arrStart >= 0) starts.push(arrStart);
+    if(!starts.length) return fenced;
+    const start = Math.min.apply(null, starts);
+    const open = fenced[start];
+    const close = open === '{' ? '}' : ']';
+    let depth = 0;
+    let inString = false;
+    let escape = false;
+    for(let i = start; i < fenced.length; i++){
+      const ch = fenced[i];
+      if(inString){
+        if(escape){ escape = false; continue; }
+        if(ch === '\\'){ escape = true; continue; }
+        if(ch === '"'){ inString = false; }
+        continue;
+      }
+      if(ch === '"'){ inString = true; continue; }
+      if(ch === open) depth++;
+      if(ch === close){
+        depth--;
+        if(depth === 0) return fenced.slice(start, i + 1).trim();
+      }
+    }
+    return fenced.slice(start).trim();
+  }
+  function parseGeminiJsonText(text){
+    const cleaned = extractBalancedJsonSnippet(String(text || '').replace(/^﻿/, '').trim());
+    if(!cleaned) throw new Error('Gemini returned empty ECG JSON.');
+    try{ return JSON.parse(cleaned); }
+    catch(_e){
+      const noTrailingCommas = cleaned.replace(/,\s*([}\]])/g, '$1');
+      return JSON.parse(noTrailingCommas);
+    }
   }
   function getGeminiErrorMessage(status, data, rawText=''){
     const apiMsg = String(data?.error?.message || data?.message || '').trim();
@@ -6528,7 +6573,7 @@ initHrOverlay();
       }],
       generationConfig:{
         responseMimeType:'application/json',
-        responseJsonSchema:schema,
+        responseSchema:schema,
         temperature:0.1,
         maxOutputTokens:maxTokens || 1100,
         mediaResolution:'MEDIA_RESOLUTION_HIGH'
@@ -6550,8 +6595,13 @@ initHrOverlay();
       if(blockReason) throw new Error('Gemini did not return ECG JSON: ' + blockReason);
       throw new Error('Gemini returned unreadable ECG JSON. Try again with a clearer crop.');
     }
-    try{ return JSON.parse(rawText); }
-    catch(_e){ throw new Error('Gemini returned unreadable ECG JSON. Try again with a clearer crop.'); }
+    try{ return parseGeminiJsonText(rawText); }
+    catch(_e){
+      const finishReason = cleanText(data?.candidates?.[0]?.finishReason);
+      const preview = cleanText(rawText).slice(0, 180);
+      if(/max/i.test(finishReason)) throw new Error('Gemini output was cut off before the ECG JSON finished. Try again.');
+      throw new Error(preview ? 'Gemini returned ECG output in an unexpected format. The app now expects JSON only, but got: ' + preview : 'Gemini returned unreadable ECG JSON. Try again.');
+    }
   }
 
   function reset(patientId){
@@ -6806,6 +6856,5 @@ initHrOverlay();
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind,{once:true});
   else bind();
 })();
-
 </script></body>
 </html>
