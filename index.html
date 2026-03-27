@@ -300,6 +300,9 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .obs-split-trigger{margin:0;min-width:42px;width:42px;border:none;border-left:none;border-radius:0;background:transparent;padding:0;display:inline-flex;align-items:center;justify-content:center;box-shadow:none;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
 .obs-split-trigger:focus-visible{outline:none;box-shadow:none}
 .obs-split-trigger:active{transform:none}
+.obs-split-field.has-detail{border-color:rgba(10,132,255,.28);background:#f7fbff}
+.obs-split-field.has-detail .obs-split-trigger{position:relative;background:linear-gradient(180deg,rgba(10,132,255,.04),rgba(10,132,255,.08))}
+.obs-split-field.has-detail .obs-split-trigger::after{content:"";position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:999px;background:#0a84ff;box-shadow:0 0 0 2px #fff}
 .bm-overlay{position:fixed;inset:0;z-index:10086}
 .bm-overlay-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .bm-overlay-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 16px);padding:12px;border-radius:20px;display:flex;flex-direction:column;gap:12px;max-height:calc(100dvh - var(--shared-header-offset,0px) - max(26px,calc(env(safe-area-inset-bottom) + 26px)));overflow:hidden}
@@ -346,9 +349,11 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .hr-overlay-pulse-card .bm-overlay-timing-label{text-align:center;line-height:1.2}
 @media (max-width:390px){#hrOverlayValue{min-height:84px;font-size:36px}}
 .bp-overlay-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}
-.bp-overlay-left-col{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;min-width:0;height:100%;min-height:258px}
+.bp-overlay-left-col{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;min-width:0;height:100%;min-height:246px}
 .bp-overlay-primary-card{justify-content:center}
-.bp-overlay-postural-card{min-height:258px;height:100%}
+.bp-overlay-primary-card .bm-overlay-value-caption{font-size:12px;letter-spacing:.01em}
+.bp-overlay-postural-card{min-height:246px;height:100%}
+.bp-overlay-optional{font-size:11px;font-weight:700;color:#98a2b3;text-transform:uppercase;letter-spacing:.04em}
 .bp-overlay-reading-grid{display:grid;grid-template-columns:1fr;gap:10px;align-content:start}
 .bp-overlay-reading-field{display:flex;flex-direction:column;gap:6px}
 .bp-overlay-reading-field label{margin:0;font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}
@@ -429,7 +434,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-lead-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_306_release.html; source=hospital_at_home_v12_36_306_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_307_release.html; source=hospital_at_home_v12_36_307_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -627,7 +632,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_306_release.html</div><div>Source: hospital_at_home_v12_36_306_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_307_release.html</div><div>Source: hospital_at_home_v12_36_307_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -645,7 +650,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 </section>
 <section class="container hidden" id="patientDetail">
 <div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div></div>
-<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><div class="obs-split-field" id="bpFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bp" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBpEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bpLying" type="hidden"/><input id="bpStanding1" type="hidden"/><input id="bpStanding3" type="hidden"/><input id="bpPosturalSymptoms" type="hidden"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
+<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><div class="obs-split-field" id="bpFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bp" placeholder="e.g. 118/72" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBpEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bpLying" type="hidden"/><input id="bpStanding1" type="hidden"/><input id="bpStanding3" type="hidden"/><input id="bpPosturalSymptoms" type="hidden"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Prototype clinician tool. Scan, upload or paste an ECG image for a structured draft review and copy-ready text.</div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Lead review</div><div class="ecg-assist-lead-grid" id="ecgAssistLeadGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
 <div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><label>Issues</label><textarea id="issues"></textarea><div class="field-label-row"><label for="examination">Examination</label><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button></div><textarea id="examination"></textarea><label>Plan</label><textarea autocapitalize="sentences" id="plan"></textarea><label>For discharge summary</label><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
 <div class="card patient-reorder-card" data-card-key="meds">
@@ -727,9 +732,9 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="bm-overlay-layout bp-overlay-layout">
 <div class="bm-overlay-left-col bp-overlay-left-col">
 <div class="bm-overlay-value-card bp-overlay-primary-card">
-<div class="bm-overlay-card-title">Primary reading</div>
+<div class="bm-overlay-card-title">Main reading</div>
 <div class="bm-overlay-value-wrap"><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="next" id="bpOverlayValue" inputmode="text" placeholder="e.g. 118/72" spellcheck="false" type="text"/></div>
-<div class="bm-overlay-value-caption">mmHg</div>
+<div class="bm-overlay-value-caption">Shown on obs line</div>
 </div>
 <div class="bm-overlay-target-card bp-overlay-symptom-card">
 <div class="bm-overlay-card-label">Symptoms on standing</div>
@@ -737,9 +742,9 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 </div>
 </div>
 <div class="bm-overlay-timing-card bp-overlay-postural-card">
-<div class="bm-overlay-section-head"><div class="bm-overlay-timing-label">Lying / standing</div></div>
+<div class="bm-overlay-section-head"><div class="bm-overlay-timing-label">Postural readings</div><div class="bp-overlay-optional">Optional</div></div>
 <div class="bp-overlay-reading-grid">
-<div class="bp-overlay-reading-field"><label for="bpOverlayLying">Lying</label><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="next" id="bpOverlayLying" inputmode="text" placeholder="e.g. 130/78" spellcheck="false" type="text"/></div>
+<div class="bp-overlay-reading-field"><label for="bpOverlayLying">Lying / baseline</label><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="next" id="bpOverlayLying" inputmode="text" placeholder="e.g. 130/78" spellcheck="false" type="text"/></div>
 <div class="bp-overlay-reading-field"><label for="bpOverlayStanding1">Standing 1 min</label><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="next" id="bpOverlayStanding1" inputmode="text" placeholder="Optional" spellcheck="false" type="text"/></div>
 <div class="bp-overlay-reading-field"><label for="bpOverlayStanding3">Standing 3 min</label><input autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="done" id="bpOverlayStanding3" inputmode="text" placeholder="Optional" spellcheck="false" type="text"/></div>
 </div>
@@ -5276,8 +5281,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_306_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_306_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_307_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_307_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6280,10 +6285,17 @@ window.HAH.modules.bpOverlay = true;
 let bpOverlayLastFocus=null;
 let bpOverlayDraft={value:'', lying:'', standing1:'', standing3:'', symptoms:''};
 
-function bpFieldValue(){ return ($('bp') && $('bp').value) ? String($('bp').value).trim() : ''; }
-function bpLyingValue(){ return ($('bpLying') && $('bpLying').value) ? String($('bpLying').value).trim() : ''; }
-function bpStanding1Value(){ return ($('bpStanding1') && $('bpStanding1').value) ? String($('bpStanding1').value).trim() : ''; }
-function bpStanding3Value(){ return ($('bpStanding3') && $('bpStanding3').value) ? String($('bpStanding3').value).trim() : ''; }
+function normaliseBPText(raw){
+  let text=String(raw||'').trim();
+  if(!text) return '';
+  text=text.replace(/\s*\/\s*/g,'/').replace(/\s+/g,' ');
+  if(/^\d{2,3}\s+\d{2,3}$/.test(text)) text=text.replace(/\s+/,'/');
+  return text;
+}
+function bpFieldValue(){ return ($('bp') && $('bp').value) ? normaliseBPText($('bp').value) : ''; }
+function bpLyingValue(){ return ($('bpLying') && $('bpLying').value) ? normaliseBPText($('bpLying').value) : ''; }
+function bpStanding1Value(){ return ($('bpStanding1') && $('bpStanding1').value) ? normaliseBPText($('bpStanding1').value) : ''; }
+function bpStanding3Value(){ return ($('bpStanding3') && $('bpStanding3').value) ? normaliseBPText($('bpStanding3').value) : ''; }
 function bpPosturalSymptomsValue(){ return ($('bpPosturalSymptoms') && $('bpPosturalSymptoms').value) ? String($('bpPosturalSymptoms').value).trim() : ''; }
 
 function hasBPPosturalData(){
@@ -6296,16 +6308,34 @@ function getBPPosturalClinicalSuffix(){
   if(bpStanding3Value()) parts.push(`standing 3 min ${bpStanding3Value()}`);
   const symptoms=bpPosturalSymptomsValue();
   if(symptoms) parts.push(`symptoms ${symptoms}`);
-  return parts.length ? ` (postural: ${parts.join(', ')})` : '';
+  return parts.length ? ` (${parts.join(', ')})` : '';
 }
 window.hasBPPosturalData=hasBPPosturalData;
 window.getBPPosturalClinicalSuffix=getBPPosturalClinicalSuffix;
 
+function getBPPosturalSummaryText(){
+  const parts=[];
+  if(bpLyingValue()) parts.push(`lying ${bpLyingValue()}`);
+  if(bpStanding1Value()) parts.push(`standing 1 min ${bpStanding1Value()}`);
+  if(bpStanding3Value()) parts.push(`standing 3 min ${bpStanding3Value()}`);
+  if(bpPosturalSymptomsValue()) parts.push(`symptoms ${bpPosturalSymptomsValue()}`);
+  return parts.join(', ');
+}
 function syncBpTriggerDisplay(){
   const input=$('bp');
+  const shell=$('bpFieldShell');
+  const trigger=$('openBpEditorBtn');
   if(!input) return;
   const value=bpFieldValue();
+  const hasDetail=hasBPPosturalData();
+  const summary=getBPPosturalSummaryText();
   if(document.activeElement!==input && input.value!==value) input.value=value;
+  if(shell) shell.classList.toggle('has-detail', hasDetail);
+  if(trigger){
+    const label=value ? `Edit blood pressure${hasDetail ? `, postural readings recorded: ${summary}` : ''}` : `Add blood pressure${hasDetail ? `, postural readings recorded: ${summary}` : ''}`;
+    trigger.setAttribute('aria-label', label);
+    trigger.title=hasDetail ? `Postural readings: ${summary}` : 'Add postural blood pressure details';
+  }
 }
 window.syncBpTriggerDisplay=syncBpTriggerDisplay;
 
@@ -6327,6 +6357,12 @@ function openBpOverlay(){
   overlay.setAttribute('aria-hidden','false');
   try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
   try{ const len=(input.value||'').length; if(input.setSelectionRange) input.setSelectionRange(len,len); }catch(_e){}
+  requestAnimationFrame(()=>{
+    if(document.activeElement!==input){
+      try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
+      try{ const len=(input.value||'').length; if(input.setSelectionRange) input.setSelectionRange(len,len); }catch(_e){}
+    }
+  });
 }
 function closeBpOverlay(restoreFocus=true){
   const overlay=$('bpOverlay');
@@ -6345,10 +6381,10 @@ function commitBpOverlay(closeAfter=true){
   const standing3=$('bpStanding3');
   const symptoms=$('bpPosturalSymptoms');
   if(!bp || !lying || !standing1 || !standing3 || !symptoms) return;
-  bp.value=String(bpOverlayDraft.value||'').trim();
-  lying.value=String(bpOverlayDraft.lying||'').trim();
-  standing1.value=String(bpOverlayDraft.standing1||'').trim();
-  standing3.value=String(bpOverlayDraft.standing3||'').trim();
+  bp.value=normaliseBPText(bpOverlayDraft.value||'');
+  lying.value=normaliseBPText(bpOverlayDraft.lying||'');
+  standing1.value=normaliseBPText(bpOverlayDraft.standing1||'');
+  standing3.value=normaliseBPText(bpOverlayDraft.standing3||'');
   symptoms.value=String(bpOverlayDraft.symptoms||'').trim();
   syncBpTriggerDisplay();
   calculateNews();
@@ -6374,11 +6410,11 @@ function initBpOverlay(){
   $('bpOverlayDoneBtn')?.addEventListener('click', ()=>commitBpOverlay(true));
   $('bpOverlayClearBtn')?.addEventListener('click', clearBpOverlayDraft);
   [['bpOverlayValue','value'],['bpOverlayLying','lying'],['bpOverlayStanding1','standing1'],['bpOverlayStanding3','standing3'],['bpOverlaySymptoms','symptoms']].forEach(([id,key])=>{
-    $(id)?.addEventListener('input', e=>{ bpOverlayDraft[key]=String(e.target.value||'').trim(); });
+    $(id)?.addEventListener('input', e=>{ bpOverlayDraft[key]=key==='symptoms' ? String(e.target.value||'').trim() : normaliseBPText(e.target.value||''); });
     $(id)?.addEventListener('keydown', e=>{ if(e.key==='Enter' && id!=='bpOverlaySymptoms'){ e.preventDefault(); const order=['bpOverlayValue','bpOverlayLying','bpOverlayStanding1','bpOverlayStanding3','bpOverlaySymptoms']; const next=order[order.indexOf(id)+1]; if(next && $(next)){ try{ $(next).focus({preventScroll:true}); }catch(_e){ $(next).focus(); } } else { commitBpOverlay(true); } } else if(e.key==='Enter' && id==='bpOverlaySymptoms'){ e.preventDefault(); commitBpOverlay(true); } });
   });
   $('bp')?.addEventListener('input', ()=>{ syncBpTriggerDisplay(); saveCurrentPatientForm(); saveData(); calculateNews(); });
-  $('bp')?.addEventListener('change', ()=>{ syncBpTriggerDisplay(); saveCurrentPatientForm(); saveData(); calculateNews(); });
+  $('bp')?.addEventListener('change', ()=>{ const input=$('bp'); if(input) input.value=bpFieldValue(); syncBpTriggerDisplay(); saveCurrentPatientForm(); saveData(); calculateNews(); });
   document.addEventListener('keydown', e=>{
     if(e.key!=='Escape') return;
     if(overlay.classList.contains('hidden')) return;
