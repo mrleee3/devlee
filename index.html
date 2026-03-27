@@ -415,7 +415,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_296_release.html; source=hospital_at_home_v12_36_296_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_298_release.html; source=hospital_at_home_v12_36_298_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -596,18 +596,24 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 </div>
 <div class="card">
 <h3>AI scan tools (beta)</h3>
-<div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Store your Groq API key locally on this device for future blister-pack, IV-label and ECG scans. The key stays in this browser only.</div>
-<label>Groq API key</label>
+<div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Store scan API keys locally on this device. Keys stay in this browser only.</div>
+<label>Groq API key <span class="tiny muted">(blister pack / IV label)</span></label>
 <input autocapitalize="off" autocorrect="off" id="xaiApiKeyInput" placeholder="Paste your Groq API key" spellcheck="false" type="password"/>
 <div class="top-actions" style="margin-top:10px">
 <button class="primary fullwidth" id="saveXaiSettingsBtn">Save key</button>
 </div>
-<div class="tiny muted" id="xaiSettingsStatus" style="margin-top:6px"></div>
+<div class="tiny muted" id="xaiSettingsStatus" style="margin-top:6px;margin-bottom:12px"></div>
+<label>Gemini API key <span class="tiny muted">(ECG Assist)</span></label>
+<input autocapitalize="off" autocorrect="off" id="geminiApiKeyInput" placeholder="Paste your Gemini API key" spellcheck="false" type="password"/>
+<div class="top-actions" style="margin-top:10px">
+<button class="primary fullwidth" id="saveGeminiSettingsBtn">Save key</button>
+</div>
+<div class="tiny muted" id="geminiSettingsStatus" style="margin-top:6px"></div>
 </div>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_296_release.html</div><div>Source: hospital_at_home_v12_36_296_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_298_release.html</div><div>Source: hospital_at_home_v12_36_298_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -771,7 +777,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.core = true;
-const STORAGE_KEY="hah_prototype_v12_36_162_pin_rebuild_data", UNDO_KEY="hah_prototype_v12_36_162_pin_rebuild_undo", NHS_EMAIL_KEY="hah_nhs_email", GRAPH_SETTINGS_KEY="hah_graph_settings", GRAPH_ACCOUNT_KEY="hah_graph_account", XAI_SETTINGS_KEY="hah_xai_settings";
+const STORAGE_KEY="hah_prototype_v12_36_162_pin_rebuild_data", UNDO_KEY="hah_prototype_v12_36_162_pin_rebuild_undo", NHS_EMAIL_KEY="hah_nhs_email", GRAPH_SETTINGS_KEY="hah_graph_settings", GRAPH_ACCOUNT_KEY="hah_graph_account", XAI_SETTINGS_KEY="hah_xai_settings", GEMINI_SETTINGS_KEY="hah_gemini_settings";
 const PIN_KEY='hah_pin_hash', CRED_ID_KEY='hah_cred_id', BIOMETRIC_KEY='hah_biometric', NEDRY_SOUND_KEY='hah_nedry_enabled';
 const LEGACY_STORAGE_KEYS=['hah_prototype_v12_36_156_pin_state_fix_data','hah_prototype_v12_36_153_medlist_update_only_data','hah_prototype_v12_36_140_pin_loop_fix2_data','hah_prototype_v12_36_139_bg_underlay_fix_data','hah_prototype_v12_36_138_pull_refresh_icon_restore_data','hah_prototype_v12_36_137_pin_loop_fix_data','hah_prototype_v12_36_134_safe_update_banner_data','hah_prototype_v12_36_133_reorder_activate_only_data','hah_prototype_v12_36_104_weight_overlay_parsefix_data','hah_prototype_v12_36_103_weight_overlay_historyfix_data','hah_prototype_v12_36_102_weight_overlay_data','hah_prototype_v12_36_101_flush2_data','hah_prototype_v12_36_96_fresh_demo_patients_data','hah_prototype_v12_36_78_pull_refresh_softgrey_data','hah_prototype_v12_36_77_pull_refresh_underlay_glyph_tuned_data','hah_prototype_v12_36_76_pull_refresh_underlay_glyph_data','hah_prototype_v12_36_75_pull_refresh_feedback_from71_data','hah_prototype_v12_36_74_pull_refresh_feedback_fix_data','hah_prototype_v12_36_73_pull_refresh_feedback_data','hah_prototype_v12_36_72_pull_refresh_data','hah_prototype_v12_36_71_search_toggleclose_data','hah_prototype_v12_36_70_search_keyboardfix_data','hah_prototype_v12_36_69_search_autofocus_data','hah_prototype_v12_36_68_search_fullwidth_data','hah_prototype_v12_36_68_search_fullwidth_undo','hah_prototype_v12_36_67_search_style60_data','hah_prototype_v12_36_67_search_style60_undo','hah_prototype_v12_36_66_search_from58_data','hah_prototype_v12_36_66_search_from58_undo',"hah_prototype_v12_36_58_sortsurname_toggle_data","hah_prototype_v12_36_57_data","hah_prototype_v12_36_55_data","hah_prototype_v12_36_49_data","hah_prototype_v12_36_48_data","hah_prototype_v12_36_47_data","hah_prototype_v12_36_46_data","hah_prototype_v12_36_45_data","hah_prototype_v12_36_36_data","hah_prototype_v12_36_19_data","hah_prototype_v12_35_3_data"];
 const LEGACY_UNDO_KEYS=['hah_prototype_v12_36_156_pin_state_fix_undo',"hah_prototype_v12_36_140_pin_loop_fix2_undo","hah_prototype_v12_36_139_bg_underlay_fix_undo","hah_prototype_v12_36_137_pin_loop_fix_undo","hah_prototype_v12_36_134_safe_update_banner_undo","hah_prototype_v12_36_133_reorder_activate_only_undo","hah_prototype_v12_36_104_weight_overlay_parsefix_undo","hah_prototype_v12_36_103_weight_overlay_historyfix_undo","hah_prototype_v12_36_102_weight_overlay_undo","hah_prototype_v12_36_101_flush2_undo","hah_prototype_v12_36_96_fresh_demo_patients_undo","hah_prototype_v12_36_78_pull_refresh_softgrey_undo","hah_prototype_v12_36_77_pull_refresh_underlay_glyph_tuned_undo","hah_prototype_v12_36_76_pull_refresh_underlay_glyph_undo","hah_prototype_v12_36_75_pull_refresh_feedback_from71_undo","hah_prototype_v12_36_74_pull_refresh_feedback_fix_undo","hah_prototype_v12_36_73_pull_refresh_feedback_undo","hah_prototype_v12_36_72_pull_refresh_undo","hah_prototype_v12_36_71_search_toggleclose_undo","hah_prototype_v12_36_70_search_keyboardfix_undo","hah_prototype_v12_36_69_search_autofocus_undo","hah_prototype_v12_36_58_sortsurname_toggle_undo","hah_prototype_v12_36_57_undo","hah_prototype_v12_36_55_undo","hah_prototype_v12_36_49_undo","hah_prototype_v12_36_48_undo","hah_prototype_v12_36_47_undo","hah_prototype_v12_36_46_undo","hah_prototype_v12_36_45_undo","hah_prototype_v12_36_36_undo","hah_prototype_v12_36_19_undo","hah_prototype_v12_35_3_undo"];
@@ -1023,6 +1029,54 @@ function fillXaiSettingsUI(){
 }
 function getXaiApiKey(){
   return String(loadXaiSettings().apiKey||'').trim();
+}
+function defaultGeminiSettings(){
+  return {apiKey:'', model:'gemini-2.5-flash'};
+}
+function loadGeminiSettings(){
+  try{return {...defaultGeminiSettings(), ...(JSON.parse(localStorage.getItem(GEMINI_SETTINGS_KEY)||"{}"))};}
+  catch(e){return defaultGeminiSettings();}
+}
+function setGeminiStatus(msg, isError=false){
+  const el=$("geminiSettingsStatus");
+  if(!el) return;
+  el.textContent=msg||"";
+  el.style.color=isError?'#b91c1c':'#6b7280';
+}
+function setGeminiSettingsLocked(locked){
+  const inp=$("geminiApiKeyInput");
+  const btn=$("saveGeminiSettingsBtn");
+  if(inp){
+    inp.readOnly=locked;
+    inp.type=locked?'password':'text';
+    inp.style.background=locked?'#f3f4f6':'';
+    inp.style.color=locked?'#6b7280':'';
+  }
+  if(btn){
+    btn.textContent=locked?'Edit key':'Save key';
+    btn.classList.toggle('primary', !locked);
+  }
+}
+function saveGeminiSettings(showMsg=true){
+  const current=loadGeminiSettings();
+  const settings={...current, apiKey:($("geminiApiKeyInput")?.value||"").trim()};
+  localStorage.setItem(GEMINI_SETTINGS_KEY, JSON.stringify(settings));
+  if(showMsg){
+    setGeminiSettingsLocked(true);
+    setGeminiStatus(settings.apiKey?'Gemini key saved on this device.':'Gemini key removed.');
+  }
+  return settings;
+}
+function fillGeminiSettingsUI(){
+  const s=loadGeminiSettings();
+  if($("geminiApiKeyInput")) $("geminiApiKeyInput").value=s.apiKey||"";
+  setGeminiSettingsLocked(!!(s.apiKey));
+}
+function getGeminiApiKey(){
+  return String(loadGeminiSettings().apiKey||'').trim();
+}
+function getGeminiModel(){
+  return String(loadGeminiSettings().model||'gemini-2.5-flash').trim() || 'gemini-2.5-flash';
 }
 const BLISTER_SCAN_SCHEMA={type:'object',additionalProperties:false,required:['items'],properties:{items:{type:'array',items:{type:'object',additionalProperties:false,required:['medication','dose','frequency','confidence','notes'],properties:{medication:{type:'string'},dose:{type:'string'},frequency:{type:'string'},confidence:{type:'number'},notes:{type:'string'}}}}}};
 let blisterScanState={file:null,dataUrl:'',items:[],busy:false};
@@ -5154,8 +5208,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_296_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_296_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_298_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_298_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -5490,7 +5544,7 @@ function initPatientCardReorder(){
 }
 
 document.addEventListener("DOMContentLoaded",function(){
-  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillGeminiSettingsUI(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -5623,7 +5677,7 @@ document.addEventListener("DOMContentLoaded",function(){
     };
 });
   $("plan").addEventListener("keydown",bulletKeyHandler); $("forDischargeSummary").addEventListener("keydown",bulletKeyHandler); $("plan").addEventListener("input",()=>capitalizeBulletStarts($("plan"))); $("forDischargeSummary").addEventListener("input",()=>capitalizeBulletStarts($("forDischargeSummary")));
-  ["newName","newAge","newReferralOther","rr","spo2","temp","bp","hr","weight","bm","xaiApiKeyInput"].forEach(id=>{const el=$(id); if(el){el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault(); if(id==="newReferralOther") $("saveAddBtn").focus(); else if(id==="xaiApiKeyInput") $("saveXaiSettingsBtn")?.click(); else focusNextField(id)}})}});
+  ["newName","newAge","newReferralOther","rr","spo2","temp","bp","hr","weight","bm","xaiApiKeyInput","geminiApiKeyInput"].forEach(id=>{const el=$(id); if(el){el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault(); if(id==="newReferralOther") $("saveAddBtn").focus(); else if(id==="xaiApiKeyInput") $("saveXaiSettingsBtn")?.click(); else if(id==="geminiApiKeyInput") $("saveGeminiSettingsBtn")?.click(); else focusNextField(id)}})}});
   function preserveAddPatientInputFocus(e){
     if(!document.body.classList.contains("add-patient-open")) return;
     const active=document.activeElement;
@@ -5734,6 +5788,17 @@ document.addEventListener("DOMContentLoaded",function(){
       return;
     }
     saveXaiSettings(true);
+  };
+  if($("saveGeminiSettingsBtn")) $("saveGeminiSettingsBtn").onclick=()=>{
+    const btn=$("saveGeminiSettingsBtn");
+    const inp=$("geminiApiKeyInput");
+    if(btn && btn.textContent==='Edit key'){
+      setGeminiSettingsLocked(false);
+      setGeminiStatus('Editing key.');
+      if(inp){ try{inp.focus({preventScroll:true});}catch(_){inp.focus();} inp.select?.(); }
+      return;
+    }
+    saveGeminiSettings(true);
   };
   if($("scanBlisterBtn")) $("scanBlisterBtn").onclick=()=>{ noteBlisterPickerLaunch(); $("blisterScanInput")?.click(); };
   if($("scanIVBtn")) $("scanIVBtn").onclick=()=>{ $("ivScanInput")?.click(); };
@@ -6174,13 +6239,33 @@ initHrOverlay();
     }
   };
 
+  const ECG_CHALLENGE_SCHEMA = {
+    type: 'object',
+    additionalProperties: false,
+    required: [
+      'highRisk','summary','inferiorPattern','anteriorPattern','lateralPattern','reciprocalChange','concerningFeatures','urgentDifferentials','actionBias','uncertainty'
+    ],
+    properties: {
+      highRisk: { type: 'boolean' },
+      summary: { type: 'string' },
+      inferiorPattern: { type: 'string' },
+      anteriorPattern: { type: 'string' },
+      lateralPattern: { type: 'string' },
+      reciprocalChange: { type: 'string' },
+      concerningFeatures: { type: 'array', items: { type: 'string' } },
+      urgentDifferentials: { type: 'array', items: { type: 'string' } },
+      actionBias: { type: 'string' },
+      uncertainty: { type: 'string' }
+    }
+  };
+
   let state = { mode:'scan', dataUrl:'', result:null, busy:false, patientId:'' };
   let bound = false;
 
   function cleanText(value){ return String(value || '').replace(/\s+/g,' ').trim(); }
   function normaliseList(list){
     return Array.isArray(list)
-      ? Array.from(new Set(list.map(v => cleanText(v)).filter(Boolean))).slice(0,10)
+      ? Array.from(new Set(list.map(v => cleanText(v)).filter(Boolean))).slice(0,12)
       : [];
   }
   function isMeaningful(value){
@@ -6232,7 +6317,7 @@ initHrOverlay();
     if(result.limitations && /quality|photo|image|lead|crop|resolution|angle|artifact/i.test(result.limitations)){
       reasons.push('Certainty limited by image quality / lead visibility.');
     }
-    return Array.from(new Set(reasons)).slice(0,8);
+    return Array.from(new Set(reasons)).slice(0,10);
   }
   function hasVisibleIschaemicConcern(result){
     const hay = [
@@ -6293,6 +6378,10 @@ initHrOverlay();
     const impression = cleanText(result.impression || 'Clinical correlation advised.');
     return `${summary || 'ECG reviewed.'}${summary ? '. ' : ' '}${impression}`.trim();
   }
+  function looksNormalImpression(text){
+    const hay = cleanText(text).toLowerCase();
+    return /normal|within normal|no obvious acute abnormal|no acute abnormal|largely within normal|sinus rhythm with no obvious acute abnormality/.test(hay);
+  }
   function normaliseResult(raw){
     const src = raw && typeof raw === 'object' ? raw : {};
     const result = {
@@ -6327,6 +6416,144 @@ initHrOverlay();
     return result;
   }
 
+  function normaliseChallenge(raw){
+    const src = raw && typeof raw === 'object' ? raw : {};
+    return {
+      highRisk: !!src.highRisk,
+      summary: cleanText(src.summary),
+      inferiorPattern: cleanText(src.inferiorPattern),
+      anteriorPattern: cleanText(src.anteriorPattern),
+      lateralPattern: cleanText(src.lateralPattern),
+      reciprocalChange: cleanText(src.reciprocalChange),
+      concerningFeatures: normaliseList(src.concerningFeatures),
+      urgentDifferentials: normaliseList(src.urgentDifferentials),
+      actionBias: cleanText(src.actionBias),
+      uncertainty: cleanText(src.uncertainty)
+    };
+  }
+  function challengeSuggestsHighRisk(challenge){
+    const hay = [
+      challenge.summary,
+      challenge.inferiorPattern,
+      challenge.anteriorPattern,
+      challenge.lateralPattern,
+      challenge.reciprocalChange,
+      ...(challenge.concerningFeatures || []),
+      ...(challenge.urgentDifferentials || [])
+    ].join(' | ').toLowerCase();
+    return !!challenge.highRisk || /st elevation|stemi|occlusion|omi|acute coronary|inferior mi|inferior myocardial|reciprocal|posterior mi|hyperkala|broad complex tachy|ventricular tachy|complete heart block/.test(hay);
+  }
+  function challengeConcernLabel(challenge){
+    const hay = [challenge.summary, challenge.inferiorPattern, challenge.anteriorPattern, challenge.lateralPattern, challenge.reciprocalChange].join(' | ').toLowerCase();
+    if(/inferior/.test(hay) && /st elevation|stemi|occlusion|mi/.test(hay)) return 'possible inferior ST-elevation / occlusion pattern';
+    if(/anterior|anteroseptal/.test(hay) && /st elevation|stemi|occlusion|mi/.test(hay)) return 'possible anterior ST-elevation / occlusion pattern';
+    if(/lateral/.test(hay) && /st elevation|stemi|occlusion|mi/.test(hay)) return 'possible lateral ST-elevation / occlusion pattern';
+    if(/reciprocal/.test(hay)) return 'possible reciprocal ST-segment changes';
+    if(/acute coronary|acs|occlusion/.test(hay)) return 'possible acute coronary / occlusion pattern';
+    return challenge.highRisk ? 'possible high-risk ECG pattern' : '';
+  }
+  function mergeChallenge(result, challenge){
+    if(!challenge) return result;
+    const merged = result;
+    const highRisk = challengeSuggestsHighRisk(challenge);
+    const concernLabel = challengeConcernLabel(challenge);
+    const challengeWhy = normaliseList([
+      challenge.inferiorPattern,
+      challenge.anteriorPattern,
+      challenge.lateralPattern,
+      challenge.reciprocalChange,
+      ...(challenge.concerningFeatures || [])
+    ]);
+
+    merged.whyInterpretation = normaliseList([...(merged.whyInterpretation || []), ...challengeWhy]);
+    merged.differentials = normaliseList([...(merged.differentials || []), ...(challenge.urgentDifferentials || [])]);
+    if(challenge.uncertainty && !merged.limitations){
+      merged.limitations = challenge.uncertainty;
+    }
+
+    if(highRisk){
+      merged.redFlags = normaliseList([...(merged.redFlags || []), concernLabel, ...(challenge.urgentDifferentials || [])]);
+      const stPieces = normaliseList([challenge.inferiorPattern, challenge.anteriorPattern, challenge.lateralPattern, challenge.reciprocalChange]);
+      if(stPieces.length){
+        merged.stSegments = stPieces.join(' · ');
+      }else if(!isMeaningful(merged.stSegments) || /normal|no acute/i.test(merged.stSegments)){
+        merged.stSegments = 'Concerning ST-segment abnormality seen';
+      }
+      if(looksNormalImpression(merged.impression) || !isMeaningful(merged.impression)){
+        merged.impression = challenge.summary || 'ECG image is concerning for a possible acute ischaemic / occlusion pattern and should not be treated as normal.';
+      }
+      merged.action = challenge.actionBias || 'Potential high-risk ECG pattern — urgent senior / acute assessment is advised if clinically consistent.';
+      merged.confidence = merged.confidence || 'Red-flag challenge triggered';
+      merged.copyText = buildFallbackCopy(merged);
+    }
+    return merged;
+  }
+  function splitDataUrl(dataUrl){
+    const match = String(dataUrl || '').match(/^data:([^;,]+);base64,(.+)$/);
+    if(!match) throw new Error('ECG image could not be prepared for Gemini. Try upload again.');
+    return { mimeType: match[1], base64: match[2] };
+  }
+  function extractGeminiStructuredText(data){
+    const candidate = data && Array.isArray(data.candidates) ? data.candidates[0] : null;
+    const parts = candidate && candidate.content && Array.isArray(candidate.content.parts) ? candidate.content.parts : [];
+    for(const part of parts){
+      if(part && typeof part.text === 'string' && part.text.trim()) return part.text;
+    }
+    return '';
+  }
+  function getGeminiErrorMessage(status, data, rawText=''){
+    const apiMsg = String(data?.error?.message || data?.message || '').trim();
+    const suffix = apiMsg || rawText || '';
+    if(status===400) return suffix ? 'Gemini rejected the request (400): ' + suffix : 'Gemini rejected the request (400). This is usually a request-format issue.';
+    if(status===401) return suffix ? 'Gemini rejected the API key (401): ' + suffix : 'Gemini rejected the API key (401). Check the key in Options.';
+    if(status===403) return suffix ? 'Gemini blocked this request (403): ' + suffix : 'Gemini blocked this request (403). The key may not have permission for this model or endpoint.';
+    if(status===404) return suffix ? 'Gemini could not find the endpoint or model (404): ' + suffix : 'Gemini could not find the endpoint or model (404).';
+    if(status===413) return 'Image too large for Gemini upload (413). Try a tighter crop.';
+    if(status===415) return 'Unsupported upload format (415). Use JPG or PNG.';
+    if(status===422) return suffix ? 'Gemini could not process this request (422): ' + suffix : 'Gemini could not process this request (422).';
+    if(status===429) return suffix ? 'Gemini rate limit reached (429): ' + suffix : 'Gemini rate limit reached (429). Try again in a moment.';
+    if(status>=500) return suffix ? 'Gemini server error ('+status+'): ' + suffix : 'Gemini server error ('+status+'). Try again.';
+    return suffix ? 'ECG scan failed ('+status+'): ' + suffix : 'ECG scan failed ('+status+').';
+  }
+  async function callGeminiStructured({ apiKey, model, system, userText, imageUrl, schema, maxTokens }){
+    const { mimeType, base64 } = splitDataUrl(imageUrl);
+    const body = {
+      system_instruction: { parts:[{ text: system }] },
+      contents: [{
+        role:'user',
+        parts:[
+          { text: userText },
+          { inline_data:{ mime_type: mimeType, data: base64 } }
+        ]
+      }],
+      generationConfig:{
+        responseMimeType:'application/json',
+        responseJsonSchema:schema,
+        temperature:0.1,
+        maxOutputTokens:maxTokens || 1100,
+        mediaResolution:'MEDIA_RESOLUTION_HIGH'
+      }
+    };
+    const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model || 'gemini-2.5-flash') + ':generateContent?key=' + encodeURIComponent(apiKey);
+    const res = await fetch(endpoint, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body:JSON.stringify(body)
+    });
+    const rawResponse = await res.text();
+    let data = {};
+    try{ data = rawResponse ? JSON.parse(rawResponse) : {}; }catch(_e){ data = {}; }
+    if(!res.ok) throw new Error(getGeminiErrorMessage(res.status, data, rawResponse.slice(0,260)));
+    const rawText = extractGeminiStructuredText(data);
+    if(!rawText){
+      const blockReason = cleanText(data?.promptFeedback?.blockReason || data?.candidates?.[0]?.finishReason);
+      if(blockReason) throw new Error('Gemini did not return ECG JSON: ' + blockReason);
+      throw new Error('Gemini returned unreadable ECG JSON. Try again with a clearer crop.');
+    }
+    try{ return JSON.parse(rawText); }
+    catch(_e){ throw new Error('Gemini returned unreadable ECG JSON. Try again with a clearer crop.'); }
+  }
+
   function reset(patientId){
     state = { mode:'scan', dataUrl:'', result:null, busy:false, patientId:patientId||'' };
     render();
@@ -6345,10 +6572,10 @@ initHrOverlay();
     const hay=[
       result.rate,result.rhythm,result.axis,result.prInterval,result.qrsDuration,result.qtc,result.stSegments,result.tWaves,
       result.rWaveProgression,result.ectopy,result.conduction,result.morphology,result.impression,result.action,
-      ...(result.redFlags||[]),...(result.differentials||[])
+      ...(result.redFlags||[]),...(result.differentials||[]),...(result.whyInterpretation||[])
     ].join(' | ').toLowerCase();
     const flags=[];
-    if(/st\s*elevation|stemi|occlusion|acute coronary/.test(hay)) flags.push('possible acute ST elevation / occlusion pattern');
+    if(/st\s*elevation|stemi|occlusion|acute coronary|inferior mi|inferior myocardial|reciprocal/.test(hay)) flags.push('possible acute ST-elevation / occlusion pattern');
     if(/broad complex tachy|ventricular tachy|\bvt\b/.test(hay)) flags.push('possible broad complex tachycardia');
     if(/complete heart block|high[- ]grade av block|third degree block/.test(hay)) flags.push('possible heart block');
     if(/hyperkala|peaked t wave/.test(hay)) flags.push('possible hyperkalaemia pattern');
@@ -6439,8 +6666,8 @@ initHrOverlay();
   function isOpen(){ const el=$('ecgAssistOverlay'); return !!(el && !el.classList.contains('hidden')); }
   function openOverlay(mode){
     if(!currentPatient || !patients || !patients[currentPatient]){ alert('Open a patient first.'); return; }
-    const key=typeof getXaiApiKey==='function'?getXaiApiKey():'';
-    if(!key){ alert('Please add your Groq API key in Options first.'); if(typeof showSection==='function') showSection('handover'); return; }
+    const key=typeof getGeminiApiKey==='function'?getGeminiApiKey():'';
+    if(!key){ alert('Please add your Gemini API key in Options first.'); if(typeof showSection==='function') showSection('handover'); return; }
     const overlay=$('ecgAssistOverlay'); if(!overlay) return;
     if(state.patientId!==currentPatient) reset(currentPatient);
     setMode(mode||state.mode||'scan');
@@ -6452,59 +6679,52 @@ initHrOverlay();
   }
   function closeOverlay(){ const overlay=$('ecgAssistOverlay'); if(!overlay) return; overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); document.body.classList.remove('ecg-assist-open'); }
 
-  async function runAssist(file, sourceType){
-    const apiKey=typeof getXaiApiKey==='function'?getXaiApiKey():'';
-    if(!apiKey){ setStatus('Please add your Groq API key in Options first.',true); return; }
+  async function runAssist(file){
+    const apiKey=typeof getGeminiApiKey==='function'?getGeminiApiKey():'';
+    if(!apiKey){ setStatus('Please add your Gemini API key in Options first.',true); return; }
     state.busy=true;
     try{
-      setStatus('Reading ECG image…');
+      setStatus('Preparing ECG image…');
       const dataUrl=await normaliseBlisterScanImage(file);
       state.dataUrl=dataUrl;
       render();
-      setStatus('Scanning ECG…');
-      const body={
-        model:'meta-llama/llama-4-scout-17b-16e-instruct',
-        messages:[
-          {
-            role:'system',
-            content:'You are an ECG interpretation assistant for clinicians. Provide a cautious draft review from the visible ECG only. Do not invent findings. Use UK spelling. Never state that the interpretation is definitive. Prefer specific measurable descriptions where visible. Give an exact or close estimated rate such as 68 bpm rather than a broad range like 60-70 bpm unless a closer estimate is genuinely impossible. Explain the visible findings that support the impression. If the ECG appears normal, say so plainly. Do not use boilerplate such as "clinical correlation is recommended to rule out ischemia" unless there are visible ischaemic features or a clearly stated image limitation that specifically prevents assessment. If image quality or lead visibility is limited, state that in limitations rather than implying unexplained ischaemia.'
-          },
-          {
-            role:'user',
-            content:[
-              {
-                type:'text',
-                text:'Review this ECG image and return a structured cautious draft interpretation. Use only what is visible. Populate the specific fields requested: rhythm, rate, axis, PR interval, QRS duration, QTc, ST segments, T waves, R-wave progression, conduction and ectopy. whyInterpretation should be a concise bullet-style array explaining why you reached the impression using visible ECG features. limitations should state any image quality / crop / lead visibility caveats. Include dangerous alternatives not to miss and concise copy-ready ECG text suitable for clinical notes.'
-              },
-              { type:'image_url', image_url:{url:dataUrl} }
-            ]
-          }
-        ],
-        response_format:{ type:'json_schema', json_schema:{ name:'ecg_assist', strict:true, schema:ECG_ASSIST_SCHEMA } },
-        temperature:0.2,
-        max_completion_tokens:1100
-      };
-      const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-        method:'POST',
-        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+apiKey },
-        body:JSON.stringify(body)
+
+      setStatus('Scanning ECG with Gemini…');
+      const primaryRaw = await callGeminiStructured({
+        apiKey,
+        model: typeof getGeminiModel==='function' ? getGeminiModel() : 'gemini-2.5-flash',
+        imageUrl:dataUrl,
+        schemaName:'ecg_assist',
+        schema:ECG_ASSIST_SCHEMA,
+        maxTokens:1200,
+        system:'You are an ECG interpretation assistant for clinicians. Provide a cautious draft review from the visible ECG only. Do not invent findings. Use UK spelling. Never state that the interpretation is definitive. Prefer specific measurable descriptions where visible. Give an exact or close estimated rate such as 68 bpm rather than a broad range like 60-70 bpm unless a closer estimate is genuinely impossible. Explain the visible findings that support the impression. Review the tracing systematically: rhythm strip, inferior leads (II, III, aVF), lateral leads (I, aVL, V5-V6), anterior / septal leads (V1-V4), intervals, QRS width and any reciprocal changes. Do not call the ECG normal if there is any visible ST elevation, ST depression, reciprocal change, hyperacute T wave, pathological Q wave or other clearly abnormal acute morphology. If the ECG appears normal, say so plainly. Do not use boilerplate such as "clinical correlation is recommended to rule out ischaemia" unless there are visible ischaemic features or a clearly stated image limitation that specifically prevents assessment. If image quality or lead visibility is limited, state that in limitations rather than implying unexplained ischaemia.',
+        userText:'Review this ECG image and return a structured cautious draft interpretation. Use only what is visible. Populate the specific fields requested: rhythm, rate, axis, PR interval, QRS duration, QTc, ST segments, T waves, R-wave progression, conduction and ectopy. whyInterpretation should be a concise bullet-style array explaining why you reached the impression using visible ECG features. limitations should state any image quality / crop / lead visibility caveats. Include dangerous alternatives not to miss and concise copy-ready ECG text suitable for clinical notes.'
       });
-      const rawResponse=await res.text();
-      let data={};
-      try{ data=rawResponse?JSON.parse(rawResponse):{}; }catch(_e){ data={}; }
-      if(!res.ok) throw new Error(getXaiErrorMessage(res.status,data,rawResponse.slice(0,220)));
-      const rawText=extractStructuredTextFromXaiResponse(data);
-      let parsed={};
-      try{ parsed=rawText?JSON.parse(rawText):data; }
-      catch(_e){ throw new Error('Groq returned unreadable ECG JSON. Try again with a clearer crop.'); }
-      state.result=normaliseResult(parsed);
+      let result = normaliseResult(primaryRaw);
       render();
+
+      setStatus('Running Gemini red-flag challenge…');
+      const challengeRaw = await callGeminiStructured({
+        apiKey,
+        model: typeof getGeminiModel==='function' ? getGeminiModel() : 'gemini-2.5-flash',
+        imageUrl:dataUrl,
+        schemaName:'ecg_redflag_challenge',
+        schema:ECG_CHALLENGE_SCHEMA,
+        maxTokens:700,
+        system:'You are a cautious ECG red-flag checker for clinicians. Your only job is to challenge a possibly reassuring first pass. Inspect the visible ECG for high-risk patterns, especially ST elevation / occlusion, inferior MI patterns in II, III and aVF, reciprocal depression in I or aVL, anterior or lateral ST elevation, marked hyperacute T waves, broad complex tachycardia and high-grade block. Be conservative, but do not miss obvious acute abnormalities. If there is visible concerning ST elevation or reciprocal change, set highRisk true. If the image is too limited, say so clearly.',
+        userText:'Challenge this ECG image for red flags. Focus on whether there is any visible acute occlusion / STEMI pattern, especially inferior ST elevation with reciprocal change. Return only the structured fields requested. summary should be one short sentence. concerningFeatures should list the visible abnormal features that make the ECG high risk. urgentDifferentials should contain only dangerous alternatives not to miss.'
+      });
+      const challenge = normaliseChallenge(challengeRaw);
+      result = mergeChallenge(result, challenge);
+      state.result = result;
+      render();
+
       const flags=Array.from(new Set([...(state.result.redFlags||[]),...safetyFlags(state.result)]));
       setStatus(flags.length ? 'Review carefully — potential high-risk ECG pattern flagged.' : 'Review the structured ECG draft below, then copy or insert it.');
     }catch(err){
       console.error(err);
       const message=String(err&&err.message||'').trim()||'ECG scan failed.';
-      if(/Failed to fetch|Load failed|NetworkError/i.test(message)) setStatus('Network/CORS error talking to Groq. Check connection, then try again. If it persists, the browser may be blocking direct API calls from the app.',true);
+      if(/Failed to fetch|Load failed|NetworkError/i.test(message)) setStatus('Network/CORS error talking to Gemini. Check connection, then try again. If it persists, the browser may be blocking direct API calls from the app.',true);
       else setStatus(message,true);
     }finally{
       state.busy=false;
@@ -6524,7 +6744,7 @@ initHrOverlay();
         const blob=await item.getType(type);
         const file=new File([blob],'ecg-clipboard-image',{type});
         setMode('paste');
-        await runAssist(file,'paste');
+        await runAssist(file);
         return;
       }
       setStatus('Clipboard did not contain an image. Copy an ECG screenshot first, then try again.',true);
@@ -6561,7 +6781,7 @@ initHrOverlay();
     if(!file) return;
     event.preventDefault();
     setMode('paste');
-    runAssist(file,'paste');
+    runAssist(file);
   }
   function bind(){
     if(bound) return;
@@ -6576,8 +6796,8 @@ initHrOverlay();
     $('ecgAssistCopyBtn')&&$('ecgAssistCopyBtn').addEventListener('click',copyText);
     $('ecgAssistInsertBtn')&&$('ecgAssistInsertBtn').addEventListener('click',insertIntoExamination);
     $('ecgAssistOverlay')&&$('ecgAssistOverlay').addEventListener('click',onOverlayClick);
-    $('ecgAssistScanInput')&&$('ecgAssistScanInput').addEventListener('change',e=>{ const file=e.target.files&&e.target.files[0]; if(file){ setMode('scan'); runAssist(file,'scan'); } });
-    $('ecgAssistUploadInput')&&$('ecgAssistUploadInput').addEventListener('change',e=>{ const file=e.target.files&&e.target.files[0]; if(file){ setMode('upload'); runAssist(file,'upload'); } });
+    $('ecgAssistScanInput')&&$('ecgAssistScanInput').addEventListener('change',e=>{ const file=e.target.files&&e.target.files[0]; if(file){ setMode('scan'); runAssist(file); } });
+    $('ecgAssistUploadInput')&&$('ecgAssistUploadInput').addEventListener('change',e=>{ const file=e.target.files&&e.target.files[0]; if(file){ setMode('upload'); runAssist(file); } });
     $('ecgAssistPasteTarget')&&$('ecgAssistPasteTarget').addEventListener('click',()=>{ try{ $('ecgAssistPasteTarget').focus({preventScroll:true}); }catch(_e){ $('ecgAssistPasteTarget').focus(); } });
     $('ecgAssistCopyText')&&$('ecgAssistCopyText').addEventListener('input',()=>{ if(!state.result) state.result=normaliseResult({}); state.result.copyText=$('ecgAssistCopyText').value||''; });
     document.addEventListener('paste',onPaste);
