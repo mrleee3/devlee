@@ -415,7 +415,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_295_release.html; source=hospital_at_home_v12_36_295_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_296_release.html; source=hospital_at_home_v12_36_296_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -607,7 +607,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_295_release.html</div><div>Source: hospital_at_home_v12_36_295_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_296_release.html</div><div>Source: hospital_at_home_v12_36_296_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -626,7 +626,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <section class="container hidden" id="patientDetail">
 <div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div></div>
 <div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
-<div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Prototype clinician tool. Scan, upload or paste an ECG image for a structured draft review and copy-ready text.</div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Structured review</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
+<div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Prototype clinician tool. Scan, upload or paste an ECG image for a structured draft review and copy-ready text.</div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
 <div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><label>Issues</label><textarea id="issues"></textarea><div class="field-label-row"><label for="examination">Examination</label><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button></div><textarea id="examination"></textarea><label>Plan</label><textarea autocapitalize="sentences" id="plan"></textarea><label>For discharge summary</label><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
 <div class="card patient-reorder-card" data-card-key="meds">
 <div class="toggle-row meds-header-row">
@@ -5154,8 +5154,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_295_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_295_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_296_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_296_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6145,43 +6145,446 @@ initHrOverlay();
   const ECG_ASSIST_SCHEMA = {
     type: 'object',
     additionalProperties: false,
-    required: ['rate','rhythm','axis','intervals','morphology','redFlags','impression','differentials','action','copyText','confidence','uncertainty'],
+    required: [
+      'rate','rhythm','axis','prInterval','qrsDuration','qtc','stSegments','tWaves','rWaveProgression','ectopy','conduction','morphology',
+      'whyInterpretation','limitations','redFlags','impression','differentials','action','copyText','confidence','uncertainty'
+    ],
     properties: {
-      rate: { type: 'string' }, rhythm: { type: 'string' }, axis: { type: 'string' }, intervals: { type: 'string' }, morphology: { type: 'string' },
-      redFlags: { type: 'array', items: { type: 'string' } }, impression: { type: 'string' }, differentials: { type: 'array', items: { type: 'string' } },
-      action: { type: 'string' }, copyText: { type: 'string' }, confidence: { type: 'string' }, uncertainty: { type: 'string' }
+      rate: { type: 'string' },
+      rhythm: { type: 'string' },
+      axis: { type: 'string' },
+      prInterval: { type: 'string' },
+      qrsDuration: { type: 'string' },
+      qtc: { type: 'string' },
+      stSegments: { type: 'string' },
+      tWaves: { type: 'string' },
+      rWaveProgression: { type: 'string' },
+      ectopy: { type: 'string' },
+      conduction: { type: 'string' },
+      morphology: { type: 'string' },
+      whyInterpretation: { type: 'array', items: { type: 'string' } },
+      limitations: { type: 'string' },
+      redFlags: { type: 'array', items: { type: 'string' } },
+      impression: { type: 'string' },
+      differentials: { type: 'array', items: { type: 'string' } },
+      action: { type: 'string' },
+      copyText: { type: 'string' },
+      confidence: { type: 'string' },
+      uncertainty: { type: 'string' }
     }
   };
 
   let state = { mode:'scan', dataUrl:'', result:null, busy:false, patientId:'' };
   let bound = false;
-  function reset(patientId){ state = { mode:'scan', dataUrl:'', result:null, busy:false, patientId:patientId||'' }; render(); setStatus('Take, choose or paste an ECG image to begin.'); if($('ecgAssistScanInput')) $('ecgAssistScanInput').value=''; if($('ecgAssistUploadInput')) $('ecgAssistUploadInput').value=''; }
-  function normaliseList(list){ return Array.isArray(list) ? list.map(v=>String(v||'').trim()).filter(Boolean).slice(0,8) : []; }
-  function normaliseResult(raw){ const src = raw && typeof raw === 'object' ? raw : {}; return { rate:String(src.rate||'').trim(), rhythm:String(src.rhythm||'').trim(), axis:String(src.axis||'').trim(), intervals:String(src.intervals||'').trim(), morphology:String(src.morphology||'').trim(), redFlags:normaliseList(src.redFlags||src.redflags), impression:String(src.impression||'').trim(), differentials:normaliseList(src.differentials), action:String(src.action||'').trim(), copyText:String(src.copyText||src.copytext||'').trim(), confidence:String(src.confidence||'').trim(), uncertainty:String(src.uncertainty||'').trim() }; }
-  function setStatus(msg, err){ const el=$('ecgAssistStatus'); if(!el) return; el.textContent=String(msg||''); el.classList.toggle('error',!!err); }
-  function setMode(mode){ const next=['scan','upload','paste'].includes(String(mode||''))?String(mode):'scan'; state.mode=next; document.querySelectorAll('[data-ecg-mode]').forEach(btn=>btn.classList.toggle('active',btn.getAttribute('data-ecg-mode')===next)); document.querySelectorAll('[data-ecg-panel]').forEach(panel=>panel.classList.toggle('hidden',panel.getAttribute('data-ecg-panel')!==next)); }
-  function safetyFlags(result){ const hay=[result.rate,result.rhythm,result.axis,result.intervals,result.morphology,result.impression,result.action,...(result.redFlags||[]),...(result.differentials||[])].join(' | ').toLowerCase(); const flags=[]; if(/st\s*elevation|stemi|occlusion|acute coronary/.test(hay)) flags.push('possible acute ST elevation / occlusion pattern'); if(/broad complex tachy|ventricular tachy|\bvt\b/.test(hay)) flags.push('possible broad complex tachycardia'); if(/complete heart block|high[- ]grade av block|third degree block/.test(hay)) flags.push('possible heart block'); if(/hyperkala|peaked t wave/.test(hay)) flags.push('possible hyperkalaemia pattern'); if(/marked brady|profound brady/.test(hay)) flags.push('possible profound bradycardia'); return flags; }
-  function fallbackCopy(result){ const parts=[]; if(result.rhythm) parts.push(`ECG suggests ${result.rhythm.toLowerCase()}`); if(result.rate) parts.push(`with rate ${result.rate}`); if(result.morphology) parts.push(`${parts.length?'':'ECG demonstrates '}${result.morphology}`); const base=parts.join(', ').replace(/^,\s*/,''); return (base?`${base}. `:'ECG reviewed. ')+(result.impression||'Clinical correlation advised.'); }
-  function render(){ const preview=$('ecgAssistPreview'), results=$('ecgAssistResults'), grid=$('ecgAssistStructuredGrid'), impression=$('ecgAssistImpression'), differentials=$('ecgAssistDifferentials'), action=$('ecgAssistAction'), copy=$('ecgAssistCopyText'), flag=$('ecgAssistFlag'); if(preview){ if(state.dataUrl){ preview.src=state.dataUrl; preview.classList.remove('hidden'); } else { preview.src=''; preview.classList.add('hidden'); } } if(!state.result){ if(results) results.classList.add('hidden'); if(grid) grid.innerHTML=''; if(impression) impression.textContent=''; if(differentials) differentials.innerHTML=''; if(action) action.textContent=''; if(copy) copy.value=''; if(flag){ flag.textContent=''; flag.classList.add('hidden'); } return; } const result=state.result; const rows=[['Rate',result.rate||'Not clear'],['Rhythm',result.rhythm||'Not clear'],['Axis',result.axis||'Not clear'],['Intervals',result.intervals||'Not clear'],['Morphology',result.morphology||'Not clear'],['Confidence',[result.confidence,result.uncertainty].filter(Boolean).join(' · ')||'Cautious draft']]; if(grid) grid.innerHTML=rows.map(([label,val])=>`<div class="ecg-assist-grid-item"><div class="ecg-assist-grid-label">${escapeHtml(label)}</div><div class="ecg-assist-grid-value">${escapeHtml(val)}</div></div>`).join(''); if(impression) impression.textContent=result.impression||'No clear overall impression returned.'; const flags=Array.from(new Set([...(result.redFlags||[]),...safetyFlags(result)])); if(flag){ if(flags.length){ flag.textContent=`Potential high-risk ECG pattern: ${flags.join(' · ')}`; flag.classList.remove('hidden'); } else { flag.textContent=''; flag.classList.add('hidden'); } } if(differentials){ const items=result.differentials&&result.differentials.length?result.differentials:['Clinical correlation required before acting on this draft.']; differentials.innerHTML=items.map(item=>`<div class="ecg-assist-list-item">${escapeHtml(item)}</div>`).join(''); } if(action) action.textContent=result.action||'Review clinically and compare with prior ECG if available.'; if(copy) copy.value=result.copyText||fallbackCopy(result); if(results) results.classList.remove('hidden'); }
-  function isOpen(){ const el=$('ecgAssistOverlay'); return !!(el && !el.classList.contains('hidden')); }
-  function openOverlay(mode){ if(!currentPatient || !patients || !patients[currentPatient]){ alert('Open a patient first.'); return; } const key=typeof getXaiApiKey==='function'?getXaiApiKey():''; if(!key){ alert('Please add your Groq API key in Options first.'); if(typeof showSection==='function') showSection('handover'); return; } const overlay=$('ecgAssistOverlay'); if(!overlay) return; if(state.patientId!==currentPatient) reset(currentPatient); setMode(mode||state.mode||'scan'); overlay.classList.remove('hidden'); overlay.setAttribute('aria-hidden','false'); document.body.classList.add('ecg-assist-open'); if(state.result) setStatus('Review the structured ECG draft below.'); else setStatus('Take, choose or paste an ECG image to begin.'); }
-  function closeOverlay(){ const overlay=$('ecgAssistOverlay'); if(!overlay) return; overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); document.body.classList.remove('ecg-assist-open'); }
-  async function runAssist(file, sourceType){ const apiKey=typeof getXaiApiKey==='function'?getXaiApiKey():''; if(!apiKey){ setStatus('Please add your Groq API key in Options first.',true); return; } state.busy=true; try{ setStatus('Reading ECG image…'); const dataUrl=await normaliseBlisterScanImage(file); state.dataUrl=dataUrl; render(); setStatus('Scanning ECG…'); const body={ model:'meta-llama/llama-4-scout-17b-16e-instruct', messages:[ {role:'system',content:'You are an ECG interpretation assistant for clinicians. Provide a cautious draft review from the visible ECG only. Do not invent findings. Use uncertainty language when features are unclear. Never state that the interpretation is definitive.'}, {role:'user',content:[ {type:'text',text:'Review this ECG image and return a structured draft interpretation. Use only what is visible. If quality is limited, say so. Include dangerous alternatives not to miss and a concise copy-ready ECG summary suitable for clinical notes.'}, {type:'image_url',image_url:{url:dataUrl}} ]} ], response_format:{ type:'json_schema', json_schema:{ name:'ecg_assist', strict:true, schema:ECG_ASSIST_SCHEMA } }, temperature:0.2, max_completion_tokens:900 };
-        const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{ method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+apiKey }, body:JSON.stringify(body) });
-        const rawResponse=await res.text(); let data={}; try{ data=rawResponse?JSON.parse(rawResponse):{}; }catch(_e){ data={}; }
-        if(!res.ok) throw new Error(getXaiErrorMessage(res.status,data,rawResponse.slice(0,220)));
-        const rawText=extractStructuredTextFromXaiResponse(data); let parsed={}; try{ parsed=rawText?JSON.parse(rawText):data; }catch(_e){ throw new Error('Groq returned unreadable ECG JSON. Try again with a clearer crop.'); }
-        state.result=normaliseResult(parsed); render(); const flags=Array.from(new Set([...(state.result.redFlags||[]),...safetyFlags(state.result)])); setStatus(flags.length?'Review carefully — potential high-risk ECG pattern flagged.':'Review the structured ECG draft below, then copy or insert it.');
-      }catch(err){ console.error(err); const message=String(err&&err.message||'').trim()||'ECG scan failed.'; if(/Failed to fetch|Load failed|NetworkError/i.test(message)) setStatus('Network/CORS error talking to Groq. Check connection, then try again. If it persists, the browser may be blocking direct API calls from the app.',true); else setStatus(message,true); }
-      finally{ state.busy=false; }
+
+  function cleanText(value){ return String(value || '').replace(/\s+/g,' ').trim(); }
+  function normaliseList(list){
+    return Array.isArray(list)
+      ? Array.from(new Set(list.map(v => cleanText(v)).filter(Boolean))).slice(0,10)
+      : [];
   }
-  async function readClipboardImage(){ try{ if(!(navigator.clipboard&&navigator.clipboard.read)){ setStatus('Clipboard image access is not available here. Try pasting directly into the box or use Upload instead.',true); return; } const items=await navigator.clipboard.read(); for(const item of items){ const type=(item.types||[]).find(t=>/^image\//i.test(t)); if(!type) continue; const blob=await item.getType(type); const file=new File([blob],'ecg-clipboard-image',{type}); setMode('paste'); await runAssist(file,'paste'); return; } setStatus('Clipboard did not contain an image. Copy an ECG screenshot first, then try again.',true); }catch(err){ console.error(err); setStatus('Could not read a clipboard image here. Try pasting directly into the box or use Upload instead.',true); } }
-  async function copyText(){ const text=$('ecgAssistCopyText')&&$('ecgAssistCopyText').value.trim(); if(!text){ alert('No ECG text to copy yet.'); return; } try{ await navigator.clipboard.writeText(text); setStatus('ECG summary copied.'); }catch(_e){ alert('Clipboard copy is blocked in this view. You can still select the ECG text manually.'); } }
-  function insertIntoExamination(){ const text=$('ecgAssistCopyText')&&$('ecgAssistCopyText').value.trim(); if(!text){ alert('No ECG text to insert yet.'); return; } const exam=$('examination'); if(!exam) return; if(!exam.value.trim()) exam.value=text; else if(!exam.value.includes(text)) exam.value=`${exam.value.trim()}\n\n${text}`; if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm(); if(typeof saveData==='function') saveData('ECG text inserted'); if(typeof generateClinicalOutput==='function') generateClinicalOutput(); closeOverlay(); }
+  function isMeaningful(value){
+    const text = cleanText(value).toLowerCase();
+    if(!text) return false;
+    return !/^(not clear|unclear|unknown|not visible|not well seen|not measurable|unable to assess|unable to determine|difficult to assess|indeterminate|not stated|n\/a|none)$/i.test(text);
+  }
+  function titleCase(label){
+    return String(label || '').replace(/\b\w/g, c => c.toUpperCase());
+  }
+  function tightenRateText(rate){
+    const text = cleanText(rate);
+    const m = text.match(/^(\d{2,3})\s*[-–]\s*(\d{2,3})(?:\s*bpm)?$/i);
+    if(m){
+      const a = Number(m[1]);
+      const b = Number(m[2]);
+      if(Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= 20){
+        return `approximately ${Math.round((a + b) / 2)} bpm`;
+      }
+    }
+    return text;
+  }
+  function normaliseRhythmText(rhythm){
+    const text = cleanText(rhythm);
+    if(!text) return '';
+    if(/^sinus$/i.test(text)) return 'Sinus rhythm';
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+  function formatReason(label, value){
+    const text = cleanText(value);
+    if(!isMeaningful(text)) return '';
+    return `${label}: ${text}`;
+  }
+  function buildWhyFallback(result){
+    const reasons = [
+      formatReason('Rhythm', result.rhythm),
+      formatReason('Rate', result.rate),
+      formatReason('Axis', result.axis),
+      formatReason('PR interval', result.prInterval),
+      formatReason('QRS duration', result.qrsDuration),
+      formatReason('QTc', result.qtc),
+      formatReason('ST segments', result.stSegments),
+      formatReason('T waves', result.tWaves),
+      formatReason('R-wave progression', result.rWaveProgression),
+      formatReason('Conduction', result.conduction),
+      formatReason('Ectopy', result.ectopy),
+      formatReason('Other morphology', result.morphology)
+    ].filter(Boolean);
+    if(result.limitations && /quality|photo|image|lead|crop|resolution|angle|artifact/i.test(result.limitations)){
+      reasons.push('Certainty limited by image quality / lead visibility.');
+    }
+    return Array.from(new Set(reasons)).slice(0,8);
+  }
+  function hasVisibleIschaemicConcern(result){
+    const hay = [
+      result.stSegments,
+      result.tWaves,
+      result.morphology,
+      ...(result.redFlags || []),
+      ...(result.differentials || []),
+      ...(result.whyInterpretation || [])
+    ].join(' | ').toLowerCase();
+    return /ischaem|ischemi|st depression|st elevation|reciprocal|t wave inversion|inverted t|acs|acute coronary|q wave|posterior|anterolateral|inferior/.test(hay);
+  }
+  function softenGenericIschaemiaLanguage(result){
+    const combined = `${result.impression} ${result.action}`.toLowerCase();
+    const genericIschaemia = /rule out isch|exclude isch|possible isch|cannot rule out isch|clinical correlation.*isch|correlat.*ische/i.test(combined);
+    if(!genericIschaemia || hasVisibleIschaemicConcern(result)) return result;
+
+    const likelyNormal = [result.rhythm, result.stSegments, result.tWaves, result.conduction, result.morphology].join(' | ').toLowerCase();
+    if(/sinus|normal|within normal|no acute|no obvious acute/.test(likelyNormal)){
+      result.impression = result.rhythm && /sinus/i.test(result.rhythm)
+        ? 'Sinus rhythm with no obvious acute abnormality seen on this ECG image.'
+        : 'No obvious acute abnormality seen on this ECG image.';
+    }
+    result.action = 'Correlate with symptoms and haemodynamic status, and compare with prior ECG if available.';
+    if(!isMeaningful(result.limitations)){
+      result.limitations = 'Assessment is limited to image review alone, so subtle interval or ischaemic change may not be fully excluded from the photo.';
+    }
+    const rationale = buildWhyFallback(result);
+    if(rationale.length && !(result.whyInterpretation || []).length){
+      result.whyInterpretation = rationale;
+    }
+    return result;
+  }
+  function buildFallbackCopy(result){
+    const details = [];
+    if(isMeaningful(result.rhythm)) details.push(result.rhythm.charAt(0).toLowerCase() + result.rhythm.slice(1));
+    if(isMeaningful(result.rate)) details.push(`at ${result.rate}`);
+    if(isMeaningful(result.axis)) details.push(result.axis.charAt(0).toLowerCase() === 'n' && /axis/i.test(result.axis) ? result.axis.charAt(0).toLowerCase() + result.axis.slice(1) : `axis ${result.axis}`);
+
+    const intervals = [];
+    if(isMeaningful(result.prInterval)) intervals.push(`PR ${result.prInterval}`);
+    if(isMeaningful(result.qrsDuration)) intervals.push(`QRS ${result.qrsDuration}`);
+    if(isMeaningful(result.qtc)) intervals.push(`QTc ${result.qtc}`);
+
+    const features = [];
+    if(isMeaningful(result.stSegments)) features.push(`ST segments ${result.stSegments.charAt(0).toLowerCase() + result.stSegments.slice(1)}`);
+    if(isMeaningful(result.tWaves)) features.push(`T waves ${result.tWaves.charAt(0).toLowerCase() + result.tWaves.slice(1)}`);
+    if(isMeaningful(result.conduction)) features.push(`conduction ${result.conduction.charAt(0).toLowerCase() + result.conduction.slice(1)}`);
+    if(isMeaningful(result.ectopy)) features.push(`ectopy ${result.ectopy.charAt(0).toLowerCase() + result.ectopy.slice(1)}`);
+    if(isMeaningful(result.morphology)) features.push(result.morphology.charAt(0).toLowerCase() + result.morphology.slice(1));
+
+    const chunks = [];
+    if(details.length) chunks.push(`ECG demonstrates ${details.join(', ')}`);
+    if(intervals.length) chunks.push(intervals.join(', '));
+    if(features.length) chunks.push(features.join('; '));
+
+    const summary = chunks.join('. ');
+    const impression = cleanText(result.impression || 'Clinical correlation advised.');
+    return `${summary || 'ECG reviewed.'}${summary ? '. ' : ' '}${impression}`.trim();
+  }
+  function normaliseResult(raw){
+    const src = raw && typeof raw === 'object' ? raw : {};
+    const result = {
+      rate: tightenRateText(src.rate),
+      rhythm: normaliseRhythmText(src.rhythm),
+      axis: cleanText(src.axis),
+      prInterval: cleanText(src.prInterval || src.pr || src.printerval),
+      qrsDuration: cleanText(src.qrsDuration || src.qrs || src.qrsduration),
+      qtc: cleanText(src.qtc || src.qt || src.qtcInterval),
+      stSegments: cleanText(src.stSegments || src.stSegment || src.st || src.stchanges),
+      tWaves: cleanText(src.tWaves || src.twaves || src.twave),
+      rWaveProgression: cleanText(src.rWaveProgression || src.rwaveprogression || src.rWave || src.rwave),
+      ectopy: cleanText(src.ectopy),
+      conduction: cleanText(src.conduction),
+      morphology: cleanText(src.morphology),
+      whyInterpretation: normaliseList(src.whyInterpretation || src.why || src.reasoning),
+      limitations: cleanText(src.limitations || src.caveats || src.limits),
+      redFlags: normaliseList(src.redFlags || src.redflags),
+      impression: cleanText(src.impression),
+      differentials: normaliseList(src.differentials),
+      action: cleanText(src.action),
+      copyText: cleanText(src.copyText || src.copytext),
+      confidence: cleanText(src.confidence),
+      uncertainty: cleanText(src.uncertainty)
+    };
+
+    if(!result.whyInterpretation.length){
+      result.whyInterpretation = buildWhyFallback(result);
+    }
+    softenGenericIschaemiaLanguage(result);
+    if(!result.copyText) result.copyText = buildFallbackCopy(result);
+    return result;
+  }
+
+  function reset(patientId){
+    state = { mode:'scan', dataUrl:'', result:null, busy:false, patientId:patientId||'' };
+    render();
+    setStatus('Take, choose or paste an ECG image to begin.');
+    if($('ecgAssistScanInput')) $('ecgAssistScanInput').value='';
+    if($('ecgAssistUploadInput')) $('ecgAssistUploadInput').value='';
+  }
+  function setStatus(msg, err){ const el=$('ecgAssistStatus'); if(!el) return; el.textContent=String(msg||''); el.classList.toggle('error',!!err); }
+  function setMode(mode){
+    const next=['scan','upload','paste'].includes(String(mode||''))?String(mode):'scan';
+    state.mode=next;
+    document.querySelectorAll('[data-ecg-mode]').forEach(btn=>btn.classList.toggle('active',btn.getAttribute('data-ecg-mode')===next));
+    document.querySelectorAll('[data-ecg-panel]').forEach(panel=>panel.classList.toggle('hidden',panel.getAttribute('data-ecg-panel')!==next));
+  }
+  function safetyFlags(result){
+    const hay=[
+      result.rate,result.rhythm,result.axis,result.prInterval,result.qrsDuration,result.qtc,result.stSegments,result.tWaves,
+      result.rWaveProgression,result.ectopy,result.conduction,result.morphology,result.impression,result.action,
+      ...(result.redFlags||[]),...(result.differentials||[])
+    ].join(' | ').toLowerCase();
+    const flags=[];
+    if(/st\s*elevation|stemi|occlusion|acute coronary/.test(hay)) flags.push('possible acute ST elevation / occlusion pattern');
+    if(/broad complex tachy|ventricular tachy|\bvt\b/.test(hay)) flags.push('possible broad complex tachycardia');
+    if(/complete heart block|high[- ]grade av block|third degree block/.test(hay)) flags.push('possible heart block');
+    if(/hyperkala|peaked t wave/.test(hay)) flags.push('possible hyperkalaemia pattern');
+    if(/marked brady|profound brady/.test(hay)) flags.push('possible profound bradycardia');
+    return flags;
+  }
+  function renderList(el, items, fallback){
+    if(!el) return;
+    const list = Array.isArray(items) && items.length ? items : [fallback];
+    el.innerHTML = list.map(item => `<div class="ecg-assist-list-item">${escapeHtml(item)}</div>`).join('');
+  }
+  function render(){
+    const preview=$('ecgAssistPreview');
+    const results=$('ecgAssistResults');
+    const grid=$('ecgAssistStructuredGrid');
+    const impression=$('ecgAssistImpression');
+    const why=$('ecgAssistWhy');
+    const limitations=$('ecgAssistLimitations');
+    const differentials=$('ecgAssistDifferentials');
+    const action=$('ecgAssistAction');
+    const copy=$('ecgAssistCopyText');
+    const flag=$('ecgAssistFlag');
+
+    if(preview){
+      if(state.dataUrl){
+        preview.src=state.dataUrl;
+        preview.classList.remove('hidden');
+      }else{
+        preview.src='';
+        preview.classList.add('hidden');
+      }
+    }
+
+    if(!state.result){
+      if(results) results.classList.add('hidden');
+      if(grid) grid.innerHTML='';
+      if(impression) impression.textContent='';
+      if(why) why.innerHTML='';
+      if(limitations) limitations.textContent='';
+      if(differentials) differentials.innerHTML='';
+      if(action) action.textContent='';
+      if(copy) copy.value='';
+      if(flag){ flag.textContent=''; flag.classList.add('hidden'); }
+      return;
+    }
+
+    const result=state.result;
+    const rows=[
+      ['Rate',result.rate||'Not clear'],
+      ['Rhythm',result.rhythm||'Not clear'],
+      ['Axis',result.axis||'Not clear'],
+      ['PR interval',result.prInterval||'Not clear'],
+      ['QRS duration',result.qrsDuration||'Not clear'],
+      ['QTc',result.qtc||'Not clear'],
+      ['ST segments',result.stSegments||'Not clear'],
+      ['T waves',result.tWaves||'Not clear'],
+      ['R-wave progression',result.rWaveProgression||'Not clear'],
+      ['Conduction',result.conduction||'Not clear'],
+      ['Ectopy',result.ectopy||'Not clear'],
+      ['Confidence',[result.confidence,result.uncertainty].filter(Boolean).join(' · ')||'Cautious draft']
+    ];
+    if(grid){
+      grid.innerHTML = rows.map(([label,val]) =>
+        `<div class="ecg-assist-grid-item"><div class="ecg-assist-grid-label">${escapeHtml(titleCase(label))}</div><div class="ecg-assist-grid-value">${escapeHtml(val)}</div></div>`
+      ).join('');
+    }
+    if(impression) impression.textContent=result.impression||'No clear overall impression returned.';
+
+    const flags=Array.from(new Set([...(result.redFlags||[]),...safetyFlags(result)]));
+    if(flag){
+      if(flags.length){
+        flag.textContent=`Potential high-risk ECG pattern: ${flags.join(' · ')}`;
+        flag.classList.remove('hidden');
+      }else{
+        flag.textContent='';
+        flag.classList.add('hidden');
+      }
+    }
+
+    renderList(why, result.whyInterpretation, 'Reasoning not returned. Review the visible parameters above.');
+    if(limitations) limitations.textContent = result.limitations || 'No specific image caveat returned.';
+    renderList(differentials, result.differentials, 'Clinical correlation required before acting on this draft.');
+    if(action) action.textContent = result.action || 'Review clinically and compare with prior ECG if available.';
+    if(copy) copy.value = result.copyText || buildFallbackCopy(result);
+    if(results) results.classList.remove('hidden');
+  }
+
+  function isOpen(){ const el=$('ecgAssistOverlay'); return !!(el && !el.classList.contains('hidden')); }
+  function openOverlay(mode){
+    if(!currentPatient || !patients || !patients[currentPatient]){ alert('Open a patient first.'); return; }
+    const key=typeof getXaiApiKey==='function'?getXaiApiKey():'';
+    if(!key){ alert('Please add your Groq API key in Options first.'); if(typeof showSection==='function') showSection('handover'); return; }
+    const overlay=$('ecgAssistOverlay'); if(!overlay) return;
+    if(state.patientId!==currentPatient) reset(currentPatient);
+    setMode(mode||state.mode||'scan');
+    overlay.classList.remove('hidden');
+    overlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('ecg-assist-open');
+    if(state.result) setStatus('Review the structured ECG draft below.');
+    else setStatus('Take, choose or paste an ECG image to begin.');
+  }
+  function closeOverlay(){ const overlay=$('ecgAssistOverlay'); if(!overlay) return; overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); document.body.classList.remove('ecg-assist-open'); }
+
+  async function runAssist(file, sourceType){
+    const apiKey=typeof getXaiApiKey==='function'?getXaiApiKey():'';
+    if(!apiKey){ setStatus('Please add your Groq API key in Options first.',true); return; }
+    state.busy=true;
+    try{
+      setStatus('Reading ECG image…');
+      const dataUrl=await normaliseBlisterScanImage(file);
+      state.dataUrl=dataUrl;
+      render();
+      setStatus('Scanning ECG…');
+      const body={
+        model:'meta-llama/llama-4-scout-17b-16e-instruct',
+        messages:[
+          {
+            role:'system',
+            content:'You are an ECG interpretation assistant for clinicians. Provide a cautious draft review from the visible ECG only. Do not invent findings. Use UK spelling. Never state that the interpretation is definitive. Prefer specific measurable descriptions where visible. Give an exact or close estimated rate such as 68 bpm rather than a broad range like 60-70 bpm unless a closer estimate is genuinely impossible. Explain the visible findings that support the impression. If the ECG appears normal, say so plainly. Do not use boilerplate such as "clinical correlation is recommended to rule out ischemia" unless there are visible ischaemic features or a clearly stated image limitation that specifically prevents assessment. If image quality or lead visibility is limited, state that in limitations rather than implying unexplained ischaemia.'
+          },
+          {
+            role:'user',
+            content:[
+              {
+                type:'text',
+                text:'Review this ECG image and return a structured cautious draft interpretation. Use only what is visible. Populate the specific fields requested: rhythm, rate, axis, PR interval, QRS duration, QTc, ST segments, T waves, R-wave progression, conduction and ectopy. whyInterpretation should be a concise bullet-style array explaining why you reached the impression using visible ECG features. limitations should state any image quality / crop / lead visibility caveats. Include dangerous alternatives not to miss and concise copy-ready ECG text suitable for clinical notes.'
+              },
+              { type:'image_url', image_url:{url:dataUrl} }
+            ]
+          }
+        ],
+        response_format:{ type:'json_schema', json_schema:{ name:'ecg_assist', strict:true, schema:ECG_ASSIST_SCHEMA } },
+        temperature:0.2,
+        max_completion_tokens:1100
+      };
+      const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+apiKey },
+        body:JSON.stringify(body)
+      });
+      const rawResponse=await res.text();
+      let data={};
+      try{ data=rawResponse?JSON.parse(rawResponse):{}; }catch(_e){ data={}; }
+      if(!res.ok) throw new Error(getXaiErrorMessage(res.status,data,rawResponse.slice(0,220)));
+      const rawText=extractStructuredTextFromXaiResponse(data);
+      let parsed={};
+      try{ parsed=rawText?JSON.parse(rawText):data; }
+      catch(_e){ throw new Error('Groq returned unreadable ECG JSON. Try again with a clearer crop.'); }
+      state.result=normaliseResult(parsed);
+      render();
+      const flags=Array.from(new Set([...(state.result.redFlags||[]),...safetyFlags(state.result)]));
+      setStatus(flags.length ? 'Review carefully — potential high-risk ECG pattern flagged.' : 'Review the structured ECG draft below, then copy or insert it.');
+    }catch(err){
+      console.error(err);
+      const message=String(err&&err.message||'').trim()||'ECG scan failed.';
+      if(/Failed to fetch|Load failed|NetworkError/i.test(message)) setStatus('Network/CORS error talking to Groq. Check connection, then try again. If it persists, the browser may be blocking direct API calls from the app.',true);
+      else setStatus(message,true);
+    }finally{
+      state.busy=false;
+    }
+  }
+
+  async function readClipboardImage(){
+    try{
+      if(!(navigator.clipboard&&navigator.clipboard.read)){
+        setStatus('Clipboard image access is not available here. Try pasting directly into the box or use Upload instead.',true);
+        return;
+      }
+      const items=await navigator.clipboard.read();
+      for(const item of items){
+        const type=(item.types||[]).find(t=>/^image\//i.test(t));
+        if(!type) continue;
+        const blob=await item.getType(type);
+        const file=new File([blob],'ecg-clipboard-image',{type});
+        setMode('paste');
+        await runAssist(file,'paste');
+        return;
+      }
+      setStatus('Clipboard did not contain an image. Copy an ECG screenshot first, then try again.',true);
+    }catch(err){
+      console.error(err);
+      setStatus('Could not read a clipboard image here. Try pasting directly into the box or use Upload instead.',true);
+    }
+  }
+  async function copyText(){
+    const text=$('ecgAssistCopyText')&&$('ecgAssistCopyText').value.trim();
+    if(!text){ alert('No ECG text to copy yet.'); return; }
+    try{ await navigator.clipboard.writeText(text); setStatus('ECG summary copied.'); }
+    catch(_e){ alert('Clipboard copy is blocked in this view. You can still select the ECG text manually.'); }
+  }
+  function insertIntoExamination(){
+    const text=$('ecgAssistCopyText')&&$('ecgAssistCopyText').value.trim();
+    if(!text){ alert('No ECG text to insert yet.'); return; }
+    const exam=$('examination');
+    if(!exam) return;
+    if(!exam.value.trim()) exam.value=text;
+    else if(!exam.value.includes(text)) exam.value=`${exam.value.trim()}\n\n${text}`;
+    if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
+    if(typeof saveData==='function') saveData('ECG text inserted');
+    if(typeof generateClinicalOutput==='function') generateClinicalOutput();
+    closeOverlay();
+  }
   function onOverlayClick(event){ const tab=event.target.closest('[data-ecg-mode]'); if(tab) setMode(tab.getAttribute('data-ecg-mode')); }
-  function onPaste(event){ if(!isOpen()) return; const items=event.clipboardData&&event.clipboardData.items?Array.from(event.clipboardData.items):[]; const imageItem=items.find(item=>/^image\//i.test(item.type)); if(!imageItem) return; const file=imageItem.getAsFile(); if(!file) return; event.preventDefault(); setMode('paste'); runAssist(file,'paste'); }
-  function bind(){ if(bound) return; bound=true; $('openEcgAssistBtn')&&$('openEcgAssistBtn').addEventListener('click',()=>openOverlay('scan')); $('ecgAssistCloseBtn')&&$('ecgAssistCloseBtn').addEventListener('click',closeOverlay); $('ecgAssistBackdrop')&&$('ecgAssistBackdrop').addEventListener('click',closeOverlay); $('chooseEcgScanBtn')&&$('chooseEcgScanBtn').addEventListener('click',()=>{ setMode('scan'); $('ecgAssistScanInput')&&$('ecgAssistScanInput').click(); }); $('chooseEcgUploadBtn')&&$('chooseEcgUploadBtn').addEventListener('click',()=>{ setMode('upload'); $('ecgAssistUploadInput')&&$('ecgAssistUploadInput').click(); }); $('readClipboardEcgBtn')&&$('readClipboardEcgBtn').addEventListener('click',readClipboardImage); $('ecgAssistClearBtn')&&$('ecgAssistClearBtn').addEventListener('click',()=>reset(currentPatient||'')); $('ecgAssistCopyBtn')&&$('ecgAssistCopyBtn').addEventListener('click',copyText); $('ecgAssistInsertBtn')&&$('ecgAssistInsertBtn').addEventListener('click',insertIntoExamination); $('ecgAssistOverlay')&&$('ecgAssistOverlay').addEventListener('click',onOverlayClick); $('ecgAssistScanInput')&&$('ecgAssistScanInput').addEventListener('change',e=>{ const file=e.target.files&&e.target.files[0]; if(file){ setMode('scan'); runAssist(file,'scan'); } }); $('ecgAssistUploadInput')&&$('ecgAssistUploadInput').addEventListener('change',e=>{ const file=e.target.files&&e.target.files[0]; if(file){ setMode('upload'); runAssist(file,'upload'); } }); $('ecgAssistPasteTarget')&&$('ecgAssistPasteTarget').addEventListener('click',()=>{ try{ $('ecgAssistPasteTarget').focus({preventScroll:true}); }catch(_e){ $('ecgAssistPasteTarget').focus(); } }); $('ecgAssistCopyText')&&$('ecgAssistCopyText').addEventListener('input',()=>{ if(!state.result) state.result=normaliseResult({}); state.result.copyText=$('ecgAssistCopyText').value||''; }); document.addEventListener('paste',onPaste); document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&isOpen()) closeOverlay(); }); }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind,{once:true}); else bind();
+  function onPaste(event){
+    if(!isOpen()) return;
+    const items=event.clipboardData&&event.clipboardData.items?Array.from(event.clipboardData.items):[];
+    const imageItem=items.find(item=>/^image\//i.test(item.type));
+    if(!imageItem) return;
+    const file=imageItem.getAsFile();
+    if(!file) return;
+    event.preventDefault();
+    setMode('paste');
+    runAssist(file,'paste');
+  }
+  function bind(){
+    if(bound) return;
+    bound=true;
+    $('openEcgAssistBtn')&&$('openEcgAssistBtn').addEventListener('click',()=>openOverlay('scan'));
+    $('ecgAssistCloseBtn')&&$('ecgAssistCloseBtn').addEventListener('click',closeOverlay);
+    $('ecgAssistBackdrop')&&$('ecgAssistBackdrop').addEventListener('click',closeOverlay);
+    $('chooseEcgScanBtn')&&$('chooseEcgScanBtn').addEventListener('click',()=>{ setMode('scan'); $('ecgAssistScanInput')&&$('ecgAssistScanInput').click(); });
+    $('chooseEcgUploadBtn')&&$('chooseEcgUploadBtn').addEventListener('click',()=>{ setMode('upload'); $('ecgAssistUploadInput')&&$('ecgAssistUploadInput').click(); });
+    $('readClipboardEcgBtn')&&$('readClipboardEcgBtn').addEventListener('click',readClipboardImage);
+    $('ecgAssistClearBtn')&&$('ecgAssistClearBtn').addEventListener('click',()=>reset(currentPatient||''));
+    $('ecgAssistCopyBtn')&&$('ecgAssistCopyBtn').addEventListener('click',copyText);
+    $('ecgAssistInsertBtn')&&$('ecgAssistInsertBtn').addEventListener('click',insertIntoExamination);
+    $('ecgAssistOverlay')&&$('ecgAssistOverlay').addEventListener('click',onOverlayClick);
+    $('ecgAssistScanInput')&&$('ecgAssistScanInput').addEventListener('change',e=>{ const file=e.target.files&&e.target.files[0]; if(file){ setMode('scan'); runAssist(file,'scan'); } });
+    $('ecgAssistUploadInput')&&$('ecgAssistUploadInput').addEventListener('change',e=>{ const file=e.target.files&&e.target.files[0]; if(file){ setMode('upload'); runAssist(file,'upload'); } });
+    $('ecgAssistPasteTarget')&&$('ecgAssistPasteTarget').addEventListener('click',()=>{ try{ $('ecgAssistPasteTarget').focus({preventScroll:true}); }catch(_e){ $('ecgAssistPasteTarget').focus(); } });
+    $('ecgAssistCopyText')&&$('ecgAssistCopyText').addEventListener('input',()=>{ if(!state.result) state.result=normaliseResult({}); state.result.copyText=$('ecgAssistCopyText').value||''; });
+    document.addEventListener('paste',onPaste);
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&isOpen()) closeOverlay(); });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind,{once:true});
+  else bind();
 })();
 
 </script></body>
