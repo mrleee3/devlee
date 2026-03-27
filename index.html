@@ -410,12 +410,14 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .ecg-assist-card-title{font-size:17px;font-weight:600;color:#1c1c1e;line-height:1.25}
 .ecg-assist-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .ecg-assist-grid-item{background:#f8fafc;border:1px solid rgba(15,23,42,.06);border-radius:12px;padding:10px}.ecg-assist-grid-label{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}.ecg-assist-grid-value{font-size:13px;line-height:1.45;color:#111}
+.ecg-assist-lead-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ecg-assist-lead-item{background:#f8fafc;border:1px solid rgba(15,23,42,.06);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:4px}.ecg-assist-lead-name{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}.ecg-assist-lead-text{font-size:12.5px;line-height:1.4;color:#111}
 .ecg-assist-copy-block,.ecg-assist-list{font-size:14px;line-height:1.5;color:#111}.ecg-assist-list{display:flex;flex-direction:column;gap:8px}.ecg-assist-list-item{padding-left:14px;position:relative}.ecg-assist-list-item:before{content:'•';position:absolute;left:0;top:0;color:#667085}
 .ecg-assist-card textarea{min-height:120px;resize:vertical}.ecg-assist-footer{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:10px;margin-top:auto}.ecg-assist-footer button{height:40px}
-@media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
+@media (min-width:700px){.ecg-assist-lead-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:420px){.ecg-assist-grid{grid-template-columns:1fr}.ecg-assist-lead-grid{grid-template-columns:1fr}.ecg-assist-footer{grid-template-columns:1fr}.clinical-review-actions{gap:6px}}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_301_release.html; source=hospital_at_home_v12_36_301_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_302_release.html; source=hospital_at_home_v12_36_302_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -613,7 +615,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_301_release.html</div><div>Source: hospital_at_home_v12_36_301_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_302_release.html</div><div>Source: hospital_at_home_v12_36_302_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -632,7 +634,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <section class="container hidden" id="patientDetail">
 <div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div></div>
 <div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><input autocapitalize="off" autocorrect="off" id="bp" spellcheck="false" type="text"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
-<div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Prototype clinician tool. Scan, upload or paste an ECG image for a structured draft review and copy-ready text.</div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
+<div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Prototype clinician tool. Scan, upload or paste an ECG image for a structured draft review and copy-ready text.</div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Lead review</div><div class="ecg-assist-lead-grid" id="ecgAssistLeadGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
 <div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><label>Issues</label><textarea id="issues"></textarea><div class="field-label-row"><label for="examination">Examination</label><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button></div><textarea id="examination"></textarea><label>Plan</label><textarea autocapitalize="sentences" id="plan"></textarea><label>For discharge summary</label><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
 <div class="card patient-reorder-card" data-card-key="meds">
 <div class="toggle-row meds-header-row">
@@ -5210,8 +5212,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_301_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_301_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_302_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_302_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6214,15 +6216,36 @@ initHrOverlay();
   const LONG_STRING = { type: 'string', maxLength: 420 };
   const SHORT_LIST = { type: 'array', maxItems: 5, items: { type: 'string', maxLength: 140 } };
   const DIFFERENTIAL_LIST = { type: 'array', maxItems: 4, items: { type: 'string', maxLength: 120 } };
+  const LEAD_ORDER = ['I','II','III','aVR','aVL','aVF','V1','V2','V3','V4','V5','V6'];
+  const INFERIOR_LEADS = ['II','III','aVF'];
+  const RECIPROCAL_INFERIOR_LEADS = ['I','aVL'];
+  const ANTERIOR_LEADS = ['V1','V2','V3','V4'];
+  const SEPTAL_LEADS = ['V1','V2'];
+  const LATERAL_LEADS = ['I','aVL','V5','V6'];
+  const PRECORDIAL_LEADS = ['V1','V2','V3','V4','V5','V6'];
+  const DIFFUSE_DEPRESS_LEADS = ['I','II','III','aVL','aVF','V4','V5','V6'];
+
+  const LEAD_FINDING_SCHEMA = {
+    type: 'object',
+    required: ['lead','st','t','q','note'],
+    properties: {
+      lead: { type: 'string', maxLength: 4 },
+      st: { type: 'string', maxLength: 24 },
+      t: { type: 'string', maxLength: 24 },
+      q: { type: 'string', maxLength: 24 },
+      note: { type: 'string', maxLength: 80 }
+    }
+  };
 
   const ECG_ASSIST_SCHEMA = {
     type: 'object',
     additionalProperties: false,
     required: [
-      'rate','rhythm','axis','prInterval','qrsDuration','qtc','stSegments','tWaves','rWaveProgression','ectopy','conduction','morphology',
-      'whyInterpretation','limitations','redFlags','impression','differentials','action','copyText','confidence','uncertainty'
+      'leadReview','rate','rhythm','axis','prInterval','qrsDuration','qtc','stSegments','tWaves','rWaveProgression','ectopy','conduction',
+      'morphology','whyInterpretation','limitations','redFlags','impression','differentials','action','copyText','confidence','uncertainty'
     ],
     properties: {
+      leadReview: { type: 'array', maxItems: 12, items: LEAD_FINDING_SCHEMA },
       rate: SHORT_STRING,
       rhythm: SHORT_STRING,
       axis: SHORT_STRING,
@@ -6247,26 +6270,6 @@ initHrOverlay();
     }
   };
 
-  const ECG_CHALLENGE_SCHEMA = {
-    type: 'object',
-    additionalProperties: false,
-    required: [
-      'highRisk','summary','inferiorPattern','anteriorPattern','lateralPattern','reciprocalChange','concerningFeatures','urgentDifferentials','actionBias','uncertainty'
-    ],
-    properties: {
-      highRisk: { type: 'boolean' },
-      summary: MEDIUM_STRING,
-      inferiorPattern: MEDIUM_STRING,
-      anteriorPattern: MEDIUM_STRING,
-      lateralPattern: MEDIUM_STRING,
-      reciprocalChange: MEDIUM_STRING,
-      concerningFeatures: SHORT_LIST,
-      urgentDifferentials: DIFFERENTIAL_LIST,
-      actionBias: MEDIUM_STRING,
-      uncertainty: SHORT_STRING
-    }
-  };
-
   let state = { mode:'scan', dataUrl:'', result:null, busy:false, patientId:'' };
   let bound = false;
 
@@ -6281,26 +6284,21 @@ initHrOverlay();
     if(!text) return false;
     return !/^(not clear|unclear|unknown|not visible|not well seen|not measurable|unable to assess|unable to determine|difficult to assess|indeterminate|not stated|n\/a|none)$/i.test(text);
   }
-  function titleCase(label){
-    return String(label || '').replace(/\b\w/g, c => c.toUpperCase());
-  }
+  function titleCase(label){ return String(label || '').replace(/\b\w/g, c => c.toUpperCase()); }
+  function uniqueOrdered(values){ return Array.from(new Set((values || []).filter(Boolean))); }
   function getPreferredGeminiModel(){
     const configured = typeof getGeminiModel==='function' ? String(getGeminiModel() || '').trim() : '';
     if(!configured || configured === 'gemini-2.5-flash') return 'gemini-3-flash-preview';
     return configured;
   }
-  function shouldUseGeminiThinkingConfig(model){
-    return /^gemini-3/i.test(String(model || '').trim());
-  }
+  function shouldUseGeminiThinkingConfig(model){ return /^gemini-3/i.test(String(model || '').trim()); }
   function tightenRateText(rate){
     const text = cleanText(rate);
     const m = text.match(/^(\d{2,3})\s*[-–]\s*(\d{2,3})(?:\s*bpm)?$/i);
     if(m){
       const a = Number(m[1]);
       const b = Number(m[2]);
-      if(Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= 20){
-        return `approximately ${Math.round((a + b) / 2)} bpm`;
-      }
+      if(Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= 20) return `approximately ${Math.round((a + b) / 2)} bpm`;
     }
     return text;
   }
@@ -6309,6 +6307,116 @@ initHrOverlay();
     if(!text) return '';
     if(/^sinus$/i.test(text)) return 'Sinus rhythm';
     return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
+  function normaliseLeadCode(input){
+    const raw = cleanText(input).replace(/\s+/g,'').toUpperCase();
+    if(!raw) return '';
+    const map = { AVR:'aVR', AVL:'aVL', AVF:'aVF', AAR:'aVR', AAL:'aVL', AAF:'aVF', 1:'I', 2:'II', 3:'III' };
+    if(map[raw]) return map[raw];
+    if(raw === 'I' || raw === 'II' || raw === 'III') return raw;
+    if(/^V[1-6]$/.test(raw)) return raw;
+    return '';
+  }
+  function normaliseStCategory(input){
+    const text = cleanText(input).toLowerCase();
+    if(!text) return 'unclear';
+    const hasElevation = /st[^a-z]*elev|elevat|raised st|stemi|elevation/.test(text);
+    const hasDepression = /st[^a-z]*depress|depress|reciprocal/.test(text);
+    if(hasElevation && hasDepression) return 'mixed';
+    if(hasElevation) return 'elevation';
+    if(hasDepression) return 'depression';
+    if(/none|normal|no st|isoelectric|flat/.test(text)) return 'none';
+    if(/unclear|not clear|unable|indeterminate/.test(text)) return 'unclear';
+    return text.length <= 24 ? text : 'unclear';
+  }
+  function normaliseTCategory(input){
+    const text = cleanText(input).toLowerCase();
+    if(!text) return 'unclear';
+    if(/hyperacute/.test(text)) return 'hyperacute';
+    if(/invert|inversion|inverted/.test(text)) return 'inversion';
+    if(/peaked|tented/.test(text)) return 'peaked';
+    if(/flat|flatten/.test(text)) return 'flattened';
+    if(/normal|none|no t/.test(text)) return 'normal';
+    if(/unclear|not clear|unable|indeterminate/.test(text)) return 'unclear';
+    return text.length <= 24 ? text : 'unclear';
+  }
+  function normaliseQCategory(input){
+    const text = cleanText(input).toLowerCase();
+    if(!text) return 'unclear';
+    if(/path|present|yes|q wave/.test(text)) return 'present';
+    if(/absent|none|no q/.test(text)) return 'absent';
+    if(/unclear|not clear|unable|indeterminate/.test(text)) return 'unclear';
+    return text.length <= 24 ? text : 'unclear';
+  }
+  function normaliseLeadNote(input){
+    const text = cleanText(input);
+    return text.length > 80 ? `${text.slice(0,77)}…` : text;
+  }
+  function collectLeadEntries(raw){
+    if(Array.isArray(raw)) return raw;
+    if(raw && Array.isArray(raw.items)) return raw.items;
+    if(raw && Array.isArray(raw.leads)) return raw.leads;
+    if(raw && typeof raw === 'object'){
+      return Object.keys(raw).map(key => {
+        const entry = raw[key];
+        if(entry && typeof entry === 'object') return { lead:key, ...entry };
+        return { lead:key, st:entry };
+      });
+    }
+    return [];
+  }
+  function normaliseLeadReview(raw){
+    const map = {};
+    for(const entry of collectLeadEntries(raw)){
+      const lead = normaliseLeadCode(entry?.lead || entry?.name || entry?.label || entry?.id);
+      if(!lead) continue;
+      map[lead] = {
+        lead,
+        st: normaliseStCategory(entry?.st || entry?.stSegment || entry?.stChange || entry?.stSegments),
+        t: normaliseTCategory(entry?.t || entry?.tWave || entry?.twave || entry?.tWaves),
+        q: normaliseQCategory(entry?.q || entry?.qWave || entry?.qwaves),
+        note: normaliseLeadNote(entry?.note || entry?.notes || entry?.comment || '')
+      };
+    }
+    return LEAD_ORDER.map(lead => map[lead] || { lead, st:'unclear', t:'unclear', q:'unclear', note:'' });
+  }
+  function leadMap(review){ return Object.fromEntries((review || []).map(entry => [entry.lead, entry])); }
+  function intersect(source, group){ return group.filter(lead => source.includes(lead)); }
+  function leadListText(leads){
+    const ordered = LEAD_ORDER.filter(lead => (leads || []).includes(lead));
+    if(!ordered.length) return '';
+    if(ordered.length === 1) return ordered[0];
+    if(ordered.length === 2) return `${ordered[0]} and ${ordered[1]}`;
+    return `${ordered.slice(0,-1).join(', ')} and ${ordered[ordered.length - 1]}`;
+  }
+  function categoryLabel(value, kind){
+    if(kind === 'st'){
+      if(value === 'elevation') return 'ST elevation';
+      if(value === 'depression') return 'ST depression';
+      if(value === 'none') return 'No clear ST change';
+      if(value === 'mixed') return 'Mixed ST change';
+      return 'ST unclear';
+    }
+    if(kind === 't'){
+      if(value === 'hyperacute') return 'Hyperacute T';
+      if(value === 'inversion') return 'T inversion';
+      if(value === 'peaked') return 'Peaked T';
+      if(value === 'flattened') return 'Flat T';
+      if(value === 'normal') return 'T normal';
+      return 'T unclear';
+    }
+    if(kind === 'q'){
+      if(value === 'present') return 'Q present';
+      if(value === 'absent') return 'Q absent';
+      return 'Q unclear';
+    }
+    return value;
+  }
+  function buildLeadDisplayText(entry){
+    const parts = [categoryLabel(entry.st, 'st'), categoryLabel(entry.t, 't'), categoryLabel(entry.q, 'q')];
+    if(entry.note) parts.push(entry.note);
+    return parts.filter(Boolean).join(' · ');
   }
   function formatReason(label, value){
     const text = cleanText(value);
@@ -6330,9 +6438,7 @@ initHrOverlay();
       formatReason('Ectopy', result.ectopy),
       formatReason('Other morphology', result.morphology)
     ].filter(Boolean);
-    if(result.limitations && /quality|photo|image|lead|crop|resolution|angle|artifact/i.test(result.limitations)){
-      reasons.push('Certainty limited by image quality / lead visibility.');
-    }
+    if(result.limitations && /quality|photo|image|lead|crop|resolution|angle|artifact/i.test(result.limitations)) reasons.push('Certainty limited by image quality / lead visibility.');
     return Array.from(new Set(reasons)).slice(0,10);
   }
   function hasVisibleIschaemicConcern(result){
@@ -6344,7 +6450,7 @@ initHrOverlay();
       ...(result.differentials || []),
       ...(result.whyInterpretation || [])
     ].join(' | ').toLowerCase();
-    return /ischaem|ischemi|st depression|st elevation|reciprocal|t wave inversion|inverted t|acs|acute coronary|q wave|posterior|anterolateral|inferior/.test(hay);
+    return /ischaem|ischemi|st depression|st elevation|reciprocal|t wave inversion|inverted t|acs|acute coronary|q wave|posterior|anterolateral|inferior|stemi|occlusion/.test(hay);
   }
   function softenGenericIschaemiaLanguage(result){
     const combined = `${result.impression} ${result.action}`.toLowerCase();
@@ -6358,20 +6464,140 @@ initHrOverlay();
         : 'No obvious acute abnormality seen on this ECG image.';
     }
     result.action = 'Correlate with symptoms and haemodynamic status, and compare with prior ECG if available.';
-    if(!isMeaningful(result.limitations)){
-      result.limitations = 'Assessment is limited to image review alone, so subtle interval or ischaemic change may not be fully excluded from the photo.';
-    }
-    const rationale = buildWhyFallback(result);
-    if(rationale.length && !(result.whyInterpretation || []).length){
-      result.whyInterpretation = rationale;
-    }
+    if(!isMeaningful(result.limitations)) result.limitations = 'Assessment is limited to image review alone, so subtle interval or ischaemic change may not be fully excluded from the photo.';
+    if(!(result.whyInterpretation || []).length) result.whyInterpretation = buildWhyFallback(result);
     return result;
+  }
+  function buildLeadStateGroups(review){
+    const groups = {
+      stElevation:[], stDepression:[], stMixed:[], tHyperacute:[], tInversion:[], tPeaked:[], qPresent:[]
+    };
+    for(const entry of review || []){
+      if(entry.st === 'elevation') groups.stElevation.push(entry.lead);
+      if(entry.st === 'depression') groups.stDepression.push(entry.lead);
+      if(entry.st === 'mixed') groups.stMixed.push(entry.lead);
+      if(entry.t === 'hyperacute') groups.tHyperacute.push(entry.lead);
+      if(entry.t === 'inversion') groups.tInversion.push(entry.lead);
+      if(entry.t === 'peaked') groups.tPeaked.push(entry.lead);
+      if(entry.q === 'present') groups.qPresent.push(entry.lead);
+    }
+    return groups;
+  }
+  function buildLeadDerivedSummary(review){
+    const groups = buildLeadStateGroups(review);
+    const inferiorElevation = intersect(groups.stElevation, INFERIOR_LEADS);
+    const inferiorDepression = intersect(groups.stDepression, INFERIOR_LEADS);
+    const reciprocalInferior = intersect(groups.stDepression, RECIPROCAL_INFERIOR_LEADS);
+    const anteriorElevation = intersect(groups.stElevation, ANTERIOR_LEADS);
+    const septalElevation = intersect(groups.stElevation, SEPTAL_LEADS);
+    const lateralElevation = intersect(groups.stElevation, LATERAL_LEADS);
+    const diffuseDepression = intersect(groups.stDepression, DIFFUSE_DEPRESS_LEADS);
+    const avrElevation = intersect(groups.stElevation, ['aVR']);
+    const tHyperPrecordial = intersect(groups.tHyperacute, PRECORDIAL_LEADS);
+    const tInversionInferior = intersect(groups.tInversion, INFERIOR_LEADS);
+    const qInferior = intersect(groups.qPresent, INFERIOR_LEADS);
+    const qAnterior = intersect(groups.qPresent, ANTERIOR_LEADS);
+
+    const stParts = [];
+    if(groups.stElevation.length) stParts.push(`ST elevation in ${leadListText(groups.stElevation)}`);
+    if(groups.stDepression.length){
+      if(inferiorElevation.length >= 2 && reciprocalInferior.length) stParts.push(`Reciprocal ST depression in ${leadListText(reciprocalInferior)}`);
+      const remainingDepression = groups.stDepression.filter(lead => !reciprocalInferior.includes(lead));
+      if(remainingDepression.length) stParts.push(`ST depression in ${leadListText(remainingDepression)}`);
+    }
+    if(groups.stMixed.length) stParts.push(`Conflicting ST assessment in ${leadListText(groups.stMixed)}`);
+    const stSummary = stParts.length ? stParts.join('. ') + '.' : '';
+
+    const tParts = [];
+    if(groups.tHyperacute.length) tParts.push(`Hyperacute T waves in ${leadListText(groups.tHyperacute)}`);
+    if(groups.tInversion.length) tParts.push(`T-wave inversion in ${leadListText(groups.tInversion)}`);
+    if(groups.tPeaked.length) tParts.push(`Peaked T waves in ${leadListText(groups.tPeaked)}`);
+    const tSummary = tParts.length ? tParts.join('. ') + '.' : '';
+
+    let impression = '';
+    let pattern = '';
+    const why = [];
+    const redFlags = [];
+    const differentials = [];
+    let action = '';
+
+    if(inferiorElevation.length >= 2){
+      pattern = lateralElevation.length >= 2 ? 'inferolateral STEMI pattern' : 'inferior STEMI pattern';
+      impression = lateralElevation.length >= 2
+        ? 'ECG is concerning for an inferolateral STEMI pattern.'
+        : 'ECG is concerning for an inferior STEMI pattern.';
+      why.push(`ST elevation in ${leadListText(inferiorElevation)}`);
+      if(reciprocalInferior.length) why.push(`Reciprocal ST depression in ${leadListText(reciprocalInferior)}`);
+      if(qInferior.length) why.push(`Pathological Q waves in ${leadListText(qInferior)}`);
+      if(tInversionInferior.length) why.push(`Inferior T-wave inversion in ${leadListText(tInversionInferior)}`);
+      redFlags.push(pattern);
+      differentials.push('Acute coronary occlusion / STEMI');
+      action = 'Potential STEMI / occlusion pattern — urgent acute assessment or emergency transfer is advised if clinically consistent.';
+    }else if(anteriorElevation.length >= 3){
+      pattern = lateralElevation.length >= 2 ? 'anterolateral STEMI pattern' : (septalElevation.length >= 2 ? 'anteroseptal STEMI pattern' : 'anterior STEMI pattern');
+      impression = `ECG is concerning for an ${pattern}.`;
+      why.push(`ST elevation in ${leadListText(anteriorElevation)}`);
+      if(tHyperPrecordial.length) why.push(`Hyperacute T waves in ${leadListText(tHyperPrecordial)}`);
+      if(qAnterior.length) why.push(`Pathological Q waves in ${leadListText(qAnterior)}`);
+      redFlags.push(pattern);
+      differentials.push('Acute coronary occlusion / STEMI');
+      action = 'Potential STEMI / occlusion pattern — urgent acute assessment or emergency transfer is advised if clinically consistent.';
+    }else if(lateralElevation.length >= 2){
+      pattern = 'lateral STEMI pattern';
+      impression = 'ECG is concerning for a lateral STEMI pattern.';
+      why.push(`ST elevation in ${leadListText(lateralElevation)}`);
+      redFlags.push(pattern);
+      differentials.push('Acute coronary occlusion / STEMI');
+      action = 'Potential STEMI / occlusion pattern — urgent acute assessment or emergency transfer is advised if clinically consistent.';
+    }else if(diffuseDepression.length >= 4 && avrElevation.length){
+      pattern = 'diffuse ST depression with aVR elevation';
+      impression = 'ECG shows diffuse ST depression with aVR elevation, concerning for high-risk ischaemia.';
+      why.push(`ST depression in ${leadListText(diffuseDepression)}`);
+      why.push(`ST elevation in ${leadListText(avrElevation)}`);
+      redFlags.push('high-risk ischaemic ST-segment pattern');
+      differentials.push('High-risk acute coronary syndrome');
+      action = 'High-risk ischaemic pattern — urgent senior review / acute assessment is advised if clinically consistent.';
+    }else if(groups.stElevation.length || groups.stDepression.length || groups.stMixed.length){
+      pattern = 'abnormal ST-segment pattern';
+      impression = 'ECG shows an abnormal ST-segment pattern.';
+      if(groups.stElevation.length) why.push(`ST elevation in ${leadListText(groups.stElevation)}`);
+      if(groups.stDepression.length) why.push(`ST depression in ${leadListText(groups.stDepression)}`);
+      if(groups.stMixed.length) why.push(`Conflicting ST assessment in ${leadListText(groups.stMixed)}`);
+      redFlags.push('abnormal ST-segment pattern');
+      differentials.push('Acute coronary syndrome');
+      action = 'Correlate urgently with symptoms and compare with prior ECG if available.';
+    }else if(groups.tHyperacute.length || groups.tInversion.length || groups.tPeaked.length){
+      pattern = 'repolarisation abnormality';
+      impression = 'ECG shows a repolarisation abnormality without a definite STEMI pattern.';
+      if(groups.tHyperacute.length) why.push(`Hyperacute T waves in ${leadListText(groups.tHyperacute)}`);
+      if(groups.tInversion.length) why.push(`T-wave inversion in ${leadListText(groups.tInversion)}`);
+      if(groups.tPeaked.length) why.push(`Peaked T waves in ${leadListText(groups.tPeaked)}`);
+      action = 'Correlate clinically and compare with any prior ECG.';
+    }
+
+    return {
+      groups,
+      stSummary,
+      tSummary,
+      impression,
+      pattern,
+      why: uniqueOrdered(why),
+      redFlags: uniqueOrdered(redFlags),
+      differentials: uniqueOrdered(differentials),
+      action,
+      inferiorElevation,
+      reciprocalInferior,
+      anteriorElevation,
+      lateralElevation,
+      diffuseDepression,
+      avrElevation
+    };
   }
   function buildFallbackCopy(result){
     const details = [];
     if(isMeaningful(result.rhythm)) details.push(result.rhythm.charAt(0).toLowerCase() + result.rhythm.slice(1));
     if(isMeaningful(result.rate)) details.push(`at ${result.rate}`);
-    if(isMeaningful(result.axis)) details.push(result.axis.charAt(0).toLowerCase() === 'n' && /axis/i.test(result.axis) ? result.axis.charAt(0).toLowerCase() + result.axis.slice(1) : `axis ${result.axis}`);
+    if(isMeaningful(result.axis)) details.push(/axis/i.test(result.axis) ? result.axis.charAt(0).toLowerCase() + result.axis.slice(1) : `axis ${result.axis}`);
 
     const intervals = [];
     if(isMeaningful(result.prInterval)) intervals.push(`PR ${result.prInterval}`);
@@ -6379,17 +6605,16 @@ initHrOverlay();
     if(isMeaningful(result.qtc)) intervals.push(`QTc ${result.qtc}`);
 
     const features = [];
-    if(isMeaningful(result.stSegments)) features.push(`ST segments ${result.stSegments.charAt(0).toLowerCase() + result.stSegments.slice(1)}`);
-    if(isMeaningful(result.tWaves)) features.push(`T waves ${result.tWaves.charAt(0).toLowerCase() + result.tWaves.slice(1)}`);
-    if(isMeaningful(result.conduction)) features.push(`conduction ${result.conduction.charAt(0).toLowerCase() + result.conduction.slice(1)}`);
-    if(isMeaningful(result.ectopy)) features.push(`ectopy ${result.ectopy.charAt(0).toLowerCase() + result.ectopy.slice(1)}`);
-    if(isMeaningful(result.morphology)) features.push(result.morphology.charAt(0).toLowerCase() + result.morphology.slice(1));
+    if(isMeaningful(result.stSegments)) features.push(result.stSegments.replace(/\.$/, ''));
+    if(isMeaningful(result.tWaves)) features.push(result.tWaves.replace(/\.$/, ''));
+    if(isMeaningful(result.conduction) && !/normal conduction/i.test(result.conduction)) features.push(`conduction ${result.conduction.charAt(0).toLowerCase() + result.conduction.slice(1)}`);
+    if(isMeaningful(result.ectopy) && !/^none/i.test(result.ectopy)) features.push(`ectopy ${result.ectopy.charAt(0).toLowerCase() + result.ectopy.slice(1)}`);
+    if(isMeaningful(result.morphology) && !/normal/i.test(result.morphology)) features.push(result.morphology.charAt(0).toLowerCase() + result.morphology.slice(1));
 
     const chunks = [];
     if(details.length) chunks.push(`ECG demonstrates ${details.join(', ')}`);
     if(intervals.length) chunks.push(intervals.join(', '));
     if(features.length) chunks.push(features.join('; '));
-
     const summary = chunks.join('. ');
     const impression = cleanText(result.impression || 'Clinical correlation advised.');
     return `${summary || 'ECG reviewed.'}${summary ? '. ' : ' '}${impression}`.trim();
@@ -6401,6 +6626,7 @@ initHrOverlay();
   function normaliseResult(raw){
     const src = raw && typeof raw === 'object' ? raw : {};
     const result = {
+      leadReview: normaliseLeadReview(src.leadReview || src.leads || src.leadMatrix || src.leadFindings),
       rate: tightenRateText(src.rate),
       rhythm: normaliseRhythmText(src.rhythm),
       axis: cleanText(src.axis),
@@ -6421,89 +6647,44 @@ initHrOverlay();
       action: cleanText(src.action),
       copyText: cleanText(src.copyText || src.copytext),
       confidence: cleanText(src.confidence),
-      uncertainty: cleanText(src.uncertainty)
+      uncertainty: cleanText(src.uncertainty),
+      derivedPattern: '',
+      consistencyIssues: []
     };
 
-    if(!result.whyInterpretation.length){
-      result.whyInterpretation = buildWhyFallback(result);
-    }
+    const leadSummary = buildLeadDerivedSummary(result.leadReview);
+    result.derivedPattern = leadSummary.pattern;
+
+    if(leadSummary.stSummary) result.stSegments = leadSummary.stSummary;
+    if(leadSummary.tSummary) result.tWaves = leadSummary.tSummary;
+    if(leadSummary.impression && (looksNormalImpression(result.impression) || !isMeaningful(result.impression) || leadSummary.redFlags.length)) result.impression = leadSummary.impression;
+    if(leadSummary.why.length) result.whyInterpretation = uniqueOrdered([...leadSummary.why, ...result.whyInterpretation]).slice(0,8);
+    if(leadSummary.redFlags.length) result.redFlags = uniqueOrdered([...leadSummary.redFlags, ...result.redFlags]).slice(0,6);
+    if(leadSummary.differentials.length) result.differentials = uniqueOrdered([...leadSummary.differentials, ...result.differentials]).slice(0,5);
+    if(leadSummary.action && (!isMeaningful(result.action) || /clinical correlation|compare with prior|review clinically/i.test(result.action))) result.action = leadSummary.action;
+
+    if(!result.whyInterpretation.length) result.whyInterpretation = buildWhyFallback(result);
     softenGenericIschaemiaLanguage(result);
+
     if(!result.copyText) result.copyText = buildFallbackCopy(result);
+    if(!result.confidence) result.confidence = leadSummary.redFlags.length ? 'Cautious high-risk draft' : 'Cautious draft';
+
+    const reviewMap = leadMap(result.leadReview);
+    for(const lead of LEAD_ORDER){
+      const entry = reviewMap[lead];
+      if(entry && entry.st === 'mixed') result.consistencyIssues.push(`${lead}: conflicting ST description`);
+    }
+    if(/inferior/i.test(result.impression) && leadSummary.inferiorElevation.length < 2) result.consistencyIssues.push('Impression says inferior pattern without clear inferior lead support');
+    if(/anter/i.test(result.impression) && leadSummary.anteriorElevation.length < 2) result.consistencyIssues.push('Impression says anterior pattern without clear precordial lead support');
+    if(/lateral/i.test(result.impression) && leadSummary.lateralElevation.length < 2) result.consistencyIssues.push('Impression says lateral pattern without clear lateral lead support');
+    if(result.consistencyIssues.length){
+      result.redFlags = uniqueOrdered([...result.redFlags, 'internal lead-pattern inconsistency']).slice(0,6);
+      result.whyInterpretation = uniqueOrdered([...result.whyInterpretation, ...result.consistencyIssues]).slice(0,10);
+    }
+    result.copyText = buildFallbackCopy(result);
     return result;
   }
 
-  function normaliseChallenge(raw){
-    const src = raw && typeof raw === 'object' ? raw : {};
-    return {
-      highRisk: !!src.highRisk,
-      summary: cleanText(src.summary),
-      inferiorPattern: cleanText(src.inferiorPattern),
-      anteriorPattern: cleanText(src.anteriorPattern),
-      lateralPattern: cleanText(src.lateralPattern),
-      reciprocalChange: cleanText(src.reciprocalChange),
-      concerningFeatures: normaliseList(src.concerningFeatures),
-      urgentDifferentials: normaliseList(src.urgentDifferentials),
-      actionBias: cleanText(src.actionBias),
-      uncertainty: cleanText(src.uncertainty)
-    };
-  }
-  function challengeSuggestsHighRisk(challenge){
-    const hay = [
-      challenge.summary,
-      challenge.inferiorPattern,
-      challenge.anteriorPattern,
-      challenge.lateralPattern,
-      challenge.reciprocalChange,
-      ...(challenge.concerningFeatures || []),
-      ...(challenge.urgentDifferentials || [])
-    ].join(' | ').toLowerCase();
-    return !!challenge.highRisk || /st elevation|stemi|occlusion|omi|acute coronary|inferior mi|inferior myocardial|reciprocal|posterior mi|hyperkala|broad complex tachy|ventricular tachy|complete heart block/.test(hay);
-  }
-  function challengeConcernLabel(challenge){
-    const hay = [challenge.summary, challenge.inferiorPattern, challenge.anteriorPattern, challenge.lateralPattern, challenge.reciprocalChange].join(' | ').toLowerCase();
-    if(/inferior/.test(hay) && /st elevation|stemi|occlusion|mi/.test(hay)) return 'possible inferior ST-elevation / occlusion pattern';
-    if(/anterior|anteroseptal/.test(hay) && /st elevation|stemi|occlusion|mi/.test(hay)) return 'possible anterior ST-elevation / occlusion pattern';
-    if(/lateral/.test(hay) && /st elevation|stemi|occlusion|mi/.test(hay)) return 'possible lateral ST-elevation / occlusion pattern';
-    if(/reciprocal/.test(hay)) return 'possible reciprocal ST-segment changes';
-    if(/acute coronary|acs|occlusion/.test(hay)) return 'possible acute coronary / occlusion pattern';
-    return challenge.highRisk ? 'possible high-risk ECG pattern' : '';
-  }
-  function mergeChallenge(result, challenge){
-    if(!challenge) return result;
-    const merged = result;
-    const highRisk = challengeSuggestsHighRisk(challenge);
-    const concernLabel = challengeConcernLabel(challenge);
-    const challengeWhy = normaliseList([
-      challenge.inferiorPattern,
-      challenge.anteriorPattern,
-      challenge.lateralPattern,
-      challenge.reciprocalChange,
-      ...(challenge.concerningFeatures || [])
-    ]);
-
-    merged.whyInterpretation = normaliseList([...(merged.whyInterpretation || []), ...challengeWhy]);
-    merged.differentials = normaliseList([...(merged.differentials || []), ...(challenge.urgentDifferentials || [])]);
-    if(challenge.uncertainty && !merged.limitations){
-      merged.limitations = challenge.uncertainty;
-    }
-
-    if(highRisk){
-      merged.redFlags = normaliseList([...(merged.redFlags || []), concernLabel, ...(challenge.urgentDifferentials || [])]);
-      const stPieces = normaliseList([challenge.inferiorPattern, challenge.anteriorPattern, challenge.lateralPattern, challenge.reciprocalChange]);
-      if(stPieces.length){
-        merged.stSegments = stPieces.join(' · ');
-      }else if(!isMeaningful(merged.stSegments) || /normal|no acute/i.test(merged.stSegments)){
-        merged.stSegments = 'Concerning ST-segment abnormality seen';
-      }
-      if(looksNormalImpression(merged.impression) || !isMeaningful(merged.impression)){
-        merged.impression = challenge.summary || 'ECG image is concerning for a possible acute ischaemic / occlusion pattern and should not be treated as normal.';
-      }
-      merged.action = challenge.actionBias || 'Potential high-risk ECG pattern — urgent senior / acute assessment is advised if clinically consistent.';
-      merged.confidence = merged.confidence || 'Red-flag challenge triggered';
-      merged.copyText = buildFallbackCopy(merged);
-    }
-    return merged;
-  }
   function splitDataUrl(dataUrl){
     const match = String(dataUrl || '').match(/^data:([^;,]+);base64,(.+)$/);
     if(!match) throw new Error('ECG image could not be prepared for Gemini. Try upload again.');
@@ -6513,9 +6694,7 @@ initHrOverlay();
     const candidate = data && Array.isArray(data.candidates) ? data.candidates[0] : null;
     const parts = candidate && candidate.content && Array.isArray(candidate.content.parts) ? candidate.content.parts : [];
     const texts = [];
-    for(const part of parts){
-      if(part && typeof part.text === 'string' && part.text.trim()) texts.push(part.text.trim());
-    }
+    for(const part of parts){ if(part && typeof part.text === 'string' && part.text.trim()) texts.push(part.text.trim()); }
     return texts.join('\n').trim();
   }
   function extractBalancedJsonSnippet(text){
@@ -6581,8 +6760,7 @@ initHrOverlay();
     if(!schema || typeof schema !== 'object') return schema;
     const out = {};
     for(const [key, value] of Object.entries(schema)){
-      if(key === '$schema' || key === '$defs' || key === 'definitions' || key === 'patternProperties' || key === 'unevaluatedProperties') continue;
-      if(key === 'additionalProperties') continue;
+      if(key === '$schema' || key === '$defs' || key === 'definitions' || key === 'patternProperties' || key === 'unevaluatedProperties' || key === 'additionalProperties') continue;
       out[key] = toGeminiJsonSchema(value);
     }
     return out;
@@ -6595,30 +6773,18 @@ initHrOverlay();
       responseJsonSchema:toGeminiJsonSchema(schema),
       candidateCount:1,
       temperature:0,
-      maxOutputTokens:maxTokens || 1100,
+      maxOutputTokens:maxTokens || 1300,
       mediaResolution: mediaResolution || 'MEDIA_RESOLUTION_HIGH',
       seed:1
     };
-    if(shouldUseGeminiThinkingConfig(model)){
-      generationConfig.thinkingConfig = { thinkingLevel:'low' };
-    }
+    if(shouldUseGeminiThinkingConfig(model)) generationConfig.thinkingConfig = { thinkingLevel:'low' };
     const body = {
       system_instruction: { parts:[{ text: system }] },
-      contents: [{
-        role:'user',
-        parts:[
-          { text: userText },
-          { inline_data:{ mime_type: mimeType, data: base64 } }
-        ]
-      }],
+      contents: [{ role:'user', parts:[{ text: userText }, { inline_data:{ mime_type: mimeType, data: base64 } }] }],
       generationConfig
     };
     const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model || 'gemini-3-flash-preview') + ':generateContent?key=' + encodeURIComponent(apiKey);
-    const res = await fetch(endpoint, {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json' },
-      body:JSON.stringify(body)
-    });
+    const res = await fetch(endpoint, { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify(body) });
     const rawResponse = await res.text();
     let data = {};
     try{ data = rawResponse ? JSON.parse(rawResponse) : {}; }catch(_e){ data = {}; }
@@ -6633,9 +6799,8 @@ initHrOverlay();
       err.geminiFinishMessage = finishMessage;
       throw err;
     }
-    try{
-      return parseGeminiJsonText(rawText);
-    }catch(_e){
+    try{ return parseGeminiJsonText(rawText); }
+    catch(_e){
       const preview = cleanText(rawText).slice(0,180);
       const err = new Error(preview ? 'Gemini returned ECG output in an unexpected format. The app now expects JSON only, but got: ' + preview : 'Gemini returned unreadable ECG JSON. Try again.');
       err.geminiFinishReason = finishReason;
@@ -6644,29 +6809,26 @@ initHrOverlay();
       throw err;
     }
   }
-
   function shouldRetryGeminiError(err){
     const reason = String(err?.geminiFinishReason || '').toUpperCase();
     const message = String(err?.message || '');
-    return /MAX_TOKENS|MALFORMED_RESPONSE|OTHER|STOP/.test(reason)
-      || /cut off before the ECG JSON finished|unexpected format|unreadable ECG JSON/i.test(message);
+    return /MAX_TOKENS|MALFORMED_RESPONSE|OTHER|STOP/.test(reason) || /cut off before the ECG JSON finished|unexpected format|unreadable ECG JSON/i.test(message);
   }
-
   async function callGeminiStructured(args){
     const attempts = [
       {
         model: args.model || 'gemini-3-flash-preview',
-        maxTokens: args.maxTokens || 900,
+        maxTokens: args.maxTokens || 1300,
         mediaResolution: args.mediaResolution || 'MEDIA_RESOLUTION_HIGH',
         system: args.system,
         userText: args.userText
       },
       {
         model: 'gemini-3-flash-preview',
-        maxTokens: Math.max((args.maxTokens || 900) + 400, 1200),
+        maxTokens: Math.max((args.maxTokens || 1300) + 300, 1500),
         mediaResolution: 'MEDIA_RESOLUTION_MEDIUM',
-        system: args.system + ' Keep every field concise. Use short plain phrases. whyInterpretation max 4 items. redFlags max 4 items. differentials max 3 items. No prose before or after the JSON object.',
-        userText: args.userText + ' Return compact JSON only. Keep each string short and factual.'
+        system: args.system + ' Keep each field compact. The leadReview must include each lead exactly once in this order: I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6. No prose before or after the JSON object.',
+        userText: args.userText + ' Return compact JSON only. Keep each string short and factual. Use unclear instead of guessing.'
       }
     ];
     let lastErr = null;
@@ -6711,14 +6873,15 @@ initHrOverlay();
     const hay=[
       result.rate,result.rhythm,result.axis,result.prInterval,result.qrsDuration,result.qtc,result.stSegments,result.tWaves,
       result.rWaveProgression,result.ectopy,result.conduction,result.morphology,result.impression,result.action,
-      ...(result.redFlags||[]),...(result.differentials||[]),...(result.whyInterpretation||[])
+      ...(result.redFlags||[]),...(result.differentials||[]),...(result.whyInterpretation||[]),...(result.consistencyIssues||[])
     ].join(' | ').toLowerCase();
     const flags=[];
-    if(/st\s*elevation|stemi|occlusion|acute coronary|inferior mi|inferior myocardial|reciprocal/.test(hay)) flags.push('possible acute ST-elevation / occlusion pattern');
+    if(/st\s*elevation|stemi|occlusion|acute coronary|inferior mi|inferior myocardial|reciprocal|high-risk ischaemic/.test(hay)) flags.push('possible acute ST-elevation / occlusion pattern');
     if(/broad complex tachy|ventricular tachy|\bvt\b/.test(hay)) flags.push('possible broad complex tachycardia');
     if(/complete heart block|high[- ]grade av block|third degree block/.test(hay)) flags.push('possible heart block');
     if(/hyperkala|peaked t wave/.test(hay)) flags.push('possible hyperkalaemia pattern');
     if(/marked brady|profound brady/.test(hay)) flags.push('possible profound bradycardia');
+    if(/internal lead-pattern inconsistency|conflicting st description/.test(hay)) flags.push('internal lead-pattern inconsistency');
     return flags;
   }
   function renderList(el, items, fallback){
@@ -6726,10 +6889,21 @@ initHrOverlay();
     const list = Array.isArray(items) && items.length ? items : [fallback];
     el.innerHTML = list.map(item => `<div class="ecg-assist-list-item">${escapeHtml(item)}</div>`).join('');
   }
+  function renderLeadReview(grid, review){
+    if(!grid) return;
+    const items = Array.isArray(review) && review.length ? review : LEAD_ORDER.map(lead => ({ lead, st:'unclear', t:'unclear', q:'unclear', note:'' }));
+    grid.innerHTML = items.map(entry => `
+      <div class="ecg-assist-lead-item">
+        <div class="ecg-assist-lead-name">${escapeHtml(entry.lead)}</div>
+        <div class="ecg-assist-lead-text">${escapeHtml(buildLeadDisplayText(entry))}</div>
+      </div>
+    `).join('');
+  }
   function render(){
     const preview=$('ecgAssistPreview');
     const results=$('ecgAssistResults');
     const grid=$('ecgAssistStructuredGrid');
+    const leadGrid=$('ecgAssistLeadGrid');
     const impression=$('ecgAssistImpression');
     const why=$('ecgAssistWhy');
     const limitations=$('ecgAssistLimitations');
@@ -6739,18 +6913,14 @@ initHrOverlay();
     const flag=$('ecgAssistFlag');
 
     if(preview){
-      if(state.dataUrl){
-        preview.src=state.dataUrl;
-        preview.classList.remove('hidden');
-      }else{
-        preview.src='';
-        preview.classList.add('hidden');
-      }
+      if(state.dataUrl){ preview.src=state.dataUrl; preview.classList.remove('hidden'); }
+      else { preview.src=''; preview.classList.add('hidden'); }
     }
 
     if(!state.result){
       if(results) results.classList.add('hidden');
       if(grid) grid.innerHTML='';
+      if(leadGrid) leadGrid.innerHTML='';
       if(impression) impression.textContent='';
       if(why) why.innerHTML='';
       if(limitations) limitations.textContent='';
@@ -6781,6 +6951,7 @@ initHrOverlay();
         `<div class="ecg-assist-grid-item"><div class="ecg-assist-grid-label">${escapeHtml(titleCase(label))}</div><div class="ecg-assist-grid-value">${escapeHtml(val)}</div></div>`
       ).join('');
     }
+    renderLeadReview(leadGrid, result.leadReview);
     if(impression) impression.textContent=result.impression||'No clear overall impression returned.';
 
     const flags=Array.from(new Set([...(result.redFlags||[]),...safetyFlags(result)]));
@@ -6833,29 +7004,12 @@ initHrOverlay();
         apiKey,
         model: getPreferredGeminiModel(),
         imageUrl:dataUrl,
-        schemaName:'ecg_assist',
         schema:ECG_ASSIST_SCHEMA,
-        maxTokens:900,
-        system:'Return only JSON matching the schema. Review only visible ECG features. Be specific: close estimated rate, rhythm, axis, PR/QRS/QTc if visible, ST/T-wave changes, conduction, ectopy, and image limitations. Never call the ECG normal if there is visible ST elevation, ST depression, reciprocal change, hyperacute T waves, or pathological Q waves. Use short factual phrases and UK spelling.',
-        userText:'Review this ECG image. Return JSON only. Keep strings short. whyInterpretation max 4 items, redFlags max 4 items, differentials max 3 items. Explain visible features supporting the impression, especially any inferior, anterior, lateral, or reciprocal ST-segment changes. For a normal-looking tracing, say so plainly.'
+        maxTokens:1300,
+        system:'Return only JSON matching the schema. Do a strict lead-by-lead ECG review first. leadReview must include each lead exactly once in this order: I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6. For each lead, set st to elevation, depression, none, or unclear; t to hyperacute, inversion, peaked, normal, or unclear; q to present, absent, or unclear; and note to a very short factual phrase or empty string. Use unclear rather than guessing. Never describe reciprocal ST depression in the same leads that you have called elevated. Be specific about rate, rhythm, PR, QRS, QTc, and visible image limitations. Use short factual phrases and UK spelling.',
+        userText:'Review this ECG image and return JSON only. Lead-by-lead analysis comes first, then the summary fields. Keep strings short. whyInterpretation max 5 items, redFlags max 4 items, differentials max 3 items. If a territory pattern is present, support it with the actual leads. If the image is limited, say why.'
       });
-      let result = normaliseResult(primaryRaw);
-      render();
-
-      setStatus('Running Gemini red-flag challenge…');
-      const challengeRaw = await callGeminiStructured({
-        apiKey,
-        model: getPreferredGeminiModel(),
-        imageUrl:dataUrl,
-        schemaName:'ecg_redflag_challenge',
-        schema:ECG_CHALLENGE_SCHEMA,
-        maxTokens:500,
-        system:'Return only JSON matching the schema. Challenge a reassuring first pass. Look specifically for inferior ST elevation in II, III, aVF; reciprocal depression in I or aVL; anterior or lateral ST elevation; hyperacute T waves; broad complex tachycardia; and high-grade block. If visible concerning ST elevation or reciprocal change is present, set highRisk true.',
-        userText:'Challenge this ECG image for red flags. Return JSON only. Keep strings short. summary one sentence. concerningFeatures max 4 short items. urgentDifferentials max 3 short items.'
-      });
-      const challenge = normaliseChallenge(challengeRaw);
-      result = mergeChallenge(result, challenge);
-      state.result = result;
+      state.result = normaliseResult(primaryRaw);
       render();
 
       const flags=Array.from(new Set([...(state.result.redFlags||[]),...safetyFlags(state.result)]));
@@ -6945,5 +7099,6 @@ initHrOverlay();
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind,{once:true});
   else bind();
 })();
+
 </script></body>
 </html>
