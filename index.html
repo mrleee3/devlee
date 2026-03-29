@@ -477,7 +477,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 }
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_316_release.html; source=hospital_at_home_v12_36_316_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_318_release.html; source=hospital_at_home_v12_36_318_source.zip -->
 <body>
 <div class="hidden" id="lockScreen">
 <div class="lock-title" id="lockTitle">Hospital at Home</div>
@@ -675,7 +675,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_316_release.html</div><div>Source: hospital_at_home_v12_36_316_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_318_release.html</div><div>Source: hospital_at_home_v12_36_318_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -5324,8 +5324,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_316_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_316_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_318_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_318_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6142,14 +6142,34 @@ function isBmOutsideTarget(value, target){
   if(!range) return false;
   return numeric < range.min || numeric > range.max;
 }
+function hasBMOverlayDetail(){
+  return !!(bmTimingValue() || bmTimingTimeValue() || bmTargetValue());
+}
+function getBMOverlayDetailSummary(){
+  const parts=[];
+  const timingLabel=getBMTimingTriggerLabel(bmTimingValue(), bmTimingTimeValue());
+  const target=bmTargetValue();
+  if(timingLabel) parts.push(timingLabel);
+  if(target) parts.push(`target ${target}`);
+  return parts.join(', ');
+}
 function syncBmTriggerDisplay(){
   const input=$('bm');
   const shell=$('bmFieldShell');
+  const trigger=$('openBmEditorBtn');
   if(!input || !shell) return;
   const value=bmFieldValue();
   const outside=isBmOutsideTarget(value, bmTargetValue());
+  const hasDetail=hasBMOverlayDetail();
+  const summary=getBMOverlayDetailSummary();
   if(document.activeElement!==input && input.value!==value) input.value=value;
   shell.classList.toggle('is-alert', outside);
+  shell.classList.toggle('has-detail', hasDetail);
+  if(trigger){
+    const label=value ? `Edit BM${hasDetail ? `, detail recorded: ${summary}` : ''}` : `Add BM${hasDetail ? `, detail recorded: ${summary}` : ''}`;
+    trigger.setAttribute('aria-label', label);
+    trigger.title=hasDetail ? `BM detail: ${summary}` : 'Add BM details';
+  }
 }
 window.syncBmTriggerDisplay=syncBmTriggerDisplay;
 
