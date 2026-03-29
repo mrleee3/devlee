@@ -565,6 +565,222 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
   box-shadow:none;
 }
 
+
+/* v12_36_336 apply add-medication overlay layout language to IV medications overlay */
+.iv-edit-modal{
+  position:fixed;
+  left:14px;
+  right:14px;
+  top:calc(var(--shared-header-offset,0px) + 16px);
+  bottom:calc(env(safe-area-inset-bottom) + var(--keyboard-extra-bottom,0px) + 14px);
+  padding:12px;
+  border-radius:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  overflow:hidden;
+  pointer-events:auto;
+  background:#fff;
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:0 20px 44px rgba(15,23,42,.12);
+}
+.iv-edit-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:0;
+  margin:0 0 12px 0;
+  min-height:34px;
+}
+.iv-edit-head h3{
+  display:block;
+  margin:0;
+  font-size:20px;
+  line-height:1.1;
+  font-weight:700;
+  letter-spacing:-.02em;
+  color:#111827;
+}
+#ivEditCloseBtn.iv-edit-close{
+  -webkit-appearance:none;
+  appearance:none;
+  width:34px;
+  height:34px;
+  min-width:34px;
+  margin:0;
+  padding:0;
+  border-radius:999px;
+  border:1px solid rgba(15,23,42,.08);
+  background:#f8fafc;
+  color:#475467;
+  font-size:18px;
+  font-weight:700;
+  line-height:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  box-shadow:none;
+}
+.iv-edit-body{
+  min-height:0;
+  overflow:auto;
+  padding-right:2px;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  pointer-events:auto;
+}
+.iv-edit-card{
+  background:transparent;
+  border:none;
+  border-radius:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.iv-edit-card #ivSection{
+  display:block !important;
+  padding:0;
+  background:transparent;
+}
+#ivEditOverlay #ivSection > label,
+#ivEditOverlay .iv-entry label{
+  display:block;
+  margin-top:10px;
+  margin-bottom:6px;
+  font-size:11px;
+  font-weight:800;
+  color:#667085;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  line-height:1.2;
+}
+#ivEditOverlay #ivSection > label:first-child,
+#ivEditOverlay .iv-entry label:first-child{
+  margin-top:0;
+}
+#ivEditOverlay #ivSection > input,
+#ivEditOverlay .iv-entry input{
+  margin-top:0;
+  padding:10px 12px;
+  min-height:42px;
+  background:#f8fafc;
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:none;
+  border-radius:14px;
+}
+#ivEditOverlay #ivSection > input:focus,
+#ivEditOverlay .iv-entry input:focus{
+  outline:none;
+  border-color:#0a84ff;
+  box-shadow:0 0 0 3px rgba(10,132,255,.14);
+}
+#ivEditOverlay .iv-entry{
+  border:none;
+  border-top:1px solid rgba(15,23,42,.08);
+  border-radius:0;
+  background:transparent;
+  margin-top:12px;
+  padding-top:12px;
+  overflow:visible;
+}
+#ivEditOverlay .iv-entry:first-child{
+  margin-top:12px;
+}
+#ivEditOverlay .drug-preset-row,
+#ivEditOverlay .dose-preset-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:6px 0 8px;
+}
+#ivEditOverlay .drug-btn,
+#ivEditOverlay .dose-btn{
+  min-height:39px;
+  padding:8px 10px;
+  font-size:12px;
+  font-weight:700;
+  border-radius:14px;
+  border:1px solid rgba(15,23,42,.08);
+  background:#f8fafc;
+  color:#111;
+  line-height:1.15;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+#ivEditOverlay .dose-btn.active,
+#ivEditOverlay .drug-btn.active{
+  background:#eaf4ff;
+  border-color:#0a84ff;
+  color:#0a3d91;
+  box-shadow:0 0 0 1px rgba(10,132,255,.12) inset;
+}
+#ivEditOverlay #ivBottomButtons{
+  margin-top:12px !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+#ivEditOverlay #ivBottomButtons button{
+  height:40px;
+  border-radius:12px;
+  font-weight:600;
+}
+#ivEditOverlay #addIVBtn,
+#ivEditOverlay #clearIVBtn{
+  background:#eef2f7;
+  color:#0f172a;
+  border:1px solid transparent;
+  box-shadow:none;
+}
+#ivEditOverlay #deleteIVBtn{
+  grid-column:1 / -1;
+}
+@media (max-height:760px){
+  .iv-edit-modal{
+    top:calc(var(--shared-header-offset,0px) + 14px);
+    bottom:calc(env(safe-area-inset-bottom) + var(--keyboard-extra-bottom,0px) + 10px);
+    padding:12px;
+  }
+  .iv-edit-head h3{
+    font-size:18px;
+  }
+  #ivEditOverlay #ivSection > label,
+  #ivEditOverlay .iv-entry label{
+    margin-top:8px;
+    margin-bottom:5px;
+    font-size:10.5px;
+  }
+  #ivEditOverlay #ivSection > input,
+  #ivEditOverlay .iv-entry input{
+    min-height:40px;
+    padding:9px 11px;
+  }
+  #ivEditOverlay .drug-preset-row,
+  #ivEditOverlay .dose-preset-row{
+    gap:6px;
+    margin:5px 0 7px;
+  }
+  #ivEditOverlay .drug-btn,
+  #ivEditOverlay .dose-btn{
+    min-height:37px;
+    padding:7px 9px;
+    font-size:11.5px;
+  }
+  #ivEditOverlay #ivBottomButtons{
+    margin-top:10px !important;
+    gap:8px;
+  }
+  #ivEditOverlay #ivBottomButtons button{
+    height:38px;
+    border-radius:12px;
+  }
+}
+
 </style></head>
 <body style="background:#0a84ff;">
 <div id="appSplash" aria-hidden="true">
@@ -785,7 +1001,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_335_release.html</div><div>Source: hospital_at_home_v12_36_335_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_336_release.html</div><div>Source: hospital_at_home_v12_36_336_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -5434,8 +5650,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_335_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_335_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_336_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_336_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
