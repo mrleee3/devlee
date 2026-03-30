@@ -1391,6 +1391,131 @@ body.keyboard-open #ivEditOverlay .iv-rebuilt-modal{
   }
 }
 
+/* v12_36_348 IV overlay stability pass + tasks/options overscroll fix */
+#tasks,
+#handover,
+#deletedPage,
+#eventLogPage{
+  position:fixed;
+  left:0;
+  right:0;
+  top:var(--app-header-height,88px);
+  bottom:83px;
+  z-index:1;
+  min-height:0;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;
+  touch-action:pan-y;
+  background:var(--bg);
+  padding:14px;
+  padding-top:14px;
+}
+
+.iv-rebuilt-modal{
+  top:calc(var(--shared-header-offset,0px) + 12px) !important;
+  bottom:calc(env(safe-area-inset-bottom) + var(--keyboard-extra-bottom,0px) + 8px) !important;
+  padding:12px 12px 8px !important;
+  overflow:hidden !important;
+}
+body.keyboard-open #ivEditOverlay .iv-rebuilt-modal{
+  top:calc(var(--shared-header-offset,0px) + 10px) !important;
+  bottom:calc(env(safe-area-inset-bottom) + var(--keyboard-extra-bottom,0px) + 6px) !important;
+  padding:12px 12px 8px !important;
+}
+.iv-rebuilt-modal .meds-overlay-body{
+  display:block !important;
+  min-height:0 !important;
+  overflow:auto !important;
+  overscroll-behavior:contain !important;
+  padding-right:2px !important;
+  padding-bottom:calc(env(safe-area-inset-bottom) + 14px) !important;
+  scroll-padding-bottom:calc(env(safe-area-inset-bottom) + 108px) !important;
+}
+.iv-rebuilt-card{
+  min-height:0 !important;
+  max-height:none !important;
+  border-radius:18px !important;
+  overflow:hidden !important;
+  box-shadow:0 18px 42px rgba(15,23,42,.12) !important;
+}
+.iv-overlay-entry-body{
+  display:block !important;
+  min-height:0 !important;
+  padding:0 !important;
+}
+.iv-overlay-entry-body #ivBottomButtons{
+  position:static !important;
+  bottom:auto !important;
+  z-index:auto !important;
+  margin-top:12px !important;
+  padding-top:0 !important;
+  padding-bottom:0 !important;
+  background:none !important;
+}
+#ivEditOverlay .iv-rebuilt-card .med-entry-summary{
+  font-size:20px !important;
+}
+#ivEditOverlay .iv-overlay-entry-body label,
+#ivEditOverlay .iv-overlay-entry-body .iv-info-label-btn{
+  font-size:12px !important;
+  margin-top:10px !important;
+  margin-bottom:6px !important;
+}
+#ivEditOverlay .iv-overlay-entry-body > input,
+#ivEditOverlay .iv-overlay-entry-body .iv-entry input{
+  min-height:42px !important;
+  padding:10px 12px !important;
+  font-size:16px !important;
+}
+#ivEditOverlay .iv-overlay-entry-body .drug-btn,
+#ivEditOverlay .iv-overlay-entry-body .dose-btn{
+  min-height:39px !important;
+  padding:8px 10px !important;
+  font-size:12px !important;
+}
+#ivEditOverlay .iv-overlay-entry-body #ivBottomButtons button,
+#ivEditOverlay .iv-overlay-entry-body #deleteIVBtn{
+  height:40px !important;
+}
+@media (max-height:760px){
+  .iv-rebuilt-modal{
+    top:calc(var(--shared-header-offset,0px) + 10px) !important;
+    bottom:calc(env(safe-area-inset-bottom) + var(--keyboard-extra-bottom,0px) + 6px) !important;
+    padding:10px 12px 6px !important;
+  }
+  body.keyboard-open #ivEditOverlay .iv-rebuilt-modal{
+    top:calc(var(--shared-header-offset,0px) + 8px) !important;
+    bottom:calc(env(safe-area-inset-bottom) + var(--keyboard-extra-bottom,0px) + 4px) !important;
+    padding:10px 12px 6px !important;
+  }
+  #ivEditOverlay .iv-rebuilt-card .med-entry-summary{
+    font-size:20px !important;
+  }
+  #ivEditOverlay .iv-overlay-entry-body label,
+  #ivEditOverlay .iv-overlay-entry-body .iv-info-label-btn{
+    font-size:12px !important;
+    margin-top:10px !important;
+    margin-bottom:6px !important;
+  }
+  #ivEditOverlay .iv-overlay-entry-body > input,
+  #ivEditOverlay .iv-overlay-entry-body .iv-entry input{
+    min-height:42px !important;
+    padding:10px 12px !important;
+    font-size:16px !important;
+  }
+  #ivEditOverlay .iv-overlay-entry-body .drug-btn,
+  #ivEditOverlay .iv-overlay-entry-body .dose-btn{
+    min-height:39px !important;
+    padding:8px 10px !important;
+    font-size:12px !important;
+  }
+  #ivEditOverlay .iv-overlay-entry-body #ivBottomButtons button,
+  #ivEditOverlay .iv-overlay-entry-body #deleteIVBtn{
+    height:40px !important;
+  }
+}
+
 </style></head>
 <body style="background:#0a84ff;">
 <div id="appSplash" aria-hidden="true">
@@ -1611,7 +1736,7 @@ body.keyboard-open #ivEditOverlay .iv-rebuilt-modal{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_347_release.html</div><div>Source: hospital_at_home_v12_36_347_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_348_release.html</div><div>Source: hospital_at_home_v12_36_348_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -6254,8 +6379,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_347_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_347_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_348_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_348_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
