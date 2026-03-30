@@ -1215,6 +1215,18 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
   margin-top:10px !important;
   padding-top:0 !important;
 }
+.iv-overlay-entry-body .iv-dual-row{
+  display:grid !important;
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr) !important;
+  gap:12px !important;
+  align-items:start !important;
+}
+.iv-overlay-entry-body .iv-dual-field{
+  min-width:0 !important;
+}
+.iv-overlay-entry-body .iv-dual-field input{
+  width:100% !important;
+}
 .iv-overlay-entry-body .drug-preset-row,
 .iv-overlay-entry-body .dose-preset-row{
   display:flex !important;
@@ -1298,6 +1310,9 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
   .iv-overlay-entry-body .iv-entry input{
     min-height:40px !important;
     padding:9px 11px !important;
+  }
+  .iv-overlay-entry-body .iv-dual-row{
+    gap:10px !important;
   }
   .iv-overlay-entry-body .drug-preset-row,
   .iv-overlay-entry-body .dose-preset-row{
@@ -1540,7 +1555,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_343_release.html</div><div>Source: hospital_at_home_v12_36_343_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_344_release.html</div><div>Source: hospital_at_home_v12_36_344_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -4288,7 +4303,7 @@ function toggleVisitSelection(id) {
 function renderIVDrugButtons(div){const input=div.querySelector(".iv-medication"); const current=(input?.value||"").trim(); div.querySelectorAll("[data-drug]").forEach(btn=>{const drug=btn.dataset.drug||''; btn.classList.toggle('active', current===drug); btn.onclick=()=>{const next=((input?.value||'').trim()===drug)?'':drug; if(input) input.value=next; renderIVDrugButtons(div); renderDoseButtons(div,next); calculateNews();};});}
 function renderDoseButtons(div, drug){const holder=div.querySelector(".dose-preset-row"); if(!holder) return; const selected=(div.querySelector(".iv-dose")?.value||'').trim(); const activeDrug=String(drug||'').trim(); holder.innerHTML=""; (DOSE_PRESETS[activeDrug]||[]).forEach(d=>{const btn=document.createElement("button"); btn.type="button"; btn.className="dose-btn"+(selected===d?' active':''); btn.textContent=d; btn.onclick=()=>{const input=div.querySelector(".iv-dose"); const next=((input?.value||'').trim()===d)?'':d; if(input) input.value=next; renderDoseButtons(div,(div.querySelector('.iv-medication')?.value||'').trim()); calculateNews();}; holder.appendChild(btn)})}
 function syncIVEntryButtonState(div){if(!div) return; renderIVDrugButtons(div); renderDoseButtons(div,(div.querySelector('.iv-medication')?.value||'').trim());}
-function createIVEntry(entry={medication:"",dose:"",serialExpiry:"",details:""}){const div=document.createElement("div"); div.className="iv-entry"; div.innerHTML=`<label>Medication</label><input class="iv-medication" type="text" value="${escapeHtml(entry.medication||"")}" enterkeyhint="next" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Start typing drug name"><div class="drug-preset-row">${DRUG_PRESETS.map(d=>`<button type="button" class="drug-btn" data-drug="${d}">${d}</button>`).join("")}</div><label>Dose</label><div class="dose-preset-row"></div><input class="iv-dose" type="text" value="${escapeHtml(entry.dose||"")}" enterkeyhint="next" placeholder="Dose"><label>Batch/expiry</label><input class="iv-serial-expiry" type="text" value="${escapeHtml(entry.serialExpiry||"")}" enterkeyhint="next" placeholder="Batch and expiry"><label class="iv-details-label">Details</label><input class="iv-details" type="text" value="${escapeHtml(entry.details||"")}" enterkeyhint="next" placeholder="Optional notes">`; $("ivContainer").appendChild(div); const medicationInput=div.querySelector('.iv-medication'); const doseInput=div.querySelector('.iv-dose'); div.querySelectorAll("input").forEach(inp=>{inp.addEventListener("input",()=>{if(inp===medicationInput){renderIVDrugButtons(div); renderDoseButtons(div,medicationInput.value||'');}else if(inp===doseInput){renderDoseButtons(div,medicationInput?.value||'');} calculateNews();}); inp.addEventListener("change",()=>{if(inp===medicationInput){renderIVDrugButtons(div); renderDoseButtons(div,medicationInput.value||'');}else if(inp===doseInput){renderDoseButtons(div,medicationInput?.value||'');} calculateNews();});}); syncIVEntryButtonState(div); updateIVDeleteButton(); attachIVOverlayFieldNav()}
+function createIVEntry(entry={medication:"",dose:"",serialExpiry:"",details:""}){const div=document.createElement("div"); div.className="iv-entry"; div.innerHTML=`<label>Medication</label><input class="iv-medication" type="text" value="${escapeHtml(entry.medication||"")}" enterkeyhint="next" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Start typing drug name"><div class="drug-preset-row">${DRUG_PRESETS.map(d=>`<button type="button" class="drug-btn" data-drug="${d}">${d}</button>`).join("")}</div><div class="iv-dual-row"><div class="iv-dual-field iv-dose-field"><label>Dose</label><input class="iv-dose" type="text" value="${escapeHtml(entry.dose||"")}" enterkeyhint="next" placeholder="Dose"></div><div class="iv-dual-field iv-batch-field"><label>Batch/expiry</label><input class="iv-serial-expiry" type="text" value="${escapeHtml(entry.serialExpiry||"")}" enterkeyhint="next" placeholder="Batch and expiry"></div></div><div class="dose-preset-row"></div><label class="iv-details-label">Details</label><input class="iv-details" type="text" value="${escapeHtml(entry.details||"")}" enterkeyhint="next" placeholder="Optional notes">`; $("ivContainer").appendChild(div); const medicationInput=div.querySelector('.iv-medication'); const doseInput=div.querySelector('.iv-dose'); div.querySelectorAll("input").forEach(inp=>{inp.addEventListener("input",()=>{if(inp===medicationInput){renderIVDrugButtons(div); renderDoseButtons(div,medicationInput.value||'');}else if(inp===doseInput){renderDoseButtons(div,medicationInput?.value||'');} calculateNews();}); inp.addEventListener("change",()=>{if(inp===medicationInput){renderIVDrugButtons(div); renderDoseButtons(div,medicationInput.value||'');}else if(inp===doseInput){renderDoseButtons(div,medicationInput?.value||'');} calculateNews();});}); syncIVEntryButtonState(div); updateIVDeleteButton(); attachIVOverlayFieldNav()}
 function getIVEntries(){return Array.from(document.querySelectorAll(".iv-entry")).map(div=>({medication:div.querySelector(".iv-medication").value,dose:div.querySelector(".iv-dose").value,serialExpiry:div.querySelector(".iv-serial-expiry").value,details:(div.querySelector('.iv-details')?.value||'')}))}
 function updateIVDeleteButton(){
   const count = document.querySelectorAll("#ivContainer .iv-entry").length;
@@ -6182,8 +6197,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_343_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_343_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_344_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_344_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
