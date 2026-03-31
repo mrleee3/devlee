@@ -208,7 +208,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:transparent;transition:background .1s}
 .pin-dot.filled{background:#fff;border-color:#fff}
 .pin-error{color:#fed7aa;font-size:14px;min-height:22px;margin-bottom:16px;text-align:center}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:280px;touch-action:manipulation}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:280px;touch-action:manipulation;margin-top:20px}
 .pin-key{width:100%;aspect-ratio:1;border-radius:16px;background:rgba(255,255,255,.18);color:#fff;font-size:28px;font-weight:300;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .pin-key:active{background:rgba(255,255,255,.35)}
 .pin-key.empty{background:transparent;pointer-events:none}
@@ -1942,7 +1942,7 @@ body.keyboard-open #ivEditOverlay .iv-overlay-entry-body #deleteIVBtn{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_371_release.html</div><div>Source: hospital_at_home_v12_36_371_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_373_release.html</div><div>Source: hospital_at_home_v12_36_373_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -6585,8 +6585,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_371_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_371_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_373_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_373_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
