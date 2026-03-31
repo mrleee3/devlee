@@ -208,7 +208,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:transparent;transition:background .1s}
 .pin-dot.filled{background:#fff;border-color:#fff}
 .pin-error{color:#fed7aa;font-size:14px;min-height:22px;margin-bottom:16px;text-align:center}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:280px;touch-action:manipulation}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:280px;touch-action:manipulation;margin-top:20px}
 .pin-key{width:100%;aspect-ratio:1;border-radius:16px;background:rgba(255,255,255,.18);color:#fff;font-size:28px;font-weight:300;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .pin-key:active{background:rgba(255,255,255,.35)}
 .pin-key.empty{background:transparent;pointer-events:none}
@@ -1942,7 +1942,7 @@ body.keyboard-open #ivEditOverlay .iv-overlay-entry-body #deleteIVBtn{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_371_release.html</div><div>Source: hospital_at_home_v12_36_371_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_376_release.html</div><div>Source: hospital_at_home_v12_36_376_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -6585,8 +6585,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_371_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_371_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_376_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_376_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6949,7 +6949,7 @@ function runAppSplashTitleTransition(){
   if(!splash || !lock || !splashTitle || !lockTitle || lock.classList.contains('hidden')) return false;
   const splashText=(splashTitle.textContent||'').trim();
   const lockText=(lockTitle.textContent||'').trim();
-  if(!splashText || splashText!==lockText) return false;
+  if(!splashText || !lockText) return false;
   const sourceRect=splashTitle.getBoundingClientRect();
   const targetRect=lockTitle.getBoundingClientRect();
   if(!sourceRect.width || !sourceRect.height || !targetRect.width || !targetRect.height) return false;
@@ -6957,6 +6957,7 @@ function runAppSplashTitleTransition(){
   appSplashDismissed=true;
   const sourceStyle=window.getComputedStyle(splashTitle);
   const targetStyle=window.getComputedStyle(lockTitle);
+  const sameText=splashText===lockText;
   const easing='cubic-bezier(.28,.92,.18,1)';
   const moveMs=780;
   const holdMs=140;
@@ -6966,6 +6967,45 @@ function runAppSplashTitleTransition(){
     const num=parseFloat(value);
     return Number.isFinite(num) ? `${num}px` : `${fallback}px`;
   };
+  const makeMeasureGhost=()=>{
+    const el=document.createElement('div');
+    el.className='app-splash-title-ghost';
+    el.textContent=splashText;
+    el.style.left='-10000px';
+    el.style.top='-10000px';
+    el.style.width='auto';
+    el.style.height='auto';
+    el.style.display='inline-flex';
+    el.style.alignItems='center';
+    el.style.justifyContent='center';
+    el.style.whiteSpace='nowrap';
+    el.style.fontFamily=targetStyle.fontFamily;
+    el.style.fontSize=targetStyle.fontSize;
+    el.style.fontWeight=targetStyle.fontWeight;
+    el.style.lineHeight=px(targetStyle.lineHeight, targetRect.height);
+    el.style.letterSpacing=targetStyle.letterSpacing;
+    el.style.textShadow=targetStyle.textShadow;
+    el.style.color=targetStyle.color;
+    el.style.opacity='0';
+    el.style.transition='none';
+    return el;
+  };
+  let finalLeft=targetRect.left;
+  let finalTop=targetRect.top;
+  let finalWidth=targetRect.width;
+  let finalHeight=targetRect.height;
+  if(!sameText){
+    const measureGhost=makeMeasureGhost();
+    document.body.appendChild(measureGhost);
+    const measuredRect=measureGhost.getBoundingClientRect();
+    if(measureGhost&&measureGhost.parentNode) measureGhost.remove();
+    if(measuredRect.width && measuredRect.height){
+      finalWidth=measuredRect.width;
+      finalHeight=measuredRect.height;
+      finalLeft=targetRect.left+((targetRect.width-finalWidth)/2);
+      finalTop=targetRect.top+((targetRect.height-finalHeight)/2);
+    }
+  }
   const ghost=document.createElement('div');
   ghost.className='app-splash-title-ghost';
   ghost.textContent=splashText;
@@ -7013,14 +7053,14 @@ function runAppSplashTitleTransition(){
         `letter-spacing ${moveMs}ms ${easing}`,
         'opacity 120ms linear'
       ].join(', ');
-      ghost.style.left=`${targetRect.left.toFixed(2)}px`;
-      ghost.style.top=`${targetRect.top.toFixed(2)}px`;
-      ghost.style.width=`${targetRect.width.toFixed(2)}px`;
-      ghost.style.height=`${targetRect.height.toFixed(2)}px`;
+      ghost.style.left=`${finalLeft.toFixed(2)}px`;
+      ghost.style.top=`${finalTop.toFixed(2)}px`;
+      ghost.style.width=`${finalWidth.toFixed(2)}px`;
+      ghost.style.height=`${finalHeight.toFixed(2)}px`;
       ghost.style.fontFamily=targetStyle.fontFamily;
       ghost.style.fontSize=targetStyle.fontSize;
       ghost.style.fontWeight=targetStyle.fontWeight;
-      ghost.style.lineHeight=px(targetStyle.lineHeight, targetRect.height);
+      ghost.style.lineHeight=px(targetStyle.lineHeight, finalHeight || targetRect.height);
       ghost.style.letterSpacing=targetStyle.letterSpacing;
       splash.style.pointerEvents='none';
       splash.style.transition='opacity .42s ease .34s,visibility 0s linear .76s';
@@ -7034,9 +7074,9 @@ function runAppSplashTitleTransition(){
     if(handoffDone) return;
     handoffDone=true;
     ghost.removeEventListener('transitionend',onTransitionEnd);
-    lockTitle.style.transition='none';
-    lockTitle.style.opacity='1';
+    lockTitle.style.transition=sameText ? 'none' : 'opacity 150ms ease';
     requestAnimationFrame(()=>{
+      lockTitle.style.opacity='1';
       setTimeout(()=>{
         ghost.style.transition='opacity 90ms linear';
         ghost.style.opacity='0';
