@@ -200,7 +200,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .linklike{background:none;padding:0;border:none;color:inherit;font:inherit;cursor:pointer;text-align:left}
 .med-entry{border:1px solid var(--line);border-radius:14px;background:#fff;margin-top:12px;overflow:hidden}.med-entry:first-child{margin-top:0}.med-entry-head{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f8fafc;padding:12px 14px}.med-entry-summary{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.med-entry-delete{background:none;color:#6b7280;padding:2px 4px;border-radius:8px;font-size:22px;line-height:1.1;min-width:auto}.med-entry-body{padding:0 14px 14px}.med-entry-body label{margin-top:12px}.med-entry-body .med-dose-row,.med-entry-body .med-frequency-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 10px}.med-entry-body .med-details-label{margin-top:14px}.med-dose-btn,.med-frequency-btn,.med-prn-btn{padding:8px 10px;font-size:13px;border-radius:10px;border:1px solid #d1d5db;background:#fff;color:#111}.med-dose-btn.active,.med-frequency-btn.active,.med-prn-btn.active{background:#0a84ff;color:#fff;border-color:#0a84ff}.done-green{background:var(--green)!important;color:#fff!important}.meds-inline-open #medsContainer{margin-top:12px}.log-item{padding:8px 0;border-top:1px solid var(--line)}.log-item:first-child{border-top:none}.restore-btn{margin-top:6px;padding:8px 10px;font-size:13px;border-radius:10px;background:#eef2f7}
 @keyframes pinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
-#lockScreen{position:fixed;inset:0;background:var(--blue);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;transition:opacity 0.15s ease}
+#lockScreen{position:fixed;inset:0;background:var(--blue);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top) + 40px) 20px 40px;transition:opacity 0.15s ease}
 #lockScreen.hidden{opacity:0;pointer-events:none;display:flex!important}
 .lock-title{color:#fff;font-size:22px;font-weight:760;line-height:1.05;letter-spacing:-.028em;text-shadow:0 1px 0 rgba(0,0,0,.08);margin-bottom:6px;text-align:center}
 .lock-subtitle{color:rgba(255,255,255,.8);font-size:14px;margin-bottom:32px;text-align:center}
@@ -1942,7 +1942,7 @@ body.keyboard-open #ivEditOverlay .iv-overlay-entry-body #deleteIVBtn{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_377_release.html</div><div>Source: hospital_at_home_v12_36_377_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_378_release.html</div><div>Source: hospital_at_home_v12_36_378_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -6597,8 +6597,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_377_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_377_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_378_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_378_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
