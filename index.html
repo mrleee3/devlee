@@ -202,7 +202,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @keyframes pinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 #lockScreen{position:fixed;inset:0;background:var(--blue);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;transition:opacity 0.15s ease}
 #lockScreen.hidden{opacity:0;pointer-events:none;display:flex!important}
-.lock-title{color:#fff;font-size:22px;font-weight:700;margin-bottom:6px;text-align:center}
+.lock-title{color:#fff;font-size:22px;font-weight:760;line-height:1.05;letter-spacing:-.028em;text-shadow:0 1px 0 rgba(0,0,0,.08);margin-bottom:6px;text-align:center}
 .lock-subtitle{color:rgba(255,255,255,.8);font-size:14px;margin-bottom:32px;text-align:center}
 .pin-dots{display:flex;gap:18px;margin-bottom:12px}
 .pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:transparent;transition:background .1s}
@@ -1942,7 +1942,7 @@ body.keyboard-open #ivEditOverlay .iv-overlay-entry-body #deleteIVBtn{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_370_release.html</div><div>Source: hospital_at_home_v12_36_370_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_371_release.html</div><div>Source: hospital_at_home_v12_36_371_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -6585,8 +6585,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_370_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_370_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_371_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_371_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -6957,29 +6957,37 @@ function runAppSplashTitleTransition(){
   appSplashDismissed=true;
   const sourceStyle=window.getComputedStyle(splashTitle);
   const targetStyle=window.getComputedStyle(lockTitle);
-  const srcFontSize=parseFloat(sourceStyle.fontSize)||31;
-  const tgtFontSize=parseFloat(targetStyle.fontSize)||22;
-  const dy=(targetRect.top-sourceRect.top).toFixed(2);
-  const scale=(tgtFontSize/srcFontSize).toFixed(4);
-  // Ghost uses SOURCE font+position — identical to splashTitle at creation.
-  // transform-origin:top center pins the top edge; scale shrinks downward.
-  // translateY(dy) moves the top edge to targetRect.top. End = lockTitle position.
+  const easing='cubic-bezier(.28,.92,.18,1)';
+  const moveMs=780;
+  const holdMs=140;
+  const totalMs=moveMs+holdMs+80;
+  const px=(value,fallback)=>{
+    if(typeof value==='string' && value.endsWith('px')) return value;
+    const num=parseFloat(value);
+    return Number.isFinite(num) ? `${num}px` : `${fallback}px`;
+  };
   const ghost=document.createElement('div');
   ghost.className='app-splash-title-ghost';
   ghost.textContent=splashText;
+  ghost.style.left=`${sourceRect.left.toFixed(2)}px`;
   ghost.style.top=`${sourceRect.top.toFixed(2)}px`;
+  ghost.style.width=`${sourceRect.width.toFixed(2)}px`;
+  ghost.style.height=`${sourceRect.height.toFixed(2)}px`;
+  ghost.style.display='flex';
+  ghost.style.alignItems='center';
+  ghost.style.justifyContent='center';
+  ghost.style.whiteSpace='nowrap';
+  ghost.style.fontFamily=sourceStyle.fontFamily;
   ghost.style.fontSize=sourceStyle.fontSize;
   ghost.style.fontWeight=sourceStyle.fontWeight;
-  ghost.style.lineHeight=sourceStyle.lineHeight;
+  ghost.style.lineHeight=px(sourceStyle.lineHeight, sourceRect.height);
   ghost.style.letterSpacing=sourceStyle.letterSpacing;
   ghost.style.textShadow=sourceStyle.textShadow;
   ghost.style.color=sourceStyle.color;
   ghost.style.opacity='0';
   ghost.style.transition='none';
   ghost.style.transform='none';
-  // Keep splash title visible until the ghost is committed, then hide it.
-  // Its intro animation uses fill-forwards, which can otherwise keep the
-  // original title painted at the source position during the move.
+  ghost.style.willChange='left,top,width,height,font-size,line-height,letter-spacing,opacity';
   lockTitle.style.transition='none';
   lockTitle.style.opacity='0';
   document.body.appendChild(ghost);
@@ -6987,21 +6995,33 @@ function runAppSplashTitleTransition(){
   lock.classList.add('splash-title-transition');
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>{
-      // Step 1: snap ghost visible at source position with no transition
-      // Ghost appears exactly where splashTitle was — zero offset, zero movement yet
       ghost.style.transition='none';
       ghost.style.opacity='1';
-      // Force style recalc so the opacity:1 is committed before we set the transform transition
       ghost.getBoundingClientRect();
       splashTitle.style.animation='none';
       splashTitle.style.webkitAnimation='none';
       splashTitle.style.transition='none';
       splashTitle.style.opacity='0';
       splashTitle.style.visibility='hidden';
-      // Step 2: now engage transform-only transition — ghost moves from source to target
-      // opacity is already 1 and stays 1, so no simultaneous fade-while-moving
-      ghost.style.transition='transform .78s cubic-bezier(.28,.92,.18,1)';
-      ghost.style.transform=`translateY(${dy}px) scale(${scale})`;
+      ghost.style.transition=[
+        `left ${moveMs}ms ${easing}`,
+        `top ${moveMs}ms ${easing}`,
+        `width ${moveMs}ms ${easing}`,
+        `height ${moveMs}ms ${easing}`,
+        `font-size ${moveMs}ms ${easing}`,
+        `line-height ${moveMs}ms ${easing}`,
+        `letter-spacing ${moveMs}ms ${easing}`,
+        'opacity 120ms linear'
+      ].join(', ');
+      ghost.style.left=`${targetRect.left.toFixed(2)}px`;
+      ghost.style.top=`${targetRect.top.toFixed(2)}px`;
+      ghost.style.width=`${targetRect.width.toFixed(2)}px`;
+      ghost.style.height=`${targetRect.height.toFixed(2)}px`;
+      ghost.style.fontFamily=targetStyle.fontFamily;
+      ghost.style.fontSize=targetStyle.fontSize;
+      ghost.style.fontWeight=targetStyle.fontWeight;
+      ghost.style.lineHeight=px(targetStyle.lineHeight, targetRect.height);
+      ghost.style.letterSpacing=targetStyle.letterSpacing;
       splash.style.pointerEvents='none';
       splash.style.transition='opacity .42s ease .34s,visibility 0s linear .76s';
       splash.style.opacity='0';
@@ -7014,26 +7034,28 @@ function runAppSplashTitleTransition(){
     if(handoffDone) return;
     handoffDone=true;
     ghost.removeEventListener('transitionend',onTransitionEnd);
-    // Atomic swap — ghost is visually at lockTitle position, snap-swap
-    ghost.style.transition='none';
-    ghost.style.opacity='0';
     lockTitle.style.transition='none';
     lockTitle.style.opacity='1';
     requestAnimationFrame(()=>{
-      if(ghost&&ghost.parentNode) ghost.remove();
-      removeAppSplashElement(splash,0);
-      // Delay class removal until pin UI transitions settle (~960ms total, handoff at ~720ms)
       setTimeout(()=>{
-        lock.classList.remove('splash-title-transition','splash-title-transition-ready');
-        lockTitle.style.transition='';
-        lockTitle.style.opacity='';
-        appSplashTransitioning=false;
-      },300);
+        ghost.style.transition='opacity 90ms linear';
+        ghost.style.opacity='0';
+        setTimeout(()=>{
+          if(ghost&&ghost.parentNode) ghost.remove();
+          removeAppSplashElement(splash,0);
+          setTimeout(()=>{
+            lock.classList.remove('splash-title-transition','splash-title-transition-ready');
+            lockTitle.style.transition='';
+            lockTitle.style.opacity='';
+            appSplashTransitioning=false;
+          },300);
+        },100);
+      },holdMs);
     });
   };
-  const onTransitionEnd=(e)=>{ if(e.propertyName==='transform') doHandoff(); };
+  const onTransitionEnd=(e)=>{ if(['left','top','width','font-size','letter-spacing','height','line-height'].includes(e.propertyName)) doHandoff(); };
   ghost.addEventListener('transitionend',onTransitionEnd);
-  setTimeout(doHandoff,980); // safety fallback
+  setTimeout(doHandoff,totalMs);
   return true;
 }
 function dismissAppSplash(){
