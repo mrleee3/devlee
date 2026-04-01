@@ -1722,6 +1722,7 @@ body.keyboard-open #ivEditOverlay .iv-overlay-entry-body #deleteIVBtn{
 #lockScreen.splash-title-transition.splash-title-transition-ready .lock-subtitle,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-dots,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-error,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-pad,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-biometric-row{opacity:1;transform:translateY(0)}
 @keyframes appSplashFadeOnly{from{opacity:0}to{opacity:1}}
 
+.deepgram-option-group{margin-top:12px;padding-top:12px;border-top:1px solid rgba(15,23,42,.06);display:flex;flex-direction:column;gap:8px}.deepgram-option-title{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}.deepgram-toggle{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px;font-weight:600;color:#111827;line-height:1.25}.deepgram-toggle input[type="checkbox"]{width:18px;height:18px;flex:0 0 auto;margin:0;accent-color:#0a84ff}
 </style></head>
 <body style="background:#0a84ff;">
 <div id="appSplash" aria-hidden="true">
@@ -1947,12 +1948,22 @@ body.keyboard-open #ivEditOverlay .iv-overlay-entry-body #deleteIVBtn{
 <div class="top-actions" style="margin-top:10px">
 <button class="primary fullwidth" id="saveDeepgramSettingsBtn">Save key</button>
 </div>
-<div class="tiny muted" id="deepgramSettingsStatus" style="margin-top:6px"></div>
+<div class="deepgram-option-group">
+<div class="deepgram-option-title">Formatting &amp; punctuation</div>
+<label class="deepgram-toggle"><input checked id="deepgramPunctuateToggle" type="checkbox"/><span>Punctuation + capitals</span></label>
+<label class="deepgram-toggle"><input checked id="deepgramSmartFormatToggle" type="checkbox"/><span>Smart formatting</span></label>
+<label class="deepgram-toggle"><input checked id="deepgramDictationToggle" type="checkbox"/><span>Spoken punctuation commands</span></label>
+<label class="deepgram-toggle"><input checked id="deepgramNumeralsToggle" type="checkbox"/><span>Numbers as digits</span></label>
+<label class="deepgram-toggle"><input checked id="deepgramMeasurementsToggle" type="checkbox"/><span>Units as abbreviations</span></label>
+</div>
+<div class="tiny muted" style="margin-top:8px">Voice commands: “comma”, “period”, “colon”, “question mark”, “exclamation mark”, “new line”, “new paragraph”.</div>
+<div class="tiny muted" style="margin-top:6px">This build now preserves dictated new lines and paragraphs in the note box.</div>
+<div class="tiny muted" id="deepgramSettingsStatus" style="margin-top:8px"></div>
 </div>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_377_release.html</div><div>Source: hospital_at_home_v12_36_377_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_378_release.html</div><div>Source: hospital_at_home_v12_36_378_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -2442,7 +2453,7 @@ function getGeminiModel(){
   return model;
 }
 function defaultDeepgramSettings(){
-  return {apiKey:'', model:'nova-3-medical', language:'en-GB'};
+  return {apiKey:'', model:'nova-3-medical', language:'en-GB', punctuate:true, smartFormat:true, dictation:true, numerals:true, measurements:true};
 }
 function loadDeepgramSettings(){
   try{return {...defaultDeepgramSettings(), ...(JSON.parse(localStorage.getItem(DEEPGRAM_SETTINGS_KEY)||"{}"))};}
@@ -2470,17 +2481,31 @@ function setDeepgramSettingsLocked(locked){
 }
 function saveDeepgramSettings(showMsg=true){
   const current=loadDeepgramSettings();
-  const settings={...current, apiKey:($("deepgramApiKeyInput")?.value||"").trim()};
+  const settings={
+    ...current,
+    apiKey:($("deepgramApiKeyInput")?.value||"").trim(),
+    punctuate:!!$("deepgramPunctuateToggle")?.checked,
+    smartFormat:!!$("deepgramSmartFormatToggle")?.checked,
+    dictation:!!$("deepgramDictationToggle")?.checked,
+    numerals:!!$("deepgramNumeralsToggle")?.checked,
+    measurements:!!$("deepgramMeasurementsToggle")?.checked
+  };
+  if(settings.dictation) settings.punctuate=true;
   localStorage.setItem(DEEPGRAM_SETTINGS_KEY, JSON.stringify(settings));
   if(showMsg){
     setDeepgramSettingsLocked(true);
-    setDeepgramStatus(settings.apiKey?'Deepgram key saved on this device.':'Deepgram key removed.');
+    setDeepgramStatus(settings.apiKey?'Deepgram settings saved on this device.':'Deepgram key removed.');
   }
   return settings;
 }
 function fillDeepgramSettingsUI(){
   const s=loadDeepgramSettings();
   if($("deepgramApiKeyInput")) $("deepgramApiKeyInput").value=s.apiKey||"";
+  if($("deepgramPunctuateToggle")) $("deepgramPunctuateToggle").checked=!!s.punctuate;
+  if($("deepgramSmartFormatToggle")) $("deepgramSmartFormatToggle").checked=!!s.smartFormat;
+  if($("deepgramDictationToggle")) $("deepgramDictationToggle").checked=!!s.dictation;
+  if($("deepgramNumeralsToggle")) $("deepgramNumeralsToggle").checked=!!s.numerals;
+  if($("deepgramMeasurementsToggle")) $("deepgramMeasurementsToggle").checked=!!s.measurements;
   setDeepgramSettingsLocked(!!(s.apiKey));
 }
 function getDeepgramApiKey(){
@@ -2491,6 +2516,21 @@ function getDeepgramModel(){
 }
 function getDeepgramLanguage(){
   return String(loadDeepgramSettings().language||'en-GB').trim() || 'en-GB';
+}
+function getDeepgramPunctuate(){
+  return !!loadDeepgramSettings().punctuate;
+}
+function getDeepgramSmartFormat(){
+  return !!loadDeepgramSettings().smartFormat;
+}
+function getDeepgramDictation(){
+  return !!loadDeepgramSettings().dictation;
+}
+function getDeepgramNumerals(){
+  return !!loadDeepgramSettings().numerals;
+}
+function getDeepgramMeasurements(){
+  return !!loadDeepgramSettings().measurements;
 }
 const BLISTER_SCAN_SCHEMA={type:'object',additionalProperties:false,required:['items'],properties:{items:{type:'array',items:{type:'object',additionalProperties:false,required:['medication','dose','frequency','confidence','notes'],properties:{medication:{type:'string'},dose:{type:'string'},frequency:{type:'string'},confidence:{type:'number'},notes:{type:'string'}}}}}};
 let blisterScanState={file:null,dataUrl:'',items:[],busy:false};
@@ -6646,8 +6686,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_377_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_377_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_378_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_378_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -9348,17 +9388,24 @@ window.HAH.modules.deepgramDictation = true;
     return '';
   }
 
-  function normaliseWhitespace(text){
-    return String(text || '').replace(/\s+/g, ' ').trim();
+  function normaliseTranscriptText(text){
+    return String(text || '')
+      .replace(/\r\n?/g, '\n')
+      .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/[ \t\f\v]{2,}/g, ' ')
+      .trim();
   }
 
   function joinTranscript(existing, chunk){
-    const next = String(chunk || '').trim();
+    const next = normaliseTranscriptText(chunk);
     if(!next) return String(existing || '');
     const prev = String(existing || '');
     if(!prev) return next;
+    if(/\n/.test(next.charAt(0))) return prev.replace(/[ \t]+$/,'') + next;
     if(/[\s\n\r]$/.test(prev)) return prev + next;
-    if(/[-–—\/]$/.test(prev)) return prev + next;
+    if(/[\-–—\/]$/.test(prev)) return prev + next;
+    if(/^[,.;:!?)]/.test(next)) return prev + next;
     return prev + ' ' + next;
   }
 
@@ -9469,15 +9516,22 @@ window.HAH.modules.deepgramDictation = true;
 
   function buildDeepgramUrl(){
     const params = new URLSearchParams();
-    params.set('model', typeof getDeepgramModel === 'function' ? getDeepgramModel() : 'nova-3-medical');
-    params.set('language', typeof getDeepgramLanguage === 'function' ? getDeepgramLanguage() : 'en-GB');
+    const model = typeof getDeepgramModel === 'function' ? getDeepgramModel() : 'nova-3-medical';
+    const language = typeof getDeepgramLanguage === 'function' ? getDeepgramLanguage() : 'en-GB';
+    const punctuate = typeof getDeepgramPunctuate === 'function' ? getDeepgramPunctuate() : true;
+    const smartFormat = typeof getDeepgramSmartFormat === 'function' ? getDeepgramSmartFormat() : true;
+    const dictation = typeof getDeepgramDictation === 'function' ? getDeepgramDictation() : true;
+    const numerals = typeof getDeepgramNumerals === 'function' ? getDeepgramNumerals() : true;
+    const measurements = typeof getDeepgramMeasurements === 'function' ? getDeepgramMeasurements() : true;
+    params.set('model', model);
+    params.set('language', language);
     params.set('interim_results', 'true');
     params.set('endpointing', '500');
-    params.set('punctuate', 'true');
-    params.set('dictation', 'true');
-    params.set('smart_format', 'true');
-    params.set('numerals', 'true');
-    params.set('measurements', 'true');
+    if(punctuate || dictation || smartFormat) params.set('punctuate', 'true');
+    if(dictation) params.set('dictation', 'true');
+    if(smartFormat) params.set('smart_format', 'true');
+    if(numerals) params.set('numerals', 'true');
+    if(measurements) params.set('measurements', 'true');
     params.set('mip_opt_out', 'true');
     DEEPGRAM_KEYTERMS.forEach(term => params.append('keyterm', term));
     return 'wss://api.deepgram.com/v1/listen?' + params.toString();
@@ -9485,7 +9539,7 @@ window.HAH.modules.deepgramDictation = true;
 
   function handleDeepgramResults(payload){
     if(!dictationState || payload.type !== 'Results') return;
-    const transcript = normaliseWhitespace(payload?.channel?.alternatives?.[0]?.transcript || '');
+    const transcript = normaliseTranscriptText(payload?.channel?.alternatives?.[0]?.transcript || '');
     if(payload.is_final){
       if(transcript) dictationState.committedText = joinTranscript(dictationState.committedText, transcript);
       dictationState.interimText = '';
@@ -9657,6 +9711,13 @@ window.HAH.modules.deepgramDictation = true;
     if(typeof fillDeepgramSettingsUI === 'function') fillDeepgramSettingsUI();
     const input = $id('deepgramApiKeyInput');
     const saveBtn = $id('saveDeepgramSettingsBtn');
+    const toggleIds = [
+      'deepgramPunctuateToggle',
+      'deepgramSmartFormatToggle',
+      'deepgramDictationToggle',
+      'deepgramNumeralsToggle',
+      'deepgramMeasurementsToggle'
+    ];
     if(input){
       input.addEventListener('keydown', event => {
         if(event.key !== 'Enter') return;
@@ -9664,6 +9725,18 @@ window.HAH.modules.deepgramDictation = true;
         saveBtn && saveBtn.click();
       });
     }
+    toggleIds.forEach(id => {
+      const el = $id(id);
+      if(!el) return;
+      el.addEventListener('change', () => {
+        if(id === 'deepgramDictationToggle' && el.checked){
+          const punctuateToggle = $id('deepgramPunctuateToggle');
+          if(punctuateToggle) punctuateToggle.checked = true;
+        }
+        if(typeof saveDeepgramSettings === 'function') saveDeepgramSettings(false);
+        if(typeof setDeepgramStatus === 'function') setDeepgramStatus('Deepgram dictation options updated.');
+      });
+    });
     if(saveBtn){
       saveBtn.addEventListener('click', () => {
         const btn = $id('saveDeepgramSettingsBtn');
