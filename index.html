@@ -1964,7 +1964,7 @@ body.keyboard-open #ivEditOverlay .iv-overlay-entry-body #deleteIVBtn{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_380_release.html</div><div>Source: hospital_at_home_v12_36_380_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_381_release.html</div><div>Source: hospital_at_home_v12_36_381_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -6729,8 +6729,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_380_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_380_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_381_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_381_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -9436,6 +9436,42 @@ window.HAH.modules.deepgramDictation = true;
     ['as required', 'PRN']
   ];
 
+
+  const DEEPGRAM_CANONICAL_ABBREVIATIONS = [
+    ['h f p e f', 'HFpEF'],
+    ['hfpef', 'HFpEF'],
+    ['h f r e f', 'HFrEF'],
+    ['hfref', 'HFrEF'],
+    ['a f', 'AF'],
+    ['af', 'AF'],
+    ['a k i', 'AKI'],
+    ['aki', 'AKI'],
+    ['c k d', 'CKD'],
+    ['ckd', 'CKD'],
+    ['c o p d', 'COPD'],
+    ['copd', 'COPD'],
+    ['u t i', 'UTI'],
+    ['uti', 'UTI'],
+    ['l r t i', 'LRTI'],
+    ['lrti', 'LRTI'],
+    ['u r t i', 'URTI'],
+    ['urti', 'URTI'],
+    ['c r p', 'CRP'],
+    ['crp', 'CRP'],
+    ['w c c', 'WCC'],
+    ['wcc', 'WCC'],
+    ['f b c', 'FBC'],
+    ['fbc', 'FBC'],
+    ['c x r', 'CXR'],
+    ['cxr', 'CXR'],
+    ['e c g', 'ECG'],
+    ['ecg', 'ECG'],
+    ['i v', 'IV'],
+    ['iv', 'IV'],
+    ['p r n', 'PRN'],
+    ['prn', 'PRN']
+  ];
+
   let dictationState = null;
 
 
@@ -9482,6 +9518,64 @@ window.HAH.modules.deepgramDictation = true;
       .replace(/\\n/g, '\n');
   }
 
+  function getLastMeaningfulLine(text){
+    const lines = String(text || '').replace(/\r\n?/g, '\n').split('\n');
+    for(let i = lines.length - 1; i >= 0; i -= 1){
+      const trimmed = lines[i].trim();
+      if(trimmed) return trimmed;
+    }
+    return '';
+  }
+
+  function getNextBulletNumber(text){
+    const lines = String(text || '').replace(/\r\n?/g, '\n').split('\n');
+    for(let i = lines.length - 1; i >= 0; i -= 1){
+      const match = lines[i].trim().match(/^(\d+)\.\s/);
+      if(match) return Number(match[1]) + 1;
+    }
+    return 1;
+  }
+
+  function shouldAutoNumberDictationLine(targetId, contextText){
+    if(targetId !== 'plan' && targetId !== 'forDischargeSummary') return false;
+    const normalised = String(contextText || '').replace(/\r\n?/g, '\n').replace(/[ \t]+$/g, '');
+    if(!normalised) return false;
+    if(/\n\n$/.test(normalised)) return false;
+    return /^\d+\.\s+/.test(getLastMeaningfulLine(normalised));
+  }
+
+  function applyDictationListFormatting(text, options = {}){
+    const targetId = String(options.targetId || '');
+    let contextText = String(options.contextText || '');
+    const decoded = decodeDictationMarkers(text);
+    if(!decoded) return '';
+    let out = '';
+    for(let i = 0; i < decoded.length; i += 1){
+      const char = decoded.charAt(i);
+      if(char !== '\n'){
+        out += char;
+        contextText += char;
+        continue;
+      }
+      const nextChar = decoded.charAt(i + 1);
+      if(nextChar === '\n'){
+        out += '\n\n';
+        contextText += '\n\n';
+        i += 1;
+        continue;
+      }
+      if(shouldAutoNumberDictationLine(targetId, contextText)){
+        const bullet = '\n' + getNextBulletNumber(contextText) + '. ';
+        out += bullet;
+        contextText += bullet;
+      } else {
+        out += '\n';
+        contextText += '\n';
+      }
+    }
+    return out;
+  }
+
   function applyClinicalAbbreviationReplacements(text){
     if(!(typeof getDeepgramClinicalAbbreviations === 'function' ? getDeepgramClinicalAbbreviations() : true)) return String(text || '');
     let next = String(text || '');
@@ -9489,12 +9583,16 @@ window.HAH.modules.deepgramDictation = true;
       const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
       next = next.replace(new RegExp('\\b' + escaped + '\\b', 'gi'), replacement);
     });
+    DEEPGRAM_CANONICAL_ABBREVIATIONS.forEach(([find, replacement]) => {
+      const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '[ \\t]+');
+      next = next.replace(new RegExp('\\b' + escaped + '\\b', 'gi'), replacement);
+    });
     return next;
   }
 
-  function normaliseTranscriptText(text){
+  function normaliseTranscriptText(text, options = {}){
     return applyClinicalAbbreviationReplacements(
-      decodeDictationMarkers(text)
+      applyDictationListFormatting(text, options)
         .replace(/\r\n?/g, '\n')
         .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
         .replace(/\n{3,}/g, '\n\n')
@@ -9652,7 +9750,10 @@ window.HAH.modules.deepgramDictation = true;
 
   function handleDeepgramResults(payload){
     if(!dictationState || payload.type !== 'Results') return;
-    const transcript = normaliseTranscriptText(payload?.channel?.alternatives?.[0]?.transcript || '');
+    const transcript = normaliseTranscriptText(payload?.channel?.alternatives?.[0]?.transcript || '', {
+      targetId: dictationState.targetId,
+      contextText: String(dictationState.baseBefore || '') + String(dictationState.committedText || '')
+    });
     if(payload.is_final){
       if(transcript) dictationState.committedText = joinTranscript(dictationState.committedText, transcript);
       dictationState.interimText = '';
