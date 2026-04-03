@@ -29,7 +29,7 @@ body{background:#0a84ff;color:#fff;}
 #appSplash .app-splash-title-block{display:flex;flex-direction:column;align-items:center;gap:7px;}
 #appSplash .app-splash-title{font-size:31px;font-weight:760;line-height:1.05;letter-spacing:-.028em;}
 #appSplash .app-splash-tagline{font-size:14px;font-weight:600;line-height:1.2;letter-spacing:.01em;color:rgba(255,255,255,.86);}
-#appSplash .app-splash-company{font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72);}#appSplash .app-splash-logo-button{appearance:none;-webkit-appearance:none;border:0;padding:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:30px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}#appSplash .app-splash-logo-button:active{transform:scale(.97);}#appSnapshotShield{position:fixed;inset:0;background:#0a84ff;z-index:9999;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .06s ease,visibility 0s linear .06s;}#appSnapshotShield.active{opacity:1;visibility:visible;transition:opacity .08s linear;}
+#appSplash .app-splash-company{font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72);}#appSplash .app-splash-logo-button{appearance:none;-webkit-appearance:none;border:0;padding:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:30px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}#appSplash .app-splash-logo-button:active{transform:scale(.97);}#appSnapshotShield{position:fixed;inset:0;background:#f2f2f7;z-index:9999;opacity:0;visibility:hidden;pointer-events:none;transition:none;}#appSnapshotShield.active{opacity:1;visibility:visible;transition:opacity .08s linear;}
 </style>
 
 <style>
@@ -8003,7 +8003,7 @@ function bindOnboardingUi(){
   if(window.visualViewport) window.visualViewport.addEventListener('resize', refreshTourLayout, {passive:true});
 }
 
-const APP_SNAPSHOT_SHIELD_REVEAL_DELAY_MS=60;
+const APP_SNAPSHOT_SHIELD_REVEAL_DELAY_MS=0;
 let appSnapshotShieldHideTimer=null;
 function getAppSnapshotShield(){
   return $("appSnapshotShield");
@@ -8069,6 +8069,8 @@ function fadeOutAndRemoveAppSplash(){
   splash.style.transition='opacity .26s ease, visibility 0s linear .26s';
   splash.style.opacity='0';
   splash.style.visibility='hidden';
+  document.body.style.background='';
+  document.documentElement.style.background='';
   removeAppSplashElement(splash, 280);
 }
 function runAppSplashTitleTransition(){
@@ -8087,6 +8089,8 @@ function runAppSplashTitleTransition(){
   if(!sourceRect.width || !sourceRect.height || !targetRect.width || !targetRect.height) return false;
   appSplashTransitioning=true;
   appSplashDismissed=true;
+  document.body.style.background='';
+  document.documentElement.style.background='';
   const sourceStyle=window.getComputedStyle(splashTitle);
   const targetStyle=window.getComputedStyle(lockTitle);
   const sameText=splashText===lockText;
