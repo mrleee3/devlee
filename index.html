@@ -29,7 +29,7 @@ body{background:#0a84ff;color:#fff;}
 #appSplash .app-splash-title-block{display:flex;flex-direction:column;align-items:center;gap:7px;}
 #appSplash .app-splash-title{font-size:31px;font-weight:760;line-height:1.05;letter-spacing:-.028em;}
 #appSplash .app-splash-tagline{font-size:14px;font-weight:600;line-height:1.2;letter-spacing:.01em;color:rgba(255,255,255,.86);}
-#appSplash .app-splash-company{font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72);}#appSplash .app-splash-logo-button{appearance:none;-webkit-appearance:none;border:0;padding:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:30px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}#appSplash .app-splash-logo-button:active{transform:scale(.97);}#appSnapshotShield{position:fixed;inset:0;background:#0a84ff;z-index:9999;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .16s ease,visibility 0s linear .16s;}#appSnapshotShield.active{opacity:1;visibility:visible;transition:opacity .08s linear;}
+#appSplash .app-splash-company{font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72);}#appSplash .app-splash-logo-button{appearance:none;-webkit-appearance:none;border:0;padding:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:30px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}#appSplash .app-splash-logo-button:active{transform:scale(.97);}#appSnapshotShield{position:fixed;inset:0;background:#0a84ff;z-index:9999;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .06s ease,visibility 0s linear .06s;}#appSnapshotShield.active{opacity:1;visibility:visible;transition:opacity .08s linear;}
 </style>
 
 <style>
@@ -2458,7 +2458,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_424_release.html</div><div>Source: hospital_at_home_v12_36_424_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_426_release.html</div><div>Source: hospital_at_home_v12_36_426_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -7241,8 +7241,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_424_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_424_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_426_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_426_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -8003,7 +8003,7 @@ function bindOnboardingUi(){
   if(window.visualViewport) window.visualViewport.addEventListener('resize', refreshTourLayout, {passive:true});
 }
 
-const APP_SNAPSHOT_SHIELD_REVEAL_DELAY_MS=180;
+const APP_SNAPSHOT_SHIELD_REVEAL_DELAY_MS=60;
 let appSnapshotShieldHideTimer=null;
 function getAppSnapshotShield(){
   return $("appSnapshotShield");
