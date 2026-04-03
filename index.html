@@ -151,7 +151,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .news-box{text-align:center;padding:16px;border-radius:16px;color:#fff;font-weight:700;margin-bottom:8px}
 .news-score{font-size:36px;line-height:1;margin-bottom:6px}.news-low{background:var(--green)} .news-medium{background:var(--amber)} .news-high{background:var(--red)}
 .result-box{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;min-height:160px;margin-bottom:8px;touch-action:pan-y}
-.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:30;transition:transform .18s ease,opacity .18s ease} body.keyboard-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none}
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:30;transition:transform .18s ease,opacity .18s ease} body.keyboard-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none} body.keyboard-open.dictation-active .nav{transform:none;opacity:1;pointer-events:auto}
 #patientDetail{padding-bottom:40px;}
 #patientDetail.detail-overlay-active{padding-bottom:40px;}
 .nav button{background:none;padding:8px 10px;font-size:13px;color:#374151}.nav .active{color:var(--blue);font-weight:800}
@@ -10704,6 +10704,14 @@ window.HAH.modules.deepgramDictation = true;
     "DNAR"
   ],
   [
+    "g p",
+    "GP"
+  ],
+  [
+    "gp",
+    "GP"
+  ],
+  [
     "re spect form",
     "ReSPECT form"
   ],
@@ -11433,14 +11441,16 @@ window.HAH.modules.deepgramDictation = true;
       .replace(/\b(\d+(?:\.\d+)?)\s+(?:milligram|milligrams)\b/gi, '$1mg')
       .replace(/\b(\d+(?:\.\d+)?)\s+(?:gram|grams)\b/gi, '$1g')
       .replace(/\b(\d+(?:\.\d+)?)\s+(?:microgram|micrograms)\b/gi, '$1mcg')
-      .replace(/\b(\d+(?:\.\d+)?)\s+(?:millilitre|millilitres|milliliter|milliliters)\b/gi, '$1mL')
+      .replace(/\b(\d+(?:\.\d+)?)\s+(?:mill|mills|mil|mils|millilitre|millilitres|milliliter|milliliters)\b/gi, '$1ml')
       .replace(/\b(\d+(?:\.\d+)?)\s+(?:unit|units)\b/gi, '$1units');
-    next = next.replace(/\b(\d+(?:\.\d+)?)\s+(mg|g|mcg|µg|kg|mL|ml|mmol|units)\b/g, (_m, value, unit) => {
-      const canonical = unit === 'ml' ? 'mL' : unit;
+    next = next.replace(/\b(\d+(?:\.\d+)?)\s+(mg|g|mcg|µg|kg|ml|mmol|units)\b/gi, (_m, value, unit) => {
+      const canonical = /^ml$/i.test(unit) ? 'ml' : unit;
       return `${value}${canonical}`;
     });
+    next = next.replace(/\bgp\b/gi, 'GP');
     return next;
   }
+
 
   function capitaliseNumberedBulletStarts(text){
     return String(text || '').replace(/(^|\n)(\d+\.\s+)([a-z])/g, (_match, prefix, bullet, first) => `${prefix}${bullet}${first.toUpperCase()}`);
@@ -11512,10 +11522,10 @@ window.HAH.modules.deepgramDictation = true;
     renderDictationPreview();
     const target = dictationState.target;
     const caret = target.value.length - String(dictationState.baseAfter || '').length;
-    try{ target.focus({ preventScroll: true }); }catch(_err){ try{ target.focus(); }catch(_err2){} }
     try{ target.setSelectionRange(caret, caret); }catch(_err){}
     try{ target.dispatchEvent(new Event('input', { bubbles: true })); }catch(_err){}
     try{ target.dispatchEvent(new Event('change', { bubbles: true })); }catch(_err){}
+    try{ if(typeof target.blur === 'function') target.blur(); }catch(_err){}
   }
 
   function setButtonState(button, mode){
@@ -11530,6 +11540,7 @@ window.HAH.modules.deepgramDictation = true;
   }
 
   function refreshDictationButtons(){
+    try{ document.body.classList.toggle('dictation-active', !!dictationState); }catch(_err){}
     document.querySelectorAll('[data-dictation-target]').forEach(button => {
       const targetId = button.getAttribute('data-dictation-target') || '';
       if(dictationState && dictationState.targetId === targetId){
@@ -11714,8 +11725,10 @@ window.HAH.modules.deepgramDictation = true;
       stream: null,
       mediaRecorder: null,
       keepAliveTimer: null,
-      finalizing: false
+      finalizing: false,
+      restoreFocus: (document.activeElement === target)
     };
+    try{ if(document.activeElement === target && typeof target.blur === 'function') target.blur(); }catch(_err){}
     refreshDictationButtons();
 
     try{
@@ -11789,7 +11802,7 @@ window.HAH.modules.deepgramDictation = true;
         }, 8000);
         if(typeof setDeepgramStatus === 'function') setDeepgramStatus('Deepgram dictation ready. Tap the mic again to stop.');
         renderDictationPreview();
-        try{ target.focus({ preventScroll: true }); }catch(_err){ try{ target.focus(); }catch(_err2){} }
+        try{ if(typeof target.blur === 'function') target.blur(); }catch(_err){}
       };
     }catch(err){
       const msg = explainStartError(err);
