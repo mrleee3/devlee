@@ -2025,6 +2025,18 @@ body.onboarding-open .nav{z-index:1}
   .add-patient-bottom-buttons button{height:38px}
 }
 
+.deepgram-commands-modal{bottom:max(10px,calc(env(safe-area-inset-bottom) + 10px))}
+.deepgram-commands-body{padding-right:2px}
+.deepgram-commands-card{gap:14px}
+.deepgram-commands-group{display:flex;flex-direction:column;gap:10px}
+.deepgram-command-row{display:grid;grid-template-columns:minmax(0,120px) minmax(0,1fr);gap:10px;align-items:start;padding:10px 0;border-top:1px solid rgba(15,23,42,.06)}
+.deepgram-command-row:first-of-type{border-top:none;padding-top:0}
+.deepgram-command-phrase{font-size:13px;font-weight:800;color:#111827;line-height:1.25}
+.deepgram-command-desc{font-size:13px;color:#475467;line-height:1.4}
+.deepgram-command-chips{display:flex;flex-wrap:wrap;gap:6px}
+body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none}
+@media (max-width:390px){.deepgram-command-row{grid-template-columns:1fr;gap:6px}}
+
 </style></head>
 <body style="background:#0a84ff;">
 <div id="appSnapshotShield" aria-hidden="true"></div>
@@ -2407,7 +2419,8 @@ body.onboarding-open .nav{z-index:1}
 <label class="deepgram-toggle"><input checked id="deepgramClinicalAbbrevToggle" type="checkbox"/><span>Common clinical abbreviations</span></label>
 </div>
 <div class="tiny muted" style="margin-top:8px">Voice commands: “comma”, “period”, “colon”, “question mark”, “exclamation mark”, “new line”, “new paragraph”.</div>
-<div class="tiny muted" style="margin-top:6px">Built-in handling now includes around 80 common medical terms, abbreviations and UK spellings, including U&amp;Es, LFTs, TFTs, HbA1c, HFpEF, HFrEF, AF, AKI, CKD, COPD, UTI, CAP, CXR, ECG, Sando-K and orthopnoea.</div>
+<div class="top-actions" style="margin-top:10px;margin-bottom:0"><button class="clinical-tools-btn" id="openDeepgramCommandsBtn" type="button">Commands</button></div>
+<div class="tiny muted" style="margin-top:6px">Built-in handling now includes around 80 common medical terms, abbreviations and UK spellings, including U&amp;Es, LFTs, TFTs, HbA1c, HFpEF, HFrEF, DNAR, AF, AKI, CKD, COPD, UTI, CAP, CXR, ECG, Sando-K, ceiling of care and orthopnoea.</div>
 <div class="deepgram-option-group">
 <div class="deepgram-option-title">Custom phrases</div>
 <label for="deepgramCustomPhrasesInput">One phrase per line. Use <span class="tiny muted">spoken = written</span></label>
@@ -2420,7 +2433,7 @@ body.onboarding-open .nav{z-index:1}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_420_release.html</div><div>Source: hospital_at_home_v12_36_420_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_421_release.html</div><div>Source: hospital_at_home_v12_36_421_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -2603,6 +2616,7 @@ body.onboarding-open .nav{z-index:1}
 
 
 
+<div aria-hidden="true" class="exam-findings-overlay hidden" id="deepgramCommandsOverlay"><div class="exam-findings-backdrop" id="deepgramCommandsBackdrop"></div><div aria-labelledby="deepgramCommandsTitle" aria-modal="true" class="exam-findings-modal deepgram-commands-modal" role="dialog"><div class="exam-findings-head"><h3 id="deepgramCommandsTitle">Dictation commands</h3><button aria-label="Close commands" class="exam-findings-close" id="deepgramCommandsCloseBtn" type="button">×</button></div><div class="exam-findings-body deepgram-commands-body"><div class="exam-findings-card deepgram-commands-card"><div class="deepgram-commands-group"><div class="exam-findings-group-title">Structured notes</div><div class="deepgram-command-row"><div class="deepgram-command-phrase">start issues</div><div class="deepgram-command-desc">Starts a numbered list with <strong>1.</strong></div></div><div class="deepgram-command-row"><div class="deepgram-command-phrase">next issue</div><div class="deepgram-command-desc">Blank line, then the next numbered item</div></div><div class="deepgram-command-row"><div class="deepgram-command-phrase">next point</div><div class="deepgram-command-desc">New line with <strong>- </strong></div></div><div class="deepgram-command-row"><div class="deepgram-command-phrase">new paragraph</div><div class="deepgram-command-desc">Blank line within the current section</div></div><div class="deepgram-command-row"><div class="deepgram-command-phrase">end issues</div><div class="deepgram-command-desc">Ends the numbered list</div></div></div><div class="deepgram-commands-group"><div class="exam-findings-group-title">Punctuation</div><div class="deepgram-command-chips"><span class="exam-findings-chip">comma</span><span class="exam-findings-chip">period</span><span class="exam-findings-chip">colon</span><span class="exam-findings-chip">question mark</span><span class="exam-findings-chip">exclamation mark</span><span class="exam-findings-chip">new line</span><span class="exam-findings-chip">new paragraph</span></div></div><div class="deepgram-commands-group"><div class="exam-findings-group-title">Custom phrases</div><div class="tiny muted">Use <strong>spoken = written</strong>, for example <strong>use and ease = U&amp;Es</strong> or <strong>heff peff = HFpEF</strong>.</div></div></div></div></div></div>
 <script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.core = true;
@@ -7202,8 +7216,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_420_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_420_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_421_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_421_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10421,7 +10435,9 @@ window.HAH.modules.deepgramDictation = true;
   "diabetes mellitus",
   "palliative care",
   "end of life care",
+  "ceiling of care",
   "DNACPR",
+  "DNAR",
   "ReSPECT",
   "intravenous",
   "subcutaneous",
@@ -10535,6 +10551,18 @@ window.HAH.modules.deepgramDictation = true;
     "DNACPR"
   ],
   [
+    "do not attempt resuscitation",
+    "DNAR"
+  ],
+  [
+    "do not resuscitate",
+    "DNAR"
+  ],
+  [
+    "sealing of care",
+    "ceiling of care"
+  ],
+  [
     "intravenous",
     "IV"
   ],
@@ -10641,6 +10669,14 @@ window.HAH.modules.deepgramDictation = true;
   [
     "dnacpr",
     "DNACPR"
+  ],
+  [
+    "d n a r",
+    "DNAR"
+  ],
+  [
+    "dnar",
+    "DNAR"
   ],
   [
     "re spect form",
@@ -11365,8 +11401,24 @@ window.HAH.modules.deepgramDictation = true;
     return next;
   }
 
+  function normaliseMedicationAndWeightUnits(text){
+    let next = String(text || '');
+    next = next
+      .replace(/\b(\d+(?:\.\d+)?)\s+(?:kilo|kilos|kilogram|kilograms)\b/gi, '$1kg')
+      .replace(/\b(\d+(?:\.\d+)?)\s+(?:milligram|milligrams)\b/gi, '$1mg')
+      .replace(/\b(\d+(?:\.\d+)?)\s+(?:gram|grams)\b/gi, '$1g')
+      .replace(/\b(\d+(?:\.\d+)?)\s+(?:microgram|micrograms)\b/gi, '$1mcg')
+      .replace(/\b(\d+(?:\.\d+)?)\s+(?:millilitre|millilitres|milliliter|milliliters)\b/gi, '$1mL')
+      .replace(/\b(\d+(?:\.\d+)?)\s+(?:unit|units)\b/gi, '$1units');
+    next = next.replace(/\b(\d+(?:\.\d+)?)\s+(mg|g|mcg|µg|kg|mL|ml|mmol|units)\b/g, (_m, value, unit) => {
+      const canonical = unit === 'ml' ? 'mL' : unit;
+      return `${value}${canonical}`;
+    });
+    return next;
+  }
+
   function applyClinicalTextPostProcessing(text){
-    return applyClinicalAbbreviationReplacements(String(text || ''))
+    return normaliseMedicationAndWeightUnits(applyClinicalAbbreviationReplacements(String(text || '')))
       .replace(/[ \t\f\v]{2,}/g, ' ')
       .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
       .replace(/\n{3,}/g, '\n\n')
@@ -11714,6 +11766,29 @@ window.HAH.modules.deepgramDictation = true;
     }
   }
 
+  function setDictationCommandsOverlay(open){
+    const overlay = $id('deepgramCommandsOverlay');
+    if(!overlay) return;
+    overlay.classList.toggle('hidden', !open);
+    overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+    document.body.classList.toggle('deepgram-commands-open', !!open);
+  }
+
+  function bindDeepgramCommandsOverlay(){
+    const openBtn = $id('openDeepgramCommandsBtn');
+    const overlay = $id('deepgramCommandsOverlay');
+    const closeBtn = $id('deepgramCommandsCloseBtn');
+    const backdrop = $id('deepgramCommandsBackdrop');
+    if(openBtn) openBtn.addEventListener('click', () => setDictationCommandsOverlay(true));
+    [closeBtn, backdrop].forEach(el => {
+      if(!el) return;
+      el.addEventListener('click', () => setDictationCommandsOverlay(false));
+    });
+    document.addEventListener('keydown', event => {
+      if(event.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) setDictationCommandsOverlay(false);
+    });
+  }
+
   function bindDeepgramSettingsUI(){
     if(typeof fillDeepgramSettingsUI === 'function') fillDeepgramSettingsUI();
     const input = $id('deepgramApiKeyInput');
@@ -11776,6 +11851,7 @@ window.HAH.modules.deepgramDictation = true;
 
   ready(() => {
     bindDeepgramSettingsUI();
+    bindDeepgramCommandsOverlay();
     bindDictationButtons();
     document.addEventListener('visibilitychange', () => {
       if(document.hidden && dictationState) stopDeepgramDictation({ silent: true });
