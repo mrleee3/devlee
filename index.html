@@ -2458,7 +2458,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_422_release.html</div><div>Source: hospital_at_home_v12_36_422_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_424_release.html</div><div>Source: hospital_at_home_v12_36_424_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -7241,8 +7241,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_422_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_422_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_424_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_424_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11151,6 +11151,133 @@ window.HAH.modules.deepgramDictation = true;
   ]
 ];
 
+  const MEDICATION_KEYTERM_LIMIT = 80;
+  const GENERAL_KEYTERM_LIMIT = 20;
+  const MEDICATION_TRADE_NAMES = [
+    'Abasaglar',
+    'Adcal-D3',
+    'Admelog',
+    'Calcichew D3',
+    'Fiasp',
+    'Gaviscon',
+    'Humalog',
+    'Humalog Mix25',
+    'Humalog Mix50',
+    'Humulin I',
+    'Insulatard',
+    'Lantus',
+    'Levemir',
+    'Movicol',
+    'NovoMix 30',
+    'NovoRapid',
+    'Sando-K',
+    'Toujeo',
+    'Tresiba',
+    'Tazocin'
+  ];
+  const MEDICATION_TRADE_NAME_SET = new Set(MEDICATION_TRADE_NAMES.map(name => String(name || '').trim().toLowerCase()).filter(Boolean));
+  const MEDICATION_NAME_ALIASES = [
+    ['co amoxiclav', 'Co-amoxiclav'],
+    ['co-amoxyclav', 'Co-amoxiclav'],
+    ['co amoxyclav', 'Co-amoxiclav'],
+    ['co codamol', 'Co-codamol'],
+    ['sand okay', 'Sando-K'],
+    ['send okay', 'Sando-K'],
+    ['sound okay', 'Sando-K'],
+    ['sando kay', 'Sando-K'],
+    ['tazocin', 'Piperacillin with tazobactam'],
+    ['tazocin.', 'Piperacillin with tazobactam'],
+    ['pip taz', 'Piperacillin with tazobactam'],
+    ['pip-taz', 'Piperacillin with tazobactam'],
+    ['frusemide', 'Frusemide'],
+    ['furosemide', 'Furosemide'],
+    ['glyceryl trinitrate', 'Glyceryl trinitrate spray']
+  ];
+
+  function isMedicationTradeName(name){
+    return MEDICATION_TRADE_NAME_SET.has(String(name || '').trim().toLowerCase());
+  }
+
+  function normaliseMedicationDisplayName(name){
+    const clean = String(name || '').trim();
+    if(!clean) return '';
+    if(isMedicationTradeName(clean)) return clean;
+    return clean.charAt(0).toLowerCase() + clean.slice(1);
+  }
+
+  function getMedicationDictionaryTerms(){
+    const groups = [
+      Array.isArray(DRUG_PRESETS) ? DRUG_PRESETS : [],
+      typeof MED_DOSE_PRESETS === 'object' && MED_DOSE_PRESETS ? Object.keys(MED_DOSE_PRESETS) : [],
+      Array.isArray(MEDICATION_OPTIONS) ? MEDICATION_OPTIONS : []
+    ];
+    const out = [];
+    const seen = new Set();
+    groups.forEach(group => {
+      group.forEach(term => {
+        const clean = String(term || '').trim();
+        if(!clean) return;
+        const key = clean.toLowerCase();
+        if(seen.has(key)) return;
+        seen.add(key);
+        out.push(clean);
+      });
+    });
+    return out;
+  }
+
+  function getMedicationKeytermTerms(limit = MEDICATION_KEYTERM_LIMIT){
+    return getMedicationDictionaryTerms().slice(0, Math.max(0, limit));
+  }
+
+  function getDeepgramKeytermTerms(){
+    const medicationTerms = getMedicationKeytermTerms();
+    const out = [];
+    const seen = new Set();
+    function push(term){
+      const clean = String(term || '').trim();
+      if(!clean) return;
+      const key = clean.toLowerCase();
+      if(seen.has(key)) return;
+      seen.add(key);
+      out.push(clean);
+    }
+    medicationTerms.forEach(push);
+    DEEPGRAM_KEYTERMS.forEach(term => {
+      if(out.length >= MEDICATION_KEYTERM_LIMIT + GENERAL_KEYTERM_LIMIT) return;
+      push(term);
+    });
+    return out;
+  }
+
+  function getMedicationReplacementRules(){
+    const rules = [];
+    MEDICATION_NAME_ALIASES.forEach(([find, canonical]) => {
+      rules.push([find, normaliseMedicationDisplayName(canonical)]);
+    });
+    getMedicationDictionaryTerms().forEach(term => {
+      rules.push([term, normaliseMedicationDisplayName(term)]);
+    });
+    return rules;
+  }
+
+  function getGenericMedicationSentenceStartTerms(){
+    const terms = [];
+    const seen = new Set();
+    function add(term){
+      const clean = String(term || '').trim();
+      if(!clean || isMedicationTradeName(clean)) return;
+      const display = normaliseMedicationDisplayName(clean);
+      const key = display.toLowerCase();
+      if(seen.has(key)) return;
+      seen.add(key);
+      terms.push(display);
+    }
+    getMedicationDictionaryTerms().forEach(add);
+    MEDICATION_NAME_ALIASES.forEach(([, canonical]) => add(canonical));
+    return terms.sort((a, b) => b.length - a.length);
+  }
+
   let dictationState = null;
 
 
@@ -11428,6 +11555,7 @@ window.HAH.modules.deepgramDictation = true;
       next = applyReplacementRules(next, DEEPGRAM_REPLACE_RULES);
       next = applyReplacementRules(next, DEEPGRAM_CANONICAL_ABBREVIATIONS);
       next = applyReplacementRules(next, DEEPGRAM_UK_ENGLISH_REPLACE_RULES);
+      next = applyReplacementRules(next, getMedicationReplacementRules());
     }
     const customRules = getCustomPhraseRules();
     next = applyReplacementRules(next, customRules);
@@ -11456,25 +11584,39 @@ window.HAH.modules.deepgramDictation = true;
     return String(text || '').replace(/(^|\n)(\d+\.\s+)([a-z])/g, (_match, prefix, bullet, first) => `${prefix}${bullet}${first.toUpperCase()}`);
   }
 
+  function capitaliseGenericMedicationSentenceStarts(text){
+    let next = String(text || '');
+    getGenericMedicationSentenceStartTerms().forEach(term => {
+      const capitalised = term.charAt(0).toUpperCase() + term.slice(1);
+      const pattern = new RegExp(`(^|[.!?]\s+|\n\n+|\n\d+\.\s+|\n-\s+)(${escapeRegExp(term)})(?=$|[^A-Za-z0-9])`, 'g');
+      next = next.replace(pattern, (_match, prefix) => `${prefix}${capitalised}`);
+    });
+    return next;
+  }
+
   function applyClinicalTextPostProcessing(text){
-    return capitaliseNumberedBulletStarts(
-      normaliseMedicationAndWeightUnits(applyClinicalAbbreviationReplacements(String(text || '')))
-        .replace(/[ \t\f\v]{2,}/g, ' ')
-        .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
-        .replace(/\n{3,}/g, '\n\n')
-        .replace(/[ \t\f\v]+$/g, '')
+    return capitaliseGenericMedicationSentenceStarts(
+      capitaliseNumberedBulletStarts(
+        normaliseMedicationAndWeightUnits(applyClinicalAbbreviationReplacements(String(text || '')))
+          .replace(/[ \t\f\v]{2,}/g, ' ')
+          .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
+          .replace(/\n{3,}/g, '\n\n')
+          .replace(/[ \t\f\v]+$/g, '')
+      )
     );
   }
 
   function normaliseTranscriptText(text, options = {}){
-    return capitaliseNumberedBulletStarts(
-      applyClinicalAbbreviationReplacements(
-        applyDictationListFormatting(text, options)
-          .replace(/\r\n?/g, '\n')
-          .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
-          .replace(/\n{3,}/g, '\n\n')
-          .replace(/[ \t\f\v]{2,}/g, ' ')
-          .replace(/^[ \t\f\v]+|[ \t\f\v]+$/g, '')
+    return capitaliseGenericMedicationSentenceStarts(
+      capitaliseNumberedBulletStarts(
+        applyClinicalAbbreviationReplacements(
+          applyDictationListFormatting(text, options)
+            .replace(/\r\n?/g, '\n')
+            .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
+            .replace(/\n{3,}/g, '\n\n')
+            .replace(/[ \t\f\v]{2,}/g, ' ')
+            .replace(/^[ \t\f\v]+|[ \t\f\v]+$/g, '')
+        )
       )
     );
   }
@@ -11621,7 +11763,7 @@ window.HAH.modules.deepgramDictation = true;
     if(numerals) params.set('numerals', 'true');
     if(measurements) params.set('measurements', 'true');
     params.set('mip_opt_out', 'true');
-    const hintedTerms = [...DEEPGRAM_KEYTERMS];
+    const hintedTerms = getDeepgramKeytermTerms();
     customRules.forEach(([spoken, written]) => {
       hintedTerms.push(spoken);
       if(written && /[A-Z&-]/.test(written)) hintedTerms.push(written);
