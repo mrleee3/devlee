@@ -2407,12 +2407,12 @@ body.onboarding-open .nav{z-index:1}
 <label class="deepgram-toggle"><input checked id="deepgramClinicalAbbrevToggle" type="checkbox"/><span>Common clinical abbreviations</span></label>
 </div>
 <div class="tiny muted" style="margin-top:8px">Voice commands: “comma”, “period”, “colon”, “question mark”, “exclamation mark”, “new line”, “new paragraph”.</div>
-<div class="tiny muted" style="margin-top:6px">Common clinical abbreviation replacements are available for phrases like U&amp;Es, LFTs, TFTs, HbA1c, HFpEF, HFrEF, AF, AKI, CKD, COPD, UTI, CAP, CXR, and ECG.</div>
+<div class="tiny muted" style="margin-top:6px">Built-in handling now includes around 80 common medical terms, abbreviations and UK spellings, including U&amp;Es, LFTs, TFTs, HbA1c, HFpEF, HFrEF, AF, AKI, CKD, COPD, UTI, CAP, CXR, ECG, Sando-K and orthopnoea.</div>
 <div class="deepgram-option-group">
 <div class="deepgram-option-title">Custom phrases</div>
 <label for="deepgramCustomPhrasesInput">One phrase per line. Use <span class="tiny muted">spoken = written</span></label>
 <textarea autocapitalize="off" autocorrect="off" id="deepgramCustomPhrasesInput" placeholder="u and es = U&amp;Es&#10;l f t s = LFTs&#10;h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
-<div class="tiny muted" style="margin-top:6px">These replacements are applied after dictation and are also sent to Deepgram as phrase hints.</div>
+<div class="tiny muted" style="margin-top:6px">These replacements are applied after dictation with more tolerant matching, and spoken forms are also sent to Deepgram as phrase hints.</div>
 </div>
 <div class="tiny muted" id="deepgramSettingsStatus" style="margin-top:8px"></div>
 </div>
@@ -2420,7 +2420,7 @@ body.onboarding-open .nav{z-index:1}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_419_release.html</div><div>Source: hospital_at_home_v12_36_419_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_420_release.html</div><div>Source: hospital_at_home_v12_36_420_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -7202,8 +7202,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_419_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_419_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_420_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_420_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10351,133 +10351,736 @@ window.HAH.modules.deepgramDictation = true;
 
 (function(){
   const DEEPGRAM_KEYTERMS = [
-    'SpO2',
-    'respiratory rate',
-    'heart rate',
-    'blood pressure',
-    'oxygen saturations',
-    'co-amoxiclav',
-    'ceftriaxone',
-    'ertapenem',
-    'metronidazole',
-    'furosemide',
-    'piperacillin tazobactam',
-    'apixaban',
-    'ramipril',
-    'amlodipine',
-    'bisoprolol',
-    'creatinine',
-    'eGFR',
-    'CRP',
-    'WCC',
-    'FBC',
-    'U&Es',
-    'LFTs',
-    'CXR',
-    'ECG',
-    'HFpEF',
-    'HFrEF',
-    'AF',
-    'AKI',
-    'CKD',
-    'COPD',
-    'UTI',
-    'CAP',
-    'LRTI',
-    'SOB',
-    'NEWS'
-  ];
+  "SpO2",
+  "respiratory rate",
+  "heart rate",
+  "blood pressure",
+  "oxygen saturations",
+  "co-amoxiclav",
+  "ceftriaxone",
+  "ertapenem",
+  "metronidazole",
+  "furosemide",
+  "piperacillin tazobactam",
+  "apixaban",
+  "ramipril",
+  "amlodipine",
+  "bisoprolol",
+  "spironolactone",
+  "prednisolone",
+  "doxycycline",
+  "amoxicillin",
+  "clarithromycin",
+  "Sando-K",
+  "creatinine",
+  "eGFR",
+  "CRP",
+  "WCC",
+  "FBC",
+  "U&Es",
+  "LFTs",
+  "TFTs",
+  "HbA1c",
+  "BNP",
+  "NT-proBNP",
+  "troponin",
+  "INR",
+  "CXR",
+  "ECG",
+  "echocardiogram",
+  "venous blood gas",
+  "arterial blood gas",
+  "HFpEF",
+  "HFrEF",
+  "AF",
+  "AKI",
+  "CKD",
+  "COPD",
+  "UTI",
+  "CAP",
+  "LRTI",
+  "URTI",
+  "SOB",
+  "orthopnoea",
+  "oedema",
+  "cellulitis",
+  "delirium",
+  "frailty",
+  "dehydration",
+  "hyperkalaemia",
+  "hypokalaemia",
+  "hyponatraemia",
+  "hypernatraemia",
+  "pneumonia",
+  "sepsis",
+  "venous thromboembolism",
+  "deep vein thrombosis",
+  "pulmonary embolism",
+  "heart failure",
+  "acute coronary syndrome",
+  "diabetes mellitus",
+  "palliative care",
+  "end of life care",
+  "DNACPR",
+  "ReSPECT",
+  "intravenous",
+  "subcutaneous",
+  "intramuscular",
+  "PRN",
+  "TDS",
+  "QDS",
+  "NEWS2",
+  "orthostatic hypotension"
+];
 
   const DEEPGRAM_REPLACE_RULES = [
-    ['heart failure with preserved ejection fraction', 'HFpEF'],
-    ['heart failure with reduced ejection fraction', 'HFrEF'],
-    ['atrial fibrillation', 'AF'],
-    ['acute kidney injury', 'AKI'],
-    ['chronic kidney disease', 'CKD'],
-    ['chronic obstructive pulmonary disease', 'COPD'],
-    ['community acquired pneumonia', 'CAP'],
-    ['lower respiratory tract infection', 'LRTI'],
-    ['upper respiratory tract infection', 'URTI'],
-    ['urinary tract infection', 'UTI'],
-    ['shortness of breath', 'SOB'],
-    ['full blood count', 'FBC'],
-    ['white cell count', 'WCC'],
-    ['c reactive protein', 'CRP'],
-    ['chest x ray', 'CXR'],
-    ['electrocardiogram', 'ECG'],
-    ['u and es', 'U&Es'],
-    ['u and e s', 'U&Es'],
-    ["u's and e's", 'U&Es'],
-    ["u’s and e’s", 'U&Es'],
-    ['use and ease', 'U&Es'],
-    ['l f t s', 'LFTs'],
-    ['lfts', 'LFTs'],
-    ['t f t s', 'TFTs'],
-    ['tfts', 'TFTs'],
-    ['h b a one c', 'HbA1c'],
-    ['h b a 1 c', 'HbA1c'],
-    ['hba1c', 'HbA1c'],
-    ['e g f r', 'eGFR'],
-    ['egfr', 'eGFR'],
-    ['s p o 2', 'SpO2'],
-    ['spo2', 'SpO2'],
-    ['intravenous', 'IV'],
-    ['as required', 'PRN']
-  ];
-
+  [
+    "heart failure with preserved ejection fraction",
+    "HFpEF"
+  ],
+  [
+    "heart failure with reduced ejection fraction",
+    "HFrEF"
+  ],
+  [
+    "left ventricular ejection fraction",
+    "LVEF"
+  ],
+  [
+    "ejection fraction",
+    "EF"
+  ],
+  [
+    "atrial fibrillation",
+    "AF"
+  ],
+  [
+    "acute kidney injury",
+    "AKI"
+  ],
+  [
+    "chronic kidney disease",
+    "CKD"
+  ],
+  [
+    "chronic obstructive pulmonary disease",
+    "COPD"
+  ],
+  [
+    "community acquired pneumonia",
+    "CAP"
+  ],
+  [
+    "lower respiratory tract infection",
+    "LRTI"
+  ],
+  [
+    "upper respiratory tract infection",
+    "URTI"
+  ],
+  [
+    "urinary tract infection",
+    "UTI"
+  ],
+  [
+    "shortness of breath",
+    "SOB"
+  ],
+  [
+    "full blood count",
+    "FBC"
+  ],
+  [
+    "white cell count",
+    "WCC"
+  ],
+  [
+    "c reactive protein",
+    "CRP"
+  ],
+  [
+    "chest x ray",
+    "CXR"
+  ],
+  [
+    "chest x-ray",
+    "CXR"
+  ],
+  [
+    "electrocardiogram",
+    "ECG"
+  ],
+  [
+    "venous blood gas",
+    "VBG"
+  ],
+  [
+    "arterial blood gas",
+    "ABG"
+  ],
+  [
+    "brain natriuretic peptide",
+    "BNP"
+  ],
+  [
+    "n t pro b n p",
+    "NT-proBNP"
+  ],
+  [
+    "nt pro bnp",
+    "NT-proBNP"
+  ],
+  [
+    "do not attempt cardiopulmonary resuscitation",
+    "DNACPR"
+  ],
+  [
+    "intravenous",
+    "IV"
+  ],
+  [
+    "subcutaneous",
+    "SC"
+  ],
+  [
+    "intramuscular",
+    "IM"
+  ],
+  [
+    "as required",
+    "PRN"
+  ],
+  [
+    "once daily",
+    "OD"
+  ],
+  [
+    "twice daily",
+    "BD"
+  ],
+  [
+    "three times daily",
+    "TDS"
+  ],
+  [
+    "four times daily",
+    "QDS"
+  ],
+  [
+    "u and es",
+    "U&Es"
+  ],
+  [
+    "u and e s",
+    "U&Es"
+  ],
+  [
+    "u's and e's",
+    "U&Es"
+  ],
+  [
+    "u’s and e’s",
+    "U&Es"
+  ],
+  [
+    "use and ease",
+    "U&Es"
+  ],
+  [
+    "l f t s",
+    "LFTs"
+  ],
+  [
+    "lfts",
+    "LFTs"
+  ],
+  [
+    "t f t s",
+    "TFTs"
+  ],
+  [
+    "tfts",
+    "TFTs"
+  ],
+  [
+    "h b a one c",
+    "HbA1c"
+  ],
+  [
+    "h b a 1 c",
+    "HbA1c"
+  ],
+  [
+    "hba1c",
+    "HbA1c"
+  ],
+  [
+    "e g f r",
+    "eGFR"
+  ],
+  [
+    "egfr",
+    "eGFR"
+  ],
+  [
+    "s p o 2",
+    "SpO2"
+  ],
+  [
+    "spo2",
+    "SpO2"
+  ],
+  [
+    "news 2",
+    "NEWS2"
+  ],
+  [
+    "n e w s 2",
+    "NEWS2"
+  ],
+  [
+    "dnacpr",
+    "DNACPR"
+  ],
+  [
+    "re spect form",
+    "ReSPECT form"
+  ],
+  [
+    "re spect",
+    "ReSPECT"
+  ]
+];
 
   const DEEPGRAM_CANONICAL_ABBREVIATIONS = [
-    ['h f p e f', 'HFpEF'],
-    ['hfpef', 'HFpEF'],
-    ['h f r e f', 'HFrEF'],
-    ['hfref', 'HFrEF'],
-    ['a f', 'AF'],
-    ['af', 'AF'],
-    ['a k i', 'AKI'],
-    ['aki', 'AKI'],
-    ['c k d', 'CKD'],
-    ['ckd', 'CKD'],
-    ['c o p d', 'COPD'],
-    ['copd', 'COPD'],
-    ['u t i', 'UTI'],
-    ['uti', 'UTI'],
-    ['l r t i', 'LRTI'],
-    ['lrti', 'LRTI'],
-    ['u r t i', 'URTI'],
-    ['urti', 'URTI'],
-    ['c r p', 'CRP'],
-    ['crp', 'CRP'],
-    ['w c c', 'WCC'],
-    ['wcc', 'WCC'],
-    ['f b c', 'FBC'],
-    ['fbc', 'FBC'],
-    ['u and es', 'U&Es'],
-    ['u n es', 'U&Es'],
-    ['u and e s', 'U&Es'],
-    ['u&es', 'U&Es'],
-    ["u's and e's", 'U&Es'],
-    ["u’s and e’s", 'U&Es'],
-    ['use and ease', 'U&Es'],
-    ['l f t s', 'LFTs'],
-    ['lfts', 'LFTs'],
-    ['t f t s', 'TFTs'],
-    ['tfts', 'TFTs'],
-    ['h b a one c', 'HbA1c'],
-    ['h b a 1 c', 'HbA1c'],
-    ['hba1c', 'HbA1c'],
-    ['e g f r', 'eGFR'],
-    ['egfr', 'eGFR'],
-    ['s p o 2', 'SpO2'],
-    ['spo2', 'SpO2'],
-    ['c x r', 'CXR'],
-    ['cxr', 'CXR'],
-    ['e c g', 'ECG'],
-    ['ecg', 'ECG'],
-    ['i v', 'IV'],
-    ['iv', 'IV'],
-    ['p r n', 'PRN'],
-    ['prn', 'PRN']
-  ];
+  [
+    "h f p e f",
+    "HFpEF"
+  ],
+  [
+    "hfpef",
+    "HFpEF"
+  ],
+  [
+    "heff peff",
+    "HFpEF"
+  ],
+  [
+    "h f r e f",
+    "HFrEF"
+  ],
+  [
+    "hfref",
+    "HFrEF"
+  ],
+  [
+    "heff reff",
+    "HFrEF"
+  ],
+  [
+    "a f",
+    "AF"
+  ],
+  [
+    "af",
+    "AF"
+  ],
+  [
+    "a k i",
+    "AKI"
+  ],
+  [
+    "aki",
+    "AKI"
+  ],
+  [
+    "c k d",
+    "CKD"
+  ],
+  [
+    "ckd",
+    "CKD"
+  ],
+  [
+    "c o p d",
+    "COPD"
+  ],
+  [
+    "copd",
+    "COPD"
+  ],
+  [
+    "u t i",
+    "UTI"
+  ],
+  [
+    "uti",
+    "UTI"
+  ],
+  [
+    "l r t i",
+    "LRTI"
+  ],
+  [
+    "lrti",
+    "LRTI"
+  ],
+  [
+    "u r t i",
+    "URTI"
+  ],
+  [
+    "urti",
+    "URTI"
+  ],
+  [
+    "c r p",
+    "CRP"
+  ],
+  [
+    "crp",
+    "CRP"
+  ],
+  [
+    "w c c",
+    "WCC"
+  ],
+  [
+    "wcc",
+    "WCC"
+  ],
+  [
+    "f b c",
+    "FBC"
+  ],
+  [
+    "fbc",
+    "FBC"
+  ],
+  [
+    "b n p",
+    "BNP"
+  ],
+  [
+    "bnp",
+    "BNP"
+  ],
+  [
+    "n t pro b n p",
+    "NT-proBNP"
+  ],
+  [
+    "nt pro bnp",
+    "NT-proBNP"
+  ],
+  [
+    "nt probnp",
+    "NT-proBNP"
+  ],
+  [
+    "u and es",
+    "U&Es"
+  ],
+  [
+    "u n es",
+    "U&Es"
+  ],
+  [
+    "u and e s",
+    "U&Es"
+  ],
+  [
+    "u&es",
+    "U&Es"
+  ],
+  [
+    "u's and e's",
+    "U&Es"
+  ],
+  [
+    "u’s and e’s",
+    "U&Es"
+  ],
+  [
+    "use and ease",
+    "U&Es"
+  ],
+  [
+    "l f t s",
+    "LFTs"
+  ],
+  [
+    "lfts",
+    "LFTs"
+  ],
+  [
+    "t f t s",
+    "TFTs"
+  ],
+  [
+    "tfts",
+    "TFTs"
+  ],
+  [
+    "h b a one c",
+    "HbA1c"
+  ],
+  [
+    "h b a 1 c",
+    "HbA1c"
+  ],
+  [
+    "hba1c",
+    "HbA1c"
+  ],
+  [
+    "e g f r",
+    "eGFR"
+  ],
+  [
+    "egfr",
+    "eGFR"
+  ],
+  [
+    "s p o 2",
+    "SpO2"
+  ],
+  [
+    "spo2",
+    "SpO2"
+  ],
+  [
+    "c x r",
+    "CXR"
+  ],
+  [
+    "cxr",
+    "CXR"
+  ],
+  [
+    "e c g",
+    "ECG"
+  ],
+  [
+    "ecg",
+    "ECG"
+  ],
+  [
+    "i v",
+    "IV"
+  ],
+  [
+    "iv",
+    "IV"
+  ],
+  [
+    "s c",
+    "SC"
+  ],
+  [
+    "sc",
+    "SC"
+  ],
+  [
+    "i m",
+    "IM"
+  ],
+  [
+    "im",
+    "IM"
+  ],
+  [
+    "p r n",
+    "PRN"
+  ],
+  [
+    "prn",
+    "PRN"
+  ],
+  [
+    "t d s",
+    "TDS"
+  ],
+  [
+    "tds",
+    "TDS"
+  ],
+  [
+    "q d s",
+    "QDS"
+  ],
+  [
+    "qds",
+    "QDS"
+  ],
+  [
+    "o d",
+    "OD"
+  ],
+  [
+    "od",
+    "OD"
+  ],
+  [
+    "b d",
+    "BD"
+  ],
+  [
+    "bd",
+    "BD"
+  ],
+  [
+    "news 2",
+    "NEWS2"
+  ],
+  [
+    "news2",
+    "NEWS2"
+  ],
+  [
+    "sando k",
+    "Sando-K"
+  ],
+  [
+    "sando-k",
+    "Sando-K"
+  ],
+  [
+    "sand okay",
+    "Sando-K"
+  ],
+  [
+    "send okay",
+    "Sando-K"
+  ],
+  [
+    "sound okay",
+    "Sando-K"
+  ],
+  [
+    "sando kay",
+    "Sando-K"
+  ]
+];
+
+  const DEEPGRAM_UK_ENGLISH_REPLACE_RULES = [
+  [
+    "orthopnea",
+    "orthopnoea"
+  ],
+  [
+    "orthopneic",
+    "orthopnoeic"
+  ],
+  [
+    "dyspnea",
+    "dyspnoea"
+  ],
+  [
+    "dyspneic",
+    "dyspnoeic"
+  ],
+  [
+    "edema",
+    "oedema"
+  ],
+  [
+    "edematous",
+    "oedematous"
+  ],
+  [
+    "ischemia",
+    "ischaemia"
+  ],
+  [
+    "ischemic",
+    "ischaemic"
+  ],
+  [
+    "anemia",
+    "anaemia"
+  ],
+  [
+    "anemic",
+    "anaemic"
+  ],
+  [
+    "hematuria",
+    "haematuria"
+  ],
+  [
+    "hematemesis",
+    "haematemesis"
+  ],
+  [
+    "hematoma",
+    "haematoma"
+  ],
+  [
+    "hemorrhage",
+    "haemorrhage"
+  ],
+  [
+    "hemorrhagic",
+    "haemorrhagic"
+  ],
+  [
+    "diarrhea",
+    "diarrhoea"
+  ],
+  [
+    "esophagus",
+    "oesophagus"
+  ],
+  [
+    "esophageal",
+    "oesophageal"
+  ],
+  [
+    "pediatric",
+    "paediatric"
+  ],
+  [
+    "pediatrics",
+    "paediatrics"
+  ],
+  [
+    "orthopedic",
+    "orthopaedic"
+  ],
+  [
+    "orthopedics",
+    "orthopaedics"
+  ],
+  [
+    "anesthesia",
+    "anaesthesia"
+  ],
+  [
+    "anesthetic",
+    "anaesthetic"
+  ],
+  [
+    "fecal",
+    "faecal"
+  ],
+  [
+    "feces",
+    "faeces"
+  ],
+  [
+    "leukocyte",
+    "leucocyte"
+  ],
+  [
+    "leukocytes",
+    "leucocytes"
+  ],
+  [
+    "hemoglobin",
+    "haemoglobin"
+  ]
+];
 
   let dictationState = null;
 
@@ -10659,6 +11262,51 @@ window.HAH.modules.deepgramDictation = true;
     return out;
   }
 
+
+  function escapeRegExp(text){
+    return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function buildLoosePhraseRegex(phrase){
+    const raw = String(phrase || '').trim().toLowerCase();
+    if(!raw) return null;
+    let pattern = '';
+    for(let i = 0; i < raw.length; i += 1){
+      const ch = raw.charAt(i);
+      if(/[a-z0-9]/.test(ch)){
+        pattern += escapeRegExp(ch);
+      } else if(/\s/.test(ch) || ch === '-' || ch === '–' || ch === '—' || ch === '_'){
+        pattern += '[\\s\\-–—_]+';
+      } else if(ch === '&'){
+        pattern += '(?:&|and)';
+      } else if(ch === "'" || ch === '’'){
+        pattern += "['’]?";
+      } else if(ch === '/'){
+        pattern += '[\\s\\/\\-–—_]+';
+      } else if(ch === '.'){
+        pattern += '\\.?';
+      } else {
+        pattern += escapeRegExp(ch);
+      }
+    }
+    return new RegExp(`(^|[^A-Za-z0-9])(${pattern})(?=$|[^A-Za-z0-9])`, 'gi');
+  }
+
+  function applyLoosePhraseReplacement(text, find, replacement){
+    const pattern = buildLoosePhraseRegex(find);
+    if(!pattern) return String(text || '');
+    return String(text || '').replace(pattern, (_match, prefix) => `${prefix}${replacement}`);
+  }
+
+  function applyReplacementRules(text, rules){
+    const ordered = (rules || []).slice().sort((a, b) => String(b && b[0] || '').length - String(a && a[0] || '').length);
+    let next = String(text || '');
+    ordered.forEach(([find, replacement]) => {
+      if(find && replacement) next = applyLoosePhraseReplacement(next, find, replacement);
+    });
+    return next;
+  }
+
   function parseCustomPhraseRules(raw){
     const seen = new Set();
     return String(raw || '')
@@ -10690,15 +11338,17 @@ window.HAH.modules.deepgramDictation = true;
     });
   }
 
-  function appendDeepgramKeyterms(params, terms){
+  function appendDeepgramKeyterms(params, terms, maxTerms = 100){
     const seen = new Set();
+    let count = 0;
     terms.forEach(term => {
       const clean = String(term || '').trim();
       if(!clean) return;
       const key = clean.toLowerCase();
-      if(seen.has(key)) return;
+      if(seen.has(key) || count >= maxTerms) return;
       seen.add(key);
       params.append('keyterm', clean);
+      count += 1;
     });
   }
 
@@ -10706,21 +11356,21 @@ window.HAH.modules.deepgramDictation = true;
     let next = String(text || '');
     const commonEnabled = typeof getDeepgramClinicalAbbreviations === 'function' ? getDeepgramClinicalAbbreviations() : true;
     if(commonEnabled){
-      DEEPGRAM_REPLACE_RULES.forEach(([find, replacement]) => {
-        const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
-        next = next.replace(new RegExp('\\b' + escaped + '\\b', 'gi'), replacement);
-      });
-      DEEPGRAM_CANONICAL_ABBREVIATIONS.forEach(([find, replacement]) => {
-        const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '[ \\t]+');
-        next = next.replace(new RegExp('\\b' + escaped + '\\b', 'gi'), replacement);
-      });
+      next = applyReplacementRules(next, DEEPGRAM_REPLACE_RULES);
+      next = applyReplacementRules(next, DEEPGRAM_CANONICAL_ABBREVIATIONS);
+      next = applyReplacementRules(next, DEEPGRAM_UK_ENGLISH_REPLACE_RULES);
     }
     const customRules = getCustomPhraseRules();
-    customRules.forEach(([find, replacement]) => {
-      const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
-      next = next.replace(new RegExp('\\b' + escaped + '\\b', 'gi'), replacement);
-    });
+    next = applyReplacementRules(next, customRules);
     return next;
+  }
+
+  function applyClinicalTextPostProcessing(text){
+    return applyClinicalAbbreviationReplacements(String(text || ''))
+      .replace(/[ \t\f\v]{2,}/g, ' ')
+      .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/[ \t\f\v]+$/g, '');
   }
 
   function normaliseTranscriptText(text, options = {}){
@@ -10748,7 +11398,7 @@ window.HAH.modules.deepgramDictation = true;
 
   function composeInsertionText(){
     if(!dictationState) return '';
-    return joinTranscript(dictationState.committedText, dictationState.interimText);
+    return applyClinicalTextPostProcessing(joinTranscript(dictationState.committedText, dictationState.interimText));
   }
 
   function composeTargetValue(){
@@ -10877,9 +11527,10 @@ window.HAH.modules.deepgramDictation = true;
     params.set('mip_opt_out', 'true');
     const hintedTerms = [...DEEPGRAM_KEYTERMS];
     customRules.forEach(([spoken, written]) => {
-      hintedTerms.push(spoken, written);
+      hintedTerms.push(spoken);
+      if(written && /[A-Z&-]/.test(written)) hintedTerms.push(written);
     });
-    appendDeepgramKeyterms(params, hintedTerms);
+    appendDeepgramKeyterms(params, hintedTerms, 100);
     if(clinicalAbbreviations){
       appendDeepgramReplaceRules(params, DEEPGRAM_REPLACE_RULES);
     }
