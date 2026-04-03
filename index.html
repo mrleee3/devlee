@@ -2150,7 +2150,7 @@ body.onboarding-open .nav{z-index:1}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_412_release.html</div><div>Source: hospital_at_home_v12_36_412_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_413_release.html</div><div>Source: hospital_at_home_v12_36_413_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -6927,8 +6927,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_412_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_412_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_413_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_413_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10288,18 +10288,26 @@ window.HAH.modules.deepgramDictation = true;
     return next;
   }
 
+  function shouldApplyDictationCommandFallback(){
+    const dictation = typeof getDeepgramDictation === 'function' ? getDeepgramDictation() : true;
+    const punctuate = typeof getDeepgramPunctuate === 'function' ? getDeepgramPunctuate() : true;
+    const smartFormat = typeof getDeepgramSmartFormat === 'function' ? getDeepgramSmartFormat() : true;
+    return !!(dictation || punctuate || smartFormat);
+  }
+
   function applyDictationPunctuationFallback(text){
-    if(!(typeof getDeepgramDictation === 'function' ? getDeepgramDictation() : true)) return String(text || '');
+    if(!shouldApplyDictationCommandFallback()) return String(text || '');
     let next = String(text || '');
     const replacements = [
-      [/\bfull[ \t]+stop\b/gi, '.'],
+      [/\bfull[ \t-]*stop\b/gi, '.'],
       [/\bperiod\b/gi, '.'],
       [/\bcomma\b/gi, ','],
       [/\bsemicolon\b/gi, ';'],
       [/\bcolon\b/gi, ':'],
-      [/\bquestion[ \t]+mark\b/gi, '?'],
-      [/\bexclamation[ \t]+mark\b/gi, '!'],
-      [/\bexclamation[ \t]+point\b/gi, '!']
+      [/\bquestion[ \t-]*mark\b/gi, '?'],
+      [/\bquestionmark\b/gi, '?'],
+      [/\bexclamation[ \t-]*(?:mark|point)\b/gi, '!'],
+      [/\bexclamation(?:mark|point)\b/gi, '!']
     ];
     replacements.forEach(([pattern, replacement]) => {
       next = next.replace(pattern, replacement);
@@ -10307,26 +10315,65 @@ window.HAH.modules.deepgramDictation = true;
     return next
       .replace(/[ \t]+([,.;:!?])/g, '$1')
       .replace(/([,.;:!?])(?![\s\n]|$)/g, '$1 ')
-      .replace(/([.!?])[ \t]+([a-z])/g, (_m, punct, letter) => punct + ' ' + letter.toUpperCase());
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n[ \t]+/g, '\n');
+  }
+
+  function shouldCapitalizeFromContext(contextText){
+    const context = String(contextText || '').replace(/\r\n?/g, '\n');
+    if(!context) return true;
+    if(/[.!?]["')\]]*[ \t]*$/.test(context)) return true;
+    if(/\n[ \t]*$/.test(context)) return true;
+    return false;
+  }
+
+  function applySentenceCapitalization(text, options = {}){
+    const next = String(text || '');
+    if(!next) return next;
+    let capitalizeNext = shouldCapitalizeFromContext(options.contextText);
+    let out = '';
+    for(let i = 0; i < next.length; i += 1){
+      let char = next.charAt(i);
+      if(capitalizeNext && /[a-z]/.test(char)){
+        char = char.toUpperCase();
+        capitalizeNext = false;
+      }
+      out += char;
+      if(/[.!?]/.test(char)){
+        capitalizeNext = true;
+        continue;
+      }
+      if(char === '\n'){
+        capitalizeNext = true;
+        continue;
+      }
+      if(/[A-Za-z]/.test(char)){
+        capitalizeNext = false;
+      }
+    }
+    return out;
   }
 
   function normaliseTranscriptText(text, options = {}){
     return applyClinicalAbbreviationReplacements(
-      applyDictationPunctuationFallback(
-        applyDictationListFormatting(text, options)
-          .replace(/\r\n?/g, '\n')
-          .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
-          .replace(/\n{3,}/g, '\n\n')
-          .replace(/[ \t\f\v]{2,}/g, ' ')
-          .replace(/^[ \t\f\v]+|[ \t\f\v]+$/g, '')
+      applySentenceCapitalization(
+        applyDictationPunctuationFallback(
+          applyDictationListFormatting(text, options)
+            .replace(/\r\n?/g, '\n')
+            .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
+            .replace(/\n{3,}/g, '\n\n')
+            .replace(/[ \t\f\v]{2,}/g, ' ')
+            .replace(/^[ \t\f\v]+|[ \t\f\v]+$/g, '')
+        ),
+        options
       )
     );
   }
 
   function joinTranscript(existing, chunk){
-    const next = normaliseTranscriptText(chunk);
-    if(!next) return String(existing || '');
     const prev = String(existing || '');
+    const next = normaliseTranscriptText(chunk, { contextText: prev });
+    if(!next) return String(existing || '');
     if(!prev) return next;
     if(/\n/.test(next.charAt(0))) return prev.replace(/[ \t]+$/,'') + next;
     if(/[\s\n\r]$/.test(prev)) return prev + next;
