@@ -1811,260 +1811,218 @@ body.onboarding-open .nav{z-index:1}
 @media (max-width:640px){.onboarding-figure-wrap.tour-step{padding:18px 16px 16px 16px}.onboarding-figure-wrap.tour-step .onboarding-guide-image{max-width:210px;max-height:210px;margin-left:118px}.onboarding-speech-bubble{left:50%;transform:translateX(-50%);max-width:min(300px,86%);text-align:center}.onboarding-speech-bubble::before{left:50%;transform:translateX(-50%)}.onboarding-speech-bubble::after{left:50%;transform:translateX(-50%)}.onboarding-figure-wrap.tour-step .onboarding-speech-bubble{left:18px;top:50px;transform:rotate(-2deg);max-width:190px;text-align:center}.onboarding-figure-wrap.tour-step .onboarding-speech-bubble::before{left:calc(100% - 30px);top:58%;transform:none}.onboarding-figure-wrap.tour-step .onboarding-speech-bubble::after{left:calc(100% - 34px);top:calc(58% + 2px);transform:none}}
 
 
-/* v12_36_412 final IV overlay parity pass from source base */
-#ivEditOverlay .iv-rebuilt-modal{
-  top:calc(var(--shared-header-offset,0px) + 16px) !important;
-  bottom:calc(env(safe-area-inset-bottom) + var(--keyboard-extra-bottom,0px) + 14px) !important;
-  padding:12px !important;
-  border-radius:20px !important;
+/* v12_36_413 add patient overlay restyled to match add medications overlay language */
+.add-patient-backdrop{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  top:var(--shared-header-offset,0px);
+  background:rgba(15,23,42,.14);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
 }
-#ivEditOverlay .iv-rebuilt-modal .meds-overlay-body{
-  min-height:0 !important;
-  overflow:auto !important;
-  padding-right:2px !important;
-  padding-bottom:0 !important;
-  scroll-padding-bottom:0 !important;
+.add-patient-modal{
+  position:fixed;
+  left:14px;
+  right:14px;
+  top:var(--add-patient-modal-top,calc(var(--shared-header-offset,0px) + 16px));
+  max-height:var(--add-patient-modal-max-height,calc(100dvh - var(--shared-header-offset,0px) - 112px));
+  padding:12px;
+  margin:0;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  border-radius:20px;
+  overflow:hidden;
 }
-#ivEditOverlay .iv-rebuilt-card{
-  padding:0 !important;
-  overflow:hidden !important;
-  background:#fff !important;
-  border:1px solid rgba(15,23,42,.08) !important;
-  border-radius:18px !important;
-  display:flex !important;
-  flex-direction:column !important;
-  gap:0 !important;
+.add-patient-modal-shell{
+  padding:12px;
+  overflow:hidden;
+  background:#fff;
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:18px;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  box-shadow:0 20px 44px rgba(15,23,42,.12);
 }
-#ivEditOverlay .iv-rebuilt-card .med-entry-head{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:space-between !important;
-  gap:12px !important;
-  background:#fff !important;
-  padding:0 0 12px !important;
-  border-bottom:none !important;
+.add-patient-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:0;
+  margin:0 0 12px 0;
+  min-height:34px;
+  background:#fff;
 }
-#ivEditOverlay .iv-rebuilt-card .med-entry-summary{
-  font-size:20px !important;
-  font-weight:700 !important;
-  line-height:1.1 !important;
-  color:#111827 !important;
+.add-patient-title{
+  display:block;
+  margin:0;
+  font-size:20px;
+  line-height:1.1;
+  font-weight:700;
+  letter-spacing:-.02em;
+  color:#111827;
 }
-#ivEditOverlay .iv-edit-close,
-#ivEditOverlay .meds-overlay-close-inline{
-  width:34px !important;
-  height:34px !important;
-  min-width:34px !important;
-  border-radius:999px !important;
-  border:1px solid rgba(15,23,42,.08) !important;
-  background:#f8fafc !important;
-  color:#475467 !important;
-  padding:0 !important;
-  font-size:18px !important;
-  font-weight:700 !important;
-  line-height:1 !important;
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  flex:0 0 auto !important;
+#addPatientCloseBtn.add-patient-close-inline{
+  -webkit-appearance:none;
+  appearance:none;
+  width:34px;
+  height:34px;
+  min-width:34px;
+  margin:0;
+  padding:0;
+  border-radius:999px;
+  border:1px solid rgba(15,23,42,.08);
+  background:#f8fafc;
+  color:#475467;
+  font-size:18px;
+  font-weight:700;
+  line-height:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  box-shadow:none;
 }
-#ivEditOverlay .iv-overlay-entry-body{
-  display:block !important;
-  min-height:0 !important;
-  overflow:visible !important;
-  padding:0 !important;
-  background:#fff !important;
+.add-patient-entry-body{
+  min-height:0;
+  overflow:auto;
+  padding:0 2px 0 0;
+  background:#fff;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
 }
-#ivEditOverlay .iv-overlay-entry-body > input,
-#ivEditOverlay .iv-overlay-entry-body .iv-entry input{
-  margin-top:0 !important;
-  padding:10px 12px !important;
-  min-height:42px !important;
-  background:#f8fafc !important;
-  border:1px solid rgba(15,23,42,.08) !important;
-  box-shadow:none !important;
-  border-radius:14px !important;
-  font-size:16px !important;
+.add-patient-entry-body label,
+.add-patient-entry-body .add-patient-top-grid>div>label{
+  display:block;
+  margin-top:10px;
+  margin-bottom:6px;
+  font-size:11px;
+  font-weight:800;
+  color:#667085;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  line-height:1.2;
 }
-#ivEditOverlay .iv-overlay-entry-body > input:focus,
-#ivEditOverlay .iv-overlay-entry-body .iv-entry input:focus{
-  outline:none !important;
-  border-color:#0a84ff !important;
-  box-shadow:0 0 0 3px rgba(10,132,255,.14) !important;
+.add-patient-entry-body label:first-child{
+  margin-top:0;
 }
-#ivEditOverlay .iv-overlay-entry-body > label,
-#ivEditOverlay .iv-overlay-entry-body .iv-entry > label,
-#ivEditOverlay .iv-overlay-entry-body .iv-entry .iv-details-label,
-#ivEditOverlay .iv-overlay-entry-body .iv-info-label-btn{
-  display:block !important;
-  margin-top:10px !important;
-  margin-bottom:6px !important;
-  font-size:11px !important;
-  font-weight:800 !important;
-  color:#667085 !important;
-  text-transform:uppercase !important;
-  letter-spacing:.04em !important;
-  line-height:1.2 !important;
+.add-patient-entry-body input,
+.add-patient-entry-body .date-display-btn,
+.add-patient-entry-body .referral-other-input{
+  margin-top:0;
+  padding:10px 12px;
+  min-height:42px;
+  background:#f8fafc;
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:none;
+  border-radius:14px;
 }
-#ivEditOverlay .iv-overlay-entry-body > label:first-child,
-#ivEditOverlay .iv-overlay-entry-body .iv-info-label-btn,
-#ivEditOverlay .iv-overlay-entry-body .iv-entry > label:first-child{
-  margin-top:0 !important;
+.add-patient-entry-body input:focus,
+.add-patient-entry-body .date-display-btn:focus-visible,
+.add-patient-entry-body .referral-other-input:focus{
+  outline:none;
+  border-color:#0a84ff;
+  box-shadow:0 0 0 3px rgba(10,132,255,.14);
 }
-#ivEditOverlay .iv-overlay-entry-body .iv-info-label-btn{
-  -webkit-appearance:none !important;
-  appearance:none !important;
-  background:none !important;
-  border:none !important;
-  padding:0 !important;
-  text-align:left !important;
-  width:max-content !important;
+.add-patient-entry-body .date-display-btn{
+  color:#111;
 }
-#ivEditOverlay .iv-overlay-entry-body .drug-preset-row,
-#ivEditOverlay .iv-overlay-entry-body .dose-preset-row{
-  display:flex !important;
-  flex-wrap:wrap !important;
-  gap:7px !important;
-  margin:6px 0 8px !important;
+.add-patient-entry-body .date-display-placeholder{
+  color:#9ca3af;
 }
-#ivEditOverlay .iv-overlay-entry-body .drug-btn,
-#ivEditOverlay .iv-overlay-entry-body .dose-btn{
-  min-height:39px !important;
-  padding:8px 10px !important;
-  font-size:12px !important;
-  font-weight:700 !important;
-  border-radius:14px !important;
-  border:1px solid rgba(15,23,42,.08) !important;
-  background:#f8fafc !important;
-  color:#111 !important;
-  line-height:1.15 !important;
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  text-align:center !important;
+.add-patient-top-grid{
+  display:grid;
+  grid-template-columns:minmax(72px,.72fr) minmax(128px,1.08fr) minmax(112px,.9fr);
+  gap:10px;
+  align-items:start;
 }
-#ivEditOverlay .iv-overlay-entry-body .drug-btn.active,
-#ivEditOverlay .iv-overlay-entry-body .dose-btn.active{
-  background:#eaf4ff !important;
-  border-color:#0a84ff !important;
-  color:#0a3d91 !important;
-  box-shadow:0 0 0 1px rgba(10,132,255,.12) inset !important;
+.add-patient-top-grid>div{display:flex;flex-direction:column;align-items:stretch}
+.add-patient-top-grid>div>input,
+.add-patient-top-grid .date-display-btn,
+.add-patient-top-grid .compact-choice-row{margin-top:0}
+.add-patient-entry-body .choice-row{display:flex;flex-wrap:wrap;gap:7px;margin:0}
+.add-patient-entry-body .choice-btn,
+.add-patient-entry-body .compact-choice-btn,
+.add-patient-entry-body .acuity-choice-btn{
+  min-height:39px;
+  padding:8px 10px;
+  font-size:12px;
+  font-weight:700;
+  border-radius:14px;
+  border:1px solid rgba(15,23,42,.08);
+  background:#f8fafc;
+  color:#111;
+  line-height:1.15;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  box-shadow:none;
 }
-#ivEditOverlay .iv-overlay-entry-body .iv-entry{
-  border-top:1px solid var(--line) !important;
-  padding-top:12px !important;
-  margin-top:12px !important;
+.add-patient-entry-body .choice-btn.selected,
+.add-patient-entry-body .compact-choice-btn.selected,
+.add-patient-entry-body .acuity-choice-btn.selected,
+.add-patient-entry-body .referral-other-input.selected{
+  background:#eaf4ff;
+  border-color:#0a84ff;
+  color:#0a3d91;
+  box-shadow:0 0 0 1px rgba(10,132,255,.12) inset;
 }
-#ivEditOverlay .iv-overlay-entry-body .iv-entry:first-child{
-  margin-top:12px !important;
+.add-patient-entry-body .compact-choice-row{flex-wrap:nowrap;gap:7px}
+.add-patient-entry-body .compact-choice-btn{flex:1 1 0;min-width:0}
+.add-patient-entry-body .acuity-choice-btn{position:relative;padding-left:18px;text-transform:none}
+.add-patient-entry-body .acuity-choice-btn::before{content:"";position:absolute;left:10px;top:50%;width:8px;height:8px;border-radius:999px;transform:translateY(-50%)}
+.add-patient-entry-body .acuity-choice-btn[data-acuity="GREEN"]::before{background:#34c759}
+.add-patient-entry-body .acuity-choice-btn[data-acuity="AMBER"]::before{background:#ff9f0a}
+.add-patient-entry-body .acuity-choice-btn[data-acuity="RED"]::before{background:#ff3b30}
+.add-patient-entry-body .acuity-choice-btn.selected::before{opacity:.9}
+.add-patient-entry-body .referral-other-input{flex:1 1 110px;min-width:110px;width:auto;font-size:15px;font-weight:400;justify-content:flex-start;text-align:left}
+.add-patient-entry-body .referral-other-input::placeholder{color:#9ca3af;opacity:1}
+.add-patient-bottom-buttons{
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
-#ivEditOverlay .iv-overlay-entry-body #ivBottomButtons{
-  margin-top:12px !important;
-  display:grid !important;
-  grid-template-columns:1fr 1fr 1fr !important;
-  gap:10px !important;
-  position:static !important;
-  padding:0 !important;
-  background:none !important;
+.add-patient-bottom-buttons button{
+  height:40px;
+  border-radius:12px;
+  font-weight:600;
 }
-#ivEditOverlay .iv-overlay-entry-body #ivBottomButtons button{
-  height:40px !important;
-  border-radius:12px !important;
-  font-weight:600 !important;
+#cancelAddBtn{
+  background:#eef2f7;
+  color:#0f172a;
+  border:1px solid transparent;
+  box-shadow:none;
 }
-#ivEditOverlay #addIVBtn{
-  background:#eef2f7 !important;
-  color:#0f172a !important;
-  border:1px solid transparent !important;
-  box-shadow:none !important;
+#saveAddBtn{
+  background:var(--blue);
+  color:#fff;
+  border:1px solid rgba(10,132,255,.18);
+  box-shadow:none;
 }
-#ivEditOverlay #clearIVBtn{
-  background:#eef2f7 !important;
-  color:#0f172a !important;
-  border:1px solid transparent !important;
-  box-shadow:none !important;
-}
-#ivEditOverlay #doneIVBtn{
-  background:var(--blue) !important;
-  color:#fff !important;
-  border:1px solid rgba(10,132,255,.18) !important;
-  box-shadow:none !important;
-}
-#ivEditOverlay #deleteIVBtn{
-  margin-top:10px !important;
-  margin-bottom:0 !important;
-  height:40px !important;
-  border-radius:12px !important;
-}
-.vip-score-card{
-  border-radius:18px !important;
-  padding:14px !important;
-}
-.vip-score-table{
-  font-size:13px !important;
-}
-.vip-score-table th,
-.vip-score-table td{
-  padding:10px 8px !important;
-}
-.vip-score-table thead th{
-  color:#667085 !important;
-  font-size:11px !important;
-  font-weight:800 !important;
-  text-transform:uppercase !important;
-  letter-spacing:.04em !important;
-}
-.vip-action-cell{
-  width:36% !important;
-}
-.vip-action-badge{
-  display:inline-block !important;
-  width:100% !important;
-  padding:8px 10px !important;
-  border-radius:12px !important;
-  font-weight:700 !important;
-  line-height:1.3 !important;
-  border:1px solid transparent !important;
-}
-.vip-action-safe{background:rgba(22,163,74,.14) !important;border-color:rgba(22,163,74,.24) !important;color:#166534 !important}
-.vip-action-caution{background:rgba(245,158,11,.16) !important;border-color:rgba(245,158,11,.24) !important;color:#92400e !important}
-.vip-action-remove{background:rgba(239,68,68,.14) !important;border-color:rgba(239,68,68,.20) !important;color:#991b1b !important}
-.vip-action-urgent{background:rgba(127,29,29,.16) !important;border-color:rgba(127,29,29,.24) !important;color:#7f1d1d !important}
-.vip-score-note{
-  margin-top:10px !important;
-  font-size:12px !important;
-  line-height:1.35 !important;
-  color:#667085 !important;
+@media (max-width:390px){
+  .add-patient-top-grid{grid-template-columns:minmax(64px,.68fr) minmax(116px,.98fr) minmax(104px,.84fr);gap:8px}
+  .add-patient-entry-body .compact-choice-btn{padding:8px;font-size:11.5px}
 }
 @media (max-height:760px){
-  #ivEditOverlay .iv-rebuilt-modal{
-    top:calc(var(--shared-header-offset,0px) + 14px) !important;
-    bottom:calc(env(safe-area-inset-bottom) + var(--keyboard-extra-bottom,0px) + 10px) !important;
-    padding:12px !important;
-  }
-  #ivEditOverlay .iv-rebuilt-card .med-entry-summary{font-size:18px !important}
-  #ivEditOverlay .iv-overlay-entry-body > label,
-  #ivEditOverlay .iv-overlay-entry-body .iv-entry > label,
-  #ivEditOverlay .iv-overlay-entry-body .iv-entry .iv-details-label,
-  #ivEditOverlay .iv-overlay-entry-body .iv-info-label-btn{
-    margin-top:8px !important;
-    margin-bottom:5px !important;
-    font-size:10.5px !important;
-  }
-  #ivEditOverlay .iv-overlay-entry-body > input,
-  #ivEditOverlay .iv-overlay-entry-body .iv-entry input{
-    min-height:40px !important;
-    padding:9px 11px !important;
-  }
-  #ivEditOverlay .iv-overlay-entry-body .drug-btn,
-  #ivEditOverlay .iv-overlay-entry-body .dose-btn{
-    min-height:37px !important;
-    padding:7px 9px !important;
-    font-size:11.5px !important;
-  }
-  #ivEditOverlay .iv-overlay-entry-body #ivBottomButtons{margin-top:10px !important;gap:8px !important}
-  #ivEditOverlay .iv-overlay-entry-body #ivBottomButtons button,
-  #ivEditOverlay #deleteIVBtn{height:38px !important}
+  .add-patient-modal{top:var(--add-patient-modal-top,calc(var(--shared-header-offset,0px) + 14px));padding:12px}
+  .add-patient-head{margin-bottom:10px}
+  .add-patient-title{font-size:18px}
+  .add-patient-entry-body label,
+  .add-patient-entry-body .add-patient-top-grid>div>label{margin-top:8px;margin-bottom:5px;font-size:10.5px}
+  .add-patient-entry-body input,
+  .add-patient-entry-body .date-display-btn,
+  .add-patient-entry-body .referral-other-input{min-height:40px;padding:9px 11px}
+  .add-patient-entry-body .choice-btn,
+  .add-patient-entry-body .compact-choice-btn,
+  .add-patient-entry-body .acuity-choice-btn{min-height:37px;padding:7px 9px;font-size:11.5px}
+  .add-patient-bottom-buttons{margin-top:10px;gap:8px}
+  .add-patient-bottom-buttons button{height:38px}
 }
 
 </style></head>
@@ -2230,7 +2188,56 @@ body.onboarding-open .nav{z-index:1}
 </section>
 <div aria-hidden="true" class="hidden add-patient-overlay" id="addPatientOverlay">
 <div class="add-patient-backdrop" id="addPatientBackdrop"></div>
-<div class="card add-patient-modal hidden" id="addPatientCard" autocomplete="off"><h3>Add patient</h3><label>Name</label><input id="newName" name="patient_name_entry" placeholder="" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text" enterkeyhint="next"/><div class="add-patient-top-grid"><div><label>Age</label><input id="newAge" name="patient_age_entry" placeholder="" type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="numeric" enterkeyhint="next"/></div><div class="admission-field-wrap"><label>Admission</label><button aria-haspopup="dialog" class="date-display-btn" id="newDoaBtn" type="button"><span class="date-display-placeholder" id="newDoaText">Select date</span></button><input id="newDoa" name="patient_admission_date_entry" type="hidden"/></div><div><label>Sex</label><div class="choice-row compact-choice-row"><button class="choice-btn compact-choice-btn" id="newSexF" type="button">F</button><button class="choice-btn compact-choice-btn" id="newSexM" type="button">M</button></div></div></div><div aria-hidden="true" class="hidden add-date-popover" id="addDatePopover"><div class="add-date-header"><button aria-label="Previous month" class="add-date-nav" id="addDatePrevBtn" type="button">‹</button><button aria-label="Choose month and year" class="add-date-title-btn" id="addDateTitleBtn" type="button"><span id="addDateTitle"></span></button><button aria-label="Next month" class="add-date-nav" id="addDateNextBtn" type="button">›</button></div><div class="hidden add-date-month-year-picker" id="addDateMonthYearPicker"><div class="add-date-year-row"><button aria-label="Previous year" class="add-date-nav" id="addDatePrevYearBtn" type="button">‹</button><div class="add-date-year-label" id="addDateYearLabel"></div><button aria-label="Next year" class="add-date-nav" id="addDateNextYearBtn" type="button">›</button></div><div class="add-date-months" id="addDateMonths"></div></div><div class="add-date-weekdays"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="add-date-grid" id="addDateGrid"></div></div><label>Referral source</label><div class="choice-row"><button class="choice-btn" data-ref="GSTT" type="button">GSTT</button><button class="choice-btn" data-ref="KCH" type="button">KCH</button><button class="choice-btn" data-ref="PRUH" type="button">PRUH</button><button class="choice-btn" data-ref="GP" type="button">GP</button><button class="choice-btn" data-ref="LAS" type="button">LAS</button><button class="choice-btn" data-ref="RR" type="button">RR</button><input class="choice-btn referral-other-input" id="newReferralOther" name="patient_referral_other_entry" placeholder="Other" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text" enterkeyhint="done"/></div><label>Acuity</label><div class="choice-row compact-choice-row"><button class="choice-btn compact-choice-btn acuity-choice-btn" data-acuity="GREEN" type="button">Green</button><button class="choice-btn compact-choice-btn acuity-choice-btn" data-acuity="AMBER" type="button">Amber</button><button class="choice-btn compact-choice-btn acuity-choice-btn" data-acuity="RED" type="button">Red</button></div><div class="top-actions" style="margin-top:12px"><button id="cancelAddBtn">Cancel</button><button class="primary" id="saveAddBtn">Add patient</button></div></div>
+<div class="card add-patient-modal hidden" id="addPatientCard" autocomplete="off">
+  <div class="add-patient-modal-shell">
+    <div class="add-patient-head">
+      <span class="add-patient-title">Add patient</span>
+      <button aria-label="Close add patient" class="add-patient-close-inline" id="addPatientCloseBtn" type="button">×</button>
+    </div>
+    <div class="add-patient-entry-body">
+      <label>Name</label>
+      <input id="newName" name="patient_name_entry" placeholder="" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text" enterkeyhint="next"/>
+      <div class="add-patient-top-grid">
+        <div>
+          <label>Age</label>
+          <input id="newAge" name="patient_age_entry" placeholder="" type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="numeric" enterkeyhint="next"/>
+        </div>
+        <div class="admission-field-wrap">
+          <label>Admission</label>
+          <button aria-haspopup="dialog" class="date-display-btn" id="newDoaBtn" type="button"><span class="date-display-placeholder" id="newDoaText">Select date</span></button>
+          <input id="newDoa" name="patient_admission_date_entry" type="hidden"/>
+        </div>
+        <div>
+          <label>Sex</label>
+          <div class="choice-row compact-choice-row">
+            <button class="choice-btn compact-choice-btn" id="newSexF" type="button">F</button>
+            <button class="choice-btn compact-choice-btn" id="newSexM" type="button">M</button>
+          </div>
+        </div>
+      </div>
+      <div aria-hidden="true" class="hidden add-date-popover" id="addDatePopover">
+        <div class="add-date-header"><button aria-label="Previous month" class="add-date-nav" id="addDatePrevBtn" type="button">‹</button><button aria-label="Choose month and year" class="add-date-title-btn" id="addDateTitleBtn" type="button"><span id="addDateTitle"></span></button><button aria-label="Next month" class="add-date-nav" id="addDateNextBtn" type="button">›</button></div>
+        <div class="hidden add-date-month-year-picker" id="addDateMonthYearPicker"><div class="add-date-year-row"><button aria-label="Previous year" class="add-date-nav" id="addDatePrevYearBtn" type="button">‹</button><div class="add-date-year-label" id="addDateYearLabel"></div><button aria-label="Next year" class="add-date-nav" id="addDateNextYearBtn" type="button">›</button></div><div class="add-date-months" id="addDateMonths"></div></div>
+        <div class="add-date-weekdays"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+        <div class="add-date-grid" id="addDateGrid"></div>
+      </div>
+      <label>Referral source</label>
+      <div class="choice-row add-patient-referral-row">
+        <button class="choice-btn" data-ref="GSTT" type="button">GSTT</button><button class="choice-btn" data-ref="KCH" type="button">KCH</button><button class="choice-btn" data-ref="PRUH" type="button">PRUH</button><button class="choice-btn" data-ref="GP" type="button">GP</button><button class="choice-btn" data-ref="LAS" type="button">LAS</button><button class="choice-btn" data-ref="RR" type="button">RR</button><input class="choice-btn referral-other-input" id="newReferralOther" name="patient_referral_other_entry" placeholder="Other" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text" enterkeyhint="done"/>
+      </div>
+      <label>Acuity</label>
+      <div class="choice-row compact-choice-row add-patient-acuity-row">
+        <button class="choice-btn compact-choice-btn acuity-choice-btn" data-acuity="GREEN" type="button">Green</button>
+        <button class="choice-btn compact-choice-btn acuity-choice-btn" data-acuity="AMBER" type="button">Amber</button>
+        <button class="choice-btn compact-choice-btn acuity-choice-btn" data-acuity="RED" type="button">Red</button>
+      </div>
+      <div class="add-patient-bottom-buttons">
+        <button id="cancelAddBtn" type="button">Cancel</button>
+        <button class="primary" id="saveAddBtn" type="button">Add patient</button>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 <div aria-hidden="true" class="hidden blister-scan-overlay" id="blisterScanOverlay">
 <div class="blister-scan-backdrop" id="blisterScanBackdrop"></div>
@@ -2273,7 +2280,7 @@ body.onboarding-open .nav{z-index:1}
 </div>
 <div aria-hidden="true" class="med-edit-overlay hidden" id="medEditOverlay"><div class="med-edit-backdrop" id="medEditBackdrop"></div><div class="med-edit-modal" id="medEditCard"><div class="med-edit-body"><div class="med-edit-card"><div class="med-entry-head"><span class="med-entry-summary" id="medEditSummary">Medication</span><div class="med-edit-head-actions"><button aria-label="Cancel medication edit" class="med-edit-actionbtn" id="medEditCancelBtn" type="button">Cancel</button><button aria-label="Save medication edit" class="med-edit-actionbtn primary" id="medEditSaveBtn" type="button">Save</button></div></div><div class="med-entry-body"><label>Medication</label><input class="med-name" id="medEditName" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Start typing drug name"><label class="med-dose-label">Dose</label><div class="med-dose-row hidden" id="medEditDoseRow"></div><input class="med-dose" id="medEditDose" type="text" placeholder="Dose"><label>Frequency</label><div class="med-frequency-row" id="medEditFrequencyRow"></div><input class="med-frequency" id="medEditFrequency" type="text" placeholder="Frequency e.g. QDS PRN"><label class="med-details-label">Details</label><input class="med-details" id="medEditDetails" type="text" placeholder="Optional notes"></div></div></div></div></div>
 <div aria-hidden="true" class="meds-overlay hidden" id="medsOverlay"><div class="meds-overlay-backdrop" id="medsOverlayBackdrop"></div><div class="card meds-overlay-modal meds-overlay-modal-single" id="medsOverlayModal"><div class="meds-overlay-body" id="medsOverlayBody"><div class="meds-overlay-card meds-overlay-card-single" id="medsOverlayCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="medsOverlayTitle">Add medication</span><button aria-label="Close medications" class="med-entry-delete meds-overlay-close-inline" id="medsOverlayCloseBtn" type="button">×</button></div><div class="med-entry-body meds-overlay-entry-body"><label>Medication</label><input class="med-name" id="medsOverlayName" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Start typing drug name"><label class="med-dose-label">Dose</label><div class="med-dose-row hidden" id="medsOverlayDoseRow"></div><input class="med-dose" id="medsOverlayDose" type="text" placeholder="Dose"><label>Frequency</label><div class="med-frequency-row" id="medsOverlayFrequencyRow"></div><input class="med-frequency" id="medsOverlayFrequency" type="text" placeholder="Frequency e.g. QDS PRN"><label class="med-details-label">Details</label><input class="med-details" id="medsOverlayDetails" type="text" placeholder="Optional notes"><div id="medsOverlayBottomButtons" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px"><button id="medsOverlayAddAnotherBtn" type="button">Add another</button><button id="medsOverlayClearBtn" type="button">Clear</button><button class="done-green" id="medsOverlayDoneBtn" type="button">Done</button></div></div></div></div></div></div>
-<div aria-hidden="true" class="exam-findings-overlay hidden" id="examFindingsOverlay"><div class="exam-findings-backdrop" id="examFindingsBackdrop"></div><div class="card exam-findings-modal" id="examFindingsModal"><div class="exam-findings-head"><h3>Examination findings</h3><button aria-label="Close examination findings" class="exam-findings-close" id="examFindingsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="examFindingsText">Edit findings</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="examFindingsText" type="button">Dictate</button></div><textarea id="examFindingsText" placeholder="Enter or edit examination findings"></textarea></div><div class="exam-findings-presets" id="examFindingsPresets"></div></div></div><div class="exam-findings-footer"><button id="examFindingsClearBtn" type="button">Clear</button><button class="primary" id="examFindingsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="meds-overlay iv-rebuilt-overlay hidden" id="ivEditOverlay"><div class="meds-overlay-backdrop iv-edit-backdrop" id="ivEditBackdrop"></div><div aria-labelledby="ivEditTitle" aria-modal="true" class="card meds-overlay-modal meds-overlay-modal-single iv-rebuilt-modal" id="ivEditModal" role="dialog"><div class="meds-overlay-body" id="ivEditBody"><div class="meds-overlay-card meds-overlay-card-single iv-rebuilt-card" id="ivEditCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="ivEditTitle">IV medications administered</span><button aria-label="Close IV medications" class="med-entry-delete meds-overlay-close-inline iv-edit-close" id="ivEditCloseBtn" type="button">×</button></div><div class="meds-overlay-entry-body iv-overlay-entry-body hidden" id="ivSection"><button class="iv-info-label-btn" id="ivVipInfoBtn" type="button">VIP score</button><input id="ivVIP" type="text" enterkeyhint="next"/><div id="ivContainer"></div><div id="ivBottomButtons"><button id="addIVBtn" type="button">Add another</button><button id="clearIVBtn" type="button">Clear</button><button id="doneIVBtn" type="button">Done</button></div><button class="danger hidden" id="deleteIVBtn" type="button">Delete</button></div></div></div></div></div><div aria-hidden="true" class="vip-score-overlay hidden" id="vipScoreOverlay"><div class="vip-score-backdrop" id="vipScoreBackdrop"></div><div aria-labelledby="vipScoreTitle" aria-modal="true" class="card vip-score-modal" id="vipScoreModal" role="dialog"><div class="vip-score-head"><h3 id="vipScoreTitle">Visual Infusion Phlebitis (VIP) score</h3><button aria-label="Close VIP score table" class="vip-score-close" id="vipScoreCloseBtn" type="button">×</button></div><div class="vip-score-body"><div class="vip-score-card"><table class="vip-score-table"><thead><tr><th>Score</th><th>Findings</th><th>Suggested action</th></tr></thead><tbody><tr><td>0</td><td>IV site appears healthy</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-safe">Observe cannula</span></td></tr><tr><td>1</td><td>Possible first signs of phlebitis: slight pain near site and/or slight redness</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-caution">Observe cannula closely</span></td></tr><tr><td>2</td><td>Early phlebitis: pain at site with erythema and/or swelling</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Remove cannula · document · Datix</span></td></tr><tr><td>3</td><td>Medium phlebitis: pain along cannula path with erythema and induration</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Remove cannula · alert medical staff</span></td></tr><tr><td>4</td><td>Advanced phlebitis / start of thrombophlebitis: extensive pain, erythema and palpable venous cord</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Remove cannula · consider treatment</span></td></tr><tr><td>5</td><td>Advanced thrombophlebitis: score 4 features plus pyrexia</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-urgent">Remove cannula · urgent review · start treatment</span></td></tr></tbody></table><div class="vip-score-note">Based on the standard NHS VIP score approach: score 0 observe, score 1 monitor closely, and score 2 or above remove the cannula and act according to local policy.</div></div></div></div></div><div aria-hidden="true" class="score-tools-overlay hidden" id="scoreToolsOverlay"><div class="score-tools-backdrop" id="scoreToolsBackdrop"></div><div class="card score-tools-modal" id="scoreToolsCard"><div class="score-tools-head"><button aria-expanded="false" aria-label="Show all score tools" class="score-tools-title-btn" id="scoreToolsTitleBtn" type="button"><h3>Scores</h3></button><button aria-label="Close scores" class="score-tools-close" id="scoreToolsCloseBtn" type="button">×</button></div><div class="score-tools-tabs-wrap" id="scoreToolsTabsWrap"><div class="score-tools-tabs" id="scoreToolsTabs"><button class="score-tool-tab active" data-score-tool-tab="cfs" type="button">CFS</button><button class="score-tool-tab" data-score-tool-tab="amt10" type="button">AMT10</button><button class="score-tool-tab" data-score-tool-tab="4at" type="button">4AT</button><button class="score-tool-tab" data-score-tool-tab="gcs" type="button">GCS</button><button class="score-tool-tab" data-score-tool-tab="must" type="button">MUST</button><button class="score-tool-tab" data-score-tool-tab="waterlow" type="button">Waterlow</button></div></div><div class="score-tools-body" id="scoreToolsBody"><div class="score-tool-panel" data-score-tool-panel="cfs"><div class="score-tool-card"><h4>Clinical Frailty Scale</h4><div class="score-tool-help">Score baseline frailty rather than the acute illness state.</div><div class="score-choice-grid" id="cfsChoiceGrid"></div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="amt10"><div class="score-tool-card"><h4>AMT10</h4><div class="score-tool-help">1 point per correct answer · Tap Yes for correct, No for incorrect or unable</div><div class="score-qrows" id="amt10Rows"></div><div class="score-summary-box" id="amt10SummaryBox">AMT10 - score pending</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="4at"><div class="score-tool-card"><div class="score-subhead"><h4>4AT</h4><div class="score-mini-note">Rapid delirium screen /12</div></div><div class="score-tool-help">Use the official 4AT scoring below · AMT4 is shown automatically from AMT10 when all 4 orientation items have been answered; otherwise manual AMT4 scoring is available here</div><div class="score-4at-grid"><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Alertness</div><div class="score-4at-task">Observe whether the patient is fully alert or clearly abnormally drowsy or agitated</div></div><div class="score-4at-options" id="fourAtAlertnessRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">AMT4</div><div class="score-4at-task">Test age, date of birth, place, and current year</div><div class="score-inline-note score-4at-subnote" id="fourAtAmt4Note">Manual scoring is available if the AMT10 orientation items have not all been completed</div></div><div class="score-4at-options" id="fourAtAmt4Row"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Attention</div><div class="score-4at-task">Ask the patient to say the months of the year backwards, starting from December</div></div><div class="score-4at-options" id="fourAtAttentionRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Acute change or fluctuating course</div><div class="score-4at-task">Is there evidence of a significant change or fluctuation in mental state over the last 2 weeks, still present in the last 24 hours</div></div><div class="score-4at-options" id="fourAtAcuteRow"></div></div></div><div class="score-summary-box" id="fourAtSummaryBox">4AT incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="gcs"><div class="score-tool-card"><div class="score-subhead"><h4>GCS</h4><div class="score-mini-note">Glasgow Coma Scale /15</div></div><div class="score-tool-help">Select the best eye, verbal and motor response.</div><div class="score-section-stack"><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Eye opening</h4></div><div class="score-qrows" id="gcsEyeRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Verbal response</h4></div><div class="score-qrows" id="gcsVerbalRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Motor response</h4></div><div class="score-qrows" id="gcsMotorRows"></div></div></div><div class="score-summary-box" id="gcsSummaryBox">GCS incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="must"><div class="score-tool-card"><div class="score-subhead"><h4>MUST</h4><div class="score-mini-note">Malnutrition Universal Screening Tool</div></div><div class="score-tool-help">Enter height and weight to calculate BMI, or select the BMI score directly if measurements are not available.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="must" for="mustHeightInput" id="mustHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="mustHeightMetricWrap"><input id="mustHeightInput" inputmode="decimal" placeholder="Enter" type="text"></div><div class="score-inline-dual hidden" id="mustHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="mustHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="mustHeightInchesInput" inputmode="decimal" placeholder="in" type="text"></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="must" for="mustWeightInput" id="mustWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="mustWeightMetricWrap"><input id="mustWeightInput" inputmode="decimal" placeholder="Enter" type="text"></div><div class="score-inline-dual hidden" id="mustWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="mustWeightStoneInput" inputmode="decimal" placeholder="st" type="text"></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="mustWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>BMI score</h4><div class="score-mini-note" id="mustBmiValue">BMI pending</div></div><div class="score-chip-row" id="mustBmiScoreRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Unplanned weight loss in past 3–6 months</h4></div><div class="score-chip-row" id="mustWeightLossRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Acute disease effect</h4></div><div class="score-chip-row" id="mustAcuteRow"></div><div class="score-inline-note">Add 2 if acutely ill and there has been or is likely to be no nutritional intake for more than 5 days.</div></div><div class="score-summary-box" id="mustSummaryBox">MUST incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="waterlow"><div class="score-tool-card"><div class="score-subhead"><h4>Waterlow</h4><div class="score-mini-note">Pressure ulcer risk screen</div></div><div class="score-tool-help">Complete each category using the option that best fits the patient. Enter weight and height to calculate BMI, or choose the build / BMI option directly if BMI is already known.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="waterlow" for="waterlowWeightInput" id="waterlowWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="waterlowWeightMetricWrap"><input id="waterlowWeightInput" inputmode="decimal" placeholder="Enter" type="text"></div><div class="score-inline-dual hidden" id="waterlowWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="waterlowWeightStoneInput" inputmode="decimal" placeholder="st" type="text"></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="waterlowWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="waterlow" for="waterlowHeightInput" id="waterlowHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="waterlowHeightMetricWrap"><input id="waterlowHeightInput" inputmode="decimal" placeholder="Enter" type="text"></div><div class="score-inline-dual hidden" id="waterlowHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="waterlowHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="waterlowHeightInchesInput" inputmode="decimal" placeholder="in" type="text"></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Build / BMI</h4><div class="score-mini-note" id="waterlowBmiValue">BMI optional</div></div><div class="score-chip-row" id="waterlowBuildRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Sex and age</h4></div><div class="score-chip-row" id="waterlowSexRow"></div><div class="score-chip-row" id="waterlowAgeRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Continence</h4></div><div class="score-chip-row" id="waterlowContinenceRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Skin / visual risk areas</h4></div><div class="score-chip-row" id="waterlowSkinRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Mobility</h4></div><div class="score-chip-row" id="waterlowMobilityRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Nutrition / appetite</h4></div><div class="score-chip-row" id="waterlowAppetiteRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Tissue malnutrition</h4></div><div class="score-chip-row" id="waterlowTissueRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Neurological deficit</h4></div><div class="score-chip-row" id="waterlowNeuroRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Major surgery / trauma</h4></div><div class="score-chip-row" id="waterlowSurgeryRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Medication</h4></div><div class="score-chip-row" id="waterlowMedicationRow"></div></div><div class="score-summary-box" id="waterlowSummaryBox">Waterlow incomplete</div></div></div></div><div class="score-tools-footer"><button id="scoreToolsClearBtn" type="button">Clear</button><button class="primary" id="scoreToolsInsertBtn" type="button">Done</button></div></div></div>
+<div aria-hidden="true" class="exam-findings-overlay hidden" id="examFindingsOverlay"><div class="exam-findings-backdrop" id="examFindingsBackdrop"></div><div class="card exam-findings-modal" id="examFindingsModal"><div class="exam-findings-head"><h3>Examination findings</h3><button aria-label="Close examination findings" class="exam-findings-close" id="examFindingsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="examFindingsText">Edit findings</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="examFindingsText" type="button">Dictate</button></div><textarea id="examFindingsText" placeholder="Enter or edit examination findings"></textarea></div><div class="exam-findings-presets" id="examFindingsPresets"></div></div></div><div class="exam-findings-footer"><button id="examFindingsClearBtn" type="button">Clear</button><button class="primary" id="examFindingsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="meds-overlay iv-rebuilt-overlay hidden" id="ivEditOverlay"><div class="meds-overlay-backdrop iv-edit-backdrop" id="ivEditBackdrop"></div><div aria-labelledby="ivEditTitle" aria-modal="true" class="card meds-overlay-modal meds-overlay-modal-single iv-rebuilt-modal" id="ivEditModal" role="dialog"><div class="meds-overlay-body" id="ivEditBody"><div class="meds-overlay-card meds-overlay-card-single iv-rebuilt-card" id="ivEditCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="ivEditTitle">IV medications administered</span><button aria-label="Close IV medications" class="med-entry-delete meds-overlay-close-inline iv-edit-close" id="ivEditCloseBtn" type="button">×</button></div><div class="meds-overlay-entry-body iv-overlay-entry-body hidden" id="ivSection"><button class="iv-info-label-btn" id="ivVipInfoBtn" type="button">VIP score</button><input id="ivVIP" type="text" enterkeyhint="next"/><div id="ivContainer"></div><div id="ivBottomButtons"><button id="addIVBtn" type="button">Add another</button><button id="clearIVBtn" type="button">Clear</button><button id="doneIVBtn" type="button">Done</button></div><button class="danger hidden" id="deleteIVBtn" type="button">Delete</button></div></div></div></div></div><div aria-hidden="true" class="vip-score-overlay hidden" id="vipScoreOverlay"><div class="vip-score-backdrop" id="vipScoreBackdrop"></div><div aria-labelledby="vipScoreTitle" aria-modal="true" class="card vip-score-modal" id="vipScoreModal" role="dialog"><div class="vip-score-head"><h3 id="vipScoreTitle">Visual Infusion Phlebitis (VIP) score</h3><button aria-label="Close VIP score table" class="vip-score-close" id="vipScoreCloseBtn" type="button">×</button></div><div class="vip-score-body"><div class="vip-score-card"><table class="vip-score-table"><thead><tr><th>Score</th><th>Findings</th><th>Suggested action</th></tr></thead><tbody><tr><td>0</td><td>Site appears healthy</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-safe">Observe cannula</span></td></tr><tr><td>1</td><td>Slight pain near site or slight redness</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-caution">Observe closely</span></td></tr><tr><td>2</td><td>Pain near site with redness and/or swelling</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula</span></td></tr><tr><td>3</td><td>Pain along cannula path with redness and induration</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>4</td><td>As score 3 plus a palpable venous cord</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>5</td><td>As score 4 plus pyrexia</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-urgent">Urgent review and treat per local policy</span></td></tr></tbody></table><div class="vip-score-note">Use local policy if it differs. Scores 2 or above usually mean the cannula should be removed or re-sited.</div></div></div></div></div><div aria-hidden="true" class="score-tools-overlay hidden" id="scoreToolsOverlay"><div class="score-tools-backdrop" id="scoreToolsBackdrop"></div><div class="card score-tools-modal" id="scoreToolsCard"><div class="score-tools-head"><button aria-expanded="false" aria-label="Show all score tools" class="score-tools-title-btn" id="scoreToolsTitleBtn" type="button"><h3>Scores</h3></button><button aria-label="Close scores" class="score-tools-close" id="scoreToolsCloseBtn" type="button">×</button></div><div class="score-tools-tabs-wrap" id="scoreToolsTabsWrap"><div class="score-tools-tabs" id="scoreToolsTabs"><button class="score-tool-tab active" data-score-tool-tab="cfs" type="button">CFS</button><button class="score-tool-tab" data-score-tool-tab="amt10" type="button">AMT10</button><button class="score-tool-tab" data-score-tool-tab="4at" type="button">4AT</button><button class="score-tool-tab" data-score-tool-tab="gcs" type="button">GCS</button><button class="score-tool-tab" data-score-tool-tab="must" type="button">MUST</button><button class="score-tool-tab" data-score-tool-tab="waterlow" type="button">Waterlow</button></div></div><div class="score-tools-body" id="scoreToolsBody"><div class="score-tool-panel" data-score-tool-panel="cfs"><div class="score-tool-card"><h4>Clinical Frailty Scale</h4><div class="score-tool-help">Score baseline frailty rather than the acute illness state.</div><div class="score-choice-grid" id="cfsChoiceGrid"></div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="amt10"><div class="score-tool-card"><h4>AMT10</h4><div class="score-tool-help">1 point per correct answer · Tap Yes for correct, No for incorrect or unable</div><div class="score-qrows" id="amt10Rows"></div><div class="score-summary-box" id="amt10SummaryBox">AMT10 - score pending</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="4at"><div class="score-tool-card"><div class="score-subhead"><h4>4AT</h4><div class="score-mini-note">Rapid delirium screen /12</div></div><div class="score-tool-help">Use the official 4AT scoring below · AMT4 is shown automatically from AMT10 when all 4 orientation items have been answered; otherwise manual AMT4 scoring is available here</div><div class="score-4at-grid"><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Alertness</div><div class="score-4at-task">Observe whether the patient is fully alert or clearly abnormally drowsy or agitated</div></div><div class="score-4at-options" id="fourAtAlertnessRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">AMT4</div><div class="score-4at-task">Test age, date of birth, place, and current year</div><div class="score-inline-note score-4at-subnote" id="fourAtAmt4Note">Manual scoring is available if the AMT10 orientation items have not all been completed</div></div><div class="score-4at-options" id="fourAtAmt4Row"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Attention</div><div class="score-4at-task">Ask the patient to say the months of the year backwards, starting from December</div></div><div class="score-4at-options" id="fourAtAttentionRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Acute change or fluctuating course</div><div class="score-4at-task">Is there evidence of a significant change or fluctuation in mental state over the last 2 weeks, still present in the last 24 hours</div></div><div class="score-4at-options" id="fourAtAcuteRow"></div></div></div><div class="score-summary-box" id="fourAtSummaryBox">4AT incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="gcs"><div class="score-tool-card"><div class="score-subhead"><h4>GCS</h4><div class="score-mini-note">Glasgow Coma Scale /15</div></div><div class="score-tool-help">Select the best eye, verbal and motor response.</div><div class="score-section-stack"><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Eye opening</h4></div><div class="score-qrows" id="gcsEyeRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Verbal response</h4></div><div class="score-qrows" id="gcsVerbalRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Motor response</h4></div><div class="score-qrows" id="gcsMotorRows"></div></div></div><div class="score-summary-box" id="gcsSummaryBox">GCS incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="must"><div class="score-tool-card"><div class="score-subhead"><h4>MUST</h4><div class="score-mini-note">Malnutrition Universal Screening Tool</div></div><div class="score-tool-help">Enter height and weight to calculate BMI, or select the BMI score directly if measurements are not available.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="must" for="mustHeightInput" id="mustHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="mustHeightMetricWrap"><input id="mustHeightInput" inputmode="decimal" placeholder="Enter" type="text"></div><div class="score-inline-dual hidden" id="mustHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="mustHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="mustHeightInchesInput" inputmode="decimal" placeholder="in" type="text"></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="must" for="mustWeightInput" id="mustWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="mustWeightMetricWrap"><input id="mustWeightInput" inputmode="decimal" placeholder="Enter" type="text"></div><div class="score-inline-dual hidden" id="mustWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="mustWeightStoneInput" inputmode="decimal" placeholder="st" type="text"></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="mustWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>BMI score</h4><div class="score-mini-note" id="mustBmiValue">BMI pending</div></div><div class="score-chip-row" id="mustBmiScoreRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Unplanned weight loss in past 3–6 months</h4></div><div class="score-chip-row" id="mustWeightLossRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Acute disease effect</h4></div><div class="score-chip-row" id="mustAcuteRow"></div><div class="score-inline-note">Add 2 if acutely ill and there has been or is likely to be no nutritional intake for more than 5 days.</div></div><div class="score-summary-box" id="mustSummaryBox">MUST incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="waterlow"><div class="score-tool-card"><div class="score-subhead"><h4>Waterlow</h4><div class="score-mini-note">Pressure ulcer risk screen</div></div><div class="score-tool-help">Complete each category using the option that best fits the patient. Enter weight and height to calculate BMI, or choose the build / BMI option directly if BMI is already known.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="waterlow" for="waterlowWeightInput" id="waterlowWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="waterlowWeightMetricWrap"><input id="waterlowWeightInput" inputmode="decimal" placeholder="Enter" type="text"></div><div class="score-inline-dual hidden" id="waterlowWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="waterlowWeightStoneInput" inputmode="decimal" placeholder="st" type="text"></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="waterlowWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="waterlow" for="waterlowHeightInput" id="waterlowHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="waterlowHeightMetricWrap"><input id="waterlowHeightInput" inputmode="decimal" placeholder="Enter" type="text"></div><div class="score-inline-dual hidden" id="waterlowHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="waterlowHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="waterlowHeightInchesInput" inputmode="decimal" placeholder="in" type="text"></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Build / BMI</h4><div class="score-mini-note" id="waterlowBmiValue">BMI optional</div></div><div class="score-chip-row" id="waterlowBuildRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Sex and age</h4></div><div class="score-chip-row" id="waterlowSexRow"></div><div class="score-chip-row" id="waterlowAgeRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Continence</h4></div><div class="score-chip-row" id="waterlowContinenceRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Skin / visual risk areas</h4></div><div class="score-chip-row" id="waterlowSkinRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Mobility</h4></div><div class="score-chip-row" id="waterlowMobilityRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Nutrition / appetite</h4></div><div class="score-chip-row" id="waterlowAppetiteRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Tissue malnutrition</h4></div><div class="score-chip-row" id="waterlowTissueRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Neurological deficit</h4></div><div class="score-chip-row" id="waterlowNeuroRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Major surgery / trauma</h4></div><div class="score-chip-row" id="waterlowSurgeryRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Medication</h4></div><div class="score-chip-row" id="waterlowMedicationRow"></div></div><div class="score-summary-box" id="waterlowSummaryBox">Waterlow incomplete</div></div></div></div><div class="score-tools-footer"><button id="scoreToolsClearBtn" type="button">Clear</button><button class="primary" id="scoreToolsInsertBtn" type="button">Done</button></div></div></div>
 <section class="container hidden" id="tasks"><div class="card"><h3>Today’s tasks</h3><p><strong>Mrs Law-test</strong><br/><span class="muted small">Give IV ceftriaxone and review temperature / oral intake.</span></p><p><strong>Mrs Coo-test</strong><br/><span class="muted small">Reassess delirium, chase urine sample, confirm escalation plan.</span></p><p><strong>Mr Doy-test</strong><br/><span class="muted small">Repeat U&amp;E, review fluid balance and oral intake.</span></p></div></section>
 <section class="container hidden" id="handover">
 <div class="card">
@@ -2407,7 +2414,7 @@ body.onboarding-open .nav{z-index:1}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_412_release.html</div><div>Source: hospital_at_home_v12_36_412_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_413_release.html</div><div>Source: hospital_at_home_v12_36_413_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -7184,8 +7191,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_412_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_412_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_413_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_413_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -8436,7 +8443,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("openWeightHistoryBtn").onclick=openWeightHistoryModal;
   $("weightHistoryCloseBtn").onclick=closeWeightHistoryModal;
   $("weightHistoryBackdrop").onclick=closeWeightHistoryModal;
-  $("addPatientBtn").onclick=()=>toggleAddPatient(true); $("cancelAddBtn").onclick=()=>toggleAddPatient(false); $("saveAddBtn").onclick=addPatient;
+  $("addPatientBtn").onclick=()=>toggleAddPatient(true); $("cancelAddBtn").onclick=()=>toggleAddPatient(false); if($("addPatientCloseBtn")) $("addPatientCloseBtn").onclick=()=>toggleAddPatient(false); if($("addPatientBackdrop")) $("addPatientBackdrop").onclick=()=>toggleAddPatient(false); $("saveAddBtn").onclick=addPatient;
   $("resetDemoBtn").onclick=resetToDemo; $("undoBtn").onclick=undoLastChange; $("openDeletedBtn").onclick=()=>showSection("deletedPage"); $("openEventLogBtn").onclick=()=>showSection("eventLogPage"); $("backFromDeletedBtn").onclick=()=>showSection("handover"); $("backFromEventLogBtn").onclick=()=>showSection("handover");
   try{
     const liveShaParam=(new URL(window.location.href)).searchParams.get('_ghsha')||'';
