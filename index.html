@@ -2150,7 +2150,7 @@ body.onboarding-open .nav{z-index:1}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_411_release.html</div><div>Source: hospital_at_home_v12_36_411_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_412_release.html</div><div>Source: hospital_at_home_v12_36_412_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -6927,8 +6927,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_411_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_411_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_412_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_412_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10288,14 +10288,38 @@ window.HAH.modules.deepgramDictation = true;
     return next;
   }
 
+  function applyDictationPunctuationFallback(text){
+    if(!(typeof getDeepgramDictation === 'function' ? getDeepgramDictation() : true)) return String(text || '');
+    let next = String(text || '');
+    const replacements = [
+      [/\bfull[ \t]+stop\b/gi, '.'],
+      [/\bperiod\b/gi, '.'],
+      [/\bcomma\b/gi, ','],
+      [/\bsemicolon\b/gi, ';'],
+      [/\bcolon\b/gi, ':'],
+      [/\bquestion[ \t]+mark\b/gi, '?'],
+      [/\bexclamation[ \t]+mark\b/gi, '!'],
+      [/\bexclamation[ \t]+point\b/gi, '!']
+    ];
+    replacements.forEach(([pattern, replacement]) => {
+      next = next.replace(pattern, replacement);
+    });
+    return next
+      .replace(/[ \t]+([,.;:!?])/g, '$1')
+      .replace(/([,.;:!?])(?![\s\n]|$)/g, '$1 ')
+      .replace(/([.!?])[ \t]+([a-z])/g, (_m, punct, letter) => punct + ' ' + letter.toUpperCase());
+  }
+
   function normaliseTranscriptText(text, options = {}){
     return applyClinicalAbbreviationReplacements(
-      applyDictationListFormatting(text, options)
-        .replace(/\r\n?/g, '\n')
-        .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
-        .replace(/\n{3,}/g, '\n\n')
-        .replace(/[ \t\f\v]{2,}/g, ' ')
-        .replace(/^[ \t\f\v]+|[ \t\f\v]+$/g, '')
+      applyDictationPunctuationFallback(
+        applyDictationListFormatting(text, options)
+          .replace(/\r\n?/g, '\n')
+          .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
+          .replace(/\n{3,}/g, '\n\n')
+          .replace(/[ \t\f\v]{2,}/g, ' ')
+          .replace(/^[ \t\f\v]+|[ \t\f\v]+$/g, '')
+      )
     );
   }
 
