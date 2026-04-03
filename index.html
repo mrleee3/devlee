@@ -2407,14 +2407,20 @@ body.onboarding-open .nav{z-index:1}
 <label class="deepgram-toggle"><input checked id="deepgramClinicalAbbrevToggle" type="checkbox"/><span>Common clinical abbreviations</span></label>
 </div>
 <div class="tiny muted" style="margin-top:8px">Voice commands: “comma”, “period”, “colon”, “question mark”, “exclamation mark”, “new line”, “new paragraph”.</div>
-<div class="tiny muted" style="margin-top:6px">Common clinical abbreviation replacements are available for phrases like HFpEF, HFrEF, AF, AKI, CKD, COPD, UTI, CAP, CXR, and ECG.</div>
+<div class="tiny muted" style="margin-top:6px">Common clinical abbreviation replacements are available for phrases like U&amp;Es, LFTs, TFTs, HbA1c, HFpEF, HFrEF, AF, AKI, CKD, COPD, UTI, CAP, CXR, and ECG.</div>
+<div class="deepgram-option-group">
+<div class="deepgram-option-title">Custom phrases</div>
+<label for="deepgramCustomPhrasesInput">One phrase per line. Use <span class="tiny muted">spoken = written</span></label>
+<textarea autocapitalize="off" autocorrect="off" id="deepgramCustomPhrasesInput" placeholder="u and es = U&amp;Es&#10;l f t s = LFTs&#10;h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
+<div class="tiny muted" style="margin-top:6px">These replacements are applied after dictation and are also sent to Deepgram as phrase hints.</div>
+</div>
 <div class="tiny muted" id="deepgramSettingsStatus" style="margin-top:8px"></div>
 </div>
 </div>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_417_release.html</div><div>Source: hospital_at_home_v12_36_417_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_418_release.html</div><div>Source: hospital_at_home_v12_36_418_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -2905,7 +2911,7 @@ function getGeminiModel(){
   return model;
 }
 function defaultDeepgramSettings(){
-  return {apiKey:'', model:'nova-3-medical', language:'en-GB', punctuate:true, smartFormat:true, dictation:true, numerals:true, measurements:true, clinicalAbbreviations:true};
+  return {apiKey:'', model:'nova-3-medical', language:'en-GB', punctuate:true, smartFormat:true, dictation:true, numerals:true, measurements:true, clinicalAbbreviations:true, customPhrases:''};
 }
 function loadDeepgramSettings(){
   try{return {...defaultDeepgramSettings(), ...(JSON.parse(localStorage.getItem(DEEPGRAM_SETTINGS_KEY)||"{}"))};}
@@ -2941,7 +2947,8 @@ function saveDeepgramSettings(showMsg=true){
     dictation:!!$("deepgramDictationToggle")?.checked,
     numerals:!!$("deepgramNumeralsToggle")?.checked,
     measurements:!!$("deepgramMeasurementsToggle")?.checked,
-    clinicalAbbreviations:!!$("deepgramClinicalAbbrevToggle")?.checked
+    clinicalAbbreviations:!!$("deepgramClinicalAbbrevToggle")?.checked,
+    customPhrases:String($("deepgramCustomPhrasesInput")?.value||'').trim()
   };
   if(settings.dictation) settings.punctuate=true;
   localStorage.setItem(DEEPGRAM_SETTINGS_KEY, JSON.stringify(settings));
@@ -2960,6 +2967,7 @@ function fillDeepgramSettingsUI(){
   if($("deepgramNumeralsToggle")) $("deepgramNumeralsToggle").checked=!!s.numerals;
   if($("deepgramMeasurementsToggle")) $("deepgramMeasurementsToggle").checked=!!s.measurements;
   if($("deepgramClinicalAbbrevToggle")) $("deepgramClinicalAbbrevToggle").checked=(s.clinicalAbbreviations!==false);
+  if($("deepgramCustomPhrasesInput")) $("deepgramCustomPhrasesInput").value=String(s.customPhrases||'');
   setDeepgramSettingsLocked(!!(s.apiKey));
 }
 function getDeepgramApiKey(){
@@ -2989,6 +2997,9 @@ function getDeepgramMeasurements(){
 
 function getDeepgramClinicalAbbreviations(){
   return loadDeepgramSettings().clinicalAbbreviations!==false;
+}
+function getDeepgramCustomPhrases(){
+  return String(loadDeepgramSettings().customPhrases||'');
 }
 function getOpenOptionsSection(){
   try{return String(localStorage.getItem(OPTIONS_SECTION_KEY)||'').trim();}
@@ -7191,8 +7202,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_417_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_417_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_418_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_418_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10394,6 +10405,19 @@ window.HAH.modules.deepgramDictation = true;
     ['c reactive protein', 'CRP'],
     ['chest x ray', 'CXR'],
     ['electrocardiogram', 'ECG'],
+    ['u and es', 'U&Es'],
+    ['u and e s', 'U&Es'],
+    ['l f t s', 'LFTs'],
+    ['lfts', 'LFTs'],
+    ['t f t s', 'TFTs'],
+    ['tfts', 'TFTs'],
+    ['h b a one c', 'HbA1c'],
+    ['h b a 1 c', 'HbA1c'],
+    ['hba1c', 'HbA1c'],
+    ['e g f r', 'eGFR'],
+    ['egfr', 'eGFR'],
+    ['s p o 2', 'SpO2'],
+    ['spo2', 'SpO2'],
     ['intravenous', 'IV'],
     ['as required', 'PRN']
   ];
@@ -10424,6 +10448,21 @@ window.HAH.modules.deepgramDictation = true;
     ['wcc', 'WCC'],
     ['f b c', 'FBC'],
     ['fbc', 'FBC'],
+    ['u and es', 'U&Es'],
+    ['u n es', 'U&Es'],
+    ['u and e s', 'U&Es'],
+    ['u&es', 'U&Es'],
+    ['l f t s', 'LFTs'],
+    ['lfts', 'LFTs'],
+    ['t f t s', 'TFTs'],
+    ['tfts', 'TFTs'],
+    ['h b a one c', 'HbA1c'],
+    ['h b a 1 c', 'HbA1c'],
+    ['hba1c', 'HbA1c'],
+    ['e g f r', 'eGFR'],
+    ['egfr', 'eGFR'],
+    ['s p o 2', 'SpO2'],
+    ['spo2', 'SpO2'],
     ['c x r', 'CXR'],
     ['cxr', 'CXR'],
     ['e c g', 'ECG'],
@@ -10614,15 +10653,65 @@ window.HAH.modules.deepgramDictation = true;
     return out;
   }
 
-  function applyClinicalAbbreviationReplacements(text){
-    if(!(typeof getDeepgramClinicalAbbreviations === 'function' ? getDeepgramClinicalAbbreviations() : true)) return String(text || '');
-    let next = String(text || '');
-    DEEPGRAM_REPLACE_RULES.forEach(([find, replacement]) => {
-      const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
-      next = next.replace(new RegExp('\\b' + escaped + '\\b', 'gi'), replacement);
+  function parseCustomPhraseRules(raw){
+    const seen = new Set();
+    return String(raw || '')
+      .split(/\r?\n/)
+      .map(line => String(line || '').trim())
+      .filter(Boolean)
+      .map(line => {
+        const match = line.match(/^(.*?)\s*(?:=>|->|=|:)\s*(.*?)$/);
+        if(!match) return null;
+        const spoken = String(match[1] || '').trim();
+        const written = String(match[2] || '').trim();
+        if(!spoken || !written) return null;
+        const key = spoken.toLowerCase() + '→' + written;
+        if(seen.has(key)) return null;
+        seen.add(key);
+        return [spoken, written];
+      })
+      .filter(Boolean);
+  }
+
+  function getCustomPhraseRules(){
+    const raw = typeof getDeepgramCustomPhrases === 'function' ? getDeepgramCustomPhrases() : '';
+    return parseCustomPhraseRules(raw);
+  }
+
+  function appendDeepgramReplaceRules(params, rules){
+    rules.forEach(([find, replacement]) => {
+      if(find && replacement) params.append('replace', find + ':' + replacement);
     });
-    DEEPGRAM_CANONICAL_ABBREVIATIONS.forEach(([find, replacement]) => {
-      const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '[ \\t]+');
+  }
+
+  function appendDeepgramKeyterms(params, terms){
+    const seen = new Set();
+    terms.forEach(term => {
+      const clean = String(term || '').trim();
+      if(!clean) return;
+      const key = clean.toLowerCase();
+      if(seen.has(key)) return;
+      seen.add(key);
+      params.append('keyterm', clean);
+    });
+  }
+
+  function applyClinicalAbbreviationReplacements(text){
+    let next = String(text || '');
+    const commonEnabled = typeof getDeepgramClinicalAbbreviations === 'function' ? getDeepgramClinicalAbbreviations() : true;
+    if(commonEnabled){
+      DEEPGRAM_REPLACE_RULES.forEach(([find, replacement]) => {
+        const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+        next = next.replace(new RegExp('\\b' + escaped + '\\b', 'gi'), replacement);
+      });
+      DEEPGRAM_CANONICAL_ABBREVIATIONS.forEach(([find, replacement]) => {
+        const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '[ \\t]+');
+        next = next.replace(new RegExp('\\b' + escaped + '\\b', 'gi'), replacement);
+      });
+    }
+    const customRules = getCustomPhraseRules();
+    customRules.forEach(([find, replacement]) => {
+      const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
       next = next.replace(new RegExp('\\b' + escaped + '\\b', 'gi'), replacement);
     });
     return next;
@@ -10769,6 +10858,7 @@ window.HAH.modules.deepgramDictation = true;
     const numerals = typeof getDeepgramNumerals === 'function' ? getDeepgramNumerals() : true;
     const measurements = typeof getDeepgramMeasurements === 'function' ? getDeepgramMeasurements() : true;
     const clinicalAbbreviations = typeof getDeepgramClinicalAbbreviations === 'function' ? getDeepgramClinicalAbbreviations() : true;
+    const customRules = getCustomPhraseRules();
     params.set('model', model);
     params.set('language', language);
     params.set('interim_results', 'true');
@@ -10779,10 +10869,15 @@ window.HAH.modules.deepgramDictation = true;
     if(numerals) params.set('numerals', 'true');
     if(measurements) params.set('measurements', 'true');
     params.set('mip_opt_out', 'true');
-    DEEPGRAM_KEYTERMS.forEach(term => params.append('keyterm', term));
+    const hintedTerms = [...DEEPGRAM_KEYTERMS];
+    customRules.forEach(([spoken, written]) => {
+      hintedTerms.push(spoken, written);
+    });
+    appendDeepgramKeyterms(params, hintedTerms);
     if(clinicalAbbreviations){
-      DEEPGRAM_REPLACE_RULES.forEach(([find, replacement]) => params.append('replace', find + ':' + replacement));
+      appendDeepgramReplaceRules(params, DEEPGRAM_REPLACE_RULES);
     }
+    appendDeepgramReplaceRules(params, customRules);
     return 'wss://api.deepgram.com/v1/listen?' + params.toString();
   }
 
