@@ -2458,7 +2458,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_428_release.html</div><div>Source: hospital_at_home_v12_36_428_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_429_release.html</div><div>Source: hospital_at_home_v12_36_429_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -7241,8 +7241,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_428_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_428_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_429_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_429_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11633,6 +11633,9 @@ window.HAH.modules.deepgramDictation = true;
     );
   }
 
+  // First-pass normalisation is applied chunk-by-chunk so live preview stays readable.
+  // Final composeInsertionText() then reapplies the clinical cleanup layer over the merged text
+  // to catch phrase replacements that were split across interim/final chunks.
   function normaliseTranscriptText(text, options = {}){
     return capitaliseGenericMedicationSentenceStarts(
       capitaliseNumberedBulletStarts(
@@ -11792,7 +11795,7 @@ window.HAH.modules.deepgramDictation = true;
     if(requestId) state.requestId = requestId;
   }
 
-  function describeUnexpectedCloseContext(state){
+  function describeUnexpectedCloseContext(state, event){
     const details = [];
     if(state && state.audioFramesSent) details.push(`${state.audioFramesSent} audio frames sent`);
     if(state && state.lastAudioAt){
@@ -11801,6 +11804,7 @@ window.HAH.modules.deepgramDictation = true;
     } else {
       details.push('no audio frames sent');
     }
+    if(event && typeof event.wasClean === 'boolean' && !event.wasClean) details.push('socket closed without clean handshake');
     if(document.visibilityState && document.visibilityState !== 'visible') details.push('app not foregrounded');
     return details.join(', ');
   }
@@ -11890,7 +11894,7 @@ window.HAH.modules.deepgramDictation = true;
       }
 
       if(!activeState.finalizing){
-        const context = closeCode === 1006 ? describeUnexpectedCloseContext(activeState) : '';
+        const context = closeCode === 1006 ? describeUnexpectedCloseContext(activeState, event) : '';
         const msg = explainCloseReason(event, activeState) + (context ? ` (${context}).` : '');
         cleanupDictationResources();
         dictationState = null;
@@ -12024,6 +12028,7 @@ window.HAH.modules.deepgramDictation = true;
     cleanupDictationResources();
     dictationState = null;
     refreshDictationButtons();
+    if(!silent && typeof setDeepgramStatus === 'function') setDeepgramStatus('Deepgram dictation stopped.');
 
   }
 
