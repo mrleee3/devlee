@@ -11155,8 +11155,11 @@ window.HAH.modules.deepgramDictation = true;
   ]
 ];
 
-  const MEDICATION_KEYTERM_LIMIT = 80;
-  const GENERAL_KEYTERM_LIMIT = 20;
+  const MEDICATION_KEYTERM_LIMIT = 12;
+  const GENERAL_KEYTERM_LIMIT = 32;
+  const CUSTOM_KEYTERM_LIMIT = 12;
+  const DEEPGRAM_KEYTERM_ENCODED_BUDGET = 1400;
+  const AUTO_RECONNECT_CLOSE_CODES = new Set([1006]);
   const MEDICATION_TRADE_NAMES = [
     'Abasaglar',
     'Adcal-D3',
@@ -11234,22 +11237,38 @@ window.HAH.modules.deepgramDictation = true;
     return getMedicationDictionaryTerms().slice(0, Math.max(0, limit));
   }
 
-  function getDeepgramKeytermTerms(){
-    const medicationTerms = getMedicationKeytermTerms();
+  function isMedicationLikeDictationTarget(targetId){
+    const id = String(targetId || '').trim().toLowerCase();
+    if(!id) return false;
+    return /(med|drug|iv|medication)/.test(id);
+  }
+
+  function getDeepgramKeytermTerms(targetId, customRules = []){
+    const includeMedicationTerms = isMedicationLikeDictationTarget(targetId);
     const out = [];
     const seen = new Set();
     function push(term){
       const clean = String(term || '').trim();
-      if(!clean) return;
+      if(!clean) return false;
       const key = clean.toLowerCase();
-      if(seen.has(key)) return;
+      if(seen.has(key)) return false;
       seen.add(key);
       out.push(clean);
+      return true;
     }
-    medicationTerms.forEach(push);
     DEEPGRAM_KEYTERMS.forEach(term => {
-      if(out.length >= MEDICATION_KEYTERM_LIMIT + GENERAL_KEYTERM_LIMIT) return;
+      if(out.length >= GENERAL_KEYTERM_LIMIT) return;
       push(term);
+    });
+    if(includeMedicationTerms){
+      getMedicationKeytermTerms().forEach(term => {
+        if(out.length >= GENERAL_KEYTERM_LIMIT + MEDICATION_KEYTERM_LIMIT) return;
+        push(term);
+      });
+    }
+    customRules.forEach(([spoken]) => {
+      if(out.length >= GENERAL_KEYTERM_LIMIT + (includeMedicationTerms ? MEDICATION_KEYTERM_LIMIT : 0) + CUSTOM_KEYTERM_LIMIT) return;
+      push(spoken);
     });
     return out;
   }
@@ -11538,17 +11557,21 @@ window.HAH.modules.deepgramDictation = true;
     });
   }
 
-  function appendDeepgramKeyterms(params, terms, maxTerms = 100){
+  function appendDeepgramKeyterms(params, terms, maxTerms = 100, maxEncodedChars = DEEPGRAM_KEYTERM_ENCODED_BUDGET){
     const seen = new Set();
     let count = 0;
+    let encodedChars = 0;
     terms.forEach(term => {
       const clean = String(term || '').trim();
       if(!clean) return;
       const key = clean.toLowerCase();
       if(seen.has(key) || count >= maxTerms) return;
+      const projected = encodeURIComponent(clean).length + 9;
+      if(maxEncodedChars && encodedChars + projected > maxEncodedChars) return;
       seen.add(key);
       params.append('keyterm', clean);
       count += 1;
+      encodedChars += projected;
     });
   }
 
@@ -11737,16 +11760,191 @@ window.HAH.modules.deepgramDictation = true;
     return 'Unable to start live dictation.';
   }
 
-  function explainCloseReason(event){
-    const code = Number(event && event.code || 0);
-    const reason = String(event && event.reason || '').trim();
+  function describeCloseCode(code){
     if(code === 1008 || code === 4001 || code === 4003) return 'Deepgram rejected the connection. Check the API key in Options.';
-    if(code === 1006) return 'Deepgram connection closed unexpectedly. Check your network and try again.';
-    if(reason) return reason;
-    return '';
+    if(code === 1006) return 'Deepgram connection closed unexpectedly.';
+    if(code === 1011) return 'Deepgram closed the stream unexpectedly.';
+    if(code === 1000) return 'Deepgram closed the stream.';
+    if(code) return `Deepgram connection closed (code ${code}).`;
+    return 'Deepgram connection closed unexpectedly.';
   }
 
-  function buildDeepgramUrl(){
+  function explainCloseReason(event, state){
+    const code = Number(event && event.code || 0);
+    const reason = String(event && event.reason || '').trim();
+    const requestId = String(state && state.requestId || '').trim();
+    const summary = describeCloseCode(code);
+    const details = [];
+    if(code) details.push(`code ${code}`);
+    if(reason) details.push(reason);
+    if(requestId) details.push(`request ${requestId}`);
+    return details.length ? `${summary} (${details.join(', ')}).` : summary;
+  }
+
+  function captureDeepgramRequestId(state, payload){
+    if(!state || !payload || typeof payload !== 'object') return;
+    const requestId = String(
+      payload.request_id ||
+      payload.requestId ||
+      (payload.metadata && (payload.metadata.request_id || payload.metadata.requestId)) ||
+      ''
+    ).trim();
+    if(requestId) state.requestId = requestId;
+  }
+
+  function describeUnexpectedCloseContext(state){
+    const details = [];
+    if(state && state.audioFramesSent) details.push(`${state.audioFramesSent} audio frames sent`);
+    if(state && state.lastAudioAt){
+      const ageMs = Math.max(0, Date.now() - state.lastAudioAt);
+      details.push(`last audio ${Math.round(ageMs / 100) / 10}s ago`);
+    } else {
+      details.push('no audio frames sent');
+    }
+    if(document.visibilityState && document.visibilityState !== 'visible') details.push('app not foregrounded');
+    return details.join(', ');
+  }
+
+  function hasLiveAudioStream(stream){
+    try{
+      return !!(stream && stream.active && stream.getAudioTracks && stream.getAudioTracks().some(track => track.readyState === 'live' && track.enabled !== false));
+    }catch(_err){
+      return false;
+    }
+  }
+
+  function getDictationAudioConstraints(){
+    return {
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true
+      }
+    };
+  }
+
+  async function ensureLiveDictationStream(state){
+    if(hasLiveAudioStream(state && state.stream)) return state.stream;
+    const stream = await navigator.mediaDevices.getUserMedia(getDictationAudioConstraints());
+    if(state) state.stream = stream;
+    return stream;
+  }
+
+  async function connectDeepgramSession(state, apiKey){
+    const stream = await ensureLiveDictationStream(state);
+    if(!dictationState || dictationState !== state){
+      stopTracks(stream);
+      return;
+    }
+
+    const ws = new WebSocket(buildDeepgramUrl(state.targetId), ['token', apiKey]);
+    state.ws = ws;
+    ws.binaryType = 'arraybuffer';
+
+    ws.onmessage = event => {
+      let payload = null;
+      try{ payload = JSON.parse(event.data); }catch(_err){ return; }
+      if(dictationState && dictationState === state && state.ws === ws) captureDeepgramRequestId(state, payload);
+      handleDeepgramResults(payload);
+    };
+
+    ws.onerror = () => {
+      const activeState = dictationState === state && state.ws === ws ? state : null;
+      const suffix = activeState && activeState.requestId ? ` Request ${activeState.requestId}.` : '';
+      if(typeof setDeepgramStatus === 'function') setDeepgramStatus(`Deepgram connection error.${suffix}`, true);
+    };
+
+    ws.onclose = event => {
+      const activeState = dictationState === state && state.ws === ws ? state : null;
+      if(!activeState) return;
+      const closeCode = Number(event && event.code || 0);
+      activeState.lastCloseCode = closeCode;
+
+      const shouldReconnect = !activeState.finalizing
+        && AUTO_RECONNECT_CLOSE_CODES.has(closeCode)
+        && activeState.autoReconnectAttempts < 1
+        && document.visibilityState === 'visible';
+
+      if(shouldReconnect){
+        activeState.autoReconnectAttempts += 1;
+        activeState.interimText = '';
+        if(activeState.keepAliveTimer){
+          clearInterval(activeState.keepAliveTimer);
+          activeState.keepAliveTimer = null;
+        }
+        try{
+          if(activeState.mediaRecorder && activeState.mediaRecorder.state !== 'inactive') activeState.mediaRecorder.stop();
+        }catch(_err){}
+        activeState.mediaRecorder = null;
+        activeState.ws = null;
+        if(typeof setDeepgramStatus === 'function') setDeepgramStatus('Deepgram connection dropped. Reconnecting…', true);
+        connectDeepgramSession(activeState, apiKey).catch(err => {
+          const fallback = explainStartError(err);
+          cleanupDictationResources();
+          dictationState = null;
+          refreshDictationButtons();
+          if(typeof setDeepgramStatus === 'function') setDeepgramStatus(fallback, true);
+          alert(fallback);
+        });
+        return;
+      }
+
+      if(!activeState.finalizing){
+        const context = closeCode === 1006 ? describeUnexpectedCloseContext(activeState) : '';
+        const msg = explainCloseReason(event, activeState) + (context ? ` (${context}).` : '');
+        cleanupDictationResources();
+        dictationState = null;
+        refreshDictationButtons();
+        if(msg){
+          if(typeof setDeepgramStatus === 'function') setDeepgramStatus(msg, true);
+          alert(msg);
+        }
+      }
+    };
+
+    ws.onopen = () => {
+      if(!dictationState || dictationState !== state || state.ws !== ws) return;
+      state.lastWsOpenAt = Date.now();
+      const mimeType = preferredRecorderMimeType();
+      let recorder = null;
+      try{
+        recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+      }catch(_err){
+        recorder = new MediaRecorder(stream);
+      }
+      state.mediaRecorder = recorder;
+      recorder.ondataavailable = async event => {
+        if(!dictationState || dictationState !== state || state.ws !== ws || ws.readyState !== WebSocket.OPEN) return;
+        if(!(event.data && event.data.size)) return;
+        try{
+          const chunk = await event.data.arrayBuffer();
+          if(ws.readyState === WebSocket.OPEN){
+            state.audioFramesSent += 1;
+            state.audioBytesSent += Number(chunk.byteLength || 0);
+            state.lastAudioAt = Date.now();
+            ws.send(chunk);
+          }
+        }catch(_err){}
+      };
+      recorder.onerror = () => {
+        if(typeof setDeepgramStatus === 'function') setDeepgramStatus('Microphone recording error.', true);
+      };
+      recorder.start(250);
+      state.keepAliveTimer = window.setInterval(() => {
+        try{
+          if(dictationState && dictationState === state && state.ws === ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'KeepAlive' }));
+        }catch(_err){}
+      }, 8000);
+      if(typeof setDeepgramStatus === 'function'){
+        const reconnectNote = state.autoReconnectAttempts ? ' Reconnected.' : '';
+        setDeepgramStatus('Deepgram dictation ready. Tap the mic again to stop.' + reconnectNote);
+      }
+      renderDictationPreview();
+      try{ if(typeof state.target?.blur === 'function') state.target.blur(); }catch(_err){}
+    };
+  }
+
+  function buildDeepgramUrl(targetId = ''){
     const params = new URLSearchParams();
     const model = typeof getDeepgramModel === 'function' ? getDeepgramModel() : 'nova-3-medical';
     const language = typeof getDeepgramLanguage === 'function' ? getDeepgramLanguage() : 'en-GB';
@@ -11767,28 +11965,16 @@ window.HAH.modules.deepgramDictation = true;
     if(numerals) params.set('numerals', 'true');
     if(measurements) params.set('measurements', 'true');
     params.set('mip_opt_out', 'true');
-    const hintedTerms = getDeepgramKeytermTerms();
-    customRules.forEach(([spoken, written]) => {
-      hintedTerms.push(spoken);
-      if(written && /[A-Z&-]/.test(written)) hintedTerms.push(written);
-    });
-    appendDeepgramKeyterms(params, hintedTerms, 100);
-    // Build base URL from URLSearchParams (safe params only - no replace rules)
-    let url = 'wss://api.deepgram.com/v1/listen?' + params.toString();
-    // Append replace rules manually to preserve the literal colon separator.
-    // URLSearchParams encodes ':' as '%3A' which breaks Deepgram's find:replacement format.
+    const hintedTerms = getDeepgramKeytermTerms(targetId, customRules);
+    appendDeepgramKeyterms(params, hintedTerms, 64, DEEPGRAM_KEYTERM_ENCODED_BUDGET);
     if(clinicalAbbreviations){
-      DEEPGRAM_REPLACE_RULES.forEach(([find, replacement]) => {
-        if(find && replacement){
-          url += '&replace=' + encodeURIComponent(find) + ':' + encodeURIComponent(replacement);
-        }
-      });
+      appendDeepgramReplaceRules(params, DEEPGRAM_REPLACE_RULES);
     }
     // Keep custom phrases app-side only. Sending them as Deepgram server-side replace rules
     // can make letter-style abbreviations like U&Es come back as spoken-out forms such as
     // "u's and e's" before our formatter sees them. We still send both sides as keyterm hints
     // and then apply the user's exact replacement locally to the transcript.
-    return url;
+    return 'wss://api.deepgram.com/v1/listen?' + params.toString();
   }
 
   function handleDeepgramResults(payload){
@@ -11880,84 +12066,20 @@ window.HAH.modules.deepgramDictation = true;
       mediaRecorder: null,
       keepAliveTimer: null,
       finalizing: false,
-      restoreFocus: (document.activeElement === target)
+      restoreFocus: (document.activeElement === target),
+      requestId: '',
+      audioFramesSent: 0,
+      audioBytesSent: 0,
+      lastAudioAt: 0,
+      lastWsOpenAt: 0,
+      autoReconnectAttempts: 0,
+      lastCloseCode: 0
     };
     try{ if(document.activeElement === target && typeof target.blur === 'function') target.blur(); }catch(_err){}
     refreshDictationButtons();
 
     try{
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true
-        }
-      });
-      if(!dictationState || dictationState.targetId !== targetId){
-        stopTracks(stream);
-        return;
-      }
-      dictationState.stream = stream;
-
-      const ws = new WebSocket(buildDeepgramUrl(), ['token', apiKey]);
-      dictationState.ws = ws;
-      ws.binaryType = 'arraybuffer';
-
-      ws.onmessage = event => {
-        let payload = null;
-        try{ payload = JSON.parse(event.data); }catch(_err){ return; }
-        handleDeepgramResults(payload);
-      };
-
-      ws.onerror = () => {
-        if(typeof setDeepgramStatus === 'function') setDeepgramStatus('Deepgram connection error.', true);
-      };
-
-      ws.onclose = event => {
-        if(!dictationState || dictationState.ws !== ws) return;
-        if(!dictationState.finalizing){
-          const msg = explainCloseReason(event);
-          cleanupDictationResources();
-          dictationState = null;
-          refreshDictationButtons();
-          if(msg){
-            if(typeof setDeepgramStatus === 'function') setDeepgramStatus(msg, true);
-            alert(msg);
-          }
-        }
-      };
-
-      ws.onopen = () => {
-        if(!dictationState || dictationState.ws !== ws) return;
-        const mimeType = preferredRecorderMimeType();
-        let recorder = null;
-        try{
-          recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
-        }catch(_err){
-          recorder = new MediaRecorder(stream);
-        }
-        dictationState.mediaRecorder = recorder;
-        recorder.ondataavailable = async event => {
-          if(!dictationState || dictationState.ws !== ws || ws.readyState !== WebSocket.OPEN) return;
-          if(!(event.data && event.data.size)) return;
-          try{
-            const chunk = await event.data.arrayBuffer();
-            if(ws.readyState === WebSocket.OPEN) ws.send(chunk);
-          }catch(_err){}
-        };
-        recorder.onerror = () => {
-          if(typeof setDeepgramStatus === 'function') setDeepgramStatus('Microphone recording error.', true);
-        };
-        recorder.start(250);
-        dictationState.keepAliveTimer = window.setInterval(() => {
-          try{
-            if(dictationState && dictationState.ws === ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'KeepAlive' }));
-          }catch(_err){}
-        }, 8000);
-        if(typeof setDeepgramStatus === 'function') setDeepgramStatus('Deepgram dictation ready. Tap the mic again to stop.');
-        renderDictationPreview();
-        try{ if(typeof target.blur === 'function') target.blur(); }catch(_err){}
-      };
+      await connectDeepgramSession(dictationState, apiKey);
     }catch(err){
       const msg = explainStartError(err);
       if(typeof setDeepgramStatus === 'function') setDeepgramStatus(msg, true);
