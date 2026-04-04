@@ -2150,8 +2150,8 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
             <div class="onboarding-panel hidden" data-onboarding-panel="api">
               <label for="onboardingGroqKeyInput">Groq API key</label>
               <input autocapitalize="off" autocorrect="off" id="onboardingGroqKeyInput" placeholder="Blister pack / IV scan" spellcheck="false" type="password"/>
-              <label for="onboardingGeminiKeyInput" style="margin-top:12px">Gemini API key</label>
-              <input autocapitalize="off" autocorrect="off" id="onboardingGeminiKeyInput" placeholder="ECG Assist" spellcheck="false" type="password"/>
+              <label for="onboardingGeminiKeyInput" style="margin-top:12px">Gemini API key <span class="tiny muted">(optional fallback)</span></label>
+              <input autocapitalize="off" autocorrect="off" id="onboardingGeminiKeyInput" placeholder="Optional ECG fallback" spellcheck="false" type="password"/>
               <label for="onboardingDeepgramKeyInput" style="margin-top:12px">Deepgram API key</label>
               <input autocapitalize="off" autocorrect="off" id="onboardingDeepgramKeyInput" placeholder="Live dictation" spellcheck="false" type="password"/>
               <div class="tiny muted" style="margin-top:8px">Keys are stored locally on this device only. You can edit them later in Options.</div>
@@ -2403,18 +2403,24 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 <div class="card options-section-card collapsed" data-options-section="aiscan">
 <button aria-controls="optionsSectionAiScan" aria-expanded="false" class="options-section-toggle" data-options-section-toggle="aiscan" type="button">
-<span class="options-section-titlewrap"><span class="options-section-title">AI scan tools (beta)</span><span class="options-section-subtitle">Groq for blister / IV, Gemini for ECG</span></span>
+<span class="options-section-titlewrap"><span class="options-section-title">AI scan tools (beta)</span><span class="options-section-subtitle">Groq for blister / IV, PULSE endpoint or Gemini for ECG</span></span>
 <span aria-hidden="true" class="options-section-chevron">›</span>
 </button>
 <div class="options-section-body" id="optionsSectionAiScan">
-<div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Store scan API keys locally on this device. Keys stay in this browser only.</div>
+<div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Store scan settings locally on this device. Keys and endpoint URLs stay in this browser only.</div>
 <label>Groq API key <span class="tiny muted">(blister pack / IV label)</span></label>
 <input autocapitalize="off" autocorrect="off" id="xaiApiKeyInput" placeholder="Paste your Groq API key" spellcheck="false" type="password"/>
 <div class="top-actions" style="margin-top:10px">
 <button class="primary fullwidth" id="saveXaiSettingsBtn">Save key</button>
 </div>
 <div class="tiny muted" id="xaiSettingsStatus" style="margin-top:6px;margin-bottom:12px"></div>
-<label>Gemini API key <span class="tiny muted">(ECG Assist)</span></label>
+<label>PULSE endpoint URL <span class="tiny muted">(Modal ECG endpoint)</span></label>
+<input autocapitalize="off" autocorrect="off" id="pulseEndpointUrlInput" placeholder="Paste your deployed Modal endpoint URL" spellcheck="false" type="url"/>
+<div class="top-actions" style="margin-top:10px">
+<button class="primary fullwidth" id="savePulseSettingsBtn">Save endpoint</button>
+</div>
+<div class="tiny muted" id="pulseSettingsStatus" style="margin-top:6px;margin-bottom:12px">If set, ECG Assist will use this PULSE endpoint before trying Gemini.</div>
+<label>Gemini API key <span class="tiny muted">(optional ECG fallback)</span></label>
 <input autocapitalize="off" autocorrect="off" id="geminiApiKeyInput" placeholder="Paste your Gemini API key" spellcheck="false" type="password"/>
 <div class="top-actions" style="margin-top:10px">
 <button class="primary fullwidth" id="saveGeminiSettingsBtn">Save key</button>
@@ -2458,7 +2464,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_429_release.html</div><div>Source: hospital_at_home_v12_36_429_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_431_release.html</div><div>Source: hospital_at_home_v12_36_431_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -2645,7 +2651,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.core = true;
-const STORAGE_KEY="hah_prototype_v12_36_162_pin_rebuild_data", UNDO_KEY="hah_prototype_v12_36_162_pin_rebuild_undo", NHS_EMAIL_KEY="hah_nhs_email", GRAPH_SETTINGS_KEY="hah_graph_settings", GRAPH_ACCOUNT_KEY="hah_graph_account", XAI_SETTINGS_KEY="hah_xai_settings", GEMINI_SETTINGS_KEY="hah_gemini_settings", DEEPGRAM_SETTINGS_KEY="hah_deepgram_settings", OPTIONS_SECTION_KEY="hah_options_open_section";
+const STORAGE_KEY="hah_prototype_v12_36_162_pin_rebuild_data", UNDO_KEY="hah_prototype_v12_36_162_pin_rebuild_undo", NHS_EMAIL_KEY="hah_nhs_email", GRAPH_SETTINGS_KEY="hah_graph_settings", GRAPH_ACCOUNT_KEY="hah_graph_account", XAI_SETTINGS_KEY="hah_xai_settings", GEMINI_SETTINGS_KEY="hah_gemini_settings", PULSE_SETTINGS_KEY="hah_pulse_settings", DEEPGRAM_SETTINGS_KEY="hah_deepgram_settings", OPTIONS_SECTION_KEY="hah_options_open_section";
 const PIN_KEY='hah_pin_hash', CRED_ID_KEY='hah_cred_id', BIOMETRIC_KEY='hah_biometric', NEDRY_SOUND_KEY='hah_nedry_enabled';
 const LEGACY_STORAGE_KEYS=['hah_prototype_v12_36_156_pin_state_fix_data','hah_prototype_v12_36_153_medlist_update_only_data','hah_prototype_v12_36_140_pin_loop_fix2_data','hah_prototype_v12_36_139_bg_underlay_fix_data','hah_prototype_v12_36_138_pull_refresh_icon_restore_data','hah_prototype_v12_36_137_pin_loop_fix_data','hah_prototype_v12_36_134_safe_update_banner_data','hah_prototype_v12_36_133_reorder_activate_only_data','hah_prototype_v12_36_104_weight_overlay_parsefix_data','hah_prototype_v12_36_103_weight_overlay_historyfix_data','hah_prototype_v12_36_102_weight_overlay_data','hah_prototype_v12_36_101_flush2_data','hah_prototype_v12_36_96_fresh_demo_patients_data','hah_prototype_v12_36_78_pull_refresh_softgrey_data','hah_prototype_v12_36_77_pull_refresh_underlay_glyph_tuned_data','hah_prototype_v12_36_76_pull_refresh_underlay_glyph_data','hah_prototype_v12_36_75_pull_refresh_feedback_from71_data','hah_prototype_v12_36_74_pull_refresh_feedback_fix_data','hah_prototype_v12_36_73_pull_refresh_feedback_data','hah_prototype_v12_36_72_pull_refresh_data','hah_prototype_v12_36_71_search_toggleclose_data','hah_prototype_v12_36_70_search_keyboardfix_data','hah_prototype_v12_36_69_search_autofocus_data','hah_prototype_v12_36_68_search_fullwidth_data','hah_prototype_v12_36_68_search_fullwidth_undo','hah_prototype_v12_36_67_search_style60_data','hah_prototype_v12_36_67_search_style60_undo','hah_prototype_v12_36_66_search_from58_data','hah_prototype_v12_36_66_search_from58_undo',"hah_prototype_v12_36_58_sortsurname_toggle_data","hah_prototype_v12_36_57_data","hah_prototype_v12_36_55_data","hah_prototype_v12_36_49_data","hah_prototype_v12_36_48_data","hah_prototype_v12_36_47_data","hah_prototype_v12_36_46_data","hah_prototype_v12_36_45_data","hah_prototype_v12_36_36_data","hah_prototype_v12_36_19_data","hah_prototype_v12_35_3_data"];
 const LEGACY_UNDO_KEYS=['hah_prototype_v12_36_156_pin_state_fix_undo',"hah_prototype_v12_36_140_pin_loop_fix2_undo","hah_prototype_v12_36_139_bg_underlay_fix_undo","hah_prototype_v12_36_137_pin_loop_fix_undo","hah_prototype_v12_36_134_safe_update_banner_undo","hah_prototype_v12_36_133_reorder_activate_only_undo","hah_prototype_v12_36_104_weight_overlay_parsefix_undo","hah_prototype_v12_36_103_weight_overlay_historyfix_undo","hah_prototype_v12_36_102_weight_overlay_undo","hah_prototype_v12_36_101_flush2_undo","hah_prototype_v12_36_96_fresh_demo_patients_undo","hah_prototype_v12_36_78_pull_refresh_softgrey_undo","hah_prototype_v12_36_77_pull_refresh_underlay_glyph_tuned_undo","hah_prototype_v12_36_76_pull_refresh_underlay_glyph_undo","hah_prototype_v12_36_75_pull_refresh_feedback_from71_undo","hah_prototype_v12_36_74_pull_refresh_feedback_fix_undo","hah_prototype_v12_36_73_pull_refresh_feedback_undo","hah_prototype_v12_36_72_pull_refresh_undo","hah_prototype_v12_36_71_search_toggleclose_undo","hah_prototype_v12_36_70_search_keyboardfix_undo","hah_prototype_v12_36_69_search_autofocus_undo","hah_prototype_v12_36_58_sortsurname_toggle_undo","hah_prototype_v12_36_57_undo","hah_prototype_v12_36_55_undo","hah_prototype_v12_36_49_undo","hah_prototype_v12_36_48_undo","hah_prototype_v12_36_47_undo","hah_prototype_v12_36_46_undo","hah_prototype_v12_36_45_undo","hah_prototype_v12_36_36_undo","hah_prototype_v12_36_19_undo","hah_prototype_v12_35_3_undo"];
@@ -2898,6 +2904,50 @@ function fillXaiSettingsUI(){
 }
 function getXaiApiKey(){
   return String(loadXaiSettings().apiKey||'').trim();
+}
+
+function defaultPulseSettings(){
+  return {endpointUrl:''};
+}
+function loadPulseSettings(){
+  try{return {...defaultPulseSettings(), ...(JSON.parse(localStorage.getItem(PULSE_SETTINGS_KEY)||"{}"))};}
+  catch(e){return defaultPulseSettings();}
+}
+function setPulseStatus(msg, isError=false){
+  const el=$("pulseSettingsStatus");
+  if(!el) return;
+  el.textContent=msg||"";
+  el.style.color=isError?'#b91c1c':'#6b7280';
+}
+function setPulseSettingsLocked(locked){
+  const inp=$("pulseEndpointUrlInput");
+  const btn=$("savePulseSettingsBtn");
+  if(inp){
+    inp.readOnly=locked;
+    inp.style.background=locked?'#f3f4f6':'';
+    inp.style.color=locked?'#6b7280':'';
+  }
+  if(btn){
+    btn.textContent=locked?'Edit endpoint':'Save endpoint';
+    btn.classList.toggle('primary', !locked);
+  }
+}
+function savePulseSettings(showMsg=true){
+  const settings={endpointUrl:($("pulseEndpointUrlInput")?.value||"").trim().replace(/\/$/, '')};
+  localStorage.setItem(PULSE_SETTINGS_KEY, JSON.stringify(settings));
+  if(showMsg){
+    setPulseSettingsLocked(true);
+    setPulseStatus(settings.endpointUrl?'PULSE endpoint saved on this device.':'PULSE endpoint removed.');
+  }
+  return settings;
+}
+function fillPulseSettingsUI(){
+  const s=loadPulseSettings();
+  if($("pulseEndpointUrlInput")) $("pulseEndpointUrlInput").value=s.endpointUrl||"";
+  setPulseSettingsLocked(!!(s.endpointUrl));
+}
+function getPulseEndpointUrl(){
+  return String(loadPulseSettings().endpointUrl||'').trim().replace(/\/$/, '');
 }
 function defaultGeminiSettings(){
   return {apiKey:'', model:'gemini-3-flash-preview'};
@@ -7241,8 +7291,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_429_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_429_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_431_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_431_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -7725,10 +7775,12 @@ function fillOnboardingInputsFromSavedSettings(){
   const nhs=nhsEmail || (typeof loadNhsEmail==='function' ? (loadNhsEmail(), nhsEmail) : '') || ($('nhsEmailInput')?.value||'');
   const xai=typeof loadXaiSettings==='function' ? loadXaiSettings().apiKey||'' : ($('xaiApiKeyInput')?.value||'');
   const gemini=typeof loadGeminiSettings==='function' ? loadGeminiSettings().apiKey||'' : ($('geminiApiKeyInput')?.value||'');
+  const pulse=typeof loadPulseSettings==='function' ? loadPulseSettings().endpointUrl||'' : ($('pulseEndpointUrlInput')?.value||'');
   const deepgram=typeof loadDeepgramSettings==='function' ? loadDeepgramSettings().apiKey||'' : ($('deepgramApiKeyInput')?.value||'');
   if($('onboardingNhsEmailInput')) $('onboardingNhsEmailInput').value=nhs||'';
   if($('onboardingGroqKeyInput')) $('onboardingGroqKeyInput').value=xai||'';
   if($('onboardingGeminiKeyInput')) $('onboardingGeminiKeyInput').value=gemini||'';
+  if($('pulseEndpointUrlInput')) $('pulseEndpointUrlInput').value=pulse||'';
   if($('onboardingDeepgramKeyInput')) $('onboardingDeepgramKeyInput').value=deepgram||'';
 }
 function persistOnboardingEmail(){
@@ -8280,7 +8332,7 @@ document.addEventListener("DOMContentLoaded",function(){
   initAppSnapshotShield();
   initAppSplash();
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
-  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillGeminiSettingsUI(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -8413,7 +8465,7 @@ document.addEventListener("DOMContentLoaded",function(){
     };
 });
   $("issues").addEventListener("keydown",bulletKeyHandler); $("plan").addEventListener("keydown",bulletKeyHandler); $("forDischargeSummary").addEventListener("keydown",bulletKeyHandler); $("issues").addEventListener("input",()=>capitalizeBulletStarts($("issues"))); $("plan").addEventListener("input",()=>capitalizeBulletStarts($("plan"))); $("forDischargeSummary").addEventListener("input",()=>capitalizeBulletStarts($("forDischargeSummary")));
-  ["newName","newAge","newReferralOther","rr","spo2","temp","bp","hr","weight","bm","xaiApiKeyInput","geminiApiKeyInput"].forEach(id=>{const el=$(id); if(el){el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault(); if(id==="newReferralOther") $("saveAddBtn").focus(); else if(id==="xaiApiKeyInput") $("saveXaiSettingsBtn")?.click(); else if(id==="geminiApiKeyInput") $("saveGeminiSettingsBtn")?.click(); else focusNextField(id)}})}});
+  ["newName","newAge","newReferralOther","rr","spo2","temp","bp","hr","weight","bm","xaiApiKeyInput","pulseEndpointUrlInput","geminiApiKeyInput"].forEach(id=>{const el=$(id); if(el){el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault(); if(id==="newReferralOther") $("saveAddBtn").focus(); else if(id==="xaiApiKeyInput") $("saveXaiSettingsBtn")?.click(); else if(id==="pulseEndpointUrlInput") $("savePulseSettingsBtn")?.click(); else if(id==="geminiApiKeyInput") $("saveGeminiSettingsBtn")?.click(); else focusNextField(id)}})}});
   function preserveAddPatientInputFocus(e){
     if(!document.body.classList.contains("add-patient-open")) return;
     const active=document.activeElement;
@@ -8525,6 +8577,17 @@ document.addEventListener("DOMContentLoaded",function(){
       return;
     }
     saveXaiSettings(true);
+  };
+  if($("savePulseSettingsBtn")) $("savePulseSettingsBtn").onclick=()=>{
+    const btn=$("savePulseSettingsBtn");
+    const inp=$("pulseEndpointUrlInput");
+    if(btn && btn.textContent==='Edit endpoint'){
+      setPulseSettingsLocked(false);
+      setPulseStatus('Editing endpoint.');
+      if(inp){ try{inp.focus({preventScroll:true});}catch(_){inp.focus();} inp.select?.(); }
+      return;
+    }
+    savePulseSettings(true);
   };
   if($("saveGeminiSettingsBtn")) $("saveGeminiSettingsBtn").onclick=()=>{
     const btn=$("saveGeminiSettingsBtn");
@@ -9326,6 +9389,12 @@ initBpOverlay();
   }
   function titleCase(label){ return String(label || '').replace(/\b\w/g, c => c.toUpperCase()); }
   function uniqueOrdered(values){ return Array.from(new Set((values || []).filter(Boolean))); }
+  function getPulseEndpointUrlSafe(){
+    return typeof getPulseEndpointUrl==='function' ? String(getPulseEndpointUrl() || '').trim().replace(/\/$/, '') : '';
+  }
+  function hasConfiguredEcgProvider(){
+    return !!(getPulseEndpointUrlSafe() || (typeof getGeminiApiKey==='function' ? getGeminiApiKey() : ''));
+  }
   function getConfiguredGeminiModel(){
     return typeof getGeminiModel==='function' ? String(getGeminiModel() || '').trim() : '';
   }
@@ -10139,6 +10208,31 @@ initBpOverlay();
     const result = normaliseResult(leadRaw);
     return mergeOverviewIntoResult(result, overview);
   }
+  async function requestPulseEcgDraft({ endpointUrl, imageBundle }){
+    const body = {
+      mode: 'ecg_assist_v1',
+      preview_data_url: imageBundle.previewDataUrl,
+      analysis_images: Array.isArray(imageBundle.analysisImages)
+        ? imageBundle.analysisImages.map(part => ({ label: cleanText(part?.label || 'ECG image'), data_url: String(part?.dataUrl || '').trim() })).filter(part => part.data_url)
+        : []
+    };
+    const res = await fetch(endpointUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const rawText = await res.text();
+    let data = {};
+    try{ data = rawText ? JSON.parse(rawText) : {}; }catch(_e){ data = {}; }
+    if(!res.ok){
+      const message = cleanText(data?.error || data?.message || rawText).slice(0,240);
+      throw new Error(message ? `PULSE endpoint error (${res.status}): ${message}` : `PULSE endpoint error (${res.status}).`);
+    }
+    const payload = data && typeof data === 'object' ? data : {};
+    const candidate = payload.result && typeof payload.result === 'object' ? payload.result : payload;
+    if(!candidate || typeof candidate !== 'object') throw new Error('PULSE endpoint returned no ECG result object.');
+    return normaliseResult(candidate);
+  }
 
   function reset(patientId){
     state = { mode:'scan', dataUrl:'', result:null, busy:false, patientId:patientId||'' };
@@ -10261,8 +10355,7 @@ initBpOverlay();
   function isOpen(){ const el=$('ecgAssistOverlay'); return !!(el && !el.classList.contains('hidden')); }
   function openOverlay(mode){
     if(!currentPatient || !patients || !patients[currentPatient]){ alert('Open a patient first.'); return; }
-    const key=typeof getGeminiApiKey==='function'?getGeminiApiKey():'';
-    if(!key){ alert('Please add your Gemini API key in Options first.'); if(typeof showSection==='function') showSection('handover'); return; }
+    if(!hasConfiguredEcgProvider()){ alert('Please add a PULSE endpoint URL or Gemini API key in Options first.'); if(typeof showSection==='function') showSection('handover'); return; }
     const overlay=$('ecgAssistOverlay'); if(!overlay) return;
     if(state.patientId!==currentPatient) reset(currentPatient);
     setMode(mode||state.mode||'scan');
@@ -10275,8 +10368,9 @@ initBpOverlay();
   function closeOverlay(){ const overlay=$('ecgAssistOverlay'); if(!overlay) return; overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); document.body.classList.remove('ecg-assist-open'); }
 
   async function runAssist(file){
+    const pulseEndpoint = getPulseEndpointUrlSafe();
     const apiKey=typeof getGeminiApiKey==='function'?getGeminiApiKey():'';
-    if(!apiKey){ setStatus('Please add your Gemini API key in Options first.',true); return; }
+    if(!pulseEndpoint && !apiKey){ setStatus('Please add a PULSE endpoint URL or Gemini API key in Options first.',true); return; }
     state.busy=true;
     try{
       setStatus('Preparing ECG image…');
@@ -10285,16 +10379,32 @@ initBpOverlay();
       render();
 
       let result;
-      try{
-        setStatus('Scanning ECG with Gemini…');
-        result = await requestGeminiEcgDraft({ apiKey, imageBundle });
-      }catch(err){
-        if(!isGeminiTransportFailure(err)) throw err;
-        setStatus('Retrying with a smaller ECG image bundle…');
-        imageBundle = await buildEcgImageBundle(file, true);
-        state.dataUrl = imageBundle.previewDataUrl;
-        render();
-        result = await requestGeminiEcgDraft({ apiKey, imageBundle });
+      if(pulseEndpoint){
+        try{
+          setStatus('Scanning ECG with PULSE…');
+          result = await requestPulseEcgDraft({ endpointUrl: pulseEndpoint, imageBundle });
+        }catch(err){
+          if(apiKey){
+            console.warn('PULSE endpoint failed, falling back to Gemini.', err);
+            setStatus('PULSE endpoint failed — retrying with Gemini fallback…');
+            result = null;
+          }else{
+            throw err;
+          }
+        }
+      }
+      if(!result){
+        try{
+          setStatus('Scanning ECG with Gemini…');
+          result = await requestGeminiEcgDraft({ apiKey, imageBundle });
+        }catch(err){
+          if(!isGeminiTransportFailure(err)) throw err;
+          setStatus('Retrying with a smaller ECG image bundle…');
+          imageBundle = await buildEcgImageBundle(file, true);
+          state.dataUrl = imageBundle.previewDataUrl;
+          render();
+          result = await requestGeminiEcgDraft({ apiKey, imageBundle });
+        }
       }
 
       state.result = result;
@@ -10305,7 +10415,7 @@ initBpOverlay();
     }catch(err){
       console.error(err);
       const message=String(err&&err.message||'').trim()||'ECG scan failed.';
-      if(isGeminiTransportFailure(err)) setStatus('Could not reach Gemini from this browser just now. Check connection and try again. The app already retried once with a smaller ECG image. If it keeps happening, direct browser API calls may be blocked in this view.',true);
+      if(isGeminiTransportFailure(err)) setStatus('Could not reach the ECG analysis service from this browser just now. Check connection and try again. Gemini already retried once with a smaller ECG image if it was being used.',true);
       else setStatus(message,true);
     }finally{
       state.busy=false;
@@ -11621,14 +11731,43 @@ window.HAH.modules.deepgramDictation = true;
     return next;
   }
 
+  function ensureBulletDashSpacing(text){
+    return String(text || '')
+      .replace(/(^|\n)-(?=\S)/g, '$1- ')
+      .replace(/(^|\n)-\s{2,}/g, '$1- ');
+  }
+
+  function shouldForceSpeechFinalPunctuation(targetId){
+    const cleanTargetId = String(targetId || '');
+    if(!cleanTargetId) return false;
+    if(STRUCTURED_DICTATION_TARGETS.has(cleanTargetId)) return false;
+    if(isMedicationLikeDictationTarget(cleanTargetId)) return false;
+    return true;
+  }
+
+  function applySpeechFinalPunctuation(text, options = {}){
+    const next = String(text || '');
+    if(!next) return '';
+    if(!options || !options.speechFinal || !shouldForceSpeechFinalPunctuation(options.targetId)) return next;
+    const trimmed = next.replace(/[ \t]+$/g, '');
+    if(!trimmed) return trimmed;
+    if(/[.!?…](["'”’\])}]*)$/.test(trimmed)) return trimmed;
+    if(/[,:;\-–—\/]$/.test(trimmed)) return trimmed;
+    if(/\b(?:and|or|with|of|to|for|in|on|at|from|via|plus|then|because|but|so)\s*$/i.test(trimmed)) return trimmed;
+    if(!/[A-Za-z]{2,}/.test(trimmed)) return trimmed;
+    return trimmed + '.';
+  }
+
   function applyClinicalTextPostProcessing(text){
     return capitaliseGenericMedicationSentenceStarts(
       capitaliseNumberedBulletStarts(
-        normaliseMedicationAndWeightUnits(applyClinicalAbbreviationReplacements(String(text || '')))
-          .replace(/[ \t\f\v]{2,}/g, ' ')
-          .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
-          .replace(/\n{3,}/g, '\n\n')
-          .replace(/[ \t\f\v]+$/g, '')
+        ensureBulletDashSpacing(
+          normaliseMedicationAndWeightUnits(applyClinicalAbbreviationReplacements(String(text || '')))
+            .replace(/[ \t\f\v]{2,}/g, ' ')
+            .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
+            .replace(/\n{3,}/g, '\n\n')
+            .replace(/[ \t\f\v]+$/g, '')
+        )
       )
     );
   }
@@ -11639,13 +11778,18 @@ window.HAH.modules.deepgramDictation = true;
   function normaliseTranscriptText(text, options = {}){
     return capitaliseGenericMedicationSentenceStarts(
       capitaliseNumberedBulletStarts(
-        applyClinicalAbbreviationReplacements(
-          applyDictationListFormatting(text, options)
-            .replace(/\r\n?/g, '\n')
-            .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
-            .replace(/\n{3,}/g, '\n\n')
-            .replace(/[ \t\f\v]{2,}/g, ' ')
-            .replace(/^[ \t\f\v]+|[ \t\f\v]+$/g, '')
+        ensureBulletDashSpacing(
+          applySpeechFinalPunctuation(
+            applyClinicalAbbreviationReplacements(
+              applyDictationListFormatting(text, options)
+                .replace(/\r\n?/g, '\n')
+                .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
+                .replace(/\n{3,}/g, '\n\n')
+                .replace(/[ \t\f\v]{2,}/g, ' ')
+                .replace(/^[ \t\f\v]+|[ \t\f\v]+$/g, '')
+            ),
+            options
+          )
         )
       )
     );
@@ -11658,6 +11802,7 @@ window.HAH.modules.deepgramDictation = true;
     if(!prev) return next;
     if(/\n/.test(next.charAt(0))) return prev.replace(/[ \t]+$/,'') + next;
     if(/[\s\n\r]$/.test(prev)) return prev + next;
+    if(/(^|\n)-$/.test(prev)) return prev + ' ' + next;
     if(/[\-–—\/]$/.test(prev)) return prev + next;
     if(/^[,.;:!?)]/.test(next)) return prev + next;
     return prev + ' ' + next;
@@ -11962,7 +12107,7 @@ window.HAH.modules.deepgramDictation = true;
     params.set('model', model);
     params.set('language', language);
     params.set('interim_results', 'true');
-    params.set('endpointing', '500');
+    params.set('endpointing', '900');
     if(punctuate || dictation || smartFormat) params.set('punctuate', 'true');
     if(dictation) params.set('dictation', 'true');
     if(smartFormat) params.set('smart_format', 'true');
@@ -11985,7 +12130,8 @@ window.HAH.modules.deepgramDictation = true;
     if(!dictationState || payload.type !== 'Results') return;
     const transcript = normaliseTranscriptText(payload?.channel?.alternatives?.[0]?.transcript || '', {
       targetId: dictationState.targetId,
-      contextText: String(dictationState.baseBefore || '') + String(dictationState.committedText || '')
+      contextText: String(dictationState.baseBefore || '') + String(dictationState.committedText || ''),
+      speechFinal: !!payload?.speech_final
     });
     if(payload.is_final){
       if(transcript) dictationState.committedText = joinTranscript(dictationState.committedText, transcript);
