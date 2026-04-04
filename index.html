@@ -11534,7 +11534,7 @@ window.HAH.modules.deepgramDictation = true;
 
   function appendDeepgramReplaceRules(params, rules){
     rules.forEach(([find, replacement]) => {
-      if(find && replacement) params.append('replace', encodeURIComponent(find) + ':' + encodeURIComponent(replacement));
+      if(find && replacement) params.append('replace', find + ':' + replacement);
     });
   }
 
@@ -11737,13 +11737,36 @@ window.HAH.modules.deepgramDictation = true;
     return 'Unable to start live dictation.';
   }
 
-  function explainCloseReason(event){
+  function describeCloseCode(code){
+    if(code === 1008 || code === 4001 || code === 4003) return 'Deepgram rejected the connection. Check the API key in Options.';
+    if(code === 1006) return 'Deepgram connection closed unexpectedly.';
+    if(code === 1011) return 'Deepgram closed the stream unexpectedly.';
+    if(code === 1000) return 'Deepgram closed the stream.';
+    if(code) return `Deepgram connection closed (code ${code}).`;
+    return 'Deepgram connection closed unexpectedly.';
+  }
+
+  function explainCloseReason(event, state){
     const code = Number(event && event.code || 0);
     const reason = String(event && event.reason || '').trim();
-    if(code === 1008 || code === 4001 || code === 4003) return 'Deepgram rejected the connection. Check the API key in Options.';
-    if(code === 1006) return 'Deepgram connection closed unexpectedly. Check your network and try again.';
-    if(reason) return reason;
-    return '';
+    const requestId = String(state && state.requestId || '').trim();
+    const summary = describeCloseCode(code);
+    const details = [];
+    if(code) details.push(`code ${code}`);
+    if(reason) details.push(reason);
+    if(requestId) details.push(`request ${requestId}`);
+    return details.length ? `${summary} (${details.join(', ')}).` : summary;
+  }
+
+  function captureDeepgramRequestId(state, payload){
+    if(!state || !payload || typeof payload !== 'object') return;
+    const requestId = String(
+      payload.request_id ||
+      payload.requestId ||
+      (payload.metadata && (payload.metadata.request_id || payload.metadata.requestId)) ||
+      ''
+    ).trim();
+    if(requestId) state.requestId = requestId;
   }
 
   function buildDeepgramUrl(){
@@ -11872,7 +11895,8 @@ window.HAH.modules.deepgramDictation = true;
       mediaRecorder: null,
       keepAliveTimer: null,
       finalizing: false,
-      restoreFocus: (document.activeElement === target)
+      restoreFocus: (document.activeElement === target),
+      requestId: ''
     };
     try{ if(document.activeElement === target && typeof target.blur === 'function') target.blur(); }catch(_err){}
     refreshDictationButtons();
@@ -11898,17 +11922,21 @@ window.HAH.modules.deepgramDictation = true;
       ws.onmessage = event => {
         let payload = null;
         try{ payload = JSON.parse(event.data); }catch(_err){ return; }
+        if(dictationState && dictationState.ws === ws) captureDeepgramRequestId(dictationState, payload);
         handleDeepgramResults(payload);
       };
 
       ws.onerror = () => {
-        if(typeof setDeepgramStatus === 'function') setDeepgramStatus('Deepgram connection error.', true);
+        const state = dictationState && dictationState.ws === ws ? dictationState : null;
+        const suffix = state && state.requestId ? ` Request ${state.requestId}.` : '';
+        if(typeof setDeepgramStatus === 'function') setDeepgramStatus(`Deepgram connection error.${suffix}`, true);
       };
 
       ws.onclose = event => {
-        if(!dictationState || dictationState.ws !== ws) return;
-        if(!dictationState.finalizing){
-          const msg = explainCloseReason(event);
+        const state = dictationState && dictationState.ws === ws ? dictationState : null;
+        if(!state) return;
+        if(!state.finalizing){
+          const msg = explainCloseReason(event, state);
           cleanupDictationResources();
           dictationState = null;
           refreshDictationButtons();
