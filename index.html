@@ -2464,7 +2464,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_431_release.html</div><div>Source: hospital_at_home_v12_36_431_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_433_release.html</div><div>Source: hospital_at_home_v12_36_433_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -7291,8 +7291,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_431_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_431_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_433_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_433_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10208,30 +10208,87 @@ initBpOverlay();
     const result = normaliseResult(leadRaw);
     return mergeOverviewIntoResult(result, overview);
   }
-  async function requestPulseEcgDraft({ endpointUrl, imageBundle }){
-    const body = {
+  function buildPulseRequestBody(imageBundle){
+    return {
       mode: 'ecg_assist_v1',
       preview_data_url: imageBundle.previewDataUrl,
-      analysis_images: Array.isArray(imageBundle.analysisImages)
-        ? imageBundle.analysisImages.map(part => ({ label: cleanText(part?.label || 'ECG image'), data_url: String(part?.dataUrl || '').trim() })).filter(part => part.data_url)
-        : []
+      analysis_images: []
     };
-    const res = await fetch(endpointUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    const rawText = await res.text();
-    let data = {};
-    try{ data = rawText ? JSON.parse(rawText) : {}; }catch(_e){ data = {}; }
-    if(!res.ok){
-      const message = cleanText(data?.error || data?.message || rawText).slice(0,240);
-      throw new Error(message ? `PULSE endpoint error (${res.status}): ${message}` : `PULSE endpoint error (${res.status}).`);
+  }
+  function getPulseErrorMessage(status, data, rawText=''){
+    const message = cleanText(data?.detail || data?.error || data?.message || rawText).slice(0, 260);
+    if(status === 408 || status === 504) return message ? `PULSE endpoint timed out (${status}): ${message}` : `PULSE endpoint timed out (${status}).`;
+    if(status === 413) return 'ECG image payload was too large for the PULSE endpoint (413).';
+    if(status >= 500) return message ? `PULSE endpoint server error (${status}): ${message}` : `PULSE endpoint server error (${status}).`;
+    return message ? `PULSE endpoint error (${status}): ${message}` : `PULSE endpoint error (${status}).`;
+  }
+  function isPulseTransportFailure(err){
+    const message = String(err?.message || err || '');
+    return /Failed to fetch|Load failed|NetworkError|network request failed|fetch failed|aborted|timed out|timeout/i.test(message);
+  }
+  async function fetchPulseJson(endpointUrl, body, timeoutMs=240000){
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    let timeoutId = 0;
+    try{
+      if(controller) timeoutId = window.setTimeout(() => controller.abort(new DOMException('PULSE request timed out', 'AbortError')), timeoutMs);
+      const res = await fetch(endpointUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: controller ? controller.signal : undefined
+      });
+      const rawText = await res.text();
+      let data = {};
+      try{ data = rawText ? JSON.parse(rawText) : {}; }catch(_e){ data = {}; }
+      if(!res.ok) throw new Error(getPulseErrorMessage(res.status, data, rawText));
+      return { data, rawText };
+    }catch(err){
+      if(controller && controller.signal && controller.signal.aborted){
+        throw new Error('PULSE request timed out before the browser received a response. The first cold start can take over a minute; try again now that the container is warm.');
+      }
+      if(isPulseTransportFailure(err)){
+        throw new Error('PULSE endpoint did not return a readable browser response. If the Modal dashboard shows POST succeeded, redeploy the latest CORS-enabled backend package and try again.');
+      }
+      throw err;
+    }finally{
+      if(timeoutId) window.clearTimeout(timeoutId);
     }
+  }
+  async function withProgressNotices(promise, notices, updateStatus){
+    const timers = [];
+    try{
+      (Array.isArray(notices) ? notices : []).forEach(item => {
+        const delay = Math.max(0, Number(item?.delay || 0));
+        const message = cleanText(item?.message);
+        if(!message) return;
+        const id = window.setTimeout(() => { try{ updateStatus(message); }catch(_e){} }, delay);
+        timers.push(id);
+      });
+      return await promise;
+    }finally{
+      timers.forEach(id => window.clearTimeout(id));
+    }
+  }
+  async function requestPulseEcgDraft({ endpointUrl, imageBundle, onProgress }){
+    const body = buildPulseRequestBody(imageBundle);
+    const { data, rawText } = await withProgressNotices(
+      fetchPulseJson(endpointUrl, body, 240000),
+      [
+        { delay: 15000, message: 'PULSE is still starting / analysing… the first run can take over a minute.' },
+        { delay: 60000, message: 'Still analysing with PULSE… keeping the request open.' },
+        { delay: 120000, message: 'PULSE is taking longer than usual, but the app is still waiting for a response.' }
+      ],
+      onProgress || (() => {})
+    );
     const payload = data && typeof data === 'object' ? data : {};
     const candidate = payload.result && typeof payload.result === 'object' ? payload.result : payload;
-    if(!candidate || typeof candidate !== 'object') throw new Error('PULSE endpoint returned no ECG result object.');
-    return normaliseResult(candidate);
+    if(!candidate || typeof candidate !== 'object'){
+      const preview = cleanText(rawText).slice(0, 240);
+      throw new Error(preview ? `PULSE endpoint returned an unexpected response: ${preview}` : 'PULSE endpoint returned no ECG result object.');
+    }
+    const result = normaliseResult(candidate);
+    if(payload.provider && !result.confidence) result.confidence = `Cautious draft · ${payload.provider}`;
+    return result;
   }
 
   function reset(patientId){
@@ -10372,6 +10429,9 @@ initBpOverlay();
     const apiKey=typeof getGeminiApiKey==='function'?getGeminiApiKey():'';
     if(!pulseEndpoint && !apiKey){ setStatus('Please add a PULSE endpoint URL or Gemini API key in Options first.',true); return; }
     state.busy=true;
+    let pulseErr = null;
+    let pulseAttempted = false;
+    let geminiAttempted = false;
     try{
       setStatus('Preparing ECG image…');
       let imageBundle = await buildEcgImageBundle(file, false);
@@ -10380,13 +10440,21 @@ initBpOverlay();
 
       let result;
       if(pulseEndpoint){
+        pulseAttempted = true;
         try{
-          setStatus('Scanning ECG with PULSE…');
-          result = await requestPulseEcgDraft({ endpointUrl: pulseEndpoint, imageBundle });
+          setStatus('Scanning ECG with PULSE… first run can take over a minute.');
+          result = await requestPulseEcgDraft({
+            endpointUrl: pulseEndpoint,
+            imageBundle,
+            onProgress: (msg) => {
+              if(state.busy) setStatus(msg);
+            }
+          });
         }catch(err){
+          pulseErr = err;
           if(apiKey){
             console.warn('PULSE endpoint failed, falling back to Gemini.', err);
-            setStatus('PULSE endpoint failed — retrying with Gemini fallback…');
+            setStatus('PULSE did not return a usable result yet — retrying with Gemini fallback…');
             result = null;
           }else{
             throw err;
@@ -10394,6 +10462,7 @@ initBpOverlay();
         }
       }
       if(!result){
+        geminiAttempted = true;
         try{
           setStatus('Scanning ECG with Gemini…');
           result = await requestGeminiEcgDraft({ apiKey, imageBundle });
@@ -10415,8 +10484,18 @@ initBpOverlay();
     }catch(err){
       console.error(err);
       const message=String(err&&err.message||'').trim()||'ECG scan failed.';
-      if(isGeminiTransportFailure(err)) setStatus('Could not reach the ECG analysis service from this browser just now. Check connection and try again. Gemini already retried once with a smaller ECG image if it was being used.',true);
-      else setStatus(message,true);
+      if(isGeminiTransportFailure(err)){
+        if(pulseErr){
+          const pulseMsg = String(pulseErr?.message || 'PULSE endpoint did not return a usable response.').trim();
+          setStatus(`PULSE was reached but the app did not receive a usable result in time. ${pulseMsg}${geminiAttempted ? ' Gemini fallback also did not complete from this browser just now.' : ''}`, true);
+        }else{
+          setStatus('Could not reach the ECG analysis service from this browser just now. Check connection and try again. Gemini already retried once with a smaller ECG image if it was being used.',true);
+        }
+      }else if(isPulseTransportFailure(err)){
+        setStatus(message || 'PULSE endpoint did not return a readable browser response.', true);
+      }else{
+        setStatus(message,true);
+      }
     }finally{
       state.busy=false;
     }
