@@ -438,6 +438,167 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
   margin-bottom:0;
 }
 
+.bloods-panel{margin-top:8px;padding:12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;display:flex;flex-direction:column;gap:10px}.bloods-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}.bloods-panel-meta{font-size:12px;font-weight:600;color:#475467;line-height:1.35}.bloods-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.bloods-item{background:#fff;border:1px solid rgba(15,23,42,.06);border-radius:12px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;min-width:0}.bloods-item-label{font-size:12px;font-weight:800;color:#667085;letter-spacing:.01em;line-height:1.1}.bloods-analyte-btn{padding:0;border:none;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer}.bloods-analyte-btn:active{opacity:.72}.bloods-item-value{font-size:16px;font-weight:700;color:#101828;line-height:1.15;display:flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap}.bloods-item-flag{font-size:14px;font-weight:800;line-height:1}.bloods-item.is-high,.bloods-item.is-low{border-color:rgba(180,35,24,.22);background:#fff8f7}.bloods-item.is-high .bloods-item-value,.bloods-item.is-high .bloods-item-flag,.bloods-item.is-low .bloods-item-value,.bloods-item.is-low .bloods-item-flag{color:#b42318}.bloods-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(15,23,42,.08);border-radius:12px;background:#fff}.bloods-table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}.bloods-table th,.bloods-table td{padding:8px 8px;border-bottom:1px solid rgba(15,23,42,.06);vertical-align:middle}.bloods-table thead th{background:#f8fafc;font-size:11px;font-weight:800;line-height:1.2;color:#475467;text-align:center;position:sticky;top:0;z-index:3;white-space:pre-line;min-width:64px}.bloods-table thead th:first-child{text-align:left;left:0;z-index:5;min-width:72px}.bloods-table-corner{box-shadow:1px 0 0 rgba(15,23,42,.06)}.bloods-table tbody tr:last-child th,.bloods-table tbody tr:last-child td{border-bottom:none}.bloods-table tbody th{font-size:12px;font-weight:800;color:#667085;background:#fcfcfd;text-align:left;width:72px;min-width:72px;position:sticky;left:0;z-index:2;box-shadow:1px 0 0 rgba(15,23,42,.06)}.bloods-table tbody td{text-align:center;font-size:13px;font-weight:700;color:#101828;line-height:1.2;min-width:64px}.bloods-table-value{display:inline-flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}.bloods-table-value.is-high,.bloods-table-value.is-low{color:#b42318}.bloods-table-empty{color:#98a2b3;font-weight:600}.bloods-empty{font-size:13px;line-height:1.45;color:#667085}.blood-trend-modal{max-height:min(80vh,640px)}.blood-trend-value{display:inline-flex;align-items:center;gap:4px}.blood-trend-value.is-high,.blood-trend-value.is-low,.blood-trend-flag{color:#b42318}.bloods-empty.hidden,.bloods-grid.hidden,.bloods-table-wrap.hidden{display:none !important}#bloodsSummaryCard .bloods-panel{margin-top:0;padding:0;border:none;background:transparent}@media (max-width:420px){.bloods-grid{grid-template-columns:1fr}.bloods-table th,.bloods-table td{padding:7px 6px}.bloods-table tbody td{font-size:12px}.bloods-table thead th{font-size:10px;min-width:60px}.bloods-table thead th:first-child,.bloods-table tbody th{min-width:66px;width:66px}}
+.weight-history-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.22);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:140;opacity:0;pointer-events:none;transition:opacity .18s ease}
+.weight-history-backdrop.show{opacity:1;pointer-events:auto}
+.weight-history-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);width:min(420px,calc(100vw - 28px));max-height:min(78vh,620px);background:rgba(255,255,255,.96);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.7);border-radius:22px;box-shadow:0 24px 56px rgba(15,23,42,.22);z-index:141;opacity:0;pointer-events:none;display:flex;flex-direction:column;overflow:hidden;transition:opacity .18s ease,transform .2s cubic-bezier(.2,.9,.2,1)}
+.weight-history-modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.weight-history-head{padding:16px 18px 10px;border-bottom:1px solid rgba(148,163,184,.16)}
+.weight-history-title{font-size:17px;font-weight:800;color:#111827}
+.weight-history-subtitle{margin-top:4px;font-size:12px;color:#6b7280}
+.weight-history-close{position:absolute;right:14px;top:12px;width:32px;height:32px;min-width:32px;padding:0;border-radius:999px;background:#eef2f7;color:#334155;font-size:20px;line-height:1}
+.weight-history-body{padding:14px 16px 16px;overflow:auto}
+.weight-history-summary{padding:12px 14px;border-radius:16px;background:#f8fafc;border:1px solid #e5e7eb;font-size:14px;font-weight:700;color:#0f172a}
+.weight-history-summary.muted{font-weight:600;color:#475569}
+.weight-history-chart{margin-top:12px;padding:12px 12px 10px;border-radius:18px;background:linear-gradient(180deg,#fbfcfe 0%,#f8fafc 100%);border:1px solid #e5e7eb}
+.weight-history-chart svg{display:block;width:100%;height:auto}
+.weight-history-chart-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px;color:#64748b}
+.weight-history-table{margin-top:12px;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;background:#fff}
+.weight-history-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:11px 14px;font-size:14px}
+.weight-history-row+.weight-history-row{border-top:1px solid #eef2f7}
+.weight-history-date{color:#475569}
+.weight-history-value{font-weight:700;color:#0f172a}
+.weight-history-row.current .weight-history-value{color:#0a84ff}
+.weight-history-empty{padding:18px 16px;border-radius:16px;background:#f8fafc;border:1px solid #e5e7eb;color:#64748b;font-size:14px}
+
+#importHandoverBtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;transition:transform .14s ease,background .18s ease,box-shadow .18s ease,color .18s ease}
+#importHandoverBtn .refresh-icon{display:none;flex:0 0 auto;width:22px;height:22px}
+#importHandoverBtn.importing,#importHandoverBtn.done{justify-content:center}
+#importHandoverBtn.importing span,#importHandoverBtn.done span{display:none}
+#importHandoverBtn.importing .refresh-icon,#importHandoverBtn.done .refresh-icon{display:block}
+#importHandoverBtn.importing{background:#e8f1ff;color:#0a84ff;box-shadow:none}
+#importHandoverBtn.done{background:#dcfce7;color:#16a34a;box-shadow:none}
+#importHandoverBtn.importing .refresh-icon{animation:refreshSpin .75s linear infinite}
+
+.add-patient-top-grid{display:grid;grid-template-columns:minmax(72px,.72fr) minmax(128px,1.08fr) minmax(112px,.9fr);gap:10px;align-items:start}.add-patient-top-grid>div{display:flex;flex-direction:column;align-items:stretch}.add-patient-top-grid>div>label{margin-top:2px;margin-bottom:0;line-height:1.2}.add-patient-top-grid>div>input,.add-patient-top-grid .date-display-btn,.add-patient-top-grid .compact-choice-row{margin-top:6px}.add-patient-top-grid input[type="date"]{height:46px;padding:10px 12px;line-height:1.2;-webkit-appearance:none;appearance:none}.compact-choice-row{gap:6px;flex-wrap:nowrap;margin-top:6px}.compact-choice-btn{padding:12px 10px;min-width:0;flex:1 1 0;border-radius:12px}.acuity-choice-btn{position:relative;text-transform:none;font-weight:700;background:#fff;border-color:#dbe3ef;color:#0f172a;padding-left:18px}.acuity-choice-btn::before{content:"";position:absolute;left:12px;top:50%;width:8px;height:8px;border-radius:999px;transform:translateY(-50%)}.acuity-choice-btn[data-acuity="GREEN"]::before{background:#34c759}.acuity-choice-btn[data-acuity="AMBER"]::before{background:#ff9f0a}.acuity-choice-btn[data-acuity="RED"]::before{background:#ff3b30}.acuity-choice-btn.selected{background:#e8f1ff;border-color:#0a84ff;color:#0a84ff;box-shadow:inset 0 0 0 1px rgba(10,132,255,.12)}@media (max-width:390px){.add-patient-top-grid{grid-template-columns:minmax(64px,.68fr) minmax(116px,.98fr) minmax(104px,.84fr);gap:8px;align-items:start}.compact-choice-btn{padding:12px 8px;font-size:14px}}
+
+
+.date-display-btn{width:100%;min-height:46px;border:1px solid #d1d5db;border-radius:12px;background:#fff;text-align:left;padding:12px;font-size:16px;font-weight:400;color:var(--text);display:flex;align-items:center;box-sizing:border-box}.date-display-btn:active{transform:none}.date-display-placeholder{color:transparent;font-weight:400}.date-display-value{color:var(--text);font-weight:400}.admission-field-wrap{position:relative}.add-date-popover{position:absolute;left:0;right:0;top:100%;margin-top:10px;padding:12px;border:1px solid rgba(60,130,246,.18);border-radius:20px;background:rgba(255,255,255,.98);box-shadow:0 18px 48px rgba(17,24,39,.18);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:8;touch-action:pan-y}.add-date-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.add-date-title-btn{font-size:16px;font-weight:700;text-align:center;flex:1;border:none;background:transparent;padding:6px 8px;border-radius:12px;color:var(--text)}.add-date-title-btn:active{transform:none}.add-date-nav{width:36px;height:36px;border-radius:12px;border:1px solid var(--line);background:#fff;padding:0;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center}.add-date-weekdays,.add-date-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.add-date-weekdays{margin-bottom:6px}.add-date-weekdays span{font-size:11px;font-weight:700;color:var(--muted);text-align:center}.add-date-day{height:34px;border-radius:12px;border:1px solid transparent;background:#fff;font-size:14px;font-weight:600;color:var(--text);padding:0}.add-date-day.is-outside{color:#c4c8d0}.add-date-day.is-today{border-color:rgba(60,130,246,.28)}.add-date-day.is-selected{background:var(--blue);color:#fff}.add-date-day:active{transform:none}.add-date-month-year-picker{margin-top:8px;padding-top:10px;border-top:1px solid rgba(148,163,184,.18)}.add-date-year-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.add-date-year-label{font-size:16px;font-weight:700;flex:1;text-align:center}.add-date-months{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.add-date-month-btn{height:38px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:14px;font-weight:600;color:var(--text)}.add-date-month-btn.selected{background:#e8f1ff;border-color:#0a84ff;color:#0a84ff}.add-patient-modal.date-popover-open{overflow:visible}
+.obs-picker-btn{width:100%;min-height:46px;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #d1d5db;background:#fff;display:flex;align-items:center;gap:10px;text-align:left;box-shadow:none;box-sizing:border-box;-webkit-appearance:none;appearance:none}
+.obs-picker-btn:focus-visible{outline:none;border-color:#7fc3ff;box-shadow:0 0 0 1px #7fc3ff inset}
+.obs-picker-main{min-width:0;flex:1;font-size:16px;font-weight:400;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.obs-picker-main.is-alert{color:var(--red)}
+.obs-picker-btn.is-empty .obs-picker-main{font-weight:400;color:#9ca3af}
+.obs-picker-arrow{color:#98a2b3;font-size:16px;line-height:1;flex:0 0 auto;transform:translateY(-1px)}
+.obs-split-field{display:flex;align-items:stretch;width:100%;margin-top:6px;border:1px solid #d1d5db;border-radius:12px;background:#fff;overflow:hidden;box-sizing:border-box}
+.obs-split-field:focus-within{border-color:#7fc3ff;box-shadow:0 0 0 1px #7fc3ff inset}
+.obs-split-field.is-alert{border-color:rgba(220,38,38,.34);background:#fff7f7}
+#bm,#bp,#hr{margin-top:0;border:none;border-radius:0;background:transparent;box-shadow:none;min-height:46px;padding:12px;line-height:1.2}
+#bm:focus,#bp:focus,#hr:focus{outline:none;box-shadow:none}
+#bm::placeholder,#bp::placeholder,#hr::placeholder{color:#9ca3af}
+#hr{appearance:textfield;-moz-appearance:textfield}
+#hr::-webkit-outer-spin-button,#hr::-webkit-inner-spin-button{margin:0;-webkit-appearance:none}
+.obs-split-field.is-alert #bm,.obs-split-field.is-alert #bp,.obs-split-field.is-alert #hr{color:var(--red)}
+.obs-split-trigger{margin:0;min-width:42px;width:42px;border:none;border-left:none;border-radius:0;background:transparent;padding:0;display:inline-flex;align-items:center;justify-content:center;box-shadow:none;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent;position:relative}
+.obs-split-trigger:focus-visible{outline:none;box-shadow:none}
+.obs-split-trigger:active{transform:none}
+.obs-split-field.has-detail .obs-split-trigger::after{content:"";position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:999px;background:#0a84ff;box-shadow:0 0 0 2px #fff}
+.bm-overlay{position:fixed;inset:0;z-index:10086}
+.bm-overlay-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.bm-overlay-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 16px);padding:12px;border-radius:20px;display:flex;flex-direction:column;gap:12px;max-height:calc(100dvh - var(--shared-header-offset,0px) - max(26px,calc(env(safe-area-inset-bottom) + 26px)));overflow:hidden}
+.bm-overlay-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.bm-overlay-head h3{margin:0;font-size:20px;line-height:1.1}
+.bm-overlay-close{width:34px;height:34px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#475467;font-size:18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;flex:0 0 auto}
+.bm-overlay-body{min-height:0;overflow:auto;padding-right:2px;-webkit-overflow-scrolling:touch}
+.bm-overlay-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:stretch}
+.bm-overlay-left-col{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;min-width:0;height:100%;min-height:258px}
+.bm-overlay-value-card,.bm-overlay-target-card,.bm-overlay-timing-card{border:1px solid rgba(15,23,42,.08);border-radius:18px;background:#fff;padding:12px;display:flex;flex-direction:column;gap:10px}
+.bm-overlay-value-card{min-height:0;flex:1 1 auto}
+.bm-overlay-timing-card{min-height:258px;height:100%}
+.bm-overlay-target-card{justify-content:flex-start}
+.bm-overlay-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:18px}
+.bm-overlay-timing-label,.bm-overlay-card-label,.bm-overlay-card-title{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}.bm-overlay-card-title{text-align:center}
+.bm-overlay-value-wrap{display:flex;align-items:center;justify-content:center;flex:1 1 auto}
+#bmOverlayValue{width:100%;min-height:96px;font-size:42px;line-height:1.05;font-weight:800;text-align:center;padding:14px 12px;border-radius:18px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none;margin-top:0}
+#bmOverlayValue:focus,#bmOverlayTarget:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
+#hrOverlayValue{width:100%;min-height:96px;font-size:42px;line-height:1.05;font-weight:800;text-align:center;padding:14px 12px;border-radius:18px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none;margin-top:0}
+#hrOverlayValue:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
+.bm-overlay-value-caption{text-align:center;font-size:13px;font-weight:700;color:#667085}
+.bm-overlay-target-wrap{display:flex;flex-direction:column;gap:4px}
+#bmOverlayTarget{margin-top:0;min-height:42px;padding:10px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
+.bm-overlay-timing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;align-content:start}
+.bm-timing-chip{min-height:39px;padding:8px 8px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-size:11px;font-weight:700;line-height:1.15;text-align:center;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;overflow-wrap:normal;word-break:keep-all;hyphens:none}
+
+.bm-timing-chip--breakfast{white-space:normal;word-break:normal;overflow-wrap:anywhere}
+.bm-timing-chip.active{background:#eaf4ff;border-color:#0a84ff;color:#0a3d91;box-shadow:0 0 0 1px rgba(10,132,255,.12) inset}
+.bm-timing-chip:active{transform:scale(.98)}
+.bm-overlay-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.bm-overlay-footer button{height:40px}
+@media (max-width:390px){.bm-overlay-layout{grid-template-columns:1fr}.bm-overlay-left-col{grid-template-rows:auto auto}.bm-overlay-value-card,.bm-overlay-timing-card{min-height:0}#bmOverlayValue{min-height:84px;font-size:36px}.obs-picker-main{font-size:15px}}
+#hr{margin-top:0;border:none;border-radius:0;background:transparent;box-shadow:none;min-height:46px;padding:12px;line-height:1.2}
+#hr:focus{outline:none;box-shadow:none}
+#hrFieldShell.is-alert #hr{color:var(--red)}
+.hr-overlay-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}
+.hr-overlay-left-col{display:flex;min-height:258px;height:100%}
+.hr-overlay-pulse-card{min-height:258px;height:100%}
+.hr-overlay-pulse-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
+@media (max-width:390px){.hr-overlay-layout{grid-template-columns:1fr}.hr-overlay-left-col,.hr-overlay-pulse-card{min-height:0}}
+.hr-overlay-left-col .bm-overlay-value-card{flex:1 1 auto;min-height:258px;justify-content:center}
+.hr-overlay-pulse-card .bm-overlay-timing-label{text-align:center;line-height:1.2}
+.hr-overlay-pulse-card .bm-overlay-section-head{min-height:18px}
+.hr-pulse-chip{min-height:40px}
+.hr-overlay-optional{font-size:11px;font-weight:700;color:#98a2b3;text-transform:uppercase;letter-spacing:.04em}
+@media (max-width:390px){#hrOverlayValue{min-height:84px;font-size:36px}}
+.bp-overlay-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}
+.bp-overlay-left-col{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;min-width:0;height:100%;min-height:246px}
+.bp-overlay-primary-card{justify-content:center}
+.bp-overlay-primary-card .bm-overlay-value-caption{font-size:12px;letter-spacing:.01em}
+.bp-overlay-postural-card{min-height:246px;height:100%}
+.bp-overlay-optional{font-size:11px;font-weight:700;color:#98a2b3;text-transform:uppercase;letter-spacing:.04em}
+.bp-overlay-reading-grid{display:grid;grid-template-columns:1fr;gap:10px;align-content:start}
+.bp-overlay-reading-field{display:flex;flex-direction:column;gap:6px}
+.bp-overlay-reading-field label{margin:0;font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}
+.bp-overlay-reading-field input{margin-top:0;min-height:44px;padding:10px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
+.bp-overlay-reading-field.is-alert input{color:var(--red)}
+.bp-overlay-reading-field input:focus,#bpOverlayValue:focus,#bpOverlaySymptoms:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
+#bpOverlayValue{width:100%;min-height:96px;font-size:40px;line-height:1.05;font-weight:800;text-align:center;padding:14px 12px;border-radius:18px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none;margin-top:0}
+#bpOverlaySymptoms{margin-top:0;min-height:42px;padding:10px 12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;box-shadow:none}
+@media (max-width:390px){.bp-overlay-layout{grid-template-columns:1fr}.bp-overlay-left-col,.bp-overlay-postural-card{min-height:0}#bpOverlayValue{min-height:84px;font-size:34px}}
+
+/* v12_36_291: header standardisation + clinical review spacing tidy */
+.patient-reorder-card[data-card-key="obs"] h3,
+.meds-header-row #medsToggleText,
+.iv-header-row #ivToggleText,
+.patient-reorder-card[data-card-key="output"] h3,
+.clinical-review-header h3{
+  font-size:17px;
+  font-weight:600;
+  line-height:1.25;
+  letter-spacing:0;
+  color:#1c1c1e;
+}
+
+.clinical-review-header{
+  margin-bottom:6px;
+}
+
+.patient-reorder-card[data-card-key="clinical"] label{
+  display:block;
+  margin-top:18px;
+  margin-bottom:0;
+  line-height:1.25;
+}
+
+.patient-reorder-card[data-card-key="clinical"] .clinical-review-header + label{
+  margin-top:8px;
+}
+
+.patient-reorder-card[data-card-key="clinical"] textarea{
+  margin-top:8px;
+}
+
+.patient-reorder-card[data-card-key="clinical"] #issues,
+.patient-reorder-card[data-card-key="clinical"] #examination,
+.patient-reorder-card[data-card-key="clinical"] #bloods,
+.patient-reorder-card[data-card-key="clinical"] #plan{
+  margin-bottom:4px;
+}
+
+.field-label-row{
+  margin-top:18px;
+  margin-bottom:0;
+}
+
 .bloods-panel{margin-top:8px;padding:12px;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;display:flex;flex-direction:column;gap:10px}.bloods-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}.bloods-panel-meta{font-size:12px;font-weight:600;color:#475467;line-height:1.35}.bloods-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.bloods-item{background:#fff;border:1px solid rgba(15,23,42,.06);border-radius:12px;padding:9px 10px;display:flex;flex-direction:column;gap:4px;min-width:0}.bloods-item-label{font-size:12px;font-weight:800;color:#667085;letter-spacing:.01em;line-height:1.1}.bloods-item-value{font-size:16px;font-weight:700;color:#101828;line-height:1.15;display:flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap}.bloods-item-flag{font-size:14px;font-weight:800;line-height:1}.bloods-item.is-high,.bloods-item.is-low{border-color:rgba(180,35,24,.22);background:#fff8f7}.bloods-item.is-high .bloods-item-value,.bloods-item.is-high .bloods-item-flag,.bloods-item.is-low .bloods-item-value,.bloods-item.is-low .bloods-item-flag{color:#b42318}.bloods-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(15,23,42,.08);border-radius:12px;background:#fff}.bloods-table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}.bloods-table th,.bloods-table td{padding:8px 8px;border-bottom:1px solid rgba(15,23,42,.06);vertical-align:middle}.bloods-table thead th{background:#f8fafc;font-size:11px;font-weight:800;line-height:1.2;color:#475467;text-align:center;position:sticky;top:0;z-index:1;white-space:pre-line}.bloods-table thead th:first-child{text-align:left}.bloods-table tbody tr:last-child th,.bloods-table tbody tr:last-child td{border-bottom:none}.bloods-table tbody th{font-size:12px;font-weight:800;color:#667085;background:#fcfcfd;text-align:left;width:58px}.bloods-table tbody td{text-align:center;font-size:13px;font-weight:700;color:#101828;line-height:1.2}.bloods-table-value{display:inline-flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}.bloods-table-value.is-high,.bloods-table-value.is-low{color:#b42318}.bloods-table-empty{color:#98a2b3;font-weight:600}.bloods-empty{font-size:13px;line-height:1.45;color:#667085}.bloods-empty.hidden,.bloods-grid.hidden,.bloods-table-wrap.hidden{display:none !important}#bloodsSummaryCard .bloods-panel{margin-top:0;padding:0;border:none;background:transparent}@media (max-width:420px){.bloods-grid{grid-template-columns:1fr}.bloods-table th,.bloods-table td{padding:7px 6px}.bloods-table tbody td{font-size:12px}.bloods-table thead th{font-size:10px}.bloods-table tbody th{width:50px}}
 
 .clinical-review-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -2466,7 +2627,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_443_release.html</div><div>Source: hospital_at_home_v12_36_443_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_444_release.html</div><div>Source: hospital_at_home_v12_36_444_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -2547,6 +2708,21 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="weight-history-chart hidden" id="weightHistoryChart"></div>
 <div class="weight-history-table hidden" id="weightHistoryTable"></div>
 <div class="weight-history-empty hidden" id="weightHistoryEmpty">No imported weight history available yet.</div>
+</div>
+</div>
+
+<div class="weight-history-backdrop hidden" id="bloodTrendBackdrop"></div>
+<div aria-labelledby="bloodTrendTitle" aria-modal="true" class="weight-history-modal blood-trend-modal hidden" id="bloodTrendModal" role="dialog">
+<button aria-label="Close blood trend" class="weight-history-close" id="bloodTrendCloseBtn" type="button">×</button>
+<div class="weight-history-head">
+<div class="weight-history-title" id="bloodTrendTitle">Blood trend</div>
+<div class="weight-history-subtitle" id="bloodTrendSubtitle"></div>
+</div>
+<div class="weight-history-body">
+<div class="weight-history-summary" id="bloodTrendSummary">No values available yet.</div>
+<div class="weight-history-chart hidden" id="bloodTrendChart"></div>
+<div class="weight-history-table hidden" id="bloodTrendTable"></div>
+<div class="weight-history-empty hidden" id="bloodTrendEmpty">No values available for this analyte yet.</div>
 </div>
 </div>
 
@@ -3783,23 +3959,23 @@ function parseRespMdmNotes(raw){
 }
 
 const BLOODS_ANALYTES = [
-  {key:'hb', label:'Hb', labels:['haemoglobin','hemoglobin','hgb','hb'], limits:(sex)=>({low:/^m/i.test(String(sex||'')) ? 130 : 115, high:/^m/i.test(String(sex||'')) ? 180 : 165})},
-  {key:'wcc', label:'WCC', labels:['white cell count','wcc'], limits:()=>({low:4, high:11})},
-  {key:'neut', label:'Neut', labels:['neutrophils','neuts','neut'], limits:()=>({low:2, high:7.5})},
-  {key:'plt', label:'Plt', labels:['platelets','platelet','plt'], limits:()=>({low:150, high:450})},
-  {key:'na', label:'Na', labels:['sodium','na'], limits:()=>({low:133, high:146})},
-  {key:'k', label:'K+', labels:['potassium','k+','k'], limits:()=>({low:3.5, high:5.3})},
-  {key:'urea', label:'Urea', labels:['urea'], limits:()=>({low:2.5, high:7.8})},
-  {key:'cr', label:'Cr', labels:['creatinine','creat','cr'], limits:(sex)=>({low:/^m/i.test(String(sex||'')) ? 59 : 45, high:/^m/i.test(String(sex||'')) ? 104 : 84})},
-  {key:'egfr', label:'eGFR', labels:['egfr','e gfr','gfr'], limits:()=>({low:60, high:null})},
-  {key:'crp', label:'CRP', labels:['crp'], limits:()=>({low:null, high:5})},
-  {key:'alb', label:'Alb', labels:['albumin','alb'], limits:()=>({low:35, high:50})},
-  {key:'alt', label:'ALT', labels:['alt'], limits:()=>({low:null, high:55})},
-  {key:'alp', label:'ALP', labels:['alp'], limits:()=>({low:30, high:130})},
-  {key:'bili', label:'Bili', labels:['bilirubin','bili'], limits:()=>({low:null, high:21})},
-  {key:'ca', label:'CCa', labels:['corrected calcium','corrected ca','cca','adjusted calcium','adjusted ca','adj ca','calcium','ca'], limits:()=>({low:2.2, high:2.6})},
-  {key:'po4', label:'PO4', labels:['phosphate','po4'], limits:()=>({low:0.8, high:1.5})},
-  {key:'mg', label:'Mg', labels:['magnesium','mg'], limits:()=>({low:0.7, high:1.0})}
+  {key:'hb', label:'Hb', unit:'g/L', labels:['haemoglobin','hemoglobin','hgb','hb'], limits:(sex)=>({low:/^m/i.test(String(sex||'')) ? 130 : 115, high:/^m/i.test(String(sex||'')) ? 180 : 165})},
+  {key:'wcc', label:'WCC', unit:'×10⁹/L', labels:['white cell count','wcc'], limits:()=>({low:4, high:11})},
+  {key:'neut', label:'Neut', unit:'×10⁹/L', labels:['neutrophils','neuts','neut'], limits:()=>({low:2, high:7.5})},
+  {key:'plt', label:'Plt', unit:'×10⁹/L', labels:['platelets','platelet','plt'], limits:()=>({low:150, high:450})},
+  {key:'na', label:'Na', unit:'mmol/L', labels:['sodium','na'], limits:()=>({low:133, high:146})},
+  {key:'k', label:'K+', unit:'mmol/L', labels:['potassium','k+','k'], limits:()=>({low:3.5, high:5.3})},
+  {key:'urea', label:'Urea', unit:'mmol/L', labels:['urea'], limits:()=>({low:2.5, high:7.8})},
+  {key:'cr', label:'Cr', unit:'µmol/L', labels:['creatinine','creat','cr'], limits:(sex)=>({low:/^m/i.test(String(sex||'')) ? 59 : 45, high:/^m/i.test(String(sex||'')) ? 104 : 84})},
+  {key:'egfr', label:'eGFR', unit:'mL/min/1.73m²', labels:['egfr','e gfr','gfr'], limits:()=>({low:60, high:null})},
+  {key:'crp', label:'CRP', unit:'mg/L', labels:['crp'], limits:()=>({low:null, high:5})},
+  {key:'alb', label:'Alb', unit:'g/L', labels:['albumin','alb'], limits:()=>({low:35, high:50})},
+  {key:'alt', label:'ALT', unit:'U/L', labels:['alt'], limits:()=>({low:null, high:55})},
+  {key:'alp', label:'ALP', unit:'U/L', labels:['alp'], limits:()=>({low:30, high:130})},
+  {key:'bili', label:'Bili', unit:'µmol/L', labels:['bilirubin','bili'], limits:()=>({low:null, high:21})},
+  {key:'ca', label:'CCa', unit:'mmol/L', labels:['corrected calcium','corrected ca','cca','adjusted calcium','adjusted ca','adj ca','calcium','ca'], limits:()=>({low:2.2, high:2.6})},
+  {key:'po4', label:'PO4', unit:'mmol/L', labels:['phosphate','po4'], limits:()=>({low:0.8, high:1.5})},
+  {key:'mg', label:'Mg', unit:'mmol/L', labels:['magnesium','mg'], limits:()=>({low:0.7, high:1.0})}
 ];
 function escapeRegex(text){ return String(text||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
 function normaliseBloodsText(raw){
@@ -4023,6 +4199,130 @@ function formatBloodsForClinicalOutput(raw, sex=''){
   const latest = history.latest;
   if(!latest || !latest.raw) return '';
   return latest.summary || latest.raw;
+}
+
+function getBloodAnalyteConfig(key){
+  return BLOODS_ANALYTES.find(analyte=>analyte.key===key) || null;
+}
+function getBloodAnalyteUnit(key){
+  const analyte = getBloodAnalyteConfig(key);
+  return analyte && analyte.unit ? analyte.unit : '';
+}
+function getBloodTrendRecords(raw, analyteKey, sex=''){
+  const history = parseBloodsHistory(raw, sex);
+  const entries = Array.isArray(history.entries) ? history.entries.slice() : [];
+  const withValue = entries.map(entry=>{
+    const item = Array.isArray(entry.items) ? entry.items.find(found=>found.key===analyteKey) : null;
+    if(!item || !Number.isFinite(Number(item.numeric))) return null;
+    return {
+      key: analyteKey,
+      label: item.label,
+      raw: item.value,
+      value: Number(item.numeric),
+      status: item.status || '',
+      flag: item.flag || '',
+      comparator: item.comparator || '',
+      sampleLabel: entry.sampleLabel || 'Undated',
+      sampleTs: Number.isFinite(Number(entry.sampleTs)) ? Number(entry.sampleTs) : null,
+      entryRaw: entry.raw || ''
+    };
+  }).filter(Boolean);
+  withValue.sort((a,b)=>{
+    if(a.sampleTs !== null && b.sampleTs !== null && a.sampleTs !== b.sampleTs) return a.sampleTs - b.sampleTs;
+    if(a.sampleTs !== null && b.sampleTs === null) return -1;
+    if(a.sampleTs === null && b.sampleTs !== null) return 1;
+    return 0;
+  });
+  return withValue;
+}
+function formatBloodTrendDate(label){
+  return String(label || '').trim() || 'Undated';
+}
+function buildBloodTrendSparkline(records, analyte, sex=''){
+  if(!Array.isArray(records) || !records.length) return '';
+  const width=320, height=132, padX=12, padY=16;
+  const values=records.map(r=>Number(r.value)).filter(Number.isFinite);
+  if(!values.length) return '';
+  const limits = analyte && typeof analyte.limits==='function' ? (analyte.limits(sex) || {}) : {};
+  const low = Number.isFinite(Number(limits.low)) ? Number(limits.low) : null;
+  const high = Number.isFinite(Number(limits.high)) ? Number(limits.high) : null;
+  let min=Math.min.apply(null, values);
+  let max=Math.max.apply(null, values);
+  if(low !== null) min = Math.min(min, low);
+  if(high !== null) max = Math.max(max, high);
+  const range=Math.max(max-min, Math.max(Math.abs(max || 1)*0.12, 1));
+  const graphMin=min - range*0.08;
+  const graphMax=max + range*0.08;
+  const yFor=value=>height-padY - (((Number(value)-graphMin)/(graphMax-graphMin))*(height-padY*2));
+  const step=records.length===1 ? 0 : (width-padX*2)/(records.length-1);
+  const points=records.map((r,idx)=>({
+    x: padX + (records.length===1 ? (width-padX*2)/2 : idx*step),
+    y: yFor(r.value),
+    value: Number(r.value),
+    latest: idx===records.length-1,
+    status: r.status || ''
+  }));
+  const line=points.map((p,idx)=>`${idx?'L':'M'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+  const area=`M ${points[0].x.toFixed(1)} ${(height-padY).toFixed(1)} ` + points.map(p=>`L ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') + ` L ${points[points.length-1].x.toFixed(1)} ${(height-padY).toFixed(1)} Z`;
+  let band='';
+  if(low !== null || high !== null){
+    const bandTop = yFor(high !== null ? high : graphMax);
+    const bandBottom = yFor(low !== null ? low : graphMin);
+    const rectY = Math.min(bandTop, bandBottom);
+    const rectH = Math.abs(bandBottom - bandTop);
+    band = `<rect x="${padX}" y="${rectY.toFixed(1)}" width="${(width-padX*2).toFixed(1)}" height="${Math.max(rectH,1).toFixed(1)}" rx="10" fill="rgba(16,185,129,.08)"></rect>`;
+  }
+  const circles=points.map(p=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.latest?4:3.2}" fill="${p.latest ? '#0a84ff' : (p.status ? '#b42318' : '#94a3b8')}"></circle>`).join('');
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml((analyte && analyte.label) || 'Blood')} trend">${band}<path d="${area}" fill="rgba(10,132,255,.08)"></path><path d="${line}" fill="none" stroke="#0a84ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>${circles}</svg>`;
+}
+function buildBloodTrendInterpretation(records, analyte, sex=''){
+  if(!Array.isArray(records) || !records.length || !analyte) return {summary:'No values available.', detail:''};
+  const latest = records[records.length-1];
+  const unit = analyte.unit ? ` ${analyte.unit}` : '';
+  const limits = typeof analyte.limits==='function' ? (analyte.limits(sex) || {}) : {};
+  const low = Number.isFinite(Number(limits.low)) ? Number(limits.low) : null;
+  const high = Number.isFinite(Number(limits.high)) ? Number(limits.high) : null;
+  const latestState = latest.status === 'high' ? 'above range' : latest.status === 'low' ? 'below range' : 'within range';
+  if(records.length===1){
+    return {
+      summary:`Latest ${analyte.label} ${latest.raw}${unit} on ${formatBloodTrendDate(latest.sampleLabel)}.`,
+      detail:`${analyte.label} is ${latestState}.`
+    };
+  }
+  const values = records.map(item=>Number(item.value)).filter(Number.isFinite);
+  const first = records[0];
+  const delta = Number(latest.value) - Number(first.value);
+  const span = Math.max.apply(null, values) - Math.min.apply(null, values);
+  const scaleBase = high !== null && low !== null ? Math.abs(high-low) : Math.max(Math.abs(Number(first.value)) * 0.12, 1);
+  const stableThreshold = Math.max(scaleBase * 0.12, analyte.key === 'crp' ? 5 : analyte.key === 'cr' ? 5 : 0.2);
+  const diffs = [];
+  for(let i=1;i<records.length;i++) diffs.push(Number(records[i].value) - Number(records[i-1].value));
+  const signChanges = diffs.reduce((count,diff,idx)=>{
+    if(idx===0) return count;
+    const prev = diffs[idx-1];
+    if(Math.abs(diff) < stableThreshold*0.35 || Math.abs(prev) < stableThreshold*0.35) return count;
+    return (diff > 0 && prev < 0) || (diff < 0 && prev > 0) ? count + 1 : count;
+  }, 0);
+  let trend = 'Broadly stable';
+  if(span <= stableThreshold){
+    trend = 'Broadly stable';
+  } else if(signChanges >= 1){
+    trend = 'Fluctuating';
+  } else if(delta > stableThreshold){
+    trend = 'Rising';
+  } else if(delta < -stableThreshold){
+    trend = 'Falling';
+  }
+  let detail='';
+  if(trend === 'Rising') detail = `${analyte.label} has risen from ${first.raw} to ${latest.raw}${unit}.`;
+  else if(trend === 'Falling') detail = `${analyte.label} has fallen from ${first.raw} to ${latest.raw}${unit}.`;
+  else if(trend === 'Fluctuating') detail = `${analyte.label} has fluctuated between ${Math.min.apply(null, values)} and ${Math.max.apply(null, values)}${unit}.`;
+  else detail = `${analyte.label} has stayed broadly similar across the recorded samples.`;
+  if(latestState !== 'within range') detail += ` Latest value is ${latestState}.`;
+  return {
+    summary:`${trend}. Latest ${analyte.label} ${latest.raw}${unit} on ${formatBloodTrendDate(latest.sampleLabel)}.`,
+    detail
+  };
 }
 
 function parseWeightNumber(value){
@@ -4330,6 +4630,72 @@ function deriveImportedSummary(){
   return '';
 }
 
+
+
+function renderBloodTrendModal(analyteKey){
+  const patient=patients[currentPatient];
+  const title=$('bloodTrendTitle');
+  const subtitle=$('bloodTrendSubtitle');
+  const summaryEl=$('bloodTrendSummary');
+  const chartEl=$('bloodTrendChart');
+  const tableEl=$('bloodTrendTable');
+  const emptyEl=$('bloodTrendEmpty');
+  const analyte = typeof getBloodAnalyteConfig==='function' ? getBloodAnalyteConfig(analyteKey) : null;
+  const unit = typeof getBloodAnalyteUnit==='function' ? getBloodAnalyteUnit(analyteKey) : '';
+  const liveRaw = $('bloods') ? String($('bloods').value || '') : '';
+  const storedRaw = String((patient && patient.form && patient.form.bloods) || '');
+  const raw = liveRaw.trim() ? liveRaw : storedRaw;
+  const sex = patient && patient.sex || '';
+  const records = typeof getBloodTrendRecords==='function' ? getBloodTrendRecords(raw, analyteKey, sex) : [];
+  if(title) title.textContent=`${(analyte && analyte.label) || 'Blood'}${unit ? ` (${unit})` : ''}`;
+  if(subtitle) subtitle.textContent=`${patient?.name || 'Patient'} — blood trend`;
+  if(!records.length || !analyte){
+    if(summaryEl){
+      summaryEl.textContent='No values available for this analyte yet.';
+      summaryEl.classList.add('muted');
+    }
+    chartEl?.classList.add('hidden');
+    tableEl?.classList.add('hidden');
+    emptyEl?.classList.remove('hidden');
+    return;
+  }
+  const interpretation = typeof buildBloodTrendInterpretation==='function' ? buildBloodTrendInterpretation(records, analyte, sex) : {summary:'', detail:''};
+  if(summaryEl){
+    summaryEl.textContent=[interpretation.summary, interpretation.detail].filter(Boolean).join(' ');
+    summaryEl.classList.remove('muted');
+  }
+  if(chartEl){
+    chartEl.innerHTML=(typeof buildBloodTrendSparkline==='function' ? buildBloodTrendSparkline(records, analyte, sex) : '') + `<div class="weight-history-chart-foot"><span>${escapeHtml(typeof formatBloodTrendDate==='function' ? formatBloodTrendDate(records[0].sampleLabel) : (records[0].sampleLabel || ''))}</span><span>${escapeHtml(typeof formatBloodTrendDate==='function' ? formatBloodTrendDate(records[records.length-1].sampleLabel) : (records[records.length-1].sampleLabel || ''))}</span></div>`;
+    chartEl.classList.remove('hidden');
+  }
+  if(tableEl){
+    tableEl.innerHTML=records.slice().reverse().map((item, idx)=>`<div class="weight-history-row${idx===0?' current':''}"><div class="weight-history-date">${escapeHtml(typeof formatBloodTrendDate==='function' ? formatBloodTrendDate(item.sampleLabel) : (item.sampleLabel || 'Unknown date'))}</div><div class="weight-history-value blood-trend-value${item.status ? ` is-${item.status}` : ''}">${escapeHtml(item.raw)}${item.flag ? `<span class="blood-trend-flag">${escapeHtml(item.flag)}</span>` : ''}</div></div>`).join('');
+    tableEl.classList.remove('hidden');
+  }
+  emptyEl?.classList.add('hidden');
+}
+function openBloodTrendModal(analyteKey){
+  if(!currentPatient || !patients[currentPatient] || !analyteKey) return;
+  renderBloodTrendModal(analyteKey);
+  const backdrop=$('bloodTrendBackdrop');
+  const modal=$('bloodTrendModal');
+  backdrop?.classList.remove('hidden');
+  modal?.classList.remove('hidden');
+  requestAnimationFrame(()=>{
+    backdrop?.classList.add('show');
+    modal?.classList.add('show');
+  });
+}
+function closeBloodTrendModal(){
+  const backdrop=$('bloodTrendBackdrop');
+  const modal=$('bloodTrendModal');
+  backdrop?.classList.remove('show');
+  modal?.classList.remove('show');
+  setTimeout(()=>{
+    backdrop?.classList.add('hidden');
+    modal?.classList.add('hidden');
+  },180);
+}
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
@@ -6587,12 +6953,13 @@ function renderBloodsSummaryCard(){
     return;
   }
   if(structuredEntries.length > 1 && tableWrap && tableHead && tableBody){
-    const displayedEntries = structuredEntries.slice(0, 5);
+    const displayedEntries = structuredEntries;
     const analytes = (typeof BLOODS_ANALYTES !== 'undefined' && Array.isArray(BLOODS_ANALYTES) ? BLOODS_ANALYTES : [])
       .filter(analyte=>displayedEntries.some(entry=>entry.items.some(item=>item.key===analyte.key)));
     const headerRow = document.createElement('tr');
     const blankHead = document.createElement('th');
-    blankHead.textContent = '';
+    blankHead.textContent = 'Analyte';
+    blankHead.className = 'bloods-table-corner';
     headerRow.appendChild(blankHead);
     displayedEntries.forEach(entry=>{
       const th = document.createElement('th');
@@ -6604,7 +6971,15 @@ function renderBloodsSummaryCard(){
       const row = document.createElement('tr');
       const labelCell = document.createElement('th');
       labelCell.scope = 'row';
-      labelCell.textContent = analyte.label;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'bloods-analyte-btn';
+      btn.textContent = analyte.label;
+      btn.dataset.analyteKey = analyte.key;
+      btn.dataset.analyteLabel = analyte.label;
+      btn.setAttribute('aria-label', `Show ${analyte.label} trend`);
+      btn.addEventListener('click', ()=>{ if(typeof openBloodTrendModal==='function') openBloodTrendModal(analyte.key); });
+      labelCell.appendChild(btn);
       row.appendChild(labelCell);
       displayedEntries.forEach(entry=>{
         const cell = document.createElement('td');
@@ -6631,8 +7006,8 @@ function renderBloodsSummaryCard(){
       });
       tableBody.appendChild(row);
     });
-    meta.textContent = '';
-    if(head) head.classList.add('hidden');
+    meta.textContent = 'Tap analyte for trend • swipe for older sets';
+    if(head) head.classList.remove('hidden');
     tableWrap.classList.remove('hidden');
     empty.classList.add('hidden');
     return;
@@ -6642,9 +7017,14 @@ function renderBloodsSummaryCard(){
   latest.items.forEach(item=>{
     const card = document.createElement('div');
     card.className = `bloods-item${item.status ? ` is-${item.status}` : ''}`;
-    const label = document.createElement('div');
-    label.className = 'bloods-item-label';
+    const label = document.createElement('button');
+    label.type = 'button';
+    label.className = 'bloods-item-label bloods-analyte-btn';
     label.textContent = item.label;
+    label.dataset.analyteKey = item.key;
+    label.dataset.analyteLabel = item.label;
+    label.setAttribute('aria-label', `Show ${item.label} trend`);
+    label.addEventListener('click', ()=>{ if(typeof openBloodTrendModal==='function') openBloodTrendModal(item.key); });
     const value = document.createElement('div');
     value.className = 'bloods-item-value';
     const valueText = document.createElement('span');
@@ -7700,8 +8080,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_443_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_443_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_444_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_444_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -8958,6 +9338,8 @@ document.addEventListener("DOMContentLoaded",function(){
   $("openWeightHistoryBtn").onclick=openWeightHistoryModal;
   $("weightHistoryCloseBtn").onclick=closeWeightHistoryModal;
   $("weightHistoryBackdrop").onclick=closeWeightHistoryModal;
+  if($("bloodTrendCloseBtn")) $("bloodTrendCloseBtn").onclick=closeBloodTrendModal;
+  if($("bloodTrendBackdrop")) $("bloodTrendBackdrop").onclick=closeBloodTrendModal;
   $("addPatientBtn").onclick=()=>toggleAddPatient(true); $("cancelAddBtn").onclick=()=>toggleAddPatient(false); if($("addPatientCloseBtn")) $("addPatientCloseBtn").onclick=()=>toggleAddPatient(false); if($("addPatientBackdrop")) $("addPatientBackdrop").onclick=()=>toggleAddPatient(false); $("saveAddBtn").onclick=addPatient;
   $("resetDemoBtn").onclick=resetToDemo; $("undoBtn").onclick=undoLastChange; $("openDeletedBtn").onclick=()=>showSection("deletedPage"); $("openEventLogBtn").onclick=()=>showSection("eventLogPage"); $("backFromDeletedBtn").onclick=()=>showSection("handover"); $("backFromEventLogBtn").onclick=()=>showSection("handover");
   try{
