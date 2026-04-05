@@ -2628,7 +2628,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_449_release.html</div><div>Source: hospital_at_home_v12_36_449_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_450_release.html</div><div>Source: hospital_at_home_v12_36_450_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -2978,6 +2978,7 @@ const GRAPH_SCOPES=["User.Read","Files.ReadWrite"];
 let msalLoaderPromise=null;
 const GRAPH_POST_AUTH_RETURN_KEY='hah_graph_post_auth_return';
 const GRAPH_POST_AUTH_RETURN_MAX_AGE_MS=15*60*1000;
+const GRAPH_AUTH_RETURN_BYPASS_SNAPSHOT_SHIELD_KEY='hah_graph_auth_return_bypass_snapshot_shield';
 function getGraphPostAuthReturn(){
   try{
     const raw=localStorage.getItem(GRAPH_POST_AUTH_RETURN_KEY);
@@ -3002,6 +3003,23 @@ function setGraphPostAuthReturn(target={}){
 }
 function clearGraphPostAuthReturn(){
   try{localStorage.removeItem(GRAPH_POST_AUTH_RETURN_KEY);}catch(e){}
+}
+function setGraphAuthReturnSnapshotShieldBypass(enabled=true){
+  try{
+    if(enabled) localStorage.setItem(GRAPH_AUTH_RETURN_BYPASS_SNAPSHOT_SHIELD_KEY,'1');
+    else localStorage.removeItem(GRAPH_AUTH_RETURN_BYPASS_SNAPSHOT_SHIELD_KEY);
+  }catch(e){}
+}
+function shouldBypassGraphAuthReturnSnapshotShield(){
+  try{return localStorage.getItem(GRAPH_AUTH_RETURN_BYPASS_SNAPSHOT_SHIELD_KEY)==='1';}
+  catch(e){return false;}
+}
+function consumeGraphAuthReturnSnapshotShieldBypass(){
+  try{
+    const bypass=localStorage.getItem(GRAPH_AUTH_RETURN_BYPASS_SNAPSHOT_SHIELD_KEY)==='1';
+    localStorage.removeItem(GRAPH_AUTH_RETURN_BYPASS_SNAPSHOT_SHIELD_KEY);
+    return bypass;
+  }catch(e){return false;}
 }
 
 function defaultGraphSettings(){
@@ -3732,7 +3750,13 @@ async function signInMicrosoft(){
     saveGraphSettings(false);
     const app=await ensureMsalApp();
     setGraphPostAuthReturn();
-    await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'select_account'});
+    setGraphAuthReturnSnapshotShieldBypass(true);
+    try{
+      await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'select_account'});
+    }catch(e){
+      setGraphAuthReturnSnapshotShieldBypass(false);
+      throw e;
+    }
     // Page will redirect — execution stops here
   }catch(e){
     setGraphStatus(e.message||'Microsoft sign-in failed.', true);
@@ -3760,7 +3784,13 @@ async function getGraphAccessToken(){
     // No account — trigger redirect sign-in, flag that import should resume after
     localStorage.setItem('hah_pending_import','1');
     setGraphPostAuthReturn();
-    await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'select_account'});
+    setGraphAuthReturnSnapshotShieldBypass(true);
+    try{
+      await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'select_account'});
+    }catch(e){
+      setGraphAuthReturnSnapshotShieldBypass(false);
+      throw e;
+    }
     return; // Page will redirect
   }
   try{
@@ -3772,7 +3802,13 @@ async function getGraphAccessToken(){
     const accountObj = app.getAllAccounts().find(a=>a.homeAccountId===graphAccount.homeAccountId) || app.getAllAccounts()[0] || undefined;
     localStorage.setItem('hah_pending_import','1');
     setGraphPostAuthReturn();
-    await app.acquireTokenRedirect({scopes:GRAPH_SCOPES, account:accountObj});
+    setGraphAuthReturnSnapshotShieldBypass(true);
+    try{
+      await app.acquireTokenRedirect({scopes:GRAPH_SCOPES, account:accountObj});
+    }catch(e){
+      setGraphAuthReturnSnapshotShieldBypass(false);
+      throw e;
+    }
     // Page will redirect
   }
 }
@@ -8153,8 +8189,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_449_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_449_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_450_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_450_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -8923,6 +8959,7 @@ function getAppSnapshotShield(){
   return $("appSnapshotShield");
 }
 function showAppSnapshotShield(){
+  if(typeof shouldBypassGraphAuthReturnSnapshotShield==='function' && shouldBypassGraphAuthReturnSnapshotShield()) return;
   const shield=getAppSnapshotShield();
   if(!shield) return;
   if(appSnapshotShieldHideTimer){
@@ -9246,6 +9283,7 @@ function initAppSplash(){
 }
 
 document.addEventListener("DOMContentLoaded",function(){
+  if(typeof consumeGraphAuthReturnSnapshotShieldBypass==='function') consumeGraphAuthReturnSnapshotShieldBypass();
   initAppSnapshotShield();
   const pendingGraphPostAuthRestore=getGraphPostAuthUiRestore();
   if(pendingGraphPostAuthRestore && pendingGraphPostAuthRestore.skipSplash) skipAppSplashImmediately();
