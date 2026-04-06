@@ -2670,7 +2670,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_452_release.html</div><div>Source: hospital_at_home_v12_36_452_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_453_release.html</div><div>Source: hospital_at_home_v12_36_453_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -4068,23 +4068,23 @@ function parseRespMdmNotes(raw){
 }
 
 const BLOODS_ANALYTES = [
-  {key:'hb', label:'Hb', unit:'g/L', labels:['haemoglobin','hemoglobin','hgb','hb'], limits:(sex)=>({low:/^m/i.test(String(sex||'')) ? 130 : 115, high:/^m/i.test(String(sex||'')) ? 180 : 165})},
-  {key:'wcc', label:'WCC', unit:'×10⁹/L', labels:['white cell count','wcc'], limits:()=>({low:4, high:11})},
-  {key:'neut', label:'Neut', unit:'×10⁹/L', labels:['neutrophils','neuts','neut'], limits:()=>({low:2, high:7.5})},
-  {key:'plt', label:'Plt', unit:'×10⁹/L', labels:['platelets','platelet','plt'], limits:()=>({low:150, high:450})},
-  {key:'na', label:'Na', unit:'mmol/L', labels:['sodium','na'], limits:()=>({low:133, high:146})},
-  {key:'k', label:'K+', unit:'mmol/L', labels:['potassium','k+','k'], limits:()=>({low:3.5, high:5.3})},
-  {key:'urea', label:'Urea', unit:'mmol/L', labels:['urea'], limits:()=>({low:2.5, high:7.8})},
-  {key:'cr', label:'Cr', unit:'µmol/L', labels:['creatinine','creat','cr'], limits:(sex)=>({low:/^m/i.test(String(sex||'')) ? 59 : 45, high:/^m/i.test(String(sex||'')) ? 104 : 84})},
-  {key:'egfr', label:'eGFR', unit:'mL/min/1.73m²', labels:['egfr','e gfr','gfr'], limits:()=>({low:60, high:null})},
-  {key:'crp', label:'CRP', unit:'mg/L', labels:['crp'], limits:()=>({low:null, high:5})},
-  {key:'alb', label:'Alb', unit:'g/L', labels:['albumin','alb'], limits:()=>({low:35, high:50})},
-  {key:'alt', label:'ALT', unit:'U/L', labels:['alt'], limits:()=>({low:null, high:55})},
-  {key:'alp', label:'ALP', unit:'U/L', labels:['alp'], limits:()=>({low:30, high:130})},
-  {key:'bili', label:'Bili', unit:'µmol/L', labels:['bilirubin','bili'], limits:()=>({low:null, high:21})},
-  {key:'ca', label:'CCa', unit:'mmol/L', labels:['corrected calcium','corrected ca','cca','adjusted calcium','adjusted ca','adj ca','calcium','ca'], limits:()=>({low:2.2, high:2.6})},
-  {key:'po4', label:'PO4', unit:'mmol/L', labels:['phosphate','po4'], limits:()=>({low:0.8, high:1.5})},
-  {key:'mg', label:'Mg', unit:'mmol/L', labels:['magnesium','mg'], limits:()=>({low:0.7, high:1.0})}
+  {key:'hb', label:'Hb', trendLabel:'Haemoglobin', unit:'g/L', labels:['haemoglobin','hemoglobin','hgb','hb'], limits:(sex)=>({low:/^m/i.test(String(sex||'')) ? 130 : 115, high:/^m/i.test(String(sex||'')) ? 180 : 165})},
+  {key:'wcc', label:'WCC', trendLabel:'White cell count', unit:'×10⁹/L', labels:['white cell count','wcc'], limits:()=>({low:4, high:11})},
+  {key:'neut', label:'Neut', trendLabel:'Neutrophils', unit:'×10⁹/L', labels:['neutrophils','neuts','neut'], limits:()=>({low:2, high:7.5})},
+  {key:'plt', label:'Plt', trendLabel:'Platelets', unit:'×10⁹/L', labels:['platelets','platelet','plt'], limits:()=>({low:150, high:450})},
+  {key:'na', label:'Na', trendLabel:'Sodium', unit:'mmol/L', labels:['sodium','na'], limits:()=>({low:133, high:146})},
+  {key:'k', label:'K+', trendLabel:'Potassium', unit:'mmol/L', labels:['potassium','k+','k'], limits:()=>({low:3.5, high:5.3})},
+  {key:'urea', label:'Urea', trendLabel:'Urea', unit:'mmol/L', labels:['urea'], limits:()=>({low:2.5, high:7.8})},
+  {key:'cr', label:'Cr', trendLabel:'Creatinine', unit:'µmol/L', labels:['creatinine','creat','cr'], limits:(sex)=>({low:/^m/i.test(String(sex||'')) ? 59 : 45, high:/^m/i.test(String(sex||'')) ? 104 : 84})},
+  {key:'egfr', label:'eGFR', trendLabel:'eGFR', unit:'mL/min/1.73m²', labels:['egfr','e gfr','gfr'], limits:()=>({low:60, high:null})},
+  {key:'crp', label:'CRP', trendLabel:'CRP', unit:'mg/L', labels:['crp'], limits:()=>({low:null, high:5})},
+  {key:'alb', label:'Alb', trendLabel:'Albumin', unit:'g/L', labels:['albumin','alb'], limits:()=>({low:35, high:50})},
+  {key:'alt', label:'ALT', trendLabel:'ALT', unit:'U/L', labels:['alt'], limits:()=>({low:null, high:55})},
+  {key:'alp', label:'ALP', trendLabel:'ALP', unit:'U/L', labels:['alp'], limits:()=>({low:30, high:130})},
+  {key:'bili', label:'Bili', trendLabel:'Bilirubin', unit:'µmol/L', labels:['bilirubin','bili'], limits:()=>({low:null, high:21})},
+  {key:'ca', label:'CCa', trendLabel:'Corrected calcium', unit:'mmol/L', labels:['corrected calcium','corrected ca','cca','adjusted calcium','adjusted ca','adj ca','calcium','ca'], limits:()=>({low:2.2, high:2.6})},
+  {key:'po4', label:'PO4', trendLabel:'Phosphate', unit:'mmol/L', labels:['phosphate','po4'], limits:()=>({low:0.8, high:1.5})},
+  {key:'mg', label:'Mg', trendLabel:'Magnesium', unit:'mmol/L', labels:['magnesium','mg'], limits:()=>({low:0.7, high:1.0})}
 ];
 function escapeRegex(text){ return String(text||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
 function normaliseBloodsText(raw){
@@ -4317,6 +4317,10 @@ function getBloodAnalyteUnit(key){
   const analyte = getBloodAnalyteConfig(key);
   return analyte && analyte.unit ? analyte.unit : '';
 }
+function getBloodAnalyteTrendLabel(key){
+  const analyte = getBloodAnalyteConfig(key);
+  return analyte && (analyte.trendLabel || analyte.label) ? (analyte.trendLabel || analyte.label) : '';
+}
 function getBloodTrendRecords(raw, analyteKey, sex=''){
   const history = parseBloodsHistory(raw, sex);
   const entries = Array.isArray(history.entries) ? history.entries.slice() : [];
@@ -4349,40 +4353,22 @@ function formatBloodTrendDate(label){
 }
 function buildBloodTrendSparkline(records, analyte, sex=''){
   if(!Array.isArray(records) || !records.length) return '';
-  const width=320, height=132, padX=12, padY=16;
-  const values=records.map(r=>Number(r.value)).filter(Number.isFinite);
-  if(!values.length) return '';
-  const limits = analyte && typeof analyte.limits==='function' ? (analyte.limits(sex) || {}) : {};
-  const low = Number.isFinite(Number(limits.low)) ? Number(limits.low) : null;
-  const high = Number.isFinite(Number(limits.high)) ? Number(limits.high) : null;
-  let min=Math.min.apply(null, values);
-  let max=Math.max.apply(null, values);
-  if(low !== null) min = Math.min(min, low);
-  if(high !== null) max = Math.max(max, high);
-  const range=Math.max(max-min, Math.max(Math.abs(max || 1)*0.12, 1));
-  const graphMin=min - range*0.08;
-  const graphMax=max + range*0.08;
-  const yFor=value=>height-padY - (((Number(value)-graphMin)/(graphMax-graphMin))*(height-padY*2));
+  const width=320, height=116, padX=12, padY=14;
+  const values=records.map(r=>Number(r.numeric));
+  const min=Math.min.apply(null, values);
+  const max=Math.max.apply(null, values);
+  const range=Math.max(max-min, Math.max(Math.abs(max)*0.12, 0.8));
   const step=records.length===1 ? 0 : (width-padX*2)/(records.length-1);
-  const points=records.map((r,idx)=>({
-    x: padX + (records.length===1 ? (width-padX*2)/2 : idx*step),
-    y: yFor(r.value),
-    value: Number(r.value),
-    latest: idx===records.length-1,
-    status: r.status || ''
-  }));
+  const points=records.map((r,idx)=>{
+    const value=Number(r.numeric);
+    const x=padX + (records.length===1 ? (width-padX*2)/2 : idx*step);
+    const y=height-padY - (((value-min)/range)*(height-padY*2));
+    return {x,y,current:idx===records.length-1};
+  });
   const line=points.map((p,idx)=>`${idx?'L':'M'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
   const area=`M ${points[0].x.toFixed(1)} ${(height-padY).toFixed(1)} ` + points.map(p=>`L ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') + ` L ${points[points.length-1].x.toFixed(1)} ${(height-padY).toFixed(1)} Z`;
-  let band='';
-  if(low !== null || high !== null){
-    const bandTop = yFor(high !== null ? high : graphMax);
-    const bandBottom = yFor(low !== null ? low : graphMin);
-    const rectY = Math.min(bandTop, bandBottom);
-    const rectH = Math.abs(bandBottom - bandTop);
-    band = `<rect x="${padX}" y="${rectY.toFixed(1)}" width="${(width-padX*2).toFixed(1)}" height="${Math.max(rectH,1).toFixed(1)}" rx="10" fill="rgba(16,185,129,.08)"></rect>`;
-  }
-  const circles=points.map(p=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.latest?4:3.2}" fill="${p.latest ? '#0a84ff' : (p.status ? '#b42318' : '#94a3b8')}"></circle>`).join('');
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml((analyte && analyte.label) || 'Blood')} trend">${band}<path d="${area}" fill="rgba(10,132,255,.08)"></path><path d="${line}" fill="none" stroke="#0a84ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>${circles}</svg>`;
+  const circles=points.map(p=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.current?3.8:3}" fill="${p.current?'#0a84ff':'#94a3b8'}"></circle>`).join('');
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml((analyte && (analyte.trendLabel || analyte.label)) || 'Blood')} trend"><path d="${area}" fill="rgba(10,132,255,.08)"></path><path d="${line}" fill="none" stroke="#0a84ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>${circles}</svg>`;
 }
 function buildBloodTrendInterpretation(records, analyte, sex=''){
   if(!Array.isArray(records) || !records.length || !analyte) return {summary:'No values available.', detail:''};
@@ -4751,34 +4737,27 @@ function renderBloodTrendModal(analyteKey){
   const emptyEl=$('bloodTrendEmpty');
   const analyte = typeof getBloodAnalyteConfig==='function' ? getBloodAnalyteConfig(analyteKey) : null;
   const unit = typeof getBloodAnalyteUnit==='function' ? getBloodAnalyteUnit(analyteKey) : '';
+  const trendLabel = typeof getBloodAnalyteTrendLabel==='function' ? getBloodAnalyteTrendLabel(analyteKey) : ((analyte && analyte.label) || 'Blood');
   const liveRaw = $('bloods') ? String($('bloods').value || '') : '';
   const storedRaw = String((patient && patient.form && patient.form.bloods) || '');
   const raw = liveRaw.trim() ? liveRaw : storedRaw;
   const sex = patient && patient.sex || '';
   const records = typeof getBloodTrendRecords==='function' ? getBloodTrendRecords(raw, analyteKey, sex) : [];
-  if(title) title.textContent=`${(analyte && analyte.label) || 'Blood'}${unit ? ` (${unit})` : ''}`;
-  if(subtitle) subtitle.textContent=`${patient?.name || 'Patient'} — blood trend`;
+  if(title) title.textContent=`${trendLabel}${unit ? ` (${unit})` : ''}`;
+  if(subtitle) subtitle.textContent='Imported blood results';
+  if(summaryEl) summaryEl.classList.add('hidden');
   if(!records.length || !analyte){
-    if(summaryEl){
-      summaryEl.textContent='No values available for this analyte yet.';
-      summaryEl.classList.add('muted');
-    }
     chartEl?.classList.add('hidden');
     tableEl?.classList.add('hidden');
     emptyEl?.classList.remove('hidden');
     return;
-  }
-  const interpretation = typeof buildBloodTrendInterpretation==='function' ? buildBloodTrendInterpretation(records, analyte, sex) : {summary:'', detail:''};
-  if(summaryEl){
-    summaryEl.textContent=[interpretation.summary, interpretation.detail].filter(Boolean).join(' ');
-    summaryEl.classList.remove('muted');
   }
   if(chartEl){
     chartEl.innerHTML=(typeof buildBloodTrendSparkline==='function' ? buildBloodTrendSparkline(records, analyte, sex) : '') + `<div class="weight-history-chart-foot"><span>${escapeHtml(typeof formatBloodTrendDate==='function' ? formatBloodTrendDate(records[0].sampleLabel) : (records[0].sampleLabel || ''))}</span><span>${escapeHtml(typeof formatBloodTrendDate==='function' ? formatBloodTrendDate(records[records.length-1].sampleLabel) : (records[records.length-1].sampleLabel || ''))}</span></div>`;
     chartEl.classList.remove('hidden');
   }
   if(tableEl){
-    tableEl.innerHTML=records.slice().reverse().map((item, idx)=>`<div class="weight-history-row${idx===0?' current':''}"><div class="weight-history-date">${escapeHtml(typeof formatBloodTrendDate==='function' ? formatBloodTrendDate(item.sampleLabel) : (item.sampleLabel || 'Unknown date'))}</div><div class="weight-history-value blood-trend-value${item.status ? ` is-${item.status}` : ''}">${escapeHtml(item.raw)}${item.flag ? `<span class="blood-trend-flag">${escapeHtml(item.flag)}</span>` : ''}</div></div>`).join('');
+    tableEl.innerHTML=records.slice().reverse().map((item)=>`<div class="weight-history-row"><div class="weight-history-date">${escapeHtml(typeof formatBloodTrendDate==='function' ? formatBloodTrendDate(item.sampleLabel) : (item.sampleLabel || 'Unknown date'))}</div><div class="weight-history-value blood-trend-value${item.status ? ` is-${item.status}` : ''}">${escapeHtml(item.raw)}${item.flag ? `<span class="blood-trend-flag">${escapeHtml(item.flag)}</span>` : ''}</div></div>`).join('');
     tableEl.classList.remove('hidden');
   }
   emptyEl?.classList.add('hidden');
@@ -8231,8 +8210,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_452_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_452_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_453_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_453_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
