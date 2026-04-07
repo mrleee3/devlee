@@ -2703,10 +2703,21 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="tiny muted" id="deepgramSettingsStatus" style="margin-top:8px"></div>
 </div>
 </div>
+<div class="card options-section-card collapsed" data-options-section="medlinkdebug">
+<button aria-controls="optionsSectionMedLinkDebug" aria-expanded="false" class="options-section-toggle" data-options-section-toggle="medlinkdebug" type="button">
+<span class="options-section-titlewrap"><span class="options-section-title">Medication link debug</span><span class="options-section-subtitle">Recent long-press / link events for troubleshooting</span></span>
+<span aria-hidden="true" class="options-section-chevron">›</span>
+</button>
+<div class="options-section-body" id="optionsSectionMedLinkDebug">
+<div class="tiny muted" id="medLinkDebugStatus" style="margin-top:4px;margin-bottom:10px">No recent medication-link events yet.</div>
+<div class="top-actions" style="margin-top:0;margin-bottom:10px"><button class="fullwidth" id="copyMedLinkDebugBtn" type="button">Copy debug log</button><button class="fullwidth" id="clearMedLinkDebugBtn" type="button">Clear</button></div>
+<div class="tiny muted" id="medLinkDebugLog">No recent medication-link events yet.</div>
+</div>
+</div>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_465_release.html</div><div>Source: hospital_at_home_v12_36_465_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_466_release.html</div><div>Source: hospital_at_home_v12_36_466_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -5551,6 +5562,7 @@ function showSection(id) {
   if (id === "handover") {
     setActive("navHandover");
     populateNhsEmailField();
+    if(typeof renderMedicationDebugLog === 'function') renderMedicationDebugLog();
   }
   if (id === "deletedPage") { setActive("navHandover"); renderDeletedList(); }
   if (id === "eventLogPage") { setActive("navHandover"); renderEventLog(); }
@@ -6764,6 +6776,57 @@ let medContextActionLockUntil=0;
 let medContextIgnoreCloseUntil=0;
 let medReferenceIgnoreCloseUntil=0;
 let medReferenceFrameLoadTimer=null;
+let medOverlayTransitionIgnoreUntil=0;
+const MED_REF_DEBUG_STORAGE_KEY='hah_med_ref_debug_v1';
+let medRefDebugEntries=[];
+(function loadMedicationDebugLog(){
+  try{
+    const raw=localStorage.getItem(MED_REF_DEBUG_STORAGE_KEY);
+    const parsed=raw ? JSON.parse(raw) : [];
+    medRefDebugEntries=Array.isArray(parsed) ? parsed.slice(0,80) : [];
+  }catch(_e){ medRefDebugEntries=[]; }
+})();
+function persistMedicationDebugLog(){
+  try{ localStorage.setItem(MED_REF_DEBUG_STORAGE_KEY, JSON.stringify(medRefDebugEntries.slice(0,80))); }catch(_e){}
+}
+function medicationDebugNow(){
+  try{ return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}); }catch(_e){ return String(Date.now()); }
+}
+function addMedicationDebugLog(text){
+  const line={time:medicationDebugNow(), text:String(text||'')};
+  medRefDebugEntries.unshift(line);
+  medRefDebugEntries=medRefDebugEntries.slice(0,80);
+  persistMedicationDebugLog();
+  renderMedicationDebugLog();
+}
+function renderMedicationDebugLog(){
+  const el=$('medLinkDebugLog');
+  const status=$('medLinkDebugStatus');
+  if(status) status.textContent=medRefDebugEntries.length ? `${medRefDebugEntries.length} recent entries` : 'No recent medication-link events yet.';
+  if(!el) return;
+  if(!medRefDebugEntries.length){ el.innerHTML='<div class="tiny muted">No recent medication-link events yet.</div>'; return; }
+  el.innerHTML=medRefDebugEntries.map(item=>`<div class="log-item"><strong>${escapeHtml(item.time)}</strong> — ${escapeHtml(item.text)}</div>`).join('');
+}
+async function copyMedicationDebugLog(){
+  const text=medRefDebugEntries.length ? medRefDebugEntries.map(item=>`${item.time} — ${item.text}`).join('\n') : 'No recent medication-link events yet.';
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(text); addMedicationDebugLog('Copied medication-link debug log'); return true; }
+  }catch(_e){}
+  try{
+    const ta=document.createElement('textarea');
+    ta.value=text;
+    ta.setAttribute('readonly','readonly');
+    ta.style.position='fixed';
+    ta.style.left='-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+    addMedicationDebugLog('Copied medication-link debug log');
+    return true;
+  }catch(_e){ addMedicationDebugLog('Copy medication-link debug log failed'); return false; }
+}
+function clearMedicationDebugLog(){ medRefDebugEntries=[]; persistMedicationDebugLog(); renderMedicationDebugLog(); }
 function setMedSummaryDeleteMode(on){ medSummaryDeleteMode=!!on; updateMedSummary(); }
 function getMedEntryAtIndex(index){
   const entries=getMedEntries();
@@ -6814,13 +6877,17 @@ function getMedicationReferencePayload(index){
     }
   };
 }
-function closeMedicationContextMenu(force){
-  if(!force && Date.now()<medContextIgnoreCloseUntil) return;
+function closeMedicationContextMenu(force, reason){
+  if(!force && Date.now()<medContextIgnoreCloseUntil){
+    addMedicationDebugLog(`Ignored medication action-sheet close (${reason||'guard active'})`);
+    return;
+  }
   const backdrop=$('medContextBackdrop');
   const menu=$('medContextMenu');
   if(backdrop){ backdrop.classList.remove('show'); backdrop.classList.add('hidden'); }
   if(menu){ menu.classList.remove('show'); menu.classList.add('hidden'); }
   medContextIndex=null;
+  addMedicationDebugLog(`Closed medication action sheet${reason?` (${reason})`:''}`);
 }
 function setMedicationContextButtonState(btn, enabled, url){
   if(!btn) return;
@@ -6829,7 +6896,7 @@ function setMedicationContextButtonState(btn, enabled, url){
   btn.dataset.url=enabled ? String(url||'') : '';
 }
 function openMedicationContextMenu(index){
-  medContextIgnoreCloseUntil=Date.now()+380;
+  medContextIgnoreCloseUntil=Date.now()+550;
   const payload=getMedicationReferencePayload(index);
   if(!payload) return;
   medContextIndex=index;
@@ -6845,9 +6912,13 @@ function openMedicationContextMenu(index){
   setMedicationContextButtonState(medicinesBtn, payload.canLookup && !!payload.urls.medicines, payload.urls.medicines);
   if(backdrop){ backdrop.classList.remove('hidden'); requestAnimationFrame(()=>backdrop.classList.add('show')); }
   if(menu){ menu.classList.remove('hidden'); requestAnimationFrame(()=>menu.classList.add('show')); }
+  addMedicationDebugLog(`Opened medication action sheet for ${payload.lookupName || payload.title || 'medication'}`);
 }
-function closeMedicationReferenceViewer(force){
-  if(!force && Date.now()<medReferenceIgnoreCloseUntil) return;
+function closeMedicationReferenceViewer(force, reason){
+  if(!force && Date.now()<medReferenceIgnoreCloseUntil){
+    addMedicationDebugLog(`Ignored medication reference close (${reason||'guard active'})`);
+    return;
+  }
   const backdrop=$('medRefBackdrop');
   const modal=$('medRefModal');
   const frame=$('medRefFrame');
@@ -6861,10 +6932,25 @@ function closeMedicationReferenceViewer(force){
   if(frame){
     setTimeout(()=>{ if(modal && modal.classList.contains('hidden')) frame.src='about:blank'; }, 180);
   }
+  addMedicationDebugLog(`Closed medication reference viewer${reason?` (${reason})`:''}`);
 }
-function openMedicationReferenceViewer(sourceKey){
-  if(medContextIndex===null) return;
-  const payload=getMedicationReferencePayload(medContextIndex);
+function swallowMedicationOverlayEvent(ev){
+  if(Date.now()>=medOverlayTransitionIgnoreUntil) return;
+  const target=ev && ev.target;
+  if(target && (target.id==='medRefBackdrop' || target.id==='medContextBackdrop' || (target.closest && target.closest('#patientDetail, #patients, .context-menu-backdrop, .med-ref-backdrop')))){
+    if(typeof ev.preventDefault==='function') ev.preventDefault();
+    if(typeof ev.stopPropagation==='function') ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+    addMedicationDebugLog(`Swallowed ${ev.type} during medication viewer transition`);
+  }
+}
+function armMedicationOverlayTransitionGuard(ms){
+  medOverlayTransitionIgnoreUntil=Math.max(medOverlayTransitionIgnoreUntil, Date.now() + Math.max(0, Number(ms)||0));
+}
+function openMedicationReferenceViewer(sourceKey, indexOverride){
+  const effectiveIndex=Number.isInteger(indexOverride) ? indexOverride : medContextIndex;
+  if(effectiveIndex===null || effectiveIndex===undefined) return;
+  const payload=getMedicationReferencePayload(effectiveIndex);
   if(!payload || !payload.canLookup) return;
   const source=String(sourceKey||'').toLowerCase()==='medicines' ? 'medicines' : 'bnf';
   const url=source==='bnf' ? payload.urls.bnf : payload.urls.medicines;
@@ -6872,6 +6958,7 @@ function openMedicationReferenceViewer(sourceKey){
   medReferenceCurrentUrl=url;
   medReferenceCurrentTitle=payload.title || 'Medication reference';
   medReferenceCurrentSource=source==='bnf' ? 'BNF' : 'medicines.org.uk';
+  addMedicationDebugLog(`Opening medication reference viewer for ${payload.lookupName || payload.title || 'medication'} — ${medReferenceCurrentSource}`);
   const title=$('medRefTitle');
   const subtitle=$('medRefSubtitle');
   const frame=$('medRefFrame');
@@ -6879,8 +6966,9 @@ function openMedicationReferenceViewer(sourceKey){
   if(title) title.textContent=medReferenceCurrentTitle;
   if(subtitle) subtitle.textContent=medReferenceCurrentSource;
   if(externalBtn) externalBtn.dataset.url=url;
-  medReferenceIgnoreCloseUntil=Date.now()+650;
-  closeMedicationContextMenu(true);
+  medReferenceIgnoreCloseUntil=Date.now()+1400;
+  armMedicationOverlayTransitionGuard(1400);
+  closeMedicationContextMenu(true, 'opening reference viewer');
   const backdrop=$('medRefBackdrop');
   const modal=$('medRefModal');
   if(backdrop){ backdrop.classList.remove('hidden'); requestAnimationFrame(()=>backdrop.classList.add('show')); }
@@ -6888,11 +6976,19 @@ function openMedicationReferenceViewer(sourceKey){
   document.body.classList.add('med-reference-open');
   if(frame){
     frame.src='about:blank';
+    addMedicationDebugLog('Medication reference iframe reset to blank');
     if(medReferenceFrameLoadTimer){ clearTimeout(medReferenceFrameLoadTimer); medReferenceFrameLoadTimer=null; }
     medReferenceFrameLoadTimer=setTimeout(()=>{
       medReferenceFrameLoadTimer=null;
-      if(medReferenceCurrentUrl===url) frame.src=url;
-    },90);
+      if(medReferenceCurrentUrl===url){
+        try{
+          frame.src=url;
+          addMedicationDebugLog(`Medication reference iframe src set: ${medReferenceCurrentSource}`);
+        }catch(err){
+          addMedicationDebugLog(`Medication reference iframe src failed: ${err && err.message ? err.message : err}`);
+        }
+      }
+    },140);
   }
 }
 function handleMedicationContextAction(sourceKey, ev){
@@ -6902,9 +6998,14 @@ function handleMedicationContextAction(sourceKey, ev){
     if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
   }
   const now=Date.now();
-  if(now<medContextActionLockUntil) return;
-  medContextActionLockUntil=now+320;
-  openMedicationReferenceViewer(sourceKey);
+  if(now<medContextActionLockUntil){ addMedicationDebugLog(`Ignored duplicate medication action (${sourceKey})`); return; }
+  const indexSnapshot=medContextIndex;
+  medContextActionLockUntil=now+700;
+  medContextIgnoreCloseUntil=now+900;
+  medReferenceIgnoreCloseUntil=now+1400;
+  armMedicationOverlayTransitionGuard(1400);
+  addMedicationDebugLog(`Medication action pressed: ${String(sourceKey||'').toUpperCase()}${Number.isInteger(indexSnapshot)?` [index ${indexSnapshot}]`:''}`);
+  setTimeout(()=>openMedicationReferenceViewer(sourceKey, indexSnapshot), 0);
 }
 function handleMedicationDeleteAction(ev){
   if(ev){
@@ -6913,8 +7014,9 @@ function handleMedicationDeleteAction(ev){
     if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
   }
   const now=Date.now();
-  if(now<medContextActionLockUntil) return;
-  medContextActionLockUntil=now+320;
+  if(now<medContextActionLockUntil){ addMedicationDebugLog('Ignored duplicate medication delete action'); return; }
+  medContextActionLockUntil=now+700;
+  addMedicationDebugLog('Medication delete action pressed');
   deleteMedicationFromContextMenu();
 }
 function bindMedicationContextMenuInteractions(){
@@ -6938,6 +7040,13 @@ function bindMedicationContextMenuInteractions(){
   menu.addEventListener('click', handler, {passive:false});
   menu.addEventListener('touchend', handler, {passive:false});
   menu.addEventListener('pointerup', handler, {passive:false});
+  menu.addEventListener('touchstart', ev=>{
+    const btn=ev.target && ev.target.closest ? ev.target.closest('#medContextBnfBtn, #medContextMedicinesBtn, #medContextDeleteBtn') : null;
+    if(!btn) return;
+    armMedicationOverlayTransitionGuard(1400);
+    if(typeof ev.preventDefault==='function') ev.preventDefault();
+    if(typeof ev.stopPropagation==='function') ev.stopPropagation();
+  }, {passive:false});
 }
 function bindMedicationReferenceViewerInteractions(){
   const btn=$('medRefExternalBtn');
@@ -6952,17 +7061,29 @@ function bindMedicationReferenceViewerInteractions(){
   btn.addEventListener('touchend', handler, {passive:false});
   btn.addEventListener('pointerup', handler, {passive:false});
 }
+function bindMedicationReferenceDebugInstrumentation(){
+  if(document.documentElement.dataset.medRefDebugBound==='1') return;
+  document.documentElement.dataset.medRefDebugBound='1';
+  ['click','touchend','pointerup'].forEach(type=>document.addEventListener(type, swallowMedicationOverlayEvent, true));
+  const frame=$('medRefFrame');
+  if(frame && frame.dataset.debugBound!=='1'){
+    frame.dataset.debugBound='1';
+    frame.addEventListener('load', ()=>addMedicationDebugLog(`Medication reference iframe loaded: ${medReferenceCurrentSource || 'unknown source'}`));
+    frame.addEventListener('error', ()=>addMedicationDebugLog(`Medication reference iframe error: ${medReferenceCurrentSource || 'unknown source'}`));
+  }
+}
 function openMedicationReferenceExternally(){
   const btn=$('medRefExternalBtn');
   const url=medReferenceCurrentUrl || (btn && btn.dataset ? btn.dataset.url : '');
-  if(!url) return;
+  if(!url){ addMedicationDebugLog('Open in browser pressed with no URL'); return; }
+  addMedicationDebugLog(`Opening medication reference externally: ${medReferenceCurrentSource || 'external'}`);
   const win=window.open(url,'_blank','noopener');
   try{ if(win) win.opener=null; }catch(_e){}
 }
 function deleteMedicationFromContextMenu(){
   if(medContextIndex===null) return;
   const index=medContextIndex;
-  closeMedicationContextMenu(true);
+  closeMedicationContextMenu(true, 'delete medication');
   removeMedEntryAtIndex(index);
   saveCurrentPatientForm();
   saveData();
@@ -8757,8 +8878,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_465_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_465_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_466_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_466_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10045,16 +10166,19 @@ document.addEventListener("DOMContentLoaded",function(){
   if($("medsOverlayName")) attachMedAutocomplete($("medsOverlayName"));
   $("clearMedBtn").onclick=()=>{const focusedIndex=getMedFocusedIndex(); const compact=!!(patients[currentPatient] && patients[currentPatient].form && patients[currentPatient].form.medsCollapsed); if(compact && focusedIndex!==null){const entry=document.querySelectorAll("#medsContainer .med-entry")[focusedIndex]; if(entry){entry.querySelectorAll("input").forEach(i=>i.value=""); renderMedPresetButtons(entry); refreshMedEntryHeader(entry); updateMedSummary();}} else {document.querySelectorAll("#medsContainer .med-entry").forEach(entry=>{entry.querySelectorAll("input").forEach(i=>i.value=""); renderMedPresetButtons(entry);}); refreshAllMedEntryHeaders(); updateMedSummary();} calculateNews()};
   $("doneMedBtn").onclick=finishMedsEditing;
-  $("medContextBackdrop").onclick=()=>closeMedicationContextMenu();
+  $("medContextBackdrop").onclick=()=>closeMedicationContextMenu(false,'backdrop');
   bindMedicationContextMenuInteractions();
   $("medContextBnfBtn").onclick=e=>handleMedicationContextAction('bnf',e);
   $("medContextMedicinesBtn").onclick=e=>handleMedicationContextAction('medicines',e);
   $("medContextDeleteBtn").onclick=e=>handleMedicationDeleteAction(e);
-  $("medRefBackdrop").onclick=()=>closeMedicationReferenceViewer();
-  $("medRefBackBtn").onclick=()=>closeMedicationReferenceViewer(true);
-  $("medRefCloseBtn").onclick=()=>closeMedicationReferenceViewer(true);
+  $("medRefBackdrop").onclick=()=>closeMedicationReferenceViewer(false,'backdrop');
+  $("medRefBackBtn").onclick=()=>closeMedicationReferenceViewer(true,'back button');
+  $("medRefCloseBtn").onclick=()=>closeMedicationReferenceViewer(true,'close button');
   bindMedicationReferenceViewerInteractions();
+  bindMedicationReferenceDebugInstrumentation();
   $("medRefExternalBtn").onclick=e=>{ if(e) e.preventDefault(); openMedicationReferenceExternally(); };
+  if($("copyMedLinkDebugBtn")) $("copyMedLinkDebugBtn").onclick=()=>copyMedicationDebugLog();
+  if($("clearMedLinkDebugBtn")) $("clearMedLinkDebugBtn").onclick=()=>clearMedicationDebugLog();
   $("medsCollapsedSummary").addEventListener("click",e=>{const chip=e.target.closest("[data-med-index]"); if(!chip) return; if(Date.now()<suppressMedSummaryClickUntil) return; openMedFromSummary(Number(chip.dataset.medIndex));});
   (()=>{
     const summary=$("medsCollapsedSummary");
@@ -10094,7 +10218,7 @@ document.addEventListener("DOMContentLoaded",function(){
     summary.addEventListener('mouseleave',end);
     summary.addEventListener('contextmenu',e=>{ if(e.target.closest('[data-med-index]')) e.preventDefault(); });
     document.addEventListener('selectionchange',()=>{ if(pressTimer) clearSelection(); });
-    document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeMedicationContextMenu(); closeMedicationReferenceViewer(); } });
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeMedicationContextMenu(false,'escape'); closeMedicationReferenceViewer(false,'escape'); } });
   })();
   $("medsToggleText").onclick=toggleMedsCollapse;
   $("ivQuickAddBtn").onclick=()=>{openIVEditOverlay()};
