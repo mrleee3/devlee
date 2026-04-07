@@ -2748,7 +2748,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_480_release.html</div><div>Source: hospital_at_home_v12_36_480_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_481_release.html</div><div>Source: hospital_at_home_v12_36_481_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -8997,8 +8997,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_480_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_480_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_481_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_481_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -14453,14 +14453,20 @@ window.HAH.modules.deepgramDictation = true;
     return 'padding:14px;border-radius:18px;background:#fffdfa;border:1px solid #f3e2bf;box-shadow:0 8px 20px rgba(15,23,42,.04)';
   }
   function renderRenalSummaryBox(state){
-    const pills = buildRenalMetricPills(state.ctx);
     const title = state.headline ? escapeRenalHtml(state.headline) : 'Current renal picture';
-    const pillsHtml = pills.length
-      ? `<div${renalStyle('display:flex;flex-wrap:wrap;gap:8px;margin-top:10px')}>${pills.map(pill=>`<span${renalStyle(renalMetricPillStyle())}>${escapeRenalHtml(pill)}</span>`).join('')}</div>`
-      : `<div${renalStyle('margin-top:8px;font-size:13px;font-weight:600;color:#64748b;line-height:1.45')}>No recent structured renal blood results available.</div>`;
-    return `<div${renalStyle('padding:14px;border-radius:18px;background:#f8fbff;border:1px solid rgba(15,23,42,.08)')}>
-      <div${renalStyle('font-size:13px;font-weight:800;color:#0f172a;line-height:1.35')}>${title}</div>
-      ${pillsHtml}
+    const metrics = [];
+    if(Number.isFinite(state.ctx.latestCr)) metrics.push(`Cr ${formatRenalNumber(state.ctx.latestCr)} µmol/L`);
+    if(Number.isFinite(state.ctx.latestEgfr)) metrics.push(`eGFR ${formatRenalNumber(state.ctx.latestEgfr)} mL/min/1.73m²`);
+    if(Number.isFinite(state.ctx.crcl)) metrics.push(`CrCl ${formatRenalNumber(state.ctx.crcl)} mL/min`);
+    if(Number.isFinite(state.ctx.latestK)) metrics.push(`K+ ${formatRenalNumber(state.ctx.latestK,1)} mmol/L`);
+    if(Number.isFinite(state.ctx.latestUrea)) metrics.push(`Urea ${formatRenalNumber(state.ctx.latestUrea,1)} mmol/L`);
+    const primaryMetrics = metrics.slice(0, 3).join(' • ');
+    const secondaryMetrics = metrics.slice(3).join(' • ');
+    return `<div class="renal-review-summary-box">
+      <div class="renal-review-summary-headline">${title}</div>
+      ${primaryMetrics ? `<div class="renal-review-summary-line">${escapeRenalHtml(primaryMetrics)}</div>` : ''}
+      ${secondaryMetrics ? `<div class="renal-review-summary-line secondary">${escapeRenalHtml(secondaryMetrics)}</div>` : ''}
+      ${!metrics.length ? `<div class="renal-review-summary-empty">No recent structured renal blood results available.</div>` : ''}
     </div>`;
   }
   function renderRenalMetricSummary(state){
@@ -14629,43 +14635,34 @@ window.HAH.modules.deepgramDictation = true;
     const list = ren$('renalReviewList');
     if(!subtitle || !summary || !caveat || !list) return;
     subtitle.textContent = state.headline || 'AKI / renal function screen';
-    summary.style.padding = '0';
-    summary.style.background = 'transparent';
-    summary.style.border = '0';
-    summary.style.borderRadius = '0';
-    summary.style.boxShadow = 'none';
+    summary.className = 'weight-history-summary renal-review-summary';
     summary.innerHTML = renderRenalMetricSummary(state);
-    caveat.style.padding = '0';
-    caveat.style.background = 'transparent';
-    caveat.style.border = '0';
-    caveat.style.borderRadius = '0';
-    list.style.display = 'flex';
-    list.style.flexDirection = 'column';
-    list.style.gap = '12px';
     const caveatParts = [];
     if(state.ctx.crclLimitedByInstability) caveatParts.push('Creatinine appears unstable — CrCl is shown for context and may be less reliable.');
     if(state.ctx.missingCrclInputs) caveatParts.push('Current weight is needed for Cockcroft–Gault CrCl-based checks.');
     caveatParts.push('Rules-based review only — confirm with local dosing guidance before changing treatment.');
-    caveat.innerHTML = `<div${renalStyle('padding:12px 14px;border-radius:16px;background:#fff8ef;border:1px solid rgba(180,83,9,.14)')}><div${renalStyle('font-size:12px;font-weight:800;line-height:1.35;color:#9a3412')}>Use with caution</div><div${renalStyle('margin-top:4px;font-size:12.5px;line-height:1.5;color:#9a3412')}>${escapeRenalHtml(caveatParts.join(' '))}</div></div>`;
+    caveat.className = 'renal-review-caveat';
+    caveat.innerHTML = `<div class="renal-review-caveat-title">Use with caution</div><div class="renal-review-caveat-copy">${escapeRenalHtml(caveatParts.join(' '))}</div>`;
+    list.className = 'renal-review-list';
     if(!state.alerts.length){
-      list.innerHTML = `<div${renalStyle('padding:16px;border-radius:16px;background:#f8fafc;border:1px dashed #d1d5db;color:#64748b;font-size:14px;font-weight:600')}>No current medication-specific renal review alerts.</div>`;
+      list.innerHTML = `<div class="renal-review-empty">No current medication-specific renal review alerts.</div>`;
       return;
     }
     list.innerHTML = state.alerts.map(alert=>{
-      const reasonsHtml = alert.reasons.map(reason=>`<span${renalStyle(renalReasonPillStyle())}>${escapeRenalHtml(reason)}</span>`).join('');
-      return `<section${renalStyle(renalCardStyle(alert.severity))}>
-        <div${renalStyle('display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap')}>
-          <div${renalStyle('min-width:0;flex:1 1 180px')}>
-            <div${renalStyle('font-size:15px;font-weight:800;color:#0f172a;line-height:1.25')}>${escapeRenalHtml(alert.medication)}</div>
-            ${alert.line && alert.line !== alert.medication ? `<div${renalStyle('margin-top:4px;font-size:12.5px;color:#64748b;line-height:1.4')}>${escapeRenalHtml(alert.line)}</div>` : ''}
+      const reasonsHtml = alert.reasons.map(reason=>`<span class="renal-review-reason">${escapeRenalHtml(reason)}</span>`).join('');
+      return `<section class="renal-review-item severity-${escapeRenalHtml(alert.severity)}">
+        <div class="renal-review-item-head">
+          <div class="renal-review-item-copy">
+            <div class="renal-review-item-title">${escapeRenalHtml(alert.medication)}</div>
+            ${alert.line && alert.line !== alert.medication ? `<div class="renal-review-item-line">${escapeRenalHtml(alert.line)}</div>` : ''}
           </div>
-          <div${renalStyle('display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end')}>
-            ${alert.sourceTag ? `<span${renalStyle(renalSourcePillStyle())}>${escapeRenalHtml(alert.sourceTag)}</span>` : ''}
-            <span${renalStyle(renalActionPillStyle(alert.severity))}>${escapeRenalHtml(alert.badge)}</span>
+          <div class="renal-review-item-badges">
+            ${alert.sourceTag ? `<span class="renal-review-source">${escapeRenalHtml(alert.sourceTag)}</span>` : ''}
+            <span class="renal-review-badge severity-${escapeRenalHtml(alert.severity)}">${escapeRenalHtml(alert.badge)}</span>
           </div>
         </div>
-        ${reasonsHtml ? `<div${renalStyle('margin-top:12px;display:flex;flex-wrap:wrap;gap:8px')}>${reasonsHtml}</div>` : ''}
-        ${alert.note ? `<div${renalStyle('margin-top:12px;padding-top:12px;border-top:1px solid rgba(226,232,240,.9);font-size:12.5px;line-height:1.5;color:#475569')}>${escapeRenalHtml(alert.note)}</div>` : ''}
+        ${reasonsHtml ? `<div class="renal-review-reasons">${reasonsHtml}</div>` : ''}
+        ${alert.note ? `<div class="renal-review-note">${escapeRenalHtml(alert.note)}</div>` : ''}
       </section>`;
     }).join('');
   }
