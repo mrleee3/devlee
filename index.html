@@ -2717,7 +2717,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_466_release.html</div><div>Source: hospital_at_home_v12_36_466_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_467_release.html</div><div>Source: hospital_at_home_v12_36_467_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -2802,6 +2802,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 <div class="med-ref-backdrop hidden" id="medRefBackdrop"></div>
 <div aria-labelledby="medRefTitle" aria-modal="true" class="med-ref-modal hidden" id="medRefModal" role="dialog">
+<div class="med-ref-card">
 <div class="med-ref-head">
 <button class="med-ref-nav med-ref-back" id="medRefBackBtn" type="button">‹ Back</button>
 <div class="med-ref-head-copy">
@@ -2814,6 +2815,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="med-ref-body">
 <iframe class="med-ref-frame" id="medRefFrame" loading="eager" referrerpolicy="no-referrer-when-downgrade" title="Medication reference viewer"></iframe>
 <div class="med-ref-help tiny muted" id="medRefHelp">If this source does not render inside the app, use Open in browser.</div>
+</div>
 </div>
 </div>
 <div class="weight-history-backdrop hidden" id="weightHistoryBackdrop"></div>
@@ -6884,8 +6886,8 @@ function closeMedicationContextMenu(force, reason){
   }
   const backdrop=$('medContextBackdrop');
   const menu=$('medContextMenu');
-  if(backdrop){ backdrop.classList.remove('show'); backdrop.classList.add('hidden'); }
-  if(menu){ menu.classList.remove('show'); menu.classList.add('hidden'); }
+  if(backdrop) hideMedicationOverlayElement(backdrop);
+  if(menu) hideMedicationOverlayElement(menu);
   medContextIndex=null;
   addMedicationDebugLog(`Closed medication action sheet${reason?` (${reason})`:''}`);
 }
@@ -6894,6 +6896,27 @@ function setMedicationContextButtonState(btn, enabled, url){
   btn.disabled=!enabled;
   btn.classList.toggle('disabled', !enabled);
   btn.dataset.url=enabled ? String(url||'') : '';
+}
+function showMedicationOverlayElement(el){
+  if(!el) return;
+  el.classList.remove('hidden');
+  void el.offsetWidth;
+  el.classList.add('show');
+}
+function hideMedicationOverlayElement(el){
+  if(!el) return;
+  el.classList.remove('show');
+  el.classList.add('hidden');
+}
+function logMedicationReferenceViewerState(label){
+  const modal=$('medRefModal');
+  if(!modal) return;
+  let rectInfo='';
+  try{
+    const rect=modal.getBoundingClientRect();
+    rectInfo=` ${Math.round(rect.width)}x${Math.round(rect.height)} @ ${Math.round(rect.left)},${Math.round(rect.top)}`;
+  }catch(_e){}
+  addMedicationDebugLog(`${label}: hidden=${modal.classList.contains('hidden')} show=${modal.classList.contains('show')} opacity=${getComputedStyle(modal).opacity}${rectInfo}`);
 }
 function openMedicationContextMenu(index){
   medContextIgnoreCloseUntil=Date.now()+550;
@@ -6910,8 +6933,8 @@ function openMedicationContextMenu(index){
   if(subtitle) subtitle.textContent=payload.subtitle || 'Medication actions';
   setMedicationContextButtonState(bnfBtn, payload.canLookup && !!payload.urls.bnf, payload.urls.bnf);
   setMedicationContextButtonState(medicinesBtn, payload.canLookup && !!payload.urls.medicines, payload.urls.medicines);
-  if(backdrop){ backdrop.classList.remove('hidden'); requestAnimationFrame(()=>backdrop.classList.add('show')); }
-  if(menu){ menu.classList.remove('hidden'); requestAnimationFrame(()=>menu.classList.add('show')); }
+  if(backdrop) showMedicationOverlayElement(backdrop);
+  if(menu) showMedicationOverlayElement(menu);
   addMedicationDebugLog(`Opened medication action sheet for ${payload.lookupName || payload.title || 'medication'}`);
 }
 function closeMedicationReferenceViewer(force, reason){
@@ -6922,8 +6945,8 @@ function closeMedicationReferenceViewer(force, reason){
   const backdrop=$('medRefBackdrop');
   const modal=$('medRefModal');
   const frame=$('medRefFrame');
-  if(backdrop){ backdrop.classList.remove('show'); backdrop.classList.add('hidden'); }
-  if(modal){ modal.classList.remove('show'); modal.classList.add('hidden'); }
+  if(backdrop) hideMedicationOverlayElement(backdrop);
+  if(modal) hideMedicationOverlayElement(modal);
   document.body.classList.remove('med-reference-open');
   medReferenceCurrentUrl='';
   medReferenceCurrentTitle='';
@@ -6971,9 +6994,11 @@ function openMedicationReferenceViewer(sourceKey, indexOverride){
   closeMedicationContextMenu(true, 'opening reference viewer');
   const backdrop=$('medRefBackdrop');
   const modal=$('medRefModal');
-  if(backdrop){ backdrop.classList.remove('hidden'); requestAnimationFrame(()=>backdrop.classList.add('show')); }
-  if(modal){ modal.classList.remove('hidden'); requestAnimationFrame(()=>modal.classList.add('show')); }
+  if(backdrop) showMedicationOverlayElement(backdrop);
+  if(modal) showMedicationOverlayElement(modal);
   document.body.classList.add('med-reference-open');
+  logMedicationReferenceViewerState('Medication reference viewer shown');
+  setTimeout(()=>logMedicationReferenceViewerState('Medication reference viewer post-open state'), 220);
   if(frame){
     frame.src='about:blank';
     addMedicationDebugLog('Medication reference iframe reset to blank');
@@ -8878,8 +8903,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_466_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_466_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_467_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_467_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
