@@ -2738,7 +2738,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_469_release.html</div><div>Source: hospital_at_home_v12_36_469_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_470_release.html</div><div>Source: hospital_at_home_v12_36_470_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -6803,8 +6803,9 @@ let medReferenceIgnoreCloseUntil=0;
 let medReferenceFrameLoadTimer=null;
 let medReferenceBackFallbackTimer=null;
 let medReferencePendingBackNavigation=false;
-let medReferenceIframeNavDepth=0;
-let medReferenceAutoLoadCount=0;
+let medReferenceHistoryDepth=0;
+let medReferenceHistoryReady=false;
+let medReferenceAwaitingInitialLoad=false;
 let medOverlayTransitionIgnoreUntil=0;
 const MED_REF_DEBUG_STORAGE_KEY='hah_med_ref_debug_v1';
 let medRefDebugEntries=[];
@@ -6978,11 +6979,12 @@ function closeMedicationReferenceViewer(force, reason){
   medReferenceCurrentUrl='';
   medReferenceCurrentTitle='';
   medReferenceCurrentSource='';
+  medReferenceHistoryDepth=0;
+  medReferenceHistoryReady=false;
+  medReferenceAwaitingInitialLoad=false;
   if(medReferenceFrameLoadTimer){ clearTimeout(medReferenceFrameLoadTimer); medReferenceFrameLoadTimer=null; }
   if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); medReferenceBackFallbackTimer=null; }
   medReferencePendingBackNavigation=false;
-  medReferenceIframeNavDepth=0;
-  medReferenceAutoLoadCount=0;
   if(frame){
     setTimeout(()=>{ if(modal && modal.classList.contains('hidden')) frame.src='about:blank'; }, 180);
   }
@@ -6990,27 +6992,32 @@ function closeMedicationReferenceViewer(force, reason){
 }
 function navigateMedicationReferenceBack(){
   const frame=$('medRefFrame');
-  if(!frame || medReferenceIframeNavDepth<1){
+  if(!frame){
     closeMedicationReferenceViewer(true,'back button');
     return;
   }
+  if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); medReferenceBackFallbackTimer=null; }
   try{
     medReferencePendingBackNavigation=true;
-    if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); }
+    frame.contentWindow.history.back();
+    addMedicationDebugLog(`Medication reference back requested (tracked depth ${medReferenceHistoryDepth || 1})`);
     medReferenceBackFallbackTimer=setTimeout(()=>{
       medReferenceBackFallbackTimer=null;
-      if(medReferencePendingBackNavigation){
-        medReferencePendingBackNavigation=false;
-        medReferenceIframeNavDepth=0;
-        addMedicationDebugLog('Medication reference back had no iframe navigation');
+      if(!medReferencePendingBackNavigation) return;
+      medReferencePendingBackNavigation=false;
+      addMedicationDebugLog(`Medication reference back produced no navigation (tracked depth ${medReferenceHistoryDepth || 1})`);
+      if((medReferenceHistoryDepth||0)<=1){
+        addMedicationDebugLog('Medication reference back fallback closing viewer');
+        closeMedicationReferenceViewer(true,'back button fallback');
       }
-    }, 900);
-    frame.contentWindow.history.back();
-    addMedicationDebugLog('Medication reference back requested');
+    }, 1000);
+    return;
   }catch(err){
     medReferencePendingBackNavigation=false;
-    if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); medReferenceBackFallbackTimer=null; }
     addMedicationDebugLog(`Medication reference back failed: ${err && err.message ? err.message : err}`);
+  }
+  if((medReferenceHistoryDepth||0)<=1){
+    addMedicationDebugLog('Medication reference back unavailable; closing viewer');
     closeMedicationReferenceViewer(true,'back button');
   }
 }
@@ -7047,6 +7054,10 @@ function openMedicationReferenceViewer(sourceKey, indexOverride){
   if(subtitle) subtitle.textContent=medReferenceCurrentSource;
   if(externalBtn) externalBtn.dataset.url=url;
   medReferenceIgnoreCloseUntil=Date.now()+1400;
+  medReferenceHistoryDepth=0;
+  medReferenceHistoryReady=false;
+  medReferenceAwaitingInitialLoad=false;
+  medReferencePendingBackNavigation=false;
   armMedicationOverlayTransitionGuard(1400);
   closeMedicationContextMenu(true, 'opening reference viewer');
   const backdrop=$('medRefBackdrop');
@@ -7057,8 +7068,6 @@ function openMedicationReferenceViewer(sourceKey, indexOverride){
   logMedicationReferenceViewerState('Medication reference viewer shown');
   setTimeout(()=>logMedicationReferenceViewerState('Medication reference viewer post-open state'), 220);
   if(frame){
-    medReferenceIframeNavDepth=0;
-    medReferenceAutoLoadCount=2;
     frame.src='about:blank';
     addMedicationDebugLog('Medication reference iframe reset to blank');
     if(medReferenceFrameLoadTimer){ clearTimeout(medReferenceFrameLoadTimer); medReferenceFrameLoadTimer=null; }
@@ -7072,7 +7081,10 @@ function openMedicationReferenceViewer(sourceKey, indexOverride){
           }else{
             frame.src=url;
           }
-          addMedicationDebugLog(`Medication reference iframe src set: ${medReferenceCurrentSource}`);
+          medReferenceHistoryDepth=1;
+          medReferenceHistoryReady=true;
+          medReferenceAwaitingInitialLoad=true;
+          addMedicationDebugLog(`Medication reference iframe src set: ${medReferenceCurrentSource} (tracked depth 1)`);
         }catch(err){
           try{ frame.src=url; }catch(_fallbackErr){}
           addMedicationDebugLog(`Medication reference iframe src failed: ${err && err.message ? err.message : err}`);
@@ -7159,18 +7171,22 @@ function bindMedicationReferenceDebugInstrumentation(){
   if(frame && frame.dataset.debugBound!=='1'){
     frame.dataset.debugBound='1';
     frame.addEventListener('load', ()=>{
+      let loadLabel=`Medication reference iframe loaded: ${medReferenceCurrentSource || 'unknown source'}`;
       if(medReferencePendingBackNavigation){
         medReferencePendingBackNavigation=false;
         if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); medReferenceBackFallbackTimer=null; }
-        medReferenceIframeNavDepth=Math.max(0, medReferenceIframeNavDepth-1);
-        addMedicationDebugLog('Medication reference back navigation completed');
-      }else if(medReferenceAutoLoadCount>0){
-        medReferenceAutoLoadCount--;
-      }else{
-        medReferenceIframeNavDepth++;
-        addMedicationDebugLog(`Medication reference in-frame navigation (depth ${medReferenceIframeNavDepth})`);
+        medReferenceHistoryDepth=Math.max(1, (medReferenceHistoryDepth||1)-1);
+        medReferenceHistoryReady=true;
+        medReferenceAwaitingInitialLoad=false;
+        addMedicationDebugLog(`Medication reference back navigation completed (tracked depth ${medReferenceHistoryDepth})`);
+      }else if(medReferenceAwaitingInitialLoad){
+        medReferenceAwaitingInitialLoad=false;
+        loadLabel+=` (tracked depth ${medReferenceHistoryDepth || 1})`;
+      }else if(medReferenceHistoryReady){
+        medReferenceHistoryDepth=Math.max(1, (medReferenceHistoryDepth||0)+1);
+        loadLabel+=` (tracked depth ${medReferenceHistoryDepth})`;
       }
-      addMedicationDebugLog(`Medication reference iframe loaded: ${medReferenceCurrentSource || 'unknown source'}`);
+      addMedicationDebugLog(loadLabel);
     });
     frame.addEventListener('error', ()=>addMedicationDebugLog(`Medication reference iframe error: ${medReferenceCurrentSource || 'unknown source'}`));
   }
@@ -8981,8 +8997,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_469_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_469_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_470_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_470_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
