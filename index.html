@@ -2748,7 +2748,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_479_release.html</div><div>Source: hospital_at_home_v12_36_479_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_480_release.html</div><div>Source: hospital_at_home_v12_36_480_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -8997,8 +8997,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_479_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_479_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_480_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_480_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -14431,13 +14431,40 @@ window.HAH.modules.deepgramDictation = true;
     return pills;
   }
 
-  function renderRenalMetricSummary(state){
+
+  function renalStyle(value){ return value ? ` style="${value}"` : ''; }
+  function renalMetricPillStyle(){
+    return 'display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:999px;background:#ffffff;border:1px solid #dbe4ee;color:#0f172a;font-size:12.5px;font-weight:700;line-height:1.15;white-space:nowrap';
+  }
+  function renalReasonPillStyle(){
+    return 'display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:999px;background:#f8fafc;border:1px solid #e2e8f0;color:#334155;font-size:12.5px;font-weight:700;line-height:1.25';
+  }
+  function renalSourcePillStyle(){
+    return 'display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:0 10px;border-radius:999px;background:#ecf4ff;border:1px solid rgba(37,99,235,.1);color:#2563eb;font-size:12px;font-weight:800;line-height:1';
+  }
+  function renalActionPillStyle(severity){
+    if(severity === 'critical') return 'display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:0 10px;border-radius:999px;background:#fee8e8;border:1px solid rgba(220,38,38,.14);color:#dc2626;font-size:12px;font-weight:800;line-height:1';
+    if(severity === 'high') return 'display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:0 10px;border-radius:999px;background:#fff0df;border:1px solid rgba(194,65,12,.14);color:#c2410c;font-size:12px;font-weight:800;line-height:1';
+    return 'display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:0 10px;border-radius:999px;background:#fff6dc;border:1px solid rgba(161,98,7,.14);color:#a16207;font-size:12px;font-weight:800;line-height:1';
+  }
+  function renalCardStyle(severity){
+    if(severity === 'critical') return 'padding:14px;border-radius:18px;background:#fff7f7;border:1px solid #f6c9c9;box-shadow:0 8px 20px rgba(15,23,42,.04)';
+    if(severity === 'high') return 'padding:14px;border-radius:18px;background:#fffaf5;border:1px solid #f7d7c0;box-shadow:0 8px 20px rgba(15,23,42,.04)';
+    return 'padding:14px;border-radius:18px;background:#fffdfa;border:1px solid #f3e2bf;box-shadow:0 8px 20px rgba(15,23,42,.04)';
+  }
+  function renderRenalSummaryBox(state){
     const pills = buildRenalMetricPills(state.ctx);
-    const eyebrow = state.headline ? `<div class="renal-review-summary-title">${escapeRenalHtml(state.headline)}</div>` : '<div class="renal-review-summary-title">Current renal picture</div>';
-    if(!pills.length){
-      return `${eyebrow}<div class="renal-review-summary-empty">No recent structured renal blood results available.</div>`;
-    }
-    return `${eyebrow}<div class="renal-review-metric-pills">${pills.map(pill=>`<span class="renal-review-metric-pill">${escapeRenalHtml(pill)}</span>`).join('')}</div>`;
+    const title = state.headline ? escapeRenalHtml(state.headline) : 'Current renal picture';
+    const pillsHtml = pills.length
+      ? `<div${renalStyle('display:flex;flex-wrap:wrap;gap:8px;margin-top:10px')}>${pills.map(pill=>`<span${renalStyle(renalMetricPillStyle())}>${escapeRenalHtml(pill)}</span>`).join('')}</div>`
+      : `<div${renalStyle('margin-top:8px;font-size:13px;font-weight:600;color:#64748b;line-height:1.45')}>No recent structured renal blood results available.</div>`;
+    return `<div${renalStyle('padding:14px;border-radius:18px;background:#f8fbff;border:1px solid rgba(15,23,42,.08)')}>
+      <div${renalStyle('font-size:13px;font-weight:800;color:#0f172a;line-height:1.35')}>${title}</div>
+      ${pillsHtml}
+    </div>`;
+  }
+  function renderRenalMetricSummary(state){
+    return renderRenalSummaryBox(state);
   }
   function createRenalAlert(index, entry, medication, badge, severity, reasons, note, sourceTag){
     return {
@@ -14602,31 +14629,43 @@ window.HAH.modules.deepgramDictation = true;
     const list = ren$('renalReviewList');
     if(!subtitle || !summary || !caveat || !list) return;
     subtitle.textContent = state.headline || 'AKI / renal function screen';
+    summary.style.padding = '0';
+    summary.style.background = 'transparent';
+    summary.style.border = '0';
+    summary.style.borderRadius = '0';
+    summary.style.boxShadow = 'none';
     summary.innerHTML = renderRenalMetricSummary(state);
+    caveat.style.padding = '0';
+    caveat.style.background = 'transparent';
+    caveat.style.border = '0';
+    caveat.style.borderRadius = '0';
+    list.style.display = 'flex';
+    list.style.flexDirection = 'column';
+    list.style.gap = '12px';
     const caveatParts = [];
     if(state.ctx.crclLimitedByInstability) caveatParts.push('Creatinine appears unstable — CrCl is shown for context and may be less reliable.');
     if(state.ctx.missingCrclInputs) caveatParts.push('Current weight is needed for Cockcroft–Gault CrCl-based checks.');
     caveatParts.push('Rules-based review only — confirm with local dosing guidance before changing treatment.');
-    caveat.innerHTML = `<div class="renal-review-caveat-title">Use with caution</div><div class="renal-review-caveat-copy">${escapeRenalHtml(caveatParts.join(' '))}</div>`;
+    caveat.innerHTML = `<div${renalStyle('padding:12px 14px;border-radius:16px;background:#fff8ef;border:1px solid rgba(180,83,9,.14)')}><div${renalStyle('font-size:12px;font-weight:800;line-height:1.35;color:#9a3412')}>Use with caution</div><div${renalStyle('margin-top:4px;font-size:12.5px;line-height:1.5;color:#9a3412')}>${escapeRenalHtml(caveatParts.join(' '))}</div></div>`;
     if(!state.alerts.length){
-      list.innerHTML = '<div class="renal-review-empty">No current medication-specific renal review alerts.</div>';
+      list.innerHTML = `<div${renalStyle('padding:16px;border-radius:16px;background:#f8fafc;border:1px dashed #d1d5db;color:#64748b;font-size:14px;font-weight:600')}>No current medication-specific renal review alerts.</div>`;
       return;
     }
     list.innerHTML = state.alerts.map(alert=>{
-      const reasonsHtml = alert.reasons.map(reason=>`<span class="renal-review-reason">${escapeRenalHtml(reason)}</span>`).join('');
-      return `<section class="renal-review-item severity-${escapeRenalHtml(alert.severity)}">
-        <div class="renal-review-item-head">
-          <div class="renal-review-item-copy">
-            <div class="renal-review-item-title">${escapeRenalHtml(alert.medication)}</div>
-            ${alert.line && alert.line !== alert.medication ? `<div class="renal-review-item-line">${escapeRenalHtml(alert.line)}</div>` : ''}
+      const reasonsHtml = alert.reasons.map(reason=>`<span${renalStyle(renalReasonPillStyle())}>${escapeRenalHtml(reason)}</span>`).join('');
+      return `<section${renalStyle(renalCardStyle(alert.severity))}>
+        <div${renalStyle('display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap')}>
+          <div${renalStyle('min-width:0;flex:1 1 180px')}>
+            <div${renalStyle('font-size:15px;font-weight:800;color:#0f172a;line-height:1.25')}>${escapeRenalHtml(alert.medication)}</div>
+            ${alert.line && alert.line !== alert.medication ? `<div${renalStyle('margin-top:4px;font-size:12.5px;color:#64748b;line-height:1.4')}>${escapeRenalHtml(alert.line)}</div>` : ''}
           </div>
-          <div class="renal-review-item-badges">
-            ${alert.sourceTag ? `<span class="renal-review-source">${escapeRenalHtml(alert.sourceTag)}</span>` : ''}
-            <span class="renal-review-badge severity-${escapeRenalHtml(alert.severity)}">${escapeRenalHtml(alert.badge)}</span>
+          <div${renalStyle('display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end')}>
+            ${alert.sourceTag ? `<span${renalStyle(renalSourcePillStyle())}>${escapeRenalHtml(alert.sourceTag)}</span>` : ''}
+            <span${renalStyle(renalActionPillStyle(alert.severity))}>${escapeRenalHtml(alert.badge)}</span>
           </div>
         </div>
-        ${reasonsHtml ? `<div class="renal-review-reasons">${reasonsHtml}</div>` : ''}
-        ${alert.note ? `<div class="renal-review-note">${escapeRenalHtml(alert.note)}</div>` : ''}
+        ${reasonsHtml ? `<div${renalStyle('margin-top:12px;display:flex;flex-wrap:wrap;gap:8px')}>${reasonsHtml}</div>` : ''}
+        ${alert.note ? `<div${renalStyle('margin-top:12px;padding-top:12px;border-top:1px solid rgba(226,232,240,.9);font-size:12.5px;line-height:1.5;color:#475569')}>${escapeRenalHtml(alert.note)}</div>` : ''}
       </section>`;
     }).join('');
   }
