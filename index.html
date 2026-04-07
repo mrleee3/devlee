@@ -103,11 +103,11 @@ body.med-reference-open{overflow:hidden} body.med-reference-open #patientDetail{
 .renal-review-modal{width:min(470px,calc(100vw - 24px));max-height:min(82vh,700px)}
 .renal-review-head{padding-right:54px}
 .renal-review-body{display:flex;flex-direction:column;gap:10px;padding:12px 16px 14px;overflow:auto}
-.renal-review-summary{padding:14px 16px!important;border-radius:20px!important;background:#f7fbff!important;border:1px solid rgba(15,23,42,.08)!important;box-shadow:none!important}
-.renal-review-summary-box{display:flex;flex-direction:column;gap:5px}
-.renal-review-summary-headline{font-size:15px;font-weight:800;line-height:1.3;color:#111827;letter-spacing:-.01em}
-.renal-review-summary-line{font-size:13px;font-weight:700;line-height:1.45;color:#1f2937}
-.renal-review-summary-line.secondary{color:#334155}
+.renal-review-summary{padding:12px 14px!important;border-radius:18px!important;background:#f7fbff!important;border:1px solid rgba(15,23,42,.08)!important;box-shadow:none!important}
+.renal-review-summary-box{display:flex;flex-direction:column;gap:4px}
+.renal-review-summary-headline{font-size:14px;font-weight:800;line-height:1.32;color:#111827;letter-spacing:-.01em}
+.renal-review-summary-line{font-size:13px;font-weight:600;line-height:1.42;color:#334155}
+.renal-review-summary-line.secondary{color:#475467}
 .renal-review-summary-empty{font-size:13px;font-weight:600;line-height:1.4;color:#667085}
 .renal-review-caveat{display:none!important}
 .renal-review-list{display:flex;flex-direction:column;gap:10px}
@@ -2801,7 +2801,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_484_release.html</div><div>Source: hospital_at_home_v12_36_484_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_485_release.html</div><div>Source: hospital_at_home_v12_36_485_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -9135,8 +9135,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_484_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_484_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_485_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_485_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -14429,7 +14429,7 @@ window.HAH.modules.deepgramDictation = true;
 
 </script><script>
 (function(){
-  const RENAL_REVIEW_VERSION = 'renal-review-mvp-3';
+  const RENAL_REVIEW_VERSION = 'renal-review-mvp-3b';
   let renalRenderQueued = false;
 
   const ACE_ARB_ALIASES = ['ramipril','lisinopril','enalapril','perindopril','captopril','trandolapril','fosinopril','quinapril','losartan','candesartan','valsartan','irbesartan','olmesartan','telmisartan'];
@@ -14816,7 +14816,6 @@ window.HAH.modules.deepgramDictation = true;
             ${alert.line && alert.line !== alert.medication ? `<div class="renal-review-item-line">${escapeRenalHtml(alert.line)}</div>` : ''}
           </div>
           <div class="renal-review-item-badges">
-            ${alert.sourceTag ? `<span class="renal-review-source">${escapeRenalHtml(alert.sourceTag)}</span>` : ''}
             <span class="renal-review-badge severity-${escapeRenalHtml(alert.severity)}">${escapeRenalHtml(alert.badge)}</span>
           </div>
         </div>
