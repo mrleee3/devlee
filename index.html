@@ -6803,6 +6803,8 @@ let medReferenceIgnoreCloseUntil=0;
 let medReferenceFrameLoadTimer=null;
 let medReferenceBackFallbackTimer=null;
 let medReferencePendingBackNavigation=false;
+let medReferenceIframeNavDepth=0;
+let medReferenceAutoLoadCount=0;
 let medOverlayTransitionIgnoreUntil=0;
 const MED_REF_DEBUG_STORAGE_KEY='hah_med_ref_debug_v1';
 let medRefDebugEntries=[];
@@ -6979,6 +6981,8 @@ function closeMedicationReferenceViewer(force, reason){
   if(medReferenceFrameLoadTimer){ clearTimeout(medReferenceFrameLoadTimer); medReferenceFrameLoadTimer=null; }
   if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); medReferenceBackFallbackTimer=null; }
   medReferencePendingBackNavigation=false;
+  medReferenceIframeNavDepth=0;
+  medReferenceAutoLoadCount=0;
   if(frame){
     setTimeout(()=>{ if(modal && modal.classList.contains('hidden')) frame.src='about:blank'; }, 180);
   }
@@ -6986,38 +6990,29 @@ function closeMedicationReferenceViewer(force, reason){
 }
 function navigateMedicationReferenceBack(){
   const frame=$('medRefFrame');
-  if(!frame){
+  if(!frame || medReferenceIframeNavDepth<1){
     closeMedicationReferenceViewer(true,'back button');
     return;
   }
-  let historyLength=0;
   try{
-    historyLength=Number(frame.contentWindow && frame.contentWindow.history ? frame.contentWindow.history.length : 0) || 0;
+    medReferencePendingBackNavigation=true;
+    if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); }
+    medReferenceBackFallbackTimer=setTimeout(()=>{
+      medReferenceBackFallbackTimer=null;
+      if(medReferencePendingBackNavigation){
+        medReferencePendingBackNavigation=false;
+        medReferenceIframeNavDepth=0;
+        addMedicationDebugLog('Medication reference back had no iframe navigation');
+      }
+    }, 900);
+    frame.contentWindow.history.back();
+    addMedicationDebugLog('Medication reference back requested');
   }catch(err){
-    addMedicationDebugLog(`Medication reference history length unavailable: ${err && err.message ? err.message : err}`);
+    medReferencePendingBackNavigation=false;
+    if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); medReferenceBackFallbackTimer=null; }
+    addMedicationDebugLog(`Medication reference back failed: ${err && err.message ? err.message : err}`);
+    closeMedicationReferenceViewer(true,'back button');
   }
-  if(historyLength>1){
-    try{
-      medReferencePendingBackNavigation=true;
-      if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); }
-      medReferenceBackFallbackTimer=setTimeout(()=>{
-        medReferenceBackFallbackTimer=null;
-        if(medReferencePendingBackNavigation){
-          medReferencePendingBackNavigation=false;
-          addMedicationDebugLog('Medication reference back had no iframe navigation');
-        }
-      }, 900);
-      frame.contentWindow.history.back();
-      addMedicationDebugLog('Medication reference back requested');
-      return;
-    }catch(err){
-      medReferencePendingBackNavigation=false;
-      if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); medReferenceBackFallbackTimer=null; }
-      addMedicationDebugLog(`Medication reference back failed: ${err && err.message ? err.message : err}`);
-    }
-  }
-  addMedicationDebugLog('Medication reference back unavailable; closing viewer');
-  closeMedicationReferenceViewer(true,'back button');
 }
 function swallowMedicationOverlayEvent(ev){
   if(Date.now()>=medOverlayTransitionIgnoreUntil) return;
@@ -7062,6 +7057,8 @@ function openMedicationReferenceViewer(sourceKey, indexOverride){
   logMedicationReferenceViewerState('Medication reference viewer shown');
   setTimeout(()=>logMedicationReferenceViewerState('Medication reference viewer post-open state'), 220);
   if(frame){
+    medReferenceIframeNavDepth=0;
+    medReferenceAutoLoadCount=2;
     frame.src='about:blank';
     addMedicationDebugLog('Medication reference iframe reset to blank');
     if(medReferenceFrameLoadTimer){ clearTimeout(medReferenceFrameLoadTimer); medReferenceFrameLoadTimer=null; }
@@ -7165,7 +7162,13 @@ function bindMedicationReferenceDebugInstrumentation(){
       if(medReferencePendingBackNavigation){
         medReferencePendingBackNavigation=false;
         if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); medReferenceBackFallbackTimer=null; }
+        medReferenceIframeNavDepth=Math.max(0, medReferenceIframeNavDepth-1);
         addMedicationDebugLog('Medication reference back navigation completed');
+      }else if(medReferenceAutoLoadCount>0){
+        medReferenceAutoLoadCount--;
+      }else{
+        medReferenceIframeNavDepth++;
+        addMedicationDebugLog(`Medication reference in-frame navigation (depth ${medReferenceIframeNavDepth})`);
       }
       addMedicationDebugLog(`Medication reference iframe loaded: ${medReferenceCurrentSource || 'unknown source'}`);
     });
