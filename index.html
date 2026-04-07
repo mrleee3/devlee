@@ -2738,7 +2738,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_470_release.html</div><div>Source: hospital_at_home_v12_36_470_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_471_release.html</div><div>Source: hospital_at_home_v12_36_471_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -2825,7 +2825,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div aria-labelledby="medRefTitle" aria-modal="true" class="med-ref-modal hidden" id="medRefModal" role="dialog">
 <div class="med-ref-card">
 <div class="med-ref-head">
-<button class="med-ref-nav med-ref-back" id="medRefBackBtn" type="button">‹ Back</button>
+<button class="med-ref-nav med-ref-back" id="medRefBackBtn" type="button">Done</button>
 <div class="med-ref-head-copy">
 <div class="med-ref-title" id="medRefTitle">Medication reference</div>
 <div class="med-ref-subtitle" id="medRefSubtitle">BNF</div>
@@ -2837,7 +2837,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 <div class="med-ref-body">
 <iframe class="med-ref-frame" id="medRefFrame" loading="eager" referrerpolicy="no-referrer-when-downgrade" title="Medication reference viewer"></iframe>
-<div class="med-ref-help tiny muted" id="medRefHelp">If this source does not render inside the app, use Open in browser.</div>
+<div class="med-ref-help tiny muted" id="medRefHelp">Swipe left or right in the page for back or forward. If this source does not render inside the app, use Open in browser.</div>
 </div>
 </div>
 </div>
@@ -6991,35 +6991,8 @@ function closeMedicationReferenceViewer(force, reason){
   addMedicationDebugLog(`Closed medication reference viewer${reason?` (${reason})`:''}`);
 }
 function navigateMedicationReferenceBack(){
-  const frame=$('medRefFrame');
-  if(!frame){
-    closeMedicationReferenceViewer(true,'back button');
-    return;
-  }
-  if(medReferenceBackFallbackTimer){ clearTimeout(medReferenceBackFallbackTimer); medReferenceBackFallbackTimer=null; }
-  try{
-    medReferencePendingBackNavigation=true;
-    frame.contentWindow.history.back();
-    addMedicationDebugLog(`Medication reference back requested (tracked depth ${medReferenceHistoryDepth || 1})`);
-    medReferenceBackFallbackTimer=setTimeout(()=>{
-      medReferenceBackFallbackTimer=null;
-      if(!medReferencePendingBackNavigation) return;
-      medReferencePendingBackNavigation=false;
-      addMedicationDebugLog(`Medication reference back produced no navigation (tracked depth ${medReferenceHistoryDepth || 1})`);
-      if((medReferenceHistoryDepth||0)<=1){
-        addMedicationDebugLog('Medication reference back fallback closing viewer');
-        closeMedicationReferenceViewer(true,'back button fallback');
-      }
-    }, 1000);
-    return;
-  }catch(err){
-    medReferencePendingBackNavigation=false;
-    addMedicationDebugLog(`Medication reference back failed: ${err && err.message ? err.message : err}`);
-  }
-  if((medReferenceHistoryDepth||0)<=1){
-    addMedicationDebugLog('Medication reference back unavailable; closing viewer');
-    closeMedicationReferenceViewer(true,'back button');
-  }
+  addMedicationDebugLog('Medication reference done pressed');
+  closeMedicationReferenceViewer(true,'done button');
 }
 function swallowMedicationOverlayEvent(ev){
   if(Date.now()>=medOverlayTransitionIgnoreUntil) return;
@@ -7178,7 +7151,7 @@ function bindMedicationReferenceDebugInstrumentation(){
         medReferenceHistoryDepth=Math.max(1, (medReferenceHistoryDepth||1)-1);
         medReferenceHistoryReady=true;
         medReferenceAwaitingInitialLoad=false;
-        addMedicationDebugLog(`Medication reference back navigation completed (tracked depth ${medReferenceHistoryDepth})`);
+        addMedicationDebugLog(`Medication reference in-frame navigation completed (tracked depth ${medReferenceHistoryDepth})`);
       }else if(medReferenceAwaitingInitialLoad){
         medReferenceAwaitingInitialLoad=false;
         loadLabel+=` (tracked depth ${medReferenceHistoryDepth || 1})`;
@@ -8997,8 +8970,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_470_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_470_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_471_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_471_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
