@@ -2831,7 +2831,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_490_release.html</div><div>Source: hospital_at_home_v12_36_490_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_491_release.html</div><div>Source: hospital_at_home_v12_36_491_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -4380,8 +4380,8 @@ const BLOODS_ANALYTES = [
   {key:'po4', label:'PO4', trendLabel:'Phosphate', unit:'mmol/L', labels:['phosphate','po4'], limits:()=>({low:0.8, high:1.5})},
   {key:'mg', label:'Mg', trendLabel:'Magnesium', unit:'mmol/L', labels:['magnesium','mg'], limits:()=>({low:0.7, high:1.0})},
   {key:'serumosm', label:'Serum Osm', trendLabel:'Serum osmolality', unit:'mOsm/kg', labels:['serum osmolality','serum osm','s osmolality','s osm'], limits:()=>({low:275, high:295})},
-  {key:'urineosm', label:'Urine Osm', trendLabel:'Urine osmolality', unit:'mOsm/kg', labels:['urine osmolality','urine osm','u osmolality','u osm'], limits:()=>({low:null, high:null})},
-  {key:'urinena', label:'Urine Na', trendLabel:'Urine sodium', unit:'mmol/L', labels:['urine sodium','urine natrium','urine na','u na'], limits:()=>({low:null, high:null})},
+  {key:'urineosm', label:'Urine Osm', trendLabel:'Urine osmolality', unit:'mOsm/kg', labels:['urine osmolality','urine osm','u osmolality','u osm'], limits:()=>({low:null, high:null}), showInRecentBloods:false},
+  {key:'urinena', label:'Urine Na', trendLabel:'Urine sodium', unit:'mmol/L', labels:['urine sodium','urine natrium','urine na','u na'], limits:()=>({low:null, high:null}), showInRecentBloods:false},
   {key:'tsh', label:'TSH', trendLabel:'TSH', unit:'mIU/L', labels:['tsh'], limits:()=>({low:0.4, high:4.0})},
   {key:'cortisol', label:'Cortisol', trendLabel:'Cortisol', unit:'nmol/L', labels:['cortisol'], limits:()=>({low:null, high:null})}
 ];
@@ -4631,6 +4631,24 @@ function getBloodAnalyteConfig(key){
 function getBloodAnalyteUnit(key){
   const analyte = getBloodAnalyteConfig(key);
   return analyte && analyte.unit ? analyte.unit : '';
+}
+function formatBloodAnalyteReferenceRange(analyteOrKey, sex=''){
+  const analyte = typeof analyteOrKey === 'string' ? getBloodAnalyteConfig(analyteOrKey) : analyteOrKey;
+  if(!analyte || typeof analyte.limits !== 'function') return '';
+  const limits = analyte.limits(sex) || {};
+  const low = limits.low == null ? null : Number(limits.low);
+  const high = limits.high == null ? null : Number(limits.high);
+  const unit = analyte.unit ? ` ${analyte.unit}` : '';
+  const formatValue = value => {
+    if(!Number.isFinite(Number(value))) return '';
+    const numeric = Number(value);
+    const rounded = Math.round(numeric * 10) / 10;
+    return Math.abs(rounded - Math.round(rounded)) < 0.001 ? String(Math.round(rounded)) : rounded.toFixed(1).replace(/\.0$/,'');
+  };
+  if(Number.isFinite(low) && Number.isFinite(high)) return `${formatValue(low)}–${formatValue(high)}${unit}`;
+  if(Number.isFinite(low)) return `≥${formatValue(low)}${unit}`;
+  if(Number.isFinite(high)) return `≤${formatValue(high)}${unit}`;
+  return '';
 }
 function getBloodAnalyteTrendLabel(key){
   const analyte = getBloodAnalyteConfig(key);
@@ -5120,7 +5138,13 @@ function renderBloodTrendModal(analyteKey){
   const records = typeof getBloodTrendRecords==='function' ? getBloodTrendRecords(raw, analyteKey, sex) : [];
   const sodiumState = analyteKey === 'na' && typeof getSodiumAnalysisState === 'function' ? getSodiumAnalysisState() : null;
   if(title) title.textContent=`${trendLabel}${unit ? ` (${unit})` : ''}`;
-  if(subtitle) subtitle.textContent=analyteKey === 'na' ? 'Trend and interpretation' : 'Imported blood results';
+  if(subtitle){
+    const contextText = analyteKey === 'na' ? 'Trend and interpretation' : 'Imported blood results';
+    const rangeText = typeof formatBloodAnalyteReferenceRange === 'function' ? formatBloodAnalyteReferenceRange(analyte, sex) : '';
+    subtitle.innerHTML = rangeText
+      ? `<div style="font-weight:700;color:#475467;line-height:1.35;">Reference range ${escapeHtml(rangeText)}</div><div style="margin-top:2px;line-height:1.35;">${escapeHtml(contextText)}</div>`
+      : escapeHtml(contextText);
+  }
   if(summaryEl){
     summaryEl.classList.remove('hidden','muted','sodium-analysis-summary');
     if(analyteKey === 'na'){
@@ -8077,6 +8101,7 @@ function renderBloodsSummaryCard(){
   if(structuredEntries.length > 1 && tableWrap && tableHead && tableBody){
     const displayedEntries = structuredEntries;
     const analytes = (typeof BLOODS_ANALYTES !== 'undefined' && Array.isArray(BLOODS_ANALYTES) ? BLOODS_ANALYTES : [])
+      .filter(analyte=>analyte.showInRecentBloods !== false)
       .filter(analyte=>displayedEntries.some(entry=>entry.items.some(item=>item.key===analyte.key)));
     const headerRow = document.createElement('tr');
     const blankHead = document.createElement('th');
@@ -8136,7 +8161,11 @@ function renderBloodsSummaryCard(){
   }
   meta.textContent = latest.sampleLabel || 'Latest bloods';
   if(head) head.classList.remove('hidden');
-  latest.items.forEach(item=>{
+  const visibleLatestItems = latest.items.filter(item=>{
+    const analyte = typeof getBloodAnalyteConfig === 'function' ? getBloodAnalyteConfig(item.key) : null;
+    return !analyte || analyte.showInRecentBloods !== false;
+  });
+  visibleLatestItems.forEach(item=>{
     const card = document.createElement('div');
     card.className = `bloods-item${item.status ? ` is-${item.status}` : ''}`;
     const label = document.createElement('button');
@@ -9261,8 +9290,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_490_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_490_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_491_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_491_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
