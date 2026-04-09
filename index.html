@@ -2831,7 +2831,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_493_release.html</div><div>Source: hospital_at_home_v12_36_493_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_494_release.html</div><div>Source: hospital_at_home_v12_36_494_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -3206,6 +3206,13 @@ function formatTaskTimestamp(ms) {
   }).replace(',', '');
 }
 
+function getTaskStatusLabel(task) {
+  if (!task) return '';
+  if (task.completedAt) return `Completed ${formatTaskTimestamp(task.completedAt)}`;
+  if (task.createdAt) return `Added ${formatTaskTimestamp(task.createdAt)}`;
+  return '';
+}
+
 function addPatientTask(patientId, text) {
   const p = patients[patientId];
   if (!p || !text.trim()) return;
@@ -3237,93 +3244,143 @@ function updateTasksNavBadge() {
   });
   let badge = btn.querySelector('.nav-tasks-badge');
   if (count > 0) {
-    if (!badge) { badge = document.createElement('span'); badge.className = 'nav-tasks-badge'; btn.appendChild(badge); }
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'nav-tasks-badge';
+      btn.appendChild(badge);
+    }
     badge.textContent = String(count);
-  } else {
-    if (badge) badge.remove();
+  } else if (badge) {
+    badge.remove();
   }
 }
 
-function renderTaskGroup(id, p, tasks, isCompleted) {
+function renderTaskPatientCard(id, p, tasks, isCompleted) {
   const sortedTasks = tasks.slice().sort((a, b) => {
     const aTs = (isCompleted ? a.completedAt : a.createdAt) || 0;
     const bTs = (isCompleted ? b.completedAt : b.createdAt) || 0;
     return bTs - aTs;
   });
-  const taskRows = sortedTasks.map(t => {
-    const done = !!t.completedAt;
-    const check = done
-      ? `<svg viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,5.2 4,7.5 8.5,2.5"/></svg>`
+  const acuityBadge = p.acuity ? `<div class="badge ${escapeHtml(p.acuityClass || '')}">${escapeHtml(p.acuity)}</div>` : '';
+  const itemLabel = `${tasks.length} ${tasks.length === 1 ? 'task' : 'tasks'}`;
+  const taskRows = sortedTasks.map(task => {
+    const done = !!task.completedAt;
+    const icon = done
+      ? `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3.2,8.3 6.6,11.5 12.8,4.8"></polyline></svg>`
       : '';
-    const stamp = done && t.completedAt ? `Completed ${formatTaskTimestamp(t.completedAt)}` : (t.createdAt ? `Added ${formatTaskTimestamp(t.createdAt)}` : '');
-    return `<div class="task-row${done ? ' is-done' : ''}"><button class="task-check-btn${done ? ' done' : ''}" data-patient-id="${id}" data-task-id="${escapeHtml(t.id)}" aria-label="${done ? 'Mark incomplete' : 'Mark done'}" type="button">${check}</button><div class="task-row-main"><span class="task-text${done ? ' done' : ''}">${escapeHtml(t.text)}</span>${stamp ? `<span class="task-stamp">${escapeHtml(stamp)}</span>` : ''}</div></div>`;
+    const label = done ? 'Mark incomplete' : 'Mark done';
+    return `<div class="task-item${done ? ' is-done' : ''}">
+      <button class="task-toggle-btn${done ? ' is-done' : ''}" data-patient-id="${id}" data-task-id="${escapeHtml(task.id)}" aria-label="${label}" type="button">${icon}</button>
+      <div class="task-item-body">
+        <div class="task-item-text${done ? ' is-done' : ''}">${escapeHtml(task.text)}</div>
+        <div class="task-item-meta">${escapeHtml(getTaskStatusLabel(task))}</div>
+      </div>
+    </div>`;
   }).join('');
-  const badge = p.acuity ? `<div class="badge ${escapeHtml(p.acuityClass || '')}">${escapeHtml(p.acuity)}</div>` : '';
-  const countLabel = `${tasks.length} ${tasks.length === 1 ? 'task' : 'tasks'}`;
-  const addRow = !isCompleted ? `<div class="task-add-row"><button class="task-add-inline-btn" data-patient-id="${id}" type="button">＋ Add task</button></div>` : '';
-  return `<div class="tasks-group${isCompleted ? ' is-completed' : ''}"><div class="tasks-group-header"><button class="tasks-group-name-btn linklike" data-patient-id="${id}" type="button"><span class="tasks-group-name">${escapeHtml(p.name)}</span><span class="tasks-group-meta">${escapeHtml(ageSex(p.age, p.sex))}</span></button><div class="tasks-group-right">${badge}<span class="tasks-group-count${isCompleted ? ' is-completed' : ''}">${countLabel}</span></div></div><div class="tasks-list">${taskRows}</div>${addRow}</div>`;
+  const footer = isCompleted
+    ? `<div class="task-patient-footer"><button class="task-open-btn" data-patient-id="${id}" type="button">Open patient</button></div>`
+    : `<div class="task-patient-footer"><button class="task-open-btn" data-patient-id="${id}" type="button">Open patient</button><button class="task-add-btn" data-patient-id="${id}" type="button">Add task</button></div>`;
+  return `<div class="card task-patient-card${isCompleted ? ' is-completed' : ''}">
+    <div class="task-patient-head">
+      <button class="task-patient-main-btn" data-patient-id="${id}" type="button">
+        <div class="task-patient-name-row"><span class="task-patient-name">${escapeHtml(p.name || 'Patient')}</span>${acuityBadge}</div>
+        <div class="task-patient-meta">${escapeHtml(ageSex(p.age, p.sex)) || 'Patient details unavailable'}</div>
+      </button>
+      <div class="task-patient-count">${escapeHtml(itemLabel)}</div>
+    </div>
+    <div class="task-patient-list">${taskRows}</div>
+    ${footer}
+  </div>`;
 }
 
 function renderTasksTab() {
   const container = $('tasksTabContent');
   if (!container) return;
-  const outstanding = [], completed = [];
+
+  const outstanding = [];
+  const completed = [];
   let outstandingCount = 0;
   let completedCount = 0;
+
   Object.keys(patients).map(Number).forEach(id => {
     const p = patients[id];
     if (!p) return;
-    const ts = p.tasks || [];
-    const out = ts.filter(t => !t.completedAt);
-    const done = ts.filter(t => t.completedAt);
-    if (out.length) outstanding.push({ id, p, tasks: out });
-    if (done.length) completed.push({ id, p, tasks: done });
-    outstandingCount += out.length;
-    completedCount += done.length;
+    const allTasks = Array.isArray(p.tasks) ? p.tasks : [];
+    const openTasks = allTasks.filter(task => !task.completedAt);
+    const doneTasks = allTasks.filter(task => !!task.completedAt);
+    if (openTasks.length) outstanding.push({ id, p, tasks: openTasks });
+    if (doneTasks.length) completed.push({ id, p, tasks: doneTasks });
+    outstandingCount += openTasks.length;
+    completedCount += doneTasks.length;
   });
-  outstanding.sort((a, b) => b.tasks.length - a.tasks.length || String(a.p.name || '').localeCompare(String(b.p.name || '')));
-  completed.sort((a, b) => b.tasks.length - a.tasks.length || String(a.p.name || '').localeCompare(String(b.p.name || '')));
-  const activePatientCount = outstanding.length;
-  let html = `<div class="tasks-screen">
-    <div class="tasks-top-card">
-      <div class="tasks-title-row">
+
+  const patientCount = new Set([...outstanding.map(x => x.id), ...completed.map(x => x.id)]).size;
+  outstanding.sort((a, b) => {
+    const aNewest = Math.max(...a.tasks.map(t => t.createdAt || 0), 0);
+    const bNewest = Math.max(...b.tasks.map(t => t.createdAt || 0), 0);
+    return bNewest - aNewest || String(a.p.name || '').localeCompare(String(b.p.name || ''));
+  });
+  completed.sort((a, b) => {
+    const aNewest = Math.max(...a.tasks.map(t => t.completedAt || 0), 0);
+    const bNewest = Math.max(...b.tasks.map(t => t.completedAt || 0), 0);
+    return bNewest - aNewest || String(a.p.name || '').localeCompare(String(b.p.name || ''));
+  });
+
+  let html = `<div class="tasks-shell">
+    <div class="card task-summary-card">
+      <div class="task-summary-head">
         <div>
           <h3>Tasks</h3>
-          <div class="tasks-subtitle">Simple, patient-linked action list pulled from plan items or added manually.</div>
+          <div class="task-summary-subtitle">Patient-linked actions pulled from plan items or added manually.</div>
         </div>
       </div>
-      <div class="tasks-overview-grid">
-        <div class="tasks-overview-pill is-outstanding"><span class="tasks-overview-number">${outstandingCount}</span><span class="tasks-overview-label">Outstanding</span></div>
-        <div class="tasks-overview-pill"><span class="tasks-overview-number">${activePatientCount}</span><span class="tasks-overview-label">Patients</span></div>
-        <div class="tasks-overview-pill is-completed"><span class="tasks-overview-number">${completedCount}</span><span class="tasks-overview-label">Completed</span></div>
+      <div class="task-summary-grid">
+        <div class="task-summary-stat is-primary"><span class="task-summary-value">${outstandingCount}</span><span class="task-summary-label">Outstanding</span></div>
+        <div class="task-summary-stat"><span class="task-summary-value">${patientCount}</span><span class="task-summary-label">Patients</span></div>
+        <div class="task-summary-stat is-muted"><span class="task-summary-value">${completedCount}</span><span class="task-summary-label">Completed</span></div>
       </div>
     </div>`;
+
   if (!outstanding.length && !completed.length) {
-    html += `<div class="card tasks-empty"><div class="tasks-empty-icon">✓</div><h4>No tasks yet</h4><p class="muted small">This works best as a closed-loop action list rather than a general notes bin. Add tasks from a patient's plan, then tick them off once done.</p></div>`;
+    html += `<div class="card tasks-empty-state">
+      <div class="tasks-empty-mark">✓</div>
+      <h4>No tasks yet</h4>
+      <p>Add tasks from a patient plan, or create one manually from the patient menu. Keep this as a simple closed-loop action list rather than a notes area.</p>
+    </div>`;
   } else {
     if (outstanding.length) {
-      html += `<div class="tasks-section-label">Outstanding</div>`;
-      outstanding.forEach(({ id, p, tasks }) => { html += renderTaskGroup(id, p, tasks, false); });
+      html += `<div class="tasks-block">
+        <div class="tasks-block-head"><div class="tasks-block-title">Outstanding</div><div class="tasks-block-meta">${outstandingCount} ${outstandingCount === 1 ? 'task' : 'tasks'}</div></div>`;
+      outstanding.forEach(({ id, p, tasks }) => { html += renderTaskPatientCard(id, p, tasks, false); });
+      html += `</div>`;
+    } else {
+      html += `<div class="card tasks-empty-state is-soft"><h4>No outstanding tasks</h4><p>Completed items are shown below.</p></div>`;
     }
+
     if (completed.length) {
-      html += `<div class="tasks-completed-label">Completed</div>`;
-      completed.forEach(({ id, p, tasks }) => { html += renderTaskGroup(id, p, tasks, true); });
+      html += `<div class="tasks-block tasks-block-completed">
+        <div class="tasks-block-head"><div class="tasks-block-title">Completed</div><div class="tasks-block-meta">${completedCount} ${completedCount === 1 ? 'task' : 'tasks'}</div></div>`;
+      completed.forEach(({ id, p, tasks }) => { html += renderTaskPatientCard(id, p, tasks, true); });
+      html += `</div>`;
     }
   }
+
   html += `</div>`;
   container.innerHTML = html;
-  container.querySelectorAll('.task-check-btn').forEach(btn => {
+
+  container.querySelectorAll('.task-toggle-btn').forEach(btn => {
     btn.addEventListener('click', () => { completePatientTask(Number(btn.dataset.patientId), btn.dataset.taskId); });
   });
-  container.querySelectorAll('.tasks-group-name-btn').forEach(btn => {
+  container.querySelectorAll('.task-patient-main-btn,.task-open-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if (typeof closeAllSwipeShells === 'function') closeAllSwipeShells();
       openPatient(Number(btn.dataset.patientId));
     });
   });
-  container.querySelectorAll('.task-add-inline-btn').forEach(btn => {
+  container.querySelectorAll('.task-add-btn').forEach(btn => {
     btn.addEventListener('click', () => { openTaskPickerOverlay(Number(btn.dataset.patientId)); });
   });
+
   updateTasksNavBadge();
 }
 
@@ -9434,8 +9491,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_493_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_493_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_494_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_494_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
