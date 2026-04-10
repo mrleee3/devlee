@@ -2650,8 +2650,8 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 <div aria-hidden="true" class="med-edit-overlay hidden" id="medEditOverlay"><div class="med-edit-backdrop" id="medEditBackdrop"></div><div class="med-edit-modal" id="medEditCard"><div class="med-edit-body"><div class="med-edit-card"><div class="med-entry-head"><span class="med-entry-summary" id="medEditSummary">Medication</span><div class="med-edit-head-actions"><button aria-label="Cancel medication edit" class="med-edit-actionbtn" id="medEditCancelBtn" type="button">Cancel</button><button aria-label="Save medication edit" class="med-edit-actionbtn primary" id="medEditSaveBtn" type="button">Save</button></div></div><div class="med-entry-body"><label>Medication</label><input autocapitalize="off" autocomplete="off" autocorrect="off" class="med-name" id="medEditName" placeholder="Start typing drug name" spellcheck="false" type="text"/><label class="med-dose-label">Dose</label><div class="med-dose-row hidden" id="medEditDoseRow"></div><input class="med-dose" id="medEditDose" placeholder="Dose" type="text"/><label>Frequency</label><div class="med-frequency-row" id="medEditFrequencyRow"></div><input class="med-frequency" id="medEditFrequency" placeholder="Frequency e.g. QDS PRN" type="text"/><label class="med-details-label">Details</label><input class="med-details" id="medEditDetails" placeholder="Optional notes" type="text"/></div></div></div></div></div>
 <div aria-hidden="true" class="meds-overlay hidden" id="medsOverlay"><div class="meds-overlay-backdrop" id="medsOverlayBackdrop"></div><div class="card meds-overlay-modal meds-overlay-modal-single" id="medsOverlayModal"><div class="meds-overlay-body" id="medsOverlayBody"><div class="meds-overlay-card meds-overlay-card-single" id="medsOverlayCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="medsOverlayTitle">Add medication</span><button aria-label="Close medications" class="med-entry-delete meds-overlay-close-inline" id="medsOverlayCloseBtn" type="button">×</button></div><div class="med-entry-body meds-overlay-entry-body"><label>Medication</label><input autocapitalize="off" autocomplete="off" autocorrect="off" class="med-name" id="medsOverlayName" placeholder="Start typing drug name" spellcheck="false" type="text"/><label class="med-dose-label">Dose</label><div class="med-dose-row hidden" id="medsOverlayDoseRow"></div><input class="med-dose" id="medsOverlayDose" placeholder="Dose" type="text"/><label>Frequency</label><div class="med-frequency-row" id="medsOverlayFrequencyRow"></div><input class="med-frequency" id="medsOverlayFrequency" placeholder="Frequency e.g. QDS PRN" type="text"/><label class="med-details-label">Details</label><input class="med-details" id="medsOverlayDetails" placeholder="Optional notes" type="text"/><div id="medsOverlayBottomButtons" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px"><button id="medsOverlayAddAnotherBtn" type="button">Add another</button><button id="medsOverlayClearBtn" type="button">Clear</button><button class="done-green" id="medsOverlayDoneBtn" type="button">Done</button></div></div></div></div></div></div>
-<div aria-hidden="true" class="task-picker-overlay hidden" id="taskPickerOverlay"><div class="task-picker-backdrop" id="taskPickerBackdrop"></div><div class="card task-picker-modal" id="taskPickerModal"><div class="task-picker-head"><div><h3 id="taskPickerTitle">Add tasks</h3><div class="task-picker-patient" id="taskPickerPatientName">Patient</div></div><button aria-label="Close task picker" class="task-picker-close" id="taskPickerCloseBtn" type="button">×</button></div><div class="task-picker-body" id="taskPickerBody"><div class="task-picker-card"><div class="task-picker-section" id="taskPickerPlanSection"><div class="task-picker-section-title">From plan</div><div class="task-picker-section-help">Tap one or more items to add them as tasks.</div><div id="taskPickerPlanList"></div></div><div class="task-picker-section"><label class="task-picker-section-title" for="taskPickerFreeText">Add your own</label><div class="task-picker-section-help">Enter one task per line.</div><textarea autocapitalize="sentences" autocomplete="off" id="taskPickerFreeText" placeholder="Arrange repeat U&amp;Es&#10;Call daughter with update&#10;Review diuretics tomorrow"></textarea></div></div></div><div class="task-picker-footer"><button id="taskPickerCancelBtn" type="button">Cancel</button><button class="primary" id="taskPickerDoneBtn" type="button">Add tasks</button></div></div></div><div aria-hidden="true" class="exam-findings-overlay hidden" id="examFindingsOverlay"><div class="exam-findings-backdrop" id="examFindingsBackdrop"></div><div class="card exam-findings-modal" id="examFindingsModal"><div class="exam-findings-head"><h3>Examination findings</h3><button aria-label="Close examination findings" class="exam-findings-close" id="examFindingsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="examFindingsText">Edit findings</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="examFindingsText" type="button">Dictate</button></div><textarea id="examFindingsText" placeholder="Enter or edit examination findings"></textarea></div><div class="exam-findings-presets" id="examFindingsPresets"></div></div></div><div class="exam-findings-footer"><button id="examFindingsClearBtn" type="button">Clear</button><button class="primary" id="examFindingsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="meds-overlay iv-rebuilt-overlay hidden" id="ivEditOverlay"><div class="meds-overlay-backdrop iv-edit-backdrop" id="ivEditBackdrop"></div><div aria-labelledby="ivEditTitle" aria-modal="true" class="card meds-overlay-modal meds-overlay-modal-single iv-rebuilt-modal" id="ivEditModal" role="dialog"><div class="meds-overlay-body" id="ivEditBody"><div class="meds-overlay-card meds-overlay-card-single iv-rebuilt-card" id="ivEditCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="ivEditTitle">IV medications administered</span><button aria-label="Close IV medications" class="med-entry-delete meds-overlay-close-inline iv-edit-close" id="ivEditCloseBtn" type="button">×</button></div><div class="meds-overlay-entry-body iv-overlay-entry-body hidden" id="ivSection"><button class="iv-info-label-btn" id="ivVipInfoBtn" type="button">VIP score</button><input enterkeyhint="next" id="ivVIP" type="text"/><div id="ivContainer"></div><div id="ivBottomButtons"><button id="addIVBtn" type="button">Add another</button><button id="clearIVBtn" type="button">Clear</button><button id="doneIVBtn" type="button">Done</button></div><button class="danger hidden" id="deleteIVBtn" type="button">Delete</button></div></div></div></div></div><div aria-hidden="true" class="vip-score-overlay hidden" id="vipScoreOverlay"><div class="vip-score-backdrop" id="vipScoreBackdrop"></div><div aria-labelledby="vipScoreTitle" aria-modal="true" class="card vip-score-modal" id="vipScoreModal" role="dialog"><div class="vip-score-head"><h3 id="vipScoreTitle">Visual Infusion Phlebitis (VIP) score</h3><button aria-label="Close VIP score table" class="vip-score-close" id="vipScoreCloseBtn" type="button">×</button></div><div class="vip-score-body"><div class="vip-score-card"><table class="vip-score-table"><thead><tr><th>Score</th><th>Findings</th><th>Suggested action</th></tr></thead><tbody><tr><td>0</td><td>Site appears healthy</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-safe">Observe cannula</span></td></tr><tr><td>1</td><td>Slight pain near site or slight redness</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-caution">Observe closely</span></td></tr><tr><td>2</td><td>Pain near site with redness and/or swelling</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula</span></td></tr><tr><td>3</td><td>Pain along cannula path with redness and induration</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>4</td><td>As score 3 plus a palpable venous cord</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>5</td><td>As score 4 plus pyrexia</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-urgent">Urgent review and treat per local policy</span></td></tr></tbody></table><div class="vip-score-note">Use local policy if it differs. Scores 2 or above usually mean the cannula should be removed or re-sited.</div></div></div></div></div><div aria-hidden="true" class="score-tools-overlay hidden" id="scoreToolsOverlay"><div class="score-tools-backdrop" id="scoreToolsBackdrop"></div><div class="card score-tools-modal" id="scoreToolsCard"><div class="score-tools-head"><button aria-expanded="false" aria-label="Show all score tools" class="score-tools-title-btn" id="scoreToolsTitleBtn" type="button"><h3>Scores</h3></button><button aria-label="Close scores" class="score-tools-close" id="scoreToolsCloseBtn" type="button">×</button></div><div class="score-tools-tabs-wrap" id="scoreToolsTabsWrap"><div class="score-tools-tabs" id="scoreToolsTabs"><button class="score-tool-tab active" data-score-tool-tab="cfs" type="button">CFS</button><button class="score-tool-tab" data-score-tool-tab="amt10" type="button">AMT10</button><button class="score-tool-tab" data-score-tool-tab="4at" type="button">4AT</button><button class="score-tool-tab" data-score-tool-tab="gcs" type="button">GCS</button><button class="score-tool-tab" data-score-tool-tab="must" type="button">MUST</button><button class="score-tool-tab" data-score-tool-tab="waterlow" type="button">Waterlow</button></div></div><div class="score-tools-body" id="scoreToolsBody"><div class="score-tool-panel" data-score-tool-panel="cfs"><div class="score-tool-card"><h4>Clinical Frailty Scale</h4><div class="score-tool-help">Score baseline frailty rather than the acute illness state.</div><div class="score-choice-grid" id="cfsChoiceGrid"></div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="amt10"><div class="score-tool-card"><h4>AMT10</h4><div class="score-tool-help">1 point per correct answer · Tap Yes for correct, No for incorrect or unable</div><div class="score-qrows" id="amt10Rows"></div><div class="score-summary-box" id="amt10SummaryBox">AMT10 - score pending</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="4at"><div class="score-tool-card"><div class="score-subhead"><h4>4AT</h4><div class="score-mini-note">Rapid delirium screen /12</div></div><div class="score-tool-help">Use the official 4AT scoring below · AMT4 is shown automatically from AMT10 when all 4 orientation items have been answered; otherwise manual AMT4 scoring is available here</div><div class="score-4at-grid"><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Alertness</div><div class="score-4at-task">Observe whether the patient is fully alert or clearly abnormally drowsy or agitated</div></div><div class="score-4at-options" id="fourAtAlertnessRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">AMT4</div><div class="score-4at-task">Test age, date of birth, place, and current year</div><div class="score-inline-note score-4at-subnote" id="fourAtAmt4Note">Manual scoring is available if the AMT10 orientation items have not all been completed</div></div><div class="score-4at-options" id="fourAtAmt4Row"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Attention</div><div class="score-4at-task">Ask the patient to say the months of the year backwards, starting from December</div></div><div class="score-4at-options" id="fourAtAttentionRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Acute change or fluctuating course</div><div class="score-4at-task">Is there evidence of a significant change or fluctuation in mental state over the last 2 weeks, still present in the last 24 hours</div></div><div class="score-4at-options" id="fourAtAcuteRow"></div></div></div><div class="score-summary-box" id="fourAtSummaryBox">4AT incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="gcs"><div class="score-tool-card"><div class="score-subhead"><h4>GCS</h4><div class="score-mini-note">Glasgow Coma Scale /15</div></div><div class="score-tool-help">Select the best eye, verbal and motor response.</div><div class="score-section-stack"><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Eye opening</h4></div><div class="score-qrows" id="gcsEyeRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Verbal response</h4></div><div class="score-qrows" id="gcsVerbalRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Motor response</h4></div><div class="score-qrows" id="gcsMotorRows"></div></div></div><div class="score-summary-box" id="gcsSummaryBox">GCS incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="must"><div class="score-tool-card"><div class="score-subhead"><h4>MUST</h4><div class="score-mini-note">Malnutrition Universal Screening Tool</div></div><div class="score-tool-help">Enter height and weight to calculate BMI, or select the BMI score directly if measurements are not available.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="must" for="mustHeightInput" id="mustHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="mustHeightMetricWrap"><input id="mustHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="mustHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="mustHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="must" for="mustWeightInput" id="mustWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="mustWeightMetricWrap"><input id="mustWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="mustWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="mustWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>BMI score</h4><div class="score-mini-note" id="mustBmiValue">BMI pending</div></div><div class="score-chip-row" id="mustBmiScoreRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Unplanned weight loss in past 3–6 months</h4></div><div class="score-chip-row" id="mustWeightLossRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Acute disease effect</h4></div><div class="score-chip-row" id="mustAcuteRow"></div><div class="score-inline-note">Add 2 if acutely ill and there has been or is likely to be no nutritional intake for more than 5 days.</div></div><div class="score-summary-box" id="mustSummaryBox">MUST incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="waterlow"><div class="score-tool-card"><div class="score-subhead"><h4>Waterlow</h4><div class="score-mini-note">Pressure ulcer risk screen</div></div><div class="score-tool-help">Complete each category using the option that best fits the patient. Enter weight and height to calculate BMI, or choose the build / BMI option directly if BMI is already known.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="waterlow" for="waterlowWeightInput" id="waterlowWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="waterlowWeightMetricWrap"><input id="waterlowWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="waterlowWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="waterlowWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="waterlow" for="waterlowHeightInput" id="waterlowHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="waterlowHeightMetricWrap"><input id="waterlowHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="waterlowHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="waterlowHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Build / BMI</h4><div class="score-mini-note" id="waterlowBmiValue">BMI optional</div></div><div class="score-chip-row" id="waterlowBuildRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Sex and age</h4></div><div class="score-chip-row" id="waterlowSexRow"></div><div class="score-chip-row" id="waterlowAgeRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Continence</h4></div><div class="score-chip-row" id="waterlowContinenceRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Skin / visual risk areas</h4></div><div class="score-chip-row" id="waterlowSkinRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Mobility</h4></div><div class="score-chip-row" id="waterlowMobilityRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Nutrition / appetite</h4></div><div class="score-chip-row" id="waterlowAppetiteRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Tissue malnutrition</h4></div><div class="score-chip-row" id="waterlowTissueRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Neurological deficit</h4></div><div class="score-chip-row" id="waterlowNeuroRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Major surgery / trauma</h4></div><div class="score-chip-row" id="waterlowSurgeryRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Medication</h4></div><div class="score-chip-row" id="waterlowMedicationRow"></div></div><div class="score-summary-box" id="waterlowSummaryBox">Waterlow incomplete</div></div></div></div><div class="score-tools-footer"><button id="scoreToolsClearBtn" type="button">Clear</button><button class="primary" id="scoreToolsInsertBtn" type="button">Done</button></div></div></div>
-<section class="container hidden" id="tasks"><div id="tasksTabContent"></div></section>
+<div aria-hidden="true" class="exam-findings-overlay hidden" id="examFindingsOverlay"><div class="exam-findings-backdrop" id="examFindingsBackdrop"></div><div class="card exam-findings-modal" id="examFindingsModal"><div class="exam-findings-head"><h3>Examination findings</h3><button aria-label="Close examination findings" class="exam-findings-close" id="examFindingsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="examFindingsText">Edit findings</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="examFindingsText" type="button">Dictate</button></div><textarea id="examFindingsText" placeholder="Enter or edit examination findings"></textarea></div><div class="exam-findings-presets" id="examFindingsPresets"></div></div></div><div class="exam-findings-footer"><button id="examFindingsClearBtn" type="button">Clear</button><button class="primary" id="examFindingsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="meds-overlay iv-rebuilt-overlay hidden" id="ivEditOverlay"><div class="meds-overlay-backdrop iv-edit-backdrop" id="ivEditBackdrop"></div><div aria-labelledby="ivEditTitle" aria-modal="true" class="card meds-overlay-modal meds-overlay-modal-single iv-rebuilt-modal" id="ivEditModal" role="dialog"><div class="meds-overlay-body" id="ivEditBody"><div class="meds-overlay-card meds-overlay-card-single iv-rebuilt-card" id="ivEditCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="ivEditTitle">IV medications administered</span><button aria-label="Close IV medications" class="med-entry-delete meds-overlay-close-inline iv-edit-close" id="ivEditCloseBtn" type="button">×</button></div><div class="meds-overlay-entry-body iv-overlay-entry-body hidden" id="ivSection"><button class="iv-info-label-btn" id="ivVipInfoBtn" type="button">VIP score</button><input enterkeyhint="next" id="ivVIP" type="text"/><div id="ivContainer"></div><div id="ivBottomButtons"><button id="addIVBtn" type="button">Add another</button><button id="clearIVBtn" type="button">Clear</button><button id="doneIVBtn" type="button">Done</button></div><button class="danger hidden" id="deleteIVBtn" type="button">Delete</button></div></div></div></div></div><div aria-hidden="true" class="vip-score-overlay hidden" id="vipScoreOverlay"><div class="vip-score-backdrop" id="vipScoreBackdrop"></div><div aria-labelledby="vipScoreTitle" aria-modal="true" class="card vip-score-modal" id="vipScoreModal" role="dialog"><div class="vip-score-head"><h3 id="vipScoreTitle">Visual Infusion Phlebitis (VIP) score</h3><button aria-label="Close VIP score table" class="vip-score-close" id="vipScoreCloseBtn" type="button">×</button></div><div class="vip-score-body"><div class="vip-score-card"><table class="vip-score-table"><thead><tr><th>Score</th><th>Findings</th><th>Suggested action</th></tr></thead><tbody><tr><td>0</td><td>Site appears healthy</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-safe">Observe cannula</span></td></tr><tr><td>1</td><td>Slight pain near site or slight redness</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-caution">Observe closely</span></td></tr><tr><td>2</td><td>Pain near site with redness and/or swelling</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula</span></td></tr><tr><td>3</td><td>Pain along cannula path with redness and induration</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>4</td><td>As score 3 plus a palpable venous cord</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>5</td><td>As score 4 plus pyrexia</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-urgent">Urgent review and treat per local policy</span></td></tr></tbody></table><div class="vip-score-note">Use local policy if it differs. Scores 2 or above usually mean the cannula should be removed or re-sited.</div></div></div></div></div><div aria-hidden="true" class="score-tools-overlay hidden" id="scoreToolsOverlay"><div class="score-tools-backdrop" id="scoreToolsBackdrop"></div><div class="card score-tools-modal" id="scoreToolsCard"><div class="score-tools-head"><button aria-expanded="false" aria-label="Show all score tools" class="score-tools-title-btn" id="scoreToolsTitleBtn" type="button"><h3>Scores</h3></button><button aria-label="Close scores" class="score-tools-close" id="scoreToolsCloseBtn" type="button">×</button></div><div class="score-tools-tabs-wrap" id="scoreToolsTabsWrap"><div class="score-tools-tabs" id="scoreToolsTabs"><button class="score-tool-tab active" data-score-tool-tab="cfs" type="button">CFS</button><button class="score-tool-tab" data-score-tool-tab="amt10" type="button">AMT10</button><button class="score-tool-tab" data-score-tool-tab="4at" type="button">4AT</button><button class="score-tool-tab" data-score-tool-tab="gcs" type="button">GCS</button><button class="score-tool-tab" data-score-tool-tab="must" type="button">MUST</button><button class="score-tool-tab" data-score-tool-tab="waterlow" type="button">Waterlow</button></div></div><div class="score-tools-body" id="scoreToolsBody"><div class="score-tool-panel" data-score-tool-panel="cfs"><div class="score-tool-card"><h4>Clinical Frailty Scale</h4><div class="score-tool-help">Score baseline frailty rather than the acute illness state.</div><div class="score-choice-grid" id="cfsChoiceGrid"></div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="amt10"><div class="score-tool-card"><h4>AMT10</h4><div class="score-tool-help">1 point per correct answer · Tap Yes for correct, No for incorrect or unable</div><div class="score-qrows" id="amt10Rows"></div><div class="score-summary-box" id="amt10SummaryBox">AMT10 - score pending</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="4at"><div class="score-tool-card"><div class="score-subhead"><h4>4AT</h4><div class="score-mini-note">Rapid delirium screen /12</div></div><div class="score-tool-help">Use the official 4AT scoring below · AMT4 is shown automatically from AMT10 when all 4 orientation items have been answered; otherwise manual AMT4 scoring is available here</div><div class="score-4at-grid"><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Alertness</div><div class="score-4at-task">Observe whether the patient is fully alert or clearly abnormally drowsy or agitated</div></div><div class="score-4at-options" id="fourAtAlertnessRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">AMT4</div><div class="score-4at-task">Test age, date of birth, place, and current year</div><div class="score-inline-note score-4at-subnote" id="fourAtAmt4Note">Manual scoring is available if the AMT10 orientation items have not all been completed</div></div><div class="score-4at-options" id="fourAtAmt4Row"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Attention</div><div class="score-4at-task">Ask the patient to say the months of the year backwards, starting from December</div></div><div class="score-4at-options" id="fourAtAttentionRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Acute change or fluctuating course</div><div class="score-4at-task">Is there evidence of a significant change or fluctuation in mental state over the last 2 weeks, still present in the last 24 hours</div></div><div class="score-4at-options" id="fourAtAcuteRow"></div></div></div><div class="score-summary-box" id="fourAtSummaryBox">4AT incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="gcs"><div class="score-tool-card"><div class="score-subhead"><h4>GCS</h4><div class="score-mini-note">Glasgow Coma Scale /15</div></div><div class="score-tool-help">Select the best eye, verbal and motor response.</div><div class="score-section-stack"><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Eye opening</h4></div><div class="score-qrows" id="gcsEyeRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Verbal response</h4></div><div class="score-qrows" id="gcsVerbalRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Motor response</h4></div><div class="score-qrows" id="gcsMotorRows"></div></div></div><div class="score-summary-box" id="gcsSummaryBox">GCS incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="must"><div class="score-tool-card"><div class="score-subhead"><h4>MUST</h4><div class="score-mini-note">Malnutrition Universal Screening Tool</div></div><div class="score-tool-help">Enter height and weight to calculate BMI, or select the BMI score directly if measurements are not available.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="must" for="mustHeightInput" id="mustHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="mustHeightMetricWrap"><input id="mustHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="mustHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="mustHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="must" for="mustWeightInput" id="mustWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="mustWeightMetricWrap"><input id="mustWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="mustWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="mustWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>BMI score</h4><div class="score-mini-note" id="mustBmiValue">BMI pending</div></div><div class="score-chip-row" id="mustBmiScoreRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Unplanned weight loss in past 3–6 months</h4></div><div class="score-chip-row" id="mustWeightLossRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Acute disease effect</h4></div><div class="score-chip-row" id="mustAcuteRow"></div><div class="score-inline-note">Add 2 if acutely ill and there has been or is likely to be no nutritional intake for more than 5 days.</div></div><div class="score-summary-box" id="mustSummaryBox">MUST incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="waterlow"><div class="score-tool-card"><div class="score-subhead"><h4>Waterlow</h4><div class="score-mini-note">Pressure ulcer risk screen</div></div><div class="score-tool-help">Complete each category using the option that best fits the patient. Enter weight and height to calculate BMI, or choose the build / BMI option directly if BMI is already known.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="waterlow" for="waterlowWeightInput" id="waterlowWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="waterlowWeightMetricWrap"><input id="waterlowWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="waterlowWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="waterlowWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="waterlow" for="waterlowHeightInput" id="waterlowHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="waterlowHeightMetricWrap"><input id="waterlowHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="waterlowHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="waterlowHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Build / BMI</h4><div class="score-mini-note" id="waterlowBmiValue">BMI optional</div></div><div class="score-chip-row" id="waterlowBuildRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Sex and age</h4></div><div class="score-chip-row" id="waterlowSexRow"></div><div class="score-chip-row" id="waterlowAgeRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Continence</h4></div><div class="score-chip-row" id="waterlowContinenceRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Skin / visual risk areas</h4></div><div class="score-chip-row" id="waterlowSkinRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Mobility</h4></div><div class="score-chip-row" id="waterlowMobilityRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Nutrition / appetite</h4></div><div class="score-chip-row" id="waterlowAppetiteRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Tissue malnutrition</h4></div><div class="score-chip-row" id="waterlowTissueRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Neurological deficit</h4></div><div class="score-chip-row" id="waterlowNeuroRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Major surgery / trauma</h4></div><div class="score-chip-row" id="waterlowSurgeryRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Medication</h4></div><div class="score-chip-row" id="waterlowMedicationRow"></div></div><div class="score-summary-box" id="waterlowSummaryBox">Waterlow incomplete</div></div></div></div><div class="score-tools-footer"><button id="scoreToolsClearBtn" type="button">Clear</button><button class="primary" id="scoreToolsInsertBtn" type="button">Done</button></div></div></div>
+<section class="container hidden" id="tasks"><div class="card"><h3>Today’s tasks</h3><p><strong>Mrs Law-test</strong><br/><span class="muted small">Give IV ceftriaxone and review temperature / oral intake.</span></p><p><strong>Mrs Coo-test</strong><br/><span class="muted small">Reassess delirium, chase urine sample, confirm escalation plan.</span></p><p><strong>Mr Doy-test</strong><br/><span class="muted small">Repeat U&amp;E, review fluid balance and oral intake.</span></p></div></section>
 <section class="container hidden" id="handover">
 <div class="card">
 <h3>Options</h3>
@@ -2731,6 +2731,11 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="top-actions" style="margin-top:10px">
 <button class="primary fullwidth" id="importHandoverBtn"><span>Import patients from handover</span><svg aria-hidden="true" class="refresh-icon" id="importHandoverSpinner" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></button>
 </div>
+<div class="toggle-row" style="margin-top:14px">
+<input checked id="oneNoteAutoSyncToggle" style="width:auto;margin:0" type="checkbox"/>
+<label for="oneNoteAutoSyncToggle" style="margin:0;font-size:14px;font-weight:600">Auto-sync linked notes to OneNote</label>
+</div>
+<div class="tiny muted" style="margin-top:4px">Creates pages in the default notebook section H@H Demo Notes and updates them a few seconds after typing stops.</div>
 <div class="tiny muted" id="graphStatus" style="margin-top:8px"></div>
 </div>
 </div>
@@ -2831,7 +2836,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_495_release.html</div><div>Source: hospital_at_home_v12_36_495_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_492_release.html</div><div>Source: hospital_at_home_v12_36_492_source.zip</div></div>
 </section>
 <section class="container hidden" id="deletedPage">
 <div class="top-actions"><button id="backFromDeletedBtn">← Back</button></div>
@@ -2853,7 +2858,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Prototype clinician tool. Scan, upload or paste an ECG image for a structured draft review and copy-ready text.</div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Lead review</div><div class="ecg-assist-lead-grid" id="ecgAssistLeadGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
 <div class="card patient-reorder-card" data-card-key="bloodsSummary" id="bloodsSummaryCard"><h3>Recent bloods</h3><div class="bloods-panel" id="bloodsPanel"><div class="bloods-panel-head hidden"><div class="bloods-panel-meta" id="bloodsPanelMeta"></div></div><div class="bloods-grid hidden" id="bloodsGrid"></div><div class="bloods-table-wrap hidden" id="bloodsTableWrap"><table class="bloods-table" id="bloodsTable"><thead id="bloodsTableHead"></thead><tbody id="bloodsTableBody"></tbody></table></div><div class="bloods-empty" id="bloodsEmpty">No bloods entered.</div></div></div>
 <div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><div class="field-label-row"><label for="issues">Issues</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="issues" type="button">Dictate</button></div><textarea id="issues"></textarea><div class="field-label-row"><label for="examination">Examination</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="examination" type="button">Dictate</button></div></div><textarea id="examination"></textarea><div class="field-label-row"><label for="bloods">Bloods</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="bloods" type="button">Dictate</button></div><textarea autocapitalize="off" autocorrect="off" id="bloods" placeholder="05/04 09:20 | Hb 109 WCC 12.4 Neut 10.1 Plt 245 | Na 131 K+ 5.0 Urea 9.2 Cr 142 eGFR 44 | CRP 86 | Alb 30 ALT 52 ALP 118 Bili 11 CCa 2.16
-03/04 08:50 | Hb 111 WCC 14.8 Neut 12.3 Plt 238 | Na 134 K+ 4.7 Urea 8.4 Cr 118 eGFR 53 | CRP 124 | Alb 29 ALT 49 ALP 120 Bili 13 CCa 2.19" spellcheck="false"></textarea><div class="field-label-row"><label for="plan">Plan</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="plan" type="button">Dictate</button><button class="clinical-tools-btn" id="planTaskBtn" type="button" aria-label="Add plan item as task">＋ Task</button></div><textarea autocapitalize="sentences" id="plan"></textarea><div class="field-label-row"><label for="forDischargeSummary">For discharge summary</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="forDischargeSummary" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
+03/04 08:50 | Hb 111 WCC 14.8 Neut 12.3 Plt 238 | Na 134 K+ 4.7 Urea 8.4 Cr 118 eGFR 53 | CRP 124 | Alb 29 ALT 49 ALP 120 Bili 13 CCa 2.19" spellcheck="false"></textarea><div class="field-label-row"><label for="plan">Plan</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="plan" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="plan"></textarea><div class="field-label-row"><label for="forDischargeSummary">For discharge summary</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="forDischargeSummary" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
 <div class="card patient-reorder-card" data-card-key="meds">
 <div class="toggle-row meds-header-row">
 <input hidden="" id="medsGiven" type="checkbox"/>
@@ -2878,7 +2883,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 <div class="hidden" id="ivCollapsedSummary"></div>
 </div>
-<div class="card patient-reorder-card" data-card-key="output"><h3>Copy-ready clinical text</h3><div class="result-box" id="clinicalOutput">Enter obs and plan to generate a note.</div><div class="button-row"><button class="primary" id="copyBtn">Copy note</button><button class="primary" id="emailBtn">Email to NHSmail</button></div><button class="fullwidth" id="timestampBtn">Add timestamp</button></div>
+<div class="card patient-reorder-card" data-card-key="output"><h3>Copy-ready clinical text</h3><div class="result-box" id="clinicalOutput">Enter obs and plan to generate a note.</div><div class="button-row"><button class="primary" id="copyBtn">Copy note</button><button class="primary" id="emailBtn">Email to NHSmail</button></div><div class="button-row" style="margin-top:10px"><button class="primary" id="oneNoteBtn">Send to OneNote</button><button id="openOneNoteBtn">Open in OneNote</button></div><div class="tiny muted" id="oneNoteSyncStatus" style="margin-top:8px"></div><button class="fullwidth" id="timestampBtn">Add timestamp</button></div>
 </section>
 <div class="reorder-insert-line" id="reorderInsertLine"></div>
 <div aria-hidden="true" class="reorder-fixed-controls" id="reorderControls">
@@ -3188,215 +3193,6 @@ function loadData() {
   currentPatient = 1;
 }
 
-function parsePlanItems(planText) {
-  if (!planText || !planText.trim()) return [];
-  return planText.split('\n')
-    .map(l => l.replace(/^\s*\d+[\.\)]\s*/, '').replace(/^\s*[-•]\s*/, '').trim())
-    .filter(l => l.length > 2);
-}
-
-function formatTaskTimestamp(ms) {
-  const dt = new Date(ms || 0);
-  if (!Number.isFinite(dt.getTime())) return '';
-  return dt.toLocaleString([], {
-    day: '2-digit',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).replace(',', '');
-}
-
-function getTaskStatusLabel(task) {
-  if (!task) return '';
-  if (task.completedAt) return `Completed ${formatTaskTimestamp(task.completedAt)}`;
-  if (task.createdAt) return `Added ${formatTaskTimestamp(task.createdAt)}`;
-  return '';
-}
-
-function addPatientTask(patientId, text) {
-  const p = patients[patientId];
-  if (!p || !text.trim()) return;
-  if (!p.tasks) p.tasks = [];
-  const id = 'task_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
-  p.tasks.push({ id, text: text.trim(), createdAt: Date.now(), completedAt: null });
-  saveData('Task added');
-  if (typeof renderTasksTab === 'function') renderTasksTab();
-  updateTasksNavBadge();
-}
-
-function completePatientTask(patientId, taskId) {
-  const p = patients[patientId];
-  if (!p || !p.tasks) return;
-  const task = p.tasks.find(t => t.id === taskId);
-  if (!task) return;
-  task.completedAt = task.completedAt ? null : Date.now();
-  saveData('Task updated');
-  renderTasksTab();
-  updateTasksNavBadge();
-}
-
-function updateTasksNavBadge() {
-  const btn = $('navTasks');
-  if (!btn) return;
-  let count = 0;
-  Object.values(patients).forEach(p => {
-    if (p && p.tasks) count += p.tasks.filter(t => !t.completedAt).length;
-  });
-  btn.classList.add('nav-tasks-btn');
-  let badge = btn.querySelector('.nav-tasks-badge');
-  if (count > 0) {
-    if (!badge) {
-      badge = document.createElement('span');
-      badge.className = 'nav-tasks-badge';
-      badge.setAttribute('aria-hidden', 'true');
-      btn.appendChild(badge);
-    }
-    badge.textContent = count > 99 ? '99+' : String(count);
-  } else if (badge) {
-    badge.remove();
-  }
-}
-
-function renderTaskPatientCard(id, p, tasks, isCompleted) {
-  const sortedTasks = tasks.slice().sort((a, b) => {
-    const aTs = (isCompleted ? a.completedAt : a.createdAt) || 0;
-    const bTs = (isCompleted ? b.completedAt : b.createdAt) || 0;
-    return bTs - aTs;
-  });
-  const acuityBadge = p.acuity ? `<span class="task-patient-acuity badge ${escapeHtml(p.acuityClass || '')}">${escapeHtml(p.acuity)}</span>` : '';
-  const itemLabel = `${tasks.length} ${tasks.length === 1 ? 'task' : 'tasks'}`;
-  const taskRows = sortedTasks.map(task => {
-    const done = !!task.completedAt;
-    const icon = done
-      ? `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3.2,8.3 6.6,11.5 12.8,4.8"></polyline></svg>`
-      : '';
-    const label = done ? 'Mark incomplete' : 'Mark done';
-    return `<div class="task-row${done ? ' is-done' : ''}">
-      <button class="task-toggle-btn${done ? ' is-done' : ''}" data-patient-id="${id}" data-task-id="${escapeHtml(task.id)}" aria-label="${label}" type="button">${icon}</button>
-      <div class="task-row-copy">
-        <div class="task-row-text${done ? ' is-done' : ''}">${escapeHtml(task.text)}</div>
-        <div class="task-row-meta">${escapeHtml(getTaskStatusLabel(task))}</div>
-      </div>
-    </div>`;
-  }).join('');
-  const footer = isCompleted
-    ? `<div class="task-card-footer"><button class="task-ghost-btn task-open-btn" data-patient-id="${id}" type="button">Open patient</button></div>`
-    : `<div class="task-card-footer task-card-footer-split"><button class="task-ghost-btn task-open-btn" data-patient-id="${id}" type="button">Open patient</button><button class="task-primary-btn task-add-btn" data-patient-id="${id}" type="button">Add task</button></div>`;
-  return `<article class="card task-patient-card${isCompleted ? ' is-completed' : ''}">
-    <div class="task-card-head">
-      <button class="task-patient-main-btn" data-patient-id="${id}" type="button">
-        <div class="task-card-topline">
-          <div class="task-patient-name">${escapeHtml(p.name || 'Patient')}</div>
-          ${acuityBadge}
-        </div>
-        <div class="task-patient-meta">${escapeHtml(ageSex(p.age, p.sex)) || 'Patient details unavailable'}</div>
-      </button>
-      <div class="task-card-count">${escapeHtml(itemLabel)}</div>
-    </div>
-    <div class="task-card-body">${taskRows}</div>
-    ${footer}
-  </article>`;
-}
-
-function renderTasksTab() {
-  const container = $('tasksTabContent');
-  if (!container) return;
-
-  const outstanding = [];
-  const completed = [];
-  let outstandingCount = 0;
-  let completedCount = 0;
-
-  Object.keys(patients).map(Number).forEach(id => {
-    const p = patients[id];
-    if (!p) return;
-    const allTasks = Array.isArray(p.tasks) ? p.tasks : [];
-    const openTasks = allTasks.filter(task => !task.completedAt);
-    const doneTasks = allTasks.filter(task => !!task.completedAt);
-    if (openTasks.length) outstanding.push({ id, p, tasks: openTasks });
-    if (doneTasks.length) completed.push({ id, p, tasks: doneTasks });
-    outstandingCount += openTasks.length;
-    completedCount += doneTasks.length;
-  });
-
-  const patientCount = new Set([...outstanding.map(x => x.id), ...completed.map(x => x.id)]).size;
-  outstanding.sort((a, b) => {
-    const aNewest = Math.max(...a.tasks.map(t => t.createdAt || 0), 0);
-    const bNewest = Math.max(...b.tasks.map(t => t.createdAt || 0), 0);
-    return bNewest - aNewest || String(a.p.name || '').localeCompare(String(b.p.name || ''));
-  });
-  completed.sort((a, b) => {
-    const aNewest = Math.max(...a.tasks.map(t => t.completedAt || 0), 0);
-    const bNewest = Math.max(...b.tasks.map(t => t.completedAt || 0), 0);
-    return bNewest - aNewest || String(a.p.name || '').localeCompare(String(b.p.name || ''));
-  });
-
-  let html = `<div class="tasks-screen">
-    <section class="card tasks-summary-card">
-      <div class="tasks-summary-copy">
-        <h3>Tasks</h3>
-        <p>Patient-linked actions for follow-up, checks and jobs that still need closing off.</p>
-      </div>
-      <div class="tasks-summary-stats">
-        <div class="tasks-stat is-primary"><span class="tasks-stat-value">${outstandingCount}</span><span class="tasks-stat-label">Outstanding</span></div>
-        <div class="tasks-stat"><span class="tasks-stat-value">${patientCount}</span><span class="tasks-stat-label">Patients</span></div>
-        <div class="tasks-stat is-soft"><span class="tasks-stat-value">${completedCount}</span><span class="tasks-stat-label">Completed</span></div>
-      </div>
-    </section>`;
-
-  if (!outstanding.length && !completed.length) {
-    html += `<section class="card tasks-empty-card">
-      <div class="tasks-empty-icon">✓</div>
-      <h4>No tasks yet</h4>
-      <p>Add tasks from a patient plan or manually from the patient page. This works best as a tight action list rather than a second notes box.</p>
-    </section>`;
-  } else {
-    html += `<section class="tasks-section">
-      <div class="tasks-section-head">
-        <div>
-          <h4>Outstanding</h4>
-          <p>${outstandingCount} ${outstandingCount === 1 ? 'task' : 'tasks'} to action</p>
-        </div>
-      </div>`;
-    if (outstanding.length) {
-      outstanding.forEach(({ id, p, tasks }) => { html += renderTaskPatientCard(id, p, tasks, false); });
-    } else {
-      html += `<div class="card tasks-empty-card tasks-empty-card-soft"><h4>No outstanding tasks</h4><p>Completed items are shown below.</p></div>`;
-    }
-    html += `</section>`;
-
-    if (completed.length) {
-      html += `<section class="tasks-section tasks-section-completed">
-        <div class="tasks-section-head">
-          <div>
-            <h4>Completed</h4>
-            <p>${completedCount} ${completedCount === 1 ? 'task' : 'tasks'} already done</p>
-          </div>
-        </div>`;
-      completed.forEach(({ id, p, tasks }) => { html += renderTaskPatientCard(id, p, tasks, true); });
-      html += `</section>`;
-    }
-  }
-
-  html += `</div>`;
-  container.innerHTML = html;
-
-  container.querySelectorAll('.task-toggle-btn').forEach(btn => {
-    btn.addEventListener('click', () => { completePatientTask(Number(btn.dataset.patientId), btn.dataset.taskId); });
-  });
-  container.querySelectorAll('.task-patient-main-btn,.task-open-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (typeof closeAllSwipeShells === 'function') closeAllSwipeShells();
-      openPatient(Number(btn.dataset.patientId));
-    });
-  });
-  container.querySelectorAll('.task-add-btn').forEach(btn => {
-    btn.addEventListener('click', () => { openTaskPickerOverlay(Number(btn.dataset.patientId)); });
-  });
-
-  updateTasksNavBadge();
-}
-
 function loadNhsEmail() {
   try { nhsEmail = localStorage.getItem(NHS_EMAIL_KEY) || ""; } catch(e) {}
 }
@@ -3434,7 +3230,7 @@ function populateNhsEmailField() {
   setNhsEmailLocked(!!nhsEmail);
 }
 let msalApp=null, graphAccount=null;
-const GRAPH_SCOPES=["User.Read","Files.ReadWrite"];
+const GRAPH_SCOPES=["User.Read","Files.ReadWrite","Notes.Create","Notes.ReadWrite"];
 let msalLoaderPromise=null;
 const GRAPH_POST_AUTH_RETURN_KEY='hah_graph_post_auth_return';
 const GRAPH_POST_AUTH_RETURN_MAX_AGE_MS=15*60*1000;
@@ -3483,7 +3279,7 @@ function consumeGraphAuthReturnSnapshotShieldBypass(){
 }
 
 function defaultGraphSettings(){
-  return {clientId:"", workbookName:"", worksheetName:"List", tableName:"", workbookUrl:"", workbookId:""};
+  return {clientId:"", workbookName:"", worksheetName:"List", tableName:"", workbookUrl:"", workbookId:"", oneNoteAutoSync:true};
 }
 function loadGraphSettings(){
   try{return {...defaultGraphSettings(), ...(JSON.parse(localStorage.getItem(GRAPH_SETTINGS_KEY)||"{}"))};}
@@ -3498,7 +3294,8 @@ function saveGraphSettings(showMsg=true){
     worksheetName:"List",
     tableName:"",
     workbookUrl,
-    workbookId: (previous.workbookUrl===workbookUrl ? String(previous.workbookId||'').trim() : "")
+    workbookId: (previous.workbookUrl===workbookUrl ? String(previous.workbookId||'').trim() : ""),
+    oneNoteAutoSync: !!($("oneNoteAutoSyncToggle") ? $("oneNoteAutoSyncToggle").checked : previous.oneNoteAutoSync !== false)
   };
   localStorage.setItem(GRAPH_SETTINGS_KEY, JSON.stringify(settings));
   if(showMsg){
@@ -3526,6 +3323,7 @@ function fillGraphSettingsUI(){
   const s=loadGraphSettings();
   if($("graphClientIdInput")) $("graphClientIdInput").value=s.clientId||"";
   if($("handoverWorkbookUrlInput")) $("handoverWorkbookUrlInput").value=s.workbookUrl||"";
+  if($("oneNoteAutoSyncToggle")) $("oneNoteAutoSyncToggle").checked = s.oneNoteAutoSync !== false;
   // Lock if client ID already set
   const hasSettings=!!(s.clientId);
   setGraphSettingsLocked(hasSettings);
@@ -6077,7 +5875,7 @@ function openWorkbookLink(){
 }
 
 </script><script>
-function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));setSaveStatus(t)}catch(e){$("saveStatus").textContent="Save failed"}}
+function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){$("saveStatus").textContent="Save failed"}}
 function nowString(){return new Date().toLocaleString([],{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}
 function hideAll(){["patients","tasks","handover","patientDetail","deletedPage","eventLogPage"].forEach(id=>$(id).classList.add("hidden"))}
 function setPatientViewportMode(active){document.body.classList.toggle("patients-section-active",!!active);document.documentElement.classList.toggle("patients-section-active",!!active)}
@@ -6103,7 +5901,7 @@ function showSection(id) {
   $("backBtn").classList.add("hidden");
   $("appHeader").classList.remove("has-back");
   if (id === "patients") setActive("navPatients");
-  if (id === "tasks") { setActive("navTasks"); renderTasksTab(); }
+  if (id === "tasks") setActive("navTasks");
   if (id === "handover") {
     setActive("navHandover");
     populateNhsEmailField();
@@ -6818,11 +6616,6 @@ function renderPatientList() {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const id = Number(btn.closest('.swipe-shell')?.dataset.patientId || 0);
-      if (id && typeof openTaskPickerOverlay === 'function') {
-        if (typeof closeAllSwipeShells === 'function') closeAllSwipeShells();
-        openTaskPickerOverlay(id);
-      }
     });
   });
 
@@ -9504,8 +9297,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_495_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_495_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_492_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_492_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10862,7 +10655,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("navTasks").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("tasks")};
   $("navHandover").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("handover")};
   $("backBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; goBackToPatientList(); };
-  $("copyBtn").onclick=copyClinicalText; $("emailBtn").onclick=emailToNHSmail; $("timestampBtn").onclick=addTimestamp;
+  $("copyBtn").onclick=copyClinicalText; $("emailBtn").onclick=emailToNHSmail; if($("oneNoteBtn")) $("oneNoteBtn").onclick=sendToOneNote; if($("openOneNoteBtn")) $("openOneNoteBtn").onclick=openCurrentPatientOneNotePage; $("timestampBtn").onclick=addTimestamp;
   $("openWeightHistoryBtn").onclick=openWeightHistoryModal;
   $("weightHistoryCloseBtn").onclick=closeWeightHistoryModal;
   $("weightHistoryBackdrop").onclick=closeWeightHistoryModal;
@@ -10969,67 +10762,6 @@ document.addEventListener("DOMContentLoaded",function(){
   $("scoreToolsOverlay").addEventListener("input",handleScoreToolsInput);
   initScoreToolsSwipe();
   $("openExamFindingsBtn").onclick=openExamFindingsOverlay;
-  // Task picker overlay
-  let taskPickerPatientId = null;
-  function openTaskPickerOverlay(patientId) {
-    const p = patients[patientId];
-    if (!p) return;
-    taskPickerPatientId = patientId;
-    $('taskPickerTitle').textContent = 'Add tasks';
-    $('taskPickerPatientName').textContent = p.name || 'Patient';
-    const planText = (p.form && p.form.plan) || '';
-    const items = parsePlanItems(planText);
-    const list = $('taskPickerPlanList');
-    const planSection = $('taskPickerPlanSection');
-    if (items.length) {
-      list.innerHTML = items.map((item, i) =>
-        `<button class="task-plan-item" data-item-index="${i}" type="button"><span class="task-plan-item-check"></span><span class="task-plan-item-copy">${escapeHtml(item)}</span></button>`
-      ).join('');
-      list.querySelectorAll('.task-plan-item').forEach(btn => {
-        btn.addEventListener('click', () => btn.classList.toggle('selected'));
-      });
-      planSection.classList.remove('hidden');
-    } else {
-      list.innerHTML = `<div class="task-picker-empty-plan">No plan items available for this patient yet.</div>`;
-      planSection.classList.remove('hidden');
-    }
-    $('taskPickerFreeText').value = '';
-    const overlay = $('taskPickerOverlay');
-    overlay.classList.remove('hidden');
-    overlay.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('task-picker-open');
-    setTimeout(() => overlay.classList.add('show'), 10);
-  }
-  function closeTaskPickerOverlay() {
-    const overlay = $('taskPickerOverlay');
-    overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('task-picker-open');
-    setTimeout(() => overlay.classList.add('hidden'), 180);
-    taskPickerPatientId = null;
-  }
-  function commitTaskPickerOverlay() {
-    if (!taskPickerPatientId) return;
-    const selected = Array.from($('taskPickerPlanList').querySelectorAll('.task-plan-item.selected'))
-      .map(btn => btn.querySelector('.task-plan-item-copy')?.textContent?.trim() || '')
-      .filter(Boolean);
-    const freeText = ($('taskPickerFreeText').value || '')
-      .split(/\n+/)
-      .map(line => line.trim())
-      .filter(Boolean);
-    const all = [...selected, ...freeText];
-    if (all.length) {
-      all.forEach(text => addPatientTask(taskPickerPatientId, text));
-      setSaveStatus(all.length === 1 ? '1 task added' : `${all.length} tasks added`);
-    }
-    closeTaskPickerOverlay();
-  }
-  window.openTaskPickerOverlay = openTaskPickerOverlay;
-  $('taskPickerBackdrop').onclick = closeTaskPickerOverlay;
-  $('taskPickerCloseBtn').onclick = closeTaskPickerOverlay;
-  $('taskPickerCancelBtn').onclick = closeTaskPickerOverlay;
-  $('taskPickerDoneBtn').onclick = commitTaskPickerOverlay;
-  if ($('planTaskBtn')) $('planTaskBtn').onclick = () => { if (currentPatient) openTaskPickerOverlay(currentPatient); };
   $("examFindingsCloseBtn").onclick=closeExamFindingsOverlay;
   $("examFindingsBackdrop").onclick=closeExamFindingsOverlay;
   $("examFindingsClearBtn").onclick=clearExamFindings;
@@ -11076,7 +10808,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("patientContextOpenBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; const id=patientContextMenuId; closePatientContextMenu(); if(id) openPatient(id); };
   $("patientContextEditBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; const id=patientContextMenuId; closePatientContextMenu(); if(id) openEditPatient(id); };
   $("patientContextVisitBtn").onclick=()=>{ const id=patientContextMenuId; closePatientContextMenu(); if(id) toggleVisitSelection(id); };
-  $("patientContextTasksBtn").onclick=()=>{ const id=patientContextMenuId; closePatientContextMenu(); if(id) openTaskPickerOverlay(id); };
+  $("patientContextTasksBtn").onclick=()=>{ const id=patientContextMenuId; const p=id?patients[id]:null; setSaveStatus(p ? `${p.name} - tasks flag coming soon` : 'Tasks flag coming soon'); closePatientContextMenu(); };
   $("patientContextDeleteBtn").onclick=()=>{ const id=patientContextMenuId; closePatientContextMenu(); if(id) deletePatient(id); };
   document.addEventListener("keydown",e=>{ if(e.key==="Escape") closePatientContextMenu(); });
   if(!applyGraphPostAuthUiRestore()) showSection("patients");
@@ -15556,6 +15288,238 @@ window.HAH.modules.deepgramDictation = true;
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMedicationAlerts, {once:true});
   else initMedicationAlerts();
 })();
+
+</script>
+<script>
+const ONENOTE_SECTION_NAME='H@H Demo Notes';
+const ONENOTE_SYNC_DEBOUNCE_MS=3000;
+let oneNoteSyncTimers={};
+let oneNoteSyncInflight={};
+
+function getCurrentPatientOneNoteLink(patientId=currentPatient){
+  const p=patientId && patients ? patients[patientId] : null;
+  if(!p) return null;
+  if(!p.oneNote || typeof p.oneNote!=='object') p.oneNote={};
+  return p.oneNote;
+}
+function isOneNoteAutoSyncEnabled(){
+  const s=typeof loadGraphSettings==='function' ? loadGraphSettings() : null;
+  return !s || s.oneNoteAutoSync !== false;
+}
+function setOneNoteStatus(message,isError=false){
+  const el=$("oneNoteSyncStatus");
+  if(!el) return;
+  el.textContent=message||'';
+  el.style.color=isError?'#b42318':'#6b7280';
+}
+function updateOneNoteUiForCurrentPatient(){
+  const btn=$("oneNoteBtn");
+  const openBtn=$("openOneNoteBtn");
+  const p=currentPatient && patients ? patients[currentPatient] : null;
+  const link=p && p.oneNote ? p.oneNote : null;
+  if(btn){
+    btn.textContent=link && link.pageId ? 'OneNote linked' : 'Send to OneNote';
+  }
+  if(openBtn){
+    openBtn.disabled=!(link && link.webUrl);
+    openBtn.style.opacity=(link && link.webUrl)?'1':'0.55';
+  }
+  if(!p){ setOneNoteStatus(''); return; }
+  if(link && link.error){
+    setOneNoteStatus(link.error,true);
+    return;
+  }
+  if(link && link.pageId){
+    const last=link.lastSyncedAt ? `Last synced ${formatOneNoteSyncTime(link.lastSyncedAt)}` : 'Linked to OneNote';
+    const autosync=isOneNoteAutoSyncEnabled() ? ' • autosync on' : ' • autosync off';
+    setOneNoteStatus(last + autosync,false);
+    return;
+  }
+  setOneNoteStatus('Creates a page in H@H Demo Notes and then keeps it updated.',false);
+}
+function formatOneNoteSyncTime(iso){
+  try{
+    const d=new Date(iso);
+    if(Number.isNaN(d.getTime())) return 'recently';
+    return d.toLocaleString([], {hour:'2-digit', minute:'2-digit', day:'2-digit', month:'short'});
+  }catch(_e){ return 'recently'; }
+}
+function getClinicalOutputTextForCurrentPatient(){
+  if(!currentPatient || !patients[currentPatient]) return '';
+  if(typeof generateClinicalOutput==='function') generateClinicalOutput();
+  const txt=$("clinicalOutput") ? String($("clinicalOutput").textContent||'') : '';
+  return txt.trim();
+}
+function escapeOneNoteHtml(value){
+  return String(value==null?'':value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+function noteTextToHtml(text){
+  const safe=escapeOneNoteHtml(text||'');
+  const blocks=safe.split(/\n{2,}/).map(part=>part.trim()).filter(Boolean);
+  if(!blocks.length) return '<p>No clinical note yet.</p>';
+  return blocks.map(block=>`<p>${block.replace(/\n/g,'<br />')}</p>`).join('');
+}
+function buildOneNotePageHtml(patient, noteText, createdIso){
+  const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
+  const created=escapeOneNoteHtml(createdIso);
+  const heading=escapeOneNoteHtml(patient.name||'Clinical note');
+  const bodyHtml=noteTextToHtml(noteText);
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_492_release.html; source=hospital_at_home_v12_36_492_source.zip -->
+<body><div data-id="hah-note-root"><h2>${heading}</h2><div data-id="note-body">${bodyHtml}</div></div></body></html>`;
+}
+function buildOneNoteBodyFragment(noteText){
+  return `<div data-id="note-body">${noteTextToHtml(noteText)}</div>`;
+}
+function formatOneNotePageDate(iso){
+  try{
+    const d=new Date(iso);
+    return d.toLocaleString([], {year:'numeric', month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit'});
+  }catch(_e){ return iso; }
+}
+async function graphHtml(path, options={}){
+  const token=await getGraphAccessToken();
+  const headers={Authorization:`Bearer ${token}`, Accept:'application/json', ...(options.headers||{})};
+  const init={method:options.method||'GET', headers};
+  if(Object.prototype.hasOwnProperty.call(options,'body')) init.body=options.body;
+  const res=await fetch(`https://graph.microsoft.com/v1.0${path}`, init);
+  if(!res.ok){
+    let msg=`Graph request failed (${res.status})`;
+    try{ const j=await res.json(); msg=j.error?.message||msg; }catch(_e){ try{ const t=await res.text(); if(t) msg=t; }catch(__e){} }
+    throw new Error(msg);
+  }
+  const ct=res.headers.get('content-type')||'';
+  if(ct.includes('application/json')) return res.json();
+  return res.text();
+}
+async function createOneNotePageForPatient(patientId){
+  const patient=patients[patientId];
+  if(!patient) throw new Error('Patient not found.');
+  const noteText=getClinicalOutputTextForCurrentPatient();
+  if(!noteText) throw new Error('No clinical note to send yet.');
+  const createdIso=new Date().toISOString();
+  const html=buildOneNotePageHtml(patient, noteText, createdIso);
+  const sectionName=encodeURIComponent(ONENOTE_SECTION_NAME);
+  const page=await graphHtml(`/me/onenote/pages?sectionName=${sectionName}`, {
+    method:'POST',
+    headers:{'Content-Type':'text/html; charset=utf-8'},
+    body:html
+  });
+  patient.oneNote={
+    pageId: page && page.id ? page.id : '',
+    webUrl: page && page.links && page.links.oneNoteWebUrl && page.links.oneNoteWebUrl.href ? page.links.oneNoteWebUrl.href : '',
+    createdAt: createdIso,
+    pageCreatedAt: createdIso,
+    lastSyncedAt: new Date().toISOString(),
+    lastSyncedText: noteText,
+    syncEnabled: true,
+    error: ''
+  };
+  saveData('Saved locally • Sent to OneNote');
+  addEventLog(`${patient.name} note sent to OneNote`);
+  updateOneNoteUiForCurrentPatient();
+  return patient.oneNote;
+}
+async function fetchOneNoteTargetId(pageId){
+  const html=await graphHtml(`/me/onenote/pages/${encodeURIComponent(pageId)}/content?includeIDs=true`);
+  const match=String(html||'').match(/<div[^>]*data-id=["']note-body["'][^>]*id=["']([^"']+)["']/i) || String(html||'').match(/<div[^>]*id=["']([^"']+)["'][^>]*data-id=["']note-body["']/i);
+  if(match && match[1]) return match[1];
+  throw new Error('OneNote sync target not found on the page.');
+}
+async function pushCurrentPatientNoteToOneNote(opts={}){
+  const patientId=opts.patientId || currentPatient;
+  const patient=patientId && patients ? patients[patientId] : null;
+  if(!patient) return;
+  const link=getCurrentPatientOneNoteLink(patientId);
+  if(!link || !link.pageId) return;
+  if(oneNoteSyncInflight[patientId]) return;
+  const noteText=getClinicalOutputTextForCurrentPatient();
+  if(!noteText) return;
+  if(link.lastSyncedText===noteText && !opts.force) return;
+  oneNoteSyncInflight[patientId]=true;
+  link.error='';
+  setOneNoteStatus('Syncing to OneNote…');
+  try{
+    const targetId=await fetchOneNoteTargetId(link.pageId);
+    const commands=[{target:targetId, action:'replace', content:buildOneNoteBodyFragment(noteText)}];
+    await graphHtml(`/me/onenote/pages/${encodeURIComponent(link.pageId)}/content`, {
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(commands)
+    });
+    link.lastSyncedAt=new Date().toISOString();
+    link.lastSyncedText=noteText;
+    link.error='';
+    try{ localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection})); }catch(_e){}
+    if(currentPatient===patientId) updateOneNoteUiForCurrentPatient();
+  }catch(err){
+    const msg=String(err && err.message || 'OneNote sync failed.');
+    link.error=`OneNote sync failed: ${msg}`;
+    if(currentPatient===patientId) updateOneNoteUiForCurrentPatient();
+  }finally{
+    oneNoteSyncInflight[patientId]=false;
+  }
+}
+function scheduleOneNoteSyncForCurrentPatient(opts={}){
+  if(!currentPatient || !patients[currentPatient]) return;
+  const patient=patients[currentPatient];
+  if(!(patient.oneNote && patient.oneNote.pageId && patient.oneNote.syncEnabled!==false)) return;
+  if(!isOneNoteAutoSyncEnabled() && !opts.force) return;
+  const noteText=getClinicalOutputTextForCurrentPatient();
+  if(!noteText) return;
+  if(patient.oneNote.lastSyncedText===noteText && !opts.force) return;
+  clearTimeout(oneNoteSyncTimers[currentPatient]);
+  oneNoteSyncTimers[currentPatient]=setTimeout(()=>{
+    pushCurrentPatientNoteToOneNote({patientId:currentPatient, force:!!opts.force});
+  }, ONENOTE_SYNC_DEBOUNCE_MS);
+  setOneNoteStatus('OneNote autosync due in a few seconds…');
+}
+async function sendToOneNote(){
+  if(!currentPatient || !patients[currentPatient]){ alert('Open a patient first.'); return; }
+  if(window.location.protocol==='file:'){ alert('Microsoft sign-in works only from a hosted web address, not a downloaded file.'); return; }
+  const p=patients[currentPatient];
+  if(p.oneNote && p.oneNote.pageId){
+    scheduleOneNoteSyncForCurrentPatient({force:true});
+    setOneNoteStatus('OneNote page already linked. Syncing latest note…');
+    return;
+  }
+  try{
+    setOneNoteStatus('Creating OneNote page…');
+    await createOneNotePageForPatient(currentPatient);
+  }catch(err){
+    const msg=String(err && err.message || 'OneNote send failed.');
+    p.oneNote=p.oneNote||{};
+    p.oneNote.error=`OneNote send failed: ${msg}`;
+    updateOneNoteUiForCurrentPatient();
+    alert(msg);
+  }
+}
+function openCurrentPatientOneNotePage(){
+  const link=getCurrentPatientOneNoteLink();
+  if(!(link && link.webUrl)) return;
+  window.open(link.webUrl,'_blank','noopener');
+}
+window.addEventListener('beforeunload',()=>{
+  try{
+    if(currentPatient && oneNoteSyncTimers[currentPatient]){
+      clearTimeout(oneNoteSyncTimers[currentPatient]);
+      pushCurrentPatientNoteToOneNote({patientId:currentPatient, force:false});
+    }
+  }catch(_e){}
+});
+
+document.addEventListener('visibilitychange',()=>{
+  try{
+    if(document.hidden && currentPatient && patients && patients[currentPatient] && patients[currentPatient].oneNote && patients[currentPatient].oneNote.pageId){
+      clearTimeout(oneNoteSyncTimers[currentPatient]);
+      pushCurrentPatientNoteToOneNote({patientId:currentPatient, force:false});
+    }
+  }catch(_e){}
+});
 
 </script></body>
 </html>
