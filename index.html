@@ -2653,10 +2653,17 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div aria-hidden="true" class="exam-findings-overlay hidden" id="examFindingsOverlay"><div class="exam-findings-backdrop" id="examFindingsBackdrop"></div><div class="card exam-findings-modal" id="examFindingsModal"><div class="exam-findings-head"><h3>Examination findings</h3><button aria-label="Close examination findings" class="exam-findings-close" id="examFindingsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="examFindingsText">Edit findings</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="examFindingsText" type="button">Dictate</button></div><textarea id="examFindingsText" placeholder="Enter or edit examination findings"></textarea></div><div class="exam-findings-presets" id="examFindingsPresets"></div></div></div><div class="exam-findings-footer"><button id="examFindingsClearBtn" type="button">Clear</button><button class="primary" id="examFindingsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="meds-overlay iv-rebuilt-overlay hidden" id="ivEditOverlay"><div class="meds-overlay-backdrop iv-edit-backdrop" id="ivEditBackdrop"></div><div aria-labelledby="ivEditTitle" aria-modal="true" class="card meds-overlay-modal meds-overlay-modal-single iv-rebuilt-modal" id="ivEditModal" role="dialog"><div class="meds-overlay-body" id="ivEditBody"><div class="meds-overlay-card meds-overlay-card-single iv-rebuilt-card" id="ivEditCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="ivEditTitle">IV medications administered</span><button aria-label="Close IV medications" class="med-entry-delete meds-overlay-close-inline iv-edit-close" id="ivEditCloseBtn" type="button">×</button></div><div class="meds-overlay-entry-body iv-overlay-entry-body hidden" id="ivSection"><button class="iv-info-label-btn" id="ivVipInfoBtn" type="button">VIP score</button><input enterkeyhint="next" id="ivVIP" type="text"/><div id="ivContainer"></div><div id="ivBottomButtons"><button id="addIVBtn" type="button">Add another</button><button id="clearIVBtn" type="button">Clear</button><button id="doneIVBtn" type="button">Done</button></div><button class="danger hidden" id="deleteIVBtn" type="button">Delete</button></div></div></div></div></div><div aria-hidden="true" class="vip-score-overlay hidden" id="vipScoreOverlay"><div class="vip-score-backdrop" id="vipScoreBackdrop"></div><div aria-labelledby="vipScoreTitle" aria-modal="true" class="card vip-score-modal" id="vipScoreModal" role="dialog"><div class="vip-score-head"><h3 id="vipScoreTitle">Visual Infusion Phlebitis (VIP) score</h3><button aria-label="Close VIP score table" class="vip-score-close" id="vipScoreCloseBtn" type="button">×</button></div><div class="vip-score-body"><div class="vip-score-card"><table class="vip-score-table"><thead><tr><th>Score</th><th>Findings</th><th>Suggested action</th></tr></thead><tbody><tr><td>0</td><td>Site appears healthy</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-safe">Observe cannula</span></td></tr><tr><td>1</td><td>Slight pain near site or slight redness</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-caution">Observe closely</span></td></tr><tr><td>2</td><td>Pain near site with redness and/or swelling</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula</span></td></tr><tr><td>3</td><td>Pain along cannula path with redness and induration</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>4</td><td>As score 3 plus a palpable venous cord</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>5</td><td>As score 4 plus pyrexia</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-urgent">Urgent review and treat per local policy</span></td></tr></tbody></table><div class="vip-score-note">Use local policy if it differs. Scores 2 or above usually mean the cannula should be removed or re-sited.</div></div></div></div></div><div aria-hidden="true" class="score-tools-overlay hidden" id="scoreToolsOverlay"><div class="score-tools-backdrop" id="scoreToolsBackdrop"></div><div class="card score-tools-modal" id="scoreToolsCard"><div class="score-tools-head"><button aria-expanded="false" aria-label="Show all score tools" class="score-tools-title-btn" id="scoreToolsTitleBtn" type="button"><h3>Scores</h3></button><button aria-label="Close scores" class="score-tools-close" id="scoreToolsCloseBtn" type="button">×</button></div><div class="score-tools-tabs-wrap" id="scoreToolsTabsWrap"><div class="score-tools-tabs" id="scoreToolsTabs"><button class="score-tool-tab active" data-score-tool-tab="cfs" type="button">CFS</button><button class="score-tool-tab" data-score-tool-tab="amt10" type="button">AMT10</button><button class="score-tool-tab" data-score-tool-tab="4at" type="button">4AT</button><button class="score-tool-tab" data-score-tool-tab="gcs" type="button">GCS</button><button class="score-tool-tab" data-score-tool-tab="must" type="button">MUST</button><button class="score-tool-tab" data-score-tool-tab="waterlow" type="button">Waterlow</button></div></div><div class="score-tools-body" id="scoreToolsBody"><div class="score-tool-panel" data-score-tool-panel="cfs"><div class="score-tool-card"><h4>Clinical Frailty Scale</h4><div class="score-tool-help">Score baseline frailty rather than the acute illness state.</div><div class="score-choice-grid" id="cfsChoiceGrid"></div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="amt10"><div class="score-tool-card"><h4>AMT10</h4><div class="score-tool-help">1 point per correct answer · Tap Yes for correct, No for incorrect or unable</div><div class="score-qrows" id="amt10Rows"></div><div class="score-summary-box" id="amt10SummaryBox">AMT10 - score pending</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="4at"><div class="score-tool-card"><div class="score-subhead"><h4>4AT</h4><div class="score-mini-note">Rapid delirium screen /12</div></div><div class="score-tool-help">Use the official 4AT scoring below · AMT4 is shown automatically from AMT10 when all 4 orientation items have been answered; otherwise manual AMT4 scoring is available here</div><div class="score-4at-grid"><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Alertness</div><div class="score-4at-task">Observe whether the patient is fully alert or clearly abnormally drowsy or agitated</div></div><div class="score-4at-options" id="fourAtAlertnessRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">AMT4</div><div class="score-4at-task">Test age, date of birth, place, and current year</div><div class="score-inline-note score-4at-subnote" id="fourAtAmt4Note">Manual scoring is available if the AMT10 orientation items have not all been completed</div></div><div class="score-4at-options" id="fourAtAmt4Row"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Attention</div><div class="score-4at-task">Ask the patient to say the months of the year backwards, starting from December</div></div><div class="score-4at-options" id="fourAtAttentionRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Acute change or fluctuating course</div><div class="score-4at-task">Is there evidence of a significant change or fluctuation in mental state over the last 2 weeks, still present in the last 24 hours</div></div><div class="score-4at-options" id="fourAtAcuteRow"></div></div></div><div class="score-summary-box" id="fourAtSummaryBox">4AT incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="gcs"><div class="score-tool-card"><div class="score-subhead"><h4>GCS</h4><div class="score-mini-note">Glasgow Coma Scale /15</div></div><div class="score-tool-help">Select the best eye, verbal and motor response.</div><div class="score-section-stack"><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Eye opening</h4></div><div class="score-qrows" id="gcsEyeRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Verbal response</h4></div><div class="score-qrows" id="gcsVerbalRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Motor response</h4></div><div class="score-qrows" id="gcsMotorRows"></div></div></div><div class="score-summary-box" id="gcsSummaryBox">GCS incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="must"><div class="score-tool-card"><div class="score-subhead"><h4>MUST</h4><div class="score-mini-note">Malnutrition Universal Screening Tool</div></div><div class="score-tool-help">Enter height and weight to calculate BMI, or select the BMI score directly if measurements are not available.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="must" for="mustHeightInput" id="mustHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="mustHeightMetricWrap"><input id="mustHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="mustHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="mustHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="must" for="mustWeightInput" id="mustWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="mustWeightMetricWrap"><input id="mustWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="mustWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="mustWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>BMI score</h4><div class="score-mini-note" id="mustBmiValue">BMI pending</div></div><div class="score-chip-row" id="mustBmiScoreRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Unplanned weight loss in past 3–6 months</h4></div><div class="score-chip-row" id="mustWeightLossRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Acute disease effect</h4></div><div class="score-chip-row" id="mustAcuteRow"></div><div class="score-inline-note">Add 2 if acutely ill and there has been or is likely to be no nutritional intake for more than 5 days.</div></div><div class="score-summary-box" id="mustSummaryBox">MUST incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="waterlow"><div class="score-tool-card"><div class="score-subhead"><h4>Waterlow</h4><div class="score-mini-note">Pressure ulcer risk screen</div></div><div class="score-tool-help">Complete each category using the option that best fits the patient. Enter weight and height to calculate BMI, or choose the build / BMI option directly if BMI is already known.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="waterlow" for="waterlowWeightInput" id="waterlowWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="waterlowWeightMetricWrap"><input id="waterlowWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="waterlowWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="waterlowWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="waterlow" for="waterlowHeightInput" id="waterlowHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="waterlowHeightMetricWrap"><input id="waterlowHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="waterlowHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="waterlowHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Build / BMI</h4><div class="score-mini-note" id="waterlowBmiValue">BMI optional</div></div><div class="score-chip-row" id="waterlowBuildRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Sex and age</h4></div><div class="score-chip-row" id="waterlowSexRow"></div><div class="score-chip-row" id="waterlowAgeRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Continence</h4></div><div class="score-chip-row" id="waterlowContinenceRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Skin / visual risk areas</h4></div><div class="score-chip-row" id="waterlowSkinRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Mobility</h4></div><div class="score-chip-row" id="waterlowMobilityRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Nutrition / appetite</h4></div><div class="score-chip-row" id="waterlowAppetiteRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Tissue malnutrition</h4></div><div class="score-chip-row" id="waterlowTissueRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Neurological deficit</h4></div><div class="score-chip-row" id="waterlowNeuroRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Major surgery / trauma</h4></div><div class="score-chip-row" id="waterlowSurgeryRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Medication</h4></div><div class="score-chip-row" id="waterlowMedicationRow"></div></div><div class="score-summary-box" id="waterlowSummaryBox">Waterlow incomplete</div></div></div></div><div class="score-tools-footer"><button id="scoreToolsClearBtn" type="button">Clear</button><button class="primary" id="scoreToolsInsertBtn" type="button">Done</button></div></div></div>
 <section class="container hidden" id="tasks"><div class="card"><h3>Today’s tasks</h3><p><strong>Mrs Law-test</strong><br/><span class="muted small">Give IV ceftriaxone and review temperature / oral intake.</span></p><p><strong>Mrs Coo-test</strong><br/><span class="muted small">Reassess delirium, chase urine sample, confirm escalation plan.</span></p><p><strong>Mr Doy-test</strong><br/><span class="muted small">Repeat U&amp;E, review fluid balance and oral intake.</span></p></div></section>
 <section class="container hidden" id="handover">
+<div class="options-shell" id="optionsShell">
+<div class="card options-stack-head" id="optionsStackHead">
+<button aria-label="Back to Options" class="options-stack-back hidden" data-close-options-page id="optionsStackBackBtn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg></button>
+<div class="options-stack-titlewrap"><div class="options-stack-kicker" id="optionsStackKicker">Settings</div><h3 id="optionsStackTitle">Options</h3><div class="tiny muted" id="optionsStackSubtitle">Tap a section to open it.</div></div>
+<span aria-hidden="true" class="options-stack-spacer"></span>
+</div>
+<div class="options-stack-viewport" id="optionsStackViewport">
+<div class="options-stack-track" id="optionsStackTrack">
 <div class="options-page-panel" id="optionsHomePanel">
-<div class="card">
-<h3>Options</h3>
-<div class="top-actions" style="margin-top:12px">
+<div class="card options-quick-actions-card">
+<div class="top-actions" style="margin-top:0">
 <button class="fullwidth" id="openDeletedBtn">Recently deleted</button>
 <button class="fullwidth" id="openEventLogBtn">Event log</button>
 </div>
@@ -2682,10 +2689,10 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_499_release.html</div><div>Source: hospital_at_home_v12_36_499_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_500_release.html</div><div>Source: hospital_at_home_v12_36_500_source.zip</div></div>
 </div>
 
-<div class="options-page-panel hidden" data-options-page="security">
+<div class="options-page-panel" data-options-page="security">
 <div class="card options-subpage-card">
 <div class="options-subpage-head"><button aria-label="Back to Options" class="options-subpage-back" data-close-options-page type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg></button><div class="options-subpage-titlewrap"><h3>Security</h3><div class="tiny muted">PIN, Face ID / Touch ID, wrong-PIN sound</div></div><span aria-hidden="true" class="options-subpage-spacer"></span></div>
 <div class="options-section-body" id="optionsSectionSecurity"><div class="tiny muted" style="margin-top:4px;margin-bottom:12px">Lock the app with a 4-digit PIN. Locks automatically after 10 minutes of inactivity.</div>
@@ -2711,7 +2718,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 
-<div class="options-page-panel hidden" data-options-page="nhsmail">
+<div class="options-page-panel" data-options-page="nhsmail">
 <div class="card options-subpage-card">
 <div class="options-subpage-head"><button aria-label="Back to Options" class="options-subpage-back" data-close-options-page type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg></button><div class="options-subpage-titlewrap"><h3>NHSmail address</h3><div class="tiny muted">Used by Email to NHSmail in reviews</div></div><span aria-hidden="true" class="options-subpage-spacer"></span></div>
 <div class="options-section-body" id="optionsSectionNhsmail"><div class="tiny muted" style="margin-top:4px;margin-bottom:8px">Used for the "Email to NHSmail" button in patient reviews.</div>
@@ -2723,7 +2730,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 
-<div class="options-page-panel hidden" data-options-page="onedrive">
+<div class="options-page-panel" data-options-page="onedrive">
 <div class="card options-subpage-card">
 <div class="options-subpage-head"><button aria-label="Back to Options" class="options-subpage-back" data-close-options-page type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg></button><div class="options-subpage-titlewrap"><h3>OneDrive handover (beta)</h3><div class="tiny muted">Workbook link, sign-in and import</div></div><span aria-hidden="true" class="options-subpage-spacer"></span></div>
 <div class="options-section-body" id="optionsSectionOnedrive"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Connect to your OneDrive Excel handover workbook. Microsoft sign-in requires the app to be opened from a hosted web address, not a downloaded file.</div>
@@ -2751,7 +2758,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 
-<div class="options-page-panel hidden" data-options-page="aiscan">
+<div class="options-page-panel" data-options-page="aiscan">
 <div class="card options-subpage-card">
 <div class="options-subpage-head"><button aria-label="Back to Options" class="options-subpage-back" data-close-options-page type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg></button><div class="options-subpage-titlewrap"><h3>AI scan tools (beta)</h3><div class="tiny muted">Groq for blister / IV, PULSE endpoint or Gemini for ECG</div></div><span aria-hidden="true" class="options-subpage-spacer"></span></div>
 <div class="options-section-body" id="optionsSectionAiScan"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Store scan settings locally on this device. Keys and endpoint URLs stay in this browser only.</div>
@@ -2776,7 +2783,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 
-<div class="options-page-panel hidden" data-options-page="deepgram">
+<div class="options-page-panel" data-options-page="deepgram">
 <div class="card options-subpage-card">
 <div class="options-subpage-head"><button aria-label="Back to Options" class="options-subpage-back" data-close-options-page type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg></button><div class="options-subpage-titlewrap"><h3>Deepgram dictation (beta)</h3><div class="tiny muted">API key, formatting and dictation options</div></div><span aria-hidden="true" class="options-subpage-spacer"></span></div>
 <div class="options-section-body" id="optionsSectionDeepgram"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Direct browser connection for personal testing. The key stays in this browser only on this device.</div>
@@ -2809,7 +2816,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 </div>
 
-<div class="options-page-panel hidden" data-options-page="clinicalreview">
+<div class="options-page-panel" data-options-page="clinicalreview">
 <div class="card options-subpage-card">
 <div class="options-subpage-head"><button aria-label="Back to Options" class="options-subpage-back" data-close-options-page type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg></button><div class="options-subpage-titlewrap"><h3>Clinical review</h3><div class="tiny muted">Examination presets</div></div><span aria-hidden="true" class="options-subpage-spacer"></span></div>
 <div class="options-section-body" id="optionsSectionClinicalReview"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Customise the examination chips shown in the findings overlay. One line = one chip. Blank lines are ignored and duplicate lines are removed automatically.</div>
@@ -2828,12 +2835,15 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 </div>
 
-<div class="options-page-panel hidden" data-options-page="medlinkdebug">
+<div class="options-page-panel" data-options-page="medlinkdebug">
 <div class="card options-subpage-card">
 <div class="options-subpage-head"><button aria-label="Back to Options" class="options-subpage-back" data-close-options-page type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg></button><div class="options-subpage-titlewrap"><h3>Medication link debug</h3><div class="tiny muted">Recent long-press / link events for troubleshooting</div></div><span aria-hidden="true" class="options-subpage-spacer"></span></div>
 <div class="options-section-body" id="optionsSectionMedLinkDebug"><div class="tiny muted" id="medLinkDebugStatus" style="margin-top:4px;margin-bottom:10px">No recent medication-link events yet.</div>
 <div class="top-actions" style="margin-top:0;margin-bottom:10px"><button class="fullwidth" id="copyMedLinkDebugBtn" type="button">Copy debug log</button><button class="fullwidth" id="clearMedLinkDebugBtn" type="button">Clear</button></div>
 <div class="tiny muted" id="medLinkDebugLog">No recent medication-link events yet.</div></div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -8747,10 +8757,6 @@ function applyLockReturnOptionsSection(optionsSection){
   if(!normalized) return;
   if(typeof openOptionsSectionPage === 'function'){
     openOptionsSectionPage(normalized, {saveState:true, scroll:false});
-    requestAnimationFrame(()=>{
-      const targetPanel = document.querySelector(`.options-page-panel[data-options-page="${normalized}"]`);
-      if(targetPanel){ try{ targetPanel.scrollIntoView({block:'start', behavior:'auto'}); }catch(e){} }
-    });
     return;
   }
   if(typeof setOpenOptionsSection === 'function') setOpenOptionsSection(normalized);
@@ -9305,8 +9311,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_499_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_499_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_500_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_500_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -9641,60 +9647,212 @@ function initPatientCardReorder(){
   $('reorderDoneBtn').addEventListener('click', exitPatientReorderMode);
 }
 
+function getOptionsShellElements(){
+  return {
+    shell:$('optionsShell'),
+    header:$('optionsStackHead'),
+    viewport:$('optionsStackViewport'),
+    track:$('optionsStackTrack'),
+    back:$('optionsStackBackBtn'),
+    title:$('optionsStackTitle'),
+    subtitle:$('optionsStackSubtitle'),
+    kicker:$('optionsStackKicker')
+  };
+}
+
+let currentOptionsPageKey='';
+const optionsPageScrollOffsets={home:0};
+let optionsPanelResizeObserver=null;
+let optionsWindowResizeBound=false;
+let optionsReturnFlashTimer=null;
+
+function getOptionsPagePanels(){
+  const track=$('optionsStackTrack');
+  return track ? [...track.querySelectorAll('.options-page-panel')] : [];
+}
+
+function getOptionsPageKeyForPanel(panel){
+  return String(panel?.dataset?.optionsPage||'').trim();
+}
+
+function getOptionsPageOrder(){
+  return getOptionsPagePanels().map(panel=>getOptionsPageKeyForPanel(panel));
+}
+
+function getOptionsStorageKeyName(key=''){
+  return String(key||'').trim() || 'home';
+}
+
+function getOptionsPageMeta(key=''){
+  const normalized=String(key||'').trim();
+  if(!normalized) return {kicker:'Settings', title:'Options', subtitle:'Tap a section to open it.'};
+  const panel=document.querySelector(`.options-page-panel[data-options-page="${normalized}"]`);
+  const title=panel?.querySelector('.options-subpage-titlewrap h3')?.textContent?.trim() || 'Options';
+  const subtitle=panel?.querySelector('.options-subpage-titlewrap .tiny.muted')?.textContent?.trim() || '';
+  return {kicker:'Options', title, subtitle};
+}
+
+function getOptionsStickyTop(){
+  const header=$('optionsStackHead');
+  if(!header) return 0;
+  const top=parseFloat(window.getComputedStyle(header).top || '0');
+  return Number.isFinite(top) ? top : 0;
+}
+
+function getOptionsShellBaseScrollTop(){
+  const shell=$('optionsShell');
+  if(!shell) return 0;
+  return Math.max(0, window.scrollY + shell.getBoundingClientRect().top - getOptionsStickyTop());
+}
+
+function captureOptionsScrollPosition(key=currentOptionsPageKey){
+  const storageKey=getOptionsStorageKeyName(key);
+  optionsPageScrollOffsets[storageKey]=Math.max(0, window.scrollY - getOptionsShellBaseScrollTop());
+}
+
+function restoreOptionsScrollPosition(key='', behavior='auto'){
+  const storageKey=getOptionsStorageKeyName(key);
+  const offset=Object.prototype.hasOwnProperty.call(optionsPageScrollOffsets, storageKey) ? optionsPageScrollOffsets[storageKey] : 0;
+  const top=Math.max(0, getOptionsShellBaseScrollTop()+offset);
+  try{ window.scrollTo({top, behavior}); }
+  catch(e){ try{ window.scrollTo(0, top); }catch(_err){} }
+}
+
+function updateOptionsHeader(key=''){
+  const normalized=String(key||'').trim();
+  const {shell,back,title,subtitle,kicker}=getOptionsShellElements();
+  const meta=getOptionsPageMeta(normalized);
+  if(title) title.textContent=meta.title || 'Options';
+  if(subtitle){
+    subtitle.textContent=meta.subtitle || '';
+    subtitle.classList.toggle('hidden', !meta.subtitle);
+  }
+  if(kicker) kicker.textContent=meta.kicker || 'Options';
+  if(back){
+    const showBack=!!normalized;
+    back.classList.toggle('hidden', !showBack);
+    back.disabled=!showBack;
+  }
+  if(shell) shell.classList.toggle('options-shell-subpage-active', !!normalized);
+}
+
+function updateOptionsViewportHeight(immediate=false){
+  const viewport=$('optionsStackViewport');
+  if(!viewport) return;
+  const active=getOptionsPagePanels().find(panel=>panel.classList.contains('is-current')) || $('optionsHomePanel');
+  if(!active) return;
+  const nextHeight=Math.max(1, Math.ceil(active.scrollHeight));
+  if(immediate){
+    const previousTransition=viewport.style.transition;
+    viewport.style.transition='none';
+    viewport.style.height=nextHeight+'px';
+    viewport.offsetHeight;
+    viewport.style.transition=previousTransition || '';
+    return;
+  }
+  viewport.style.height=nextHeight+'px';
+}
+
+function flashOptionsNavRow(key=''){
+  const normalized=String(key||'').trim();
+  if(!normalized) return;
+  const row=document.querySelector(`[data-open-options-page="${normalized}"]`);
+  if(!row) return;
+  row.classList.remove('options-nav-row-return');
+  void row.offsetWidth;
+  row.classList.add('options-nav-row-return');
+  if(optionsReturnFlashTimer) clearTimeout(optionsReturnFlashTimer);
+  optionsReturnFlashTimer=setTimeout(()=>{
+    row.classList.remove('options-nav-row-return');
+    optionsReturnFlashTimer=null;
+  }, 950);
+}
+
 function isValidOptionsPageKey(key){
   const normalized=String(key||'').trim();
   if(!normalized) return true;
-  return !!document.querySelector(`.options-page-panel[data-options-page="${normalized}"]`);
+  return getOptionsPagePanels().some(panel=>getOptionsPageKeyForPanel(panel)===normalized);
 }
 
 function openOptionsSectionPage(openKey='', options={}){
   const normalized=isValidOptionsPageKey(openKey) ? String(openKey||'').trim() : '';
+  const {track}=getOptionsShellElements();
+  const panels=getOptionsPagePanels();
+  if(!track || !panels.length) return normalized;
+  const animate=options && options.animate===false ? false : true;
   const saveState=options && options.saveState===false ? false : true;
   const shouldScroll=options && options.scroll===false ? false : true;
-  const home=$('optionsHomePanel');
-  const panels=[...document.querySelectorAll('.options-page-panel[data-options-page]')];
-  if(!home && !panels.length) return '';
-  const showHome=!normalized;
-  if(home) home.classList.toggle('hidden', !showHome);
-  panels.forEach(panel=>{
-    const isActive=panel.dataset.optionsPage===normalized && !!normalized;
-    panel.classList.toggle('hidden', !isActive);
-  });
-  if(saveState && typeof setOpenOptionsSection==='function') setOpenOptionsSection(normalized);
-  if(shouldScroll){
-    requestAnimationFrame(()=>{
-      const target=showHome ? home : document.querySelector(`.options-page-panel[data-options-page="${normalized}"]`);
-      try{ if(target) target.scrollIntoView({block:'start', behavior:'auto'}); }catch(e){}
-    });
+  const previousKey=String(currentOptionsPageKey||'').trim();
+  if(previousKey!==normalized) captureOptionsScrollPosition(previousKey);
+  const order=getOptionsPageOrder();
+  const targetIndex=Math.max(0, order.indexOf(normalized));
+  if(!animate){
+    const previousTransition=track.style.transition;
+    track.style.transition='none';
+    track.style.transform=`translate3d(-${targetIndex*100}%,0,0)`;
+    track.offsetHeight;
+    track.style.transition=previousTransition || '';
+  }else{
+    track.style.transform=`translate3d(-${targetIndex*100}%,0,0)`;
   }
+  panels.forEach((panel, idx)=>{
+    const active=idx===targetIndex;
+    panel.classList.toggle('is-current', active);
+    panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+  });
+  currentOptionsPageKey=normalized;
+  updateOptionsHeader(normalized);
+  updateOptionsViewportHeight(!animate);
+  if(saveState && typeof setOpenOptionsSection==='function') setOpenOptionsSection(normalized);
+  requestAnimationFrame(()=>{
+    updateOptionsViewportHeight(false);
+    if(shouldScroll) restoreOptionsScrollPosition(normalized, 'auto');
+    if(previousKey && !normalized) flashOptionsNavRow(previousKey);
+  });
   return normalized;
 }
 
 function syncOptionsSectionPageState(options={}){
   const stored=typeof getOpenOptionsSection==='function' ? getOpenOptionsSection() : '';
-  return openOptionsSectionPage(stored, {saveState:false, scroll:options && options.scroll===false ? false : true});
+  return openOptionsSectionPage(stored, {
+    saveState:false,
+    scroll:options && options.scroll===false ? false : true,
+    animate:options && options.animate===false ? false : true
+  });
 }
 
 function initOptionsSectionAccordions(){
-  const home=$('optionsHomePanel');
-  const panels=[...document.querySelectorAll('.options-page-panel[data-options-page]')];
-  if(!home && !panels.length) return;
+  const {back}=getOptionsShellElements();
+  const panels=getOptionsPagePanels();
+  if(!panels.length) return;
+  panels.forEach(panel=>panel.classList.remove('hidden'));
   document.querySelectorAll('[data-open-options-page]').forEach(btn=>{
     if(btn.dataset.optionsPageBound==='1') return;
     btn.dataset.optionsPageBound='1';
     btn.addEventListener('click', ()=>{
       const key=btn.getAttribute('data-open-options-page') || '';
-      openOptionsSectionPage(key, {saveState:true, scroll:true});
+      openOptionsSectionPage(key, {saveState:true, scroll:true, animate:true});
     });
   });
   document.querySelectorAll('[data-close-options-page]').forEach(btn=>{
     if(btn.dataset.optionsPageBackBound==='1') return;
     btn.dataset.optionsPageBackBound='1';
     btn.addEventListener('click', ()=>{
-      openOptionsSectionPage('', {saveState:true, scroll:true});
+      openOptionsSectionPage('', {saveState:true, scroll:true, animate:true});
     });
   });
-  syncOptionsSectionPageState({scroll:false});
+  if(window.ResizeObserver && !optionsPanelResizeObserver){
+    optionsPanelResizeObserver=new ResizeObserver(entries=>{
+      if(entries.some(entry=>entry.target.classList.contains('is-current'))) updateOptionsViewportHeight(false);
+    });
+    panels.forEach(panel=>optionsPanelResizeObserver.observe(panel));
+  }
+  if(!optionsWindowResizeBound){
+    optionsWindowResizeBound=true;
+    window.addEventListener('resize', ()=>updateOptionsViewportHeight(false), {passive:true});
+  }
+  syncOptionsSectionPageState({scroll:false, animate:false});
+  requestAnimationFrame(()=>updateOptionsViewportHeight(true));
 }
 
 
@@ -10216,8 +10374,6 @@ function applyGraphPostAuthUiRestore(){
   requestAnimationFrame(()=>{
     if(targetSection==='handover' && typeof openOptionsSectionPage==='function'){
       openOptionsSectionPage(restore.optionsSection || '', {saveState:false, scroll:false});
-      const targetPanel=restore.optionsSection ? document.querySelector(`.options-page-panel[data-options-page="${restore.optionsSection}"]`) : $('optionsHomePanel');
-      if(targetPanel){ try{ targetPanel.scrollIntoView({block:'start', behavior:'auto'}); }catch(e){} }
     }
     scheduleGraphPostAuthUiRestoreClear();
   });
@@ -15408,7 +15564,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_499_release.html; source=hospital_at_home_v12_36_499_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_500_release.html; source=hospital_at_home_v12_36_500_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
