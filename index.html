@@ -2483,8 +2483,8 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="onboarding-panel hidden" data-onboarding-panel="api">
 <label for="onboardingGroqKeyInput">Groq API key</label>
 <input autocapitalize="off" autocorrect="off" id="onboardingGroqKeyInput" placeholder="Blister pack / IV scan" spellcheck="false" type="password"/>
-<label for="onboardingGeminiKeyInput" style="margin-top:12px">Gemini API key <span class="tiny muted">(optional fallback)</span></label>
-<input autocapitalize="off" autocorrect="off" id="onboardingGeminiKeyInput" placeholder="Optional ECG fallback" spellcheck="false" type="password"/>
+<label for="onboardingGeminiKeyInput" style="margin-top:12px">Gemini API key <span class="tiny muted">(ECG analysis)</span></label>
+<input autocapitalize="off" autocorrect="off" id="onboardingGeminiKeyInput" placeholder="ECG analysis" spellcheck="false" type="password"/>
 <label for="onboardingDeepgramKeyInput" style="margin-top:12px">Deepgram API key</label>
 <input autocapitalize="off" autocorrect="off" id="onboardingDeepgramKeyInput" placeholder="Live dictation" spellcheck="false" type="password"/>
 <div class="tiny muted" style="margin-top:8px">Keys are stored locally on this device only. You can edit them later in Options.</div>
@@ -2682,7 +2682,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_514_release.html</div><div>Source: hospital_at_home_v12_36_514_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_516_release.html</div><div>Source: hospital_at_home_v12_36_516_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -2753,26 +2753,20 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 
 <div class="options-page-panel hidden" data-options-page="aiscan">
 <div class="card options-subpage-card">
-<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>AI scan tools (beta)</h3><div class="tiny muted">Groq for blister / IV, digitizer + Claude for ECG</div></div></div>
-<div class="options-section-body" id="optionsSectionAiScan"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Store scan settings locally on this device. Keys and endpoint URLs stay in this browser only.</div>
+<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>AI scan tools (beta)</h3><div class="tiny muted">Groq for blister / IV, Gemini for ECG</div></div></div>
+<div class="options-section-body" id="optionsSectionAiScan"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Store scan settings locally on this device. Keys stay in this browser only.</div>
 <label>Groq API key <span class="tiny muted">(blister pack / IV label)</span></label>
 <input autocapitalize="off" autocorrect="off" id="xaiApiKeyInput" placeholder="Paste your Groq API key" spellcheck="false" type="password"/>
 <div class="top-actions" style="margin-top:10px">
 <button class="primary fullwidth" id="saveXaiSettingsBtn">Save key</button>
 </div>
 <div class="tiny muted" id="xaiSettingsStatus" style="margin-top:6px;margin-bottom:12px"></div>
-<label>PULSE endpoint URL <span class="tiny muted">(Modal ECG endpoint)</span></label>
-<input autocapitalize="off" autocorrect="off" id="pulseEndpointUrlInput" placeholder="Paste your deployed Modal endpoint URL" spellcheck="false" type="url"/>
+<label>Gemini API key <span class="tiny muted">(ECG analysis)</span></label>
+<input autocapitalize="off" autocorrect="off" id="geminiApiKeyInput" placeholder="Paste your Gemini API key" spellcheck="false" type="password"/>
 <div class="top-actions" style="margin-top:10px">
-<button class="primary fullwidth" id="savePulseSettingsBtn">Save endpoint</button>
+<button class="primary fullwidth" id="saveGeminiSettingsBtn">Save key</button>
 </div>
-<div class="tiny muted" id="pulseSettingsStatus" style="margin-top:6px;margin-bottom:12px">ECG digitizer endpoint — used with your Anthropic key for ECG analysis.</div>
-<label>Anthropic API key <span class="tiny muted">(Claude ECG analysis)</span></label>
-<input autocapitalize="off" autocorrect="off" id="anthropicApiKeyInput" placeholder="Paste your Anthropic API key" spellcheck="false" type="password"/>
-<div class="top-actions" style="margin-top:10px">
-<button class="primary fullwidth" id="saveAnthropicSettingsBtn">Save key</button>
-</div>
-<div class="tiny muted" id="anthropicSettingsStatus" style="margin-top:6px"></div></div>
+<div class="tiny muted" id="geminiSettingsStatus" style="margin-top:6px">ECG Assist now uses Gemini directly from the browser.</div></div>
 </div>
 </div>
 
@@ -9746,8 +9740,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_514_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_514_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_516_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_516_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -12049,6 +12043,8 @@ initBpOverlay();
   const PRECORDIAL_LEADS = ['V1','V2','V3','V4','V5','V6'];
   const DIFFUSE_DEPRESS_LEADS = ['I','II','III','aVL','aVF','V4','V5','V6'];
 
+  const ECG_STRICT_PROMPT = `You are a meticulous, highly disciplined AI Cardiology Assistant analyzing an ECG. You MUST perform a strict, step-by-step systematic analysis. CRITICAL RULE: You must complete each step fully before moving to the next. Do not let glaring abnormalities (like massive ST elevations) distract you from micro-morphologies (like tiny initial 'r' or 'q' waves). You must computationally "zoom in" on the exact start of every QRS complex. Provide your output EXACTLY in the following structured format: ### 1. Rate & Rhythm * **P-waves:** [Present/Absent, Upright/Inverted in specific leads] * **R-R Interval:** [Regular/Irregular] * **Rate:** [Calculated bpm] * **Rhythm Diagnosis:** [e.g., Normal Sinus Rhythm, Atrial Fibrillation] ### 2. Micro-Morphology & Axis (CRITICAL STEP) WARNING: Analyze the exact first millimeter of the QRS complex in the limb leads before determining axis. Look for tiny initial deflections. * **Lead I Morphology:**[State exact type: e.g., R, Rs, qR, rS, QS] * **Lead II Morphology:** [State exact type: e.g., R, Rs, qR, rS, QS] * **Lead III Morphology:**[State exact type: e.g., R, Rs, qR, rS, QS] * **Lead aVF Morphology:**[State exact type: e.g., R, Rs, qR, rS, QS] * **Calculated Axis:**[Normal, Left Axis Deviation, Right Axis Deviation, Extreme] - Explain briefly based on the morphologies above. ### 3. Intervals * **PR Interval:** [Duration in seconds or small squares] * **QRS Duration:**[Duration in seconds or small squares - state if Narrow or Wide] * **QTc:** [Visually normal or prolonged] ### 4. Segment & Wave Analysis (Ischemia/Infarction/Hypertrophy) Analyze by specific territories. State "Normal" if no abnormalities. * **Inferior (II, III, aVF):**[Note ST elevation/depression, T wave inversion, pathological Q waves. Note: A QS complex is a pathologic Q wave; an rS complex is NOT.] * **Anterior/Septal (V1-V4):**[Note R-wave progression, ST/T changes] * **Lateral (I, aVL, V5, V6):**[Note ST/T changes] * **Reciprocal Changes:** [Identify any ST depressions that are reciprocal to elevations] ### 5. Final Synthesis * **Primary Findings:** [List the major objective findings] * **Interpretation:**[Your final ECG conclusion]`;
+
   const LEAD_FINDING_SCHEMA = {
     type: 'object',
     required: ['lead','st','t','q','note'],
@@ -12065,17 +12061,30 @@ initBpOverlay();
     type: 'object',
     additionalProperties: false,
     required: [
-      'leadReview','rate','rhythm','axis','prInterval','qrsDuration','qtc','stSegments','tWaves','rWaveProgression','ectopy','conduction',
+      'leadReview','pWaves','rrInterval','rate','rhythm','leadMorphology','axis','prInterval','qrsDuration','qtc','inferiorAnalysis','anteriorSeptalAnalysis','lateralAnalysis','reciprocalChanges','primaryFindings','stSegments','tWaves','rWaveProgression','ectopy','conduction',
       'morphology','whyInterpretation','limitations','redFlags','impression','differentials','action','copyText','confidence','uncertainty'
     ],
     properties: {
       leadReview: { type: 'array', maxItems: 12, items: LEAD_FINDING_SCHEMA },
+      pWaves: SHORT_STRING,
+      rrInterval: SHORT_STRING,
       rate: SHORT_STRING,
       rhythm: SHORT_STRING,
+      leadMorphology: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['I','II','III','aVF'],
+        properties: { I: SHORT_STRING, II: SHORT_STRING, III: SHORT_STRING, aVF: SHORT_STRING }
+      },
       axis: SHORT_STRING,
       prInterval: SHORT_STRING,
       qrsDuration: SHORT_STRING,
       qtc: SHORT_STRING,
+      inferiorAnalysis: MEDIUM_STRING,
+      anteriorSeptalAnalysis: MEDIUM_STRING,
+      lateralAnalysis: MEDIUM_STRING,
+      reciprocalChanges: MEDIUM_STRING,
+      primaryFindings: SHORT_LIST,
       stSegments: MEDIUM_STRING,
       tWaves: MEDIUM_STRING,
       rWaveProgression: SHORT_STRING,
@@ -12157,8 +12166,11 @@ initBpOverlay();
   function getPulseEndpointUrlSafe(){
     return typeof getPulseEndpointUrl==='function' ? String(getPulseEndpointUrl() || '').trim().replace(/\/$/, '') : '';
   }
+  function getGeminiApiKeySafe(){
+    return typeof getGeminiApiKey==='function' ? String(getGeminiApiKey() || '').trim() : '';
+  }
   function hasConfiguredEcgProvider(){
-    return !!(getPulseEndpointUrlSafe() && (typeof getAnthropicApiKey==='function' ? getAnthropicApiKey() : ''));
+    return !!getGeminiApiKeySafe();
   }
   function getConfiguredGeminiModel(){
     return typeof getGeminiModel==='function' ? String(getGeminiModel() || '').trim() : '';
@@ -12571,14 +12583,28 @@ initBpOverlay();
   }
   function normaliseResult(raw){
     const src = raw && typeof raw === 'object' ? raw : {};
+    const srcMorph = src.leadMorphology && typeof src.leadMorphology === 'object' ? src.leadMorphology : {};
     const result = {
       leadReview: normaliseLeadReview(src.leadReview || src.leads || src.leadMatrix || src.leadFindings),
+      pWaves: cleanText(src.pWaves || src.pwaves),
+      rrInterval: cleanText(src.rrInterval || src.rr || src.rrRegularity),
       rate: tightenRateText(src.rate),
-      rhythm: normaliseRhythmText(src.rhythm),
+      rhythm: normaliseRhythmText(src.rhythm || src.rhythmDiagnosis),
+      leadMorphology: {
+        I: cleanText(srcMorph.I || srcMorph.leadI || src.leadIMorphology),
+        II: cleanText(srcMorph.II || srcMorph.leadII || src.leadIIMorphology),
+        III: cleanText(srcMorph.III || srcMorph.leadIII || src.leadIIIMorphology),
+        aVF: cleanText(srcMorph.aVF || srcMorph.AVF || srcMorph.avf || src.leadAVFMorphology)
+      },
       axis: cleanText(src.axis),
       prInterval: cleanText(src.prInterval || src.pr || src.printerval),
       qrsDuration: cleanText(src.qrsDuration || src.qrs || src.qrsduration),
       qtc: cleanText(src.qtc || src.qt || src.qtcInterval),
+      inferiorAnalysis: cleanText(src.inferiorAnalysis || src.inferior || src.inferiorLeads),
+      anteriorSeptalAnalysis: cleanText(src.anteriorSeptalAnalysis || src.anteriorSeptal || src.anterior || src.anteriorSeptalLeads),
+      lateralAnalysis: cleanText(src.lateralAnalysis || src.lateral || src.lateralLeads),
+      reciprocalChanges: cleanText(src.reciprocalChanges || src.reciprocal || src.reciprocalAnalysis),
+      primaryFindings: normaliseList(src.primaryFindings || src.objectiveFindings || src.keyFindings),
       stSegments: cleanText(src.stSegments || src.stSegment || src.st || src.stchanges),
       tWaves: cleanText(src.tWaves || src.twaves || src.twave),
       rWaveProgression: cleanText(src.rWaveProgression || src.rwaveprogression || src.rWave || src.rwave),
@@ -12588,7 +12614,7 @@ initBpOverlay();
       whyInterpretation: normaliseList(src.whyInterpretation || src.why || src.reasoning),
       limitations: cleanText(src.limitations || src.caveats || src.limits),
       redFlags: normaliseList(src.redFlags || src.redflags),
-      impression: cleanText(src.impression),
+      impression: cleanText(src.impression || src.interpretation),
       differentials: normaliseList(src.differentials),
       action: cleanText(src.action),
       copyText: cleanText(src.copyText || src.copytext),
@@ -12603,6 +12629,12 @@ initBpOverlay();
 
     if(leadSummary.stSummary) result.stSegments = leadSummary.stSummary;
     if(leadSummary.tSummary) result.tWaves = leadSummary.tSummary;
+    if(leadSummary.stSummary && !isMeaningful(result.inferiorAnalysis + result.anteriorSeptalAnalysis + result.lateralAnalysis + result.reciprocalChanges)) {
+      result.inferiorAnalysis = result.inferiorAnalysis || 'See lead review for inferior territory changes.';
+      result.anteriorSeptalAnalysis = result.anteriorSeptalAnalysis || 'See lead review for anterior / septal territory changes.';
+      result.lateralAnalysis = result.lateralAnalysis || 'See lead review for lateral territory changes.';
+      result.reciprocalChanges = result.reciprocalChanges || 'See lead review for reciprocal ST change.';
+    }
     if(leadSummary.impression && (looksNormalImpression(result.impression) || !isMeaningful(result.impression) || leadSummary.redFlags.length)) result.impression = leadSummary.impression;
     if(leadSummary.why.length) result.whyInterpretation = uniqueOrdered([...leadSummary.why, ...result.whyInterpretation]).slice(0,8);
     if(leadSummary.redFlags.length) result.redFlags = uniqueOrdered([...leadSummary.redFlags, ...result.redFlags]).slice(0,6);
@@ -12610,6 +12642,7 @@ initBpOverlay();
     if(leadSummary.action && (!isMeaningful(result.action) || /clinical correlation|compare with prior|review clinically/i.test(result.action))) result.action = leadSummary.action;
 
     result.limitations = deriveLimitations(result, leadSummary);
+    result.whyInterpretation = uniqueOrdered([...(result.primaryFindings || []), ...(result.whyInterpretation || [])]).slice(0,10);
     if(!result.whyInterpretation.length) result.whyInterpretation = buildWhyFallback(result);
     softenGenericIschaemiaLanguage(result);
     result.limitations = deriveLimitations(result, leadSummary);
@@ -12948,30 +12981,23 @@ initBpOverlay();
     });
     return normaliseOverview(raw);
   }
-  async function requestGeminiEcgLeadDraft({ apiKey, imageBundle, overview }){
-    const overviewText = [
-      overview?.patternClass ? `First-pass candidate pattern: ${overview.patternClass}.` : '',
-      overview?.territory ? `Likely territory: ${overview.territory}.` : '',
-      overview?.supportingLeads?.length ? `Possible supporting leads: ${overview.supportingLeads.join(', ')}.` : '',
-      overview?.reciprocalLeads?.length ? `Possible reciprocal leads: ${overview.reciprocalLeads.join(', ')}.` : '',
-      overview?.keyFindings?.length ? `First-pass findings: ${overview.keyFindings.join(' | ')}.` : ''
-    ].filter(Boolean).join(' ');
+  async function requestGeminiEcgLeadDraft({ apiKey, imageBundle }){
     return await callGeminiStructured({
       apiKey,
       models: getEcgModelAttemptList(),
       imageParts: imageBundle.analysisImages,
       schema: ECG_ASSIST_SCHEMA,
-      maxTokens: 1400,
+      maxTokens: 1800,
       mediaResolution: 'MEDIA_RESOLUTION_HIGH',
-      system: 'Return only JSON matching the schema. Do a strict lead-by-lead ECG review using the full image plus cropped lead groups. leadReview must include each lead exactly once in this order: I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6. For each lead, set st to elevation, depression, none, or unclear; t to hyperacute, inversion, peaked, normal, or unclear; q to present, absent, or unclear; and note to a very short factual phrase or empty string. Use unclear rather than guessing. Never describe reciprocal ST depression in the same leads that you have called elevated. Do not force a finding into every lead. Be specific about rate, rhythm, PR, QRS, QTc, and genuine visible image limitations. Only say single rhythm strip / lead II only if the image truly shows only a rhythm strip rather than a 12-lead ECG. Use short factual phrases and UK spelling.',
-      userText: `Review this ECG image bundle and return JSON only. Lead-by-lead analysis comes first, then the summary fields. Keep strings short. whyInterpretation max 5 items, redFlags max 4 items, differentials max 3 items. If a territory pattern is present, support it with the actual leads. If the image is limited, say why, but do not claim single rhythm strip only when multiple leads are visible. ${overviewText} Treat the first-pass pattern only as a hypothesis to verify or refute from the images.`
+      system: `${ECG_STRICT_PROMPT}
+
+Return only JSON matching the schema. Map your structured analysis into these JSON keys exactly: pWaves, rrInterval, rate, rhythm, leadMorphology.I, leadMorphology.II, leadMorphology.III, leadMorphology.aVF, axis, prInterval, qrsDuration, qtc, inferiorAnalysis, anteriorSeptalAnalysis, lateralAnalysis, reciprocalChanges, primaryFindings, impression. Also complete leadReview for all 12 leads in this order: I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6. For each leadReview item, set st to elevation, depression, none, or unclear; t to hyperacute, inversion, peaked, normal, or unclear; q to present, absent, or unclear; and note to a very short factual phrase or empty string. Use unclear rather than guessing. Never describe reciprocal ST depression in the same leads that you have called elevated. Do not force a finding into every lead. Use UK spelling.`,
+      userText: 'Review this ECG image bundle and return JSON only. Follow the strict stepwise order from the system prompt. Keep strings short but clinically useful. Use whyInterpretation for concise reasoning points, redFlags for high-risk patterns, differentials max 3 items, and action for the immediate next step. If the image is limited, say why in limitations. Do not include prose before or after the JSON object.'
     });
   }
   async function requestGeminiEcgDraft({ apiKey, imageBundle }){
-    const overview = await requestGeminiEcgOverview({ apiKey, imageBundle });
-    const leadRaw = await requestGeminiEcgLeadDraft({ apiKey, imageBundle, overview });
-    const result = normaliseResult(leadRaw);
-    return mergeOverviewIntoResult(result, overview);
+    const leadRaw = await requestGeminiEcgLeadDraft({ apiKey, imageBundle });
+    return normaliseResult(leadRaw);
   }
   function buildPulseRequestBody(imageBundle){
     const anthropicKey = typeof getAnthropicApiKey==='function' ? getAnthropicApiKey() : '';
@@ -13165,12 +13191,22 @@ initBpOverlay();
 
     const result=state.result;
     const rows=[
+      ['P-waves',result.pWaves||'Not clear'],
+      ['R-R interval',result.rrInterval||'Not clear'],
       ['Rate',result.rate||'Not clear'],
       ['Rhythm',result.rhythm||'Not clear'],
+      ['Lead I morphology',result.leadMorphology?.I||'Not clear'],
+      ['Lead II morphology',result.leadMorphology?.II||'Not clear'],
+      ['Lead III morphology',result.leadMorphology?.III||'Not clear'],
+      ['Lead aVF morphology',result.leadMorphology?.aVF||'Not clear'],
       ['Axis',result.axis||'Not clear'],
       ['PR interval',result.prInterval||'Not clear'],
       ['QRS duration',result.qrsDuration||'Not clear'],
       ['QTc',result.qtc||'Not clear'],
+      ['Inferior',result.inferiorAnalysis||'Not clear'],
+      ['Anterior / septal',result.anteriorSeptalAnalysis||'Not clear'],
+      ['Lateral',result.lateralAnalysis||'Not clear'],
+      ['Reciprocal changes',result.reciprocalChanges||'Not clear'],
       ['ST segments',result.stSegments||'Not clear'],
       ['T waves',result.tWaves||'Not clear'],
       ['R-wave progression',result.rWaveProgression||'Not clear'],
@@ -13208,7 +13244,7 @@ initBpOverlay();
   function isOpen(){ const el=$('ecgAssistOverlay'); return !!(el && !el.classList.contains('hidden')); }
   function openOverlay(mode){
     if(!currentPatient || !patients || !patients[currentPatient]){ alert('Open a patient first.'); return; }
-    if(!hasConfiguredEcgProvider()){ alert('Please add the digitizer endpoint URL and Anthropic API key in Options (AI scan tools).'); if(typeof showSection==='function') showSection('handover'); return; }
+    if(!hasConfiguredEcgProvider()){ alert('Please add your Gemini API key in Options (AI scan tools).'); if(typeof showSection==='function') showSection('handover'); return; }
     const overlay=$('ecgAssistOverlay'); if(!overlay) return;
     if(state.patientId!==currentPatient) reset(currentPatient);
     setMode(mode||state.mode||'scan');
@@ -13221,10 +13257,8 @@ initBpOverlay();
   function closeOverlay(){ const overlay=$('ecgAssistOverlay'); if(!overlay) return; overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); document.body.classList.remove('ecg-assist-open'); }
 
   async function runAssist(file){
-    const pulseEndpoint = getPulseEndpointUrlSafe();
-    const anthropicKey = typeof getAnthropicApiKey==='function' ? getAnthropicApiKey() : '';
-    if(!pulseEndpoint){ setStatus('Please add a digitizer endpoint URL in Options (AI scan tools).',true); return; }
-    if(!anthropicKey){ setStatus('Please add your Anthropic API key in Options (AI scan tools).',true); return; }
+    const geminiKey = getGeminiApiKeySafe();
+    if(!geminiKey){ setStatus('Please add your Gemini API key in Options (AI scan tools).',true); return; }
     state.busy=true;
     try{
       setStatus('Preparing ECG image…');
@@ -13232,12 +13266,8 @@ initBpOverlay();
       state.dataUrl = imageBundle.previewDataUrl;
       render();
 
-      setStatus('Digitising ECG trace…');
-      const result = await requestPulseEcgDraft({
-        endpointUrl: pulseEndpoint,
-        imageBundle,
-        onProgress: (msg) => { if(state.busy) setStatus(msg); }
-      });
+      setStatus('Analysing ECG with Gemini…');
+      const result = await requestGeminiEcgDraft({ apiKey: geminiKey, imageBundle });
 
       state.result = result;
       render();
@@ -13248,14 +13278,7 @@ initBpOverlay();
       console.error(err);
       const message=String(err&&err.message||'').trim()||'ECG scan failed.';
       if(isGeminiTransportFailure(err)){
-        if(pulseErr){
-          const pulseMsg = String(pulseErr?.message || 'PULSE endpoint did not return a usable response.').trim();
-          setStatus(`PULSE was reached but the app did not receive a usable result in time. ${pulseMsg}${geminiAttempted ? ' Gemini fallback also did not complete from this browser just now.' : ''}`, true);
-        }else{
-          setStatus('Could not reach the ECG analysis service from this browser just now. Check connection and try again. Gemini already retried once with a smaller ECG image if it was being used.',true);
-        }
-      }else if(isPulseTransportFailure(err)){
-        setStatus(message || 'PULSE endpoint did not return a readable browser response.', true);
+        setStatus('Could not reach Gemini from this browser just now. Check connection, API key, and model access, then try again.', true);
       }else{
         setStatus(message,true);
       }
@@ -15971,7 +15994,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_514_release.html; source=hospital_at_home_v12_36_514_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_516_release.html; source=hospital_at_home_v12_36_516_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
