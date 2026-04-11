@@ -287,7 +287,7 @@ body.reorder-active, body.reorder-active *{-webkit-touch-callout:none !important
 body.reorder-active #patientDetail, body.reorder-active #patientDetail *{user-select:none !important;-webkit-user-select:none !important}
 body.reorder-dragging{overflow:hidden;touch-action:none}
 
-.muted{color:var(--sub)} .small{font-size:13px} .tiny{font-size:12px}
+.muted{color:var(--sub)} .small{font-size:13px} .tiny{font-size:12px} .save-sync-note{transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;}
 .badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700;color:#fff}
 .red{background:var(--red)} .amber{background:var(--amber)} .green{background:var(--green)} .grey{background:#6b7280}
 h2,h3{margin:0 0 10px 0} h2{font-size:22px} h3{font-size:17px}
@@ -2552,7 +2552,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <button aria-label="Clear search" class="patient-search-clear" id="patientSearchClearBtn" type="button">×</button>
 </div>
 </div>
-<div class="card" style="padding:10px 14px"><div class="status-row"><span class="status-chip" id="saveStatus">Autosave enabled</span><button class="mini-btn" id="undoBtn">Undo</button></div><div class="tiny muted" style="margin-top:6px">Saves locally in this browser. Imported OneDrive patients can also sync Issues and Plan back to the workbook when signed in.</div></div>
+<div class="card" style="padding:10px 14px"><div class="status-row"><span class="status-chip" id="saveStatus">Autosave enabled</span><button class="mini-btn" id="undoBtn">Undo</button></div><div class="tiny muted save-sync-note" style="margin-top:6px">Saves locally in this browser. Imported OneDrive patients can also sync Issues and Plan back to the workbook when signed in.</div></div>
 <div id="patientList"></div>
 </div>
 </section>
@@ -2682,7 +2682,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_512_release.html</div><div>Source: hospital_at_home_v12_36_512_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_513_release.html</div><div>Source: hospital_at_home_v12_36_513_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -9746,8 +9746,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_512_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_512_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_513_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_513_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -15971,7 +15971,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_512_release.html; source=hospital_at_home_v12_36_512_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_513_release.html; source=hospital_at_home_v12_36_513_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
