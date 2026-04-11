@@ -2535,7 +2535,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <button data-sort-mode="az" role="menuitem" type="button">A–Z<span class="sort-menu-check">✓</span></button>
 </div>
 </div>
-<button aria-label="Import to H@H" class="refresh-btn patient-import-btn" id="openImportRouterBtn" title="Import to H@H">
+<button aria-label="Import to H@H" class="refresh-btn patient-import-btn" id="openImportRouterBtn" title="Import to H@H" type="button">
 <svg aria-hidden="true" class="patient-search-icon" viewbox="0 0 24 24">
 <path d="M12 3v10"></path><path d="M8.5 9.5 12 13l3.5-3.5"></path><path d="M5 17.5h14"></path><rect x="4" y="16" width="16" height="4" rx="2"></rect>
 </svg>
@@ -16360,6 +16360,7 @@ document.addEventListener('visibilitychange',()=>{
     if(payload && payload.patientId) state.patientId=Number(payload.patientId)||state.patientId;
     populatePatientSelect();
     overlay.classList.remove('hidden');
+    overlay.style.display='';
     overlay.setAttribute('aria-hidden','false');
     document.body.classList.add('import-router-open');
     if(payload && payload.text && el('importRouterText')){
@@ -16378,6 +16379,7 @@ document.addEventListener('visibilitychange',()=>{
     const overlay=el('importRouterOverlay');
     if(!overlay) return;
     overlay.classList.add('hidden');
+    overlay.style.display='';
     overlay.setAttribute('aria-hidden','true');
     document.body.classList.remove('import-router-open');
   }
@@ -16396,10 +16398,32 @@ document.addEventListener('visibilitychange',()=>{
     if(!btn) return;
     setAction(btn.getAttribute('data-import-action'));
   }
+  function safeOpenFromButton(event){
+    if(event){
+      try{ event.preventDefault(); }catch(_e){}
+      try{ event.stopPropagation(); }catch(_e){}
+    }
+    try{
+      open({ patientId: currentPatient || null });
+    }catch(err){
+      console.error('Import router failed to open', err);
+      try{ alert('Import to H@H could not open.'); }catch(_e){}
+    }
+  }
   function bind(){
     if(bound) return;
     bound=true;
-    el('openImportRouterBtn')&&el('openImportRouterBtn').addEventListener('click',()=>open({ patientId: currentPatient || null }));
+    const openBtn = el('openImportRouterBtn');
+    if(openBtn){
+      openBtn.setAttribute('type','button');
+      openBtn.onclick = safeOpenFromButton;
+      openBtn.addEventListener('click', safeOpenFromButton);
+    }
+    document.addEventListener('click', function(event){
+      const btn = event.target && event.target.closest ? event.target.closest('#openImportRouterBtn') : null;
+      if(!btn) return;
+      safeOpenFromButton(event);
+    }, true);
     el('importRouterCloseBtn')&&el('importRouterCloseBtn').addEventListener('click',close);
     el('importRouterBackdrop')&&el('importRouterBackdrop').addEventListener('click',close);
     el('importRouterChooseFileBtn')&&el('importRouterChooseFileBtn').addEventListener('click',()=> el('importRouterFileInput')&&el('importRouterFileInput').click());
