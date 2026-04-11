@@ -2673,7 +2673,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <button class="options-nav-row" data-open-options-page="security" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Security</span><span class="options-nav-subtitle">PIN, Face ID / Touch ID, wrong-PIN sound</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="nhsmail" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">NHSmail address</span><span class="options-nav-subtitle">Used by Email to NHSmail in reviews</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="onedrive" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">OneDrive handover (beta)</span><span class="options-nav-subtitle">Workbook link, sign-in and import</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
-<button class="options-nav-row" data-open-options-page="aiscan" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">AI scan tools (beta)</span><span class="options-nav-subtitle">Groq for blister / IV, PULSE endpoint or Gemini for ECG</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
+<button class="options-nav-row" data-open-options-page="aiscan" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">AI scan tools (beta)</span><span class="options-nav-subtitle">Groq for blister / IV, digitizer + Claude for ECG</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="deepgram" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Deepgram dictation (beta)</span><span class="options-nav-subtitle">API key, formatting and dictation options</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="patientlist" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Patient list</span><span class="options-nav-subtitle">Choose and reorder card details</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="clinicalreview" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Clinical review</span><span class="options-nav-subtitle">Examination presets</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="medlinkdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Medication link debug</span><span class="options-nav-subtitle">Recent long-press / link events for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
@@ -2682,7 +2682,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_504_release.html</div><div>Source: hospital_at_home_v12_36_504_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_505_release.html</div><div>Source: hospital_at_home_v12_36_505_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -2753,7 +2753,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 
 <div class="options-page-panel hidden" data-options-page="aiscan">
 <div class="card options-subpage-card">
-<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>AI scan tools (beta)</h3><div class="tiny muted">Groq for blister / IV, PULSE endpoint or Gemini for ECG</div></div></div>
+<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>AI scan tools (beta)</h3><div class="tiny muted">Groq for blister / IV, digitizer + Claude for ECG</div></div></div>
 <div class="options-section-body" id="optionsSectionAiScan"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Store scan settings locally on this device. Keys and endpoint URLs stay in this browser only.</div>
 <label>Groq API key <span class="tiny muted">(blister pack / IV label)</span></label>
 <input autocapitalize="off" autocorrect="off" id="xaiApiKeyInput" placeholder="Paste your Groq API key" spellcheck="false" type="password"/>
@@ -2766,13 +2766,13 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="top-actions" style="margin-top:10px">
 <button class="primary fullwidth" id="savePulseSettingsBtn">Save endpoint</button>
 </div>
-<div class="tiny muted" id="pulseSettingsStatus" style="margin-top:6px;margin-bottom:12px">If set, ECG Assist will use this PULSE endpoint before trying Gemini.</div>
-<label>Gemini API key <span class="tiny muted">(optional ECG fallback)</span></label>
-<input autocapitalize="off" autocorrect="off" id="geminiApiKeyInput" placeholder="Paste your Gemini API key" spellcheck="false" type="password"/>
+<div class="tiny muted" id="pulseSettingsStatus" style="margin-top:6px;margin-bottom:12px">ECG digitizer endpoint — used with your Anthropic key for ECG analysis.</div>
+<label>Anthropic API key <span class="tiny muted">(Claude ECG analysis)</span></label>
+<input autocapitalize="off" autocorrect="off" id="anthropicApiKeyInput" placeholder="Paste your Anthropic API key" spellcheck="false" type="password"/>
 <div class="top-actions" style="margin-top:10px">
-<button class="primary fullwidth" id="saveGeminiSettingsBtn">Save key</button>
+<button class="primary fullwidth" id="saveAnthropicSettingsBtn">Save key</button>
 </div>
-<div class="tiny muted" id="geminiSettingsStatus" style="margin-top:6px"></div></div>
+<div class="tiny muted" id="anthropicSettingsStatus" style="margin-top:6px"></div></div>
 </div>
 </div>
 
@@ -3095,7 +3095,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.core = true;
-const STORAGE_KEY="hah_prototype_v12_36_162_pin_rebuild_data", UNDO_KEY="hah_prototype_v12_36_162_pin_rebuild_undo", NHS_EMAIL_KEY="hah_nhs_email", GRAPH_SETTINGS_KEY="hah_graph_settings", GRAPH_ACCOUNT_KEY="hah_graph_account", XAI_SETTINGS_KEY="hah_xai_settings", GEMINI_SETTINGS_KEY="hah_gemini_settings", PULSE_SETTINGS_KEY="hah_pulse_settings", DEEPGRAM_SETTINGS_KEY="hah_deepgram_settings", CLINICAL_REVIEW_SETTINGS_KEY="hah_clinical_review_settings", PATIENT_LIST_DISPLAY_SETTINGS_KEY="hah_patient_list_display_settings", OPTIONS_SECTION_KEY="hah_options_open_section";
+const STORAGE_KEY="hah_prototype_v12_36_162_pin_rebuild_data", UNDO_KEY="hah_prototype_v12_36_162_pin_rebuild_undo", NHS_EMAIL_KEY="hah_nhs_email", GRAPH_SETTINGS_KEY="hah_graph_settings", GRAPH_ACCOUNT_KEY="hah_graph_account", XAI_SETTINGS_KEY="hah_xai_settings", GEMINI_SETTINGS_KEY="hah_gemini_settings", PULSE_SETTINGS_KEY="hah_pulse_settings", ANTHROPIC_SETTINGS_KEY="hah_anthropic_settings", DEEPGRAM_SETTINGS_KEY="hah_deepgram_settings", CLINICAL_REVIEW_SETTINGS_KEY="hah_clinical_review_settings", PATIENT_LIST_DISPLAY_SETTINGS_KEY="hah_patient_list_display_settings", OPTIONS_SECTION_KEY="hah_options_open_section";
 const PIN_KEY='hah_pin_hash', CRED_ID_KEY='hah_cred_id', BIOMETRIC_KEY='hah_biometric', NEDRY_SOUND_KEY='hah_nedry_enabled';
 const LEGACY_STORAGE_KEYS=['hah_prototype_v12_36_156_pin_state_fix_data','hah_prototype_v12_36_153_medlist_update_only_data','hah_prototype_v12_36_140_pin_loop_fix2_data','hah_prototype_v12_36_139_bg_underlay_fix_data','hah_prototype_v12_36_138_pull_refresh_icon_restore_data','hah_prototype_v12_36_137_pin_loop_fix_data','hah_prototype_v12_36_134_safe_update_banner_data','hah_prototype_v12_36_133_reorder_activate_only_data','hah_prototype_v12_36_104_weight_overlay_parsefix_data','hah_prototype_v12_36_103_weight_overlay_historyfix_data','hah_prototype_v12_36_102_weight_overlay_data','hah_prototype_v12_36_101_flush2_data','hah_prototype_v12_36_96_fresh_demo_patients_data','hah_prototype_v12_36_78_pull_refresh_softgrey_data','hah_prototype_v12_36_77_pull_refresh_underlay_glyph_tuned_data','hah_prototype_v12_36_76_pull_refresh_underlay_glyph_data','hah_prototype_v12_36_75_pull_refresh_feedback_from71_data','hah_prototype_v12_36_74_pull_refresh_feedback_fix_data','hah_prototype_v12_36_73_pull_refresh_feedback_data','hah_prototype_v12_36_72_pull_refresh_data','hah_prototype_v12_36_71_search_toggleclose_data','hah_prototype_v12_36_70_search_keyboardfix_data','hah_prototype_v12_36_69_search_autofocus_data','hah_prototype_v12_36_68_search_fullwidth_data','hah_prototype_v12_36_68_search_fullwidth_undo','hah_prototype_v12_36_67_search_style60_data','hah_prototype_v12_36_67_search_style60_undo','hah_prototype_v12_36_66_search_from58_data','hah_prototype_v12_36_66_search_from58_undo',"hah_prototype_v12_36_58_sortsurname_toggle_data","hah_prototype_v12_36_57_data","hah_prototype_v12_36_55_data","hah_prototype_v12_36_49_data","hah_prototype_v12_36_48_data","hah_prototype_v12_36_47_data","hah_prototype_v12_36_46_data","hah_prototype_v12_36_45_data","hah_prototype_v12_36_36_data","hah_prototype_v12_36_19_data","hah_prototype_v12_35_3_data"];
 const LEGACY_UNDO_KEYS=['hah_prototype_v12_36_156_pin_state_fix_undo',"hah_prototype_v12_36_140_pin_loop_fix2_undo","hah_prototype_v12_36_139_bg_underlay_fix_undo","hah_prototype_v12_36_137_pin_loop_fix_undo","hah_prototype_v12_36_134_safe_update_banner_undo","hah_prototype_v12_36_133_reorder_activate_only_undo","hah_prototype_v12_36_104_weight_overlay_parsefix_undo","hah_prototype_v12_36_103_weight_overlay_historyfix_undo","hah_prototype_v12_36_102_weight_overlay_undo","hah_prototype_v12_36_101_flush2_undo","hah_prototype_v12_36_96_fresh_demo_patients_undo","hah_prototype_v12_36_78_pull_refresh_softgrey_undo","hah_prototype_v12_36_77_pull_refresh_underlay_glyph_tuned_undo","hah_prototype_v12_36_76_pull_refresh_underlay_glyph_undo","hah_prototype_v12_36_75_pull_refresh_feedback_from71_undo","hah_prototype_v12_36_74_pull_refresh_feedback_fix_undo","hah_prototype_v12_36_73_pull_refresh_feedback_undo","hah_prototype_v12_36_72_pull_refresh_undo","hah_prototype_v12_36_71_search_toggleclose_undo","hah_prototype_v12_36_70_search_keyboardfix_undo","hah_prototype_v12_36_69_search_autofocus_undo","hah_prototype_v12_36_58_sortsurname_toggle_undo","hah_prototype_v12_36_57_undo","hah_prototype_v12_36_55_undo","hah_prototype_v12_36_49_undo","hah_prototype_v12_36_48_undo","hah_prototype_v12_36_47_undo","hah_prototype_v12_36_46_undo","hah_prototype_v12_36_45_undo","hah_prototype_v12_36_36_undo","hah_prototype_v12_36_19_undo","hah_prototype_v12_35_3_undo"];
@@ -3504,6 +3504,42 @@ function getGeminiModel(){
   const model = String(loadGeminiSettings().model||'').trim();
   if(!model || model==='gemini-2.5-flash') return 'gemini-3-flash-preview';
   return model;
+}
+function defaultAnthropicSettings(){
+  return {apiKey:''};
+}
+function loadAnthropicSettings(){
+  try{return {...defaultAnthropicSettings(), ...(JSON.parse(localStorage.getItem(ANTHROPIC_SETTINGS_KEY)||'{}'))};}
+  catch(e){return defaultAnthropicSettings();}
+}
+function setAnthropicStatus(msg, isError=false){
+  const el=$('anthropicSettingsStatus');
+  if(!el) return;
+  el.textContent=String(msg||'');
+  el.classList.toggle('error', !!isError);
+}
+function setAnthropicSettingsLocked(locked){
+  const inp=$('anthropicApiKeyInput');
+  const btn=$('saveAnthropicSettingsBtn');
+  if(inp) inp.type=locked?'password':'text';
+  if(btn){ btn.textContent=locked?'Edit key':'Save key'; btn.classList.toggle('secondary',locked); btn.classList.toggle('primary',!locked); }
+}
+function saveAnthropicSettings(showMsg=true){
+  const current=loadAnthropicSettings();
+  const settings={...current, apiKey:($('anthropicApiKeyInput')?.value||'').trim()};
+  localStorage.setItem(ANTHROPIC_SETTINGS_KEY, JSON.stringify(settings));
+  if(showMsg){
+    setAnthropicSettingsLocked(!!(settings.apiKey));
+    setAnthropicStatus(settings.apiKey?'Anthropic key saved on this device.':'Anthropic key removed.');
+  }
+}
+function fillAnthropicSettingsUI(){
+  const s=loadAnthropicSettings();
+  if($('anthropicApiKeyInput')) $('anthropicApiKeyInput').value=s.apiKey||'';
+  setAnthropicSettingsLocked(!!(s.apiKey));
+}
+function getAnthropicApiKey(){
+  return String(loadAnthropicSettings().apiKey||'').trim();
 }
 function defaultDeepgramSettings(){
   return {apiKey:'', model:'nova-3-medical', language:'en-GB', punctuate:true, smartFormat:true, dictation:true, numerals:true, measurements:true, clinicalAbbreviations:true, customPhrases:''};
@@ -9520,8 +9556,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_504_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_504_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_505_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_505_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10822,7 +10858,7 @@ document.addEventListener("DOMContentLoaded",function(){
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 1100);
   }
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
-  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillClinicalReviewSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -10955,7 +10991,7 @@ document.addEventListener("DOMContentLoaded",function(){
     };
 });
   $("issues").addEventListener("keydown",bulletKeyHandler); $("plan").addEventListener("keydown",bulletKeyHandler); $("forDischargeSummary").addEventListener("keydown",bulletKeyHandler); $("acpNotes")?.addEventListener("keydown",bulletKeyHandler); $("issues").addEventListener("input",()=>capitalizeBulletStarts($("issues"))); $("plan").addEventListener("input",()=>capitalizeBulletStarts($("plan"))); $("forDischargeSummary").addEventListener("input",()=>capitalizeBulletStarts($("forDischargeSummary"))); $("acpNotes")?.addEventListener("input",()=>capitalizeBulletStarts($("acpNotes")));
-  ["newName","newAge","newReferralOther","rr","spo2","temp","bp","hr","weight","bm","xaiApiKeyInput","pulseEndpointUrlInput","geminiApiKeyInput"].forEach(id=>{const el=$(id); if(el){el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault(); if(id==="newReferralOther") $("saveAddBtn").focus(); else if(id==="xaiApiKeyInput") $("saveXaiSettingsBtn")?.click(); else if(id==="pulseEndpointUrlInput") $("savePulseSettingsBtn")?.click(); else if(id==="geminiApiKeyInput") $("saveGeminiSettingsBtn")?.click(); else focusNextField(id)}})}});
+  ["newName","newAge","newReferralOther","rr","spo2","temp","bp","hr","weight","bm","xaiApiKeyInput","pulseEndpointUrlInput","geminiApiKeyInput","anthropicApiKeyInput"].forEach(id=>{const el=$(id); if(el){el.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault(); if(id==="newReferralOther") $("saveAddBtn").focus(); else if(id==="xaiApiKeyInput") $("saveXaiSettingsBtn")?.click(); else if(id==="pulseEndpointUrlInput") $("savePulseSettingsBtn")?.click(); else if(id==="geminiApiKeyInput") $("saveGeminiSettingsBtn")?.click(); else if(id==="anthropicApiKeyInput") $("saveAnthropicSettingsBtn")?.click(); else focusNextField(id)}})}});
   function preserveAddPatientInputFocus(e){
     if(!document.body.classList.contains("add-patient-open")) return;
     const active=document.activeElement;
@@ -11090,16 +11126,12 @@ document.addEventListener("DOMContentLoaded",function(){
     }
     savePulseSettings(true);
   };
-  if($("saveGeminiSettingsBtn")) $("saveGeminiSettingsBtn").onclick=()=>{
-    const btn=$("saveGeminiSettingsBtn");
-    const inp=$("geminiApiKeyInput");
-    if(btn && btn.textContent==='Edit key'){
-      setGeminiSettingsLocked(false);
-      setGeminiStatus('Editing key.');
-      if(inp){ try{inp.focus({preventScroll:true});}catch(_){inp.focus();} inp.select?.(); }
-      return;
-    }
-    saveGeminiSettings(true);
+  if($("saveAnthropicSettingsBtn")) $("saveAnthropicSettingsBtn").onclick=()=>{
+    const btn=$("saveAnthropicSettingsBtn");
+    if(btn && btn.textContent.trim()==='Edit key'){
+      if($("anthropicApiKeyInput")){$("anthropicApiKeyInput").type='text'; $("anthropicApiKeyInput").value=getAnthropicApiKey();}
+      btn.textContent='Save key'; btn.classList.replace('secondary','primary');
+    } else { saveAnthropicSettings(); }
   };
   if($("scanBlisterBtn")) $("scanBlisterBtn").onclick=()=>{ noteBlisterPickerLaunch(); $("blisterScanInput")?.click(); };
   if($("scanIVBtn")) $("scanIVBtn").onclick=()=>{ $("ivScanInput")?.click(); };
@@ -11923,7 +11955,7 @@ initBpOverlay();
     return typeof getPulseEndpointUrl==='function' ? String(getPulseEndpointUrl() || '').trim().replace(/\/$/, '') : '';
   }
   function hasConfiguredEcgProvider(){
-    return !!(getPulseEndpointUrlSafe() || (typeof getGeminiApiKey==='function' ? getGeminiApiKey() : ''));
+    return !!(getPulseEndpointUrlSafe() && (typeof getAnthropicApiKey==='function' ? getAnthropicApiKey() : ''));
   }
   function getConfiguredGeminiModel(){
     return typeof getGeminiModel==='function' ? String(getGeminiModel() || '').trim() : '';
@@ -12739,18 +12771,18 @@ initBpOverlay();
     return mergeOverviewIntoResult(result, overview);
   }
   function buildPulseRequestBody(imageBundle){
+    const anthropicKey = typeof getAnthropicApiKey==='function' ? getAnthropicApiKey() : '';
     return {
-      mode: 'ecg_assist_v1',
-      preview_data_url: imageBundle.previewDataUrl,
-      analysis_images: []
+      data_url: imageBundle.previewDataUrl,
+      anthropic_api_key: anthropicKey
     };
   }
   function getPulseErrorMessage(status, data, rawText=''){
     const message = cleanText(data?.detail || data?.error || data?.message || rawText).slice(0, 260);
-    if(status === 408 || status === 504) return message ? `PULSE endpoint timed out (${status}): ${message}` : `PULSE endpoint timed out (${status}).`;
-    if(status === 413) return 'ECG image payload was too large for the PULSE endpoint (413).';
-    if(status >= 500) return message ? `PULSE endpoint server error (${status}): ${message}` : `PULSE endpoint server error (${status}).`;
-    return message ? `PULSE endpoint error (${status}): ${message}` : `PULSE endpoint error (${status}).`;
+    if(status === 408 || status === 504) return message ? `ECG endpoint timed out (${status}): ${message}` : `ECG endpoint timed out (${status}).`;
+    if(status === 413) return 'ECG image payload was too large for the endpoint (413).';
+    if(status >= 500) return message ? `ECG endpoint server error (${status}): ${message}` : `ECG endpoint server error (${status}).`;
+    return message ? `ECG endpoint error (${status}): ${message}` : `ECG endpoint error (${status}).`;
   }
   function isPulseTransportFailure(err){
     const message = String(err?.message || err || '');
@@ -12833,11 +12865,11 @@ initBpOverlay();
   async function requestPulseEcgDraft({ endpointUrl, imageBundle, onProgress }){
     const body = buildPulseRequestBody(imageBundle);
     const { data, rawText } = await withProgressNotices(
-      fetchPulseJson(endpointUrl, body, 240000),
+      fetchPulseJson(endpointUrl, body, 120000),
       [
-        { delay: 15000, message: 'PULSE is still starting / analysing… the first run can take over a minute.' },
-        { delay: 60000, message: 'Still analysing with PULSE… keeping the request open.' },
-        { delay: 120000, message: 'PULSE is taking longer than usual, but the app is still waiting for a response.' }
+        { delay: 10000, message: 'Digitising ECG trace…' },
+        { delay: 25000, message: 'Analysing with Claude… almost there.' },
+        { delay: 60000, message: 'Still analysing — keeping the request open.' }
       ],
       onProgress || (() => {})
     );
@@ -12845,13 +12877,10 @@ initBpOverlay();
     const candidate = payload.result && typeof payload.result === 'object' ? payload.result : payload;
     if(!candidate || typeof candidate !== 'object'){
       const preview = cleanText(rawText).slice(0, 240);
-      throw new Error(preview ? `PULSE endpoint returned an unexpected response: ${preview}` : 'PULSE endpoint returned no ECG result object.');
+      throw new Error(preview ? `ECG endpoint returned an unexpected response: ${preview}` : 'ECG endpoint returned no result object.');
     }
     const result = normaliseResult(candidate);
-    if(pulseResultLooksInvalid(result, candidate, payload.raw_text || rawText)){
-      throw new Error('PULSE returned placeholder / schema text instead of a usable ECG draft. Retry or use Gemini fallback.');
-    }
-    if(payload.provider && !result.confidence) result.confidence = `Cautious draft · ${payload.provider}`;
+    if(!result.confidence) result.confidence = `AI ECG analysis · Claude Sonnet`;
     return result;
   }
 
@@ -12976,7 +13005,7 @@ initBpOverlay();
   function isOpen(){ const el=$('ecgAssistOverlay'); return !!(el && !el.classList.contains('hidden')); }
   function openOverlay(mode){
     if(!currentPatient || !patients || !patients[currentPatient]){ alert('Open a patient first.'); return; }
-    if(!hasConfiguredEcgProvider()){ alert('Please add a PULSE endpoint URL or Gemini API key in Options first.'); if(typeof showSection==='function') showSection('handover'); return; }
+    if(!hasConfiguredEcgProvider()){ alert('Please add the digitizer endpoint URL and Anthropic API key in Options (AI scan tools).'); if(typeof showSection==='function') showSection('handover'); return; }
     const overlay=$('ecgAssistOverlay'); if(!overlay) return;
     if(state.patientId!==currentPatient) reset(currentPatient);
     setMode(mode||state.mode||'scan');
@@ -12990,55 +13019,22 @@ initBpOverlay();
 
   async function runAssist(file){
     const pulseEndpoint = getPulseEndpointUrlSafe();
-    const apiKey=typeof getGeminiApiKey==='function'?getGeminiApiKey():'';
-    if(!pulseEndpoint && !apiKey){ setStatus('Please add a PULSE endpoint URL or Gemini API key in Options first.',true); return; }
+    const anthropicKey = typeof getAnthropicApiKey==='function' ? getAnthropicApiKey() : '';
+    if(!pulseEndpoint){ setStatus('Please add a digitizer endpoint URL in Options (AI scan tools).',true); return; }
+    if(!anthropicKey){ setStatus('Please add your Anthropic API key in Options (AI scan tools).',true); return; }
     state.busy=true;
-    let pulseErr = null;
-    let pulseAttempted = false;
-    let geminiAttempted = false;
     try{
       setStatus('Preparing ECG image…');
       let imageBundle = await buildEcgImageBundle(file, false);
       state.dataUrl = imageBundle.previewDataUrl;
       render();
 
-      let result;
-      if(pulseEndpoint){
-        pulseAttempted = true;
-        try{
-          setStatus('Scanning ECG with PULSE… first run can take over a minute.');
-          result = await requestPulseEcgDraft({
-            endpointUrl: pulseEndpoint,
-            imageBundle,
-            onProgress: (msg) => {
-              if(state.busy) setStatus(msg);
-            }
-          });
-        }catch(err){
-          pulseErr = err;
-          if(apiKey){
-            console.warn('PULSE endpoint failed, falling back to Gemini.', err);
-            setStatus('PULSE did not return a usable result yet — retrying with Gemini fallback…');
-            result = null;
-          }else{
-            throw err;
-          }
-        }
-      }
-      if(!result){
-        geminiAttempted = true;
-        try{
-          setStatus('Scanning ECG with Gemini…');
-          result = await requestGeminiEcgDraft({ apiKey, imageBundle });
-        }catch(err){
-          if(!isGeminiTransportFailure(err)) throw err;
-          setStatus('Retrying with a smaller ECG image bundle…');
-          imageBundle = await buildEcgImageBundle(file, true);
-          state.dataUrl = imageBundle.previewDataUrl;
-          render();
-          result = await requestGeminiEcgDraft({ apiKey, imageBundle });
-        }
-      }
+      setStatus('Digitising ECG trace…');
+      const result = await requestPulseEcgDraft({
+        endpointUrl: pulseEndpoint,
+        imageBundle,
+        onProgress: (msg) => { if(state.busy) setStatus(msg); }
+      });
 
       state.result = result;
       render();
@@ -15772,7 +15768,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_504_release.html; source=hospital_at_home_v12_36_504_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_505_release.html; source=hospital_at_home_v12_36_505_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
