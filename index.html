@@ -2682,7 +2682,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_523_release.html</div><div>Source: hospital_at_home_v12_36_523_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_524_release.html</div><div>Source: hospital_at_home_v12_36_524_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -9740,8 +9740,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_523_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_523_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_524_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_524_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -12054,13 +12054,20 @@ initBpOverlay();
   const PRECORDIAL_LEADS = ['V1','V2','V3','V4','V5','V6'];
   const DIFFUSE_DEPRESS_LEADS = ['I','II','III','aVL','aVF','V4','V5','V6'];
 
-  const ECG_STRICT_PROMPT = `You are a meticulous, highly disciplined AI Cardiology Assistant analyzing an ECG. You MUST perform a strict, step-by-step systematic analysis. CRITICAL RULE: You must complete each step fully before moving to the next. Do not let glaring abnormalities (like massive ST elevations) distract you from micro-morphologies (like tiny initial 'r' or 'q' waves). You must computationally "zoom in" on the exact start of every QRS complex. WARNING: Analyze the exact first millimeter of the QRS complex before determining axis or block. Look for tiny initial deflections.
-Provide your output EXACTLY as a valid JSON object. Do not include any conversational text, markdown formatting, or explanations outside the JSON structure. Use the following schema:
+  const ECG_STRICT_PROMPT = `You are a meticulous, highly disciplined AI Cardiology Assistant analysing an ECG. You MUST perform a strict, step-by-step systematic analysis. CRITICAL RULE: You must complete each step fully before moving to the next. Do not let glaring abnormalities distract you from micro-morphologies like tiny initial 'r' or 'q' waves. You must computationally "zoom in" on the exact start of every QRS complex. WARNING: Analyse the exact first millimetre of the QRS complex before determining axis or block. Look for tiny initial deflections.
+Provide your output EXACTLY as a valid JSON object. Do not include any conversational text, markdown formatting, or explanations outside the JSON structure.
+Additional rules:
+- Return direct findings from the ECG image only. Do not add app-side inferences or extra diagnoses beyond what is supported by the tracing.
+- For rate_bpm_estimate, you may return either a single value (for example "62 bpm") or a narrow range (for example "60-65 bpm") if that better reflects visual estimation.
+- Use "none", "normal", "not clear", or "uncertain" where appropriate instead of over-calling subtle abnormalities.
+- For each lead in lead_by_lead, describe only what is genuinely seen in that lead.
+- Use UK spelling.
+Use the following schema:
 {
   "rate_and_rhythm": {
     "p_waves": "[Present/Absent, Upright/Inverted in specific leads]",
     "rr_interval": "[Regular/Irregular]",
-    "rate_bpm": "[Integer]",
+    "rate_bpm_estimate": "[Single value or narrow range, ideally with bpm]",
     "rhythm_diagnosis": "[e.g., Normal Sinus Rhythm, Atrial Fibrillation]"
   },
   "morphology_axis_and_conduction": {
@@ -12068,25 +12075,47 @@ Provide your output EXACTLY as a valid JSON object. Do not include any conversat
     "limb_lead_II": "[State exact type: e.g., R, Rs, qR, rS, QS]",
     "limb_lead_III": "[State exact type: e.g., R, Rs, qR, rS, QS]",
     "limb_lead_aVF": "[State exact type: e.g., R, Rs, qR, rS, QS]",
-    "calculated_axis": "[Normal, LAD, RAD, Extreme]",
+    "calculated_axis": "[Normal, LAD, RAD, Extreme, or uncertain]",
     "chest_lead_V1": "[State exact type: e.g., rS, QS, rsR', R]",
     "chest_lead_V6": "[State exact type: e.g., qR, R, Rs, slurred S]",
-    "conduction_assessment": "[Normal, LBBB, RBBB, IVCD, Incomplete RBBB - based on V1/V6 morphology and QRS width]"
+    "conduction_assessment": "[Normal, LBBB, RBBB, IVCD, Incomplete RBBB, or uncertain]"
   },
   "intervals": {
-    "pr_interval_seconds": "[Float]",
-    "qrs_duration_seconds": "[Float]",
-    "qtc_assessment": "[Visually normal or prolonged]"
+    "pr_interval_seconds": "[Float or string if uncertain]",
+    "qrs_duration_seconds": "[Float or string if uncertain]",
+    "qtc_assessment": "[Visually normal, prolonged, short, or uncertain]"
   },
-  "segment_and_wave_analysis": {
-    "inferior_II_III_aVF": "[Note ST elevation/depression, T wave inversion, pathological Q waves]",
-    "anterior_septal_V1_V4": "[Note R-wave progression, ST/T changes]",
-    "lateral_I_aVL_V5_V6": "[Note ST/T changes]",
-    "reciprocal_changes": "[Identify any ST depressions that are reciprocal to elevations]"
+  "global_waveform_summary": {
+    "st_segments": "[Concise overall ST summary]",
+    "t_waves": "[Concise overall T-wave summary]",
+    "r_wave_progression": "[Normal, poor, delayed, or not clear]"
+  },
+  "lead_by_lead": {
+    "I": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "II": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "III": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "aVR": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "aVL": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "aVF": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "V1": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "V2": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "V3": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "V4": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "V5": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" },
+    "V6": { "st_segment": "[none/elevation/depression/uncertain]", "t_wave": "[normal/inversion/hyperacute/peaked/flattened/uncertain]", "q_wave": "[absent/present/uncertain]", "note": "[Short phrase]" }
+  },
+  "territory_summary": {
+    "inferior_II_III_aVF": "[Short territory summary]",
+    "anterior_septal_V1_V4": "[Short territory summary]",
+    "lateral_I_aVL_V5_V6": "[Short territory summary]",
+    "reciprocal_changes": "[Short summary]"
   },
   "final_synthesis": {
     "primary_findings": ["[List the major objective findings]"],
-    "interpretation": "[Your final ECG conclusion]"
+    "interpretation": "[Your final ECG conclusion]",
+    "suggested_action": "[Short action text]",
+    "confidence": "[High/Moderate/Low or similar]",
+    "uncertainty": "[Short uncertainty qualifier if relevant]"
   }
 }`;
 
@@ -12108,17 +12137,19 @@ Provide your output EXACTLY as a valid JSON object. Do not include any conversat
       'rate_and_rhythm',
       'morphology_axis_and_conduction',
       'intervals',
-      'segment_and_wave_analysis',
+      'global_waveform_summary',
+      'lead_by_lead',
+      'territory_summary',
       'final_synthesis'
     ],
     properties: {
       rate_and_rhythm: {
         type: 'object',
-        required: ['p_waves','rr_interval','rate_bpm','rhythm_diagnosis'],
+        required: ['p_waves','rr_interval','rate_bpm_estimate','rhythm_diagnosis'],
         properties: {
           p_waves: SHORT_STRING,
           rr_interval: SHORT_STRING,
-          rate_bpm: { type: 'integer' },
+          rate_bpm_estimate: SHORT_STRING,
           rhythm_diagnosis: SHORT_STRING
         }
       },
@@ -12140,12 +12171,39 @@ Provide your output EXACTLY as a valid JSON object. Do not include any conversat
         type: 'object',
         required: ['pr_interval_seconds','qrs_duration_seconds','qtc_assessment'],
         properties: {
-          pr_interval_seconds: { type: 'number' },
-          qrs_duration_seconds: { type: 'number' },
+          pr_interval_seconds: SHORT_STRING,
+          qrs_duration_seconds: SHORT_STRING,
           qtc_assessment: SHORT_STRING
         }
       },
-      segment_and_wave_analysis: {
+      global_waveform_summary: {
+        type: 'object',
+        required: ['st_segments','t_waves','r_wave_progression'],
+        properties: {
+          st_segments: LONG_STRING,
+          t_waves: LONG_STRING,
+          r_wave_progression: SHORT_STRING
+        }
+      },
+      lead_by_lead: {
+        type: 'object',
+        required: ['I','II','III','aVR','aVL','aVF','V1','V2','V3','V4','V5','V6'],
+        properties: {
+          I: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          II: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          III: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          aVR: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          aVL: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          aVF: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          V1: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          V2: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          V3: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          V4: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          V5: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } },
+          V6: { type: 'object', required: ['st_segment','t_wave','q_wave','note'], properties: { st_segment: SHORT_STRING, t_wave: SHORT_STRING, q_wave: SHORT_STRING, note: SHORT_STRING } }
+        }
+      },
+      territory_summary: {
         type: 'object',
         required: ['inferior_II_III_aVF','anterior_septal_V1_V4','lateral_I_aVL_V5_V6','reciprocal_changes'],
         properties: {
@@ -12157,10 +12215,13 @@ Provide your output EXACTLY as a valid JSON object. Do not include any conversat
       },
       final_synthesis: {
         type: 'object',
-        required: ['primary_findings','interpretation'],
+        required: ['primary_findings','interpretation','suggested_action','confidence','uncertainty'],
         properties: {
           primary_findings: SHORT_LIST,
-          interpretation: MEDIUM_STRING
+          interpretation: MEDIUM_STRING,
+          suggested_action: MEDIUM_STRING,
+          confidence: SHORT_STRING,
+          uncertainty: MEDIUM_STRING
         }
       }
     }
@@ -12646,7 +12707,9 @@ Provide your output EXACTLY as a valid JSON object. Do not include any conversat
     const nestedRate = src.rate_and_rhythm && typeof src.rate_and_rhythm === 'object' ? src.rate_and_rhythm : {};
     const nestedMorph = src.morphology_axis_and_conduction && typeof src.morphology_axis_and_conduction === 'object' ? src.morphology_axis_and_conduction : {};
     const nestedIntervals = src.intervals && typeof src.intervals === 'object' ? src.intervals : {};
-    const nestedSegment = src.segment_and_wave_analysis && typeof src.segment_and_wave_analysis === 'object' ? src.segment_and_wave_analysis : {};
+    const nestedWave = src.global_waveform_summary && typeof src.global_waveform_summary === 'object' ? src.global_waveform_summary : {};
+    const nestedLeadByLead = src.lead_by_lead && typeof src.lead_by_lead === 'object' ? src.lead_by_lead : {};
+    const nestedTerritory = src.territory_summary && typeof src.territory_summary === 'object' ? src.territory_summary : {};
     const nestedFinal = src.final_synthesis && typeof src.final_synthesis === 'object' ? src.final_synthesis : {};
     const srcMorph = src.leadMorphology && typeof src.leadMorphology === 'object' ? src.leadMorphology : {};
     const formatSeconds = (value) => {
@@ -12655,13 +12718,13 @@ Provide your output EXACTLY as a valid JSON object. Do not include any conversat
       if(Number.isFinite(num)) return `${String(num.toFixed(2)).replace(/\.0+$/,'').replace(/(\.\d*[1-9])0+$/,'$1')} seconds`;
       return cleanText(value);
     };
-    const rateValue = nestedRate.rate_bpm ?? src.rate;
-    const leadReviewSeed = normaliseLeadReview(src.leadReview || src.leads || src.leadMatrix || src.leadFindings);
+    const rateValue = nestedRate.rate_bpm_estimate ?? nestedRate.rate_bpm ?? src.rate;
+    const leadReviewSeed = normaliseLeadReview(nestedLeadByLead && Object.keys(nestedLeadByLead).length ? nestedLeadByLead : (src.leadReview || src.leads || src.leadMatrix || src.leadFindings));
     const result = {
       leadReview: leadReviewSeed,
       pWaves: cleanText(nestedRate.p_waves || src.pWaves || src.pwaves),
       rrInterval: cleanText(nestedRate.rr_interval || src.rrInterval || src.rr || src.rrRegularity),
-      rate: tightenRateText(Number.isFinite(Number(rateValue)) ? `${Number(rateValue)} bpm` : rateValue),
+      rate: tightenRateText(rateValue),
       rhythm: normaliseRhythmText(nestedRate.rhythm_diagnosis || src.rhythm || src.rhythmDiagnosis),
       leadMorphology: {
         I: cleanText(nestedMorph.limb_lead_I || srcMorph.I || srcMorph.leadI || src.leadIMorphology),
@@ -12673,14 +12736,14 @@ Provide your output EXACTLY as a valid JSON object. Do not include any conversat
       prInterval: cleanText(formatSeconds(nestedIntervals.pr_interval_seconds || src.prInterval || src.pr || src.printerval)),
       qrsDuration: cleanText(formatSeconds(nestedIntervals.qrs_duration_seconds || src.qrsDuration || src.qrs || src.qrsduration)),
       qtc: cleanText(nestedIntervals.qtc_assessment || src.qtc || src.qt || src.qtcInterval),
-      inferiorAnalysis: cleanText(nestedSegment.inferior_II_III_aVF || src.inferiorAnalysis || src.inferior || src.inferiorLeads),
-      anteriorSeptalAnalysis: cleanText(nestedSegment.anterior_septal_V1_V4 || src.anteriorSeptalAnalysis || src.anteriorSeptal || src.anterior || src.anteriorSeptalLeads),
-      lateralAnalysis: cleanText(nestedSegment.lateral_I_aVL_V5_V6 || src.lateralAnalysis || src.lateral || src.lateralLeads),
-      reciprocalChanges: cleanText(nestedSegment.reciprocal_changes || src.reciprocalChanges || src.reciprocal || src.reciprocalAnalysis),
+      inferiorAnalysis: cleanText(nestedTerritory.inferior_II_III_aVF || src.inferiorAnalysis || src.inferior || src.inferiorLeads),
+      anteriorSeptalAnalysis: cleanText(nestedTerritory.anterior_septal_V1_V4 || src.anteriorSeptalAnalysis || src.anteriorSeptal || src.anterior || src.anteriorSeptalLeads),
+      lateralAnalysis: cleanText(nestedTerritory.lateral_I_aVL_V5_V6 || src.lateralAnalysis || src.lateral || src.lateralLeads),
+      reciprocalChanges: cleanText(nestedTerritory.reciprocal_changes || src.reciprocalChanges || src.reciprocal || src.reciprocalAnalysis),
       primaryFindings: normaliseList(nestedFinal.primary_findings || src.primaryFindings || src.objectiveFindings || src.keyFindings),
-      stSegments: cleanText(src.stSegments || src.stSegment || src.st || src.stchanges),
-      tWaves: cleanText(src.tWaves || src.twaves || src.twave),
-      rWaveProgression: cleanText(src.rWaveProgression || src.rwaveprogression || src.rWave || src.rwave),
+      stSegments: cleanText(nestedWave.st_segments || src.stSegments || src.stSegment || src.st || src.stchanges),
+      tWaves: cleanText(nestedWave.t_waves || src.tWaves || src.twaves || src.twave),
+      rWaveProgression: cleanText(nestedWave.r_wave_progression || src.rWaveProgression || src.rwaveprogression || src.rWave || src.rwave),
       ectopy: cleanText(src.ectopy),
       conduction: cleanText(nestedMorph.conduction_assessment || src.conduction),
       morphology: cleanText(src.morphology || (cleanText(nestedMorph.chest_lead_V1) || cleanText(nestedMorph.chest_lead_V6)
@@ -12691,10 +12754,10 @@ Provide your output EXACTLY as a valid JSON object. Do not include any conversat
       redFlags: normaliseList(src.redFlags || src.redflags),
       impression: cleanText(nestedFinal.interpretation || src.impression || src.interpretation),
       differentials: normaliseList(src.differentials),
-      action: cleanText(src.action),
+      action: cleanText(nestedFinal.suggested_action || src.action),
       copyText: cleanText(src.copyText || src.copytext),
-      confidence: cleanText(src.confidence),
-      uncertainty: cleanText(src.uncertainty),
+      confidence: cleanText(nestedFinal.confidence || src.confidence),
+      uncertainty: cleanText(nestedFinal.uncertainty || src.uncertainty),
       derivedPattern: '',
       consistencyIssues: []
     };
@@ -12708,45 +12771,11 @@ Provide your output EXACTLY as a valid JSON object. Do not include any conversat
       result.leadReview = LEAD_ORDER.map(lead => reviewMap[lead] || { lead, st:'unclear', t:'unclear', q:'unclear', note:'' });
     }
 
-    const leadSummary = buildLeadDerivedSummary(result.leadReview);
-    result.derivedPattern = leadSummary.pattern;
-
-    if(leadSummary.stSummary) result.stSegments = leadSummary.stSummary;
-    if(leadSummary.tSummary) result.tWaves = leadSummary.tSummary;
-    if(leadSummary.stSummary && !isMeaningful(result.inferiorAnalysis + result.anteriorSeptalAnalysis + result.lateralAnalysis + result.reciprocalChanges)) {
-      result.inferiorAnalysis = result.inferiorAnalysis || 'See lead review for inferior territory changes.';
-      result.anteriorSeptalAnalysis = result.anteriorSeptalAnalysis || 'See lead review for anterior / septal territory changes.';
-      result.lateralAnalysis = result.lateralAnalysis || 'See lead review for lateral territory changes.';
-      result.reciprocalChanges = result.reciprocalChanges || 'See lead review for reciprocal ST change.';
-    }
-    if(leadSummary.impression && (looksNormalImpression(result.impression) || !isMeaningful(result.impression) || leadSummary.redFlags.length)) result.impression = leadSummary.impression;
-    if(leadSummary.why.length) result.whyInterpretation = uniqueOrdered([...leadSummary.why, ...result.whyInterpretation]).slice(0,8);
-    if(leadSummary.redFlags.length) result.redFlags = uniqueOrdered([...leadSummary.redFlags, ...result.redFlags]).slice(0,6);
-    if(leadSummary.differentials.length) result.differentials = uniqueOrdered([...leadSummary.differentials, ...result.differentials]).slice(0,5);
-    if(leadSummary.action && (!isMeaningful(result.action) || /clinical correlation|compare with prior|review clinically/i.test(result.action))) result.action = leadSummary.action;
-
-    result.limitations = deriveLimitations(result, leadSummary);
     result.whyInterpretation = uniqueOrdered([...(result.primaryFindings || []), ...(result.whyInterpretation || [])]).slice(0,10);
     if(!result.whyInterpretation.length) result.whyInterpretation = buildWhyFallback(result);
-    softenGenericIschaemiaLanguage(result);
-    result.limitations = deriveLimitations(result, leadSummary);
-
+    if(!result.limitations) result.limitations = deriveLimitations(result, null);
     if(!result.copyText) result.copyText = buildFallbackCopy(result);
-    if(!result.confidence) result.confidence = leadSummary.redFlags.length ? 'Cautious high-risk draft' : 'Cautious draft';
-
-    const reviewMap = leadMap(result.leadReview);
-    for(const lead of LEAD_ORDER){
-      const entry = reviewMap[lead];
-      if(entry && entry.st === 'mixed') result.consistencyIssues.push(`${lead}: conflicting ST description`);
-    }
-    if(/inferior/i.test(result.impression) && leadSummary.inferiorElevation.length < 2) result.consistencyIssues.push('Impression says inferior pattern without clear inferior lead support');
-    if(/anter/i.test(result.impression) && leadSummary.anteriorElevation.length < 2) result.consistencyIssues.push('Impression says anterior pattern without clear precordial lead support');
-    if(/lateral/i.test(result.impression) && leadSummary.lateralElevation.length < 2) result.consistencyIssues.push('Impression says lateral pattern without clear lateral lead support');
-    if(result.consistencyIssues.length){
-      result.redFlags = uniqueOrdered([...result.redFlags, 'internal lead-pattern inconsistency']).slice(0,6);
-      result.whyInterpretation = uniqueOrdered([...result.whyInterpretation, ...result.consistencyIssues]).slice(0,10);
-    }
-    result.copyText = buildFallbackCopy(result);
+    if(!result.confidence) result.confidence = 'Cautious draft';
     return result;
   }
 
@@ -16196,7 +16225,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_523_release.html; source=hospital_at_home_v12_36_523_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_524_release.html; source=hospital_at_home_v12_36_524_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
