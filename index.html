@@ -12194,7 +12194,7 @@ initBpOverlay();
   function shouldUseGeminiThinkingConfig(model){ return /^gemini-3(\.1)?/i.test(String(model || '').trim()); }
   function getEcgThinkingLevel(model){
     const name = String(model || '').trim();
-    if(/^gemini-3\.1-pro-preview$/i.test(name)) return 'low';
+    if(/^gemini-3\.1-pro-preview$/i.test(name)) return 'high';
     return '';
   }
   function tightenRateText(rate){
