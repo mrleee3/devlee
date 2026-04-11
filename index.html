@@ -2682,7 +2682,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_511_release.html</div><div>Source: hospital_at_home_v12_36_511_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_512_release.html</div><div>Source: hospital_at_home_v12_36_512_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -7566,6 +7566,53 @@ function getMedicationReferencePayload(index){
     referenceMeta: resolved
   };
 }
+let medContextAnchorEl=null;
+function clearMedicationContextPosition(){
+  const menu=$('medContextMenu');
+  if(!menu) return;
+  menu.style.removeProperty('--patient-context-left');
+  menu.style.removeProperty('--patient-context-top');
+  menu.style.removeProperty('--patient-context-origin-x');
+  menu.style.removeProperty('--patient-context-origin-y');
+  menu.dataset.positioned='';
+}
+function positionMedicationContextMenu(anchorEl){
+  const menu=$('medContextMenu');
+  if(!menu) return;
+  const headerBottom=Math.max(12, ($('appHeader')?.getBoundingClientRect().bottom || 0) + 8);
+  const viewportWidth=window.innerWidth || document.documentElement.clientWidth || 0;
+  const viewportHeight=window.innerHeight || document.documentElement.clientHeight || 0;
+  const menuWidth=Math.min(280, Math.max(220, viewportWidth - 32));
+  const menuRect=menu.getBoundingClientRect();
+  const menuHeight=Math.min(menuRect.height || 280, Math.max(220, viewportHeight - headerBottom - 24));
+  const rect=anchorEl?.getBoundingClientRect?.();
+  let left=viewportWidth / 2;
+  let top=viewportHeight / 2;
+  let originX='50%';
+  let originY='50%';
+  if(rect){
+    const chipCenter=rect.left + (rect.width / 2);
+    left=Math.max(16 + (menuWidth / 2), Math.min(viewportWidth - 16 - (menuWidth / 2), chipCenter));
+    const spaceBelow=viewportHeight - rect.bottom - 16;
+    const spaceAbove=rect.top - headerBottom - 12;
+    const showBelow=spaceBelow >= menuHeight || spaceBelow >= spaceAbove;
+    if(showBelow){
+      top=Math.min(viewportHeight - 16 - (menuHeight / 2), rect.bottom + 12 + (menuHeight / 2));
+      originY='0%';
+    }else{
+      top=Math.max(headerBottom + (menuHeight / 2), rect.top - 12 - (menuHeight / 2));
+      originY='100%';
+    }
+    const horizontalOffset=chipCenter - left;
+    const originPercent=Math.max(14, Math.min(86, 50 + ((horizontalOffset / Math.max(1, menuWidth / 2)) * 50)));
+    originX=`${originPercent}%`;
+  }
+  menu.style.setProperty('--patient-context-left', `${Math.round(left)}px`);
+  menu.style.setProperty('--patient-context-top', `${Math.round(top)}px`);
+  menu.style.setProperty('--patient-context-origin-x', originX);
+  menu.style.setProperty('--patient-context-origin-y', originY);
+  menu.dataset.positioned='1';
+}
 function closeMedicationContextMenu(force, reason){
   if(!force && Date.now()<medContextIgnoreCloseUntil){
     addMedicationDebugLog(`Ignored medication action-sheet close (${reason||'guard active'})`);
@@ -7573,8 +7620,11 @@ function closeMedicationContextMenu(force, reason){
   }
   const backdrop=$('medContextBackdrop');
   const menu=$('medContextMenu');
+  document.body.classList.remove('med-context-open');
   if(backdrop) hideMedicationOverlayElement(backdrop);
   if(menu) hideMedicationOverlayElement(menu);
+  clearMedicationContextPosition();
+  medContextAnchorEl=null;
   medContextIndex=null;
   addMedicationDebugLog(`Closed medication action sheet${reason?` (${reason})`:''}`);
 }
@@ -7605,11 +7655,12 @@ function logMedicationReferenceViewerState(label){
   }catch(_e){}
   addMedicationDebugLog(`${label}: hidden=${modal.classList.contains('hidden')} show=${modal.classList.contains('show')} opacity=${getComputedStyle(modal).opacity}${rectInfo}`);
 }
-function openMedicationContextMenu(index){
+function openMedicationContextMenu(index, anchorEl){
   medContextIgnoreCloseUntil=Date.now()+550;
   const payload=getMedicationReferencePayload(index);
   if(!payload) return;
   medContextIndex=index;
+  medContextAnchorEl=anchorEl || null;
   const backdrop=$('medContextBackdrop');
   const menu=$('medContextMenu');
   const title=$('medContextTitle');
@@ -7620,10 +7671,20 @@ function openMedicationContextMenu(index){
   if(subtitle) subtitle.textContent=payload.subtitle || 'Medication actions';
   setMedicationContextButtonState(bnfBtn, payload.canLookup && !!payload.urls.bnf, payload.urls.bnf);
   setMedicationContextButtonState(medicinesBtn, payload.canLookup && !!payload.urls.medicines, payload.urls.medicines);
+  document.body.classList.add('med-context-open');
   if(backdrop) showMedicationOverlayElement(backdrop);
-  if(menu) showMedicationOverlayElement(menu);
+  if(menu){
+    showMedicationOverlayElement(menu);
+    positionMedicationContextMenu(anchorEl || null);
+    requestAnimationFrame(()=>{
+      positionMedicationContextMenu(anchorEl || null);
+      menu.classList.add('show');
+    });
+  }
   addMedicationDebugLog(`Opened medication action sheet for ${payload.lookupName || payload.title || 'medication'}`);
 }
+window.addEventListener('resize', ()=>{ if(medContextIndex!==null && medContextAnchorEl) positionMedicationContextMenu(medContextAnchorEl); });
+window.addEventListener('orientationchange', ()=>{ if(medContextIndex!==null && medContextAnchorEl) setTimeout(()=>positionMedicationContextMenu(medContextAnchorEl), 80); });
 function closeMedicationReferenceViewer(force, reason){
   if(!force && Date.now()<medReferenceIgnoreCloseUntil){
     addMedicationDebugLog(`Ignored medication reference close (${reason||'guard active'})`);
@@ -9685,8 +9746,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_511_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_511_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_512_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_512_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11155,30 +11216,42 @@ document.addEventListener("DOMContentLoaded",function(){
   $("medsCollapsedSummary").addEventListener("click",e=>{const chip=e.target.closest("[data-med-index]"); if(!chip) return; if(Date.now()<suppressMedSummaryClickUntil) return; openMedFromSummary(Number(chip.dataset.medIndex));});
   (()=>{
     const summary=$("medsCollapsedSummary");
-    let pressTimer=null,startX=0,startY=0,activeChip=null;
+    let pressTimer=null,pressFeedbackTimer=null,startX=0,startY=0,activeChip=null;
     const clearSelection=()=>{ const sel=window.getSelection&&window.getSelection(); if(sel&&sel.removeAllRanges){ try{ sel.removeAllRanges(); }catch(_){} } };
-    const clearPress=()=>{ if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } if(activeChip){ activeChip.classList.remove('med-summary-chip-longpress'); } activeChip=null; };
+    const clearPress=()=>{
+      if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; }
+      if(pressFeedbackTimer){ clearTimeout(pressFeedbackTimer); pressFeedbackTimer=null; }
+      if(activeChip){ activeChip.classList.remove('med-summary-chip-longpress','med-summary-chip-pressing'); }
+      activeChip=null;
+    };
     const begin=e=>{
       const chip=e.target.closest('[data-med-index]');
-      if(!chip) return;
+      if(!chip || e.target.closest('.med-summary-chip-delete')) return;
       clearSelection();
       const point=e.touches?e.touches[0]:e;
       startX=point.clientX; startY=point.clientY;
       clearPress();
       activeChip=chip;
+      pressFeedbackTimer=setTimeout(()=>{
+        if(!activeChip) return;
+        activeChip.classList.add('med-summary-chip-pressing');
+        if(typeof triggerLongPressHaptic==='function') triggerLongPressHaptic([8]);
+      },110);
       pressTimer=setTimeout(()=>{
         clearSelection();
         suppressMedSummaryClickUntil=Date.now()+700;
-        if(typeof triggerLongPressHaptic==='function') triggerLongPressHaptic([12,30,12]);
-        if(activeChip) activeChip.classList.remove('med-summary-chip-longpress');
-        openMedicationContextMenu(Number(chip.dataset.medIndex));
-      },420);
+        if(typeof triggerLongPressHaptic==='function') triggerLongPressHaptic([12,24,12]);
+        const anchor=activeChip;
+        if(anchor) anchor.classList.remove('med-summary-chip-longpress','med-summary-chip-pressing');
+        openMedicationContextMenu(Number(chip.dataset.medIndex), anchor || chip);
+        clearPress();
+      },620);
       chip.classList.add('med-summary-chip-longpress');
     };
     const move=e=>{
-      if(!pressTimer || !activeChip) return;
+      if((!pressTimer && !pressFeedbackTimer) || !activeChip) return;
       const point=e.touches?e.touches[0]:e;
-      if(Math.abs(point.clientX-startX)>14 || Math.abs(point.clientY-startY)>14) clearPress();
+      if(Math.abs(point.clientX-startX)>10 || Math.abs(point.clientY-startY)>10) clearPress();
     };
     const end=()=>{ clearPress(); clearSelection(); };
     summary.addEventListener('touchstart',begin,{passive:true});
@@ -11189,8 +11262,9 @@ document.addEventListener("DOMContentLoaded",function(){
     summary.addEventListener('touchcancel',end);
     summary.addEventListener('mouseup',end);
     summary.addEventListener('mouseleave',end);
+    summary.addEventListener('selectstart',e=>{ if(e.target.closest('[data-med-index]')) e.preventDefault(); });
     summary.addEventListener('contextmenu',e=>{ if(e.target.closest('[data-med-index]')) e.preventDefault(); });
-    document.addEventListener('selectionchange',()=>{ if(pressTimer) clearSelection(); });
+    document.addEventListener('selectionchange',()=>{ if(pressTimer || pressFeedbackTimer) clearSelection(); });
     document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeMedicationContextMenu(false,'escape'); closeMedicationReferenceViewer(false,'escape'); } });
   })();
   $("medsToggleText").onclick=toggleMedsCollapse;
@@ -15897,7 +15971,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_511_release.html; source=hospital_at_home_v12_36_511_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_512_release.html; source=hospital_at_home_v12_36_512_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
