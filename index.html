@@ -2716,7 +2716,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_543_release.html</div><div>Source: hospital_at_home_v12_36_543_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_544_release.html</div><div>Source: hospital_at_home_v12_36_544_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -2864,7 +2864,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 <div class="options-page-panel hidden" data-options-page="clinicalreview">
 <div class="card options-subpage-card">
-<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>Clinical review</h3><div class="tiny muted">Examination presets</div></div></div>
+<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>Clinical review</h3><div class="tiny muted">Examination and PMH presets</div></div></div>
 <div class="options-section-body" id="optionsSectionClinicalReview"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Customise the examination chips shown in the findings overlay. One line = one chip. Blank lines are ignored and duplicate lines are removed automatically.</div>
 <div class="clinical-review-presets-grid">
 <div class="clinical-review-preset-card"><label for="examPresetGeneralInput">General</label><textarea id="examPresetGeneralInput" placeholder="One chip per line"></textarea></div>
@@ -2878,7 +2878,22 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <button class="primary fullwidth" id="saveClinicalReviewSettingsBtn" type="button">Save examination presets</button>
 <button class="fullwidth" id="restoreExamPresetsBtn" type="button">Restore defaults</button>
 </div>
-<div class="clinical-review-preset-help" id="clinicalReviewSettingsStatus"></div></div>
+<div class="clinical-review-preset-help" id="clinicalReviewSettingsStatus"></div>
+
+<div class="tiny muted" style="margin-top:18px;margin-bottom:10px">Customise the PMH chips shown in the PMH preset overlay. Add one condition at a time below, then tap a chip to remove it. The Recent section still updates automatically from use.</div>
+<div class="clinical-review-preset-card">
+<label for="pmhPresetAddInput">PMH chips</label>
+<div style="display:flex;gap:10px;align-items:center">
+<input id="pmhPresetAddInput" type="text" placeholder="Add condition" autocapitalize="words" enterkeyhint="done" />
+<button class="clinical-tools-btn" id="addPmhPresetBtn" type="button">Add</button>
+</div>
+<div class="exam-findings-chip-row" id="pmhPresetSettingsChips"></div>
+</div>
+<div class="clinical-review-presets-grid" style="margin-top:12px">
+<button class="primary fullwidth" id="savePmhPresetSettingsBtn" type="button">Save PMH presets</button>
+<button class="fullwidth" id="restorePmhPresetsBtn" type="button">Restore defaults</button>
+</div>
+<div class="clinical-review-preset-help" id="pmhPresetSettingsStatus"></div></div>
 </div>
 </div>
 
@@ -9849,8 +9864,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_543_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_543_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_544_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_544_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11151,7 +11166,7 @@ document.addEventListener("DOMContentLoaded",function(){
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 1100);
   }
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
-  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -11548,6 +11563,17 @@ document.addEventListener("DOMContentLoaded",function(){
     const restored=restoreDefaultClinicalReviewSettings(true);
     if(restored) renderExamFindingsPresets();
   });
+  $("addPmhPresetBtn")?.addEventListener('click', addPmhPresetSetting);
+  $("pmhPresetAddInput")?.addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault(); addPmhPresetSetting();}});
+  $("pmhPresetSettingsChips")?.addEventListener('click', handlePmhPresetSettingsClick);
+  $("savePmhPresetSettingsBtn")?.addEventListener('click',()=>{
+    savePmhPresetSettings(true);
+    renderPmhPresets();
+  });
+  $("restorePmhPresetsBtn")?.addEventListener('click',()=>{
+    const restored=restoreDefaultPmhPresetSettings(true);
+    if(restored) renderPmhPresets();
+  });
   $("saveGraphSettingsBtn").onclick=()=>{
     if($("graphClientIdInput").readOnly){
       setGraphSettingsLocked(false);
@@ -11586,11 +11612,64 @@ const PMH_DEFAULT_RECENT=Object.freeze([
 const PMH_OTHER_PRESETS=Object.freeze([
   'AAA','B12 deficiency',"Barrett's",'Bipolar disorder','Bladder ca','BPH','Breast ca','Bronchiectasis','Cervical ca','Chronic liver disease','Coeliac disease','Colorectal ca','Diverticular disease','DVT','Endometrial ca','Gallstones','Glaucoma','Gout','Hearing impairment','Hepatitis B','Hepatitis C','IBD','Learning disability','Leukaemia','Lung ca','Lymphoma','MDS','Melanoma','MGUS','Migraine','Multiple sclerosis','Myeloma','NAFLD','Neuropathy','Oesophagogastric ca','Osteoporosis','Ovarian ca','PAD','Pancreatic ca','Peptic ulcer disease','PMR','Previous malignancy','Prostate ca','Psoriasis','RA','Recurrent cellulitis','Renal stones','Schizophrenia','Seizure disorder','Valvular heart disease','Venous insufficiency','Visual impairment'
 ]);
+const PMH_PRESET_CATALOG_STORAGE_KEY='hahPmhPresetCatalogV1';
 const PMH_PRESET_RECENT_STORAGE_KEY='hahPmhPresetRecentV1';
 const PMH_PRESET_USE_COUNTS_STORAGE_KEY='hahPmhPresetUseCountsV1';
 const PMH_RECENT_LIMIT=PMH_DEFAULT_RECENT.length;
 const PMH_PROMOTION_MIN_USES=6;
-const PMH_ALL_PRESETS=Object.freeze(Array.from(new Map([...PMH_DEFAULT_RECENT, ...PMH_OTHER_PRESETS].map(item=>[String(item).toLowerCase(), item])).values()));
+const PMH_DEFAULT_ALL_PRESETS=Object.freeze(Array.from(new Map([...PMH_DEFAULT_RECENT, ...PMH_OTHER_PRESETS].map(item=>[String(item).toLowerCase(), item])).values()));
+function sanitisePmhPresetCatalog(raw){
+  const source=Array.isArray(raw)?raw:(raw&&Array.isArray(raw.allPresets)?raw.allPresets:[]);
+  const seen=new Set();
+  const cleaned=source.map(normalisePmhPresetLine).filter(item=>{
+    if(!item) return false;
+    const key=item.toLowerCase();
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  return cleaned.length?cleaned:PMH_DEFAULT_ALL_PRESETS.slice();
+}
+function defaultPmhPresetCatalog(){return {allPresets:PMH_DEFAULT_ALL_PRESETS.slice()};}
+function loadPmhPresetCatalog(){
+  try{
+    const stored=JSON.parse(localStorage.getItem(PMH_PRESET_CATALOG_STORAGE_KEY)||'{}');
+    return {allPresets:sanitisePmhPresetCatalog(stored)};
+  }catch(_e){}
+  return defaultPmhPresetCatalog();
+}
+function savePmhPresetCatalog(items){
+  const catalog={allPresets:sanitisePmhPresetCatalog(Array.isArray(items)?items:(items&&items.allPresets)||[])};
+  try{localStorage.setItem(PMH_PRESET_CATALOG_STORAGE_KEY, JSON.stringify(catalog));}catch(_e){}
+  const validKeys=new Set(catalog.allPresets.map(item=>item.toLowerCase()));
+  const currentRecent=loadPmhPresetRecentList().filter(item=>validKeys.has(String(item||'').toLowerCase()));
+  savePmhPresetRecentList(currentRecent);
+  return catalog;
+}
+function restoreDefaultPmhPresetCatalog(confirmRestore=true){
+  if(confirmRestore && !window.confirm('Restore the default PMH preset chips?')) return false;
+  savePmhPresetCatalog(PMH_DEFAULT_ALL_PRESETS);
+  return true;
+}
+function getConfiguredPmhAllPresets(){return loadPmhPresetCatalog().allPresets||PMH_DEFAULT_ALL_PRESETS.slice();}
+function getConfiguredPmhRecentSeed(){
+  const allPresets=getConfiguredPmhAllPresets();
+  const valid=new Map(allPresets.map(item=>[item.toLowerCase(), item]));
+  const seen=new Set();
+  const recent=[];
+  const limit=Math.min(PMH_RECENT_LIMIT, allPresets.length||PMH_RECENT_LIMIT);
+  const push=(label)=>{
+    const canonical=valid.get(String(label||'').toLowerCase());
+    if(!canonical) return;
+    const key=canonical.toLowerCase();
+    if(seen.has(key) || recent.length>=limit) return;
+    seen.add(key);
+    recent.push(canonical);
+  };
+  PMH_DEFAULT_RECENT.forEach(push);
+  allPresets.forEach(push);
+  return recent;
+}
 
 const SOCIAL_HISTORY_PRESET_GROUPS=Object.freeze({
   'Occupation':[
@@ -11621,16 +11700,16 @@ let pmhPresetsLastFocus=null;
 function scrollExamFindingsToEnd(){const area=$('examFindingsText'); if(!area) return; requestAnimationFrame(()=>{area.scrollTop=area.scrollHeight;});}
 function scrollPmhPresetsToEnd(){const area=$('pmhPresetsText'); if(!area) return; requestAnimationFrame(()=>{area.scrollTop=area.scrollHeight;});}
 function normalisePmhPresetLine(text){return String(text||'').replace(/\r\n/g,'\n').replace(/\s+/g,' ').trim();}
-function getCanonicalPmhPresetLabel(text){const clean=normalisePmhPresetLine(text).toLowerCase(); if(!clean) return ''; const match=PMH_ALL_PRESETS.find(item=>item.toLowerCase()===clean); return match||'';}
+function getCanonicalPmhPresetLabel(text){const clean=normalisePmhPresetLine(text).toLowerCase(); if(!clean) return ''; const match=getConfiguredPmhAllPresets().find(item=>item.toLowerCase()===clean); return match||'';}
 function loadPmhPresetRecentList(){try{const raw=localStorage.getItem(PMH_PRESET_RECENT_STORAGE_KEY); const parsed=JSON.parse(raw||'[]'); if(Array.isArray(parsed)) return parsed.map(normalisePmhPresetLine).filter(Boolean);}catch(_e){} return [];}
 function savePmhPresetRecentList(items){try{localStorage.setItem(PMH_PRESET_RECENT_STORAGE_KEY, JSON.stringify((Array.isArray(items)?items:[]).slice(0, PMH_RECENT_LIMIT)));}catch(_e){}}
-function getPmhPresetRecentList(){const seen=new Set(); const valid=new Map(PMH_ALL_PRESETS.map(item=>[item.toLowerCase(), item])); const recent=[]; const push=(label)=>{const canonical=valid.get(String(label||'').toLowerCase()); if(!canonical) return; const key=canonical.toLowerCase(); if(seen.has(key) || recent.length>=PMH_RECENT_LIMIT) return; seen.add(key); recent.push(canonical);}; loadPmhPresetRecentList().forEach(push); PMH_DEFAULT_RECENT.forEach(push); PMH_ALL_PRESETS.forEach(push); return recent;}
+function getPmhPresetRecentList(){const allPresets=getConfiguredPmhAllPresets(); const seen=new Set(); const valid=new Map(allPresets.map(item=>[item.toLowerCase(), item])); const recent=[]; const limit=Math.min(PMH_RECENT_LIMIT, allPresets.length||PMH_RECENT_LIMIT); const push=(label)=>{const canonical=valid.get(String(label||'').toLowerCase()); if(!canonical) return; const key=canonical.toLowerCase(); if(seen.has(key) || recent.length>=limit) return; seen.add(key); recent.push(canonical);}; loadPmhPresetRecentList().forEach(push); getConfiguredPmhRecentSeed().forEach(push); allPresets.forEach(push); return recent;}
 function loadPmhPresetUseCounts(){try{const raw=localStorage.getItem(PMH_PRESET_USE_COUNTS_STORAGE_KEY); const parsed=JSON.parse(raw||'{}'); if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed)) return parsed;}catch(_e){} return {};}
 function savePmhPresetUseCounts(counts){try{localStorage.setItem(PMH_PRESET_USE_COUNTS_STORAGE_KEY, JSON.stringify(counts&&typeof counts==='object'?counts:{}));}catch(_e){}}
 function getPmhPresetUseCount(text, counts){const canonical=getCanonicalPmhPresetLabel(text); if(!canonical) return 0; const source=(counts&&typeof counts==='object')?counts:loadPmhPresetUseCounts(); const value=Number(source[canonical.toLowerCase()]||0); return Number.isFinite(value)&&value>0?value:0;}
 function recordPmhPresetUse(text){const canonical=getCanonicalPmhPresetLabel(text); if(!canonical) return; const counts=loadPmhPresetUseCounts(); const key=canonical.toLowerCase(); counts[key]=getPmhPresetUseCount(canonical, counts)+1; savePmhPresetUseCounts(counts);}
-function rebalancePmhRecentList(){const recent=getPmhPresetRecentList(); const recentSet=new Set(recent.map(item=>item.toLowerCase())); const counts=loadPmhPresetUseCounts(); const challengers=PMH_ALL_PRESETS.filter(item=>!recentSet.has(item.toLowerCase())).map(item=>({label:item,count:getPmhPresetUseCount(item, counts)})).filter(item=>item.count>=PMH_PROMOTION_MIN_USES).sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label, undefined, {sensitivity:'base'})); if(!challengers.length){savePmhPresetRecentList(recent); return recent;} let lowestIndex=0; let lowestCount=getPmhPresetUseCount(recent[0], counts); for(let i=1;i<recent.length;i+=1){const count=getPmhPresetUseCount(recent[i], counts); if(count<lowestCount){lowestIndex=i; lowestCount=count;}} const challenger=challengers[0]; if(challenger.count>lowestCount){recent.splice(lowestIndex,1,challenger.label); savePmhPresetRecentList(recent); return recent;} savePmhPresetRecentList(recent); return recent;}
-function getPmhPresetGroups(){const recent=rebalancePmhRecentList(); const recentSeen=new Set(recent.map(item=>item.toLowerCase())); const other=PMH_ALL_PRESETS.filter(item=>!recentSeen.has(item.toLowerCase())).slice().sort((a,b)=>a.localeCompare(b, undefined, {sensitivity:'base'})); return {'Recent':recent,'Other A–Z':other};}
+function rebalancePmhRecentList(){const recent=getPmhPresetRecentList(); const allPresets=getConfiguredPmhAllPresets(); const recentSet=new Set(recent.map(item=>item.toLowerCase())); const counts=loadPmhPresetUseCounts(); const challengers=allPresets.filter(item=>!recentSet.has(item.toLowerCase())).map(item=>({label:item,count:getPmhPresetUseCount(item, counts)})).filter(item=>item.count>=PMH_PROMOTION_MIN_USES).sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label, undefined, {sensitivity:'base'})); if(!challengers.length||!recent.length){savePmhPresetRecentList(recent); return recent;} let lowestIndex=0; let lowestCount=getPmhPresetUseCount(recent[0], counts); for(let i=1;i<recent.length;i+=1){const count=getPmhPresetUseCount(recent[i], counts); if(count<lowestCount){lowestIndex=i; lowestCount=count;}} const challenger=challengers[0]; if(challenger.count>lowestCount){recent.splice(lowestIndex,1,challenger.label); savePmhPresetRecentList(recent); return recent;} savePmhPresetRecentList(recent); return recent;}
+function getPmhPresetGroups(){const recent=rebalancePmhRecentList(); const allPresets=getConfiguredPmhAllPresets(); const recentSeen=new Set(recent.map(item=>item.toLowerCase())); const other=allPresets.filter(item=>!recentSeen.has(item.toLowerCase())).slice().sort((a,b)=>a.localeCompare(b, undefined, {sensitivity:'base'})); return {'Recent':recent,'Other A–Z':other};}
 function getPmhPresetLines(text){const seen=new Set(); return String(text||'').replace(/\r\n/g,'\n').split(/\n+/).map(normalisePmhPresetLine).filter(item=>{if(!item) return false; const key=item.toLowerCase(); if(seen.has(key)) return false; seen.add(key); return true;});}
 function setPmhPresetEditorValue(lines){const area=$('pmhPresetsText'); if(!area) return; area.value=(Array.isArray(lines)?lines:getPmhPresetLines(lines)).join('\n'); const end=area.value.length; if(area.setSelectionRange) area.setSelectionRange(end,end); syncPmhPresetChipStates(); scrollPmhPresetsToEnd();}
 function renderPmhPresets(){const wrap=$('pmhPresetsList'); if(!wrap) return; const presetGroups=getPmhPresetGroups(); wrap.innerHTML=Object.entries(presetGroups).map(([group,items])=>`<div class="exam-findings-group"><div class="exam-findings-group-title">${escapeHtml(group)}</div><div class="exam-findings-chip-row">${items.map(item=>`<button class="exam-findings-chip" data-pmh-preset="${escapeHtml(item)}" type="button">${escapeHtml(item)}</button>`).join('')}</div></div>`).join(''); syncPmhPresetChipStates();}
@@ -11642,6 +11721,16 @@ function removePmhPreset(text){const clean=normalisePmhPresetLine(text); if(!cle
 function clearPmhPresets(){const area=$('pmhPresetsText'); if(!area) return; const active=document.activeElement; if(active&&typeof active.blur==='function'&&(active===area||active.tagName==='TEXTAREA'||active.tagName==='INPUT')){try{active.blur();}catch(_e){}} area.value=''; syncPmhPresetChipStates(); scrollPmhPresetsToEnd();}
 function applyPmhPresetsOverlay(){const area=$('pmhPresetsText'); const field=$('pmh'); if(!area||!field) return; field.value=getPmhPresetLines(area.value||'').join('\n'); saveCurrentPatientForm(); saveData('PMH updated'); generateClinicalOutput(); closePmhPresetsOverlay();}
 function handlePmhPresetClick(ev){const btn=ev.target.closest('[data-pmh-preset]'); if(!btn) return; ev.preventDefault(); const label=btn.dataset.pmhPreset||btn.textContent||''; if(btn.classList.contains('active')) removePmhPreset(label); else appendPmhPreset(label);}
+let pmhPresetSettingsDraft=[];
+function setPmhPresetSettingsStatus(msg,isError=false){const el=$('pmhPresetSettingsStatus'); if(!el) return; el.textContent=msg||''; el.style.color=isError?'#b91c1c':'#6b7280';}
+function sortPmhPresetSettingsDraft(){pmhPresetSettingsDraft=Array.from(new Map((Array.isArray(pmhPresetSettingsDraft)?pmhPresetSettingsDraft:[]).map(item=>[normalisePmhPresetLine(item).toLowerCase(), normalisePmhPresetLine(item)])).values()).filter(Boolean).sort((a,b)=>a.localeCompare(b, undefined, {sensitivity:'base'}));}
+function renderPmhPresetSettingsChips(){const wrap=$('pmhPresetSettingsChips'); if(!wrap) return; if(!pmhPresetSettingsDraft.length){wrap.innerHTML='<div class="tiny muted">No PMH chips added.</div>'; return;} wrap.innerHTML=pmhPresetSettingsDraft.map(item=>`<button class="exam-findings-chip" data-pmh-settings-chip="${escapeHtml(item)}" type="button" aria-label="Remove ${escapeHtml(item)}">${escapeHtml(item)} <span aria-hidden="true">×</span></button>`).join('');}
+function fillPmhPresetSettingsUI(){pmhPresetSettingsDraft=getConfiguredPmhAllPresets().slice(); sortPmhPresetSettingsDraft(); const input=$('pmhPresetAddInput'); if(input) input.value=''; renderPmhPresetSettingsChips();}
+function addPmhPresetSetting(){const input=$('pmhPresetAddInput'); if(!input) return; const clean=normalisePmhPresetLine(input.value); if(!clean){setPmhPresetSettingsStatus('Enter a condition to add.', true); return;} if(pmhPresetSettingsDraft.some(item=>item.toLowerCase()===clean.toLowerCase())){setPmhPresetSettingsStatus('That PMH chip is already in the list.', true); input.value=''; return;} pmhPresetSettingsDraft.push(clean); sortPmhPresetSettingsDraft(); renderPmhPresetSettingsChips(); input.value=''; setPmhPresetSettingsStatus('PMH chip added. Save to keep this change.');}
+function removePmhPresetSetting(text){const clean=normalisePmhPresetLine(text); if(!clean) return; const next=pmhPresetSettingsDraft.filter(item=>item.toLowerCase()!==clean.toLowerCase()); if(next.length===pmhPresetSettingsDraft.length) return; pmhPresetSettingsDraft=next; renderPmhPresetSettingsChips(); setPmhPresetSettingsStatus('PMH chip removed. Save to keep this change.');}
+function savePmhPresetSettings(showMsg=true){savePmhPresetCatalog(pmhPresetSettingsDraft); fillPmhPresetSettingsUI(); if(showMsg) setPmhPresetSettingsStatus('PMH presets saved on this device.'); return true;}
+function restoreDefaultPmhPresetSettings(confirmRestore=true){const restored=restoreDefaultPmhPresetCatalog(confirmRestore); if(!restored) return false; fillPmhPresetSettingsUI(); setPmhPresetSettingsStatus('Default PMH presets restored.'); return true;}
+function handlePmhPresetSettingsClick(ev){const btn=ev.target.closest('[data-pmh-settings-chip]'); if(!btn) return; ev.preventDefault(); removePmhPresetSetting(btn.dataset.pmhSettingsChip||btn.textContent||'');}
 
 function scrollSocialHistoryPresetsToEnd(){const area=$('socialHistoryPresetsText'); if(!area) return; requestAnimationFrame(()=>{area.scrollTop=area.scrollHeight;});}
 function normaliseSocialHistoryPresetLine(text){return String(text||'').replace(/\r\n/g,'\n').replace(/\s+/g,' ').trim();}
@@ -16554,7 +16643,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_543_release.html; source=hospital_at_home_v12_36_543_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_544_release.html; source=hospital_at_home_v12_36_544_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
