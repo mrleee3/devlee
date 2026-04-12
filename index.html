@@ -12509,7 +12509,7 @@ Use the following schema:
   function shouldUseGeminiThinkingConfig(model){ return /^gemini-3(\.1)?/i.test(String(model || '').trim()); }
   function getEcgThinkingLevel(model){
     const name = String(model || '').trim();
-    if(/^gemini-3\.1-pro-preview$/i.test(name)) return 'high';
+    if(/^gemini-3\.1-pro-preview$/i.test(name)) return 'medium';
     return '';
   }
   function tightenRateText(rate){
@@ -13403,7 +13403,7 @@ Use the following schema:
       });
     }catch(err){
       const reason = String(err?.geminiFinishReason || '').toUpperCase();
-      if(reason === 'MAX_TOKENS') throw new Error('Gemini output was cut off before the ECG JSON finished. Try a tighter crop.');
+      if(reason === 'MAX_TOKENS') throw new Error('Gemini output was cut off before the ECG JSON finished. The thinking budget may have been too large for this image — try again, as a second attempt often succeeds.');
       if(reason === 'MALFORMED_RESPONSE') throw new Error('Gemini returned malformed ECG JSON. Try a tighter crop or clearer screenshot.');
       throw err;
     }
@@ -13427,7 +13427,7 @@ Use the following schema:
       model: getEcgRequestModel(),
       imageParts: imageBundle.analysisImages,
       schema: ECG_ASSIST_SCHEMA,
-      maxTokens: 6000,
+      maxTokens: 8000,
       mediaResolution: 'MEDIA_RESOLUTION_HIGH',
       thinkingLevel: getEcgThinkingLevel(getEcgRequestModel()),
       system: `${contextPreamble || ''}${ECG_STRICT_PROMPT}
