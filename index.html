@@ -2707,10 +2707,10 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <button class="options-nav-row" data-open-options-page="security" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Security</span><span class="options-nav-subtitle">PIN, Face ID / Touch ID, wrong-PIN sound</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="nhsmail" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">NHSmail address</span><span class="options-nav-subtitle">Used by Email to NHSmail in reviews</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="onedrive" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">OneDrive handover (beta)</span><span class="options-nav-subtitle">Workbook link, sign-in and import</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
-<button class="options-nav-row" data-open-options-page="aiscan" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">AI scan tools (beta)</span><span class="options-nav-subtitle">Groq for blister / IV, digitizer + Claude for ECG</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
+<button class="options-nav-row" data-open-options-page="aiscan" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">AI scan tools (beta)</span><span class="options-nav-subtitle">Groq for blister / IV, digitizer + Claude for ECG</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG Assist log</span><span class="options-nav-subtitle">Analysis history and debug info</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="deepgram" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Deepgram dictation (beta)</span><span class="options-nav-subtitle">API key, formatting and dictation options</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="patientlist" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Patient list</span><span class="options-nav-subtitle">Choose and reorder card details</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="clinicalreview" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Clinical review</span><span class="options-nav-subtitle">Examination presets</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
-<button class="options-nav-row" data-open-options-page="medlinkdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Medication link debug</span><span class="options-nav-subtitle">Recent long-press / link events for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
+<button class="options-nav-row" data-open-options-page="medlinkdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Medication link debug</span><span class="options-nav-subtitle">Recent long-press / link events for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG analysis log</span><span class="options-nav-subtitle">Last 10 analyses for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 </div>
 </div>
 <div class="card">
@@ -2804,6 +2804,16 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 
+<div class="options-page-panel hidden" data-options-page="ecgdebug">
+<div class="card options-subpage-card">
+<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>ECG Assist log</h3><div class="tiny muted">Analysis history and debug info</div></div></div>
+<div class="options-section-body" id="optionsSectionEcgDebug">
+<div class="ecg-debug-toolbar"><button id="ecgDebugCopyBtn" type="button">Copy log</button><button class="danger" id="ecgDebugClearBtn" type="button">Clear log</button></div>
+<div id="ecgDebugLogList"></div>
+</div>
+</div>
+</div>
+
 <div class="options-page-panel hidden" data-options-page="deepgram">
 <div class="card options-subpage-card">
 <div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>Deepgram dictation (beta)</h3><div class="tiny muted">API key, formatting and dictation options</div></div></div>
@@ -2878,6 +2888,12 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="options-section-body" id="optionsSectionMedLinkDebug"><div class="tiny muted" id="medLinkDebugStatus" style="margin-top:4px;margin-bottom:10px">No recent medication-link events yet.</div>
 <div class="top-actions" style="margin-top:0;margin-bottom:10px"><button class="fullwidth" id="copyMedLinkDebugBtn" type="button">Copy debug log</button><button class="fullwidth" id="clearMedLinkDebugBtn" type="button">Clear</button></div>
 <div class="tiny muted" id="medLinkDebugLog">No recent medication-link events yet.</div></div>
+</div>
+</div>
+<div class="options-page-panel hidden" data-options-page="ecgdebug">
+<div class="card options-subpage-card">
+<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>ECG analysis log</h3><div class="tiny muted">Last 10 analyses · session only</div></div></div>
+<div class="options-section-body"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Records each analysis attempt — steps completed, model used, errors, and result summary. Cleared when the app is closed.</div><div class="top-actions" style="margin-top:0;margin-bottom:12px"><button class="fullwidth" id="ecgDebugCopyBtn" type="button">Copy log</button><button class="fullwidth" id="ecgDebugClearBtn" type="button">Clear</button></div><div id="ecgDebugLogList" style="display:flex;flex-direction:column;gap:10px"><div class="ecg-debug-empty">No ECG analyses recorded in this session.</div></div></div>
 </div>
 </div>
 </section>
@@ -12453,6 +12469,11 @@ Use the following schema:
   };
 
   let state = { mode:'scan', dataUrl:'', result:null, busy:false, patientId:'', pendingUploadFile:null };
+  const ECG_DEBUG_LOG_KEY = 'hah_ecg_debug_log';
+  const ECG_DEBUG_MAX = 30;
+  let _ecgLastCallMeta = null;
+  let ecgDebugLog = [];
+  try{ const _r=localStorage.getItem(ECG_DEBUG_LOG_KEY); if(_r) ecgDebugLog=JSON.parse(_r); }catch(_e){ ecgDebugLog=[]; }
   let bound = false;
 
   function cleanText(value){ return String(value || '').replace(/\s+/g,' ').trim(); }
@@ -13202,6 +13223,7 @@ Use the following schema:
   }
 
   async function callGeminiStructuredOnce({ apiKey, model, system, userText, imageUrl, imageParts, schema, maxTokens, mediaResolution, thinkingLevel }){
+    const _t0 = Date.now();
     const parts = [{ text: userText }];
     const structuredImageParts = Array.isArray(imageParts) && imageParts.length
       ? imageParts
@@ -13249,6 +13271,13 @@ Use the following schema:
       err.geminiFinishMessage = finishMessage;
       throw err;
     }
+    _ecgLastCallMeta = {
+      httpStatus: res.status,
+      durationMs: Date.now() - _t0,
+      finishReason: finishReason || '',
+      inputTokens: data?.usageMetadata?.promptTokenCount ?? null,
+      outputTokens: data?.usageMetadata?.candidatesTokenCount ?? null,
+    };
     try{ return parseGeminiJsonText(rawText); }
     catch(_e){
       const preview = cleanText(rawText).slice(0,180);
@@ -13711,29 +13740,88 @@ Return only JSON matching the schema. Use UK spelling.`,
   }
   function closeOverlay(){ const overlay=$('ecgAssistOverlay'); if(!overlay) return; overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); document.body.classList.remove('ecg-assist-open'); }
 
+  function renderEcgDebugLog(){
+    const list=$('ecgDebugLogList'); if(!list) return;
+    if(!ecgDebugLog.length){ list.innerHTML='<div class="ecg-debug-empty">No ECG analyses recorded in this session.</div>'; return; }
+    list.innerHTML=ecgDebugLog.map(entry=>{
+      const t=new Date(entry.ts);
+      const timeStr=t.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' · '+t.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'});
+      const ok=!entry.error;
+      const presetShort=entry.preset?entry.preset.split('—')[0].trim().split('/')[0].trim():'Unspecified';
+      const contextLine=[entry.patientLabel,entry.medCount?`${entry.medCount} med${entry.medCount!==1?'s':''}`:null].filter(Boolean).join(' · ');
+      const stepsHtml=(entry.steps||[]).map(s=>`<div class="ecg-debug-step"><span class="ecg-debug-icon ${s.ok?'ok':'fail'}">${s.ok?'✓':'✗'}</span><span class="ecg-debug-step-text"><strong>${escapeHtml(s.label)}</strong>${s.detail?' — '+escapeHtml(s.detail):''}</span></div>`).join('');
+      return `<div class="ecg-debug-entry"><div class="ecg-debug-head"><span class="ecg-debug-time">${timeStr}</span><span class="ecg-debug-tag">${escapeHtml(entry.mode)}</span><span class="ecg-debug-tag">${escapeHtml(presetShort)}</span><span class="ecg-debug-badge ${ok?'ok':'fail'}">${ok?'OK':'FAILED'}</span></div>${contextLine?`<div class="ecg-debug-meta">${escapeHtml(contextLine)}</div>`:''}<div class="ecg-debug-steps">${stepsHtml}</div>${entry.error?`<div class="ecg-debug-error">${escapeHtml(entry.error)}${entry.httpStatus?` [HTTP ${entry.httpStatus}]`:''}</div>`:''}${entry.finishReason?`<div class="ecg-debug-meta">Finish reason: ${escapeHtml(entry.finishReason)}</div>`:''} ${entry.impression?`<div class="ecg-debug-impression">${escapeHtml(entry.impression.slice(0,160))}${entry.impression.length>160?'…':''}</div>`:''}${(entry.flags&&entry.flags.length)?`<div class="ecg-debug-flags">⚑ ${entry.flags.map(f=>escapeHtml(f)).join(' · ')}</div>`:''}</div>`;
+    }).join('');
+  }
+  function formatEcgDebugLogText(){
+    if(!ecgDebugLog.length) return 'No ECG analyses recorded.';
+    return ecgDebugLog.map((e,i)=>{
+      const t=new Date(e.ts);
+      const ts=t.toLocaleTimeString('en-GB')+' '+t.toLocaleDateString('en-GB');
+      return [
+        `--- Entry ${i+1}: ${ts} ---`,
+        `Mode: ${e.mode} | Preset: ${e.preset||'Unspecified'}`,
+        e.patientLabel?`Patient: ${e.patientLabel} | Meds: ${e.medCount}`:null,
+        ...(e.steps||[]).map(s=>`  ${s.ok?'✓':'✗'} ${s.label}${s.detail?': '+s.detail:''}`),
+        e.error?`ERROR: ${e.error}`:null,
+        e.httpStatus?`HTTP status: ${e.httpStatus}`:null,
+        e.finishReason?`Finish reason: ${e.finishReason}`:null,
+        e.impression?`Impression: ${e.impression}`:null,
+        (e.flags&&e.flags.length)?`Flags: ${e.flags.join(', ')}`:null,
+      ].filter(l=>l!=null).join('\n');
+    }).join('\n\n');
+  }
+
   async function runAssist(file){
     const geminiKey = getGeminiApiKeySafe();
     if(!geminiKey){ setStatus('Please add your Gemini API key in Options (AI scan tools).',true); return; }
+    const logEntry={
+      ts:Date.now(), mode:state.mode,
+      preset:(()=>{ const el=document.querySelector('#ecgContextPresets .exam-findings-chip.active'); return el?cleanText(el.getAttribute('data-preset')||''):''; })(),
+      patientLabel:null, medCount:0,
+      steps:[], error:null, httpStatus:null, finishReason:null,
+      inputTokens:null, outputTokens:null, impression:'', flags:[]
+    };
+    const _lp=patients&&currentPatient?patients[currentPatient]:null;
+    if(_lp){
+      const _lparts=[]; if(_lp.sex==='M') _lparts.push('Male'); else if(_lp.sex==='F') _lparts.push('Female'); if(_lp.age) _lparts.push(`age ${_lp.age}`);
+      logEntry.patientLabel=_lparts.join(', ')||null;
+      const _lf=_lp.form||{}; logEntry.medCount=((_lf.medEntries||[]).length+(_lf.ivEntries||[]).length);
+    }
     state.busy=true;
     try{
       setStatus('Preparing ECG image…');
       let imageBundle = await buildEcgImageBundle(file, false);
       state.dataUrl = imageBundle.previewDataUrl;
       render();
+      const _b64=(imageBundle.previewDataUrl||'').split(',')[1]||'';
+      logEntry.steps.push({label:'Image prep',ok:true,detail:`~${Math.round(_b64.length*0.75/1024)}KB JPEG`});
 
+      _ecgLastCallMeta = null;
       setStatus('Analysing ECG with Gemini…');
       const contextParts = buildEcgClinicalContext();
       const contextPreamble = buildEcgContextPreamble(contextParts);
-      const result = await requestGeminiEcgDraft({ apiKey: geminiKey, imageBundle, contextPreamble });
-
-      state.result = result;
-      render();
-
-      const flags=Array.from(new Set([...(state.result.redFlags||[]),...safetyFlags(state.result)]));
-      setStatus(flags.length ? 'Review carefully — potential high-risk ECG pattern flagged.' : 'Review the structured ECG draft below, then copy or insert it.');
+      const _model=getEcgRequestModel();
+      try{
+        const result = await requestGeminiEcgDraft({ apiKey: geminiKey, imageBundle, contextPreamble });
+        const _lc=(result.leadReview||[]).filter(e=>e.st!=='unclear'||e.t!=='unclear'||e.q!=='unclear'||cleanText(e.note||'')).length;
+        if(_ecgLastCallMeta){ logEntry.httpStatus=_ecgLastCallMeta.httpStatus; logEntry.finishReason=_ecgLastCallMeta.finishReason||logEntry.finishReason; logEntry.inputTokens=_ecgLastCallMeta.inputTokens; logEntry.outputTokens=_ecgLastCallMeta.outputTokens; }
+        logEntry.steps.push({label:'Gemini lead draft',ok:true,detail:`model: ${_model}`});
+        logEntry.steps.push({label:'Parse & normalise',ok:true,detail:`${_lc}/12 leads · confidence: ${result.confidence||'—'}`});
+        logEntry.impression=cleanText(result.impression||'');
+        logEntry.flags=result.redFlags||[];
+        state.result = result;
+        render();
+        const flags=Array.from(new Set([...(state.result.redFlags||[]),...safetyFlags(state.result)]));
+        setStatus(flags.length ? 'Review carefully — potential high-risk ECG pattern flagged.' : 'Review the structured ECG draft below, then copy or insert it.');
+      }catch(apiErr){
+        logEntry.steps.push({label:'Gemini lead draft',ok:false,detail:`model: ${_model}`});
+        throw apiErr;
+      }
     }catch(err){
       console.error(err);
       const message=String(err&&err.message||'').trim()||'ECG scan failed.';
+      logEntry.error=message; logEntry.httpStatus=err.httpStatus||null; logEntry.finishReason=err.geminiFinishReason||null;
       if(isGeminiTransportFailure(err)){
         setStatus('Could not reach Gemini from this browser just now. Check connection, API key, and model access, then try again.', true);
       }else{
@@ -13741,6 +13829,10 @@ Return only JSON matching the schema. Use UK spelling.`,
       }
     }finally{
       state.busy=false;
+      ecgDebugLog.unshift(logEntry);
+      if(ecgDebugLog.length>ECG_DEBUG_MAX) ecgDebugLog.length=ECG_DEBUG_MAX;
+      try{ localStorage.setItem(ECG_DEBUG_LOG_KEY, JSON.stringify(ecgDebugLog)); }catch(_e){}
+      renderEcgDebugLog();
     }
   }
 
@@ -13815,11 +13907,14 @@ Return only JSON matching the schema. Use UK spelling.`,
     $('ecgAssistCopyText')&&$('ecgAssistCopyText').addEventListener('input',()=>{ if(!state.result) state.result=normaliseResult({}); state.result.copyText=$('ecgAssistCopyText').value||''; });
     $('ecgContextPresets')&&$('ecgContextPresets').addEventListener('pointerdown',e=>{ if(e.target.closest('.exam-findings-chip')) e.preventDefault(); });
     $('ecgContextPresets')&&$('ecgContextPresets').addEventListener('click',e=>{ const pill=e.target.closest('.exam-findings-chip'); if(!pill) return; document.querySelectorAll('#ecgContextPresets .exam-findings-chip').forEach(p=>p.classList.remove('active')); pill.classList.add('active'); });
+    $('ecgDebugCopyBtn')&&$('ecgDebugCopyBtn').addEventListener('click',async()=>{ const text=formatEcgDebugLogText(); try{ await navigator.clipboard.writeText(text); }catch(_e){ console.log(text); alert('Clipboard blocked — log printed to browser console.'); } });
+    $('ecgDebugClearBtn')&&$('ecgDebugClearBtn').addEventListener('click',()=>{ ecgDebugLog=[]; try{ localStorage.removeItem(ECG_DEBUG_LOG_KEY); }catch(_e){} renderEcgDebugLog(); });
     document.addEventListener('paste',onPaste);
     document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&isOpen()) closeOverlay(); });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind,{once:true});
   else bind();
+  setTimeout(renderEcgDebugLog, 0);
 })();
 
 </script><script>
