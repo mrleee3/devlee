@@ -2411,8 +2411,9 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
   flex:0 0 auto;
 }
 
-/* v12_36_549 patient list metrics strip + contextual status rail */
-.patient-metrics-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 12px}.patient-metric-card{position:relative;overflow:hidden;min-height:78px;padding:12px 12px 11px;border-radius:18px;background:#e8f1ff;border:1px solid rgba(10,132,255,.08);box-shadow:none;display:flex;flex-direction:column;justify-content:space-between;gap:8px}.patient-metric-card::before,.patient-metric-card::after{display:none!important}.patient-metric-value{font-size:31px;line-height:.92;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"ss01" 1;color:#0f172a}.patient-metric-label{font-size:11px;line-height:1.2;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#475467;white-space:nowrap}.patient-status-card{padding:10px 12px;margin-bottom:12px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,250,252,.96));border:1px solid rgba(226,232,240,.95);box-shadow:0 8px 18px rgba(15,23,42,.06)}.patient-status-rail{display:flex;align-items:center;gap:10px;min-height:26px}.patient-status-rail .status-chip{padding:6px 10px;font-size:11px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;transition:background .18s ease,color .18s ease,transform .18s ease}.patient-status-copy{flex:1;min-width:0;font-size:13px;line-height:1.35;font-weight:700;color:#334155;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:transform .22s ease,opacity .22s ease}.patient-status-copy.status-updated{transform:translateX(4px);opacity:.88}.patient-status-rail[data-tone="saved"] .status-chip{background:#ecfdf3;color:#047857}.patient-status-rail[data-tone="sync"] .status-chip{background:#eef2ff;color:#4338ca}.patient-status-rail[data-tone="action"] .status-chip{background:#eff6ff;color:#1d4ed8}.patient-status-rail[data-tone="alert"] .status-chip{background:#fef2f2;color:#b91c1c}.patient-status-rail[data-tone="undo"] .status-chip{background:#f5f3ff;color:#6d28d9}.patient-status-rail .mini-btn{padding:8px 12px;font-size:12px;font-weight:800;border-radius:11px;background:#f3f4f6;color:#111827;white-space:nowrap;flex:0 0 auto}.patient-status-rail .mini-btn.hidden{display:none!important}.patient-status-rail .mini-btn:active{transform:translateY(1px)}@media (max-width:420px){.patient-metrics-strip{gap:8px}.patient-metric-card{min-height:74px;padding:11px 10px 10px;border-radius:17px}.patient-metric-value{font-size:28px}.patient-metric-label{font-size:10.5px}.patient-status-card{padding:9px 11px}.patient-status-copy{font-size:12.5px}}
+/* v12_36_550 patient list metrics strip + inline helper status */
+.patient-helper-line{display:flex;align-items:center;min-height:24px;gap:8px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.patient-helper-default{display:inline;min-width:0;overflow:hidden;text-overflow:ellipsis}.patient-helper-status{display:inline-flex;align-items:center;gap:8px;min-width:0;max-width:100%}.patient-helper-status.hidden{display:none!important}.patient-helper-pill{display:inline-flex;align-items:center;justify-content:center;min-height:20px;padding:0 8px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;line-height:1;border:1px solid transparent;flex:0 0 auto}.patient-helper-copy{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:#667085}.patient-helper-copy.status-updated{opacity:.88}.patient-helper-undo{flex:0 0 auto;padding:0;border:none;background:none;color:#0a84ff;font-size:12px;font-weight:800;line-height:1.1}.patient-helper-undo.hidden{display:none!important}.patient-helper-undo:active{transform:translateY(1px)}
+.patient-metrics-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 12px}.patient-metric-card{position:relative;overflow:hidden;min-height:78px;padding:12px 12px 11px;border-radius:18px;background:#f8fafc;border:1px solid rgba(148,163,184,.18);box-shadow:none;display:flex;flex-direction:column;justify-content:space-between;gap:8px;transition:background .18s ease,border-color .18s ease,color .18s ease}.patient-metric-value{font-size:31px;line-height:.92;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"ss01" 1;color:#0f172a}.patient-metric-label{font-size:11px;line-height:1.2;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#475467;white-space:nowrap}.patient-metric-card.is-good{background:#ecfdf3;border-color:#bbf7d0}.patient-metric-card.is-good .patient-metric-value{color:#166534}.patient-metric-card.is-good .patient-metric-label{color:#15803d}.patient-metric-card.is-bad{background:#fef2f2;border-color:#fecaca}.patient-metric-card.is-bad .patient-metric-value{color:#b42318}.patient-metric-card.is-bad .patient-metric-label{color:#b42318}.patient-metric-card.is-neutral{background:#f8fafc;border-color:rgba(148,163,184,.18)}.patient-metric-card.is-neutral .patient-metric-value{color:#0f172a}.patient-metric-card.is-neutral .patient-metric-label{color:#475467}.patient-helper-status[data-tone="saved"] .patient-helper-pill,.patient-helper-status[data-tone="action"] .patient-helper-pill{background:#ecfdf3;border-color:#bbf7d0;color:#15803d}.patient-helper-status[data-tone="sync"] .patient-helper-pill{background:#eef4ff;border-color:#c7d7fe;color:#3559e0}.patient-helper-status[data-tone="alert"] .patient-helper-pill{background:#fef2f2;border-color:#fecaca;color:#b42318}.patient-helper-status[data-tone="undo"] .patient-helper-pill{background:#f5f3ff;border-color:#ddd6fe;color:#6d28d9}@media (max-width:420px){.patient-helper-line{gap:6px}.patient-helper-pill{font-size:10px;padding:0 7px}.patient-helper-copy{font-size:12.5px}.patient-helper-undo{font-size:11.5px}.patient-metrics-strip{gap:8px}.patient-metric-card{min-height:74px;padding:11px 10px 10px;border-radius:17px}.patient-metric-value{font-size:28px}.patient-metric-label{font-size:10.5px}}
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -2626,7 +2627,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
 <div class="section-header" style="margin-bottom:12px;">
-<div><h3 style="margin-bottom:2px">Patients</h3><div class="tiny muted" style="margin-top:10px;">Pull to refresh list</div></div>
+<div><h3 style="margin-bottom:2px">Patients</h3><div class="tiny muted patient-helper-line" id="patientStatusHelper" style="margin-top:10px;"><span class="patient-helper-default" id="patientRefreshText">Pull to refresh list</span><span class="patient-helper-status hidden" id="patientInlineStatus"><span class="status-chip patient-helper-pill" id="saveStatusPill"></span><span aria-live="polite" class="patient-helper-copy" id="saveStatus"></span><button class="patient-helper-undo hidden" id="undoBtn" type="button">Undo</button></span></div></div>
 <div class="top-actions" style="margin:0">
 <div class="sort-wrap">
 <button aria-expanded="false" aria-haspopup="menu" aria-label="Sort patients" class="refresh-btn sort-btn" id="sortPatientsBtn" title="Sort patients">
@@ -2671,15 +2672,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="patient-metric-label">Avg LoS</div>
 </div>
 </div>
-<div class="underlay-stable-card hidden" id="patientStatusShell">
-<div class="card patient-status-card">
-<div class="patient-status-rail" id="patientStatusRail" data-tone="live">
-<span class="status-chip" id="saveStatusPill">Live</span>
-<div aria-live="polite" class="patient-status-copy" id="saveStatus">Autosave on</div>
-<button class="mini-btn hidden" id="undoBtn" type="button">Undo</button>
-</div>
-</div>
-</div>
+
 <div id="patientList"></div>
 </div>
 </section>
@@ -2809,7 +2802,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_549_release.html</div><div>Source: hospital_at_home_v12_36_549_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_550_release.html</div><div>Source: hospital_at_home_v12_36_550_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3329,23 +3322,26 @@ function deriveStatusRailTone(message){
   if(/fail|error|not found|unable|missing/.test(text)) return {tone:'alert',pill:'Alert',allowUndo:false};
   if(/importing|signing|syncing|signed in|onedrive|imported/.test(text)) return {tone:'sync',pill:'Sync',allowUndo:false};
   if(/undone|undo/.test(text)) return {tone:'undo',pill:'Undo',allowUndo:false};
-  if(/deleted|restored|reset|added|updated|changed|set|removed|inserted|sent/.test(text)) return {tone:'action',pill:'Saved',allowUndo};
-  return {tone:'saved',pill:'Saved',allowUndo:false};
+  if(/deleted|restored|reset|added|updated|changed|set|removed|inserted|sent/.test(text)) return {tone:'action',pill:'Update',allowUndo};
+  return {tone:'saved',pill:'Update',allowUndo:false};
 }
 function clearSaveStatus(){
-  const shell=$("patientStatusShell");
+  const defaultEl=$("patientRefreshText");
+  const statusEl=$("patientInlineStatus");
   const textEl=$("saveStatus");
   const pillEl=$("saveStatusPill");
-  const rail=$("patientStatusRail");
   clearTimeout(setSaveStatus.timer);
   patientStatusMeta={visible:false,allowUndo:false};
-  if(shell) shell.classList.add('hidden');
+  if(defaultEl) defaultEl.classList.remove('hidden');
+  if(statusEl){
+    statusEl.classList.add('hidden');
+    delete statusEl.dataset.tone;
+  }
   if(textEl){
     textEl.textContent='';
     textEl.classList.remove('status-updated');
   }
   if(pillEl) pillEl.textContent='';
-  if(rail) rail.dataset.tone='saved';
   updateUndoButton();
 }
 function setSaveStatus(t){
@@ -3354,15 +3350,18 @@ function setSaveStatus(t){
     clearSaveStatus();
     return;
   }
-  const shell=$("patientStatusShell");
-  const rail=$("patientStatusRail");
+  const defaultEl=$("patientRefreshText");
+  const statusEl=$("patientInlineStatus");
   const textEl=$("saveStatus");
   const pillEl=$("saveStatusPill");
   const statusMeta=deriveStatusRailTone(message);
   patientStatusMeta={visible:true,allowUndo:!!statusMeta.allowUndo};
-  if(shell) shell.classList.remove('hidden');
+  if(defaultEl) defaultEl.classList.add('hidden');
+  if(statusEl){
+    statusEl.classList.remove('hidden');
+    statusEl.dataset.tone=statusMeta.tone;
+  }
   if(textEl) textEl.textContent=message;
-  if(rail) rail.dataset.tone=statusMeta.tone;
   if(pillEl) pillEl.textContent=statusMeta.pill;
   updateUndoButton();
   if(textEl){
@@ -3409,9 +3408,24 @@ function getPatientListMetrics(){
 }
 function updatePatientMetricsUI(){
   const metrics=getPatientListMetrics();
+  const cardStates=[
+    {className:'patient-metric-caseload', isGood:metrics.caseload < 30},
+    {className:'patient-metric-longstay', isGood:metrics.over7d === 0},
+    {className:'patient-metric-average', isGood:metrics.avgLos == null ? null : metrics.avgLos < 7}
+  ];
   if($("patientMetricCaseload")) $("patientMetricCaseload").textContent=String(metrics.caseload);
   if($("patientMetricLongstay")) $("patientMetricLongstay").textContent=String(metrics.over7d);
   if($("patientMetricAverage")) $("patientMetricAverage").textContent=metrics.avgLosDisplay;
+  cardStates.forEach(({className,isGood})=>{
+    const card=document.querySelector('.'+className);
+    if(!card) return;
+    card.classList.remove('is-good','is-bad','is-neutral');
+    if(isGood === null){
+      card.classList.add('is-neutral');
+    } else {
+      card.classList.add(isGood ? 'is-good' : 'is-bad');
+    }
+  });
 }
 function clearAppLocalData(){
   const keysToRemove=[
@@ -10073,8 +10087,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_549_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_549_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_550_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_550_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -16918,7 +16932,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_549_release.html; source=hospital_at_home_v12_36_549_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_550_release.html; source=hospital_at_home_v12_36_550_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
