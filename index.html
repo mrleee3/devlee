@@ -2414,10 +2414,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 /* v12_36_551 patient list metrics strip + inline helper status */
 .patient-helper-line{display:block;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.patient-helper-default{display:inline;min-width:0;overflow:hidden;text-overflow:ellipsis}.patient-helper-status{display:inline-flex;align-items:center;gap:8px;min-width:0;max-width:100%;vertical-align:top}.patient-helper-status.hidden{display:none!important}.patient-helper-copy{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:#667085}.patient-helper-copy.status-updated{opacity:.88}.patient-helper-status[data-tone="saved"] .patient-helper-copy,.patient-helper-status[data-tone="action"] .patient-helper-copy,.patient-helper-status[data-tone="sync"] .patient-helper-copy,.patient-helper-status[data-tone="undo"] .patient-helper-copy{color:#0a84ff}.patient-helper-status[data-tone="alert"] .patient-helper-copy{color:#b42318}.patient-helper-undo{flex:0 0 auto;padding:0;border:none;background:none;color:#0a84ff;font-size:12px;font-weight:800;line-height:1.1}.patient-helper-undo.hidden{display:none!important}.patient-helper-undo:active{transform:translateY(1px)}
 .patient-metrics-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 12px}.patient-metric-card{position:relative;overflow:hidden;min-height:78px;padding:12px 12px 11px;border-radius:18px;background:#f8fafc;border:1px solid rgba(148,163,184,.18);box-shadow:none;display:flex;flex-direction:column;justify-content:space-between;gap:8px;transition:background .18s ease,border-color .18s ease,color .18s ease}.patient-metric-value{font-size:31px;line-height:.92;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"ss01" 1;color:#0f172a}.patient-metric-label{font-size:11px;line-height:1.2;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#475467;white-space:nowrap}.patient-metric-card.is-good{background:#ecfdf3;border-color:#bbf7d0}.patient-metric-card.is-good .patient-metric-value{color:#166534}.patient-metric-card.is-good .patient-metric-label{color:#15803d}.patient-metric-card.is-bad{background:#fef2f2;border-color:#fecaca}.patient-metric-card.is-bad .patient-metric-value{color:#b42318}.patient-metric-card.is-bad .patient-metric-label{color:#b42318}.patient-metric-card.is-neutral{background:#f8fafc;border-color:rgba(148,163,184,.18)}.patient-metric-card.is-neutral .patient-metric-value{color:#0f172a}.patient-metric-card.is-neutral .patient-metric-label{color:#475467}@media (max-width:420px){.patient-helper-line{display:block}.patient-helper-copy{font-size:12.5px}.patient-helper-undo{font-size:11.5px}.patient-metrics-strip{gap:8px}.patient-metric-card{min-height:74px;padding:11px 10px 10px;border-radius:17px}.patient-metric-value{font-size:28px}.patient-metric-label{font-size:10.5px}}
-.patient-metric-card.metric-button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.patient-metric-card.metric-button:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(10,132,255,.16)}
-.patient-metric-card.metric-button:active{transform:translateY(1px)}
-.caseload-trend-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}.caseload-trend-meta.hidden{display:none!important}.caseload-trend-stat{padding:10px 12px;border-radius:16px;background:#f8fafc;border:1px solid #e5e7eb}.caseload-trend-stat-label{font-size:11px;line-height:1.2;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#667085}.caseload-trend-stat-value{margin-top:4px;font-size:20px;line-height:1;font-weight:800;letter-spacing:-.03em;color:#101828;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}.caseload-trend-stat-note{margin-top:2px;font-size:11px;line-height:1.2;color:#667085}.caseload-trend-estimate-note{margin-top:12px;font-size:12px;line-height:1.4;color:#667085}.caseload-trend-empty-note{margin-top:12px;font-size:12px;line-height:1.4;color:#667085}@media (max-width:420px){.caseload-trend-meta{gap:8px}.caseload-trend-stat{padding:9px 10px;border-radius:14px}.caseload-trend-stat-value{font-size:18px}}
 
 </style>
 <style>
@@ -2664,7 +2660,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 <div class="patient-metrics-strip" id="patientMetricsStrip" aria-label="Patient list metrics">
-<div aria-label="Show caseload trend" class="patient-metric-card patient-metric-caseload metric-button" id="patientMetricCaseloadCard" role="button" tabindex="0">
+<div class="patient-metric-card patient-metric-caseload">
 <div class="patient-metric-value" id="patientMetricCaseload">0</div>
 <div class="patient-metric-label">Caseload</div>
 </div>
@@ -2807,7 +2803,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_553_release.html</div><div>Source: hospital_at_home_v12_36_553_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_554_release.html</div><div>Source: hospital_at_home_v12_36_554_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3146,21 +3142,6 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="weight-history-empty hidden" id="bloodTrendEmpty">No values available for this analyte yet.</div>
 </div>
 </div>
-<div class="weight-history-backdrop hidden" id="caseloadTrendBackdrop"></div>
-<div aria-labelledby="caseloadTrendTitle" aria-modal="true" class="weight-history-modal hidden" id="caseloadTrendModal" role="dialog">
-<button aria-label="Close caseload trend" class="weight-history-close" id="caseloadTrendCloseBtn" type="button">×</button>
-<div class="weight-history-head">
-<div class="weight-history-title" id="caseloadTrendTitle">Caseload trend</div>
-<div class="weight-history-subtitle" id="caseloadTrendSubtitle">Daily caseload over time</div>
-</div>
-<div class="weight-history-body">
-<div class="weight-history-summary" id="caseloadTrendSummary">No caseload trend available yet.</div>
-<div class="caseload-trend-meta hidden" id="caseloadTrendMeta"></div>
-<div class="weight-history-chart hidden" id="caseloadTrendChart"></div>
-<div class="weight-history-table hidden" id="caseloadTrendTable"></div>
-<div class="weight-history-empty hidden" id="caseloadTrendEmpty">No caseload trend available yet.</div>
-</div>
-</div>
 <div aria-hidden="true" class="bm-overlay hidden" id="bpOverlay">
 <div class="bm-overlay-backdrop" id="bpOverlayBackdrop"></div>
 <div aria-labelledby="bpOverlayTitle" aria-modal="true" class="card bm-overlay-modal" id="bpOverlayModal" role="dialog">
@@ -3282,7 +3263,7 @@ const MED_DOSE_PRESETS={"Amlodipine":["2.5mg","5mg","10mg"],"Amoxicillin":["500m
 const MED_FREQUENCY_PRESETS={"Amlodipine":["OD"],"Amoxicillin":["OD","BD","TDS","QDS"],"Apixaban":["BD"],"Aspirin":["OD"],"Atorvastatin":["ON"],"Azithromycin":["OD"],"Bendroflumethiazide":["OD"],"Bisacodyl":["ON"],"Bisoprolol":["OD"],"Budesonide nebules":["BD","QDS"],"Bumetanide":["OD","BD"],"Carbocisteine":["TDS","QDS"],"Cefalexin":["BD","TDS","QDS"],"Cetirizine":["OD"],"Clarithromycin":["BD"],"Clopidogrel":["OD"],"Codeine":["OD","BD","TDS","QDS"],"Co-codamol":["OD","BD","TDS","QDS"],"Cyclizine":["TDS"],"Dexamethasone":["OD","BD"],"Diazepam":["OD","BD","TDS","ON"],"Digoxin":["OD"],"Diltiazem":["BD","TDS","OD"],"Docusate":["BD","TDS"],"Doxycycline":["OD","BD"],"Empagliflozin":["OD"],"Esomeprazole":["OD","BD"],"Ferrous sulfate":["OD","BD","TDS"],"Flucloxacillin":["QDS"],"Fluconazole":["OD"],"Folic acid":["OD"],"Frusemide":["OD","BD","alternate days"],"Furosemide":["OD","BD","alternate days"],"Gabapentin":["OD","BD","TDS"],"Gliclazide":["OD","BD"],"Haloperidol":["OD","BD","TDS","ON"],"Hydrocortisone":["OD","BD","TDS"],"Hyoscine butylbromide":["QDS"],"Ibuprofen":["OD","BD","TDS"],"Ipratropium nebules":["QDS"],"Lactulose":["BD","TDS"],"Lansoprazole":["OD","BD"],"Levetiracetam":["BD"],"Levothyroxine":["OD"],"Loperamide":["OD","BD","TDS","QDS"],"Lorazepam":["OD","BD","TDS","ON"],"Losartan":["OD"],"Metformin":["OD","BD","TDS"],"Metoclopramide":["TDS"],"Metolazone":["OD","alternate days"],"Mirtazapine":["ON"],"Morphine sulfate":["OD","BD","QDS"],"Movicol":["OD","BD","TDS"],"Nitrofurantoin":["BD","QDS"],"Omeprazole":["OD","BD"],"Ondansetron":["BD","TDS"],"Oxycodone":["BD","QDS"],"Paracetamol":["OD","BD","TDS","QDS"],"Penicillin V":["QDS"],"Phenoxymethylpenicillin":["QDS"],"Prednisolone":["OD"],"Pregabalin":["BD","TDS"],"Ramipril":["OD","BD"],"Rivaroxaban":["OD","BD"],"Salbutamol inhaler":["OD","BD","TDS","QDS"],"Salbutamol nebules":["OD","BD","TDS","QDS"],"Senna":["ON","BD"],"Sertraline":["OD"],"Simvastatin":["ON"],"Spironolactone":["OD"],"Tamsulosin":["ON"],"Temazepam":["ON"],"Torasemide":["OD","BD"],"Trimethoprim":["BD"],"Warfarin":["OD"],"Zopiclone":["ON"],"Adcal-D3":["OD","BD"],"Alendronic acid":["weekly"],"Allopurinol":["OD"],"Amiodarone":["OD","BD"],"Budesonide inhaler":["BD"],"Calcichew D3":["OD","BD"],"Colecalciferol":["OD","weekly","monthly"],"Dapagliflozin":["OD"],"Donepezil":["ON"],"Ferrous fumarate":["OD","BD","TDS"],"Fusidic acid cream":["BD","TDS"],"Glyceryl trinitrate spray":["PRN"],"Indapamide":["OD"],"Ipratropium inhaler":["QDS"],"Isosorbide mononitrate":["OD","BD"],"Linagliptin":["OD"],"Macrogol":["OD","BD","TDS"],"Magnesium oxide":["OD","BD","TDS"],"Mebeverine":["TDS"],"Metronidazole":["TDS"],"Nystatin":["QDS"],"Pravastatin":["ON"],"Prochlorperazine":["TDS"],"Quetiapine":["OD","BD","ON"],"Sitagliptin":["OD"],"Valproate":["BD","TDS"],"Co-amoxiclav":["TDS"]};
 const DEFAULT_MED_FREQUENCIES=["OD","BD","TDS","QDS","ON"];
 const defaultPatients={"1":{"name":"Mrs Law-test","age":82,"sex":"F","summary":"LRTI • IV ceftriaxone day 1","acuity":"AMBER","acuityClass":"amber","referralSource":"GSTT","timestamp":"","doa":"10 Mar 2026","listDetails":"Obs: T 37.8°C, BP 116/68, HR 94, SpO₂ 94% RA, RR 20","form":{"rr":"20","spo2":"94","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"37.8","bp":"116/68","hr":"94","weight":"64.2","bm":"6.8","hrPulse":"","conscious":"0","confusion":"0","issues":"1. LRTI cough\n2. Poor intake\n3. Pleuritic pain","examination":"Alert and engaging. Mild tachypnoea but speaking in full sentences. Scattered right basal crackles with no wheeze. Warm peripheries and no new oedema.","bloods":"05/04 09:20 | Hb 112 WCC 10.8 Neut 8.6 Plt 272 | Na 133 K+ 4.0 Urea 7.9 Cr 112 eGFR 46 | CRP 64 | Alb 32 ALT 40 ALP 116 Bili 11 CCa 2.20\n04/04 09:10 | Hb 111 WCC 12.4 Neut 10.1 Plt 268 | Na 132 K+ 4.1 Urea 8.4 Cr 118 eGFR 43 | CRP 86 | Alb 31 ALT 42 ALP 118 Bili 12 CCa 2.18\n03/04 08:30 | Hb 109 WCC 14.6 Neut 12.1 Plt 254 | Na 130 K+ 4.3 Urea 9.1 Cr 126 eGFR 38 | CRP 124 | Alb 29 ALT 45 ALP 121 Bili 13 CCa 2.16\n02/04 08:45 | Hb 110 WCC 15.2 Neut 12.9 Plt 248 | Na 129 K+ 4.5 Urea 9.8 Cr 132 eGFR 34 | CRP 148 | Alb 28 ALT 47 ALP 123 Bili 14 CCa 2.15\n01/04 08:15 | Hb 108 WCC 16.8 Neut 14.0 Plt 241 | Na 128 K+ 4.4 Urea 10.4 Cr 139 eGFR 31 | CRP 176 | Alb 27 ALT 49 ALP 126 Bili 15 CCa 2.13","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For fever / pleuritic discomfort"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"ceftriaxone","dose":"2g","serialExpiry":"A4821 / 10/27"}],"plan":"1. Give IV ceftriaxone today.\n2. Encourage fluids and monitor oral intake.\n3. Repeat obs later today and review if worsening breathlessness.","forDischargeSummary":"1. Complete antibiotic course.\n2. Safety-net re worsening breathlessness, fever or confusion.\n3. Consider CXR / hospital review if not improving."}},"2":{"name":"Mr Ree-test","age":76,"sex":"M","summary":"Heart failure • weight / diuresis review","acuity":"GREEN","acuityClass":"green","referralSource":"GP","timestamp":"","doa":"11 Mar 2026","listDetails":"Obs: T 36.6°C, BP 122/70, HR 80, SpO₂ 95% RA, RR 18","form":{"rr":"18","spo2":"95","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.6","bp":"122/70","hr":"80","weight":"83.5","bm":"6.2","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Oedema\n2. Diuresis review\n3. No CP/syncope","examination":"Comfortable at rest. Mild bilateral ankle oedema only. Bibasal crackles minimal and improved from yesterday. JVP not obviously elevated.","bloods":"04/04 08:35 | Hb 124 WCC 6.8 Neut 4.3 Plt 241 | Na 136 K+ 4.9 Urea 10.2 Cr 132 eGFR 46 | CRP 14 | Alb 34 ALT 31 ALP 102 Bili 9 CCa 2.24\n03/04 08:20 | Hb 126 WCC 7.1 Neut 4.8 Plt 236 | Na 138 K+ 4.6 Urea 9.4 Cr 118 eGFR 54 | CRP 18 | Alb 35 ALT 29 ALP 100 Bili 8 CCa 2.25","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Furosemide","dose":"80mg","frequency":"OD","details":"Current oral dose"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue current oral diuretic plan.\n2. Repeat weight and U&E tomorrow.\n3. Escalate if dizziness, hypotension or worsening dyspnoea.","forDischargeSummary":"1. Community HF follow-up.\n2. Repeat renal function in 1 week.\n3. Continue daily weights if possible."}},"3":{"name":"Mrs Coo-test","age":89,"sex":"F","summary":"Delirium • suspected UTI","acuity":"RED","acuityClass":"red","referralSource":"LAS","timestamp":"","doa":"12 Mar 2026","listDetails":"Obs: T 38.4°C, BP 96/54, HR 110, SpO₂ 91% RA, RR 24","form":{"rr":"24","spo2":"91","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"38.4","bp":"96/54","hr":"110","weight":"57.0","bm":"8.9","hrPulse":"","conscious":"0","confusion":"3","issues":"1. Acute delirium\n2. Suspected UTI\n3. Poor intake","examination":"Drowsy but rousable. Disorientated to place and time. Suprapubic tenderness present. No meningism. Peripheral perfusion slightly reduced.","bloods":"04/04 07:55 | Hb 103 WCC 15.9 Neut 13.8 Plt 312 | Na 128 K+ 4.7 Urea 12.4 Cr 156 eGFR 29 | CRP 124 | Alb 28 ALT 38 ALP 97 Bili 13 CCa 2.11\n03/04 08:05 | Hb 106 WCC 13.1 Neut 10.7 Plt 301 | Na 131 K+ 4.5 Urea 10.9 Cr 142 eGFR 34 | CRP 96 | Alb 30 ALT 34 ALP 93 Bili 11 CCa 2.18","medsGiven":false,"medsCollapsed":false,"medsFocusedIndex":null,"medEntries":[],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Senior clinical review today.\n2. Send urine sample if obtainable and check bloods.\n3. Low threshold for hospital conveyance if BP remains low or confusion worsens.","forDischargeSummary":"1. Update family and document escalation plan.\n2. Review culture results when available.\n3. Reassess need for admission if not settling."}},"4":{"name":"Mr Sha-test","age":68,"sex":"M","summary":"Cellulitis • oral step-down review","acuity":"GREEN","acuityClass":"green","referralSource":"PRUH","timestamp":"","doa":"13 Mar 2026","listDetails":"Obs: T 36.9°C, BP 128/74, HR 82, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.9","bp":"128/74","hr":"82","weight":"79.4","bm":"7.1","hrPulse":"","conscious":"0","confusion":"0","issues":"1. L leg cellulitis\n2. Pain improved\n3. Systemically well","examination":"Bright and comfortable. Erythema receding within marker line. Mild warmth only. No fluctuance, crepitus or discharge.","bloods":"03/04 10:20 | Hb 136 WCC 9.4 Neut 6.7 Plt 289 | Na 139 K+ 4.3 Urea 5.6 Cr 84 eGFR 78 | CRP 42 | Alb 37 ALT 24 ALP 88 Bili 8 CCa 2.29\n02/04 09:40 | Hb 134 WCC 11.6 Neut 8.5 Plt 276 | Na 138 K+ 4.2 Urea 5.9 Cr 88 eGFR 74 | CRP 68 | Alb 36 ALT 26 ALP 92 Bili 9 CCa 2.27","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Flucloxacillin","dose":"1g","frequency":"QDS","details":"Day 4 oral step-down"},{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For pain"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue oral flucloxacillin.\n2. Elevate leg and continue emollient / skin care.\n3. Review for discharge if improving again tomorrow.","forDischargeSummary":"1. Complete oral antibiotic course.\n2. Safety-net re spreading erythema, fever or increasing pain."}},"5":{"name":"Mrs Tur-test","age":73,"sex":"F","summary":"COPD exacerbation • oxygen / steroids","acuity":"AMBER","acuityClass":"amber","referralSource":"KCH","timestamp":"","doa":"15 Mar 2026","listDetails":"Obs: T 37.2°C, BP 134/78, HR 92, SpO₂ 90% 1.5L, RR 22","form":{"rr":"22","spo2":"90","oxygen":"2","oxygenFlow":"1.5L","scoreMode":"","temp":"37.2","bp":"134/78","hr":"92","weight":"69.0","bm":"9.8","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Infective COPD\n2. O2 requirement\n3. Wheeze improved","examination":"Mild work of breathing on 1.5L oxygen. Widespread expiratory wheeze with prolonged expiratory phase. No central cyanosis. Able to speak in full sentences.","bloods":"04/04 09:40 | Hb 127 WCC 11.2 Neut 8.6 Plt 255 | Na 134 K+ 4.6 Urea 7.8 Cr 92 eGFR 63 | CRP 58 | Alb 33 ALT 29 ALP 94 Bili 10 CCa 2.21\n03/04 09:05 | Hb 125 WCC 13.4 Neut 10.2 Plt 248 | Na 132 K+ 4.4 Urea 7.1 Cr 88 eGFR 68 | CRP 76 | Alb 31 ALT 33 ALP 96 Bili 11 CCa 2.19","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Prednisolone","dose":"30mg","frequency":"OD","details":"Day 2"},{"name":"Salbutamol nebules","dose":"2.5mg","frequency":"QDS","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue controlled oxygen aiming 88-92%.\n2. Continue rescue medications.\n3. Review later today if increased work of breathing or rising oxygen requirement.","forDischargeSummary":"1. Complete rescue pack course.\n2. Check inhaler technique and smoking status.\n3. COPD nurse follow-up if available."}},"6":{"name":"Mr Doy-test","age":84,"sex":"M","summary":"AKI / renal medication review","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"17 Mar 2026","listDetails":"Obs: T 36.7°C, BP 102/60, HR 94, SpO₂ 96% RA, RR 19","form":{"rr":"19","spo2":"96","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.7","bp":"102/60","hr":"94","weight":"71.0","bm":"5.7","hrPulse":"","conscious":"0","confusion":"0","issues":"1. AKI with worsening renal function\n2. Postural symptoms / likely dehydration\n3. Renally cleared / nephrotoxic medications need review","examination":"Alert and cooperative. Mucous membranes dry. Chest clear and no peripheral oedema. Abdomen soft and non-tender.","bloods":"05/04 08:20 | Hb 116 WCC 7.9 Neut 5.2 Plt 218 | Na 131 K+ 5.6 Urea 17.8 Cr 274 eGFR 20 | CRP 18 | Alb 35 ALT 25 ALP 88 Bili 10 CCa 2.18\n04/04 08:10 | Hb 117 WCC 8.1 Neut 5.4 Plt 222 | Na 130 K+ 5.3 Urea 15.6 Cr 218 eGFR 25 | CRP 21 | Alb 35 ALT 26 ALP 89 Bili 10 CCa 2.17\n03/04 08:00 | Hb 118 WCC 8.5 Neut 5.8 Plt 227 | Na 132 K+ 5.0 Urea 13.9 Cr 176 eGFR 30 | CRP 24 | Alb 35 ALT 26 ALP 90 Bili 10 CCa 2.18\n02/04 08:15 | Hb 119 WCC 8.8 Neut 6.1 Plt 230 | Na 133 K+ 4.7 Urea 11.8 Cr 148 eGFR 37 | CRP 27 | Alb 36 ALT 25 ALP 92 Bili 9 CCa 2.20\n01/04 08:05 | Hb 120 WCC 9.1 Neut 6.3 Plt 234 | Na 134 K+ 4.5 Urea 10.4 Cr 129 eGFR 45 | CRP 31 | Alb 36 ALT 24 ALP 94 Bili 9 CCa 2.21","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Apixaban","dose":"5mg","frequency":"BD","details":"AF usual regular medication"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":"Usual regular medication"},{"name":"Furosemide","dose":"40mg","frequency":"OD","details":"Usual regular medication"},{"name":"Metformin","dose":"500mg","frequency":"BD","details":"Usual regular medication"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"normal saline","dose":"500ml","serialExpiry":"NS284 / 08/27"}],"plan":"1. Give 500 mL normal saline slowly as prescribed and review renally active medicines.\n2. Hold / review metformin, ramipril and diuretic while assessing volume status.\n3. Check apixaban dose / suitability against current Cockcroft–Gault CrCl and repeat renal function tomorrow.","forDischargeSummary":"1. Reintroduce longer-term medicines only when renal function stable.\n2. Recheck renal function and potassium after medication changes.\n3. Safety-net re reduced urine output, vomiting or dizziness."}},"7":{"name":"Mrs Ben-test","age":70,"sex":"F","summary":"Diabetic foot infection • IV co-amoxiclav","acuity":"AMBER","acuityClass":"amber","referralSource":"GSTT","timestamp":"","doa":"19 Mar 2026","listDetails":"Obs: T 37.5°C, BP 118/72, HR 88, SpO₂ 98% RA, RR 18","form":{"rr":"18","spo2":"98","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"37.5","bp":"118/72","hr":"88","weight":"86.4","bm":"12.6","hrPulse":"","conscious":"0","confusion":"0","issues":"1. R diabetic foot\n2. Hyperglycaemia\n3. Podiatry involved","examination":"Systemically well. Dressing dry with no strike-through. Surrounding erythema mild and improving. Foot warm and perfused with no spreading streaking.","bloods":"05/04 09:00 | Hb 122 WCC 9.6 Neut 6.9 Plt 279 | Na 138 K+ 4.6 Urea 8.1 Cr 104 eGFR 56 | CRP 58 | Alb 33 ALT 32 ALP 118 Bili 11 CCa 2.24\n04/04 09:05 | Hb 121 WCC 10.7 Neut 7.8 Plt 274 | Na 137 K+ 4.8 Urea 8.9 Cr 109 eGFR 51 | CRP 74 | Alb 32 ALT 34 ALP 121 Bili 12 CCa 2.23\n03/04 09:15 | Hb 119 WCC 12.8 Neut 9.6 Plt 266 | Na 135 K+ 4.6 Urea 8.2 Cr 102 eGFR 56 | CRP 96 | Alb 31 ALT 36 ALP 124 Bili 13 CCa 2.21\n02/04 09:10 | Hb 118 WCC 14.2 Neut 10.8 Plt 258 | Na 134 K+ 4.7 Urea 7.9 Cr 98 eGFR 59 | CRP 118 | Alb 30 ALT 39 ALP 128 Bili 14 CCa 2.20\n01/04 09:00 | Hb 117 WCC 15.1 Neut 11.6 Plt 251 | Na 133 K+ 4.5 Urea 7.4 Cr 94 eGFR 62 | CRP 146 | Alb 30 ALT 41 ALP 130 Bili 14 CCa 2.18","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For pain"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"co-amoxiclav","dose":"1.2g","serialExpiry":"CA771 / 11/27"}],"plan":"1. Continue IV co-amoxiclav today.\n2. Recheck glucose profile and encourage hydration.\n3. Review with podiatry plan and consider oral step-down if improving.","forDischargeSummary":"1. Podiatry follow-up arranged.\n2. Continue off-loading and dressing plan.\n3. Step down to oral antibiotics when clinically appropriate."}},"8":{"name":"Mr Hug-test","age":91,"sex":"M","summary":"Constipation / frailty review","acuity":"GREEN","acuityClass":"green","referralSource":"RR","timestamp":"","doa":"21 Mar 2026","listDetails":"Obs: T 36.4°C, BP 130/76, HR 76, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.4","bp":"130/76","hr":"76","weight":"61.5","bm":"6.1","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Frailty\n2. Constipation\n3. No red flags","examination":"Well in self and comfortable in chair. Abdomen soft, non-distended and non-tender. Bowel sounds present. Hydration reasonable today.","bloods":"05/04 10:50 | Hb 117 WCC 6.4 Neut 3.9 Plt 223 | Na 139 K+ 4.0 Urea 5.8 Cr 84 eGFR 72 | CRP 6 | Alb 37 ALT 21 ALP 82 Bili 7 CCa 2.29\n04/04 10:35 | Hb 116 WCC 6.8 Neut 4.1 Plt 221 | Na 139 K+ 4.1 Urea 5.9 Cr 86 eGFR 70 | CRP 7 | Alb 37 ALT 21 ALP 83 Bili 7 CCa 2.28\n03/04 10:20 | Hb 116 WCC 7.0 Neut 4.2 Plt 220 | Na 138 K+ 4.1 Urea 6.0 Cr 87 eGFR 69 | CRP 8 | Alb 36 ALT 22 ALP 83 Bili 7 CCa 2.28\n02/04 11:00 | Hb 116 WCC 7.2 Neut 4.4 Plt 219 | Na 138 K+ 4.1 Urea 6.2 Cr 88 eGFR 68 | CRP 9 | Alb 36 ALT 22 ALP 84 Bili 7 CCa 2.27\n01/04 10:40 | Hb 114 WCC 8.0 Neut 5.1 Plt 214 | Na 137 K+ 4.2 Urea 6.8 Cr 92 eGFR 64 | CRP 14 | Alb 35 ALT 24 ALP 86 Bili 8 CCa 2.25","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Movicol","dose":"2 sachets","frequency":"BD","details":""},{"name":"Senna","dose":"15mg","frequency":"ON","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue laxatives and encourage fluids.\n2. Mobilise as able with support.\n3. Review bowel action and abdominal symptoms tomorrow.","forDischargeSummary":"1. Continue bowel regimen short term then titrate down.\n2. Safety-net re pain, vomiting or failure to open bowels."}},"9":{"name":"Mrs Sid-test","age":78,"sex":"F","summary":"Hyponatraemia • possible SIAD / drug review","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"22 Mar 2026","listDetails":"Obs: T 36.5°C, BP 126/72, HR 78, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.5","bp":"126/72","hr":"78","weight":"63.5","bm":"5.9","hrPulse":"","conscious":"0","confusion":"0","sodiumFluidStatus":"euvolaemic","issues":"1. Hyponatraemia\n2. Mild fatigue / reduced appetite\n3. Medication review needed","examination":"Clinically euvolaemic. No oedema, no overt dehydration, chest clear.","bloods":"05/04 09:10 | Hb 121 WCC 6.7 Neut 4.1 Plt 248 | Na 127 K+ 4.1 Urea 4.6 Cr 64 eGFR 81 | CRP 8 | Serum Osm 264 | Urine Osm 542 | Urine Na 52 | TSH 1.6 | Cortisol 468 | Alb 36 ALT 22 ALP 84 Bili 9 CCa 2.24\n04/04 09:00 | Hb 122 WCC 6.9 Neut 4.3 Plt 252 | Na 128 K+ 4.2 Urea 4.8 Cr 66 eGFR 79 | CRP 9 | Serum Osm 266 | Urine Osm 518 | Urine Na 49 | Alb 36 ALT 21 ALP 83 Bili 8 CCa 2.23\n03/04 09:15 | Hb 123 WCC 7.1 Neut 4.5 Plt 256 | Na 130 K+ 4.3 Urea 5.0 Cr 68 eGFR 76 | CRP 11 | Alb 35 ALT 22 ALP 83 Bili 9 CCa 2.22","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Sertraline","dose":"50mg","frequency":"OD","details":"Usual regular medication"},{"name":"Omeprazole","dose":"20mg","frequency":"OD","details":"Usual regular medication"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Review medications that may contribute to hyponatraemia.\n2. Use sodium analysis overlay with current urine studies.\n3. Repeat sodium tomorrow and escalate if symptoms develop.","forDischargeSummary":"1. Continue sodium monitoring until stable.\n2. Review antidepressant / PPI contribution if sodium remains low."}},"10":{"name":"Mr Dry-test","age":83,"sex":"M","summary":"Hyponatraemia • dizziness / likely volume depletion","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"23 Mar 2026","listDetails":"Obs: T 36.4°C, BP 102/58, HR 92, SpO₂ 96% RA, RR 17","form":{"rr":"17","spo2":"96","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.4","bp":"102/58","hr":"92","weight":"72.0","bm":"6.4","hrPulse":"","conscious":"0","confusion":"0","sodiumFluidStatus":"hypovolaemic","issues":"1. Hyponatraemia\n2. Postural dizziness\n3. Likely dehydration / diuretic contribution","examination":"Dry mucous membranes and postural symptoms. No oedema. Clinically looks hypovolaemic.","bloods":"05/04 08:40 | Hb 129 WCC 7.4 Neut 4.8 Plt 231 | Na 126 K+ 3.2 Urea 14.8 Cr 118 eGFR 55 | CRP 7 | Serum Osm 268 | Urine Osm 418 | Urine Na 18 | TSH 2.3 | Cortisol 522 | Alb 35 ALT 24 ALP 88 Bili 10 CCa 2.20\n04/04 08:30 | Hb 130 WCC 7.8 Neut 5.1 Plt 236 | Na 128 K+ 3.4 Urea 12.9 Cr 109 eGFR 60 | CRP 8 | Serum Osm 270 | Urine Osm 392 | Urine Na 16 | Alb 35 ALT 24 ALP 87 Bili 10 CCa 2.21\n03/04 08:20 | Hb 131 WCC 8.0 Neut 5.4 Plt 240 | Na 131 K+ 3.7 Urea 11.2 Cr 101 eGFR 66 | CRP 9 | Alb 36 ALT 23 ALP 86 Bili 9 CCa 2.22","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Bendroflumethiazide","dose":"2.5mg","frequency":"OD","details":"Usual regular medication"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":"Usual regular medication"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Review volume status and contributing medications.\n2. Consider holding thiazide while correcting likely volume depletion.\n3. Repeat sodium and electrolytes after treatment.","forDischargeSummary":"1. Sodium follow-up needed after medication changes.\n2. Safety-net re worsening dizziness, confusion or vomiting."}}};
-let patients={}, currentPatient=null, deletedPatients=[], eventLogEntries=[], patientMetricsHistory=[], undoState=null, detailLoadedForCurrentPatient=false, selectedNewReferral="", selectedNewSex="", editingPatientId=null, patientSortMode="dateImported", patientSortDirection="desc", patientSearchQuery="", patientSearchVisible=false, patientStatusMeta={visible:false,allowUndo:false};
+let patients={}, currentPatient=null, deletedPatients=[], eventLogEntries=[], undoState=null, detailLoadedForCurrentPatient=false, selectedNewReferral="", selectedNewSex="", editingPatientId=null, patientSortMode="dateImported", patientSortDirection="desc", patientSearchQuery="", patientSearchVisible=false, patientStatusMeta={visible:false,allowUndo:false};
 const $=id=>document.getElementById(id), clone=obj=>JSON.parse(JSON.stringify(obj));
 function currentState(){return {patients:clone(patients),deletedPatients:clone(deletedPatients),eventLogEntries:clone(eventLogEntries),currentPatient}}
 function restoreState(state){patients=clone(state.patients||{});deletedPatients=clone(state.deletedPatients||[]);eventLogEntries=clone(state.eventLogEntries||[]);currentPatient=state.currentPatient||Number(Object.keys(patients)[0]||1);detailLoadedForCurrentPatient=false}
@@ -3476,7 +3457,6 @@ function loadData() {
         patients = parsed.patients;
         deletedPatients = parsed.deletedPatients || [];
         eventLogEntries = parsed.eventLogEntries || [];
-        patientMetricsHistory = typeof normalisePatientMetricsHistory === "function" ? normalisePatientMetricsHistory(parsed.patientMetricsHistory) : (Array.isArray(parsed.patientMetricsHistory) ? parsed.patientMetricsHistory : []);
         patientSortMode = parsed.patientSortMode === "az" ? "az" : "dateImported";
         patientSortDirection = parsed.patientSortDirection === "asc" ? "asc" : "desc";
         if (patientSortMode === "az" && !(parsed && parsed.patientSortDirection)) patientSortDirection = "asc";
@@ -3488,7 +3468,7 @@ function loadData() {
         upgradeStoredPatients();
         if (key !== STORAGE_KEY) {
           try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection,patientMetricsHistory}));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));
             localStorage.removeItem(key);
           } catch(e) {}
         }
@@ -3499,7 +3479,6 @@ function loadData() {
   patients = clone(defaultPatients);
   deletedPatients = [];
   eventLogEntries = [];
-  patientMetricsHistory = [];
   currentPatient = 1;
 }
 
@@ -5603,179 +5582,6 @@ function closeBloodTrendModal(){
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
-window.HAH.modules.patientMetricHistory = true;
-
-function localIsoDate(value){
-  const date=value instanceof Date ? value : new Date(value||Date.now());
-  if(!(date instanceof Date) || Number.isNaN(date.getTime())) return '';
-  const y=date.getFullYear();
-  const m=String(date.getMonth()+1).padStart(2,'0');
-  const d=String(date.getDate()).padStart(2,'0');
-  return `${y}-${m}-${d}`;
-}
-function parseLocalIsoDate(text){
-  const m=String(text||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if(!m) return null;
-  const out=new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
-  return Number.isNaN(out.getTime()) ? null : out;
-}
-function normalisePatientMetricsHistory(raw){
-  if(!Array.isArray(raw)) return [];
-  const seen=new Map();
-  raw.forEach(item=>{
-    if(!item || typeof item!=='object') return;
-    const date=localIsoDate(item.date);
-    if(!date) return;
-    const entry={
-      date,
-      caseload:Number.isFinite(Number(item.caseload)) ? Math.max(0, Number(item.caseload)) : 0,
-      over7d:Number.isFinite(Number(item.over7d)) ? Math.max(0, Number(item.over7d)) : 0,
-      avgLos:Number.isFinite(Number(item.avgLos)) ? Number(item.avgLos) : null
-    };
-    seen.set(date, entry);
-  });
-  return Array.from(seen.values()).sort((a,b)=>String(a.date).localeCompare(String(b.date))).slice(-365);
-}
-function capturePatientMetricsSnapshot(atDate=new Date()){
-  if(typeof getPatientListMetrics!=='function') return [];
-  const date=localIsoDate(atDate);
-  if(!date) return [];
-  const metrics=getPatientListMetrics();
-  const next=normalisePatientMetricsHistory(patientMetricsHistory);
-  const entry={date, caseload:metrics.caseload, over7d:metrics.over7d, avgLos:metrics.avgLos==null?null:Number(metrics.avgLos)};
-  const idx=next.findIndex(item=>item.date===date);
-  if(idx>=0) next[idx]=entry; else next.push(entry);
-  patientMetricsHistory=normalisePatientMetricsHistory(next);
-  return patientMetricsHistory;
-}
-
-function persistPatientMetricsHistorySilently(){
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection,patientMetricsHistory}));
-  }catch(_e){}
-}
-
-function formatMetricTrendDate(dateText){
-  const dt=parseLocalIsoDate(dateText);
-  if(dt) return dt.toLocaleDateString([], {day:'2-digit', month:'short'});
-  return String(dateText||'').trim() || 'Unknown date';
-}
-function buildEstimatedCaseloadSeries(days=30){
-  const activePatients=Object.values(patients||{});
-  if(!activePatients.length) return [];
-  const starts=activePatients.map(patientLosDays).filter(v=>Number.isFinite(v)).map(daysAgo=>Math.max(0, Math.floor(Number(daysAgo))));
-  const today=new Date();
-  const series=[];
-  for(let offset=days-1; offset>=0; offset--){
-    const pointDate=new Date(today.getFullYear(), today.getMonth(), today.getDate()-offset);
-    const activeCount=starts.filter(daysAgo=>daysAgo >= offset).length;
-    series.push({date:localIsoDate(pointDate), value:activeCount});
-  }
-  return series.filter((item, idx, arr)=>idx===0 || item.value!==arr[idx-1].value || idx===arr.length-1);
-}
-function getCaseloadTrendSeries(){
-  capturePatientMetricsSnapshot();
-  const recorded=normalisePatientMetricsHistory(patientMetricsHistory).map(item=>({date:item.date, value:Number(item.caseload||0)}));
-  if(recorded.length>=2) return {records:recorded.slice(-30), source:'recorded'};
-  const estimated=buildEstimatedCaseloadSeries(30);
-  if(estimated.length>=2) return {records:estimated, source:'estimated'};
-  if(recorded.length===1) return {records:recorded, source:'recorded'};
-  return {records:[], source:'recorded'};
-}
-function buildCaseloadTrendSvg(records){
-  if(!Array.isArray(records) || !records.length) return '';
-  const width=320, height=124, padX=12, padY=14;
-  const values=records.map(item=>Number(item.value||0));
-  const min=Math.min.apply(null, values);
-  const max=Math.max.apply(null, values);
-  const range=Math.max(max-min, 2);
-  const step=records.length===1 ? 0 : (width-padX*2)/(records.length-1);
-  const points=records.map((item, idx)=>{
-    const x=padX + (records.length===1 ? (width-padX*2)/2 : idx*step);
-    const y=height-padY - (((Number(item.value||0)-min)/range)*(height-padY*2));
-    return {x,y,value:Number(item.value||0),current:idx===records.length-1};
-  });
-  const line=points.map((p,idx)=>`${idx?'L':'M'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
-  const area=`M ${points[0].x.toFixed(1)} ${(height-padY).toFixed(1)} ` + points.map(p=>`L ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') + ` L ${points[points.length-1].x.toFixed(1)} ${(height-padY).toFixed(1)} Z`;
-  const circles=points.map(p=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.current?3.9:3}" fill="${p.current?'#0a84ff':'#94a3b8'}"></circle>`).join('');
-  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Caseload trend"><path d="${area}" fill="rgba(10,132,255,.08)"></path><path d="${line}" fill="none" stroke="#0a84ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>${circles}</svg>`;
-}
-function buildCaseloadTrendSummary(records, source){
-  if(!records.length) return {text:'No caseload trend available yet.', muted:true};
-  if(records.length===1) return {text:`Current caseload ${records[0].value}. Open the app on future days to build the trend.`, muted:false};
-  const latest=records[records.length-1];
-  const baseline=records[0];
-  const delta=Number(latest.value||0)-Number(baseline.value||0);
-  const peak=Math.max.apply(null, records.map(item=>Number(item.value||0)));
-  const direction=delta===0 ? 'Stable' : (delta>0 ? `Up ${delta}` : `Down ${Math.abs(delta)}`);
-  const sourceText=source==='estimated' ? 'Estimated from current active admissions.' : 'Based on daily saved snapshots.';
-  return {text:`${direction} over ${records.length-1} interval${records.length-1===1?'':'s'}. Peak ${peak}. ${sourceText}`, muted:false};
-}
-function renderCaseloadTrendModal(){
-  const title=$('caseloadTrendTitle');
-  const subtitle=$('caseloadTrendSubtitle');
-  const summaryEl=$('caseloadTrendSummary');
-  const metaEl=$('caseloadTrendMeta');
-  const chartEl=$('caseloadTrendChart');
-  const tableEl=$('caseloadTrendTable');
-  const emptyEl=$('caseloadTrendEmpty');
-  const trend=getCaseloadTrendSeries();
-  const records=(trend.records||[]).slice(-30);
-  const source=trend.source||'recorded';
-  if(title) title.textContent='Caseload trend';
-  if(subtitle) subtitle.textContent=source==='estimated' ? 'Estimated from current active admissions' : 'Daily saved snapshots';
-  if(!records.length){
-    if(summaryEl){ summaryEl.textContent='No caseload trend available yet.'; summaryEl.classList.add('muted'); }
-    chartEl?.classList.add('hidden');
-    tableEl?.classList.add('hidden');
-    metaEl?.classList.add('hidden');
-    emptyEl?.classList.remove('hidden');
-    return;
-  }
-  const summary=buildCaseloadTrendSummary(records, source);
-  if(summaryEl){ summaryEl.textContent=summary.text; summaryEl.classList.toggle('muted', !!summary.muted); }
-  const latest=records[records.length-1];
-  const values=records.map(item=>Number(item.value||0));
-  const peak=Math.max.apply(null, values);
-  const low=Math.min.apply(null, values);
-  if(metaEl){
-    metaEl.innerHTML=`<div class="caseload-trend-stat"><div class="caseload-trend-stat-label">Current</div><div class="caseload-trend-stat-value">${escapeHtml(String(latest.value))}</div><div class="caseload-trend-stat-note">${escapeHtml(formatMetricTrendDate(latest.date))}</div></div><div class="caseload-trend-stat"><div class="caseload-trend-stat-label">Peak</div><div class="caseload-trend-stat-value">${escapeHtml(String(peak))}</div><div class="caseload-trend-stat-note">Last ${escapeHtml(String(records.length))} points</div></div><div class="caseload-trend-stat"><div class="caseload-trend-stat-label">Lowest</div><div class="caseload-trend-stat-value">${escapeHtml(String(low))}</div><div class="caseload-trend-stat-note">Last ${escapeHtml(String(records.length))} points</div></div>`;
-    metaEl.classList.remove('hidden');
-  }
-  if(chartEl){
-    chartEl.innerHTML=buildCaseloadTrendSvg(records) + `<div class="weight-history-chart-foot"><span>${escapeHtml(formatMetricTrendDate(records[0].date))}</span><span>${escapeHtml(formatMetricTrendDate(records[records.length-1].date))}</span></div>` + (source==='estimated' ? `<div class="caseload-trend-estimate-note">Estimated using each active patient’s admit date. Daily snapshots will replace this once the app has been opened and saved on future days.</div>` : '');
-    chartEl.classList.remove('hidden');
-  }
-  if(tableEl){
-    tableEl.innerHTML=records.slice().reverse().map((item, idx)=>`<div class="weight-history-row${idx===0?' current':''}"><div class="weight-history-date">${escapeHtml(formatMetricTrendDate(item.date))}${idx===0?' • latest':''}</div><div class="weight-history-value">${escapeHtml(String(item.value))}</div></div>`).join('');
-    tableEl.classList.remove('hidden');
-  }
-  emptyEl?.classList.add('hidden');
-}
-function openCaseloadTrendModal(){
-  renderCaseloadTrendModal();
-  const backdrop=$('caseloadTrendBackdrop');
-  const modal=$('caseloadTrendModal');
-  backdrop?.classList.remove('hidden');
-  modal?.classList.remove('hidden');
-  requestAnimationFrame(()=>{
-    backdrop?.classList.add('show');
-    modal?.classList.add('show');
-  });
-}
-function closeCaseloadTrendModal(){
-  const backdrop=$('caseloadTrendBackdrop');
-  const modal=$('caseloadTrendModal');
-  backdrop?.classList.remove('show');
-  modal?.classList.remove('show');
-  setTimeout(()=>{
-    backdrop?.classList.add('hidden');
-    modal?.classList.add('hidden');
-  },180);
-}
-
-</script><script>
-window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.sync = true;
 // ─── SYNC ────────────────────────────────────────────────────────────────────
 // Simple model: _lastImportedIssues / _lastImportedPlan / _lastImportedBloods track the baseline.
@@ -6450,7 +6256,7 @@ function openWorkbookLink(){
 }
 
 </script><script>
-function saveData(t="Saved locally"){try{if(typeof capturePatientMetricsSnapshot==='function') capturePatientMetricsSnapshot();localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection,patientMetricsHistory}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
+function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
 function nowString(){return new Date().toLocaleString([],{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}
 function hideAll(){["patients","tasks","handover","patientDetail","deletedPage","eventLogPage"].forEach(id=>$(id).classList.add("hidden"))}
 function setPatientViewportMode(active){document.body.classList.toggle("patients-section-active",!!active);document.documentElement.classList.toggle("patients-section-active",!!active)}
@@ -9398,7 +9204,6 @@ function resetToDemo(){
   patients = clone(defaultPatients);
   deletedPatients = [];
   eventLogEntries = [];
-  if(typeof patientMetricsHistory!=="undefined") patientMetricsHistory = [];
   currentPatient = 1;
   detailLoadedForCurrentPatient = false;
   saveData("Reset saved");
@@ -10283,8 +10088,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_553_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_553_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_554_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_554_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11651,7 +11456,7 @@ document.addEventListener("DOMContentLoaded",function(){
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 1100);
   }
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
-  loadData(); if(typeof capturePatientMetricsSnapshot==="function") capturePatientMetricsSnapshot(); if(typeof persistPatientMetricsHistorySilently==="function") persistPatientMetricsHistorySilently(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -11892,9 +11697,6 @@ document.addEventListener("DOMContentLoaded",function(){
   $("weightHistoryBackdrop").onclick=closeWeightHistoryModal;
   if($("bloodTrendCloseBtn")) $("bloodTrendCloseBtn").onclick=closeBloodTrendModal;
   if($("bloodTrendBackdrop")) $("bloodTrendBackdrop").onclick=closeBloodTrendModal;
-  if($("patientMetricCaseloadCard") && typeof openCaseloadTrendModal==="function"){ const openCaseloadTrend=()=>openCaseloadTrendModal(); $("patientMetricCaseloadCard").onclick=openCaseloadTrend; $("patientMetricCaseloadCard").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openCaseloadTrend(); } }); }
-  if($("caseloadTrendCloseBtn") && typeof closeCaseloadTrendModal==="function") $("caseloadTrendCloseBtn").onclick=closeCaseloadTrendModal;
-  if($("caseloadTrendBackdrop") && typeof closeCaseloadTrendModal==="function") $("caseloadTrendBackdrop").onclick=closeCaseloadTrendModal;
   $("addPatientBtn").onclick=()=>toggleAddPatient(true); $("cancelAddBtn").onclick=()=>toggleAddPatient(false); if($("addPatientCloseBtn")) $("addPatientCloseBtn").onclick=()=>toggleAddPatient(false); if($("addPatientBackdrop")) $("addPatientBackdrop").onclick=()=>toggleAddPatient(false); $("saveAddBtn").onclick=addPatient;
   $("resetDemoBtn").onclick=resetToDemo; $("undoBtn").onclick=undoLastChange; $("openDeletedBtn").onclick=()=>showSection("deletedPage"); $("openEventLogBtn").onclick=()=>showSection("eventLogPage"); $("backFromDeletedBtn").onclick=()=>showSection("handover"); $("backFromEventLogBtn").onclick=()=>showSection("handover");
   try{
@@ -12037,7 +11839,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("patientSearchInput").addEventListener('keydown',e=>{ if(e.key==='Escape') closePatientSearch(true); });
   $("patientSearchClearBtn").onclick=()=>{ if(patientSearchQuery.trim()){ handlePatientSearchInput(''); $("patientSearchInput")?.focus(); } else { closePatientSearch(true); } };
   document.addEventListener("click",(e)=>{ if(!e.target.closest(".sort-wrap")) closePatientSortMenu(); });
-  document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") { closeWeightHistoryModal(); if(typeof closeCaseloadTrendModal==="function") closeCaseloadTrendModal(); closeExamFindingsOverlay(); closePmhPresetsOverlay(); closeSocialHistoryPresetsOverlay(); closeAcpOverlay(false); } });
+  document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") { closeWeightHistoryModal(); closeExamFindingsOverlay(); closePmhPresetsOverlay(); closeSocialHistoryPresetsOverlay(); closeAcpOverlay(false); } });
   ['onboardingNhsEmailInput','onboardingGroqKeyInput','onboardingGeminiKeyInput','onboardingDeepgramKeyInput'].forEach(id=>{
     const el=$(id); if(!el) return;
     el.addEventListener('keydown',ev=>{ if(ev.key==='Enter'){ ev.preventDefault(); $('onboardingNextBtn')?.click(); } });
@@ -12137,6 +11939,8 @@ function savePmhPresetCatalog(items){
 function restoreDefaultPmhPresetCatalog(confirmRestore=true){
   if(confirmRestore && !window.confirm('Restore the default PMH preset chips?')) return false;
   savePmhPresetCatalog(PMH_DEFAULT_ALL_PRESETS);
+  savePmhPresetRecentList(getConfiguredPmhRecentSeed());
+  savePmhPresetUseCounts({});
   return true;
 }
 function getConfiguredPmhAllPresets(){return loadPmhPresetCatalog().allPresets||PMH_DEFAULT_ALL_PRESETS.slice();}
@@ -17131,7 +16935,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_553_release.html; source=hospital_at_home_v12_36_553_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_554_release.html; source=hospital_at_home_v12_36_554_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
@@ -17230,7 +17034,7 @@ async function pushCurrentPatientNoteToOneNote(opts={}){
     link.lastSyncedAt=new Date().toISOString();
     link.lastSyncedText=noteText;
     link.error='';
-    try{ localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection,patientMetricsHistory})); }catch(_e){}
+    try{ localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection})); }catch(_e){}
     if(currentPatient===patientId) updateOneNoteUiForCurrentPatient();
   }catch(err){
     if(isOneNotePageMissingError(err)){
