@@ -2417,7 +2417,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 
 /* ── Patient page slide (Step 1) ──────────────────────────────── */
 /* Header bar shifts with the panel using a CSS variable */
-#appHeader{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform}
+#appHeader{position:relative;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}.header-actions{display:flex;flex-direction:column;justify-content:center;align-items:flex-end;flex-shrink:0;align-self:stretch}.app-header-layer{position:relative;padding:0;min-height:inherit}.app-header-layer .header-row{min-height:44px}.app-header-layer-base{position:relative;z-index:1}.app-header-layer-overlay{position:absolute;inset:0;z-index:2;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear),opacity 180ms ease;will-change:transform;pointer-events:none;opacity:0}.app-header-layer-overlay.overlay-active{opacity:1;pointer-events:auto}.app-header-layer-overlay .header-row{padding-left:0}.app-header-layer-overlay.has-back .header-left{padding-left:42px}
 /* Panel open: prep = snap to 100% right, anim = slide to 0 */
 #patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-4px 0 20px rgba(15,23,42,.09)}
 #patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94),box-shadow 360ms ease;will-change:transform}
@@ -2636,7 +2636,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 </div>
-<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2"></div></div><div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-end;flex-shrink:0;align-self:stretch"><button aria-label="Lock app" class="header-lock" id="headerLockBtn" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></header>
+<header id="appHeader"><div class="app-header-layer app-header-layer-base" id="appHeaderBase"><div class="header-row"><div class="header-left"><div><span>Hospital at Home Companion (DEMO)</span><span class="header-age hidden"></span></div><div class="subhead">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden"></div></div><div class="header-actions"><button aria-label="Lock app" class="header-lock" id="headerLockBtn" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></div><div class="app-header-layer app-header-layer-overlay" id="appHeaderOverlay"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2"></div></div><div class="header-actions"><button aria-label="Lock app" class="header-lock" id="headerLockBtnOverlay" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></div></header>
 <section class="container" id="patients">
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
@@ -6531,7 +6531,9 @@ function showSection(id) {
   $("headerPatientMeta2").classList.add("hidden");
   $("headerPatientMeta2").textContent = "";
   $("backBtn").classList.add("hidden");
-  $("appHeader").classList.remove("has-back");
+  if(typeof setPatientHeaderOverlayActive === "function") setPatientHeaderOverlayActive(false);
+  const overlay = typeof getPatientHeaderOverlay === "function" ? getPatientHeaderOverlay() : null;
+  if (overlay) overlay.classList.remove("has-back");
   if (id === "patients") setActive("navPatients");
   if (id === "tasks") setActive("navTasks");
   if (id === "handover") {
@@ -10203,11 +10205,13 @@ function initSecurity(){
     }, {passive:false});
   });
 
-  bindFastPress($('headerLockBtn'), ()=>{
+  const handleHeaderLockPress=()=>{
     if(shouldSuppressPostUnlockInteraction()) return;
     if(isPinSet()) beginUnlockFlow(true);
     else beginSetupFlow();
-  });
+  };
+  bindFastPress($('headerLockBtn'), handleHeaderLockPress);
+  bindFastPress($('headerLockBtnOverlay'), handleHeaderLockPress);
   bindFastPress($('pinBiometricBtn'), handleBiometricBtn);
   bindFastPress($('pinForgotBtn'), ()=>{
     if(confirm('This will wipe all patient data and remove the PIN. Continue?')){
@@ -10273,9 +10277,20 @@ let sharedHeaderMinHeight=0;
 function getDetailUnderlayOffset(){ return -Math.round((window.innerWidth||390)*0.28); }
 
 /* ── Header shift mechanism ──────────────────────────────────── */
+function getPatientHeaderOverlay(){
+  return document.getElementById('appHeaderOverlay');
+}
+function setPatientHeaderOverlayActive(active){
+  const overlay=getPatientHeaderOverlay();
+  if(!overlay) return;
+  overlay.classList.toggle('overlay-active', !!active);
+  if(!active){
+    overlay.classList.remove('has-back');
+  }
+}
 function setPatientDetailHeaderShift(dx, options){
   const root=document.documentElement; if(!root) return;
-  const nextDx=Math.round(Number(dx)||0); // no clamp — supports negative (leftward)
+  const nextDx=Math.round(Number(dx)||0);
   const dragging=!!(options && options.dragging);
   const duration=dragging ? '0ms' : String(options && options.duration ? options.duration : '240ms');
   const easing=String(options && options.easing ? options.easing : 'cubic-bezier(.22,.9,.18,1)');
@@ -10298,7 +10313,7 @@ function updateHeaderForPatient(){
     const p=(typeof patients!=='undefined' && currentPatient!=null) ? patients[currentPatient] : null;
     if(!p) return;
     $("backBtn").classList.remove("hidden");
-    $("appHeader").classList.add("has-back");
+    const overlay=getPatientHeaderOverlay(); if(overlay) overlay.classList.add("has-back");
     $("headerTitle").textContent=p.name;
     const ageSexStr=typeof ageSex==='function' ? ageSex(p.age,p.sex) : '';
     $("headerAge").textContent=ageSexStr ? ' '+ageSexStr : '';
@@ -10315,6 +10330,7 @@ function animatePatientDetailOpen(){
   if(!detail) return;
   if(typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches){
     // No animation — update header content immediately
+    setPatientHeaderOverlayActive(true);
     updateHeaderForPatient();
     return;
   }
@@ -10322,7 +10338,8 @@ function animatePatientDetailOpen(){
   // Clear any stale inline styles from swipe gestures
   try{ detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow=''; }catch(_e){}
   try{ if(patients){ patients.style.transition=''; patients.style.transform=''; } }catch(_e){}
-  // Snap header to +windowWidth — old app title rides off-screen right invisibly
+  // Snap patient overlay header to +windowWidth; base list header stays fixed underneath
+  setPatientHeaderOverlayActive(true);
   setPatientDetailHeaderShift(window.innerWidth||390, {dragging:true});
   // Set up prep position via CSS classes
   detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
@@ -10363,7 +10380,13 @@ function syncSharedHeaderHeight(){
   const header=$("appHeader");
   if(!header) return;
   requestAnimationFrame(()=>{
-    const measured=Math.ceil(header.getBoundingClientRect().height||0);
+    const base=$("appHeaderBase");
+    const overlay=$("appHeaderOverlay");
+    const measured=Math.ceil(Math.max(
+      header.getBoundingClientRect().height||0,
+      base ? base.getBoundingClientRect().height||0 : 0,
+      overlay ? overlay.getBoundingClientRect().height||0 : 0
+    ));
     if(measured>sharedHeaderMinHeight) sharedHeaderMinHeight=measured;
     if(sharedHeaderMinHeight){
       header.style.minHeight=`${sharedHeaderMinHeight}px`;
@@ -10392,6 +10415,7 @@ function setPatientDetailStackActive(active){
     detail.style.transition="";
     detail.style.transform="";
     detail.style.boxShadow="";
+    setPatientHeaderOverlayActive(false);
     resetPatientDetailHeaderShift();
   }
 }
@@ -10599,12 +10623,6 @@ function goBackToPatientList(opts){
     patients.style.transform='translate3d('+offset+'px,0,0)';
     try{
       // Update header content while title is invisible
-      $("headerTitle").textContent='Hospital at Home Companion (DEMO)';
-      $("headerSub").textContent='LK Medica Software Solutions Inc.';
-      $("headerAge").classList.add('hidden'); $("headerAge").textContent='';
-      $("headerPatientMeta2").classList.add('hidden'); $("headerPatientMeta2").textContent='';
-      $("backBtn").classList.add('hidden');
-      $("appHeader").classList.remove('has-back');
       setPatientDetailHeaderShift(offset, {dragging:true});
     }catch(_e){}
     void detail.offsetWidth; // single reflow commits all three snap positions
@@ -10621,6 +10639,7 @@ function goBackToPatientList(opts){
       if(done_called) return; done_called=true;
       detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow='';
       patients.style.transition=''; patients.style.transform='';
+      setPatientHeaderOverlayActive(false);
       resetPatientDetailHeaderShift();
       detailLoadedForCurrentPatient=false;
       saveData(); renderPatientList(); showSection("patients");
