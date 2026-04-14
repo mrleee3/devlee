@@ -2415,19 +2415,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 .patient-helper-line{display:block;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.patient-helper-default{display:inline;min-width:0;overflow:hidden;text-overflow:ellipsis}.patient-helper-status{display:inline-flex;align-items:center;gap:8px;min-width:0;max-width:100%;vertical-align:top}.patient-helper-status.hidden{display:none!important}.patient-helper-copy{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:#667085}.patient-helper-copy.status-updated{opacity:.88}.patient-helper-status[data-tone="saved"] .patient-helper-copy,.patient-helper-status[data-tone="action"] .patient-helper-copy,.patient-helper-status[data-tone="sync"] .patient-helper-copy,.patient-helper-status[data-tone="undo"] .patient-helper-copy{color:#0a84ff}.patient-helper-status[data-tone="alert"] .patient-helper-copy{color:#b42318}.patient-helper-undo{flex:0 0 auto;padding:0;border:none;background:none;color:#0a84ff;font-size:12px;font-weight:800;line-height:1.1}.patient-helper-undo.hidden{display:none!important}.patient-helper-undo:active{transform:translateY(1px)}
 .patient-metrics-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 12px}.patient-metric-card{position:relative;overflow:hidden;min-height:78px;padding:12px 12px 11px;border-radius:18px;background:#f8fafc;border:1px solid rgba(148,163,184,.18);box-shadow:none;display:flex;flex-direction:column;justify-content:space-between;gap:8px;transition:background .18s ease,border-color .18s ease,color .18s ease}.patient-metric-value{font-size:31px;line-height:.92;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"ss01" 1;color:#0f172a}.patient-metric-label{font-size:11px;line-height:1.2;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#475467;white-space:nowrap}.patient-metric-card.is-good{background:#ecfdf3;border-color:#bbf7d0}.patient-metric-card.is-good .patient-metric-value{color:#166534}.patient-metric-card.is-good .patient-metric-label{color:#15803d}.patient-metric-card.is-bad{background:#fef2f2;border-color:#fecaca}.patient-metric-card.is-bad .patient-metric-value{color:#b42318}.patient-metric-card.is-bad .patient-metric-label{color:#b42318}.patient-metric-card.is-neutral{background:#f8fafc;border-color:rgba(148,163,184,.18)}.patient-metric-card.is-neutral .patient-metric-value{color:#0f172a}.patient-metric-card.is-neutral .patient-metric-label{color:#475467}@media (max-width:420px){.patient-helper-line{display:block}.patient-helper-copy{font-size:12.5px}.patient-helper-undo{font-size:11.5px}.patient-metrics-strip{gap:8px}.patient-metric-card{min-height:74px;padding:11px 10px 10px;border-radius:17px}.patient-metric-value{font-size:28px}.patient-metric-label{font-size:10.5px}}
 
-/* ── Patient page slide (Step 1) ──────────────────────────────── */
-/* Header bar shifts with the panel using a CSS variable */
-#appHeader{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform}
-/* Panel open: prep = snap to 100% right, anim = slide to 0 */
-#patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-4px 0 20px rgba(15,23,42,.09)}
-#patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94),box-shadow 360ms ease;will-change:transform}
-/* Patient list parallax: prep = 0, anim = slide to -28% */
-#patients.hah-detail-underlay-open-prep{transform:translate3d(0,0,0)}
-#patients.hah-detail-underlay-open-anim{transform:translate3d(-28%,0,0);transition:transform 360ms cubic-bezier(.25,.46,.45,.94);will-change:transform}
-@media(prefers-reduced-motion:reduce){
-  #patientDetail.hah-detail-open-anim,#patients.hah-detail-underlay-open-anim{transition:none!important}
-}
-
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -2848,7 +2835,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_559_release.html</div><div>Source: hospital_at_home_v12_36_559_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_558_release.html</div><div>Source: hospital_at_home_v12_36_558_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -8858,7 +8845,6 @@ function openPatient(id) {
   syncSharedHeaderHeight();
   setPatientDetailStackActive(true);
   animatePatientDetailSwipe(0,true);
-  animatePatientDetailOpen(); // slide panel + header in from right
   saveData();
   calculateNews();
   if(typeof renderBloodsSummaryCard==='function'){
@@ -10280,68 +10266,7 @@ function bulletKeyHandler(e){const el=e.target; if(e.key==="Enter"){e.preventDef
 let detailEdgeSwipeState=null;
 let detailSwipeCompleting=false;
 let sharedHeaderMinHeight=0;
-function getDetailUnderlayOffset(){ return -Math.round((window.innerWidth||390)*0.28); }
-
-/* ── Header shift mechanism ──────────────────────────────────── */
-function setPatientDetailHeaderShift(dx, options){
-  const root=document.documentElement; if(!root) return;
-  const nextDx=Math.round(Number(dx)||0); // no clamp — supports negative (leftward)
-  const dragging=!!(options && options.dragging);
-  const duration=dragging ? '0ms' : String(options && options.duration ? options.duration : '240ms');
-  const easing=String(options && options.easing ? options.easing : 'cubic-bezier(.22,.9,.18,1)');
-  root.style.setProperty('--hah-header-shift', nextDx+'px');
-  root.style.setProperty('--hah-header-shift-duration', duration);
-  root.style.setProperty('--hah-header-shift-ease', easing);
-}
-function resetPatientDetailHeaderShift(){
-  const root=document.documentElement; if(!root) return;
-  root.style.setProperty('--hah-header-shift', '0px');
-  root.style.setProperty('--hah-header-shift-duration', '0ms');
-  root.style.setProperty('--hah-header-shift-ease', 'linear');
-}
-
-/* ── Patient panel open animation ───────────────────────────── */
-let detailOpenAnimTimer=null;
-function animatePatientDetailOpen(){
-  const detail=document.getElementById('patientDetail');
-  const patients=document.getElementById('patients');
-  if(!detail) return;
-  if(typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  clearTimeout(detailOpenAnimTimer);
-  // Clear any stale inline styles from swipe gestures
-  try{ detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow=''; }catch(_e){}
-  try{ if(patients){ patients.style.transition=''; patients.style.transform=''; } }catch(_e){}
-  // Snap header to +windowWidth (off-screen right) — same start position as the panel
-  setPatientDetailHeaderShift(window.innerWidth||390, {dragging:true});
-  // Set up prep position via CSS classes
-  detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
-  if(patients) patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
-  detail.classList.add('hah-detail-open-prep');
-  if(patients) patients.classList.add('hah-detail-underlay-open-prep');
-  void detail.offsetWidth; // commit snap
-  requestAnimationFrame(function(){
-    // Start all three in the same frame: panel, list parallax, header
-    detail.classList.add('hah-detail-open-anim');
-    detail.classList.remove('hah-detail-open-prep');
-    if(patients){
-      patients.classList.add('hah-detail-underlay-open-anim');
-      patients.classList.remove('hah-detail-underlay-open-prep');
-    }
-    setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:'cubic-bezier(.25,.46,.45,.94)'});
-  });
-  detailOpenAnimTimer=setTimeout(function(){
-    detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
-    if(patients){
-      patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
-      // Hold parallax for edge-swipe — only if still in detail view (race condition guard)
-      if(document.body.classList.contains('detail-view-active')){
-        const offset=getDetailUnderlayOffset();
-        try{ patients.style.transition='none'; patients.style.transform='translate3d('+offset+'px,0,0)'; }catch(_e){}
-      }
-    }
-    setPatientDetailHeaderShift(0, {dragging:true});
-  }, 410);
-}
+const DETAIL_UNDERLAY_START_OFFSET=-36;
 function patientDetailIsVisible(){
   const el=$("patientDetail");
   return !!(el && !el.classList.contains("hidden"));
@@ -10379,7 +10304,6 @@ function setPatientDetailStackActive(active){
     detail.style.transition="";
     detail.style.transform="";
     detail.style.boxShadow="";
-    resetPatientDetailHeaderShift();
   }
 }
 function animatePatientDetailSwipe(dx=0, dragging=false){
@@ -10389,24 +10313,21 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
   const activeDx=Math.max(0, Math.round(dx||0));
   const width=Math.max(window.innerWidth||390,320);
   const progress=Math.max(0,Math.min(1,activeDx/width));
-  const underlayShift=Math.round(getDetailUnderlayOffset()*(1-progress));
-  const swipeEasing='cubic-bezier(.22,.9,.18,1)';
-  const transition=dragging?"none":"transform .24s "+swipeEasing;
+  const underlayShift=Math.round(DETAIL_UNDERLAY_START_OFFSET*(1-progress));
+  const transition=dragging?"none":"transform .24s cubic-bezier(.22,.9,.18,1)";
   detail.style.transition=transition;
   patients.style.transition=transition;
   detail.style.transform=`translate3d(${activeDx}px,0,0)`;
   patients.style.transform=`translate3d(${underlayShift}px,0,0)`;
   detail.style.boxShadow=activeDx>0?"0 12px 32px rgba(15,23,42,.12)":"";
-  // Header follows the panel in sync during swipe gesture
-  setPatientDetailHeaderShift(activeDx, {dragging:dragging, duration:'.24s', easing:swipeEasing});
 }
 
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_559_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_559_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_558_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_558_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10564,65 +10485,14 @@ function resetPatientDetailSwipe(){
     detail.style.boxShadow="";
     patients.style.transition="";
     patients.style.transform="";
-    resetPatientDetailHeaderShift();
   },260);
 }
-function goBackToPatientList(opts){
+function goBackToPatientList(){
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
   if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
   detailSwipeCompleting=false;
-  detailEdgeSwipeState=null;
-
-  const skipAnimation=!!(opts && opts.skipAnimation);
-  const detail=$("patientDetail");
-  const patients=$("patients");
-  const reduced=typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if(!skipAnimation && detail && patients && !reduced){
-    // Animated back-slide — exact mirror of forward open animation
-    const offset=getDetailUnderlayOffset();
-    // Snap patient list and header to their starting positions (both shifted left)
-    patients.style.transition='none';
-    patients.style.transform='translate3d('+offset+'px,0,0)';
-    try{
-      // Update header content while title is invisible
-      const _ht=$("headerTitle");
-      if(_ht){ _ht.style.transition='none'; _ht.style.opacity='0'; }
-      $("headerTitle").textContent='Hospital at Home Companion (DEMO)';
-      $("headerSub").textContent='LK Medica Software Solutions Inc.';
-      $("headerAge").classList.add('hidden'); $("headerAge").textContent='';
-      $("headerPatientMeta2").classList.add('hidden'); $("headerPatientMeta2").textContent='';
-      $("backBtn").classList.add('hidden');
-      $("appHeader").classList.remove('has-back');
-      setPatientDetailHeaderShift(offset, {dragging:true});
-    }catch(_e){}
-    void detail.offsetWidth; // single reflow commits all three snap positions
-    const easing='cubic-bezier(.25,.46,.45,.94)';
-    // Start all three animations in the same frame — mirrors the forward open
-    detail.style.transition='transform 360ms '+easing+',box-shadow 360ms ease';
-    patients.style.transition='transform 360ms '+easing;
-    setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:easing});
-    try{ const _ht=$("headerTitle"); if(_ht){ _ht.style.transition='opacity 260ms ease 60ms'; _ht.style.opacity='1'; } }catch(_e){}
-    detail.style.transform='translate3d(100%,0,0)';
-    detail.style.boxShadow='-4px 0 20px rgba(15,23,42,.09)';
-    patients.style.transform='translate3d(0,0,0)';
-    let done_called=false;
-    const done=()=>{
-      if(done_called) return; done_called=true;
-      try{ const _ht=$("headerTitle"); if(_ht){ _ht.style.transition=''; _ht.style.opacity=''; } }catch(_e){}
-      detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow='';
-      patients.style.transition=''; patients.style.transform='';
-      resetPatientDetailHeaderShift();
-      detailLoadedForCurrentPatient=false;
-      saveData(); renderPatientList(); showSection("patients");
-    };
-    detail.addEventListener('transitionend', done, {once:true});
-    setTimeout(done, 420);
-    return;
-  }
-
-  // Instant path (after swipe-back gesture, or reduced-motion)
   resetPatientDetailSwipe();
+  detailEdgeSwipeState=null;
   detailLoadedForCurrentPatient=false;
   saveData();
   renderPatientList();
@@ -10636,12 +10506,12 @@ function completePatientDetailSwipeBack(){
   const detail=$("patientDetail");
   if(!detail){
     detailSwipeCompleting=false;
-    goBackToPatientList({skipAnimation:true});
+    goBackToPatientList();
     return;
   }
   const finish=()=>{
     detailSwipeCompleting=false;
-    goBackToPatientList({skipAnimation:true});
+    goBackToPatientList();
   };
   detail.addEventListener("transitionend", finish, {once:true});
 }
@@ -17316,7 +17186,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_559_release.html; source=hospital_at_home_v12_36_559_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_558_release.html; source=hospital_at_home_v12_36_558_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
