@@ -2848,7 +2848,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_561_release.html</div><div>Source: hospital_at_home_v12_36_561_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_562_release.html</div><div>Source: hospital_at_home_v12_36_562_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10314,7 +10314,6 @@ function animatePatientDetailOpen(){
   const patients=document.getElementById('patients');
   if(!detail) return;
   if(typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches){
-    // No animation — update header content immediately
     updateHeaderForPatient();
     return;
   }
@@ -10322,25 +10321,32 @@ function animatePatientDetailOpen(){
   // Clear any stale inline styles from swipe gestures
   try{ detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow=''; }catch(_e){}
   try{ if(patients){ patients.style.transition=''; patients.style.transform=''; } }catch(_e){}
-  // Snap header to +windowWidth — old app title rides off-screen right invisibly
-  setPatientDetailHeaderShift(window.innerWidth||390, {dragging:true});
+  // Header stays at position 0 — crossfade title only (no bar movement on open)
+  // --hah-header-shift is reserved for back-slide and swipe gestures
+  try{
+    const _ht=document.getElementById('headerTitle');
+    if(_ht){ _ht.style.transition='none'; _ht.style.opacity='0'; }
+  }catch(_e){}
   // Set up prep position via CSS classes
   detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
   if(patients) patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
   detail.classList.add('hah-detail-open-prep');
   if(patients) patients.classList.add('hah-detail-underlay-open-prep');
-  void detail.offsetWidth; // commit snap — header is now off-screen right with old content
+  void detail.offsetWidth;
   requestAnimationFrame(function(){
-    // Header is off-screen: safe to update content before sliding in
+    // Update header content while title is invisible, then fade it in
     updateHeaderForPatient();
-    // Start all three in the same frame: panel, list parallax, header
+    try{
+      const _ht=document.getElementById('headerTitle');
+      if(_ht){ _ht.style.transition='opacity 180ms ease'; _ht.style.opacity='1'; }
+    }catch(_e){}
+    // Start panel and list parallax animations
     detail.classList.add('hah-detail-open-anim');
     detail.classList.remove('hah-detail-open-prep');
     if(patients){
       patients.classList.add('hah-detail-underlay-open-anim');
       patients.classList.remove('hah-detail-underlay-open-prep');
     }
-    setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:'cubic-bezier(.25,.46,.45,.94)'});
   });
   detailOpenAnimTimer=setTimeout(function(){
     detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
@@ -10353,6 +10359,7 @@ function animatePatientDetailOpen(){
       }
     }
     setPatientDetailHeaderShift(0, {dragging:true});
+    try{ const _ht=document.getElementById('headerTitle'); if(_ht){ _ht.style.transition=''; _ht.style.opacity=''; } }catch(_e){}
   }, 410);
 }
 function patientDetailIsVisible(){
@@ -10418,8 +10425,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_561_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_561_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_562_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_562_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -17325,7 +17332,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_561_release.html; source=hospital_at_home_v12_36_561_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_562_release.html; source=hospital_at_home_v12_36_562_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
