@@ -2440,10 +2440,10 @@ html.hah-vt-running body{overflow:hidden}
 .hah-overlay-enter,.hah-overlay-exit{transform-origin:var(--hah-overlay-origin-x,50%) var(--hah-overlay-origin-y,20%);will-change:transform,opacity,filter}
 .hah-overlay-enter{animation:hahOverlayEnter var(--hah-overlay-duration) var(--hah-vt-spring)}
 .hah-overlay-exit{animation:hahOverlayExit 180ms cubic-bezier(.4,0,.2,1) forwards}
-#patientDetail.hah-detail-open-prep{transform:translate3d(var(--hah-detail-open-from,48px),0,0);opacity:.998;box-shadow:-16px 0 36px rgba(15,23,42,.08)}
-#patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);opacity:1;box-shadow:-12px 0 32px rgba(15,23,42,.12);transition:transform 380ms cubic-bezier(.12,.88,.18,1),box-shadow 380ms cubic-bezier(.12,.88,.18,1),opacity 300ms linear;will-change:transform,opacity}
-#patients.hah-detail-underlay-open-prep{transform:translate3d(0,0,0);opacity:1}
-#patients.hah-detail-underlay-open-anim{transform:translate3d(0,0,0);opacity:1;transition:opacity 320ms ease}
+#patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-4px 0 20px rgba(15,23,42,.09)}
+#patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94),box-shadow 360ms ease;will-change:transform}
+#patients.hah-detail-underlay-open-prep{transform:translate3d(0,0,0)}
+#patients.hah-detail-underlay-open-anim{transform:translate3d(-28%,0,0);transition:transform 360ms cubic-bezier(.25,.46,.45,.94);will-change:transform}
 @keyframes hahPatientSurfaceOld{from{opacity:1;transform:translate3d(0,0,0) scale(1)}to{opacity:.08;transform:translate3d(0,-8px,0) scale(.985)}}
 @keyframes hahPatientSurfaceNew{from{opacity:.1;transform:translate3d(0,14px,0) scale(.965)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
 @keyframes hahPatientTitleOld{from{opacity:1;transform:translate3d(0,0,0) scale(1)}to{opacity:.24;transform:translate3d(0,-3px,0) scale(.98)}}
@@ -2885,7 +2885,7 @@ html.hah-vt-running body{overflow:hidden}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_566_release.html</div><div>Source: hospital_at_home_v12_36_566_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_567_release.html</div><div>Source: hospital_at_home_v12_36_567_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10383,7 +10383,7 @@ function bulletKeyHandler(e){const el=e.target; if(e.key==="Enter"){e.preventDef
 let detailEdgeSwipeState=null;
 let detailSwipeCompleting=false;
 let sharedHeaderMinHeight=0;
-const DETAIL_UNDERLAY_START_OFFSET=-36;
+function getDetailUnderlayOffset(){ return -Math.round((window.innerWidth||390)*0.28); }
 function patientDetailIsVisible(){
   const el=$("patientDetail");
   return !!(el && !el.classList.contains("hidden"));
@@ -10430,7 +10430,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
   const activeDx=Math.max(0, Math.round(dx||0));
   const width=Math.max(window.innerWidth||390,320);
   const progress=Math.max(0,Math.min(1,activeDx/width));
-  const underlayShift=Math.round(DETAIL_UNDERLAY_START_OFFSET*(1-progress));
+  const underlayShift=Math.round(getDetailUnderlayOffset()*(1-progress));
   const transition=dragging?"none":"transform .24s cubic-bezier(.22,.9,.18,1)";
   detail.style.transition=transition;
   patients.style.transition=transition;
@@ -10443,8 +10443,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_566_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_566_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_567_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_567_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11112,14 +11112,10 @@ function initPatientDetailEdgeSwipe(){
       const patients=document.getElementById('patients');
       if(!detail || prefersReducedMotion()) return;
       clearTimeout(state.detailAnimTimer);
-      setPatientDetailOriginFromCard(patientId);
-      const width=Math.max(global.innerWidth||390, 320);
-      const startDx=Math.min(64, Math.max(34, Math.round(width*0.14)));
       try{
         detail.style.transition='';
         detail.style.transform='';
         detail.style.boxShadow='';
-        detail.style.setProperty('--hah-detail-open-from', startDx + 'px');
       }catch(_e){}
       try{
         if(patients){
@@ -11143,11 +11139,13 @@ function initPatientDetailEdgeSwipe(){
       });
       state.detailAnimTimer=setTimeout(function(){
         detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
-        try{ detail.style.removeProperty('--hah-detail-open-from'); }catch(_e){}
         if(patients){
           patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
+          // Hold the parallax offset so edge-swipe starts from correct position — no jump
+          const offset=-Math.round((global.innerWidth||390)*0.28);
+          try{ patients.style.transition='none'; patients.style.transform=`translate3d(${offset}px,0,0)`; }catch(_e){}
         }
-      }, 460);
+      }, 410);
     }
     
     function animateOverlayOpen(overlay, sourceEl, mode){
@@ -17876,7 +17874,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_566_release.html; source=hospital_at_home_v12_36_566_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_567_release.html; source=hospital_at_home_v12_36_567_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
