@@ -2440,9 +2440,9 @@ html.hah-vt-running body{overflow:hidden}
 .hah-overlay-enter,.hah-overlay-exit{transform-origin:var(--hah-overlay-origin-x,50%) var(--hah-overlay-origin-y,20%);will-change:transform,opacity}
 .hah-overlay-enter[data-overlay-mode="sheet"]{animation:hahSheetEnter 400ms cubic-bezier(.32,.72,0,1) both}
 .hah-overlay-closing{pointer-events:none!important;animation:hahOverlayFadeOut var(--hah-close-dur,260ms) cubic-bezier(.4,0,1,1) forwards}
-.hah-overlay-exit[data-overlay-mode="sheet"]{animation:hahSheetExit 260ms cubic-bezier(.4,0,1,1) forwards}
+.hah-overlay-exit[data-overlay-mode="sheet"]{animation:hahSheetExit 320ms cubic-bezier(0,.28,.68,1) forwards}
 .hah-overlay-enter[data-overlay-mode="popover"]{animation:hahPopoverEnter 240ms cubic-bezier(.34,1.4,.64,1) both}
-.hah-overlay-exit[data-overlay-mode="popover"]{animation:hahPopoverExit 160ms cubic-bezier(.4,0,1,1) forwards}
+.hah-overlay-exit[data-overlay-mode="popover"]{animation:hahPopoverExit 200ms cubic-bezier(.32,0,.68,0) forwards}
 #patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-4px 0 20px rgba(15,23,42,.09)}
 #patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94),box-shadow 360ms ease;will-change:transform}
 #patients.hah-detail-underlay-open-prep{transform:translate3d(0,0,0)}
@@ -2463,9 +2463,9 @@ html.hah-vt-running body{overflow:hidden}
 @keyframes hahSectionWash{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
 @keyframes hahSheetEnter{from{opacity:0;transform:translate3d(0,64px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 @keyframes hahOverlayFadeOut{from{opacity:1}to{opacity:0}}
-@keyframes hahSheetExit{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,24px,0)}}
+@keyframes hahSheetExit{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,64px,0)}}
 @keyframes hahPopoverEnter{from{opacity:0;transform:scale(.72)}to{opacity:1;transform:scale(1)}}
-@keyframes hahPopoverExit{from{transform:scale(1)}to{transform:scale(.84)}}
+@keyframes hahPopoverExit{from{transform:scale(1)}to{transform:scale(.72)}}
 @media (prefers-reduced-motion: reduce){
   :root{--hah-vt-duration:1ms;--hah-overlay-duration:1ms}
   .hah-saved-pulse,.hah-section-updated,.hah-section-updated::before,.hah-section-updated::after,.hah-overlay-enter,.hah-overlay-exit,#patientDetail.hah-detail-open-anim,#patients.hah-detail-underlay-open-anim{animation:none!important;transition:none!important}
@@ -2891,7 +2891,7 @@ html.hah-vt-running body{overflow:hidden}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_571_release.html</div><div>Source: hospital_at_home_v12_36_571_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_572_release.html</div><div>Source: hospital_at_home_v12_36_572_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10449,8 +10449,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_571_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_571_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_572_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_572_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11231,7 +11231,7 @@ function initPatientDetailEdgeSwipe(){
       const target=getOverlayAnimationTarget(overlay) || overlay;
       target.dataset.overlayMode=resolvedMode;
       // Fade the container — this takes the backdrop with it smoothly
-      const exitDuration=resolvedMode==='popover' ? 180 : 280;
+      const exitDuration=resolvedMode==='popover' ? 220 : 340;
       overlay.style.setProperty('--hah-close-dur', exitDuration+'ms');
       overlay.classList.add('hah-overlay-closing');
       // Transform the inner modal (translate/scale — no opacity, container handles it)
@@ -17943,7 +17943,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_571_release.html; source=hospital_at_home_v12_36_571_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_572_release.html; source=hospital_at_home_v12_36_572_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
