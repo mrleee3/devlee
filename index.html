@@ -2417,24 +2417,55 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 
 
 /* Navigation + view transitions */
-:root{--hah-vt-duration:240ms;--hah-vt-ease:cubic-bezier(.22,.9,.18,1)}
+:root{--hah-vt-duration:290ms;--hah-vt-ease:cubic-bezier(.22,.9,.18,1);--hah-vt-spring:cubic-bezier(.2,.88,.22,1);--hah-overlay-duration:200ms}
 #appHeader{view-transition-name:hah-app-header;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
-#patients,#tasks,#handover,#deletedPage,#eventLogPage,#patientDetail{contain:layout paint style;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
+#headerTitle,#headerAge,#headerPatientMeta2,#backBtn{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
+#patients,#tasks,#handover,#deletedPage,#eventLogPage,#patientDetail,#optionsHomePanel,.options-page-panel{contain:layout paint style;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
 [data-patient-foreground],.swipe-foreground,.card,.patient-reorder-card,.options-page-panel,.sheet,.overlay-card,.popover-card{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0);will-change:transform,opacity}
 html.hah-vt-running body{overflow:hidden}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:var(--hah-vt-duration);animation-timing-function:var(--hah-vt-ease)}
-::view-transition-old(hah-app-header),::view-transition-new(hah-app-header),::view-transition-old(hah-patient-surface),::view-transition-new(hah-patient-surface),::view-transition-old(hah-section-surface),::view-transition-new(hah-section-surface){animation-duration:var(--hah-vt-duration);animation-timing-function:var(--hah-vt-ease)}
-::view-transition-old(hah-patient-surface),::view-transition-new(hah-patient-surface){mix-blend-mode:normal}
-.hah-saved-pulse{animation:hahSavedPulse .68s ease}
+::view-transition-group(hah-app-header),::view-transition-group(hah-patient-surface),::view-transition-group(hah-patient-title),::view-transition-group(hah-patient-meta),::view-transition-group(hah-section-surface),::view-transition-group(hah-options-panel){animation-duration:var(--hah-vt-duration);animation-timing-function:var(--hah-vt-spring)}
+::view-transition-old(hah-app-header),::view-transition-new(hah-app-header),::view-transition-old(hah-patient-title),::view-transition-new(hah-patient-title),::view-transition-old(hah-patient-meta),::view-transition-new(hah-patient-meta),::view-transition-old(hah-section-surface),::view-transition-new(hah-section-surface){animation-duration:var(--hah-vt-duration);animation-timing-function:var(--hah-vt-ease)}
+::view-transition-old(hah-patient-surface),::view-transition-new(hah-patient-surface){mix-blend-mode:normal;overflow:clip;border-radius:24px;box-shadow:0 18px 46px rgba(15,23,42,.10)}
+::view-transition-old(hah-patient-surface){animation:hahPatientSurfaceOld var(--hah-vt-duration) var(--hah-vt-ease)}
+::view-transition-new(hah-patient-surface){animation:hahPatientSurfaceNew var(--hah-vt-duration) var(--hah-vt-spring)}
+::view-transition-old(hah-patient-title){animation:hahPatientTitleOld var(--hah-vt-duration) var(--hah-vt-ease)}
+::view-transition-new(hah-patient-title){animation:hahPatientTitleNew var(--hah-vt-duration) var(--hah-vt-spring)}
+::view-transition-old(hah-patient-meta){animation:hahPatientMetaOld var(--hah-vt-duration) var(--hah-vt-ease)}
+::view-transition-new(hah-patient-meta){animation:hahPatientMetaNew var(--hah-vt-duration) var(--hah-vt-spring)}
+html[data-hah-options-direction="forward"]::view-transition-old(hah-options-panel){animation:hahOptionsOldForward 250ms var(--hah-vt-ease)}
+html[data-hah-options-direction="forward"]::view-transition-new(hah-options-panel){animation:hahOptionsNewForward 290ms var(--hah-vt-spring)}
+html[data-hah-options-direction="back"]::view-transition-old(hah-options-panel){animation:hahOptionsOldBack 240ms var(--hah-vt-ease)}
+html[data-hah-options-direction="back"]::view-transition-new(hah-options-panel){animation:hahOptionsNewBack 290ms var(--hah-vt-spring)}
+.hah-saved-pulse{animation:hahSavedPulse .72s ease}
+.hah-section-updated{position:relative;animation:hahSectionPop .42s var(--hah-vt-spring)}
+.hah-section-updated::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 1px rgba(10,132,255,.18) inset,0 10px 28px rgba(10,132,255,.10);animation:hahSectionGlow 1.25s ease forwards}
+.hah-patient-updated{position:relative;overflow:visible}
+.hah-patient-updated::after{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 1px rgba(10,132,255,.22) inset,0 16px 30px rgba(10,132,255,.12);animation:hahUpdatedFade 1.9s ease forwards}
+.hah-patient-updated::before{content:attr(data-hah-updated-label);position:absolute;top:-10px;right:12px;min-height:22px;padding:0 10px;border-radius:999px;background:#0a84ff;color:#fff;font-size:11px;font-weight:800;line-height:22px;letter-spacing:.02em;box-shadow:0 10px 24px rgba(10,132,255,.22);animation:hahUpdatedBadge 1.9s ease forwards;pointer-events:none;z-index:2}
+.hah-overlay-enter,.hah-overlay-exit{transform-origin:var(--hah-overlay-origin-x,50%) var(--hah-overlay-origin-y,20%);will-change:transform,opacity,filter}
+.hah-overlay-enter{animation:hahOverlayEnter var(--hah-overlay-duration) var(--hah-vt-spring)}
+.hah-overlay-exit{animation:hahOverlayExit 180ms cubic-bezier(.4,0,.2,1) forwards}
+@keyframes hahPatientSurfaceOld{from{opacity:1;transform:translate3d(0,0,0) scale(1)}to{opacity:.08;transform:translate3d(0,-8px,0) scale(.985)}}
+@keyframes hahPatientSurfaceNew{from{opacity:.1;transform:translate3d(0,14px,0) scale(.965)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+@keyframes hahPatientTitleOld{from{opacity:1;transform:translate3d(0,0,0) scale(1)}to{opacity:.24;transform:translate3d(0,-3px,0) scale(.98)}}
+@keyframes hahPatientTitleNew{from{opacity:.2;transform:translate3d(0,6px,0) scale(.97)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+@keyframes hahPatientMetaOld{from{opacity:1;transform:translate3d(0,0,0)}to{opacity:0;transform:translate3d(0,-4px,0)}}
+@keyframes hahPatientMetaNew{from{opacity:0;transform:translate3d(0,5px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes hahOptionsOldForward{from{opacity:1;transform:translate3d(0,0,0)}to{opacity:0;transform:translate3d(-22px,0,0)}}
+@keyframes hahOptionsNewForward{from{opacity:0;transform:translate3d(28px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes hahOptionsOldBack{from{opacity:1;transform:translate3d(0,0,0)}to{opacity:0;transform:translate3d(24px,0,0)}}
+@keyframes hahOptionsNewBack{from{opacity:0;transform:translate3d(-26px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 @keyframes hahSavedPulse{0%{box-shadow:0 0 0 0 rgba(10,132,255,0);border-color:rgba(15,23,42,.08)}35%{box-shadow:0 0 0 4px rgba(10,132,255,.12);border-color:rgba(10,132,255,.26)}100%{box-shadow:0 0 0 0 rgba(10,132,255,0);border-color:rgba(15,23,42,.08)}}
-.hah-patient-updated{position:relative}
-.hah-patient-updated::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 1px rgba(10,132,255,.22) inset,0 10px 22px rgba(10,132,255,.08);animation:hahUpdatedFade 1.6s ease forwards}
-@keyframes hahUpdatedFade{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
-.hah-overlay-enter{animation:hahOverlayEnter .2s var(--hah-vt-ease)}
-@keyframes hahOverlayEnter{from{opacity:.01;transform:translate3d(0,8px,0) scale(.992);transform-origin:var(--hah-overlay-origin-x,50%) var(--hah-overlay-origin-y,20%)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+@keyframes hahSectionPop{0%{transform:translate3d(0,8px,0) scale(.992)}100%{transform:translate3d(0,0,0) scale(1)}}
+@keyframes hahSectionGlow{0%{opacity:0}14%{opacity:1}100%{opacity:0}}
+@keyframes hahUpdatedFade{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
+@keyframes hahUpdatedBadge{0%{opacity:0;transform:translate3d(0,8px,0) scale(.92)}14%{opacity:1;transform:translate3d(0,0,0) scale(1)}72%{opacity:1;transform:translate3d(0,0,0) scale(1)}100%{opacity:0;transform:translate3d(0,-4px,0) scale(.98)}}
+@keyframes hahOverlayEnter{from{opacity:.01;filter:saturate(.96);transform:translate3d(0,12px,0) scale(.972)}to{opacity:1;filter:saturate(1);transform:translate3d(0,0,0) scale(1)}}
+@keyframes hahOverlayExit{from{opacity:1;filter:saturate(1);transform:translate3d(0,0,0) scale(1)}to{opacity:0;filter:saturate(.96);transform:translate3d(0,10px,0) scale(.972)}}
 @media (prefers-reduced-motion: reduce){
-  :root{--hah-vt-duration:1ms}
-  .hah-saved-pulse,.hah-patient-updated::after,.hah-overlay-enter{animation:none!important}
+  :root{--hah-vt-duration:1ms;--hah-overlay-duration:1ms}
+  .hah-saved-pulse,.hah-section-updated,.hah-section-updated::after,.hah-patient-updated::after,.hah-patient-updated::before,.hah-overlay-enter,.hah-overlay-exit{animation:none!important}
 }
 
 </style>
@@ -2857,7 +2888,7 @@ html.hah-vt-running body{overflow:hidden}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_560_release.html</div><div>Source: hospital_at_home_v12_36_560_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_561_release.html</div><div>Source: hospital_at_home_v12_36_561_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -6516,7 +6547,7 @@ function openWorkbookLink(){
 }
 
 </script><script>
-function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof HAH_NAV!=='undefined'){ try{HAH_NAV.commitHistory(HAH_NAV.buildRouteState(), true);}catch(_e){} try{HAH_NAV.pulseCurrentSurface({patientId:currentPatient});}catch(_e){} } if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
+function saveData(t="Saved locally", options={}){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof HAH_NAV!=='undefined'){ try{HAH_NAV.commitHistory(HAH_NAV.buildRouteState(), true);}catch(_e){} if(!(options&&options.pulse===false)){ try{HAH_NAV.pulseCurrentSurface({patientId:currentPatient});}catch(_e){} } } if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
 function nowString(){return new Date().toLocaleString([],{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}
 function hideAll(){["patients","tasks","handover","patientDetail","deletedPage","eventLogPage"].forEach(id=>$(id).classList.add("hidden"))}
 function setPatientViewportMode(active){document.body.classList.toggle("patients-section-active",!!active);document.documentElement.classList.toggle("patients-section-active",!!active)}
@@ -8768,6 +8799,28 @@ function getHRPulseText(){const val=$("hrPulse") ? $("hrPulse").value : ""; if(w
 function getBPPosturalText(){ if(window.getBPPosturalClinicalSuffix) return window.getBPPosturalClinicalSuffix(); return ""; }
 function obsParts(){const parts=[]; const add=(label,val,suffix="")=>{if(String(val||"").trim()) parts.push(`${label} ${val}${suffix}`)}; add("RR",$("rr").value," /min"); if(String($("spo2").value).trim()){const ox=$("oxygen").value==="2" ? ` on ${getOxygenFlowDisplay()||"oxygen"}` : " on air"; parts.push(`SpO₂ ${$("spo2").value}%${ox}`)} add("T",$("temp").value,"°C"); const bpValue=String($("bp").value||"").trim(); const bpPostural=getBPPosturalText(); if(bpValue) parts.push(`BP ${bpValue} mmHg${bpPostural}`); else if(bpPostural) parts.push(`Postural BP${bpPostural}`); if(String($("hr").value||"").trim()) parts.push(`HR ${$("hr").value} bpm${getHRPulseText()}`); add("Weight",$("weight").value," kg"); if(String($("bm").value||"").trim()) parts.push(`BM ${$("bm").value}${getBMTimingText()}`); return parts}
 function getIVSentenceList(){if(!$("ivGiven").checked) return []; return getIVEntries().filter(e=>e.medication||e.dose||e.serialExpiry||e.details).map(e=>{const details=(e.details||"").trim(); const core=`IV ${e.medication||"-"} ${e.dose||"-"} (${e.serialExpiry||"-"}) administered without incident`; return details ? `${core} — ${details}` : core;})}
+function stableNavCompareValue(value){
+  if(value==null) return '';
+  if(Array.isArray(value)) return JSON.stringify(value);
+  if(typeof value==='object'){
+    try{return JSON.stringify(value);}catch(_e){return String(value);}
+  }
+  return String(value);
+}
+const PATIENT_SECTION_FIELD_MAP={
+  obs:['rr','spo2','oxygen','oxygenFlow','scoreMode','temp','bp','bpLying','bpStanding1','bpStanding3','bpPosturalSymptoms','hr','hrPulse','weight','bm','bmTiming','bmTimingTime','bmTarget','conscious','confusion'],
+  bloodsSummary:['bloods'],
+  clinical:['issues','currently','pmh','socialHistory','examination','toolScores','sodiumFluidStatus'],
+  meds:['medsGiven','medEntries'],
+  acp:['dnacprStatus','dnacprFormSeen','tepStatus','ceilingOfCare','acpNotes'],
+  iv:['ivGiven','ivVIP','ivEntries'],
+  output:['plan','forDischargeSummary']
+};
+function getChangedPatientSections(previousForm, nextForm){
+  const before=previousForm||{};
+  const after=nextForm||{};
+  return Object.keys(PATIENT_SECTION_FIELD_MAP).filter(section=>PATIENT_SECTION_FIELD_MAP[section].some(field=>stableNavCompareValue(before[field])!==stableNavCompareValue(after[field])));
+}
 function saveCurrentPatientForm() {
   if (!detailLoadedForCurrentPatient || !patients[currentPatient]) return;
   const p = patients[currentPatient];
@@ -8846,6 +8899,11 @@ function saveCurrentPatientForm() {
   } else {
     p.listDetails = p.listDetails || '';
   }
+  const changedSections=getChangedPatientSections(previousForm, p.form);
+  if(changedSections.length && typeof HAH_NAV!=='undefined'){
+    try{ HAH_NAV.noteChangedSections(currentPatient, changedSections); }catch(_e){}
+    try{ if(!$("patientDetail")?.classList.contains('hidden')) HAH_NAV.pulseSections(changedSections); }catch(_e){}
+  }
   if(isLinkedPatient(p)){
     const issuesChanged = normText(p.form.issues) !== normText(previousForm.issues);
     const planChanged   = normText(p.form.plan)   !== normText(previousForm.plan);
@@ -8892,7 +8950,7 @@ function openPatient(id, options={}) {
     syncSharedHeaderHeight();
     setPatientDetailStackActive(true);
     animatePatientDetailSwipe(0,true);
-    saveData();
+    saveData(undefined,{pulse:false});
     calculateNews();
     if(typeof renderBloodsSummaryCard==='function'){
       requestAnimationFrame(()=>{ try{ renderBloodsSummaryCard(); }catch(e){} });
@@ -10382,8 +10440,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_560_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_560_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_561_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_561_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10567,7 +10625,12 @@ function goBackToPatientList(options={}){
     patientTransitionId:patientId
   });
   if(typeof HAH_NAV!=='undefined'){
-    const finish=()=>{ try{ HAH_NAV.restoreListScroll(restore.listScrollTop); }catch(_e){} if(opts.preserveFocus!==false) HAH_NAV.restorePatientButtonFocus(patientId); try{ HAH_NAV.markPatientCardUpdated(patientId); }catch(_e){} };
+    const finish=()=>{
+      const changedSections=(typeof HAH_NAV.consumeChangedSections==='function') ? HAH_NAV.consumeChangedSections(patientId) : [];
+      try{ HAH_NAV.restoreListScroll(restore.listScrollTop); }catch(_e){}
+      if(opts.preserveFocus!==false) HAH_NAV.restorePatientButtonFocus(patientId);
+      try{ HAH_NAV.markPatientCardUpdated(patientId, changedSections); }catch(_e){}
+    };
     if(showResult && typeof showResult.then==='function') showResult.then(finish, finish); else finish();
   }
 }
@@ -10706,6 +10769,10 @@ function initPatientDetailEdgeSwipe(){
       installAttempted:false,
       pulseTimer:null,
       overlaySourceEl:null,
+      overlaySourceById:{},
+      pendingSectionsByPatient:{},
+      sectionPulseTimers:{},
+      patientCardTimers:{},
       popstateBound:false,
       transitionQueue:Promise.resolve(),
       transitionDepth:0,
@@ -10725,6 +10792,19 @@ function initPatientDetailEdgeSwipe(){
     function updateTransitionBusyState(delta){
       state.transitionDepth=Math.max(0, (state.transitionDepth||0) + delta);
       document.documentElement.classList.toggle('hah-vt-running', state.transitionDepth>0);
+    }
+    function applyTransitionName(el, name){
+      if(!el) return function(){};
+      el.style.viewTransitionName=name || 'none';
+      return function(){
+        try{ el.style.viewTransitionName='none'; }catch(_e){}
+      };
+    }
+    function findOptionsTarget(key){
+      if(!key) return document.getElementById('optionsHomePanel');
+      return Array.from(document.querySelectorAll('.options-page-panel[data-options-page]')).find(function(panel){
+        return String(panel.dataset.optionsPage||'')===String(key||'');
+      }) || null;
     }
     function runViewTransition(update, options={}){
       const fn=typeof update==='function' ? update : function(){};
@@ -10842,35 +10922,64 @@ function initPatientDetailEdgeSwipe(){
       requestAnimationFrame(function(){ detailEl.scrollTop=value; });
     }
     function clearPatientTransitionNames(){
-      const active=state.activePatientTransitionId;
-      document.querySelectorAll('[data-patient-foreground]').forEach(function(el){
-        if(!active || el.getAttribute('data-patient-foreground')!==String(active)) el.style.viewTransitionName='none';
+      document.querySelectorAll('[data-patient-foreground],[data-patient-card-name],[data-patient-card-meta]').forEach(function(el){ el.style.viewTransitionName='none'; });
+      ['patientDetail','headerTitle','headerAge','headerPatientMeta2','backBtn'].forEach(function(id){
+        const el=document.getElementById(id);
+        if(el) el.style.viewTransitionName='none';
       });
       const detail=document.getElementById('patientDetail');
-      if(detail && (!active || detail.dataset.vtPatientActive!=='1')) detail.style.viewTransitionName='none';
+      if(detail) detail.dataset.vtPatientActive='';
+      state.activePatientTransitionId=null;
     }
     function setPatientTransition(patientId){
       const key=String(patientId||'');
       state.activePatientTransitionId=key;
+      const cleanups=[];
       const card=document.querySelector('[data-patient-foreground="'+key+'"]');
+      const cardName=document.querySelector('[data-patient-card-name="'+key+'"]');
+      const cardMeta=document.querySelector('[data-patient-card-meta="'+key+'"]');
       const detail=document.getElementById('patientDetail');
+      const headerTitle=document.getElementById('headerTitle');
+      const headerAge=document.getElementById('headerAge');
+      const headerMeta2=document.getElementById('headerPatientMeta2');
+      const backBtn=document.getElementById('backBtn');
       clearPatientTransitionNames();
-      if(card) card.style.viewTransitionName='hah-patient-surface';
+      if(card) cleanups.push(applyTransitionName(card,'hah-patient-surface'));
       if(detail){
         detail.dataset.vtPatientActive='1';
-        detail.style.viewTransitionName='hah-patient-surface';
+        cleanups.push(applyTransitionName(detail,'hah-patient-surface'));
       }
+      if(cardName && headerTitle){
+        cleanups.push(applyTransitionName(cardName,'hah-patient-title'));
+        cleanups.push(applyTransitionName(headerTitle,'hah-patient-title'));
+      }
+      if(cardMeta && headerAge && !headerAge.classList.contains('hidden')){
+        cleanups.push(applyTransitionName(cardMeta,'hah-patient-meta'));
+        cleanups.push(applyTransitionName(headerAge,'hah-patient-meta'));
+      }
+      if(headerMeta2 && !headerMeta2.classList.contains('hidden')) cleanups.push(applyTransitionName(headerMeta2,'hah-patient-submeta'));
+      if(backBtn && !backBtn.classList.contains('hidden')) cleanups.push(applyTransitionName(backBtn,'hah-header-back'));
       return function(){
-        if(card) card.style.viewTransitionName='none';
-        if(detail){ detail.style.viewTransitionName='none'; detail.dataset.vtPatientActive=''; }
-        state.activePatientTransitionId=null;
+        cleanups.forEach(safeCleanup);
+        clearPatientTransitionNames();
       };
     }
     function setSectionTransition(sectionId){
       document.querySelectorAll('#patients, #tasks, #handover, #deletedPage, #eventLogPage').forEach(function(el){ el.style.viewTransitionName='none'; });
       const active=document.getElementById(sectionId);
-      if(active) active.style.viewTransitionName='hah-section-surface';
-      return function(){ if(active) active.style.viewTransitionName='none'; };
+      const cleanup=applyTransitionName(active,'hah-section-surface');
+      return function(){ safeCleanup(cleanup); };
+    }
+    function setOptionsTransition(nextKey){
+      const current=findOptionsTarget(getCurrentOptionsSection());
+      const next=findOptionsTarget(nextKey);
+      const cleanups=[];
+      const direction=!nextKey ? 'back' : 'forward';
+      document.documentElement.setAttribute('data-hah-options-direction', direction);
+      cleanups.push(function(){ try{ document.documentElement.removeAttribute('data-hah-options-direction'); }catch(_e){} });
+      if(current) cleanups.push(applyTransitionName(current,'hah-options-panel'));
+      if(next && next!==current) cleanups.push(applyTransitionName(next,'hah-options-panel'));
+      return function(){ cleanups.forEach(safeCleanup); };
     }
     function pulseCurrentSurface(options={}){
       const explicitId=options && options.patientId!=null ? String(options.patientId) : (global.currentPatient!=null ? String(global.currentPatient) : '');
@@ -10881,15 +10990,59 @@ function initPatientDetailEdgeSwipe(){
       void target.offsetWidth;
       target.classList.add('hah-saved-pulse');
       clearTimeout(state.pulseTimer);
-      state.pulseTimer=setTimeout(function(){ target.classList.remove('hah-saved-pulse'); }, 720);
+      state.pulseTimer=setTimeout(function(){ target.classList.remove('hah-saved-pulse'); }, 760);
     }
-    function markPatientCardUpdated(patientId){
+    function pulseSection(sectionKey){
+      const key=String(sectionKey||'').trim();
+      if(!key) return;
+      const card=document.querySelector('#patientDetail .patient-reorder-card[data-card-key="'+key+'"]');
+      if(!card) return;
+      card.classList.remove('hah-section-updated');
+      void card.offsetWidth;
+      card.classList.add('hah-section-updated');
+      clearTimeout(state.sectionPulseTimers[key]);
+      state.sectionPulseTimers[key]=setTimeout(function(){
+        card.classList.remove('hah-section-updated');
+      }, 1300);
+    }
+    function pulseSections(sectionKeys){
+      const keys=Array.from(new Set((Array.isArray(sectionKeys) ? sectionKeys : [sectionKeys]).map(function(v){ return String(v||'').trim(); }).filter(Boolean)));
+      keys.forEach(pulseSection);
+    }
+    function noteChangedSections(patientId, sections){
+      const key=String(patientId||'').trim();
+      if(!key) return;
+      const values=Array.from(new Set((Array.isArray(sections) ? sections : [sections]).map(function(v){ return String(v||'').trim(); }).filter(Boolean)));
+      if(!values.length) return;
+      const current=Array.isArray(state.pendingSectionsByPatient[key]) ? state.pendingSectionsByPatient[key] : [];
+      state.pendingSectionsByPatient[key]=Array.from(new Set(current.concat(values)));
+    }
+    function consumeChangedSections(patientId){
+      const key=String(patientId||'').trim();
+      if(!key) return [];
+      const values=Array.isArray(state.pendingSectionsByPatient[key]) ? state.pendingSectionsByPatient[key].slice() : [];
+      delete state.pendingSectionsByPatient[key];
+      return values;
+    }
+    function markPatientCardUpdated(patientId, sections=[]){
       const key=String(patientId||'');
       if(!key) return;
       const card=document.querySelector('[data-patient-foreground="'+key+'"]');
       if(!card) return;
+      const values=Array.from(new Set((Array.isArray(sections) ? sections : [sections]).map(function(v){ return String(v||'').trim(); }).filter(Boolean)));
+      const label=values.length===1 ? 'Updated' : (values.length>1 ? values.length + ' updates' : 'Updated');
+      card.dataset.hahUpdatedLabel=label;
+      if(values.length) card.dataset.hahUpdatedSections=values.join(' ');
+      else delete card.dataset.hahUpdatedSections;
+      card.classList.remove('hah-patient-updated');
+      void card.offsetWidth;
       card.classList.add('hah-patient-updated');
-      setTimeout(function(){ card.classList.remove('hah-patient-updated'); }, 1800);
+      clearTimeout(state.patientCardTimers[key]);
+      state.patientCardTimers[key]=setTimeout(function(){
+        card.classList.remove('hah-patient-updated');
+        delete card.dataset.hahUpdatedLabel;
+        delete card.dataset.hahUpdatedSections;
+      }, 2300);
     }
     function notePatientButtonFocus(patientId){
       state.lastFocusedPatientId=patientId!=null ? String(patientId) : null;
@@ -10906,59 +11059,95 @@ function initPatientDetailEdgeSwipe(){
       const active=document.activeElement;
       return active && active !== document.body ? active : null;
     }
-    function animateOverlayOpen(overlay, sourceEl, mode){
-      if(!overlay || prefersReducedMotion()) return;
-      const source=sourceEl || state.overlaySourceEl || getOverlaySourceEl();
+    function applyOverlayOrigin(overlay, sourceEl){
+      const source=sourceEl || getOverlaySourceEl();
       const rect=source && source.getBoundingClientRect ? source.getBoundingClientRect() : null;
       if(rect){
         overlay.style.setProperty('--hah-overlay-origin-x', Math.round(rect.left + (rect.width/2)) + 'px');
         overlay.style.setProperty('--hah-overlay-origin-y', Math.round(rect.top + (rect.height/2)) + 'px');
       }
+      return source || null;
+    }
+    function animateOverlayOpen(overlay, sourceEl, mode){
+      if(!overlay || prefersReducedMotion()) return;
+      const source=applyOverlayOrigin(overlay, sourceEl || state.overlaySourceEl);
+      if(overlay.id) state.overlaySourceById[overlay.id]=source;
       overlay.dataset.overlayMode=mode||'sheet';
-      overlay.classList.remove('hah-overlay-enter');
+      overlay.classList.remove('hah-overlay-exit','hah-overlay-enter');
       void overlay.offsetWidth;
       overlay.classList.add('hah-overlay-enter');
-      setTimeout(function(){ overlay.classList.remove('hah-overlay-enter'); }, 260);
+      setTimeout(function(){ overlay.classList.remove('hah-overlay-enter'); }, 280);
+    }
+    function animateOverlayExit(overlay, sourceEl, mode, done){
+      if(!overlay || overlay.classList.contains('hidden') || prefersReducedMotion()){
+        if(typeof done==='function') done();
+        return;
+      }
+      applyOverlayOrigin(overlay, sourceEl || state.overlaySourceById[overlay.id] || state.overlaySourceEl);
+      overlay.dataset.overlayMode=mode||overlay.dataset.overlayMode||'sheet';
+      overlay.classList.remove('hah-overlay-enter','hah-overlay-exit');
+      void overlay.offsetWidth;
+      overlay.classList.add('hah-overlay-exit');
+      setTimeout(function(){
+        overlay.classList.remove('hah-overlay-exit');
+        if(typeof done==='function') done();
+      }, 180);
     }
     function wrapOverlayFunction(fnName, overlayId, mode){
       const original=global[fnName];
-      if(typeof original!=='function' || original.__hahWrapped) return;
+      if(typeof original!=='function' || original.__hahWrappedOpen) return;
       const wrapped=function(){
         state.overlaySourceEl=getOverlaySourceEl();
-        const args=arguments;
-        let result;
-        const invoke=()=>{
-          result=original.apply(this,args);
-          const overlay=document.getElementById(overlayId);
-          if(overlay && !overlay.classList.contains('hidden')) animateOverlayOpen(overlay, state.overlaySourceEl, mode);
-          return result;
-        };
-        if(prefersReducedMotion() || !supportsViewTransitions()) return invoke();
-        runViewTransition(invoke, {skipTransition:false});
+        const result=original.apply(this, arguments);
+        const overlay=document.getElementById(overlayId);
+        if(overlay && !overlay.classList.contains('hidden')) animateOverlayOpen(overlay, state.overlaySourceEl, mode);
         return result;
       };
-      wrapped.__hahWrapped=true;
+      wrapped.__hahWrappedOpen=true;
+      global[fnName]=wrapped;
+    }
+    function wrapOverlayCloseFunction(fnName, overlayId, mode){
+      const original=global[fnName];
+      if(typeof original!=='function' || original.__hahWrappedClose) return;
+      const wrapped=function(){
+        const overlay=document.getElementById(overlayId);
+        const args=arguments;
+        const context=this;
+        if(!overlay || overlay.classList.contains('hidden') || overlay.dataset.hahClosing==='1') return original.apply(context,args);
+        overlay.dataset.hahClosing='1';
+        animateOverlayExit(overlay, state.overlaySourceById[overlayId] || state.overlaySourceEl, mode, function(){
+          try{ original.apply(context,args); }
+          finally{
+            delete state.overlaySourceById[overlayId];
+            overlay.dataset.hahClosing='';
+          }
+        });
+      };
+      wrapped.__hahWrappedClose=true;
       global[fnName]=wrapped;
     }
     function installOverlayWrappers(){
       if(state.installAttempted) return;
       state.installAttempted=true;
       [
-        ['openBmOverlay','bmOverlay','popover'],
-        ['openHrOverlay','hrOverlay','popover'],
-        ['openBpOverlay','bpOverlay','popover'],
-        ['openAcpOverlay','acpOverlay','sheet'],
-        ['openBloodScanOverlay','bloodScanOverlay','sheet'],
-        ['openBlisterScanOverlay','blisterScanOverlay','sheet'],
-        ['openIvScanOverlay','ivScanOverlay','sheet'],
-        ['openMedsOverlay','medsOverlay','sheet'],
-        ['openIVEditOverlay','ivEditOverlay','sheet'],
-        ['openPmhPresetsOverlay','pmhPresetsOverlay','sheet'],
-        ['openSocialHistoryPresetsOverlay','socialHistoryPresetsOverlay','sheet'],
-        ['openExamFindingsOverlay','examFindingsOverlay','sheet'],
-        ['openScoreToolsOverlay','scoreToolsOverlay','sheet'],
-        ['openVipScoreOverlay','vipScoreOverlay','popover'],
-      ].forEach(function(item){ wrapOverlayFunction(item[0], item[1], item[2]); });
+        ['openBmOverlay','bmOverlay','popover','closeBmOverlay'],
+        ['openHrOverlay','hrOverlay','popover','closeHrOverlay'],
+        ['openBpOverlay','bpOverlay','popover','closeBpOverlay'],
+        ['openAcpOverlay','acpOverlay','sheet','closeAcpOverlay'],
+        ['openBloodScanOverlay','bloodScanOverlay','sheet','closeBloodScanOverlay'],
+        ['openBlisterScanOverlay','blisterScanOverlay','sheet','closeBlisterScanOverlay'],
+        ['openIvScanOverlay','ivScanOverlay','sheet','closeIvScanOverlay'],
+        ['openMedsOverlay','medsOverlay','sheet','closeMedsOverlay'],
+        ['openIVEditOverlay','ivEditOverlay','sheet','closeIVEditOverlay'],
+        ['openPmhPresetsOverlay','pmhPresetsOverlay','sheet','closePmhPresetsOverlay'],
+        ['openSocialHistoryPresetsOverlay','socialHistoryPresetsOverlay','sheet','closeSocialHistoryPresetsOverlay'],
+        ['openExamFindingsOverlay','examFindingsOverlay','sheet','closeExamFindingsOverlay'],
+        ['openScoreToolsOverlay','scoreToolsOverlay','sheet','closeScoreToolsOverlay'],
+        ['openVipScoreOverlay','vipScoreOverlay','popover','closeVipScoreOverlay'],
+      ].forEach(function(item){
+        wrapOverlayFunction(item[0], item[1], item[2]);
+        wrapOverlayCloseFunction(item[3], item[1], item[2]);
+      });
     }
     function restoreRoute(route, options={}){
       if(!route || !route[FLAG]) return false;
@@ -11007,7 +11196,12 @@ function initPatientDetailEdgeSwipe(){
       restoreDetailScroll: restoreDetailScroll,
       setPatientTransition: setPatientTransition,
       setSectionTransition: setSectionTransition,
+      setOptionsTransition: setOptionsTransition,
       pulseCurrentSurface: pulseCurrentSurface,
+      pulseSection: pulseSection,
+      pulseSections: pulseSections,
+      noteChangedSections: noteChangedSections,
+      consumeChangedSections: consumeChangedSections,
       markPatientCardUpdated: markPatientCardUpdated,
       notePatientButtonFocus: notePatientButtonFocus,
       restorePatientButtonFocus: restorePatientButtonFocus,
@@ -11160,7 +11354,7 @@ function openOptionsSectionPage(openKey='', options={}){
   if(typeof HAH_NAV!=='undefined') return HAH_NAV.runViewTransition(run, {
     skipTransition:!!(options && options.skipTransition),
     before:function(){
-      try{ return HAH_NAV.setSectionTransition('handover'); }catch(_e){ return null; }
+      try{ return typeof HAH_NAV.setOptionsTransition==='function' ? HAH_NAV.setOptionsTransition(normalized) : HAH_NAV.setSectionTransition('handover'); }catch(_e){ return null; }
     }
   });
   return run();
@@ -17595,7 +17789,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_560_release.html; source=hospital_at_home_v12_36_560_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_561_release.html; source=hospital_at_home_v12_36_561_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
