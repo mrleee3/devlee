@@ -222,9 +222,9 @@ html,body{background:var(--bg)!important;}
 *{box-sizing:border-box} html{background:var(--bg)} html.patients-section-active,body.patients-section-active,html.detail-view-active,body.detail-view-active{height:100%;overflow:hidden;overscroll-behavior:none} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg)!important;color:var(--text);padding-bottom:92px}
 #appSnapshotShield{position:fixed;inset:0;background:var(--blue);z-index:9999;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .16s ease,visibility 0s linear .16s}#appSnapshotShield.active{opacity:1;visibility:visible;transition:opacity .08s linear}
 #appSplash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.025) 16%,rgba(0,0,0,.055) 100%),var(--blue);color:#fff;z-index:10000;opacity:1;visibility:visible;pointer-events:auto;overflow:hidden;transition:opacity .9s ease,visibility 0s linear .9s}#appSplash.hidden{opacity:0;visibility:hidden;pointer-events:none}#appSplash.hidden .app-splash-stack{opacity:0;transform:translateY(-4px) scale(.985)}#appSplash.hidden .app-splash-glow{opacity:0;transform:scale(1.08)}.app-splash-stack{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 28px;text-align:center;transform:translateY(0) scale(1);opacity:1;transition:opacity .82s ease,transform .82s cubic-bezier(.22,.78,.2,1)}.app-splash-glow{position:absolute;border-radius:999px;filter:blur(0);pointer-events:none;opacity:.9;transition:opacity .82s ease,transform .82s ease}.app-splash-glow-a{width:320px;height:320px;left:-84px;top:calc(50% - 240px);background:radial-gradient(circle,rgba(255,255,255,.24) 0%,rgba(255,255,255,.08) 34%,rgba(255,255,255,0) 72%)}.app-splash-glow-b{width:280px;height:280px;right:-82px;bottom:calc(50% - 230px);background:radial-gradient(circle,rgba(255,255,255,.18) 0%,rgba(255,255,255,.05) 32%,rgba(255,255,255,0) 72%)}.app-splash-animate{opacity:1;transform:none;animation:none}.app-splash-logo-wrap{display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(8px) scale(.968);animation:appSplashLogoIn .58s cubic-bezier(.22,.88,.24,1) .06s forwards;animation-play-state:paused}.app-splash-logo-button{appearance:none;-webkit-appearance:none;border:0;padding:0;background:transparent;border-radius:30px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}.app-splash-logo-button:focus-visible{outline:2px solid rgba(255,255,255,.92);outline-offset:8px}.app-splash-logo-button:active .app-splash-logo{transform:scale(.97)}.app-splash-logo{display:flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.11));box-shadow:0 16px 34px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .18s ease}.app-splash-logo-svg{width:54px;height:54px;display:block}.app-splash-logo-svg rect{fill:none;stroke:rgba(255,255,255,.94);stroke-width:3.5}.app-splash-logo-svg path{fill:none;stroke:rgba(255,255,255,.96);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.app-splash-title-block{display:flex;flex-direction:column;align-items:center;gap:7px}.app-splash-title,.app-splash-tagline{display:block}.app-splash-company{display:block}.app-splash-title{font-size:31px;font-weight:760;line-height:1.05;letter-spacing:-.028em;text-shadow:0 1px 0 rgba(0,0,0,.08);opacity:0;transform:translateY(8px);animation:appSplashTitleIn .72s cubic-bezier(.16,.84,.2,1) .18s forwards;will-change:opacity,transform;animation-play-state:paused}.app-splash-tagline{font-size:14px;font-weight:600;line-height:1.2;letter-spacing:.01em;color:rgba(255,255,255,.86);opacity:0;transform:translateY(8px);animation:appSplashTitleIn .72s cubic-bezier(.16,.84,.2,1) .46s forwards;will-change:opacity,transform;animation-play-state:paused}.app-splash-company{position:relative;font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.82);opacity:0;animation:appSplashCompanyFadeIn 2.2s cubic-bezier(0,0,.2,1) 1.1s forwards;will-change:opacity;-webkit-font-smoothing:antialiased;font-kerning:none;font-variant-ligatures:none;animation-play-state:paused}#appSplash.splash-ready .app-splash-logo-wrap,#appSplash.splash-ready .app-splash-title,#appSplash.splash-ready .app-splash-tagline,#appSplash.splash-ready .app-splash-company{animation-play-state:running}#appSplash.splash-transition-active .app-splash-logo-wrap{opacity:0;transform:translateY(-10px) scale(.98)}#appSplash.splash-transition-active .app-splash-company{opacity:0}#appSplash.splash-transition-active .app-splash-glow{opacity:0;transform:scale(1.06)}#appSplash.splash-transition-active .app-splash-title{opacity:0}#appSplash .app-splash-title{transition:opacity .12s linear}.app-splash-title-ghost{position:fixed;left:0;top:0;width:100%;display:block;margin:0;color:#fff;z-index:10020;pointer-events:none;text-align:center;transform-origin:center center;will-change:transform,opacity;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;backface-visibility:hidden;-webkit-backface-visibility:hidden}#lockScreen.splash-title-transition .lock-title{opacity:0}#lockScreen.splash-title-transition .lock-subtitle,#lockScreen.splash-title-transition .pin-dots,#lockScreen.splash-title-transition .pin-error,#lockScreen.splash-title-transition .pin-pad,#lockScreen.splash-title-transition .pin-biometric-row{opacity:0;transform:translateY(12px);transition:opacity .32s ease,transform .42s cubic-bezier(.18,.82,.2,1)}#lockScreen.splash-title-transition.splash-title-transition-ready .lock-subtitle,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-dots,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-error,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-pad,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-biometric-row{opacity:1;transform:translateY(0)}@keyframes appSplashLogoIn{from{opacity:0;transform:translateY(8px) scale(.968)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes appSplashTitleIn{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}@keyframes appSplashCompanyFadeIn{from{opacity:0}to{opacity:1}}
- body::before{content:"";position:fixed;left:0;right:0;top:0;height:calc(var(--app-header-height,88px) + env(safe-area-inset-top) + 24px);background:var(--blue);pointer-events:none;z-index:0;transform:translateZ(0);transition:none;backface-visibility:hidden;-webkit-backface-visibility:hidden} body[style]{background:var(--bg)!important} body.keyboard-open{padding-bottom:12px} body.keyboard-open #patients{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 24px)} body.keyboard-open #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 40px)} body.add-patient-open #patients{pointer-events:none} body.add-patient-open #pullRefreshIndicator{opacity:0!important;transform:translateY(-12px)!important}
+ body::before{content:"";position:fixed;left:0;right:0;top:0;height:calc(var(--app-header-height,88px) + env(safe-area-inset-top) + 24px);background:var(--blue);pointer-events:none;z-index:0;transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden} body[style]{background:var(--bg)!important} body.keyboard-open{padding-bottom:12px} body.keyboard-open #patients{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 24px)} body.keyboard-open #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 40px)} body.add-patient-open #patients{pointer-events:none} body.add-patient-open #pullRefreshIndicator{opacity:0!important;transform:translateY(-12px)!important}
 header{position:fixed;left:0;right:0;top:0;z-index:40;background:var(--blue);color:#fff;padding:calc(env(safe-area-inset-top) + 16px) 18px 16px;font-size:20px;font-weight:700;transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform}
-.subhead{font-size:12px;opacity:.9;margin-top:4px}.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.header-left{min-width:0}.header-meta{font-size:13px;opacity:.95;margin-top:6px}.header-age{font-size:18px;opacity:.95;font-weight:600;margin-left:2px}.header-meta2{font-size:12px;opacity:.9;margin-top:4px}.header-back{position:absolute;left:18px;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;padding:0 4px;min-width:auto;font-size:22px;line-height:1;z-index:2}.header-back.hidden{display:none!important}.header-lock{display:inline-flex;align-items:center;justify-content:center;min-width:50px;width:50px;height:44px;margin-top:0;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(255,255,255,.12);color:#fff;padding:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);transition:transform .14s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease;-webkit-tap-highlight-color:transparent}.header-lock svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round}.header-lock:active{transform:scale(.96);background:rgba(255,255,255,.16)}.header-lock:hover{background:rgba(255,255,255,.14)}.header-lock:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.18), inset 0 1px 0 rgba(255,255,255,.10)}header.has-back .header-left{padding-left:42px}.container{position:relative;z-index:1;padding:14px;padding-top:calc(var(--app-header-height,88px) + 14px);min-height:calc(100vh - var(--app-header-height,88px) - env(safe-area-inset-top) - 83px - env(safe-area-inset-bottom));background:var(--bg)}#patients{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:1;padding-top:14px;min-height:0;background:var(--bg);overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}#tasks.hidden,#handover.hidden,#patientDetail.hidden,#deletedPage.hidden,#eventLogPage.hidden{display:none!important}.hidden{display:none!important} #tasks,#handover{background:var(--bg);}.add-patient-overlay{position:fixed;left:0;right:0;top:0;bottom:0;z-index:28;pointer-events:none}.add-patient-overlay.show{pointer-events:auto}.add-patient-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}.add-patient-modal{position:fixed;left:14px;right:14px;top:var(--add-patient-modal-top,calc(var(--app-header-height,88px) + 16px));max-height:var(--add-patient-modal-max-height,calc(100dvh - var(--app-header-height,88px) - 112px));overflow:auto;margin:0;z-index:29;border-radius:20px;box-shadow:0 20px 48px rgba(15,23,42,.18);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.add-patient-modal.hidden{display:none!important}#patients.detail-underlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:4;background:var(--bg);pointer-events:none;transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;padding-top:14px;contain:paint;isolation:isolate}#patientDetail.detail-overlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:6;background:var(--bg);transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;box-shadow:-12px 0 32px rgba(15,23,42,.12);padding-top:14px;-webkit-overflow-scrolling:touch;touch-action:pan-y;contain:paint;isolation:isolate}body.detail-view-active #patientDetail.hidden{display:block!important}
+.subhead{font-size:12px;opacity:.9;margin-top:4px}.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.header-left{min-width:0}.header-meta{font-size:13px;opacity:.95;margin-top:6px}.header-age{font-size:18px;opacity:.95;font-weight:600;margin-left:2px}.header-meta2{font-size:12px;opacity:.9;margin-top:4px}.header-back{position:absolute;left:18px;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;padding:0 4px;min-width:auto;font-size:22px;line-height:1;z-index:2}.header-back.hidden{display:none!important}.header-lock{display:inline-flex;align-items:center;justify-content:center;min-width:50px;width:50px;height:44px;margin-top:0;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(255,255,255,.12);color:#fff;padding:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);transition:transform .14s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease;-webkit-tap-highlight-color:transparent}.header-lock svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round}.header-lock:active{transform:scale(.96);background:rgba(255,255,255,.16)}.header-lock:hover{background:rgba(255,255,255,.14)}.header-lock:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.18), inset 0 1px 0 rgba(255,255,255,.10)}header.has-back .header-left{padding-left:42px}.container{position:relative;z-index:1;padding:14px;padding-top:calc(var(--app-header-height,88px) + 14px);min-height:calc(100vh - var(--app-header-height,88px) - env(safe-area-inset-top) - 83px - env(safe-area-inset-bottom));background:var(--bg)}#patients{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:1;padding-top:14px;min-height:0;background:var(--bg);overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}#tasks.hidden,#handover.hidden,#patientDetail.hidden,#deletedPage.hidden,#eventLogPage.hidden{display:none!important}.hidden{display:none!important} #tasks,#handover{background:var(--bg);}.add-patient-overlay{position:fixed;left:0;right:0;top:0;bottom:0;z-index:28;pointer-events:none}.add-patient-overlay.show{pointer-events:auto}.add-patient-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}.add-patient-modal{position:fixed;left:14px;right:14px;top:var(--add-patient-modal-top,calc(var(--app-header-height,88px) + 16px));max-height:var(--add-patient-modal-max-height,calc(100dvh - var(--app-header-height,88px) - 112px));overflow:auto;margin:0;z-index:29;border-radius:20px;box-shadow:0 20px 48px rgba(15,23,42,.18);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.add-patient-modal.hidden{display:none!important}#patients.detail-underlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:4;background:var(--bg);pointer-events:none;transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;padding-top:14px}#patientDetail.detail-overlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:6;background:var(--bg);transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;box-shadow:-12px 0 32px rgba(15,23,42,.12);padding-top:14px;-webkit-overflow-scrolling:touch;touch-action:pan-y}body.detail-view-active #patientDetail.hidden{display:block!important}
 .card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .card.visit-selected{border:2px solid #0a84ff;padding:12px;box-sizing:border-box;box-shadow:0 0 0 1px rgba(10,132,255,.12),0 1px 4px rgba(10,132,255,.12)}
 .swipe-shell{position:relative;border-radius:16px;margin-bottom:12px;overflow:hidden;touch-action:pan-y;--visit-pill-width:54px;--visit-pill-scale:.88;--visit-pill-opacity:0;--visit-pill-shift:-16px;--visit-bg-opacity:0}.swipe-shell .card{margin-bottom:0}.swipe-background{position:absolute;left:0;top:0;bottom:0;width:286px;display:flex;align-items:center;justify-content:flex-start;gap:10px;padding-left:12px;z-index:0;pointer-events:none;opacity:var(--visit-bg-opacity);transition:opacity .18s ease}.swipe-foreground{position:relative;z-index:2;will-change:transform,background-color;transform:translate3d(0,0,0);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .26s cubic-bezier(.22,.9,.18,1),background-color .18s ease;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}.swipe-shell.swiping .swipe-foreground{transition:none;background:var(--card)}.swipe-shell.pressing .swipe-foreground{transition:none;background:rgba(15,23,42,.06);box-shadow:inset 0 0 0 1px rgba(15,23,42,.08)}.swipe-shell.revealed .swipe-foreground{box-shadow:0 10px 20px rgba(15,23,42,.08)}.visit-action-wrap,.flag-action-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:84px;opacity:var(--visit-pill-opacity);transform:translateX(var(--visit-pill-shift)) scale(var(--visit-pill-scale));transform-origin:left center;transition:opacity .18s ease, transform .24s cubic-bezier(.18,.9,.24,1.22)}.swipe-shell.swiping .visit-action-wrap,.swipe-shell.swiping .flag-action-wrap{transition:none}.swipe-shell.popped .visit-action-wrap,.swipe-shell.popped .flag-action-wrap{transform:translateX(0) scale(1.08)}.visit-reveal-btn,.flag-reveal-btn{position:relative;width:var(--visit-pill-width);height:48px;border:none;border-radius:999px;color:#fff;display:flex;align-items:center;justify-content:center;z-index:1;opacity:var(--visit-pill-opacity);transition:width .24s cubic-bezier(.22,.9,.18,1), opacity .18s ease, filter .18s ease;pointer-events:none;box-shadow:none}.visit-reveal-btn{background:#0a84ff}.flag-reveal-btn{background:#f5c542;color:#fff}.context-menu-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.16);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:120;opacity:0;pointer-events:none;transition:opacity .18s ease}.context-menu-backdrop.show{opacity:1;pointer-events:auto}.patient-context-menu{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);width:min(280px,calc(100vw - 32px));background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.65);border-radius:20px;box-shadow:0 18px 48px rgba(15,23,42,.18);overflow:hidden;z-index:121;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .2s cubic-bezier(.2,.9,.2,1)}.patient-context-menu.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}.patient-context-header{padding:14px 16px 10px;border-bottom:1px solid rgba(148,163,184,.18);text-align:center}.patient-context-title{font-size:16px;font-weight:800;color:#111827}.patient-context-subtitle{margin-top:4px;font-size:12px;color:#6b7280}.patient-context-actions{padding:8px}.patient-context-action{width:100%;border:none;background:transparent;padding:13px 14px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:700;color:#111827}.patient-context-action + .patient-context-action{margin-top:2px}.patient-context-action:active{background:rgba(10,132,255,.1)}.patient-context-action.disabled{color:#9ca3af}.patient-context-action.disabled:active{background:transparent}.patient-context-action.danger{color:#dc2626}.patient-context-sep{height:8px}.patient-context-right{font-size:18px;line-height:1;color:#9ca3af}.patient-context-badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 8px;border-radius:999px;background:#eef2ff;color:#1d4ed8;font-size:11px;font-weight:800}.patient-context-badge.tasks{background:#fef3c7;color:#92400e}.swipe-shell.show-action .visit-reveal-btn,.swipe-shell.show-action .flag-reveal-btn{pointer-events:auto}.swipe-shell.swiping .visit-reveal-btn,.swipe-shell.swiping .flag-reveal-btn{transition:none}.visit-reveal-btn .house-icon,.flag-reveal-btn .flag-icon{width:20px;height:20px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}.visit-reveal-btn .house-icon path.house-fill{fill:rgba(255,255,255,.16);stroke:none}.visit-action-wrap .visit-label,.flag-action-wrap .flag-label{font-size:12px;font-weight:700;line-height:1;color:#6b7280;letter-spacing:.01em;opacity:var(--visit-pill-opacity);transition:opacity .18s ease}.visit-reveal-btn:active,.flag-reveal-btn:active{filter:brightness(.95)}
@@ -2415,65 +2415,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 .patient-helper-line{display:block;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.patient-helper-default{display:inline;min-width:0;overflow:hidden;text-overflow:ellipsis}.patient-helper-status{display:inline-flex;align-items:center;gap:8px;min-width:0;max-width:100%;vertical-align:top}.patient-helper-status.hidden{display:none!important}.patient-helper-copy{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:#667085}.patient-helper-copy.status-updated{opacity:.88}.patient-helper-status[data-tone="saved"] .patient-helper-copy,.patient-helper-status[data-tone="action"] .patient-helper-copy,.patient-helper-status[data-tone="sync"] .patient-helper-copy,.patient-helper-status[data-tone="undo"] .patient-helper-copy{color:#0a84ff}.patient-helper-status[data-tone="alert"] .patient-helper-copy{color:#b42318}.patient-helper-undo{flex:0 0 auto;padding:0;border:none;background:none;color:#0a84ff;font-size:12px;font-weight:800;line-height:1.1}.patient-helper-undo.hidden{display:none!important}.patient-helper-undo:active{transform:translateY(1px)}
 .patient-metrics-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 12px}.patient-metric-card{position:relative;overflow:hidden;min-height:78px;padding:12px 12px 11px;border-radius:18px;background:#f8fafc;border:1px solid rgba(148,163,184,.18);box-shadow:none;display:flex;flex-direction:column;justify-content:space-between;gap:8px;transition:background .18s ease,border-color .18s ease,color .18s ease}.patient-metric-value{font-size:31px;line-height:.92;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"ss01" 1;color:#0f172a}.patient-metric-label{font-size:11px;line-height:1.2;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#475467;white-space:nowrap}.patient-metric-card.is-good{background:#ecfdf3;border-color:#bbf7d0}.patient-metric-card.is-good .patient-metric-value{color:#166534}.patient-metric-card.is-good .patient-metric-label{color:#15803d}.patient-metric-card.is-bad{background:#fef2f2;border-color:#fecaca}.patient-metric-card.is-bad .patient-metric-value{color:#b42318}.patient-metric-card.is-bad .patient-metric-label{color:#b42318}.patient-metric-card.is-neutral{background:#f8fafc;border-color:rgba(148,163,184,.18)}.patient-metric-card.is-neutral .patient-metric-value{color:#0f172a}.patient-metric-card.is-neutral .patient-metric-label{color:#475467}@media (max-width:420px){.patient-helper-line{display:block}.patient-helper-copy{font-size:12.5px}.patient-helper-undo{font-size:11.5px}.patient-metrics-strip{gap:8px}.patient-metric-card{min-height:74px;padding:11px 10px 10px;border-radius:17px}.patient-metric-value{font-size:28px}.patient-metric-label{font-size:10.5px}}
 
-
-/* Navigation + view transitions */
-:root{--hah-vt-duration:290ms;--hah-vt-ease:cubic-bezier(.22,.9,.18,1);--hah-vt-spring:cubic-bezier(.2,.88,.22,1);--hah-overlay-duration:200ms}
-#appHeader{view-transition-name:hah-app-header;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform}
-#headerTitle,#headerAge,#headerPatientMeta2,#backBtn{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
-#patients,#tasks,#handover,#deletedPage,#eventLogPage,#patientDetail,#optionsHomePanel,.options-page-panel{contain:layout paint style;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
-[data-patient-foreground],.swipe-foreground,.card,.patient-reorder-card,.options-page-panel,.sheet,.overlay-card,.popover-card{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0);will-change:transform,opacity}
-html.hah-vt-running body{overflow:hidden}
-::view-transition-old(root),::view-transition-new(root){animation-duration:var(--hah-vt-duration);animation-timing-function:var(--hah-vt-ease)}
-::view-transition-group(hah-app-header),::view-transition-group(hah-patient-surface),::view-transition-group(hah-patient-title),::view-transition-group(hah-patient-meta),::view-transition-group(hah-section-surface),::view-transition-group(hah-options-panel){animation-duration:var(--hah-vt-duration);animation-timing-function:var(--hah-vt-spring)}
-::view-transition-old(hah-app-header),::view-transition-new(hah-app-header),::view-transition-old(hah-patient-title),::view-transition-new(hah-patient-title),::view-transition-old(hah-patient-meta),::view-transition-new(hah-patient-meta),::view-transition-old(hah-section-surface),::view-transition-new(hah-section-surface){animation-duration:var(--hah-vt-duration);animation-timing-function:var(--hah-vt-ease)}
-::view-transition-old(hah-patient-surface),::view-transition-new(hah-patient-surface){mix-blend-mode:normal;overflow:clip;border-radius:24px;box-shadow:0 18px 46px rgba(15,23,42,.10)}
-::view-transition-old(hah-patient-surface){animation:hahPatientSurfaceOld var(--hah-vt-duration) var(--hah-vt-ease)}
-::view-transition-new(hah-patient-surface){animation:hahPatientSurfaceNew var(--hah-vt-duration) var(--hah-vt-spring)}
-::view-transition-old(hah-patient-title){animation:hahPatientTitleOld var(--hah-vt-duration) var(--hah-vt-ease)}
-::view-transition-new(hah-patient-title){animation:hahPatientTitleNew var(--hah-vt-duration) var(--hah-vt-spring)}
-::view-transition-old(hah-patient-meta){animation:hahPatientMetaOld var(--hah-vt-duration) var(--hah-vt-ease)}
-::view-transition-new(hah-patient-meta){animation:hahPatientMetaNew var(--hah-vt-duration) var(--hah-vt-spring)}
-.hah-saved-pulse{animation:hahSavedPulse .72s ease}
-.hah-section-updated{position:relative;animation:hahSectionPop .48s var(--hah-vt-spring)}
-.hah-section-updated::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:rgba(10,132,255,.055);animation:hahSectionWash 1.35s ease forwards}
-.hah-section-updated::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 1px rgba(10,132,255,.24) inset,0 12px 30px rgba(10,132,255,.12);animation:hahSectionGlow 1.35s ease forwards}
-.hah-overlay-enter,.hah-overlay-exit{transform-origin:var(--hah-overlay-origin-x,50%) var(--hah-overlay-origin-y,20%);will-change:transform,opacity}
-.hah-overlay-enter[data-overlay-mode="sheet"]{animation:hahSheetEnter 400ms cubic-bezier(.32,.72,0,1) both}
-.hah-overlay-exit[data-overlay-mode="sheet"]{animation:hahSheetExit 160ms cubic-bezier(.4,0,1,1) forwards}
-.hah-overlay-enter[data-overlay-mode="popover"]{animation:hahPopoverEnter 240ms cubic-bezier(.34,1.4,.64,1) both}
-.hah-overlay-exit[data-overlay-mode="popover"]{animation:hahPopoverExit 150ms cubic-bezier(.4,0,1,1) forwards}
-#patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-4px 0 20px rgba(15,23,42,.09)}
-#patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94),box-shadow 360ms ease;will-change:transform}
-#patients.hah-detail-underlay-open-prep{transform:translate3d(0,0,0)}
-#patients.hah-detail-underlay-open-anim{transform:translate3d(-28%,0,0);transition:transform 360ms cubic-bezier(.25,.46,.45,.94);will-change:transform}
-@keyframes hahPatientSurfaceOld{from{opacity:1;transform:translate3d(0,0,0) scale(1)}to{opacity:.08;transform:translate3d(0,-8px,0) scale(.985)}}
-@keyframes hahPatientSurfaceNew{from{opacity:.1;transform:translate3d(0,14px,0) scale(.965)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
-@keyframes hahPatientTitleOld{from{opacity:1;transform:translate3d(0,0,0) scale(1)}to{opacity:.24;transform:translate3d(0,-3px,0) scale(.98)}}
-@keyframes hahPatientTitleNew{from{opacity:.2;transform:translate3d(0,6px,0) scale(.97)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
-@keyframes hahPatientMetaOld{from{opacity:1;transform:translate3d(0,0,0)}to{opacity:0;transform:translate3d(0,-4px,0)}}
-@keyframes hahPatientMetaNew{from{opacity:0;transform:translate3d(0,5px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-@keyframes hahOptionsOldForward{from{opacity:1;transform:translate3d(0,0,0)}to{opacity:0;transform:translate3d(-22px,0,0)}}
-@keyframes hahOptionsNewForward{from{opacity:0;transform:translate3d(28px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-@keyframes hahOptionsOldBack{from{opacity:1;transform:translate3d(0,0,0)}to{opacity:0;transform:translate3d(24px,0,0)}}
-@keyframes hahOptionsNewBack{from{opacity:0;transform:translate3d(-26px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-@keyframes hahSavedPulse{0%{box-shadow:0 0 0 0 rgba(10,132,255,0);border-color:rgba(15,23,42,.08)}35%{box-shadow:0 0 0 4px rgba(10,132,255,.12);border-color:rgba(10,132,255,.26)}100%{box-shadow:0 0 0 0 rgba(10,132,255,0);border-color:rgba(15,23,42,.08)}}
-@keyframes hahSectionPop{0%{transform:translate3d(0,8px,0) scale(.992)}100%{transform:translate3d(0,0,0) scale(1)}}
-@keyframes hahSectionGlow{0%{opacity:0}14%{opacity:1}100%{opacity:0}}
-@keyframes hahSectionWash{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
-@keyframes hahSheetEnter{from{opacity:0;transform:translate3d(0,64px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-@keyframes hahSheetExit{from{opacity:1;transform:translate3d(0,0,0)}to{opacity:0;transform:translate3d(0,64px,0)}}
-@keyframes hahPopoverEnter{from{opacity:0;transform:scale(.72)}to{opacity:1;transform:scale(1)}}
-@keyframes hahPopoverExit{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.72)}}
-/* Header title slide on patient open/back */
-.hah-header-forward{animation:hahHeaderForward 300ms cubic-bezier(.25,.46,.45,.94) both}
-.hah-header-back{animation:hahHeaderBack 300ms cubic-bezier(.25,.46,.45,.94) both}
-@keyframes hahHeaderForward{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:translateX(0)}}
-@keyframes hahHeaderBack{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
-@media (prefers-reduced-motion: reduce){
-  :root{--hah-vt-duration:1ms;--hah-overlay-duration:1ms}
-  .hah-saved-pulse,.hah-section-updated,.hah-section-updated::before,.hah-section-updated::after,.hah-overlay-enter,.hah-overlay-exit,.hah-header-forward,.hah-header-back,#patientDetail.hah-detail-open-anim,#patients.hah-detail-underlay-open-anim{animation:none!important;transition:none!important}
-}
-
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -2683,8 +2624,8 @@ html.hah-vt-running body{overflow:hidden}
 </div>
 </div>
 <header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2"></div></div><div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-end;flex-shrink:0;align-self:stretch"><button aria-label="Lock app" class="header-lock" id="headerLockBtn" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></header>
-<div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <section class="container" id="patients">
+<div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
 <div class="section-header" style="margin-bottom:12px;">
 <div><h3 style="margin-bottom:2px">Patients</h3><div class="tiny muted patient-helper-line" id="patientStatusHelper" style="margin-top:10px;"><span class="patient-helper-default" id="patientRefreshText">Pull to refresh list</span><span class="patient-helper-status hidden" id="patientInlineStatus"><span aria-live="polite" class="patient-helper-copy" id="saveStatus"></span><button class="patient-helper-undo hidden" id="undoBtn" type="button">Undo</button></span></div></div>
@@ -2894,7 +2835,7 @@ html.hah-vt-running body{overflow:hidden}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_579_release.html</div><div>Source: hospital_at_home_v12_36_579_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_558_release.html</div><div>Source: hospital_at_home_v12_36_558_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -6553,61 +6494,42 @@ function openWorkbookLink(){
 }
 
 </script><script>
-function saveData(t="Saved locally", options={}){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof HAH_NAV!=='undefined'){ try{HAH_NAV.commitHistory(HAH_NAV.buildRouteState(), true);}catch(_e){} if(!(options&&options.pulse===false)){ try{HAH_NAV.pulseCurrentSurface({patientId:currentPatient});}catch(_e){} } } if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
+function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
 function nowString(){return new Date().toLocaleString([],{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}
 function hideAll(){["patients","tasks","handover","patientDetail","deletedPage","eventLogPage"].forEach(id=>$(id).classList.add("hidden"))}
 function setPatientViewportMode(active){document.body.classList.toggle("patients-section-active",!!active);document.documentElement.classList.toggle("patients-section-active",!!active)}
 function setActive(which){["navPatients","navTasks","navHandover"].forEach(id=>$(id).classList.remove("active")); $(which).classList.add("active")}
-function showSection(id, options={}) {
-  const opts=(options && typeof options==='object') ? options : {};
-  const restore=opts.restore||{};
-  const shouldPushHistory=opts.pushHistory!==false && !(typeof HAH_NAV!=='undefined' && HAH_NAV.state && HAH_NAV.state.restoring);
-  const run=()=>{
-    closeWeightHistoryModal();
-    if(id !== "patients" && typeof toggleAddPatient === "function") toggleAddPatient(false);
-    if(typeof HAH_NAV!=='undefined'){ try{HAH_NAV.rememberListScroll();}catch(_e){} }
-    setPatientDetailStackActive(false);
-    setPatientViewportMode(id === "patients");
-    hideAll();
-    $(id).classList.remove("hidden");
-    if(id === "patients"){
-      const scroller=$("patients");
-      if(scroller){
-        const target=Number.isFinite(Number(restore.listScrollTop)) ? Number(restore.listScrollTop) : scroller.scrollTop || 0;
-        scroller.scrollTop = target;
-        requestAnimationFrame(()=>{ scroller.scrollTop = target; });
-      }
-      try{ window.scrollTo(0,0); }catch(e){}
-    }
-    $("headerTitle").textContent = "Hospital at Home Companion (DEMO)";
-    $("headerAge").classList.add("hidden");
-    $("headerAge").textContent = "";
-    $("headerSub").textContent = "LK Medica Software Solutions Inc.";
-    $("headerPatientMeta2").classList.add("hidden");
-    $("headerPatientMeta2").textContent = "";
-    $("backBtn").classList.add("hidden");
-    $("appHeader").classList.remove("has-back");
-    if (id === "patients") setActive("navPatients");
-    if (id === "tasks") setActive("navTasks");
-    if (id === "handover") {
-      setActive("navHandover");
-      populateNhsEmailField();
-      if(typeof renderMedicationDebugLog === 'function') renderMedicationDebugLog();
-      if(typeof syncOptionsSectionPageState === 'function') syncOptionsSectionPageState({scroll:false, pushHistory:false, skipTransition:true});
-    }
-    if (id === "deletedPage") { setActive("navHandover"); renderDeletedList(); }
-    if (id === "eventLogPage") { setActive("navHandover"); renderEventLog(); }
-    syncSharedHeaderHeight();
-    if(shouldPushHistory && typeof HAH_NAV!=='undefined') HAH_NAV.commitHistory(HAH_NAV.buildRouteState({section:id}), false);
-  };
-  if(opts.immediate===true) return run();
-  if(typeof HAH_NAV!=='undefined'){
-    const before=(opts.patientTransitionId!=null)
-      ? function(){ try{ return HAH_NAV.setPatientTransition(opts.patientTransitionId); }catch(_e){ return null; } }
-      : (opts.skipSectionTransition ? null : function(){ try{ return HAH_NAV.setSectionTransition(id); }catch(_e){ return null; } });
-    return HAH_NAV.runViewTransition(run, {skipTransition:!!opts.skipTransition, before:before});
+function showSection(id) {
+  closeWeightHistoryModal();
+  if(id !== "patients" && typeof toggleAddPatient === "function") toggleAddPatient(false);
+  setPatientDetailStackActive(false);
+  setPatientViewportMode(id === "patients");
+  hideAll();
+  $(id).classList.remove("hidden");
+  if(id === "patients"){
+    const scroller=$("patients");
+    if(scroller) scroller.scrollTop = scroller.scrollTop || 0;
+    try{ window.scrollTo(0,0); }catch(e){}
   }
-  return run();
+  $("headerTitle").textContent = "Hospital at Home Companion (DEMO)";
+  $("headerAge").classList.add("hidden");
+  $("headerAge").textContent = "";
+  $("headerSub").textContent = "LK Medica Software Solutions Inc.";
+  $("headerPatientMeta2").classList.add("hidden");
+  $("headerPatientMeta2").textContent = "";
+  $("backBtn").classList.add("hidden");
+  $("appHeader").classList.remove("has-back");
+  if (id === "patients") setActive("navPatients");
+  if (id === "tasks") setActive("navTasks");
+  if (id === "handover") {
+    setActive("navHandover");
+    populateNhsEmailField();
+    if(typeof renderMedicationDebugLog === 'function') renderMedicationDebugLog();
+    if(typeof syncOptionsSectionPageState === 'function') syncOptionsSectionPageState({scroll:false});
+  }
+  if (id === "deletedPage") { setActive("navHandover"); renderDeletedList(); }
+  if (id === "eventLogPage") { setActive("navHandover"); renderEventLog(); }
+  syncSharedHeaderHeight();
 }
 
 function acuityClassFromValue(v){if(v==="RED") return "red"; if(v==="AMBER") return "amber"; if(v==="GREEN") return "green"; return "grey"}
@@ -7186,11 +7108,11 @@ function getPatientListCardMarkup(patient, id, options={}){
   return `
       <div class="${shellClass}" data-patient-id="${patientId}">
         ${swipeBackground}
-        <div class="card swipe-foreground${visitSelected ? ' visit-selected' : ''}" data-patient-foreground="${patientId}" data-vt-card="${patientId}">
+        <div class="card swipe-foreground${visitSelected ? ' visit-selected' : ''}" data-patient-foreground="${patientId}">
           <div class="patient-card-inner">
-            <button class="patient-btn patient-main" data-patient="${patientId}" data-patient-open-btn="${patientId}">
+            <button class="patient-btn patient-main" data-patient="${patientId}">
               <div>
-                <div><strong data-patient-card-name="${patientId}">${escapeHtml(p.name || '')}</strong> <span class="muted small" data-patient-card-meta="${patientId}">${escapeHtml(ageSex(p.age, p.sex))}${referralLabel(p.referralSource) ? ' • ' + escapeHtml(referralLabel(p.referralSource)) : ''}</span></div>
+                <div><strong>${escapeHtml(p.name || '')}</strong> <span class="muted small">${escapeHtml(ageSex(p.age, p.sex))}${referralLabel(p.referralSource) ? ' • ' + escapeHtml(referralLabel(p.referralSource)) : ''}</span></div>
                 ${displaySettings.order.map(key=>displaySettings.enabled[key] ? getPatientListSectionMarkup(p,key) : '').join('')}
               </div>
             </button>
@@ -7387,7 +7309,6 @@ function renderPatientList() {
         fg.dataset.justSwiped = '0';
         return;
       }
-      if(typeof HAH_NAV!=='undefined') HAH_NAV.notePatientButtonFocus(Number(btn.dataset.patient));
       if(!shouldSuppressPostUnlockInteraction()) openPatient(Number(btn.dataset.patient));
     };
   });
@@ -8806,28 +8727,6 @@ function getHRPulseText(){const val=$("hrPulse") ? $("hrPulse").value : ""; if(w
 function getBPPosturalText(){ if(window.getBPPosturalClinicalSuffix) return window.getBPPosturalClinicalSuffix(); return ""; }
 function obsParts(){const parts=[]; const add=(label,val,suffix="")=>{if(String(val||"").trim()) parts.push(`${label} ${val}${suffix}`)}; add("RR",$("rr").value," /min"); if(String($("spo2").value).trim()){const ox=$("oxygen").value==="2" ? ` on ${getOxygenFlowDisplay()||"oxygen"}` : " on air"; parts.push(`SpO₂ ${$("spo2").value}%${ox}`)} add("T",$("temp").value,"°C"); const bpValue=String($("bp").value||"").trim(); const bpPostural=getBPPosturalText(); if(bpValue) parts.push(`BP ${bpValue} mmHg${bpPostural}`); else if(bpPostural) parts.push(`Postural BP${bpPostural}`); if(String($("hr").value||"").trim()) parts.push(`HR ${$("hr").value} bpm${getHRPulseText()}`); add("Weight",$("weight").value," kg"); if(String($("bm").value||"").trim()) parts.push(`BM ${$("bm").value}${getBMTimingText()}`); return parts}
 function getIVSentenceList(){if(!$("ivGiven").checked) return []; return getIVEntries().filter(e=>e.medication||e.dose||e.serialExpiry||e.details).map(e=>{const details=(e.details||"").trim(); const core=`IV ${e.medication||"-"} ${e.dose||"-"} (${e.serialExpiry||"-"}) administered without incident`; return details ? `${core} — ${details}` : core;})}
-function stableNavCompareValue(value){
-  if(value==null) return '';
-  if(Array.isArray(value)) return JSON.stringify(value);
-  if(typeof value==='object'){
-    try{return JSON.stringify(value);}catch(_e){return String(value);}
-  }
-  return String(value);
-}
-const PATIENT_SECTION_FIELD_MAP={
-  obs:['rr','spo2','oxygen','oxygenFlow','scoreMode','temp','bp','bpLying','bpStanding1','bpStanding3','bpPosturalSymptoms','hr','hrPulse','weight','bm','bmTiming','bmTimingTime','bmTarget','conscious','confusion'],
-  bloodsSummary:['bloods'],
-  clinical:['issues','currently','pmh','socialHistory','examination','toolScores','sodiumFluidStatus'],
-  meds:['medsGiven','medEntries'],
-  acp:['dnacprStatus','dnacprFormSeen','tepStatus','ceilingOfCare','acpNotes'],
-  iv:['ivGiven','ivVIP','ivEntries'],
-  output:['plan','forDischargeSummary']
-};
-function getChangedPatientSections(previousForm, nextForm){
-  const before=previousForm||{};
-  const after=nextForm||{};
-  return Object.keys(PATIENT_SECTION_FIELD_MAP).filter(section=>PATIENT_SECTION_FIELD_MAP[section].some(field=>stableNavCompareValue(before[field])!==stableNavCompareValue(after[field])));
-}
 function saveCurrentPatientForm() {
   if (!detailLoadedForCurrentPatient || !patients[currentPatient]) return;
   const p = patients[currentPatient];
@@ -8906,77 +8805,51 @@ function saveCurrentPatientForm() {
   } else {
     p.listDetails = p.listDetails || '';
   }
-  const changedSections=getChangedPatientSections(previousForm, p.form);
-  if(changedSections.length && typeof HAH_NAV!=='undefined'){
-    try{ HAH_NAV.noteChangedSections(currentPatient, changedSections); }catch(_e){}
-    try{
-      const detailVisible=!$("patientDetail")?.classList.contains('hidden');
-      const overlayVisible=typeof HAH_NAV.hasVisibleOverlay==='function' ? HAH_NAV.hasVisibleOverlay() : false;
-      if(detailVisible && !overlayVisible) HAH_NAV.pulseSections(changedSections);
-    }catch(_e){}
-  }
   if(isLinkedPatient(p)){
     const issuesChanged = normText(p.form.issues) !== normText(previousForm.issues);
     const planChanged   = normText(p.form.plan)   !== normText(previousForm.plan);
     if(issuesChanged || planChanged) queuePush(currentPatient);
   }
 }
-function openPatient(id, options={}) {
+function openPatient(id) {
   if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) return;
-  const opts=(options && typeof options==='object') ? options : {};
-  const restore=opts.restore||{};
-  const shouldPushHistory=opts.pushHistory!==false && !(typeof HAH_NAV!=='undefined' && HAH_NAV.state && HAH_NAV.state.restoring);
-  const run=()=>{
-    if(typeof HAH_NAV!=='undefined'){ try{HAH_NAV.rememberListScroll();}catch(_e){} try{ if(currentPatient!=null) HAH_NAV.rememberDetailScroll(currentPatient); }catch(_e){} }
-    if (detailLoadedForCurrentPatient) saveCurrentPatientForm();
-    detailSwipeCompleting=false;
-    resetPatientDetailSwipe();
-    detailEdgeSwipeState = null;
-    currentPatient = id;
-    const p = patients[id];
-    hideAll();
-    setPatientViewportMode(true);
-    $("patients").classList.remove("hidden");
-    $("patientDetail").classList.remove("hidden");
-    const patientDetailEl=$("patientDetail");
-    if(patientDetailEl){
-      const targetScroll=Number.isFinite(Number(restore.detailScrollTop)) ? Number(restore.detailScrollTop) : 0;
-      patientDetailEl.scrollTop=targetScroll;
-      requestAnimationFrame(()=>{ patientDetailEl.scrollTop=targetScroll; });
-    }
-    try{ window.scrollTo(0,0); }catch(e){}
-    $("backBtn").classList.remove("hidden");
-    $("appHeader").classList.add("has-back");
-    $("headerTitle").textContent = p.name;
-    const ageSexStr = ageSex(p.age, p.sex);
-    $("headerAge").textContent = ageSexStr ? ` ${ageSexStr}` : "";
-    $("headerAge").classList.toggle("hidden", !ageSexStr);
-    $("headerSub").textContent = "";
-    $("headerPatientMeta2").textContent = p.referralSource ? `${p.referralSource} referral` : "";
-    $("headerPatientMeta2").classList.toggle("hidden", !p.referralSource);
-    setFieldValues(p.form || {});
-    detailLoadedForCurrentPatient = true;
-    updateTimestampButton();
-    setActive("navPatients");
-    syncSharedHeaderHeight();
-    setPatientDetailStackActive(true);
-    animatePatientDetailSwipe(0,true);
-    saveData(undefined,{pulse:false});
-    calculateNews();
-    if(typeof renderBloodsSummaryCard==='function'){
-      requestAnimationFrame(()=>{ try{ renderBloodsSummaryCard(); }catch(e){} });
-    }
-    if(shouldPushHistory && typeof HAH_NAV!=='undefined') HAH_NAV.commitHistory(HAH_NAV.buildRouteState({section:'patientDetail', patientId:id}), false);
-    if(!opts.skipTransition && typeof HAH_NAV!=='undefined'){
-      try{ HAH_NAV.animatePatientDetailOpen(id); }catch(_e){}
-    }
-  };
-  if(typeof HAH_NAV!=='undefined'){
-    return HAH_NAV.runViewTransition(run, {
-      skipTransition:true
-    });
+  if (detailLoadedForCurrentPatient) saveCurrentPatientForm();
+  detailSwipeCompleting=false;
+  resetPatientDetailSwipe();
+  detailEdgeSwipeState = null;
+  currentPatient = id;
+  const p = patients[id];
+  hideAll();
+  setPatientViewportMode(true);
+  $("patients").classList.remove("hidden");
+  $("patientDetail").classList.remove("hidden");
+  const patientDetailEl=$("patientDetail");
+  if(patientDetailEl){
+    patientDetailEl.scrollTop=0;
+    requestAnimationFrame(()=>{ patientDetailEl.scrollTop=0; });
   }
-  return run();
+  try{ window.scrollTo(0,0); }catch(e){}
+  $("backBtn").classList.remove("hidden");
+  $("appHeader").classList.add("has-back");
+  $("headerTitle").textContent = p.name;
+  const ageSexStr = ageSex(p.age, p.sex);
+  $("headerAge").textContent = ageSexStr ? ` ${ageSexStr}` : "";
+  $("headerAge").classList.toggle("hidden", !ageSexStr);
+  $("headerSub").textContent = "";
+  $("headerPatientMeta2").textContent = p.referralSource ? `${p.referralSource} referral` : "";
+  $("headerPatientMeta2").classList.toggle("hidden", !p.referralSource);
+  setFieldValues(p.form || {});
+  detailLoadedForCurrentPatient = true;
+  updateTimestampButton();
+  setActive("navPatients");
+  syncSharedHeaderHeight();
+  setPatientDetailStackActive(true);
+  animatePatientDetailSwipe(0,true);
+  saveData();
+  calculateNews();
+  if(typeof renderBloodsSummaryCard==='function'){
+    requestAnimationFrame(()=>{ try{ renderBloodsSummaryCard(); }catch(e){} });
+  }
 }
 
 function getScoreMode(){return $("crewsBtn").classList.contains("active") ? "CREWS" : ($("mewsBtn").classList.contains("active") ? "MEWS" : "");}
@@ -10393,7 +10266,7 @@ function bulletKeyHandler(e){const el=e.target; if(e.key==="Enter"){e.preventDef
 let detailEdgeSwipeState=null;
 let detailSwipeCompleting=false;
 let sharedHeaderMinHeight=0;
-function getDetailUnderlayOffset(){ return -Math.round((window.innerWidth||390)*0.28); }
+const DETAIL_UNDERLAY_START_OFFSET=-36;
 function patientDetailIsVisible(){
   const el=$("patientDetail");
   return !!(el && !el.classList.contains("hidden"));
@@ -10411,24 +10284,6 @@ function syncSharedHeaderHeight(){
     }
   });
 }
-function setPatientDetailHeaderShift(dx=0, options={}){
-  const root=document.documentElement;
-  if(!root) return;
-  const nextDx=Math.max(0, Math.round(Number(dx)||0));
-  const dragging=!!(options && options.dragging);
-  const duration=dragging ? '0ms' : String(options && options.duration ? options.duration : '240ms');
-  const easing=String(options && options.easing ? options.easing : 'cubic-bezier(.22,.9,.18,1)');
-  root.style.setProperty('--hah-header-shift', `${nextDx}px`);
-  root.style.setProperty('--hah-header-shift-duration', duration);
-  root.style.setProperty('--hah-header-shift-ease', easing);
-}
-function resetPatientDetailHeaderShift(){
-  const root=document.documentElement;
-  if(!root) return;
-  root.style.setProperty('--hah-header-shift', '0px');
-  root.style.setProperty('--hah-header-shift-duration', '0ms');
-  root.style.setProperty('--hah-header-shift-ease', 'linear');
-}
 function setPatientDetailStackActive(active){
   const patients=$("patients");
   const detail=$("patientDetail");
@@ -10439,7 +10294,6 @@ function setPatientDetailStackActive(active){
     detail.classList.add("detail-overlay-active");
     document.body.classList.add("detail-view-active");
     document.documentElement.classList.add("detail-view-active");
-    setPatientDetailHeaderShift(0,{dragging:true});
   } else {
     patients.classList.remove("detail-underlay-active");
     detail.classList.remove("detail-overlay-active");
@@ -10450,7 +10304,6 @@ function setPatientDetailStackActive(active){
     detail.style.transition="";
     detail.style.transform="";
     detail.style.boxShadow="";
-    resetPatientDetailHeaderShift();
   }
 }
 function animatePatientDetailSwipe(dx=0, dragging=false){
@@ -10460,11 +10313,10 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
   const activeDx=Math.max(0, Math.round(dx||0));
   const width=Math.max(window.innerWidth||390,320);
   const progress=Math.max(0,Math.min(1,activeDx/width));
-  const underlayShift=Math.round(getDetailUnderlayOffset()*(1-progress));
+  const underlayShift=Math.round(DETAIL_UNDERLAY_START_OFFSET*(1-progress));
   const transition=dragging?"none":"transform .24s cubic-bezier(.22,.9,.18,1)";
   detail.style.transition=transition;
   patients.style.transition=transition;
-  setPatientDetailHeaderShift(activeDx,{dragging:dragging,duration:'240ms',easing:'cubic-bezier(.22,.9,.18,1)'});
   detail.style.transform=`translate3d(${activeDx}px,0,0)`;
   patients.style.transform=`translate3d(${underlayShift}px,0,0)`;
   detail.style.boxShadow=activeDx>0?"0 12px 32px rgba(15,23,42,.12)":"";
@@ -10474,8 +10326,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_579_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_579_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_558_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_558_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10633,142 +10485,18 @@ function resetPatientDetailSwipe(){
     detail.style.boxShadow="";
     patients.style.transition="";
     patients.style.transform="";
-    try{ if(typeof setPatientDetailHeaderShift==='function') setPatientDetailHeaderShift(0,{dragging:true}); }catch(_e){}
   },260);
 }
-function goBackToPatientList(options={}){
-  const opts=(options && typeof options==='object') ? options : {};
-  const patientId=currentPatient;
-  const restore=opts.restore||{};
-  const tryTraverseBack=()=>{
-    if(opts.useHistoryBack===false) return false;
-    try{
-      if(window.navigation && window.navigation.canGoBack){
-        window.navigation.back({info:{hahDetailBack:true}});
-        return true;
-      }
-    }catch(_e){}
-    try{
-      if(window.history && window.history.length>1){
-        window.history.back();
-        return true;
-      }
-    }catch(_e){}
-    return false;
-  };
-  if(typeof HAH_NAV!=='undefined'){
-    try{ if(patientId!=null) HAH_NAV.rememberDetailScroll(patientId); }catch(_e){}
-  }
+function goBackToPatientList(){
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
   if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
   detailSwipeCompleting=false;
+  resetPatientDetailSwipe();
   detailEdgeSwipeState=null;
-
-  if(opts.slideBack){
-    const detail=$("patientDetail");
-    const patients=$("patients");
-    const reduced=typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(detail && patients && !reduced){
-      const offset=-Math.round((window.innerWidth||390)*0.28);
-      patients.style.transition='none';
-      patients.style.transform=`translate3d(${offset}px,0,0)`;
-      void detail.offsetWidth;
-      const easing='cubic-bezier(.25,.46,.45,.94)';
-      detail.style.transition=`transform 360ms ${easing},box-shadow 360ms ease`;
-      patients.style.transition=`transform 360ms ${easing}`;
-      // Entire header bar slides in from slight left offset, in sync with patient list
-      try{
-        // Instantly update header content while title is invisible
-        const _ht=$("headerTitle");
-        if(_ht){ _ht.style.transition='none'; _ht.style.opacity='0'; _ht.style.transform=''; }
-        $("headerTitle").textContent='Hospital at Home Companion (DEMO)';
-        $("headerSub").textContent='LK Medica Software Solutions Inc.';
-        $("headerAge").classList.add('hidden'); $("headerAge").textContent='';
-        $("headerPatientMeta2").classList.add('hidden'); $("headerPatientMeta2").textContent='';
-        $("backBtn").classList.add('hidden');
-        $("appHeader").classList.remove('has-back');
-        // Start header bar from slight left, slide to 0 in sync with the 360ms panel exit
-        const _root=document.documentElement;
-        if(_root){
-          _root.style.setProperty('--hah-header-shift','-24px');
-          _root.style.setProperty('--hah-header-shift-duration','0ms');
-          _root.style.setProperty('--hah-header-shift-ease','linear');
-        }
-        void $("appHeader") && $("appHeader").offsetWidth;
-        requestAnimationFrame(function(){
-          try{
-            if(_root){
-              _root.style.setProperty('--hah-header-shift','0px');
-              _root.style.setProperty('--hah-header-shift-duration','360ms');
-              _root.style.setProperty('--hah-header-shift-ease',easing);
-            }
-            const _ht2=$("headerTitle");
-            if(_ht2){ _ht2.style.transition='opacity 280ms ease'; _ht2.style.opacity='1'; }
-          }catch(_e){}
-        });
-      }catch(_e){}
-      detail.style.transform='translate3d(100%,0,0)';
-      detail.style.boxShadow='-4px 0 20px rgba(15,23,42,.09)';
-      patients.style.transform='translate3d(0,0,0)';
-      let done_called=false;
-      const done=()=>{
-        if(done_called) return; done_called=true;
-        detailLoadedForCurrentPatient=false;
-        saveData();
-        renderPatientList();
-        // Clean up any lingering title inline styles from the slide-in animation
-        try{ const _ht=$("headerTitle"); if(_ht){ _ht.style.transition=''; _ht.style.opacity=''; _ht.style.transform=''; } }catch(_e){}
-        const showResult=showSection("patients",{
-          pushHistory:false,
-          skipTransition:true,
-          immediate:true,
-          restore:{listScrollTop:restore.listScrollTop},
-          preserveFocus:opts.preserveFocus,
-          skipSectionTransition:true,
-        });
-        try{ if(typeof resetPatientDetailHeaderShift==='function') resetPatientDetailHeaderShift(); }catch(_e){}
-        if(typeof HAH_NAV!=='undefined'){
-          try{ if(typeof HAH_NAV.prepareTraverseSkip==='function') HAH_NAV.prepareTraverseSkip({section:'patients'}); }catch(_e){}
-          try{ if(typeof HAH_NAV.consumeChangedSections==='function') HAH_NAV.consumeChangedSections(patientId); }catch(_e){}
-          try{ HAH_NAV.restoreListScroll(restore.listScrollTop); }catch(_e){}
-          if(opts.preserveFocus!==false) HAH_NAV.restorePatientButtonFocus(patientId);
-        }
-        detail.style.transition='';
-        detail.style.transform='';
-        detail.style.boxShadow='';
-        patients.style.transition='';
-        patients.style.transform='';
-        if(tryTraverseBack()) return;
-      };
-      detail.addEventListener('transitionend',done,{once:true});
-      setTimeout(done,420);
-      return;
-    }
-  }
-
-  if(!opts.skipDetailReset) resetPatientDetailSwipe();
   detailLoadedForCurrentPatient=false;
   saveData();
   renderPatientList();
-  // Mark the upcoming traverse as skip so Fix 4 navigate handler doesn't re-animate
-  if(typeof HAH_NAV!=='undefined'){ try{ if(typeof HAH_NAV.prepareTraverseSkip==='function') HAH_NAV.prepareTraverseSkip({section:'patients'}); }catch(_e){} }
-  if(tryTraverseBack()) return;
-  const showResult=showSection("patients", {
-    pushHistory:false,
-    skipTransition:opts.skipTransition,
-    restore:{listScrollTop:restore.listScrollTop},
-    preserveFocus:opts.preserveFocus,
-    skipSectionTransition:patientId!=null,
-    patientTransitionId:patientId
-  });
-  if(typeof HAH_NAV!=='undefined'){
-    const finish=()=>{
-      try{ if(typeof HAH_NAV.consumeChangedSections==='function') HAH_NAV.consumeChangedSections(patientId); }catch(_e){}
-      try{ HAH_NAV.restoreListScroll(restore.listScrollTop); }catch(_e){}
-      if(opts.preserveFocus!==false) HAH_NAV.restorePatientButtonFocus(patientId);
-    };
-    if(showResult && typeof showResult.then==='function') showResult.then(finish, finish); else finish();
-  }
+  showSection("patients");
 }
 function completePatientDetailSwipeBack(){
   if(detailSwipeCompleting) return;
@@ -10778,12 +10506,12 @@ function completePatientDetailSwipeBack(){
   const detail=$("patientDetail");
   if(!detail){
     detailSwipeCompleting=false;
-    goBackToPatientList({skipTransition:true, skipDetailReset:true});
+    goBackToPatientList();
     return;
   }
   const finish=()=>{
     detailSwipeCompleting=false;
-    goBackToPatientList({skipTransition:true, skipDetailReset:true});
+    goBackToPatientList();
   };
   detail.addEventListener("transitionend", finish, {once:true});
 }
@@ -10893,742 +10621,11 @@ function initPatientDetailEdgeSwipe(){
     return collapsed;
   }
 
-  const HAH_NAV=(function(){
-    const FLAG='__hahNavState';
-    const state={
-      restoring:false,
-      patientListScrollTop:0,
-      detailScrollByPatient:{},
-      lastFocusedPatientId:null,
-      lastFocusedElement:null,
-      activePatientTransitionId:null,
-      installAttempted:false,
-      pulseTimer:null,
-      overlaySourceEl:null,
-      overlaySourceById:{},
-      pendingSectionsByPatient:{},
-      sectionPulseTimers:{},
-      patientCardTimers:{},
-      popstateBound:false,
-      transitionQueue:Promise.resolve(),
-      transitionDepth:0,
-      detailAnimTimer:null,
-      navigationBound:false,
-      skipNextTraverseRestore:'',
-    };
-
-    function prefersReducedMotion(){
-      try{return !!(global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches);}catch(_e){return false;}
-    }
-    function supportsViewTransitions(){ return !!(document && typeof document.startViewTransition==='function'); }
-    function getActiveViewTransition(){
-      try{return document && document.activeViewTransition ? document.activeViewTransition : null;}catch(_e){return null;}
-    }
-    function safeCleanup(cleanup){
-      if(typeof cleanup!=='function') return;
-      try{ cleanup(); }catch(_e){}
-    }
-    function updateTransitionBusyState(delta){
-      state.transitionDepth=Math.max(0, (state.transitionDepth||0) + delta);
-      document.documentElement.classList.toggle('hah-vt-running', state.transitionDepth>0);
-    }
-    function applyTransitionName(el, name){
-      if(!el) return function(){};
-      el.style.viewTransitionName=name || 'none';
-      return function(){
-        try{ el.style.viewTransitionName='none'; }catch(_e){}
-      };
-    }
-    function findOptionsTarget(key){
-      if(!key) return document.getElementById('optionsHomePanel');
-      return Array.from(document.querySelectorAll('.options-page-panel[data-options-page]')).find(function(panel){
-        return String(panel.dataset.optionsPage||'')===String(key||'');
-      }) || null;
-    }
-    function runViewTransition(update, options={}){
-      const fn=typeof update==='function' ? update : function(){};
-      const opts=(options && typeof options==='object') ? options : {};
-      const job=async function(){
-        if(opts.skipTransition || prefersReducedMotion() || !supportsViewTransitions()){
-          const fallbackCleanup=typeof opts.before==='function' ? opts.before() : null;
-          try{ return await Promise.resolve(fn()); }
-          finally{ safeCleanup(fallbackCleanup); if(typeof opts.after==='function'){ try{ opts.after(); }catch(_e){} } }
-        }
-        const active=getActiveViewTransition();
-        if(active && active.finished){
-          try{ await active.finished.catch(function(){}); }catch(_e){}
-        }
-        let cleanup=null;
-        try{ cleanup=typeof opts.before==='function' ? opts.before() : null; }catch(_e){ cleanup=null; }
-        updateTransitionBusyState(1);
-        try{
-          const vt=document.startViewTransition(function(){ return fn(); });
-          await Promise.resolve(vt && vt.finished ? vt.finished : undefined).catch(function(){});
-          if(typeof opts.after==='function'){ try{ opts.after(); }catch(_e){} }
-        }catch(_e){
-          try{ await Promise.resolve(fn()); }catch(__e){}
-        }finally{
-          safeCleanup(cleanup);
-          updateTransitionBusyState(-1);
-        }
-      };
-      state.transitionQueue=state.transitionQueue.then(job, job);
-      return state.transitionQueue;
-    }
-    function visibleSection(){
-      const patientDetail=document.getElementById('patientDetail');
-      if(patientDetail && !patientDetail.classList.contains('hidden')) return 'patientDetail';
-      for(const id of ['patients','tasks','handover','deletedPage','eventLogPage']){
-        const el=document.getElementById(id);
-        if(el && !el.classList.contains('hidden')) return id;
-      }
-      return 'patients';
-    }
-    function captureScrollState(){
-      const patientsEl=document.getElementById('patients');
-      const detailEl=document.getElementById('patientDetail');
-      if(patientsEl) state.patientListScrollTop=patientsEl.scrollTop||0;
-      if(detailEl && global.currentPatient!=null) state.detailScrollByPatient[String(global.currentPatient)]=detailEl.scrollTop||0;
-      return {
-        listScrollTop: patientsEl ? (patientsEl.scrollTop||0) : state.patientListScrollTop,
-        detailScrollTop: detailEl ? (detailEl.scrollTop||0) : (global.currentPatient!=null ? (state.detailScrollByPatient[String(global.currentPatient)]||0) : 0),
-      };
-    }
-    function getCurrentOptionsSection(){
-      try{return typeof global.getOpenOptionsSection==='function' ? String(global.getOpenOptionsSection()||'').trim() : ''; }catch(_e){ return ''; }
-    }
-    function buildRouteState(extra={}){
-      const scrolls=captureScrollState();
-      const route={
-        [FLAG]:true,
-        section:visibleSection(),
-        patientId: global.currentPatient!=null ? Number(global.currentPatient) : null,
-        optionsSection:getCurrentOptionsSection(),
-        listScrollTop:scrolls.listScrollTop,
-        detailScrollTop:scrolls.detailScrollTop,
-        timestamp:Date.now(),
-      };
-      return Object.assign(route, extra||{});
-    }
-    function isNavigationApiAvailable(){
-      return !!(global.navigation && typeof global.navigation.navigate==='function' && typeof global.navigation.updateCurrentEntry==='function' && typeof global.navigation.entries==='function');
-    }
-    function routeToHash(route){
-      const section=String(route && route.section || 'patients');
-      if(section==='patientDetail' && route && route.patientId!=null) return '#patient/' + encodeURIComponent(String(route.patientId));
-      if(section==='tasks') return '#tasks';
-      if(section==='handover') return route && route.optionsSection ? '#handover/' + encodeURIComponent(String(route.optionsSection)) : '#handover';
-      if(section==='deletedPage') return '#deleted';
-      if(section==='eventLogPage') return '#event-log';
-      return '#patients';
-    }
-    function routeToUrl(route){
-      const url=new URL(global.location.href);
-      url.hash=routeToHash(route);
-      return url.toString();
-    }
-    function routeFromUrl(url){
-      try{
-        const parsed=new URL(url, global.location.href);
-        const raw=String(parsed.hash||'').replace(/^#/, '');
-        if(!raw) return null;
-        const parts=raw.split('/').map(function(part){ return decodeURIComponent(String(part||'').trim()); }).filter(Boolean);
-        if(!parts.length) return null;
-        const head=parts[0];
-        if(head==='patient' && parts[1]) return buildRouteState({section:'patientDetail', patientId:Number(parts[1])});
-        if(head==='tasks') return buildRouteState({section:'tasks', patientId:null});
-        if(head==='handover') return buildRouteState({section:'handover', patientId:null, optionsSection:parts[1] || ''});
-        if(head==='deleted') return buildRouteState({section:'deletedPage', patientId:null});
-        if(head==='event-log') return buildRouteState({section:'eventLogPage', patientId:null});
-        if(head==='patients') return buildRouteState({section:'patients', patientId:null});
-      }catch(_e){}
-      return null;
-    }
-    function getCurrentNavigationState(){
-      try{
-        if(isNavigationApiAvailable() && global.navigation.currentEntry && typeof global.navigation.currentEntry.getState==='function'){
-          const stateObj=global.navigation.currentEntry.getState();
-          if(stateObj && stateObj[FLAG]) return stateObj;
-        }
-      }catch(_e){}
-      return null;
-    }
-    function getDestinationState(destination){
-      try{
-        if(destination && typeof destination.getState==='function'){
-          const direct=destination.getState();
-          if(direct && direct[FLAG]) return direct;
-        }
-      }catch(_e){}
-      try{
-        if(isNavigationApiAvailable() && destination && destination.key){
-          const entries=global.navigation.entries();
-          const match=Array.isArray(entries) ? entries.find(function(entry){ return entry && entry.key===destination.key; }) : null;
-          if(match && typeof match.getState==='function'){
-            const stateObj=match.getState();
-            if(stateObj && stateObj[FLAG]) return stateObj;
-          }
-        }
-      }catch(_e){}
-      return null;
-    }
-    function updateNavigationEntryState(route){
-      try{
-        if(global.navigation && typeof global.navigation.updateCurrentEntry==='function'){
-          global.navigation.updateCurrentEntry({ state: route });
-        }
-      }catch(_e){}
-    }
-    function prepareTraverseSkip(route){
-      const section=route && route.section ? String(route.section) : '*';
-      state.skipNextTraverseRestore=section || '*';
-    }
-    function shouldSkipNextRestore(route){
-      const pending=String(state.skipNextTraverseRestore||'').trim();
-      if(!pending) return false;
-      const section=route && route.section ? String(route.section) : '';
-      if(pending==='*' || pending===section){
-        state.skipNextTraverseRestore='';
-        return true;
-      }
-      return false;
-    }
-    function commitHistory(route, replace){
-      if(state.restoring) return route;
-      const payload=route && route[FLAG] ? route : buildRouteState(route||{});
-      const targetUrl=routeToUrl(payload);
-      if(isNavigationApiAvailable()){
-        try{
-          const currentUrl=new URL(global.location.href).toString();
-          if(replace && currentUrl===targetUrl){
-            updateNavigationEntryState(payload);
-            return payload;
-          }
-          global.navigation.navigate(targetUrl, {
-            history: replace ? 'replace' : 'push',
-            state: payload,
-            info: { hahCommit:true }
-          });
-          return payload;
-        }catch(_e){}
-      }
-      try{
-        history[replace ? 'replaceState' : 'pushState'](payload, '', targetUrl);
-        updateNavigationEntryState(payload);
-      }catch(_e){}
-      return payload;
-    }
-    function initialiseHistory(){
-      if(state.navigationBound) return;
-      state.navigationBound=true;
-      try{ history.scrollRestoration='manual'; }catch(_e){}
-      if(isNavigationApiAvailable()){
-        global.navigation.addEventListener('navigate', function(ev){
-          try{
-            if(!ev || !ev.canIntercept || !ev.destination || !ev.destination.url) return;
-            const targetUrl=new URL(ev.destination.url, global.location.href);
-            const currentUrl=new URL(global.location.href);
-            if(targetUrl.origin!==currentUrl.origin || targetUrl.pathname!==currentUrl.pathname || targetUrl.search!==currentUrl.search) return;
-            const route=getDestinationState(ev.destination) || routeFromUrl(targetUrl.toString());
-            if(!route || !route[FLAG]) return;
-            // Detect backwards traversal from patientDetail → patients (e.g. iOS browser swipe-back)
-            const isTraverseBack=(
-              ev.navigationType==='traverse' &&
-              !(ev.info && ev.info.hahCommit) &&
-              String(route.section||'')==='patients' &&
-              visibleSection()==='patientDetail' &&
-              typeof global.goBackToPatientList==='function'
-            );
-            if(isTraverseBack){
-              ev.intercept({
-                scroll:'manual',
-                handler:function(){
-                  if(shouldSkipNextRestore(route)) return Promise.resolve();
-                  return new Promise(function(resolve){
-                    global.goBackToPatientList({
-                      slideBack:true,
-                      pushHistory:false,
-                      useHistoryBack:false,
-                      restore:{listScrollTop:route.listScrollTop},
-                      preserveFocus:false,
-                    });
-                    setTimeout(resolve, 430);
-                  });
-                }
-              });
-              return;
-            }
-            ev.intercept({
-              scroll:'manual',
-              handler:function(){
-                if(ev.info && ev.info.hahCommit) return Promise.resolve();
-                if(shouldSkipNextRestore(route)) return Promise.resolve();
-                return Promise.resolve(restoreRoute(route, {useTransition:false}));
-              }
-            });
-          }catch(_e){}
-        });
-        const initialRoute=getCurrentNavigationState() || routeFromUrl(global.location.href) || buildRouteState();
-        if(initialRoute && initialRoute[FLAG]){
-          const needsRestore=routeFromUrl(global.location.href);
-          if(needsRestore) restoreRoute(initialRoute, {useTransition:false});
-          commitHistory(initialRoute, true);
-          return;
-        }
-      }
-      if(state.popstateBound) return;
-      state.popstateBound=true;
-      commitHistory(buildRouteState(), true);
-      global.addEventListener('popstate', function(ev){
-        const route=ev && ev.state;
-        if(!route || !route[FLAG]) return;
-        if(shouldSkipNextRestore(route)) return;
-        // Animate backwards traversal from patientDetail → patients
-        if(
-          String(route.section||'')==='patients' &&
-          visibleSection()==='patientDetail' &&
-          typeof global.goBackToPatientList==='function'
-        ){
-          global.goBackToPatientList({
-            slideBack:true,
-            pushHistory:false,
-            useHistoryBack:false,
-            restore:{listScrollTop:route.listScrollTop},
-            preserveFocus:false,
-          });
-          return;
-        }
-        restoreRoute(route, {useTransition:false});
-      });
-    }
-    function rememberListScroll(){
-      const patientsEl=document.getElementById('patients');
-      if(patientsEl) state.patientListScrollTop=patientsEl.scrollTop||0;
-    }
-    function restoreListScroll(scrollTop){
-      const patientsEl=document.getElementById('patients');
-      if(!patientsEl) return;
-      const value=Math.max(0, Number.isFinite(Number(scrollTop)) ? Number(scrollTop) : state.patientListScrollTop||0);
-      patientsEl.scrollTop=value;
-      requestAnimationFrame(function(){ patientsEl.scrollTop=value; });
-    }
-    function rememberDetailScroll(patientId){
-      const detailEl=document.getElementById('patientDetail');
-      if(detailEl && patientId!=null) state.detailScrollByPatient[String(patientId)]=detailEl.scrollTop||0;
-    }
-    function restoreDetailScroll(patientId, scrollTop){
-      const detailEl=document.getElementById('patientDetail');
-      if(!detailEl) return;
-      const fallback=patientId!=null ? (state.detailScrollByPatient[String(patientId)]||0) : 0;
-      const value=Math.max(0, Number.isFinite(Number(scrollTop)) ? Number(scrollTop) : fallback);
-      detailEl.scrollTop=value;
-      requestAnimationFrame(function(){ detailEl.scrollTop=value; });
-    }
-    function clearPatientTransitionNames(){
-      document.querySelectorAll('[data-patient-foreground],[data-patient-card-name],[data-patient-card-meta]').forEach(function(el){ el.style.viewTransitionName='none'; });
-      ['patientDetail','headerTitle','headerAge','headerPatientMeta2','backBtn'].forEach(function(id){
-        const el=document.getElementById(id);
-        if(el) el.style.viewTransitionName='none';
-      });
-      const detail=document.getElementById('patientDetail');
-      if(detail) detail.dataset.vtPatientActive='';
-      state.activePatientTransitionId=null;
-    }
-    function setPatientTransition(patientId){
-      const key=String(patientId||'');
-      state.activePatientTransitionId=key;
-      const cleanups=[];
-      const card=document.querySelector('[data-patient-foreground="'+key+'"]');
-      const cardName=document.querySelector('[data-patient-card-name="'+key+'"]');
-      const cardMeta=document.querySelector('[data-patient-card-meta="'+key+'"]');
-      const detail=document.getElementById('patientDetail');
-      const headerTitle=document.getElementById('headerTitle');
-      const headerAge=document.getElementById('headerAge');
-      const headerMeta2=document.getElementById('headerPatientMeta2');
-      const backBtn=document.getElementById('backBtn');
-      clearPatientTransitionNames();
-      if(card) cleanups.push(applyTransitionName(card,'hah-patient-surface'));
-      if(detail){
-        detail.dataset.vtPatientActive='1';
-        cleanups.push(applyTransitionName(detail,'hah-patient-surface'));
-      }
-      if(cardName && headerTitle){
-        cleanups.push(applyTransitionName(cardName,'hah-patient-title'));
-        cleanups.push(applyTransitionName(headerTitle,'hah-patient-title'));
-      }
-      if(cardMeta && headerAge && !headerAge.classList.contains('hidden')){
-        cleanups.push(applyTransitionName(cardMeta,'hah-patient-meta'));
-        cleanups.push(applyTransitionName(headerAge,'hah-patient-meta'));
-      }
-      if(headerMeta2 && !headerMeta2.classList.contains('hidden')) cleanups.push(applyTransitionName(headerMeta2,'hah-patient-submeta'));
-      if(backBtn && !backBtn.classList.contains('hidden')) cleanups.push(applyTransitionName(backBtn,'hah-header-back'));
-      return function(){
-        cleanups.forEach(safeCleanup);
-        clearPatientTransitionNames();
-      };
-    }
-    function setSectionTransition(sectionId){
-      document.querySelectorAll('#patients, #tasks, #handover, #deletedPage, #eventLogPage').forEach(function(el){ el.style.viewTransitionName='none'; });
-      const active=document.getElementById(sectionId);
-      const cleanup=applyTransitionName(active,'hah-section-surface');
-      return function(){ safeCleanup(cleanup); };
-    }
-    function setOptionsTransition(nextKey){
-      const current=findOptionsTarget(getCurrentOptionsSection());
-      const next=findOptionsTarget(nextKey);
-      const cleanups=[];
-      const direction=!nextKey ? 'back' : 'forward';
-      document.documentElement.setAttribute('data-hah-options-direction', direction);
-      cleanups.push(function(){ try{ document.documentElement.removeAttribute('data-hah-options-direction'); }catch(_e){} });
-      if(current) cleanups.push(applyTransitionName(current,'hah-options-panel'));
-      if(next && next!==current) cleanups.push(applyTransitionName(next,'hah-options-panel'));
-      return function(){ cleanups.forEach(safeCleanup); };
-    }
-    function pulseCurrentSurface(options={}){
-      const explicitId=options && options.patientId!=null ? String(options.patientId) : (global.currentPatient!=null ? String(global.currentPatient) : '');
-      const inDetail=visibleSection()==='patientDetail';
-      const target=inDetail ? document.querySelector('#patientDetail .patient-reorder-card, #patientDetail .card') : (explicitId ? document.querySelector('[data-patient-foreground="'+explicitId+'"]') : null);
-      if(!target) return;
-      target.classList.remove('hah-saved-pulse');
-      void target.offsetWidth;
-      target.classList.add('hah-saved-pulse');
-      clearTimeout(state.pulseTimer);
-      state.pulseTimer=setTimeout(function(){ target.classList.remove('hah-saved-pulse'); }, 760);
-    }
-    function pulseSection(sectionKey){
-      const key=String(sectionKey||'').trim();
-      if(!key) return;
-      const card=document.querySelector('#patientDetail .patient-reorder-card[data-card-key="'+key+'"]');
-      if(!card) return;
-      card.classList.remove('hah-section-updated');
-      void card.offsetWidth;
-      card.classList.add('hah-section-updated');
-      clearTimeout(state.sectionPulseTimers[key]);
-      state.sectionPulseTimers[key]=setTimeout(function(){
-        card.classList.remove('hah-section-updated');
-      }, 1300);
-    }
-    function pulseSections(sectionKeys){
-      const keys=Array.from(new Set((Array.isArray(sectionKeys) ? sectionKeys : [sectionKeys]).map(function(v){ return String(v||'').trim(); }).filter(Boolean)));
-      keys.forEach(pulseSection);
-    }
-    function noteChangedSections(patientId, sections){
-      const key=String(patientId||'').trim();
-      if(!key) return;
-      const values=Array.from(new Set((Array.isArray(sections) ? sections : [sections]).map(function(v){ return String(v||'').trim(); }).filter(Boolean)));
-      if(!values.length) return;
-      const current=Array.isArray(state.pendingSectionsByPatient[key]) ? state.pendingSectionsByPatient[key] : [];
-      state.pendingSectionsByPatient[key]=Array.from(new Set(current.concat(values)));
-    }
-    function consumeChangedSections(patientId){
-      const key=String(patientId||'').trim();
-      if(!key) return [];
-      const values=Array.isArray(state.pendingSectionsByPatient[key]) ? state.pendingSectionsByPatient[key].slice() : [];
-      delete state.pendingSectionsByPatient[key];
-      return values;
-    }
-    function markPatientCardUpdated(patientId, sections=[]){
-      const key=String(patientId||'');
-      if(!key) return;
-      const card=document.querySelector('[data-patient-foreground="'+key+'"]');
-      if(!card) return;
-      const values=Array.from(new Set((Array.isArray(sections) ? sections : [sections]).map(function(v){ return String(v||'').trim(); }).filter(Boolean)));
-      const label=values.length===1 ? 'Updated' : (values.length>1 ? values.length + ' updates' : 'Updated');
-      card.dataset.hahUpdatedLabel=label;
-      if(values.length) card.dataset.hahUpdatedSections=values.join(' ');
-      else delete card.dataset.hahUpdatedSections;
-      card.classList.remove('hah-patient-updated');
-      void card.offsetWidth;
-      card.classList.add('hah-patient-updated');
-      clearTimeout(state.patientCardTimers[key]);
-      state.patientCardTimers[key]=setTimeout(function(){
-        card.classList.remove('hah-patient-updated');
-        delete card.dataset.hahUpdatedLabel;
-        delete card.dataset.hahUpdatedSections;
-      }, 2300);
-    }
-    function notePatientButtonFocus(patientId){
-      state.lastFocusedPatientId=patientId!=null ? String(patientId) : null;
-      state.lastFocusedElement=document.activeElement||null;
-    }
-    function restorePatientButtonFocus(patientId){
-      const key=String(patientId || state.lastFocusedPatientId || '');
-      if(!key) return;
-      const btn=document.querySelector('.patient-btn[data-patient="'+key+'"]');
-      if(!btn) return;
-      requestAnimationFrame(function(){ try{ btn.focus({preventScroll:true}); }catch(_e){ try{ btn.focus(); }catch(__e){} } });
-    }
-    function getOverlaySourceEl(){
-      const active=document.activeElement;
-      return active && active !== document.body ? active : null;
-    }
-    function applyOverlayOrigin(overlay, sourceEl){
-      const source=sourceEl || getOverlaySourceEl();
-      const rect=source && source.getBoundingClientRect ? source.getBoundingClientRect() : null;
-      if(rect){
-        overlay.style.setProperty('--hah-overlay-origin-x', Math.round(rect.left + (rect.width/2)) + 'px');
-        overlay.style.setProperty('--hah-overlay-origin-y', Math.round(rect.top + (rect.height/2)) + 'px');
-      }
-      return source || null;
-    }
-
-    function getOverlayAnimationTarget(overlay){
-      if(!overlay) return null;
-      return overlay.querySelector('.blister-scan-modal, .iv-scan-modal, .bm-overlay-modal, .meds-overlay-modal, .exam-findings-modal, .score-tools-modal, .vip-score-modal, .med-edit-modal, .med-ref-modal, .sheet, .overlay-card, .popover-card, .card') || overlay;
-    }
-    function hasVisibleOverlay(){
-      return !!document.querySelector([
-        '#bmOverlay:not(.hidden)',
-        '#hrOverlay:not(.hidden)',
-        '#bpOverlay:not(.hidden)',
-        '#acpOverlay:not(.hidden)',
-        '#bloodScanOverlay:not(.hidden)',
-        '#blisterScanOverlay:not(.hidden)',
-        '#ivScanOverlay:not(.hidden)',
-        '#medsOverlay:not(.hidden)',
-        '#ivEditOverlay:not(.hidden)',
-        '#pmhPresetsOverlay:not(.hidden)',
-        '#socialHistoryPresetsOverlay:not(.hidden)',
-        '#examFindingsOverlay:not(.hidden)',
-        '#scoreToolsOverlay:not(.hidden)',
-        '#vipScoreOverlay:not(.hidden)'
-      ].join(','));
-    }
-    function setPatientDetailOriginFromCard(patientId){
-      const detail=document.getElementById('patientDetail');
-      if(!detail) return;
-      const card=document.querySelector('[data-patient-foreground="'+String(patientId||'')+'"]');
-      const rect=card && card.getBoundingClientRect ? card.getBoundingClientRect() : null;
-      if(rect){
-        detail.style.setProperty('--hah-detail-origin-x', Math.round(rect.left + (rect.width/2)) + 'px');
-        detail.style.setProperty('--hah-detail-origin-y', Math.round(rect.top + (rect.height/2)) + 'px');
-      }else{
-        detail.style.removeProperty('--hah-detail-origin-x');
-        detail.style.removeProperty('--hah-detail-origin-y');
-      }
-    }
-    function animatePatientDetailOpen(patientId){
-      const detail=document.getElementById('patientDetail');
-      const patients=document.getElementById('patients');
-      if(!detail || prefersReducedMotion()) return;
-      clearTimeout(state.detailAnimTimer);
-      try{
-        detail.style.transition='';
-        detail.style.transform='';
-        detail.style.boxShadow='';
-      }catch(_e){}
-      try{
-        if(patients){
-          patients.style.transition='';
-          patients.style.transform='';
-          patients.style.removeProperty('--hah-detail-underlay-from');
-        }
-      }catch(_e){}
-      try{
-        if(typeof global.setPatientDetailHeaderShift==='function'){
-          global.setPatientDetailHeaderShift(global.innerWidth||390,{dragging:true});
-        }
-      }catch(_e){}
-      detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
-      if(patients) patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
-      detail.classList.add('hah-detail-open-prep');
-      if(patients) patients.classList.add('hah-detail-underlay-open-prep');
-      void detail.offsetWidth;
-      requestAnimationFrame(function(){
-        detail.classList.add('hah-detail-open-anim');
-        detail.classList.remove('hah-detail-open-prep');
-        if(patients){
-          patients.classList.add('hah-detail-underlay-open-anim');
-          patients.classList.remove('hah-detail-underlay-open-prep');
-        }
-        try{
-          if(typeof global.setPatientDetailHeaderShift==='function'){
-            global.setPatientDetailHeaderShift(0,{dragging:false,duration:'360ms',easing:'cubic-bezier(.25,.46,.45,.94)'});
-          }
-        }catch(_e){}
-      });
-      state.detailAnimTimer=setTimeout(function(){
-        detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
-        if(patients){
-          patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
-          // Only hold parallax if still in detail view — guards against swipe-back race
-          if(document.body.classList.contains('detail-view-active')){
-            const offset=-Math.round((global.innerWidth||390)*0.28);
-            try{ patients.style.transition='none'; patients.style.transform=`translate3d(${offset}px,0,0)`; }catch(_e){}
-          }
-        }
-        try{
-          if(typeof global.setPatientDetailHeaderShift==='function'){
-            global.setPatientDetailHeaderShift(0,{dragging:true});
-          }
-        }catch(_e){}
-      }, 410);
-    }
-    
-    function animateOverlayOpen(overlay, sourceEl, mode){
-      if(!overlay || prefersReducedMotion()) return;
-      const source=applyOverlayOrigin(overlay, sourceEl || state.overlaySourceEl);
-      if(overlay.id) state.overlaySourceById[overlay.id]=source;
-      const resolvedMode=mode||'sheet';
-      overlay.dataset.overlayMode=resolvedMode;
-      const target=getOverlayAnimationTarget(overlay);
-      if(!target) return;
-      target.dataset.overlayMode=resolvedMode;
-      target.classList.remove('hah-overlay-exit','hah-overlay-enter');
-      void target.offsetWidth;
-      target.classList.add('hah-overlay-enter');
-      setTimeout(function(){ target.classList.remove('hah-overlay-enter'); }, 420);
-    }
-    function animateOverlayExit(overlay, sourceEl, mode, done){
-      if(!overlay || overlay.classList.contains('hidden') || prefersReducedMotion()){
-        if(typeof done==='function') done();
-        return;
-      }
-      applyOverlayOrigin(overlay, sourceEl || state.overlaySourceById[overlay.id] || state.overlaySourceEl);
-      const resolvedMode=mode||overlay.dataset.overlayMode||'sheet';
-      overlay.dataset.overlayMode=resolvedMode;
-      const target=getOverlayAnimationTarget(overlay) || overlay;
-      target.dataset.overlayMode=resolvedMode;
-      const exitDuration=resolvedMode==='popover' ? 160 : 180;
-      target.classList.remove('hah-overlay-enter','hah-overlay-exit');
-      void target.offsetWidth;
-      target.classList.add('hah-overlay-exit');
-      setTimeout(function(){
-        target.classList.remove('hah-overlay-exit');
-        if(typeof done==='function') done();
-      }, exitDuration);
-    }
-    function wrapOverlayFunction(fnName, overlayId, mode){
-      const original=global[fnName];
-      if(typeof original!=='function' || original.__hahWrappedOpen) return;
-      const wrapped=function(){
-        state.overlaySourceEl=getOverlaySourceEl();
-        const result=original.apply(this, arguments);
-        const overlay=document.getElementById(overlayId);
-        if(overlay && !overlay.classList.contains('hidden')) animateOverlayOpen(overlay, state.overlaySourceEl, mode);
-        return result;
-      };
-      wrapped.__hahWrappedOpen=true;
-      global[fnName]=wrapped;
-    }
-    function wrapOverlayCloseFunction(fnName, overlayId, mode){
-      const original=global[fnName];
-      if(typeof original!=='function' || original.__hahWrappedClose) return;
-      const wrapped=function(){
-        const overlay=document.getElementById(overlayId);
-        const args=arguments;
-        const context=this;
-        if(!overlay || overlay.classList.contains('hidden') || overlay.dataset.hahClosing==='1') return original.apply(context,args);
-        overlay.dataset.hahClosing='1';
-        animateOverlayExit(overlay, state.overlaySourceById[overlayId] || state.overlaySourceEl, mode, function(){
-          try{ original.apply(context,args); }
-          finally{
-            delete state.overlaySourceById[overlayId];
-            overlay.dataset.hahClosing='';
-            try{
-              if(global.currentPatient!=null){
-                const changed=consumeChangedSections(global.currentPatient);
-                if(changed.length) pulseSections(changed);
-              }
-            }catch(_e){}
-          }
-        });
-      };
-      wrapped.__hahWrappedClose=true;
-      global[fnName]=wrapped;
-    }
-    function installOverlayWrappers(){
-      if(state.installAttempted) return;
-      state.installAttempted=true;
-      [
-        ['openBmOverlay','bmOverlay','popover','closeBmOverlay'],
-        ['openHrOverlay','hrOverlay','popover','closeHrOverlay'],
-        ['openBpOverlay','bpOverlay','popover','closeBpOverlay'],
-        ['openAcpOverlay','acpOverlay','sheet','closeAcpOverlay'],
-        ['openBloodScanOverlay','bloodScanOverlay','sheet','closeBloodScanOverlay'],
-        ['openBlisterScanOverlay','blisterScanOverlay','sheet','closeBlisterScanOverlay'],
-        ['openIvScanOverlay','ivScanOverlay','sheet','closeIvScanOverlay'],
-        ['openMedsOverlay','medsOverlay','sheet','closeMedsOverlay'],
-        ['openIVEditOverlay','ivEditOverlay','sheet','closeIVEditOverlay'],
-        ['openPmhPresetsOverlay','pmhPresetsOverlay','sheet','closePmhPresetsOverlay'],
-        ['openSocialHistoryPresetsOverlay','socialHistoryPresetsOverlay','sheet','closeSocialHistoryPresetsOverlay'],
-        ['openExamFindingsOverlay','examFindingsOverlay','sheet','closeExamFindingsOverlay'],
-        ['openScoreToolsOverlay','scoreToolsOverlay','sheet','closeScoreToolsOverlay'],
-        ['openVipScoreOverlay','vipScoreOverlay','popover','closeVipScoreOverlay'],
-      ].forEach(function(item){
-        wrapOverlayFunction(item[0], item[1], item[2]);
-        wrapOverlayCloseFunction(item[3], item[1], item[2]);
-      });
-    }
-    function restoreRoute(route, options={}){
-      if(!route || !route[FLAG]) return false;
-      const useTransition=!(options && options.useTransition===false);
-      state.restoring=true;
-      const section=String(route.section||'patients');
-      const work=function(){
-        if(section==='patientDetail' && route.patientId!=null && typeof global.openPatient==='function'){
-          global.openPatient(Number(route.patientId), {
-            pushHistory:false,
-            skipTransition:true,
-            restore:{ listScrollTop: route.listScrollTop, detailScrollTop: route.detailScrollTop },
-            preserveFocus:false,
-          });
-        }else if(typeof global.showSection==='function'){
-          global.showSection(section==='patientDetail' ? 'patients' : section, {
-            pushHistory:false,
-            skipTransition:true,
-            restore:{ listScrollTop: route.listScrollTop, detailScrollTop: route.detailScrollTop },
-            preserveFocus:false,
-          });
-        }
-        if(typeof global.openOptionsSectionPage==='function'){
-          global.openOptionsSectionPage(route.optionsSection || '', { saveState:false, scroll:false, pushHistory:false, skipTransition:true });
-        }
-        if(section!=='patientDetail') restoreListScroll(route.listScrollTop);
-        else restoreDetailScroll(route.patientId, route.detailScrollTop);
-      };
-      const done=function(){ state.restoring=false; };
-      if(useTransition){ return runViewTransition(work, {skipTransition:false}).then(done, done); }
-      work();
-      done();
-      return true;
-    }
-    return {
-      state: state,
-      supportsViewTransitions: supportsViewTransitions,
-      runViewTransition: runViewTransition,
-      initialiseHistory: initialiseHistory,
-      buildRouteState: buildRouteState,
-      commitHistory: commitHistory,
-      restoreRoute: restoreRoute,
-      rememberListScroll: rememberListScroll,
-      restoreListScroll: restoreListScroll,
-      rememberDetailScroll: rememberDetailScroll,
-      restoreDetailScroll: restoreDetailScroll,
-      setPatientTransition: setPatientTransition,
-      setSectionTransition: setSectionTransition,
-      setOptionsTransition: setOptionsTransition,
-      pulseCurrentSurface: pulseCurrentSurface,
-      pulseSection: pulseSection,
-      pulseSections: pulseSections,
-      noteChangedSections: noteChangedSections,
-      consumeChangedSections: consumeChangedSections,
-      markPatientCardUpdated: markPatientCardUpdated,
-      notePatientButtonFocus: notePatientButtonFocus,
-      restorePatientButtonFocus: restorePatientButtonFocus,
-      installOverlayWrappers: installOverlayWrappers,
-      hasVisibleOverlay: hasVisibleOverlay,
-      animatePatientDetailOpen: animatePatientDetailOpen,
-      prepareTraverseSkip: prepareTraverseSkip,
-    };
-  })();
-
   global.HAH_PROJECT_RULES = PROJECT_RULES;
   global.HAH_UI_STANDARDS = Object.freeze({
     rules: PROJECT_RULES,
     setCollapsibleState
   });
-  global.HAH_NAV = HAH_NAV;
 })(window);
 
 </script><script>
@@ -11741,31 +10738,23 @@ function openOptionsSectionPage(openKey='', options={}){
   const normalized=isValidOptionsPageKey(openKey) ? String(openKey||'').trim() : '';
   const saveState=options && options.saveState===false ? false : true;
   const shouldScroll=options && options.scroll===false ? false : true;
-  const shouldPushHistory=options && options.pushHistory===false ? false : !(typeof HAH_NAV!=='undefined' && HAH_NAV.state && HAH_NAV.state.restoring);
-  const run=()=>{
-    const home=$('optionsHomePanel');
-    const panels=[...document.querySelectorAll('.options-page-panel[data-options-page]')];
-    if(!home && !panels.length) return '';
-    const showHome=!normalized;
-    if(home) home.classList.toggle('hidden', !showHome);
-    panels.forEach(panel=>{
-      const isActive=panel.dataset.optionsPage===normalized && !!normalized;
-      panel.classList.toggle('hidden', !isActive);
+  const home=$('optionsHomePanel');
+  const panels=[...document.querySelectorAll('.options-page-panel[data-options-page]')];
+  if(!home && !panels.length) return '';
+  const showHome=!normalized;
+  if(home) home.classList.toggle('hidden', !showHome);
+  panels.forEach(panel=>{
+    const isActive=panel.dataset.optionsPage===normalized && !!normalized;
+    panel.classList.toggle('hidden', !isActive);
+  });
+  if(saveState && typeof setOpenOptionsSection==='function') setOpenOptionsSection(normalized);
+  if(shouldScroll){
+    requestAnimationFrame(()=>{
+      const target=showHome ? home : document.querySelector(`.options-page-panel[data-options-page="${normalized}"]`);
+      try{ if(target) target.scrollIntoView({block:'start', behavior:'auto'}); }catch(e){}
     });
-    if(saveState && typeof setOpenOptionsSection==='function') setOpenOptionsSection(normalized);
-    if(shouldScroll){
-      requestAnimationFrame(()=>{
-        const target=showHome ? home : document.querySelector(`.options-page-panel[data-options-page="${normalized}"]`);
-        try{ if(target) target.scrollIntoView({block:'start', behavior:'auto'}); }catch(e){}
-      });
-    }
-    const handoverVisible=!$('handover')?.classList.contains('hidden');
-    if(shouldPushHistory && handoverVisible && typeof HAH_NAV!=='undefined'){
-      try{ HAH_NAV.commitHistory(HAH_NAV.buildRouteState({optionsSection:normalized}), false); }catch(_e){}
-    }
-    return normalized;
-  };
-  return run();
+  }
+  return normalized;
 }
 
 function syncOptionsSectionPageState(options={}){
@@ -12705,7 +11694,7 @@ document.addEventListener("DOMContentLoaded",function(){
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 1100);
   }
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
-  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight(); if(typeof HAH_NAV!=='undefined'){ try{ HAH_NAV.initialiseHistory(); HAH_NAV.installOverlayWrappers(); }catch(_e){} }
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -12939,7 +11928,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("navPatients").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("patients")};
   $("navTasks").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("tasks")};
   $("navHandover").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("handover")};
-  $("backBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; goBackToPatientList({slideBack:true,useHistoryBack:true,pushHistory:false}); };
+  $("backBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; goBackToPatientList(); };
   $("copyBtn").onclick=copyClinicalText; $("emailBtn").onclick=emailToNHSmail; if($("oneNoteBtn")) $("oneNoteBtn").onclick=sendToOneNote; if($("openOneNoteBtn")) $("openOneNoteBtn").onclick=openCurrentPatientOneNotePage; $("timestampBtn").onclick=addTimestamp;
   $("openWeightHistoryBtn").onclick=openWeightHistoryModal;
   $("weightHistoryCloseBtn").onclick=closeWeightHistoryModal;
@@ -18197,7 +17186,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_579_release.html; source=hospital_at_home_v12_36_579_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_558_release.html; source=hospital_at_home_v12_36_558_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
