@@ -2417,18 +2417,21 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 
 
 /* Navigation + view transitions */
-:root{--hah-vt-duration:220ms;--hah-vt-ease:cubic-bezier(.22,.9,.18,1)}
-#appHeader{view-transition-name:hah-app-header}
-#patients,#tasks,#handover,#deletedPage,#eventLogPage,#patientDetail{contain:layout paint style}
+:root{--hah-vt-duration:240ms;--hah-vt-ease:cubic-bezier(.22,.9,.18,1)}
+#appHeader{view-transition-name:hah-app-header;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
+#patients,#tasks,#handover,#deletedPage,#eventLogPage,#patientDetail{contain:layout paint style;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
+[data-patient-foreground],.swipe-foreground,.card,.patient-reorder-card,.options-page-panel,.sheet,.overlay-card,.popover-card{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0);will-change:transform,opacity}
+html.hah-vt-running body{overflow:hidden}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:var(--hah-vt-duration);animation-timing-function:var(--hah-vt-ease)}
 ::view-transition-old(hah-app-header),::view-transition-new(hah-app-header),::view-transition-old(hah-patient-surface),::view-transition-new(hah-patient-surface),::view-transition-old(hah-section-surface),::view-transition-new(hah-section-surface){animation-duration:var(--hah-vt-duration);animation-timing-function:var(--hah-vt-ease)}
+::view-transition-old(hah-patient-surface),::view-transition-new(hah-patient-surface){mix-blend-mode:normal}
 .hah-saved-pulse{animation:hahSavedPulse .68s ease}
 @keyframes hahSavedPulse{0%{box-shadow:0 0 0 0 rgba(10,132,255,0);border-color:rgba(15,23,42,.08)}35%{box-shadow:0 0 0 4px rgba(10,132,255,.12);border-color:rgba(10,132,255,.26)}100%{box-shadow:0 0 0 0 rgba(10,132,255,0);border-color:rgba(15,23,42,.08)}}
 .hah-patient-updated{position:relative}
 .hah-patient-updated::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 1px rgba(10,132,255,.22) inset,0 10px 22px rgba(10,132,255,.08);animation:hahUpdatedFade 1.6s ease forwards}
 @keyframes hahUpdatedFade{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
-.hah-overlay-enter{animation:hahOverlayEnter .22s var(--hah-vt-ease)}
-@keyframes hahOverlayEnter{from{opacity:.02;transform:translate3d(0,10px,0) scale(.985);transform-origin:var(--hah-overlay-origin-x,50%) var(--hah-overlay-origin-y,20%)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+.hah-overlay-enter{animation:hahOverlayEnter .2s var(--hah-vt-ease)}
+@keyframes hahOverlayEnter{from{opacity:.01;transform:translate3d(0,8px,0) scale(.992);transform-origin:var(--hah-overlay-origin-x,50%) var(--hah-overlay-origin-y,20%)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
 @media (prefers-reduced-motion: reduce){
   :root{--hah-vt-duration:1ms}
   .hah-saved-pulse,.hah-patient-updated::after,.hah-overlay-enter{animation:none!important}
@@ -2854,7 +2857,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_559_release.html</div><div>Source: hospital_at_home_v12_36_559_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_560_release.html</div><div>Source: hospital_at_home_v12_36_560_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -6561,8 +6564,10 @@ function showSection(id, options={}) {
     if(shouldPushHistory && typeof HAH_NAV!=='undefined') HAH_NAV.commitHistory(HAH_NAV.buildRouteState({section:id}), false);
   };
   if(typeof HAH_NAV!=='undefined'){
-    try{ HAH_NAV.setSectionTransition(id); }catch(_e){}
-    return HAH_NAV.runViewTransition(run, {skipTransition:!!opts.skipTransition});
+    const before=(opts.patientTransitionId!=null)
+      ? function(){ try{ return HAH_NAV.setPatientTransition(opts.patientTransitionId); }catch(_e){ return null; } }
+      : (opts.skipSectionTransition ? null : function(){ try{ return HAH_NAV.setSectionTransition(id); }catch(_e){ return null; } });
+    return HAH_NAV.runViewTransition(run, {skipTransition:!!opts.skipTransition, before:before});
   }
   return run();
 }
@@ -8895,8 +8900,10 @@ function openPatient(id, options={}) {
     if(shouldPushHistory && typeof HAH_NAV!=='undefined') HAH_NAV.commitHistory(HAH_NAV.buildRouteState({section:'patientDetail', patientId:id}), false);
   };
   if(typeof HAH_NAV!=='undefined'){
-    try{ HAH_NAV.setPatientTransition(id); }catch(_e){}
-    return HAH_NAV.runViewTransition(run, {skipTransition:!!opts.skipTransition});
+    return HAH_NAV.runViewTransition(run, {
+      skipTransition:!!opts.skipTransition,
+      before:function(){ try{ return HAH_NAV.setPatientTransition(id); }catch(_e){ return null; } }
+    });
   }
   return run();
 }
@@ -10375,8 +10382,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_559_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_559_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_560_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_560_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10551,7 +10558,14 @@ function goBackToPatientList(options={}){
   detailLoadedForCurrentPatient=false;
   saveData();
   renderPatientList();
-  const showResult=showSection("patients", {pushHistory:opts.pushHistory, skipTransition:opts.skipTransition, restore:{listScrollTop:restore.listScrollTop}, preserveFocus:opts.preserveFocus});
+  const showResult=showSection("patients", {
+    pushHistory:opts.pushHistory,
+    skipTransition:opts.skipTransition,
+    restore:{listScrollTop:restore.listScrollTop},
+    preserveFocus:opts.preserveFocus,
+    skipSectionTransition:patientId!=null,
+    patientTransitionId:patientId
+  });
   if(typeof HAH_NAV!=='undefined'){
     const finish=()=>{ try{ HAH_NAV.restoreListScroll(restore.listScrollTop); }catch(_e){} if(opts.preserveFocus!==false) HAH_NAV.restorePatientButtonFocus(patientId); try{ HAH_NAV.markPatientCardUpdated(patientId); }catch(_e){} };
     if(showResult && typeof showResult.then==='function') showResult.then(finish, finish); else finish();
@@ -10565,12 +10579,12 @@ function completePatientDetailSwipeBack(){
   const detail=$("patientDetail");
   if(!detail){
     detailSwipeCompleting=false;
-    goBackToPatientList();
+    goBackToPatientList({skipTransition:true});
     return;
   }
   const finish=()=>{
     detailSwipeCompleting=false;
-    goBackToPatientList();
+    goBackToPatientList({skipTransition:true});
   };
   detail.addEventListener("transitionend", finish, {once:true});
 }
@@ -10693,24 +10707,54 @@ function initPatientDetailEdgeSwipe(){
       pulseTimer:null,
       overlaySourceEl:null,
       popstateBound:false,
+      transitionQueue:Promise.resolve(),
+      transitionDepth:0,
     };
 
     function prefersReducedMotion(){
       try{return !!(global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches);}catch(_e){return false;}
     }
     function supportsViewTransitions(){ return !!(document && typeof document.startViewTransition==='function'); }
+    function getActiveViewTransition(){
+      try{return document && document.activeViewTransition ? document.activeViewTransition : null;}catch(_e){return null;}
+    }
+    function safeCleanup(cleanup){
+      if(typeof cleanup!=='function') return;
+      try{ cleanup(); }catch(_e){}
+    }
+    function updateTransitionBusyState(delta){
+      state.transitionDepth=Math.max(0, (state.transitionDepth||0) + delta);
+      document.documentElement.classList.toggle('hah-vt-running', state.transitionDepth>0);
+    }
     function runViewTransition(update, options={}){
       const fn=typeof update==='function' ? update : function(){};
-      if(options && options.skipTransition) return Promise.resolve(fn());
-      if(prefersReducedMotion() || !supportsViewTransitions()){
-        return Promise.resolve(fn());
-      }
-      try{
-        const vt=document.startViewTransition(function(){ return fn(); });
-        return vt && vt.finished ? vt.finished.catch(function(){}) : Promise.resolve();
-      }catch(_e){
-        return Promise.resolve(fn());
-      }
+      const opts=(options && typeof options==='object') ? options : {};
+      const job=async function(){
+        if(opts.skipTransition || prefersReducedMotion() || !supportsViewTransitions()){
+          const fallbackCleanup=typeof opts.before==='function' ? opts.before() : null;
+          try{ return await Promise.resolve(fn()); }
+          finally{ safeCleanup(fallbackCleanup); if(typeof opts.after==='function'){ try{ opts.after(); }catch(_e){} } }
+        }
+        const active=getActiveViewTransition();
+        if(active && active.finished){
+          try{ await active.finished.catch(function(){}); }catch(_e){}
+        }
+        let cleanup=null;
+        try{ cleanup=typeof opts.before==='function' ? opts.before() : null; }catch(_e){ cleanup=null; }
+        updateTransitionBusyState(1);
+        try{
+          const vt=document.startViewTransition(function(){ return fn(); });
+          await Promise.resolve(vt && vt.finished ? vt.finished : undefined).catch(function(){});
+          if(typeof opts.after==='function'){ try{ opts.after(); }catch(_e){} }
+        }catch(_e){
+          try{ await Promise.resolve(fn()); }catch(__e){}
+        }finally{
+          safeCleanup(cleanup);
+          updateTransitionBusyState(-1);
+        }
+      };
+      state.transitionQueue=state.transitionQueue.then(job, job);
+      return state.transitionQueue;
     }
     function visibleSection(){
       const patientDetail=document.getElementById('patientDetail');
@@ -10816,19 +10860,17 @@ function initPatientDetailEdgeSwipe(){
         detail.dataset.vtPatientActive='1';
         detail.style.viewTransitionName='hah-patient-surface';
       }
-      requestAnimationFrame(function(){
-        requestAnimationFrame(function(){
-          if(card) card.style.viewTransitionName='none';
-          if(detail){ detail.style.viewTransitionName='none'; detail.dataset.vtPatientActive=''; }
-          state.activePatientTransitionId=null;
-        });
-      });
+      return function(){
+        if(card) card.style.viewTransitionName='none';
+        if(detail){ detail.style.viewTransitionName='none'; detail.dataset.vtPatientActive=''; }
+        state.activePatientTransitionId=null;
+      };
     }
     function setSectionTransition(sectionId){
       document.querySelectorAll('#patients, #tasks, #handover, #deletedPage, #eventLogPage').forEach(function(el){ el.style.viewTransitionName='none'; });
       const active=document.getElementById(sectionId);
       if(active) active.style.viewTransitionName='hah-section-surface';
-      requestAnimationFrame(function(){ requestAnimationFrame(function(){ if(active) active.style.viewTransitionName='none'; }); });
+      return function(){ if(active) active.style.viewTransitionName='none'; };
     }
     function pulseCurrentSurface(options={}){
       const explicitId=options && options.patientId!=null ? String(options.patientId) : (global.currentPatient!=null ? String(global.currentPatient) : '');
@@ -10892,7 +10934,7 @@ function initPatientDetailEdgeSwipe(){
           return result;
         };
         if(prefersReducedMotion() || !supportsViewTransitions()) return invoke();
-        try{ document.startViewTransition(invoke); }catch(_e){ return invoke(); }
+        runViewTransition(invoke, {skipTransition:false});
         return result;
       };
       wrapped.__hahWrapped=true;
@@ -11115,7 +11157,12 @@ function openOptionsSectionPage(openKey='', options={}){
     }
     return normalized;
   };
-  if(typeof HAH_NAV!=='undefined') return HAH_NAV.runViewTransition(run, {skipTransition:!!(options && options.skipTransition)});
+  if(typeof HAH_NAV!=='undefined') return HAH_NAV.runViewTransition(run, {
+    skipTransition:!!(options && options.skipTransition),
+    before:function(){
+      try{ return HAH_NAV.setSectionTransition('handover'); }catch(_e){ return null; }
+    }
+  });
   return run();
 }
 
@@ -17548,7 +17595,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_559_release.html; source=hospital_at_home_v12_36_559_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_560_release.html; source=hospital_at_home_v12_36_560_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
