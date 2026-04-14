@@ -222,9 +222,9 @@ html,body{background:var(--bg)!important;}
 *{box-sizing:border-box} html{background:var(--bg)} html.patients-section-active,body.patients-section-active,html.detail-view-active,body.detail-view-active{height:100%;overflow:hidden;overscroll-behavior:none} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg)!important;color:var(--text);padding-bottom:92px}
 #appSnapshotShield{position:fixed;inset:0;background:var(--blue);z-index:9999;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .16s ease,visibility 0s linear .16s}#appSnapshotShield.active{opacity:1;visibility:visible;transition:opacity .08s linear}
 #appSplash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.025) 16%,rgba(0,0,0,.055) 100%),var(--blue);color:#fff;z-index:10000;opacity:1;visibility:visible;pointer-events:auto;overflow:hidden;transition:opacity .9s ease,visibility 0s linear .9s}#appSplash.hidden{opacity:0;visibility:hidden;pointer-events:none}#appSplash.hidden .app-splash-stack{opacity:0;transform:translateY(-4px) scale(.985)}#appSplash.hidden .app-splash-glow{opacity:0;transform:scale(1.08)}.app-splash-stack{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 28px;text-align:center;transform:translateY(0) scale(1);opacity:1;transition:opacity .82s ease,transform .82s cubic-bezier(.22,.78,.2,1)}.app-splash-glow{position:absolute;border-radius:999px;filter:blur(0);pointer-events:none;opacity:.9;transition:opacity .82s ease,transform .82s ease}.app-splash-glow-a{width:320px;height:320px;left:-84px;top:calc(50% - 240px);background:radial-gradient(circle,rgba(255,255,255,.24) 0%,rgba(255,255,255,.08) 34%,rgba(255,255,255,0) 72%)}.app-splash-glow-b{width:280px;height:280px;right:-82px;bottom:calc(50% - 230px);background:radial-gradient(circle,rgba(255,255,255,.18) 0%,rgba(255,255,255,.05) 32%,rgba(255,255,255,0) 72%)}.app-splash-animate{opacity:1;transform:none;animation:none}.app-splash-logo-wrap{display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(8px) scale(.968);animation:appSplashLogoIn .58s cubic-bezier(.22,.88,.24,1) .06s forwards;animation-play-state:paused}.app-splash-logo-button{appearance:none;-webkit-appearance:none;border:0;padding:0;background:transparent;border-radius:30px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}.app-splash-logo-button:focus-visible{outline:2px solid rgba(255,255,255,.92);outline-offset:8px}.app-splash-logo-button:active .app-splash-logo{transform:scale(.97)}.app-splash-logo{display:flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.11));box-shadow:0 16px 34px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .18s ease}.app-splash-logo-svg{width:54px;height:54px;display:block}.app-splash-logo-svg rect{fill:none;stroke:rgba(255,255,255,.94);stroke-width:3.5}.app-splash-logo-svg path{fill:none;stroke:rgba(255,255,255,.96);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.app-splash-title-block{display:flex;flex-direction:column;align-items:center;gap:7px}.app-splash-title,.app-splash-tagline{display:block}.app-splash-company{display:block}.app-splash-title{font-size:31px;font-weight:760;line-height:1.05;letter-spacing:-.028em;text-shadow:0 1px 0 rgba(0,0,0,.08);opacity:0;transform:translateY(8px);animation:appSplashTitleIn .72s cubic-bezier(.16,.84,.2,1) .18s forwards;will-change:opacity,transform;animation-play-state:paused}.app-splash-tagline{font-size:14px;font-weight:600;line-height:1.2;letter-spacing:.01em;color:rgba(255,255,255,.86);opacity:0;transform:translateY(8px);animation:appSplashTitleIn .72s cubic-bezier(.16,.84,.2,1) .46s forwards;will-change:opacity,transform;animation-play-state:paused}.app-splash-company{position:relative;font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.82);opacity:0;animation:appSplashCompanyFadeIn 2.2s cubic-bezier(0,0,.2,1) 1.1s forwards;will-change:opacity;-webkit-font-smoothing:antialiased;font-kerning:none;font-variant-ligatures:none;animation-play-state:paused}#appSplash.splash-ready .app-splash-logo-wrap,#appSplash.splash-ready .app-splash-title,#appSplash.splash-ready .app-splash-tagline,#appSplash.splash-ready .app-splash-company{animation-play-state:running}#appSplash.splash-transition-active .app-splash-logo-wrap{opacity:0;transform:translateY(-10px) scale(.98)}#appSplash.splash-transition-active .app-splash-company{opacity:0}#appSplash.splash-transition-active .app-splash-glow{opacity:0;transform:scale(1.06)}#appSplash.splash-transition-active .app-splash-title{opacity:0}#appSplash .app-splash-title{transition:opacity .12s linear}.app-splash-title-ghost{position:fixed;left:0;top:0;width:100%;display:block;margin:0;color:#fff;z-index:10020;pointer-events:none;text-align:center;transform-origin:center center;will-change:transform,opacity;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;backface-visibility:hidden;-webkit-backface-visibility:hidden}#lockScreen.splash-title-transition .lock-title{opacity:0}#lockScreen.splash-title-transition .lock-subtitle,#lockScreen.splash-title-transition .pin-dots,#lockScreen.splash-title-transition .pin-error,#lockScreen.splash-title-transition .pin-pad,#lockScreen.splash-title-transition .pin-biometric-row{opacity:0;transform:translateY(12px);transition:opacity .32s ease,transform .42s cubic-bezier(.18,.82,.2,1)}#lockScreen.splash-title-transition.splash-title-transition-ready .lock-subtitle,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-dots,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-error,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-pad,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-biometric-row{opacity:1;transform:translateY(0)}@keyframes appSplashLogoIn{from{opacity:0;transform:translateY(8px) scale(.968)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes appSplashTitleIn{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}@keyframes appSplashCompanyFadeIn{from{opacity:0}to{opacity:1}}
- body::before{content:"";position:fixed;left:0;right:0;top:0;height:calc(var(--app-header-height,88px) + env(safe-area-inset-top) + 24px);background:var(--blue);pointer-events:none;z-index:0;transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden} body[style]{background:var(--bg)!important} body.keyboard-open{padding-bottom:12px} body.keyboard-open #patients{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 24px)} body.keyboard-open #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 40px)} body.add-patient-open #patients{pointer-events:none} body.add-patient-open #pullRefreshIndicator{opacity:0!important;transform:translateY(-12px)!important}
+ body::before{content:"";position:fixed;left:0;right:0;top:0;height:calc(var(--app-header-height,88px) + env(safe-area-inset-top) + 24px);background:var(--blue);pointer-events:none;z-index:0;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden} body[style]{background:var(--bg)!important} body.keyboard-open{padding-bottom:12px} body.keyboard-open #patients{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 24px)} body.keyboard-open #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 40px)} body.add-patient-open #patients{pointer-events:none} body.add-patient-open #pullRefreshIndicator{opacity:0!important;transform:translateY(-12px)!important}
 header{position:fixed;left:0;right:0;top:0;z-index:40;background:var(--blue);color:#fff;padding:calc(env(safe-area-inset-top) + 16px) 18px 16px;font-size:20px;font-weight:700;transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform}
-.subhead{font-size:12px;opacity:.9;margin-top:4px}.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.header-left{min-width:0}.header-meta{font-size:13px;opacity:.95;margin-top:6px}.header-age{font-size:18px;opacity:.95;font-weight:600;margin-left:2px}.header-meta2{font-size:12px;opacity:.9;margin-top:4px}.header-back{position:absolute;left:18px;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;padding:0 4px;min-width:auto;font-size:22px;line-height:1;z-index:2}.header-back.hidden{display:none!important}.header-lock{display:inline-flex;align-items:center;justify-content:center;min-width:50px;width:50px;height:44px;margin-top:0;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(255,255,255,.12);color:#fff;padding:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);transition:transform .14s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease;-webkit-tap-highlight-color:transparent}.header-lock svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round}.header-lock:active{transform:scale(.96);background:rgba(255,255,255,.16)}.header-lock:hover{background:rgba(255,255,255,.14)}.header-lock:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.18), inset 0 1px 0 rgba(255,255,255,.10)}header.has-back .header-left{padding-left:42px}.container{position:relative;z-index:1;padding:14px;padding-top:calc(var(--app-header-height,88px) + 14px);min-height:calc(100vh - var(--app-header-height,88px) - env(safe-area-inset-top) - 83px - env(safe-area-inset-bottom));background:var(--bg)}#patients{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:1;padding-top:14px;min-height:0;background:var(--bg);overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}#tasks.hidden,#handover.hidden,#patientDetail.hidden,#deletedPage.hidden,#eventLogPage.hidden{display:none!important}.hidden{display:none!important} #tasks,#handover{background:var(--bg);}.add-patient-overlay{position:fixed;left:0;right:0;top:0;bottom:0;z-index:28;pointer-events:none}.add-patient-overlay.show{pointer-events:auto}.add-patient-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}.add-patient-modal{position:fixed;left:14px;right:14px;top:var(--add-patient-modal-top,calc(var(--app-header-height,88px) + 16px));max-height:var(--add-patient-modal-max-height,calc(100dvh - var(--app-header-height,88px) - 112px));overflow:auto;margin:0;z-index:29;border-radius:20px;box-shadow:0 20px 48px rgba(15,23,42,.18);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.add-patient-modal.hidden{display:none!important}#patients.detail-underlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:4;background:var(--bg);pointer-events:none;transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;padding-top:14px}#patientDetail.detail-overlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:6;background:var(--bg);transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;box-shadow:-12px 0 32px rgba(15,23,42,.12);padding-top:14px;-webkit-overflow-scrolling:touch;touch-action:pan-y}body.detail-view-active #patientDetail.hidden{display:block!important}
+.subhead{font-size:12px;opacity:.9;margin-top:4px}.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.header-left{min-width:0}.header-meta{font-size:13px;opacity:.95;margin-top:6px}.header-age{font-size:18px;opacity:.95;font-weight:600;margin-left:2px}.header-meta2{font-size:12px;opacity:.9;margin-top:4px}.header-back{position:absolute;left:18px;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;padding:0 4px;min-width:auto;font-size:22px;line-height:1;z-index:2}.header-back.hidden{display:none!important}.header-lock{display:inline-flex;align-items:center;justify-content:center;min-width:50px;width:50px;height:44px;margin-top:0;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(255,255,255,.12);color:#fff;padding:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);transition:transform .14s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease;-webkit-tap-highlight-color:transparent}.header-lock svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round}.header-lock:active{transform:scale(.96);background:rgba(255,255,255,.16)}.header-lock:hover{background:rgba(255,255,255,.14)}.header-lock:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.18), inset 0 1px 0 rgba(255,255,255,.10)}header.has-back .header-left{padding-left:42px}.container{position:relative;z-index:1;padding:14px;padding-top:calc(var(--app-header-height,88px) + 14px);min-height:calc(100vh - var(--app-header-height,88px) - env(safe-area-inset-top) - 83px - env(safe-area-inset-bottom));background:var(--bg)}#patients{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:1;padding-top:14px;min-height:0;background:var(--bg);overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}#tasks.hidden,#handover.hidden,#patientDetail.hidden,#deletedPage.hidden,#eventLogPage.hidden{display:none!important}.hidden{display:none!important} #tasks,#handover{background:var(--bg);}.add-patient-overlay{position:fixed;left:0;right:0;top:0;bottom:0;z-index:28;pointer-events:none}.add-patient-overlay.show{pointer-events:auto}.add-patient-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}.add-patient-modal{position:fixed;left:14px;right:14px;top:var(--add-patient-modal-top,calc(var(--app-header-height,88px) + 16px));max-height:var(--add-patient-modal-max-height,calc(100dvh - var(--app-header-height,88px) - 112px));overflow:auto;margin:0;z-index:29;border-radius:20px;box-shadow:0 20px 48px rgba(15,23,42,.18);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.add-patient-modal.hidden{display:none!important}#patients.detail-underlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:4;background:var(--bg);pointer-events:none;transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;padding-top:14px;contain:paint;isolation:isolate}#patientDetail.detail-overlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:6;background:var(--bg);transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;box-shadow:-12px 0 32px rgba(15,23,42,.12);padding-top:14px;-webkit-overflow-scrolling:touch;touch-action:pan-y;contain:paint;isolation:isolate}body.detail-view-active #patientDetail.hidden{display:block!important}
 .card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .card.visit-selected{border:2px solid #0a84ff;padding:12px;box-sizing:border-box;box-shadow:0 0 0 1px rgba(10,132,255,.12),0 1px 4px rgba(10,132,255,.12)}
 .swipe-shell{position:relative;border-radius:16px;margin-bottom:12px;overflow:hidden;touch-action:pan-y;--visit-pill-width:54px;--visit-pill-scale:.88;--visit-pill-opacity:0;--visit-pill-shift:-16px;--visit-bg-opacity:0}.swipe-shell .card{margin-bottom:0}.swipe-background{position:absolute;left:0;top:0;bottom:0;width:286px;display:flex;align-items:center;justify-content:flex-start;gap:10px;padding-left:12px;z-index:0;pointer-events:none;opacity:var(--visit-bg-opacity);transition:opacity .18s ease}.swipe-foreground{position:relative;z-index:2;will-change:transform,background-color;transform:translate3d(0,0,0);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .26s cubic-bezier(.22,.9,.18,1),background-color .18s ease;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}.swipe-shell.swiping .swipe-foreground{transition:none;background:var(--card)}.swipe-shell.pressing .swipe-foreground{transition:none;background:rgba(15,23,42,.06);box-shadow:inset 0 0 0 1px rgba(15,23,42,.08)}.swipe-shell.revealed .swipe-foreground{box-shadow:0 10px 20px rgba(15,23,42,.08)}.visit-action-wrap,.flag-action-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:84px;opacity:var(--visit-pill-opacity);transform:translateX(var(--visit-pill-shift)) scale(var(--visit-pill-scale));transform-origin:left center;transition:opacity .18s ease, transform .24s cubic-bezier(.18,.9,.24,1.22)}.swipe-shell.swiping .visit-action-wrap,.swipe-shell.swiping .flag-action-wrap{transition:none}.swipe-shell.popped .visit-action-wrap,.swipe-shell.popped .flag-action-wrap{transform:translateX(0) scale(1.08)}.visit-reveal-btn,.flag-reveal-btn{position:relative;width:var(--visit-pill-width);height:48px;border:none;border-radius:999px;color:#fff;display:flex;align-items:center;justify-content:center;z-index:1;opacity:var(--visit-pill-opacity);transition:width .24s cubic-bezier(.22,.9,.18,1), opacity .18s ease, filter .18s ease;pointer-events:none;box-shadow:none}.visit-reveal-btn{background:#0a84ff}.flag-reveal-btn{background:#f5c542;color:#fff}.context-menu-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.16);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:120;opacity:0;pointer-events:none;transition:opacity .18s ease}.context-menu-backdrop.show{opacity:1;pointer-events:auto}.patient-context-menu{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);width:min(280px,calc(100vw - 32px));background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.65);border-radius:20px;box-shadow:0 18px 48px rgba(15,23,42,.18);overflow:hidden;z-index:121;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .2s cubic-bezier(.2,.9,.2,1)}.patient-context-menu.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}.patient-context-header{padding:14px 16px 10px;border-bottom:1px solid rgba(148,163,184,.18);text-align:center}.patient-context-title{font-size:16px;font-weight:800;color:#111827}.patient-context-subtitle{margin-top:4px;font-size:12px;color:#6b7280}.patient-context-actions{padding:8px}.patient-context-action{width:100%;border:none;background:transparent;padding:13px 14px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:700;color:#111827}.patient-context-action + .patient-context-action{margin-top:2px}.patient-context-action:active{background:rgba(10,132,255,.1)}.patient-context-action.disabled{color:#9ca3af}.patient-context-action.disabled:active{background:transparent}.patient-context-action.danger{color:#dc2626}.patient-context-sep{height:8px}.patient-context-right{font-size:18px;line-height:1;color:#9ca3af}.patient-context-badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 8px;border-radius:999px;background:#eef2ff;color:#1d4ed8;font-size:11px;font-weight:800}.patient-context-badge.tasks{background:#fef3c7;color:#92400e}.swipe-shell.show-action .visit-reveal-btn,.swipe-shell.show-action .flag-reveal-btn{pointer-events:auto}.swipe-shell.swiping .visit-reveal-btn,.swipe-shell.swiping .flag-reveal-btn{transition:none}.visit-reveal-btn .house-icon,.flag-reveal-btn .flag-icon{width:20px;height:20px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}.visit-reveal-btn .house-icon path.house-fill{fill:rgba(255,255,255,.16);stroke:none}.visit-action-wrap .visit-label,.flag-action-wrap .flag-label{font-size:12px;font-weight:700;line-height:1;color:#6b7280;letter-spacing:.01em;opacity:var(--visit-pill-opacity);transition:opacity .18s ease}.visit-reveal-btn:active,.flag-reveal-btn:active{filter:brightness(.95)}
@@ -2418,7 +2418,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 
 /* Navigation + view transitions */
 :root{--hah-vt-duration:290ms;--hah-vt-ease:cubic-bezier(.22,.9,.18,1);--hah-vt-spring:cubic-bezier(.2,.88,.22,1);--hah-overlay-duration:200ms}
-#appHeader{view-transition-name:hah-app-header;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
+#appHeader{view-transition-name:hah-app-header;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform}
 #headerTitle,#headerAge,#headerPatientMeta2,#backBtn{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
 #patients,#tasks,#handover,#deletedPage,#eventLogPage,#patientDetail,#optionsHomePanel,.options-page-panel{contain:layout paint style;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
 [data-patient-foreground],.swipe-foreground,.card,.patient-reorder-card,.options-page-panel,.sheet,.overlay-card,.popover-card{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0);will-change:transform,opacity}
@@ -2442,8 +2442,6 @@ html.hah-vt-running body{overflow:hidden}
 .hah-overlay-exit[data-overlay-mode="sheet"]{animation:hahSheetExit 220ms cubic-bezier(.4,0,1,1) forwards}
 .hah-overlay-enter[data-overlay-mode="popover"]{animation:hahPopoverEnter 240ms cubic-bezier(.34,1.4,.64,1) both}
 .hah-overlay-exit[data-overlay-mode="popover"]{animation:hahPopoverExit 150ms cubic-bezier(.4,0,1,1) forwards}
-#appHeader.hah-detail-header-open-prep{transform:translate3d(100%,0,0)}
-#appHeader.hah-detail-header-open-anim{transform:translate3d(0,0,0);transition:transform 360ms cubic-bezier(.25,.46,.45,.94);will-change:transform}
 #patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-4px 0 20px rgba(15,23,42,.09)}
 #patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94),box-shadow 360ms ease;will-change:transform}
 #patients.hah-detail-underlay-open-prep{transform:translate3d(0,0,0)}
@@ -2473,7 +2471,7 @@ html.hah-vt-running body{overflow:hidden}
 @keyframes hahHeaderBack{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
 @media (prefers-reduced-motion: reduce){
   :root{--hah-vt-duration:1ms;--hah-overlay-duration:1ms}
-  .hah-saved-pulse,.hah-section-updated,.hah-section-updated::before,.hah-section-updated::after,.hah-overlay-enter,.hah-overlay-exit,.hah-header-forward,.hah-header-back,#patientDetail.hah-detail-open-anim,#patients.hah-detail-underlay-open-anim,#appHeader.hah-detail-header-open-anim{animation:none!important;transition:none!important}
+  .hah-saved-pulse,.hah-section-updated,.hah-section-updated::before,.hah-section-updated::after,.hah-overlay-enter,.hah-overlay-exit,.hah-header-forward,.hah-header-back,#patientDetail.hah-detail-open-anim,#patients.hah-detail-underlay-open-anim{animation:none!important;transition:none!important}
 }
 
 </style>
@@ -2896,7 +2894,7 @@ html.hah-vt-running body{overflow:hidden}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_574_release.html</div><div>Source: hospital_at_home_v12_36_574_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_575_release.html</div><div>Source: hospital_at_home_v12_36_575_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -8948,12 +8946,6 @@ function openPatient(id, options={}) {
     try{ window.scrollTo(0,0); }catch(e){}
     $("backBtn").classList.remove("hidden");
     $("appHeader").classList.add("has-back");
-    const headerEl=$("appHeader");
-    if(headerEl){
-      headerEl.classList.remove('hah-detail-header-open-prep','hah-detail-header-open-anim');
-      headerEl.style.transition='';
-      headerEl.style.transform='';
-    }
     $("headerTitle").textContent = p.name;
     const ageSexStr = ageSex(p.age, p.sex);
     $("headerAge").textContent = ageSexStr ? ` ${ageSexStr}` : "";
@@ -10418,10 +10410,27 @@ function syncSharedHeaderHeight(){
     }
   });
 }
+function setPatientDetailHeaderShift(dx=0, options={}){
+  const root=document.documentElement;
+  if(!root) return;
+  const nextDx=Math.max(0, Math.round(Number(dx)||0));
+  const dragging=!!(options && options.dragging);
+  const duration=dragging ? '0ms' : String(options && options.duration ? options.duration : '240ms');
+  const easing=String(options && options.easing ? options.easing : 'cubic-bezier(.22,.9,.18,1)');
+  root.style.setProperty('--hah-header-shift', `${nextDx}px`);
+  root.style.setProperty('--hah-header-shift-duration', duration);
+  root.style.setProperty('--hah-header-shift-ease', easing);
+}
+function resetPatientDetailHeaderShift(){
+  const root=document.documentElement;
+  if(!root) return;
+  root.style.setProperty('--hah-header-shift', '0px');
+  root.style.setProperty('--hah-header-shift-duration', '0ms');
+  root.style.setProperty('--hah-header-shift-ease', 'linear');
+}
 function setPatientDetailStackActive(active){
   const patients=$("patients");
   const detail=$("patientDetail");
-  const header=$("appHeader");
   if(!patients || !detail) return;
   if(active){
     patients.classList.remove("hidden");
@@ -10429,6 +10438,7 @@ function setPatientDetailStackActive(active){
     detail.classList.add("detail-overlay-active");
     document.body.classList.add("detail-view-active");
     document.documentElement.classList.add("detail-view-active");
+    setPatientDetailHeaderShift(0,{dragging:true});
   } else {
     patients.classList.remove("detail-underlay-active");
     detail.classList.remove("detail-overlay-active");
@@ -10439,18 +10449,12 @@ function setPatientDetailStackActive(active){
     detail.style.transition="";
     detail.style.transform="";
     detail.style.boxShadow="";
-    if(header){
-      header.classList.remove("hah-detail-header-open-prep","hah-detail-header-open-anim");
-      header.style.transition="";
-      header.style.transform="";
-      header.style.boxShadow="";
-    }
+    resetPatientDetailHeaderShift();
   }
 }
 function animatePatientDetailSwipe(dx=0, dragging=false){
   const detail=$("patientDetail");
   const patients=$("patients");
-  const header=$("appHeader");
   if(!detail || !patients) return;
   const activeDx=Math.max(0, Math.round(dx||0));
   const width=Math.max(window.innerWidth||390,320);
@@ -10459,13 +10463,9 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
   const transition=dragging?"none":"transform .24s cubic-bezier(.22,.9,.18,1)";
   detail.style.transition=transition;
   patients.style.transition=transition;
-  if(header){
-    header.classList.remove("hah-detail-header-open-prep","hah-detail-header-open-anim");
-    header.style.transition=transition;
-  }
+  setPatientDetailHeaderShift(activeDx,{dragging:dragging,duration:'240ms',easing:'cubic-bezier(.22,.9,.18,1)'});
   detail.style.transform=`translate3d(${activeDx}px,0,0)`;
   patients.style.transform=`translate3d(${underlayShift}px,0,0)`;
-  if(header) header.style.transform=`translate3d(${activeDx}px,0,0)`;
   detail.style.boxShadow=activeDx>0?"0 12px 32px rgba(15,23,42,.12)":"";
 }
 
@@ -10473,8 +10473,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_574_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_574_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_575_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_575_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10626,25 +10626,35 @@ function resetPatientDetailSwipe(){
   setTimeout(()=>{
     const detail=$("patientDetail");
     const patients=$("patients");
-    const header=$("appHeader");
     if(!detail || !patients) return;
     detail.style.transition="";
     detail.style.transform="";
     detail.style.boxShadow="";
     patients.style.transition="";
     patients.style.transform="";
-    if(header){
-      header.classList.remove('hah-detail-header-open-prep','hah-detail-header-open-anim');
-      header.style.transition='';
-      header.style.transform='';
-      header.style.boxShadow='';
-    }
+    try{ if(typeof setPatientDetailHeaderShift==='function') setPatientDetailHeaderShift(0,{dragging:true}); }catch(_e){}
   },260);
 }
 function goBackToPatientList(options={}){
   const opts=(options && typeof options==='object') ? options : {};
   const patientId=currentPatient;
   const restore=opts.restore||{};
+  const tryTraverseBack=()=>{
+    if(opts.useHistoryBack===false) return false;
+    try{
+      if(window.navigation && window.navigation.canGoBack){
+        window.navigation.back({info:{hahDetailBack:true}});
+        return true;
+      }
+    }catch(_e){}
+    try{
+      if(window.history && window.history.length>1){
+        window.history.back();
+        return true;
+      }
+    }catch(_e){}
+    return false;
+  };
   if(typeof HAH_NAV!=='undefined'){
     try{ if(patientId!=null) HAH_NAV.rememberDetailScroll(patientId); }catch(_e){}
   }
@@ -10658,24 +10668,17 @@ function goBackToPatientList(options={}){
     const patients=$("patients");
     const reduced=typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(detail && patients && !reduced){
-      const header=$("appHeader");
       const offset=-Math.round((window.innerWidth||390)*0.28);
       patients.style.transition='none';
       patients.style.transform=`translate3d(${offset}px,0,0)`;
-      if(header){
-        header.classList.remove('hah-detail-header-open-prep','hah-detail-header-open-anim');
-        header.style.transition='none';
-        header.style.transform='translate3d(0,0,0)';
-      }
       void detail.offsetWidth;
       const easing='cubic-bezier(.25,.46,.45,.94)';
       detail.style.transition=`transform 360ms ${easing},box-shadow 360ms ease`;
       patients.style.transition=`transform 360ms ${easing}`;
-      if(header) header.style.transition=`transform 360ms ${easing}`;
+      try{ if(typeof setPatientDetailHeaderShift==='function') setPatientDetailHeaderShift(window.innerWidth||390,{dragging:false,duration:'360ms',easing:easing}); }catch(_e){}
       detail.style.transform='translate3d(100%,0,0)';
       detail.style.boxShadow='-4px 0 20px rgba(15,23,42,.09)';
       patients.style.transform='translate3d(0,0,0)';
-      if(header) header.style.transform='translate3d(100%,0,0)';
       let done_called=false;
       const done=()=>{
         if(done_called) return; done_called=true;
@@ -10684,30 +10687,28 @@ function goBackToPatientList(options={}){
         detail.style.boxShadow='';
         patients.style.transition='';
         patients.style.transform='';
-        const header=$("appHeader");
-        if(header){
-          header.classList.remove('hah-detail-header-open-prep','hah-detail-header-open-anim');
-          header.style.transition='';
-          header.style.transform='';
-          header.style.boxShadow='';
-        }
         detailLoadedForCurrentPatient=false;
         saveData();
         renderPatientList();
+        if(tryTraverseBack()){
+          try{ if(typeof resetPatientDetailHeaderShift==='function') resetPatientDetailHeaderShift(); }catch(_e){}
+          return;
+        }
         const showResult=showSection("patients",{
-          pushHistory:opts.pushHistory,
+          pushHistory:false,
           skipTransition:true,
           restore:{listScrollTop:restore.listScrollTop},
           preserveFocus:opts.preserveFocus,
           skipSectionTransition:true,
         });
+        try{ if(typeof resetPatientDetailHeaderShift==='function') resetPatientDetailHeaderShift(); }catch(_e){}
         if(typeof HAH_NAV!=='undefined'){
           const finish=()=>{
             try{ if(typeof HAH_NAV.consumeChangedSections==='function') HAH_NAV.consumeChangedSections(patientId); }catch(_e){}
             try{ HAH_NAV.restoreListScroll(restore.listScrollTop); }catch(_e){}
             if(opts.preserveFocus!==false) HAH_NAV.restorePatientButtonFocus(patientId);
           };
-          if(showResult && typeof showResult.then==='function') showResult.then(finish, finish); else finish();
+          if(showResult && typeof showResult.then==='function') showResult.then(finish, finish); else { finish(); }
         }
       };
       detail.addEventListener('transitionend',done,{once:true});
@@ -10720,8 +10721,9 @@ function goBackToPatientList(options={}){
   detailLoadedForCurrentPatient=false;
   saveData();
   renderPatientList();
+  if(tryTraverseBack()) return;
   const showResult=showSection("patients", {
-    pushHistory:opts.pushHistory,
+    pushHistory:false,
     skipTransition:opts.skipTransition,
     restore:{listScrollTop:restore.listScrollTop},
     preserveFocus:opts.preserveFocus,
@@ -10880,6 +10882,7 @@ function initPatientDetailEdgeSwipe(){
       transitionQueue:Promise.resolve(),
       transitionDepth:0,
       detailAnimTimer:null,
+      navigationBound:false,
     };
 
     function prefersReducedMotion(){
@@ -10975,6 +10978,68 @@ function initPatientDetailEdgeSwipe(){
       };
       return Object.assign(route, extra||{});
     }
+    function isNavigationApiAvailable(){
+      return !!(global.navigation && typeof global.navigation.navigate==='function' && typeof global.navigation.updateCurrentEntry==='function' && typeof global.navigation.entries==='function');
+    }
+    function routeToHash(route){
+      const section=String(route && route.section || 'patients');
+      if(section==='patientDetail' && route && route.patientId!=null) return '#patient/' + encodeURIComponent(String(route.patientId));
+      if(section==='tasks') return '#tasks';
+      if(section==='handover') return route && route.optionsSection ? '#handover/' + encodeURIComponent(String(route.optionsSection)) : '#handover';
+      if(section==='deletedPage') return '#deleted';
+      if(section==='eventLogPage') return '#event-log';
+      return '#patients';
+    }
+    function routeToUrl(route){
+      const url=new URL(global.location.href);
+      url.hash=routeToHash(route);
+      return url.toString();
+    }
+    function routeFromUrl(url){
+      try{
+        const parsed=new URL(url, global.location.href);
+        const raw=String(parsed.hash||'').replace(/^#/, '');
+        if(!raw) return null;
+        const parts=raw.split('/').map(function(part){ return decodeURIComponent(String(part||'').trim()); }).filter(Boolean);
+        if(!parts.length) return null;
+        const head=parts[0];
+        if(head==='patient' && parts[1]) return buildRouteState({section:'patientDetail', patientId:Number(parts[1])});
+        if(head==='tasks') return buildRouteState({section:'tasks', patientId:null});
+        if(head==='handover') return buildRouteState({section:'handover', patientId:null, optionsSection:parts[1] || ''});
+        if(head==='deleted') return buildRouteState({section:'deletedPage', patientId:null});
+        if(head==='event-log') return buildRouteState({section:'eventLogPage', patientId:null});
+        if(head==='patients') return buildRouteState({section:'patients', patientId:null});
+      }catch(_e){}
+      return null;
+    }
+    function getCurrentNavigationState(){
+      try{
+        if(isNavigationApiAvailable() && global.navigation.currentEntry && typeof global.navigation.currentEntry.getState==='function'){
+          const stateObj=global.navigation.currentEntry.getState();
+          if(stateObj && stateObj[FLAG]) return stateObj;
+        }
+      }catch(_e){}
+      return null;
+    }
+    function getDestinationState(destination){
+      try{
+        if(destination && typeof destination.getState==='function'){
+          const direct=destination.getState();
+          if(direct && direct[FLAG]) return direct;
+        }
+      }catch(_e){}
+      try{
+        if(isNavigationApiAvailable() && destination && destination.key){
+          const entries=global.navigation.entries();
+          const match=Array.isArray(entries) ? entries.find(function(entry){ return entry && entry.key===destination.key; }) : null;
+          if(match && typeof match.getState==='function'){
+            const stateObj=match.getState();
+            if(stateObj && stateObj[FLAG]) return stateObj;
+          }
+        }
+      }catch(_e){}
+      return null;
+    }
     function updateNavigationEntryState(route){
       try{
         if(global.navigation && typeof global.navigation.updateCurrentEntry==='function'){
@@ -10985,16 +11050,60 @@ function initPatientDetailEdgeSwipe(){
     function commitHistory(route, replace){
       if(state.restoring) return route;
       const payload=route && route[FLAG] ? route : buildRouteState(route||{});
+      const targetUrl=routeToUrl(payload);
+      if(isNavigationApiAvailable()){
+        try{
+          const currentUrl=new URL(global.location.href).toString();
+          if(replace && currentUrl===targetUrl){
+            updateNavigationEntryState(payload);
+            return payload;
+          }
+          global.navigation.navigate(targetUrl, {
+            history: replace ? 'replace' : 'push',
+            state: payload,
+            info: { hahCommit:true }
+          });
+          return payload;
+        }catch(_e){}
+      }
       try{
-        history[replace ? 'replaceState' : 'pushState'](payload, '', location.href);
+        history[replace ? 'replaceState' : 'pushState'](payload, '', targetUrl);
         updateNavigationEntryState(payload);
       }catch(_e){}
       return payload;
     }
     function initialiseHistory(){
+      if(state.navigationBound) return;
+      state.navigationBound=true;
+      try{ history.scrollRestoration='manual'; }catch(_e){}
+      if(isNavigationApiAvailable()){
+        global.navigation.addEventListener('navigate', function(ev){
+          try{
+            if(!ev || !ev.canIntercept || !ev.destination || !ev.destination.url) return;
+            const targetUrl=new URL(ev.destination.url, global.location.href);
+            const currentUrl=new URL(global.location.href);
+            if(targetUrl.origin!==currentUrl.origin || targetUrl.pathname!==currentUrl.pathname || targetUrl.search!==currentUrl.search) return;
+            const route=getDestinationState(ev.destination) || routeFromUrl(targetUrl.toString());
+            if(!route || !route[FLAG]) return;
+            ev.intercept({
+              scroll:'manual',
+              handler:function(){
+                if(ev.info && ev.info.hahCommit) return Promise.resolve();
+                return Promise.resolve(restoreRoute(route, {useTransition:true}));
+              }
+            });
+          }catch(_e){}
+        });
+        const initialRoute=getCurrentNavigationState() || routeFromUrl(global.location.href) || buildRouteState();
+        if(initialRoute && initialRoute[FLAG]){
+          const needsRestore=routeFromUrl(global.location.href);
+          if(needsRestore) restoreRoute(initialRoute, {useTransition:false});
+          commitHistory(initialRoute, true);
+          return;
+        }
+      }
       if(state.popstateBound) return;
       state.popstateBound=true;
-      try{ history.scrollRestoration='manual'; }catch(_e){}
       commitHistory(buildRouteState(), true);
       global.addEventListener('popstate', function(ev){
         const route=ev && ev.state;
@@ -11211,7 +11320,6 @@ function initPatientDetailEdgeSwipe(){
     function animatePatientDetailOpen(patientId){
       const detail=document.getElementById('patientDetail');
       const patients=document.getElementById('patients');
-      const header=document.getElementById('appHeader');
       if(!detail || prefersReducedMotion()) return;
       clearTimeout(state.detailAnimTimer);
       try{
@@ -11225,18 +11333,16 @@ function initPatientDetailEdgeSwipe(){
           patients.style.transform='';
           patients.style.removeProperty('--hah-detail-underlay-from');
         }
-        if(header){
-          header.style.transition='';
-          header.style.transform='';
-          header.style.boxShadow='';
+      }catch(_e){}
+      try{
+        if(typeof global.setPatientDetailHeaderShift==='function'){
+          global.setPatientDetailHeaderShift(global.innerWidth||390,{dragging:true});
         }
       }catch(_e){}
       detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
       if(patients) patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
-      if(header) header.classList.remove('hah-detail-header-open-prep','hah-detail-header-open-anim');
       detail.classList.add('hah-detail-open-prep');
       if(patients) patients.classList.add('hah-detail-underlay-open-prep');
-      if(header) header.classList.add('hah-detail-header-open-prep');
       void detail.offsetWidth;
       requestAnimationFrame(function(){
         detail.classList.add('hah-detail-open-anim');
@@ -11245,10 +11351,11 @@ function initPatientDetailEdgeSwipe(){
           patients.classList.add('hah-detail-underlay-open-anim');
           patients.classList.remove('hah-detail-underlay-open-prep');
         }
-        if(header){
-          header.classList.add('hah-detail-header-open-anim');
-          header.classList.remove('hah-detail-header-open-prep');
-        }
+        try{
+          if(typeof global.setPatientDetailHeaderShift==='function'){
+            global.setPatientDetailHeaderShift(0,{dragging:false,duration:'360ms',easing:'cubic-bezier(.25,.46,.45,.94)'});
+          }
+        }catch(_e){}
       });
       state.detailAnimTimer=setTimeout(function(){
         detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
@@ -11258,10 +11365,11 @@ function initPatientDetailEdgeSwipe(){
           const offset=-Math.round((global.innerWidth||390)*0.28);
           try{ patients.style.transition='none'; patients.style.transform=`translate3d(${offset}px,0,0)`; }catch(_e){}
         }
-        if(header){
-          header.classList.remove('hah-detail-header-open-prep','hah-detail-header-open-anim');
-          try{ header.style.transition='none'; header.style.transform='translate3d(0,0,0)'; }catch(_e){}
-        }
+        try{
+          if(typeof global.setPatientDetailHeaderShift==='function'){
+            global.setPatientDetailHeaderShift(0,{dragging:true});
+          }
+        }catch(_e){}
       }, 410);
     }
     
@@ -12738,7 +12846,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("navPatients").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("patients")};
   $("navTasks").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("tasks")};
   $("navHandover").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("handover")};
-  $("backBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; goBackToPatientList({slideBack:true}); };
+  $("backBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; goBackToPatientList({slideBack:true,useHistoryBack:true,pushHistory:false}); };
   $("copyBtn").onclick=copyClinicalText; $("emailBtn").onclick=emailToNHSmail; if($("oneNoteBtn")) $("oneNoteBtn").onclick=sendToOneNote; if($("openOneNoteBtn")) $("openOneNoteBtn").onclick=openCurrentPatientOneNotePage; $("timestampBtn").onclick=addTimestamp;
   $("openWeightHistoryBtn").onclick=openWeightHistoryModal;
   $("weightHistoryCloseBtn").onclick=closeWeightHistoryModal;
@@ -17996,7 +18104,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_574_release.html; source=hospital_at_home_v12_36_574_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_575_release.html; source=hospital_at_home_v12_36_575_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
