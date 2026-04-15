@@ -10770,227 +10770,244 @@ function initPatientDetailEdgeSwipe(){
 
 </script><script>
 // =============================================================================
-// 16-tts.js  —  TTS DEBUG BUILD  (Deepgram Aura-2 / aura-2-theia-en)
-// Hospital at Home Companion  v12_38_000
+// 16-tts.js  —  Text-to-Speech  (Deepgram Aura-2 / aura-2-theia-en)
+// Hospital at Home Companion
+//
+// Uses <audio> element playback, NOT AudioContext.
+// Reason: AudioContext uses iOS AVAudioSessionCategoryAmbient — silenced by
+// the hardware ringer switch. <audio> element media playback uses
+// AVAudioSessionCategoryPlayback, which ignores the silent switch (same
+// category as Music / Podcasts).
+//
+// iOS notes:
+//   • prime() plays-then-pauses a silent buffer on the first user gesture
+//     (PIN keypad) so the <audio> element is "activated" for later async
+//     play() calls.
+//   • playsinline prevents iOS launching the fullscreen media player.
+//   • Blob URLs are revoked after each clip to avoid memory leaks.
+//   • Latest-wins: any in-progress clip is stopped before a new one starts.
 // =============================================================================
 
-// --- Debug panel (injected multiple times to guarantee visibility) ----------
-var _ttsLogs = [];
-
-function _ttsLog(msg, level) {
-  _ttsLogs.push({ msg: msg, level: level || 'info', t: new Date().toISOString().slice(11,23) });
-  document.title = '[TTS:' + (level||'info').toUpperCase() + '] ' + msg;
-  console.log('[TTS ' + (level||'info') + '] ' + msg);
-  _ttsRender();
-}
-
-function _ttsRender() {
-  var la = document.getElementById('_ttsLA');
-  if (!la) return;
-  var html = _ttsLogs.slice(-40).map(function(e) {
-    var c = ({info:'#93c5fd',ok:'#86efac',warn:'#fde68a',err:'#fca5a5'})[e.level]||'#e2e8f0';
-    return '<div style="color:'+c+'">['+e.t+'] '+e.msg+'</div>';
-  }).join('');
-  la.innerHTML = html;
-  la.scrollTop = 99999;
-}
-
-function _ttsInject() {
-  if (document.getElementById('_ttsPnl')) return;
-  var p = document.createElement('div');
-  p.id = '_ttsPnl';
-  // Collapsed by default — just a slim pill above the nav bar
-  var _expanded = false;
-  p.setAttribute('style',
-    'position:fixed!important;bottom:calc(90px + env(safe-area-inset-bottom))!important;'+
-    'left:8px!important;right:8px!important;'+
-    'z-index:2147483647!important;background:#0f172a!important;'+
-    'border:2px solid #f59e0b!important;border-radius:12px!important;'+
-    'font-family:monospace!important;font-size:11px!important;color:#e2e8f0!important;'+
-    'display:flex!important;flex-direction:column!important;overflow:hidden!important;'+
-    'max-height:36px!important;transition:max-height .2s ease!important;');
-  p.innerHTML =
-    '<div id="_ttsBar" style="display:flex;align-items:center;justify-content:space-between;'+
-    'padding:4px 10px;background:#1e293b;flex-shrink:0;border-radius:10px;cursor:pointer">'+
-    '<b style="color:#f59e0b;font-size:11px">TTS DEBUG v12_38_000 &#9660;</b>'+
-    '<button onclick="event.stopPropagation();document.getElementById(\'_ttsPnl\').remove()" '+
-    'style="background:#475569;border:none;color:#f8fafc;padding:1px 8px;'+
-    'border-radius:4px;font-size:10px;cursor:pointer">x</button></div>'+
-    '<div id="_ttsLA" style="overflow-y:auto;padding:6px 10px;'+
-    'line-height:1.6;white-space:pre-wrap;word-break:break-all;max-height:35vh"></div>';
-  setTimeout(function(){
-    var bar = document.getElementById('_ttsBar');
-    if (bar) bar.addEventListener('click', function(){
-      var pnl = document.getElementById('_ttsPnl');
-      if (!pnl) return;
-      _expanded = !_expanded;
-      pnl.style.setProperty('max-height', _expanded ? 'calc(35vh + 36px)' : '36px', 'important');
-      bar.querySelector('b').innerHTML = 'TTS DEBUG v12_38_000 ' + (_expanded ? '&#9650;' : '&#9660;');
-    });
-  }, 100);
-  var anchor = document.getElementById('appHeader');
-  if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(p, anchor.nextSibling);
-  else if (document.body) document.body.appendChild(p);
-  else document.documentElement.appendChild(p);
-  _ttsRender();
-}
-
-_ttsInject();
-document.addEventListener('DOMContentLoaded', _ttsInject);
-setTimeout(_ttsInject, 300);
-setTimeout(_ttsInject, 1200);
-setTimeout(_ttsInject, 3000);
-
-_ttsLog('16-tts.js start', 'info');
-
-// --- TTS module -------------------------------------------------------------
-var TTS = (function() {
+var TTS = (function () {
 
   var ENDPOINT = 'https://api.deepgram.com/v1/speak?model=aura-2-theia-en';
-  var _ctx = null, _source = null, _speaking = false;
-  var _enabled = localStorage.getItem('ttsEnabled') !== 'false';
 
-  _ttsLog('TTS init. _enabled='+_enabled, 'info');
+  var _audio    = null;   // single reused <audio> element
+  var _blobUrl  = null;   // current blob URL (revoked on next play / cancel)
+  var _speaking = false;
+  var _enabled  = localStorage.getItem('ttsEnabled') !== 'false';
 
-  function _getCtx() {
-    if (!_ctx || _ctx.state === 'closed') {
-      var C = window.AudioContext || window.webkitAudioContext;
-      if (!C) throw new Error('No Web Audio API');
-      _ctx = new C();
-      _ttsLog('AudioContext created state='+_ctx.state, 'ok');
+  // -------------------------------------------------------------------------
+  // Internal: ensure the <audio> element exists
+  // -------------------------------------------------------------------------
+
+  function _getAudio() {
+    if (!_audio) {
+      _audio = document.createElement('audio');
+      _audio.setAttribute('playsinline', '');
+      _audio.preload = 'none';
     }
-    return _ctx;
+    return _audio;
   }
 
-  async function _resume() {
-    var ctx = _getCtx();
-    _ttsLog('_resume state='+ctx.state, 'info');
-    if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
-      _ttsLog('calling ctx.resume()...', 'warn');
-      await ctx.resume();
-      _ttsLog('resumed. state='+ctx.state, 'ok');
+  // -------------------------------------------------------------------------
+  // Internal: revoke any existing blob URL and stop playback
+  // -------------------------------------------------------------------------
+
+  function _cleanup() {
+    var a = _getAudio();
+    a.pause();
+    a.src = '';
+    if (_blobUrl) {
+      try { URL.revokeObjectURL(_blobUrl); } catch (_) {}
+      _blobUrl = null;
     }
-    return ctx;
+    _speaking = false;
   }
+
+  // -------------------------------------------------------------------------
+  // Internal: fetch → blob → play
+  // -------------------------------------------------------------------------
 
   async function _play(text) {
-    _ttsLog('_play: "'+text.slice(0,40)+'"', 'info');
-    var key = typeof getDeepgramApiKey==='function' ? getDeepgramApiKey() : '';
-    _ttsLog('key len='+key.length+(key?' pfx='+key.slice(0,6):'  *** EMPTY ***'), key?'ok':'err');
-    if (!key) return;
-
-    var ctx;
-    try { ctx = await _resume(); }
-    catch(e) { _ttsLog('resume err: '+e.message, 'err'); throw e; }
+    var apiKey = (typeof getDeepgramApiKey === 'function') ? getDeepgramApiKey() : '';
+    if (!apiKey) { console.warn('[TTS] No Deepgram API key'); return; }
 
     var res;
     try {
-      _ttsLog('fetch '+ENDPOINT, 'info');
       res = await fetch(ENDPOINT, {
-        method:'POST',
-        headers:{'Authorization':'Token '+key,'Content-Type':'application/json'},
-        body:JSON.stringify({text:text})
+        method:  'POST',
+        headers: { 'Authorization': 'Token ' + apiKey, 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ text: text })
       });
-    } catch(e) { _ttsLog('fetch threw: '+e.message, 'err'); throw e; }
-
-    _ttsLog('HTTP '+res.status+' ct='+(res.headers.get('content-type')||'?'), res.ok?'ok':'err');
-    if (!res.ok) {
-      var eb = await res.text().catch(function(){return '';});
-      _ttsLog('body: '+eb.slice(0,120), 'err'); throw new Error('HTTP '+res.status);
+    } catch (e) {
+      console.warn('[TTS] fetch failed:', e.message); throw e;
     }
 
-    var buf;
-    try { buf = await res.arrayBuffer(); _ttsLog('buf='+buf.byteLength+'b', 'ok'); }
-    catch(e) { _ttsLog('arrayBuffer err: '+e.message,'err'); throw e; }
+    if (!res.ok) {
+      var msg = await res.text().catch(function () { return ''; });
+      throw new Error('[TTS] HTTP ' + res.status + ': ' + msg);
+    }
 
-    if (!_enabled) { _ttsLog('muted mid-fetch','warn'); return; }
+    var blob;
+    try   { blob = await res.blob(); }
+    catch (e) { console.warn('[TTS] blob() failed:', e.message); throw e; }
 
-    var ab;
-    try { ab = await ctx.decodeAudioData(buf); _ttsLog('decoded '+ab.duration.toFixed(2)+'s','ok'); }
-    catch(e) { _ttsLog('decodeAudioData err: '+e.message,'err'); throw e; }
+    // Guard: user may have muted during the fetch
+    if (!_enabled) { return; }
 
-    if (!_enabled) return;
-    var src = ctx.createBufferSource();
-    src.buffer = ab;
-    src.connect(ctx.destination);
-    src.onended = function(){ _ttsLog('ended','ok'); _speaking=false; _source=null; };
-    _source=src; _speaking=true;
-    try { src.start(0); _ttsLog('START — audio playing','ok'); }
-    catch(e) { _ttsLog('start err: '+e.message,'err'); throw e; }
+    var url = URL.createObjectURL(blob);
+
+    _cleanup();             // stop any previous clip and revoke its URL
+    _blobUrl  = url;
+    var a = _getAudio();
+
+    a.onended = function () {
+      _speaking = false;
+      try { URL.revokeObjectURL(url); } catch (_) {}
+      if (_blobUrl === url) _blobUrl = null;
+    };
+
+    a.onerror = function () {
+      console.warn('[TTS] <audio> error');
+      _speaking = false;
+    };
+
+    a.src = url;
+    _speaking = true;
+
+    try {
+      await a.play();
+    } catch (e) {
+      console.warn('[TTS] play() failed:', e.message);
+      _speaking = false;
+      throw e;
+    }
   }
 
+  // -------------------------------------------------------------------------
+  // Public API
+  // -------------------------------------------------------------------------
+
+  /**
+   * prime()  —  Call from any early user-gesture handler (PIN keypad tap).
+   * Plays then immediately pauses a silent clip to activate the <audio>
+   * element within a gesture, so later async play() calls are not blocked
+   * by iOS's autoplay policy.
+   */
   function prime() {
-    _ttsLog('prime()', 'info');
-    try { _getCtx(); } catch(e) { _ttsLog('prime err: '+e.message,'err'); }
+    var a = _getAudio();
+    if (a.dataset.primed) return;
+    // tiny silent WAV (44 bytes) as a data URL
+    a.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAA' +
+            'EAAQAAwAAAAQABAAIAZGF0YQAAAAA=';
+    var p = a.play();
+    if (p && p.then) {
+      p.then(function () { a.pause(); a.src = ''; a.dataset.primed = '1'; })
+       .catch(function () { a.src = ''; });
+    } else {
+      try { a.pause(); } catch (_) {}
+      a.src = '';
+      a.dataset.primed = '1';
+    }
   }
 
+  /**
+   * speak(text)  —  Latest-wins: cancels any in-progress audio, then plays.
+   * Errors are swallowed so TTS never interrupts clinical workflow.
+   */
   async function speak(text) {
-    _ttsLog('speak enabled='+_enabled+' "'+String(text||'').slice(0,20)+'"', 'info');
-    if (!_enabled || !text || !String(text).trim()) { _ttsLog('speak early-exit','warn'); return; }
+    if (!_enabled || !text || !String(text).trim()) return;
     cancel();
-    try { await _play(text); }
-    catch(e) { _speaking=false; _source=null; _ttsLog('speak err: '+e.message,'err'); }
+    try   { await _play(text); }
+    catch (e) { _speaking = false; console.warn('[TTS] speak() error:', e.message); }
   }
 
+  /** cancel()  —  Immediately stop any in-progress audio. */
   function cancel() {
-    if (_source) { try{_source.stop();}catch(_){} _source=null; }
-    _speaking=false;
+    _cleanup();
   }
 
+  /**
+   * setEnabled(bool)  —  Toggle on/off. Persisted to localStorage.
+   * Cancels current audio immediately when disabling.
+   */
   function setEnabled(val) {
-    _enabled=!!val; localStorage.setItem('ttsEnabled',_enabled);
-    _ttsLog('setEnabled '+_enabled,'info');
+    _enabled = Boolean(val);
+    localStorage.setItem('ttsEnabled', _enabled);
     if (!_enabled) cancel();
-    _syncBtn();
+    _syncHeaderBtn();
   }
 
-  function isEnabled() { return _enabled; }
-  function isSpeaking(){ return _speaking; }
+  function isEnabled()  { return _enabled;  }
+  function isSpeaking() { return _speaking; }
 
-  function speakNEWS2(score, risk, action) {
-    var r = risk ? risk[0].toUpperCase()+risk.slice(1) : '';
-    var a = action!==undefined ? action
-          : risk==='high' ? 'Urgent escalation required.'
-          : risk==='medium' ? 'Prompt review required.' : '';
-    return speak(('Score '+score+'. '+r+' risk. '+a).trim().replace(/\s{2,}/g,' '));
+  // -------------------------------------------------------------------------
+  // Clinical helpers
+  // -------------------------------------------------------------------------
+
+  function speakNEWS2(score, riskClass, action) {
+    var risk = riskClass ? riskClass[0].toUpperCase() + riskClass.slice(1) : '';
+    var act  = action !== undefined ? action
+             : riskClass === 'high'   ? 'Urgent escalation required.'
+             : riskClass === 'medium' ? 'Prompt review required.'
+             : '';
+    return speak(('Score ' + score + '. ' + risk + ' risk. ' + act).trim().replace(/\s{2,}/g, ' '));
   }
 
-  function _syncBtn() {
-    var b = document.getElementById('headerTtsBtn');
-    if (!b) return;
-    b.classList.toggle('tts-muted',!_enabled);
-    b.title = _enabled ? 'Voice readback on' : 'Voice readback off';
+  // -------------------------------------------------------------------------
+  // UI wiring
+  // -------------------------------------------------------------------------
+
+  function _syncHeaderBtn() {
+    var btn = document.getElementById('headerTtsBtn');
+    if (!btn) return;
+    btn.classList.toggle('tts-muted', !_enabled);
+    btn.title = _enabled ? 'Voice readback on' : 'Voice readback off';
+    btn.setAttribute('aria-label', _enabled ? 'Voice readback on – tap to mute' : 'Voice readback off – tap to unmute');
   }
 
   function initTTSUI() {
-    _ttsLog('initTTSUI()', 'info');
-    _ttsInject();
+    var ttsBtn = document.getElementById('headerTtsBtn');
+    if (ttsBtn) {
+      _syncHeaderBtn();
+      ttsBtn.addEventListener('click', function () { setEnabled(!_enabled); });
+    }
 
-    var hb = document.getElementById('headerTtsBtn');
-    _ttsLog('headerTtsBtn='+!!hb, hb?'ok':'err');
-    if (hb) { _syncBtn(); hb.addEventListener('click', function(){ _ttsLog('header btn click','info'); setEnabled(!_enabled); }); }
-
-    var nb = document.getElementById('newsTtsBtn');
-    _ttsLog('newsTtsBtn='+!!nb, nb?'ok':'err');
-    if (nb) {
-      nb.addEventListener('click', function() {
-        _ttsLog('news btn click','info');
-        var banner = document.getElementById('newsBanner');
+    var newsBtn = document.getElementById('newsTtsBtn');
+    if (newsBtn) {
+      newsBtn.addEventListener('click', function () {
+        var banner  = document.getElementById('newsBanner');
         var scoreEl = document.getElementById('newsScore');
-        if (!banner||!scoreEl) { _ttsLog('elements missing','err'); return; }
-        var score = parseInt(scoreEl.textContent,10)||0;
-        var rc = banner.classList.contains('news-high')?'high':banner.classList.contains('news-medium')?'medium':'low';
-        var mode = typeof getScoreMode==='function' ? getScoreMode() : '';
-        var txt = ((mode?mode+' ':'')+'score '+score+'. '+rc[0].toUpperCase()+rc.slice(1)+' risk. '+(rc==='high'?'Urgent escalation required.':rc==='medium'?'Prompt review required.':'')).trim().replace(/\s{2,}/g,' ');
-        _ttsLog('text: "'+txt+'"','info');
-        speak(txt);
+        if (!banner || !scoreEl) return;
+
+        var score     = parseInt(scoreEl.textContent, 10) || 0;
+        var riskClass = banner.classList.contains('news-high')   ? 'high'
+                      : banner.classList.contains('news-medium') ? 'medium'
+                      : 'low';
+        var mode   = typeof getScoreMode === 'function' ? getScoreMode() : '';
+        var prefix = mode ? mode + ' ' : '';
+        var risk   = riskClass[0].toUpperCase() + riskClass.slice(1);
+        var action = riskClass === 'high'   ? 'Urgent escalation required.'
+                   : riskClass === 'medium' ? 'Prompt review required.'
+                   : '';
+
+        speak((prefix + 'score ' + score + '. ' + risk + ' risk. ' + action).trim().replace(/\s{2,}/g, ' '));
       });
     }
   }
 
-  _ttsLog('TTS ready', 'ok');
-  return {prime:prime, speak:speak, cancel:cancel, setEnabled:setEnabled,
-          isEnabled:isEnabled, isSpeaking:isSpeaking, speakNEWS2:speakNEWS2, initTTSUI:initTTSUI};
+  return {
+    prime:      prime,
+    speak:      speak,
+    cancel:     cancel,
+    setEnabled: setEnabled,
+    isEnabled:  isEnabled,
+    isSpeaking: isSpeaking,
+    speakNEWS2: speakNEWS2,
+    initTTSUI:  initTTSUI
+  };
+
 }());
 
 </script><script>
