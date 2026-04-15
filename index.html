@@ -332,9 +332,9 @@ html, body {
 .hah-metric-card {
   border: 1px solid var(--desk-border);
   border-radius: 20px;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.94);
   box-shadow: var(--desk-shadow);
-  padding: 18px 18px 16px;
+  padding: 16px 18px 15px;
   text-align: left;
   cursor: pointer;
   transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
@@ -360,15 +360,16 @@ html, body {
 
 .hah-metric-value {
   margin-top: 8px;
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 600;
   letter-spacing: -0.04em;
 }
 
 .hah-metric-sub {
   margin-top: 6px;
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--desk-text-muted);
+  line-height: 1.35;
 }
 
 .hah-board-toolbar {
@@ -376,24 +377,30 @@ html, body {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .hah-board-toolbar-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hah-board-toolbar-copy {
+  min-width: 0;
 }
 
 .hah-board-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .hah-board-sub {
   font-size: 13px;
   color: var(--desk-text-muted);
+  line-height: 1.4;
 }
 
 .hah-inline-pill {
@@ -426,9 +433,14 @@ html, body {
 
 .hah-table-wrap { overflow: auto; }
 
+.hah-board-table-wrap {
+  max-height: calc(100dvh - 320px);
+}
+
 .hah-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   table-layout: fixed;
 }
 
@@ -442,36 +454,46 @@ html, body {
   color: var(--desk-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  padding: 0 16px 12px;
-  background: rgba(255,255,255,0.88);
+  padding: 0 14px 12px;
+  background: rgba(255,255,255,0.94);
 }
 
 .hah-table tbody tr {
-  height: 76px;
+  height: 72px;
   cursor: pointer;
-  transition: background 160ms ease;
+  transition: background 160ms ease, box-shadow 160ms ease;
 }
 
 .hah-table tbody tr:hover { background: rgba(47, 111, 237, 0.04); }
-.hah-table tbody tr.is-selected { background: rgba(47, 111, 237, 0.08); }
+.hah-table tbody tr.is-selected {
+  background: rgba(47, 111, 237, 0.08);
+  box-shadow: inset 3px 0 0 rgba(47, 111, 237, 0.55);
+}
 
 .hah-table tbody td {
-  padding: 14px 16px;
-  border-top: 1px solid rgba(25,45,72,0.06);
+  padding: 12px 14px;
+  border-top: 1px solid rgba(25,45,72,0.055);
   vertical-align: middle;
 }
 
 .hah-row-main {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
 .hah-row-sub {
   margin-top: 4px;
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--desk-text-muted);
-  line-height: 1.3;
+  line-height: 1.35;
+}
+
+.hah-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .hah-badge {
@@ -533,8 +555,9 @@ html, body {
 }
 
 .hah-kv-value {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
+  line-height: 1.35;
 }
 
 .hah-board-right-actions {
@@ -557,6 +580,84 @@ html, body {
 }
 
 .hah-empty-text { font-size: 14px; }
+
+.hah-board-filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.hah-saved-view-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid var(--desk-border);
+  background: rgba(255,255,255,0.84);
+  border-radius: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.hah-saved-view-btn:hover {
+  background: rgba(255,255,255,1);
+  border-color: rgba(25,45,72,0.14);
+  transform: translateY(-1px);
+}
+
+.hah-saved-view-btn.is-active {
+  background: rgba(47,111,237,0.08);
+  border-color: rgba(47,111,237,0.18);
+}
+
+.hah-saved-view-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.hah-saved-view-count {
+  min-width: 30px;
+  height: 26px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(17,37,63,0.06);
+  color: var(--desk-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hah-board-context-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hah-board-context-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.hah-board-context-row span {
+  color: var(--desk-text-muted);
+}
+
+.hah-board-context-row strong {
+  font-size: 13px;
+}
+
+.hah-summary-banner-tight {
+  margin-top: 0;
+}
 
 @media (max-width: 2560px) {
   .hah-board-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -581,7 +682,7 @@ html, body {
 
 .hah-patient-header-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr auto;
+  grid-template-columns: 1.45fr 1fr auto;
   gap: 20px;
   align-items: start;
 }
@@ -608,6 +709,13 @@ html, body {
   line-height: 1.45;
 }
 
+.hah-patient-flag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
 .hah-patient-header-actions {
   display: flex;
   flex-wrap: wrap;
@@ -630,7 +738,7 @@ html, body {
 }
 
 .hah-summary-banner {
-  margin-top: 14px;
+  margin-top: 16px;
   padding: 14px 16px;
   border-radius: 16px;
   background: rgba(47, 111, 237, 0.07);
@@ -660,22 +768,22 @@ html, body {
 .hah-mini-title {
   font-size: 14px;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .hah-issue-sub,
 .hah-mini-sub {
-  margin-top: 5px;
+  margin-top: 6px;
   font-size: 12.5px;
   color: var(--desk-text-muted);
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .hah-review-body,
 .hah-text-block {
   white-space: pre-wrap;
   font-size: 14px;
-  line-height: 1.55;
+  line-height: 1.62;
   color: var(--desk-text);
 }
 
@@ -738,11 +846,25 @@ html, body {
   border-radius: 14px;
   padding: 12px;
   cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.hah-jump-btn:hover {
+  background: rgba(255,255,255,1);
+  border-color: rgba(25,45,72,0.14);
+  transform: translateY(-1px);
 }
 
 .hah-jump-btn.is-active {
   background: rgba(47,111,237,0.08);
   border-color: rgba(47,111,237,0.18);
+}
+
+.hah-jump-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .hah-jump-name {
@@ -751,7 +873,7 @@ html, body {
 }
 
 .hah-jump-sub {
-  margin-top: 4px;
+  margin-top: 6px;
   font-size: 12px;
   color: var(--desk-text-muted);
 }
@@ -770,10 +892,12 @@ html, body {
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
+  transition: background 160ms ease, border-color 160ms ease;
 }
 
 .hah-action-btn:hover {
   background: rgba(255,255,255,1);
+  border-color: rgba(25,45,72,0.14);
 }
 
 .hah-detail-inline {
@@ -1693,45 +1817,42 @@ html, body {
   const c = window.HAHBoard.components;
   const d = window.HAHBoard.derived;
 
+  const VIEW_DEFS = [
+    { key: 'all-active', label: 'All active' },
+    { key: 'high-priority', label: 'High priority' },
+    { key: 'overdue-reviews', label: 'Overdue reviews' },
+    { key: 'likely-discharge', label: 'Likely discharge' },
+    { key: 'oxygen-patients', label: 'Oxygen patients' },
+    { key: 'iv-patients', label: 'IV patients' },
+    { key: 'changed', label: 'Changed' }
+  ];
+
   function renderLeftPane(state) {
-    const savedView = state.board.savedView;
     const vm = d.buildBoardViewModel(state);
+    const counts = buildViewCounts(state);
 
-    const buttons = [
-      ['All active', 'all-active'],
-      ['High priority', 'high-priority'],
-      ['Overdue reviews', 'overdue-reviews'],
-      ['Likely discharge', 'likely-discharge'],
-      ['Oxygen patients', 'oxygen-patients'],
-      ['IV patients', 'iv-patients'],
-      ['Changed', 'changed']
-    ].map(([label, key]) => {
-      const cls = key === savedView ? 'class="hah-inline-pill is-active"' : 'class="hah-inline-pill"';
-      return `<button type="button" ${cls} data-board-action="set-view" data-view-key="${c.escapeHtml(key)}">${c.escapeHtml(label)}</button>`;
-    }).join('');
-
-    const sourceLabel = vm.source === 'live' ? 'Live app storage' : vm.source === 'adapter' ? 'Adapter data' : 'Fallback demo data';
-    const sourceMeta = vm.storageKey ? truncateText(vm.storageKey, 42) : 'No local app payload found';
+    const buttons = VIEW_DEFS.map((view) => renderSavedViewButton(view, state.board.savedView, counts[view.key] || 0)).join('');
+    const sourceLabel = vm.source === 'live' ? 'Live app data' : vm.source === 'adapter' ? 'Mapped adapter data' : 'Prototype dataset';
 
     return c.stack([
-      c.card('Board filters', `
-        <div class="hah-board-sub">Saved cohort views for the first desktop pass.</div>
-        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:10px;">
-          ${buttons}
-        </div>
+      c.card('Saved views', `
+        <div class="hah-board-sub">Quick cohort views for the current service state.</div>
+        <div class="hah-board-filter-list">${buttons}</div>
       `),
-      c.card('Data source', c.keyValueGrid([
-        { label: 'Source', value: sourceLabel },
-        { label: 'Storage key', value: sourceMeta },
-        { label: 'Current patient', value: vm.currentPatientId || '—' },
-        { label: 'Sort mode', value: vm.patientSortMode || '—' }
+      c.card('Service snapshot', c.keyValueGrid([
+        { label: 'Active', value: vm.metrics[0]?.value ?? vm.totalPatients },
+        { label: 'High priority', value: vm.metrics[1]?.value ?? '—' },
+        { label: 'Likely discharge', value: vm.metrics[3]?.value ?? '—' },
+        { label: 'Changed', value: vm.metrics[6]?.value ?? '—' }
       ])),
-      c.card('Current state', c.keyValueGrid([
-        { label: 'Saved view', value: state.board.savedView },
-        { label: 'Sort', value: state.board.sort },
-        { label: 'Density', value: state.board.density },
-        { label: 'Boardround', value: state.boardroundMode ? 'On' : 'Off' }
-      ]))
+      c.card('Board context', `
+        <div class="hah-board-context-list">
+          <div class="hah-board-context-row"><span>Current view</span><strong>${c.escapeHtml(viewLabel(state.board.savedView))}</strong></div>
+          <div class="hah-board-context-row"><span>Sort</span><strong>${c.escapeHtml(state.board.sort)}</strong></div>
+          <div class="hah-board-context-row"><span>Boardround</span><strong>${state.boardroundMode ? 'On' : 'Off'}</strong></div>
+          <div class="hah-board-context-row"><span>Source</span><strong>${c.escapeHtml(sourceLabel)}</strong></div>
+        </div>
+      `)
     ]);
   }
 
@@ -1740,6 +1861,7 @@ html, body {
     if (!vm.rows.length) {
       return `<div class="hah-board-surface">${c.emptyState('No patients in this view', 'Try a different saved view or clear filters.')}</div>`;
     }
+
     const metricsHtml = vm.metrics.map(c.metricCard).join('');
     const rowsHtml = vm.rows.map((row) => renderRow(row, vm.selectedPatient)).join('');
     const sourceText = vm.source === 'live' ? 'Live patient data' : 'Prototype fallback data';
@@ -1753,35 +1875,37 @@ html, body {
         <section class="hah-card">
           <div class="hah-card-inner">
             <div class="hah-board-toolbar">
-              <div class="hah-board-toolbar-group">
+              <div class="hah-board-toolbar-group hah-board-toolbar-copy">
                 <div>
-                  <div class="hah-board-title">Board</div>
-                  <div class="hah-board-sub">${vm.totalPatients} patients in current view · ${c.escapeHtml(sourceText)}</div>
+                  <div class="hah-board-title">${c.escapeHtml(viewLabel(state.board.savedView))}</div>
+                  <div class="hah-board-sub">${vm.totalPatients} patients · ${c.escapeHtml(sourceText)}${state.boardroundMode ? ' · boardround mode' : ''}</div>
                 </div>
               </div>
 
               <div class="hah-board-toolbar-group">
-                ${c.pillButton('Sort: priority', 'set-sort', 'data-sort-key="priority"')}
-                ${c.pillButton('Sort: name', 'set-sort', 'data-sort-key="name"')}
+                ${renderSortButton('Priority', 'priority', state.board.sort)}
+                ${renderSortButton('Review due', 'review', state.board.sort)}
+                ${renderSortButton('Name', 'name', state.board.sort)}
                 ${c.pillButton('Open selected', 'open-selected-patient')}
               </div>
             </div>
 
             ${c.table(
               [
-                { label: 'Patient', width: '280px' },
+                { label: 'Patient', width: '260px' },
                 { label: 'Source/team', width: '120px' },
-                { label: 'Pathway', width: '130px' },
-                { label: 'Priority', width: '110px' },
-                { label: 'Current status', width: '170px' },
-                { label: 'Last review', width: '130px' },
-                { label: 'Obs / score', width: '200px' },
+                { label: 'Pathway', width: '150px' },
+                { label: 'Priority', width: '112px' },
+                { label: 'Current status', width: '168px' },
+                { label: 'Review due', width: '128px' },
+                { label: 'Obs / score', width: '190px' },
                 { label: 'Blood trend', width: '180px' },
-                { label: 'Treatment flags', width: '180px' },
-                { label: 'Discharge', width: '150px' },
-                { label: 'Board status', width: '140px' }
+                { label: 'Treatment flags', width: '170px' },
+                { label: 'Discharge', width: '152px' },
+                { label: 'Board status', width: '136px' }
               ],
-              rowsHtml
+              rowsHtml,
+              { className: 'hah-board-table-wrap' }
             )}
           </div>
         </section>
@@ -1791,31 +1915,46 @@ html, body {
 
   function renderRow(row, selectedPatient) {
     const selected = selectedPatient && selectedPatient.id === row.id;
+    const reviewMeta = row.reviewDueAt ? formatDateTime(row.reviewDueAt) : '—';
+
     return `
       <tr class="${selected ? 'is-selected' : ''}" data-board-action="select-patient" data-patient-id="${c.escapeHtml(row.id)}">
         <td>
           <div class="hah-row-main">${c.escapeHtml(row.name)}</div>
-          <div class="hah-row-sub">${c.escapeHtml(`${row.age || '—'} · ${row.location}`)}</div>
+          <div class="hah-row-sub">${c.escapeHtml([row.age || '—', row.location].filter(Boolean).join(' · '))}</div>
         </td>
-        <td><div class="hah-row-main">${c.escapeHtml(row.clinician)}</div></td>
+        <td>
+          <div class="hah-row-main">${c.escapeHtml(row.clinician)}</div>
+        </td>
         <td>
           <div class="hah-row-main">${c.escapeHtml(row.pathway)}</div>
           <div class="hah-row-sub">${c.escapeHtml(row.summaryLine || '')}</div>
         </td>
         <td>${priorityBadge(row.priority)}</td>
-        <td><div class="hah-row-main">${c.escapeHtml(row.currentStatus)}</div></td>
         <td>
-          <div class="hah-row-main">${formatDateTime(row.latestReviewAt)}</div>
-          <div class="hah-row-sub">${row.reviewOverdue ? 'Review overdue' : row.reviewDueAt ? 'Review tracked' : 'No review due set'}</div>
+          <div class="hah-row-main">${c.escapeHtml(row.currentStatus)}</div>
+          <div class="hah-row-sub">${row.reviewOverdue ? 'Review overdue' : 'Review tracked'}</div>
         </td>
-        <td><div class="hah-row-main">${c.escapeHtml(row.obsSummary)}</div></td>
-        <td><div class="hah-row-main">${c.escapeHtml(row.bloodTrendSummary)}</div></td>
-        <td><div class="hah-board-flags">${row.treatmentFlags.map((flag) => c.badge(flag, 'neutral')).join('')}</div></td>
+        <td>
+          <div class="hah-row-main">${reviewMeta}</div>
+          <div class="hah-row-sub">${row.reviewOverdue ? 'Needs action' : 'On schedule'}</div>
+        </td>
+        <td>
+          <div class="hah-row-main hah-clamp-2">${c.escapeHtml(row.obsSummary)}</div>
+        </td>
+        <td>
+          <div class="hah-row-main hah-clamp-2">${c.escapeHtml(row.bloodTrendSummary)}</div>
+        </td>
+        <td>
+          <div class="hah-board-flags">${row.treatmentFlags.length ? row.treatmentFlags.slice(0, 3).map((flag) => c.badge(flag, 'neutral')).join('') : '<span class="hah-row-sub">—</span>'}</div>
+        </td>
         <td>
           <div class="hah-row-main">${c.escapeHtml(row.dischargeReadiness)}</div>
-          <div class="hah-row-sub">${c.escapeHtml(row.blockers[0] || 'No active blocker')}</div>
+          <div class="hah-row-sub hah-clamp-2">${c.escapeHtml(row.blockers[0] || 'No active blocker')}</div>
         </td>
-        <td><div class="hah-row-main">${c.escapeHtml(row.boardStatus)}</div></td>
+        <td>
+          <div class="hah-row-main">${c.escapeHtml(row.boardStatus)}</div>
+        </td>
       </tr>
     `;
   }
@@ -1828,11 +1967,12 @@ html, body {
         c.card('Selected patient preview', c.emptyState('No patient selected', 'Select a row on the board to see the live snapshot.'))
       ]);
     }
+
     return c.stack([
       c.card(
         patient.name,
         `
-          <div class="hah-board-sub">${c.escapeHtml(`${patient.age || '—'} · ${patient.location} · ${patient.pathway}`)}</div>
+          <div class="hah-board-sub">${c.escapeHtml([patient.age || '—', patient.location, patient.pathway].filter(Boolean).join(' · '))}</div>
           <div style="margin-top:8px;" class="hah-board-sub">${c.escapeHtml(patient.summaryLine || '')}</div>
           <div style="margin-top:16px;" class="hah-board-flags">
             ${priorityBadge(patient.priority)}
@@ -1843,26 +1983,29 @@ html, body {
         `,
         { subtitle: patient.clinician }
       ),
-      c.card('Today snapshot', c.keyValueGrid([
-        { label: 'Latest review', value: formatDateTime(patient.latestReviewAt) },
-        { label: 'Review due', value: formatDateTime(patient.reviewDueAt) },
-        { label: 'Obs', value: patient.obsSummary },
-        { label: 'Bloods', value: patient.bloodTrendSummary },
-        { label: 'Escalation', value: patient.escalationSummary },
-        { label: 'Discharge', value: patient.dischargeReadiness }
-      ])),
+      c.card('Today focus', `
+        <div class="hah-summary-banner hah-summary-banner-tight">${c.escapeHtml(buildTodayFocusText(patient))}</div>
+        <div style="margin-top:16px;">
+          ${c.keyValueGrid([
+            { label: 'Review due', value: formatDateTime(patient.reviewDueAt) },
+            { label: 'Obs', value: patient.obsSummary },
+            { label: 'Bloods', value: patient.bloodTrendSummary },
+            { label: 'Discharge', value: patient.dischargeReadiness }
+          ])}
+        </div>
+      `),
       c.card('Blockers and flags', `
         <div class="hah-board-flags">
           ${(patient.blockers.length ? patient.blockers : ['No active blocker']).map((x) => c.badge(x, 'warn')).join('')}
         </div>
         <div style="margin-top:16px;" class="hah-board-flags">
-          ${patient.treatmentFlags.map((x) => c.badge(x, 'neutral')).join('')}
+          ${patient.treatmentFlags.length ? patient.treatmentFlags.map((x) => c.badge(x, 'neutral')).join('') : c.badge('No active flags', 'good')}
         </div>
       `),
       c.card('Actions', `
         <div class="hah-board-right-actions">
           ${c.pillButton('Open patient', 'open-selected-patient')}
-          ${c.pillButton('Mark discussed', 'mark-discussed')}
+          ${c.pillButton('Back to all active', 'set-view', 'data-view-key="all-active"')}
           ${c.pillButton('Likely discharge', 'set-view', 'data-view-key="likely-discharge"')}
         </div>
       `)
@@ -1904,11 +2047,39 @@ html, body {
       router.goToPatient(patient.id);
       return true;
     }
-    if (action === 'mark-discussed') {
-      console.log('Board action placeholder: mark discussed');
-      return true;
-    }
     return false;
+  }
+
+  function buildViewCounts(state) {
+    const out = {};
+    VIEW_DEFS.forEach((view) => {
+      const vm = d.buildBoardViewModel({
+        ...state,
+        board: {
+          ...state.board,
+          savedView: view.key
+        }
+      });
+      out[view.key] = vm.totalPatients;
+    });
+    return out;
+  }
+
+  function renderSavedViewButton(view, activeView, count) {
+    const active = view.key === activeView ? ' is-active' : '';
+    return `
+      <button type="button" class="hah-saved-view-btn${active}" data-board-action="set-view" data-view-key="${c.escapeHtml(view.key)}">
+        <span class="hah-saved-view-label">${c.escapeHtml(view.label)}</span>
+        <span class="hah-saved-view-count">${c.escapeHtml(count)}</span>
+      </button>
+    `;
+  }
+
+  function renderSortButton(label, key, activeKey) {
+    const attrs = `data-sort-key="${c.escapeHtml(key)}"`;
+    const btn = c.pillButton(label, 'set-sort', attrs);
+    if (key !== activeKey) return btn;
+    return btn.replace('class="hah-inline-pill"', 'class="hah-inline-pill is-active"');
   }
 
   function priorityBadge(priority) {
@@ -1919,23 +2090,25 @@ html, body {
     return c.badge(priority, tone);
   }
 
+  function buildTodayFocusText(patient) {
+    const parts = [patient.currentStatus, patient.bloodTrendSummary, patient.blockers[0] || 'No active blocker'];
+    return parts.filter(Boolean).join(' · ');
+  }
+
+  function viewLabel(key) {
+    const found = VIEW_DEFS.find((view) => view.key === key);
+    return found ? found.label : 'Board';
+  }
+
   function formatDateTime(value) {
     const raw = String(value || '').trim();
     if (!raw) return '—';
     const dt = new Date(raw);
     if (!Number.isNaN(dt.getTime())) {
-      const showDate = dt.toDateString() !== new Date().toDateString();
-      return showDate
-        ? dt.toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
-        : dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
-    return raw;
-  }
-
-  function truncateText(value, maxLen) {
-    const text = String(value || '').trim();
-    if (text.length <= maxLen) return text;
-    return text.slice(0, Math.max(0, maxLen - 1)).trimEnd() + '…';
+    const compact = raw.match(/(\d{1,2}:\d{2})/);
+    return compact ? compact[1] : raw;
   }
 
   window.HAHBoard.boardScreen = {
@@ -1961,33 +2134,40 @@ html, body {
     const vm = d.buildPatientWorkspaceModel(state);
     if (!vm) return c.stack([c.card('Patient jump list', c.emptyState('No patient selected', 'Choose a patient from the Board.'))]);
 
-    const buttons = vm.contextRows.map((row, index) => {
+    const buttons = vm.contextRows.map((row) => {
       const active = String(row.id) === String(vm.patient.id) ? ' is-active' : '';
       return `
         <button type="button" class="hah-jump-btn${active}" data-patient-action="jump" data-patient-id="${c.escapeHtml(row.id)}">
-          <div class="hah-jump-name">${c.escapeHtml(row.name)}</div>
+          <div class="hah-jump-head">
+            <div class="hah-jump-name">${c.escapeHtml(row.name)}</div>
+            ${priorityBadge(row.priority)}
+          </div>
           <div class="hah-jump-sub">${c.escapeHtml(row.currentStatus)} · ${c.escapeHtml(row.location)}</div>
         </button>
       `;
     }).join('');
 
     return c.stack([
-      c.card('Patient jump list', `
-        <div class="hah-board-sub">Current board context preserved from ${c.escapeHtml(state.board.savedView)}.</div>
-        <div style="margin-top:16px;" class="hah-jump-list">${buttons}</div>
-      `),
-      c.card('Position in board', c.keyValueGrid([
-        { label: 'Selected', value: vm.selectedIndex >= 0 ? `${vm.selectedIndex + 1} of ${vm.contextRows.length}` : '—' },
-        { label: 'Saved view', value: state.board.savedView },
+      c.card('Current board view', c.keyValueGrid([
+        { label: 'View', value: viewLabel(state.board.savedView) },
+        { label: 'Position', value: vm.selectedIndex >= 0 ? `${vm.selectedIndex + 1} of ${vm.contextRows.length}` : '—' },
         { label: 'Priority', value: vm.patient.priority },
         { label: 'Status', value: vm.patient.currentStatus }
-      ]))
+      ])),
+      c.card('Patient jump list', `
+        <div class="hah-board-sub">Move through the current board cohort without losing context.</div>
+        <div style="margin-top:16px;" class="hah-jump-list">${buttons}</div>
+      `)
     ]);
   }
 
   function renderMainPane(state) {
     const vm = d.buildPatientWorkspaceModel(state);
     if (!vm) return renderEmpty();
+
+    const issueCards = vm.issues.map(renderIssueCard).join('');
+    const planRows = vm.planLines.slice(0, 6).map((line) => renderMiniLine(line)).join('');
+    const dischargeRows = vm.dischargeLines.slice(0, 4).map((line) => renderMiniLine(line)).join('');
 
     return `
       <div class="hah-patient-main">
@@ -2002,6 +2182,9 @@ html, body {
                 </div>
                 <div class="hah-patient-meta">${c.escapeHtml(buildHeaderMeta(vm))}</div>
                 <div class="hah-patient-summary-line">${c.escapeHtml(vm.summaryText)}</div>
+                <div class="hah-patient-flag-row">
+                  ${(vm.patient.treatmentFlags.length ? vm.patient.treatmentFlags : ['No active flags']).map((flag) => c.badge(flag, flag === 'DNAR' ? 'danger' : 'neutral')).join('')}
+                </div>
               </div>
 
               <div>
@@ -2026,48 +2209,33 @@ html, body {
 
         <div class="hah-patient-content-grid">
           <div class="hah-patient-column">
-            ${c.card('Today summary', c.keyValueGrid([
-              { label: 'Current state', value: vm.patient.currentStatus },
-              { label: 'Obs signal', value: vm.patient.obsSummary },
-              { label: 'Blood trend', value: vm.patient.bloodTrendSummary },
-              { label: 'Blocker', value: vm.patient.blockers[0] || 'No active blocker' },
-              { label: 'Treatment', value: vm.patient.treatmentFlags.join(', ') || 'No active flags' },
-              { label: 'Board status', value: vm.patient.boardStatus }
-            ]))}
+            ${c.card('Today summary', `
+              ${c.keyValueGrid([
+                { label: 'Current state', value: vm.patient.currentStatus },
+                { label: 'Review due', value: formatDateTime(vm.patient.reviewDueAt) },
+                { label: 'Blood trend', value: vm.patient.bloodTrendSummary },
+                { label: 'Obs signal', value: vm.patient.obsSummary },
+                { label: 'Main blocker', value: vm.patient.blockers[0] || 'No active blocker' },
+                { label: 'Board status', value: vm.patient.boardStatus }
+              ])}
+            `)}
 
-            ${c.card('Active issues', renderIssueList(vm.issues), { subtitle: `${vm.issues.length || 0} issue${vm.issues.length === 1 ? '' : 's'}` })}
+            ${c.card('Active issues', issueCards || '<div class="hah-mini-item"><div class="hah-mini-title">No active issue text recorded.</div></div>', { subtitle: `${vm.issues.length || 0} issue${vm.issues.length === 1 ? '' : 's'}` })}
 
-            ${c.card('Latest review', `
-              <div class="hah-review-meta">Narrative assembled from summary, examination, and plan in the current patient record.</div>
+            ${c.card('Clinical narrative', `
               <div class="hah-review-body">${c.escapeHtml(vm.reviewText || 'No current narrative available.')}</div>
             `)}
 
-            ${c.card('Plan and discharge', `
-              <div class="hah-kv-grid" style="margin-bottom:16px;">
-                <div class="hah-kv-item">
-                  <div class="hah-kv-label">Plan</div>
-                  <div class="hah-kv-value">${c.escapeHtml(vm.planLines[0] || 'No active plan line')}</div>
-                </div>
-                <div class="hah-kv-item">
-                  <div class="hah-kv-label">Discharge</div>
-                  <div class="hah-kv-value">${c.escapeHtml(vm.dischargeLines[0] || vm.patient.dischargeReadiness)}</div>
-                </div>
-              </div>
-              <div class="hah-plain-list">
-                ${vm.planLines.concat(vm.dischargeLines.map(line => `Discharge: ${line}`)).slice(0, 6).map((line) => `
-                  <div class="hah-mini-item">
-                    <div class="hah-mini-title">${c.escapeHtml(line)}</div>
-                  </div>
-                `).join('') || '<div class="hah-mini-item"><div class="hah-mini-title">No plan or discharge text recorded.</div></div>'}
-              </div>
-            `)}
+            ${c.card('Plan', planRows || '<div class="hah-mini-item"><div class="hah-mini-title">No plan text recorded.</div></div>')}
+
+            ${c.card('Discharge planning', dischargeRows || `<div class="hah-mini-item"><div class="hah-mini-title">${c.escapeHtml(vm.patient.dischargeReadiness)}</div></div>`)}
           </div>
 
           <div class="hah-patient-column">
             ${c.card('Obs and scores', `
               ${c.keyValueGrid(vm.obsItems)}
               <div style="margin-top:16px;" class="hah-detail-inline">
-                ${vm.patient.treatmentFlags.map((flag) => c.badge(flag, 'neutral')).join('')}
+                ${vm.patient.treatmentFlags.length ? vm.patient.treatmentFlags.map((flag) => c.badge(flag, 'neutral')).join('') : c.badge('No active flags', 'good')}
               </div>
             `)}
 
@@ -2104,22 +2272,23 @@ html, body {
         { label: 'Pathway', value: vm.patient.pathway }
       ])),
       c.card('Current blockers', renderMiniLines(vm.patient.blockers, 'No active blocker recorded.')),
-      c.card('Supporting context', renderMiniLines([
-        vm.listDetails && `Obs summary: ${vm.listDetails}`,
-        vm.referralSource && `Referral: ${vm.referralSource}`,
-        vm.admissionDate && `Admission date: ${vm.admissionDate}`
+      c.card('Board context', renderMiniLines([
+        `Current view: ${viewLabel(state.board.savedView)}`,
+        vm.selectedIndex >= 0 ? `Position: ${vm.selectedIndex + 1} of ${vm.contextRows.length}` : '',
+        vm.referralSource ? `Referral: ${vm.referralSource}` : '',
+        vm.admissionDate ? `Admission date: ${vm.admissionDate}` : ''
       ].filter(Boolean), 'No additional context available.'))
     ]);
   }
 
-  function renderIssueList(issues) {
-    if (!issues.length) return '<div class="hah-mini-item"><div class="hah-mini-title">No active issue text recorded.</div></div>';
-    return `<div class="hah-issue-list">${issues.map((issue, index) => `
+  function renderIssueCard(issue) {
+    const parsed = parseIssue(issue);
+    return `
       <div class="hah-issue-item">
-        <div class="hah-issue-title">Issue ${index + 1}</div>
-        <div class="hah-issue-sub">${c.escapeHtml(issue)}</div>
+        <div class="hah-issue-title">${c.escapeHtml(parsed.title)}</div>
+        ${parsed.body ? `<div class="hah-issue-sub">${c.escapeHtml(parsed.body)}</div>` : ''}
       </div>
-    `).join('')}</div>`;
+    `;
   }
 
   function renderBloodSamples(samples) {
@@ -2148,11 +2317,15 @@ html, body {
 
   function renderMiniLines(lines, emptyText) {
     if (!lines.length) return `<div class="hah-mini-item"><div class="hah-mini-title">${c.escapeHtml(emptyText)}</div></div>`;
-    return `<div class="hah-mini-list">${lines.map((line) => `
+    return `<div class="hah-mini-list">${lines.map((line) => renderMiniLine(line)).join('')}</div>`;
+  }
+
+  function renderMiniLine(line) {
+    return `
       <div class="hah-mini-item">
         <div class="hah-mini-title">${c.escapeHtml(line)}</div>
       </div>
-    `).join('')}</div>`;
+    `;
   }
 
   function buildHeaderMeta(vm) {
@@ -2166,7 +2339,22 @@ html, body {
   }
 
   function buildBannerText(vm) {
-    return `${vm.patient.currentStatus}. ${vm.patient.bloodTrendSummary}. ${vm.patient.blockers[0] || 'No active blocker recorded.'}`;
+    return [vm.patient.currentStatus, vm.patient.bloodTrendSummary, vm.patient.blockers[0] || 'No active blocker recorded'].filter(Boolean).join(' · ');
+  }
+
+  function parseIssue(text) {
+    const clean = String(text || '').trim();
+    if (!clean) return { title: 'Issue', body: '' };
+    const split = clean.split(/[:.]/, 2);
+    const title = split[0] ? truncate(split[0], 64) : clean;
+    const body = split[1] ? truncate(split[1].trim(), 180) : '';
+    return { title, body };
+  }
+
+  function truncate(value, maxLen) {
+    const text = String(value || '').trim();
+    if (text.length <= maxLen) return text;
+    return text.slice(0, Math.max(0, maxLen - 1)).trimEnd() + '…';
   }
 
   function handleClick(event, state) {
@@ -2218,6 +2406,18 @@ html, body {
     else if (priority === 'High') tone = 'warn';
     else if (priority === 'Low') tone = 'good';
     return c.badge(priority, tone);
+  }
+
+  function viewLabel(key) {
+    switch (key) {
+      case 'high-priority': return 'High priority';
+      case 'overdue-reviews': return 'Overdue reviews';
+      case 'likely-discharge': return 'Likely discharge';
+      case 'oxygen-patients': return 'Oxygen patients';
+      case 'iv-patients': return 'IV patients';
+      case 'changed': return 'Changed';
+      default: return 'All active';
+    }
   }
 
   function formatDateTime(value) {
@@ -2553,9 +2753,9 @@ html, body {
 </script>
 <script>
 window.__HAH_BOARD_BUILD__ = {
-  filename: 'hospital_at_home_board_v0_3_001_release.html',
-  source: 'hospital_at_home_board_v0_3_001_source.zip',
-  builtAt: '2026-04-15T17:29:42.273850',
+  filename: 'hospital_at_home_board_v0_3_002_release.html',
+  source: 'hospital_at_home_board_v0_3_002_source.zip',
+  builtAt: '2026-04-15T17:43:48.158505',
   entry: 'desktop.html'
 };
 </script>
