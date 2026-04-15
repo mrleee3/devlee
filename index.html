@@ -877,132 +877,390 @@ html, body {
   window.HAHBoard = window.HAHBoard || {};
 
   const PRIORITY_ORDER = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+  const PRIMARY_STORAGE_KEY = 'hah_prototype_v12_36_162_pin_rebuild_data';
+  const STORAGE_KEY_REGEX = /^hah_prototype_.*_data$/i;
 
   const demoPatients = [
     {
       id: 'p-001', name: 'Mary Jenkins', age: 84, location: 'Home East', pathway: 'Respiratory', clinician: 'Dr S', oxygenLpm: 2,
       iv: false, dnar: true, acp: true, latestReviewAt: '2026-04-15T09:20:00', reviewDueAt: '2026-04-15T16:00:00',
-      changedSinceYesterday: true, bloodNote: 'CRP ↑, U&Es pending', obsNote: 'CREWS 3 · sats 93% on 2L', dischargeHint: 'not-ready', blocker: 'Awaiting repeat bloods', boardStatus: 'Not discussed'
+      changedSinceYesterday: true, bloodNote: 'CRP ↑ 64 · Cr ↓ 112 · Na 133', obsNote: 'CREWS 3 · sats 93% on 2L', dischargeHint: 'not-ready', blocker: 'Awaiting repeat bloods', boardStatus: 'Not discussed', summaryLine: 'LRTI with oxygen requirement'
     },
     {
       id: 'p-002', name: 'Arthur Cole', age: 78, location: 'Home North', pathway: 'CHF', clinician: 'Dr L', oxygenLpm: 0,
       iv: true, dnar: false, acp: false, latestReviewAt: '2026-04-15T08:10:00', reviewDueAt: '2026-04-15T14:00:00',
-      changedSinceYesterday: false, bloodNote: 'Cr stable, weight down', obsNote: 'NEWS 2 · oedema improving', dischargeHint: 'possible-today', blocker: 'Awaiting TTO', boardStatus: 'In discussion'
+      changedSinceYesterday: false, bloodNote: 'Cr stable · weight down', obsNote: 'NEWS 2 · oedema improving', dischargeHint: 'possible-today', blocker: 'Awaiting TTO', boardStatus: 'In discussion', summaryLine: 'Heart failure improving'
     },
     {
       id: 'p-003', name: 'Rita Sharma', age: 69, location: 'Home South', pathway: 'Cellulitis', clinician: 'Dr S', oxygenLpm: 0,
       iv: true, dnar: false, acp: false, latestReviewAt: '2026-04-14T17:30:00', reviewDueAt: '2026-04-15T10:30:00',
-      changedSinceYesterday: true, bloodNote: 'CRP ↓, WCC improving', obsNote: 'Stable obs', dischargeHint: 'likely-tomorrow', blocker: 'IV antibiotic due', boardStatus: 'Not discussed'
-    },
-    {
-      id: 'p-004', name: 'Norman Price', age: 90, location: 'Care Home', pathway: 'Frailty', clinician: 'Dr T', oxygenLpm: 0,
-      iv: false, dnar: true, acp: true, latestReviewAt: '2026-04-14T12:00:00', reviewDueAt: '2026-04-15T09:00:00',
-      changedSinceYesterday: true, bloodNote: 'Na 128 ↓', obsNote: 'Needs review', dischargeHint: 'not-ready', blocker: 'Family discussion', boardStatus: 'Deferred'
-    },
-    {
-      id: 'p-005', name: 'Janet Rees', age: 74, location: 'Home West', pathway: 'COPD', clinician: 'Dr L', oxygenLpm: 1,
-      iv: false, dnar: false, acp: false, latestReviewAt: '2026-04-15T07:45:00', reviewDueAt: '2026-04-15T15:30:00',
-      changedSinceYesterday: false, bloodNote: 'No major drift', obsNote: 'CREWS 1 · weaning O2', dischargeHint: 'possible-today', blocker: 'O2 wean', boardStatus: 'Discussed'
-    },
-    {
-      id: 'p-006', name: 'Albert Finch', age: 81, location: 'Home Central', pathway: 'UTI', clinician: 'Dr M', oxygenLpm: 0,
-      iv: false, dnar: false, acp: false, latestReviewAt: '2026-04-15T10:05:00', reviewDueAt: '2026-04-16T10:00:00',
-      changedSinceYesterday: false, bloodNote: 'CRP ↓', obsNote: 'Stable obs', dischargeHint: 'ready', blocker: '', boardStatus: 'Actioned'
+      changedSinceYesterday: true, bloodNote: 'CRP ↓ 58 · WCC improving', obsNote: 'Stable obs', dischargeHint: 'likely-tomorrow', blocker: 'IV antibiotic due', boardStatus: 'Not discussed', summaryLine: 'Cellulitis on IV treatment'
     }
   ];
 
-  function getRawPatients() {
+  function getLocalStorageKeys() {
+    try {
+      return Object.keys(window.localStorage || {});
+    } catch (_err) {
+      return [];
+    }
+  }
+
+  function getStorageCandidateKeys() {
+    const keys = getLocalStorageKeys();
+    const dynamic = keys
+      .filter((key) => STORAGE_KEY_REGEX.test(key) && key !== PRIMARY_STORAGE_KEY)
+      .sort()
+      .reverse();
+    return [PRIMARY_STORAGE_KEY].concat(dynamic);
+  }
+
+  function readStoredPayload() {
+    const keys = getStorageCandidateKeys();
+    for (const key of keys) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.patients && typeof parsed.patients === 'object') {
+          return {
+            key,
+            patients: parsed.patients,
+            currentPatientId: parsed.currentPatient ? String(parsed.currentPatient) : null,
+            deletedPatients: Array.isArray(parsed.deletedPatients) ? parsed.deletedPatients : [],
+            patientSortMode: parsed.patientSortMode || '',
+            patientSortDirection: parsed.patientSortDirection || ''
+          };
+        }
+      } catch (_err) {}
+    }
+    return null;
+  }
+
+  function getPatientSourceBundle() {
     const adapter = window.HAHBoard.adapters && window.HAHBoard.adapters.getPatients;
     if (typeof adapter === 'function') {
       const result = adapter();
-      return Array.isArray(result) ? result : [];
+      if (Array.isArray(result) && result.length) {
+        return { source: 'adapter', storageKey: null, currentPatientId: null, rows: result.slice() };
+      }
     }
-    return demoPatients.slice();
+
+    const stored = readStoredPayload();
+    if (stored) {
+      const rows = Object.keys(stored.patients).map((id) => {
+        const patient = stored.patients[id] || {};
+        return { ...patient, id: String(id) };
+      });
+      return {
+        source: 'live',
+        storageKey: stored.key,
+        currentPatientId: stored.currentPatientId,
+        patientSortMode: stored.patientSortMode,
+        patientSortDirection: stored.patientSortDirection,
+        rows
+      };
+    }
+
+    return { source: 'demo', storageKey: null, currentPatientId: null, rows: demoPatients.slice() };
   }
 
   function isReviewOverdue(reviewDueAt) {
     if (!reviewDueAt) return false;
-    return new Date(reviewDueAt).getTime() < Date.now();
+    const ts = Date.parse(reviewDueAt);
+    if (Number.isNaN(ts)) return false;
+    return ts < Date.now();
   }
 
-  function derivePriority(raw) {
-    if (raw.priority) return raw.priority;
-    if (raw.oxygenLpm >= 2 || isReviewOverdue(raw.reviewDueAt)) return 'High';
-    if (raw.iv || raw.changedSinceYesterday) return 'Medium';
-    return 'Low';
-  }
-
-  function deriveStatus(raw) {
-    if (raw.currentStatus) return raw.currentStatus;
-    if (raw.oxygenLpm >= 2) return 'Needs review';
-    if (raw.changedSinceYesterday) return 'Awaiting result';
-    if (raw.dischargeHint === 'ready') return 'Ready for discharge';
-    if (raw.dischargeHint === 'possible-today') return 'Discharge planning';
-    return 'Stable';
-  }
-
-  function deriveDischargeReadiness(raw) {
-    switch (raw.dischargeHint) {
-      case 'ready': return 'Ready';
-      case 'possible-today': return 'Possible today';
-      case 'likely-tomorrow': return 'Likely tomorrow';
-      default: return 'Not ready';
+  function firstNonEmpty() {
+    for (let i = 0; i < arguments.length; i += 1) {
+      const value = arguments[i];
+      if (value == null) continue;
+      const text = String(value).trim();
+      if (text) return text;
     }
+    return '';
   }
 
-  function deriveEscalationSummary(raw) {
-    if (raw.dnar && raw.acp) return 'DNAR + ACP';
-    if (raw.dnar) return 'DNAR';
-    if (raw.acp) return 'ACP';
-    return 'Full escalation';
+  function splitSummaryHeadline(summary) {
+    const text = String(summary || '').trim();
+    if (!text) return '';
+    return text.split('•')[0].trim();
   }
 
-  function deriveTreatmentFlags(raw) {
-    const out = [];
-    if (raw.oxygenLpm > 0) out.push(`O2 ${raw.oxygenLpm}L`);
-    if (raw.iv) out.push('IV');
-    if (raw.dnar) out.push('DNAR');
-    return out;
+  function firstIssueLine(issues) {
+    const lines = String(issues || '')
+      .split(/\n+/)
+      .map((line) => line.replace(/^\s*\d+[.)-]?\s*/, '').trim())
+      .filter(Boolean);
+    return lines[0] || '';
+  }
+
+  function derivePathway(raw) {
+    return firstNonEmpty(raw.pathway, splitSummaryHeadline(raw.summary), firstIssueLine(raw.form && raw.form.issues), 'General');
+  }
+
+  function deriveLocation(raw) {
+    if (raw.location) return String(raw.location).trim();
+    if (raw.doa) return `Adm ${String(raw.doa).trim()}`;
+    if (raw.referralSource) return String(raw.referralSource).trim();
+    return '—';
+  }
+
+  function deriveClinician(raw) {
+    return firstNonEmpty(raw.clinician, raw.assignedClinician, raw.owner, raw.referralSource, '—');
+  }
+
+  function detectBooleanFromText(text, patterns) {
+    const haystack = String(text || '').toLowerCase();
+    return patterns.some((pattern) => pattern.test(haystack));
+  }
+
+  function getCombinedText(raw) {
+    const form = raw.form || {};
+    return [raw.summary, form.issues, form.examination, form.plan, form.forDischargeSummary, raw.listDetails]
+      .map((part) => String(part || '').trim())
+      .filter(Boolean)
+      .join('\n');
+  }
+
+  function extractOxygenLpm(raw) {
+    const form = raw.form || {};
+    const direct = parseFloat(String(form.oxygenFlow || '').replace(/[^0-9.]+/g, ''));
+    if (Number.isFinite(direct) && direct > 0) return direct;
+    const numeric = parseFloat(String(form.oxygen || '').replace(/[^0-9.]+/g, ''));
+    if (Number.isFinite(numeric) && numeric > 0) return numeric;
+
+    const details = String(raw.listDetails || '');
+    const match = details.match(/sp[oò]?[₂2]?\s*\d+%\s*([0-9]+(?:\.[0-9]+)?)\s*l/i) || details.match(/([0-9]+(?:\.[0-9]+)?)\s*l\b/i);
+    if (match) {
+      const value = parseFloat(match[1]);
+      if (Number.isFinite(value) && value > 0) return value;
+    }
+    return 0;
+  }
+
+  function inferEscalationFlags(raw) {
+    const text = getCombinedText(raw);
+    return {
+      dnar: detectBooleanFromText(text, [/\bdnar\b/, /not for resuscitation/, /not for cpr/]),
+      acp: detectBooleanFromText(text, [/\bacp\b/, /advance care/i, /ceiling of care/i])
+    };
+  }
+
+  function mapAcuityToPriority(raw, oxygenLpm) {
+    const acuity = String(raw.acuityClass || raw.acuity || '').toLowerCase();
+    if (acuity === 'red') return oxygenLpm >= 2 ? 'Critical' : 'High';
+    if (acuity === 'amber') return oxygenLpm >= 2 ? 'High' : 'Medium';
+    if (acuity === 'green') return 'Low';
+    if (oxygenLpm >= 2) return 'High';
+    return 'Medium';
+  }
+
+  function derivePriority(raw, oxygenLpm, iv) {
+    if (raw.priority) return raw.priority;
+    const mapped = mapAcuityToPriority(raw, oxygenLpm);
+    if (mapped !== 'Medium') return mapped;
+    if (iv) return 'Medium';
+    return mapped;
+  }
+
+  function parseBloodLine(line) {
+    const text = String(line || '');
+    const map = {};
+    const defs = {
+      CRP: /\bCRP\s+(-?\d+(?:\.\d+)?)/i,
+      Cr: /\bCr\s+(-?\d+(?:\.\d+)?)/i,
+      Na: /\bNa\s+(-?\d+(?:\.\d+)?)/i,
+      K: /\bK\+?\s+(-?\d+(?:\.\d+)?)/i,
+      Hb: /\bHb\s+(-?\d+(?:\.\d+)?)/i,
+      WCC: /\bWCC\s+(-?\d+(?:\.\d+)?)/i
+    };
+    Object.keys(defs).forEach((key) => {
+      const match = text.match(defs[key]);
+      if (match) map[key] = parseFloat(match[1]);
+    });
+    return map;
+  }
+
+  function trendArrow(current, previous) {
+    if (!Number.isFinite(current) || !Number.isFinite(previous)) return '';
+    if (current > previous) return '↑';
+    if (current < previous) return '↓';
+    return '→';
+  }
+
+  function formatNumber(value) {
+    if (!Number.isFinite(value)) return '';
+    return Number.isInteger(value) ? String(value) : String(value.toFixed(1));
+  }
+
+  function buildBloodTrendSummary(bloodsText) {
+    const lines = String(bloodsText || '')
+      .split(/\n+/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+    if (!lines.length) return 'No recent blood summary';
+
+    const latest = parseBloodLine(lines[0]);
+    const prev = lines[1] ? parseBloodLine(lines[1]) : {};
+    const parts = [];
+
+    ['CRP', 'Cr', 'Na', 'K', 'Hb'].forEach((key) => {
+      if (!Number.isFinite(latest[key])) return;
+      const arrow = trendArrow(latest[key], prev[key]);
+      const label = key === 'Cr' ? 'Cr' : key;
+      if (arrow && arrow !== '→') parts.push(`${label} ${arrow} ${formatNumber(latest[key])}`);
+      else parts.push(`${label} ${formatNumber(latest[key])}`);
+    });
+
+    if (parts.length) return parts.slice(0, 3).join(' · ');
+
+    const first = lines[0].replace(/^\d{1,2}\/\d{1,2}(?:\/\d{2,4})?\s+\d{1,2}:\d{2}\s*\|\s*/,'');
+    return truncateText(first, 90);
+  }
+
+  function buildObsSummary(raw) {
+    const form = raw.form || {};
+    const parts = [];
+    if (form.temp) parts.push(`T ${String(form.temp).trim()}`);
+    if (form.bp) parts.push(`BP ${String(form.bp).trim()}`);
+    if (form.hr) parts.push(`HR ${String(form.hr).trim()}`);
+    if (form.spo2) {
+      const oxygenFlow = String(form.oxygenFlow || '').trim();
+      parts.push(`SpO₂ ${String(form.spo2).trim()}%${oxygenFlow ? ` on ${oxygenFlow}` : ' RA'}`);
+    }
+    if (form.rr) parts.push(`RR ${String(form.rr).trim()}`);
+    if (parts.length) return truncateText(parts.join(' · '), 96);
+
+    const listDetails = String(raw.listDetails || '').replace(/^Obs:\s*/i, '').trim();
+    if (listDetails) return truncateText(listDetails, 96);
+    return 'No recent obs summary';
+  }
+
+  function truncateText(text, maxLen) {
+    const value = String(text || '').trim();
+    if (!value) return '';
+    if (value.length <= maxLen) return value;
+    return value.slice(0, Math.max(0, maxLen - 1)).trimEnd() + '…';
+  }
+
+  function deriveLatestReviewAt(raw) {
+    return firstNonEmpty(raw.updatedAt, raw.importedAt, raw.createdAt, raw.timestamp);
+  }
+
+  function deriveReviewDueAt(raw) {
+    return firstNonEmpty(raw.reviewDueAt, raw.nextReviewAt, raw.nextReviewDueAt);
+  }
+
+  function deriveStatus(raw, oxygenLpm, priority) {
+    if (raw.currentStatus) return raw.currentStatus;
+    if (priority === 'Critical') return 'Deteriorating';
+    if (oxygenLpm >= 2) return 'Needs review';
+    if (String(raw.acuityClass || raw.acuity || '').toLowerCase() === 'amber') return 'Needs review';
+    if (String(raw.acuityClass || raw.acuity || '').toLowerCase() === 'green') return 'Stable';
+    return 'Awaiting result';
+  }
+
+  function deriveDischargeReadiness(raw, oxygenLpm, iv, priority) {
+    const dischargeText = String(raw.form && raw.form.forDischargeSummary || '').trim();
+    if (!dischargeText) return 'Not ready';
+    if (priority === 'Low' && oxygenLpm === 0 && !iv) return 'Possible today';
+    if (priority === 'Medium' && oxygenLpm === 0) return 'Likely tomorrow';
+    return 'Not ready';
+  }
+
+  function deriveChangedSinceYesterday(raw, latestReviewAt, bloodSummary, priority) {
+    const ts = Date.parse(latestReviewAt || '');
+    if (!Number.isNaN(ts) && (Date.now() - ts) < 36 * 60 * 60 * 1000) return true;
+    if (/[↑↓]/.test(bloodSummary || '')) return true;
+    return priority === 'Critical' || priority === 'High';
+  }
+
+  function deriveBlockers(raw, oxygenLpm, iv, dischargeReadiness) {
+    if (oxygenLpm > 0) return [`O₂ requirement${oxygenLpm ? ` (${formatNumber(oxygenLpm)}L)` : ''}`];
+    if (iv) return ['IV treatment ongoing'];
+    if (dischargeReadiness === 'Possible today') return ['Discharge plan in progress'];
+
+    const firstPlanLine = String(raw.form && raw.form.plan || '')
+      .split(/\n+/)
+      .map((line) => line.replace(/^\s*\d+[.)-]?\s*/, '').trim())
+      .filter(Boolean)[0] || '';
+    if (firstPlanLine) return [truncateText(firstPlanLine, 52)];
+    return [];
+  }
+
+  function deriveTreatmentFlags(raw, oxygenLpm, iv, dnar) {
+    const flags = [];
+    if (oxygenLpm > 0) flags.push(`O2 ${formatNumber(oxygenLpm)}L`);
+    if (iv || !!(raw.form && raw.form.ivGiven)) flags.push('IV');
+    if (dnar) flags.push('DNAR');
+    if (raw.form && raw.form.medsGiven) flags.push('Meds');
+    return flags;
+  }
+
+  function deriveSummaryLine(raw) {
+    return firstNonEmpty(raw.summary, firstIssueLine(raw.form && raw.form.issues), 'No summary');
   }
 
   function buildPatientSummary(raw) {
+    const oxygenLpm = extractOxygenLpm(raw);
+    const iv = !!(raw.iv || (raw.form && raw.form.ivGiven) || (raw.form && Array.isArray(raw.form.ivEntries) && raw.form.ivEntries.length));
+    const escalationFlags = inferEscalationFlags(raw);
+    const priority = derivePriority(raw, oxygenLpm, iv);
+    const latestReviewAt = deriveLatestReviewAt(raw);
+    const reviewDueAt = deriveReviewDueAt(raw);
+    const bloodTrendSummary = buildBloodTrendSummary(raw.form && raw.form.bloods);
+    const dischargeReadiness = deriveDischargeReadiness(raw, oxygenLpm, iv, priority);
+    const treatmentFlags = deriveTreatmentFlags(raw, oxygenLpm, iv, escalationFlags.dnar);
+
     return {
-      id: raw.id,
-      name: raw.name,
+      id: String(raw.id),
+      name: firstNonEmpty(raw.name, `Patient ${raw.id}`),
       age: raw.age || '',
-      location: raw.location || '',
-      pathway: raw.pathway || '',
-      clinician: raw.clinician || '',
-      priority: derivePriority(raw),
-      currentStatus: deriveStatus(raw),
+      sex: raw.sex || '',
+      location: deriveLocation(raw),
+      pathway: derivePathway(raw),
+      clinician: deriveClinician(raw),
+      priority,
+      currentStatus: deriveStatus(raw, oxygenLpm, priority),
       boardStatus: raw.boardStatus || 'Not discussed',
-      dischargeReadiness: deriveDischargeReadiness(raw),
-      escalationSummary: deriveEscalationSummary(raw),
-      alerts: deriveTreatmentFlags(raw),
-      latestReviewAt: raw.latestReviewAt || '',
-      reviewDueAt: raw.reviewDueAt || '',
-      changedSinceYesterday: !!raw.changedSinceYesterday,
-      reviewOverdue: isReviewOverdue(raw.reviewDueAt),
-      obsSummary: raw.obsNote || 'No recent obs summary',
-      bloodTrendSummary: raw.bloodNote || 'No recent blood summary',
-      treatmentFlags: deriveTreatmentFlags(raw),
-      blockers: raw.blocker ? [raw.blocker] : [],
-      oxygenLpm: raw.oxygenLpm || 0,
-      iv: !!raw.iv,
-      dnar: !!raw.dnar,
-      acp: !!raw.acp,
-      sourcePatient: raw
+      dischargeReadiness,
+      escalationSummary: escalationFlags.dnar && escalationFlags.acp ? 'DNAR + ACP' : escalationFlags.dnar ? 'DNAR' : escalationFlags.acp ? 'ACP' : 'Full escalation',
+      alerts: treatmentFlags.slice(),
+      latestReviewAt,
+      reviewDueAt,
+      changedSinceYesterday: deriveChangedSinceYesterday(raw, latestReviewAt, bloodTrendSummary, priority),
+      reviewOverdue: isReviewOverdue(reviewDueAt),
+      obsSummary: buildObsSummary(raw),
+      bloodTrendSummary,
+      treatmentFlags,
+      blockers: deriveBlockers(raw, oxygenLpm, iv, dischargeReadiness),
+      oxygenLpm,
+      iv,
+      dnar: escalationFlags.dnar,
+      acp: escalationFlags.acp,
+      sourcePatient: raw,
+      summaryLine: deriveSummaryLine(raw)
     };
   }
 
   function filterPatients(rows, savedView) {
     switch (savedView) {
-      case 'high-priority': return rows.filter(r => r.priority === 'High' || r.priority === 'Critical');
-      case 'overdue-reviews': return rows.filter(r => r.reviewOverdue);
-      case 'likely-discharge': return rows.filter(r => r.dischargeReadiness === 'Possible today' || r.dischargeReadiness === 'Ready');
-      case 'oxygen-patients': return rows.filter(r => r.oxygenLpm > 0);
-      case 'iv-patients': return rows.filter(r => r.iv);
-      default: return rows;
+      case 'high-priority':
+        return rows.filter((r) => r.priority === 'High' || r.priority === 'Critical');
+      case 'overdue-reviews':
+        return rows.filter((r) => r.reviewOverdue);
+      case 'likely-discharge':
+        return rows.filter((r) => r.dischargeReadiness === 'Possible today' || r.dischargeReadiness === 'Ready');
+      case 'oxygen-patients':
+        return rows.filter((r) => r.oxygenLpm > 0);
+      case 'iv-patients':
+        return rows.filter((r) => r.iv);
+      case 'changed':
+        return rows.filter((r) => r.changedSinceYesterday);
+      default:
+        return rows;
     }
   }
 
@@ -1013,7 +1271,11 @@ html, body {
         out.sort((a, b) => a.name.localeCompare(b.name));
         return out;
       case 'review':
-        out.sort((a, b) => new Date(a.reviewDueAt || 0) - new Date(b.reviewDueAt || 0));
+        out.sort((a, b) => {
+          const aTs = Date.parse(a.reviewDueAt || '') || Number.MAX_SAFE_INTEGER;
+          const bTs = Date.parse(b.reviewDueAt || '') || Number.MAX_SAFE_INTEGER;
+          return aTs - bTs;
+        });
         return out;
       case 'priority':
       default:
@@ -1027,47 +1289,61 @@ html, body {
   }
 
   function buildBoardMetrics(rows) {
-    const highPriority = rows.filter(r => r.priority === 'High' || r.priority === 'Critical').length;
-    const overdueReviews = rows.filter(r => r.reviewOverdue).length;
-    const likelyDischarge = rows.filter(r => r.dischargeReadiness === 'Possible today' || r.dischargeReadiness === 'Ready').length;
-    const oxygenPatients = rows.filter(r => r.oxygenLpm > 0).length;
-    const ivPatients = rows.filter(r => r.iv).length;
-    const changed = rows.filter(r => r.changedSinceYesterday).length;
+    const highPriority = rows.filter((r) => r.priority === 'High' || r.priority === 'Critical').length;
+    const overdueReviews = rows.filter((r) => r.reviewOverdue).length;
+    const likelyDischarge = rows.filter((r) => r.dischargeReadiness === 'Possible today' || r.dischargeReadiness === 'Ready').length;
+    const oxygenPatients = rows.filter((r) => r.oxygenLpm > 0).length;
+    const ivPatients = rows.filter((r) => r.iv).length;
+    const changed = rows.filter((r) => r.changedSinceYesterday).length;
     return [
       { key: 'all-active', label: 'Caseload', value: rows.length, subtext: 'All active patients' },
-      { key: 'high-priority', label: 'High priority', value: highPriority, subtext: 'Needs senior attention', tone: 'warn' },
+      { key: 'high-priority', label: 'High priority', value: highPriority, subtext: 'Needs senior attention', tone: highPriority ? 'warn' : '' },
       { key: 'overdue-reviews', label: 'Overdue reviews', value: overdueReviews, subtext: 'Past due time', tone: overdueReviews ? 'danger' : '' },
-      { key: 'likely-discharge', label: 'Likely discharge', value: likelyDischarge, subtext: 'Today or ready', tone: 'good' },
+      { key: 'likely-discharge', label: 'Likely discharge', value: likelyDischarge, subtext: 'Today or ready', tone: likelyDischarge ? 'good' : '' },
       { key: 'oxygen-patients', label: 'Oxygen', value: oxygenPatients, subtext: 'Currently requiring O2' },
       { key: 'iv-patients', label: 'IV patients', value: ivPatients, subtext: 'Receiving IV treatment' },
-      { key: 'changed', label: 'Changed since yesterday', value: changed, subtext: 'Material shift in status' }
+      { key: 'changed', label: 'Changed since yesterday', value: changed, subtext: 'Live status shift' }
     ];
   }
 
-  function pickSelectedPatient(rows, state) {
-    const selectedId = state.selectedPatientId || state.route.entityId;
-    const found = rows.find(r => r.id === selectedId);
+  function pickSelectedPatient(rows, state, currentPatientId) {
+    const selectedId = String(state.selectedPatientId || state.route.entityId || currentPatientId || '');
+    const found = rows.find((r) => String(r.id) === selectedId);
     return found || rows[0] || null;
   }
 
   function buildBoardViewModel(state) {
-    const raw = getRawPatients();
-    const allRows = raw.map(buildPatientSummary);
+    const sourceBundle = getPatientSourceBundle();
+    const allRows = sourceBundle.rows.map(buildPatientSummary);
     const filtered = filterPatients(allRows, state.board.savedView);
     const sorted = sortPatients(filtered, state.board.sort);
-    const selectedPatient = pickSelectedPatient(sorted, state);
+    const selectedPatient = pickSelectedPatient(sorted, state, sourceBundle.currentPatientId);
+
     return {
       rows: sorted,
       metrics: buildBoardMetrics(allRows),
       selectedPatient,
-      totalPatients: sorted.length
+      totalPatients: sorted.length,
+      source: sourceBundle.source,
+      storageKey: sourceBundle.storageKey,
+      currentPatientId: sourceBundle.currentPatientId,
+      patientSortMode: sourceBundle.patientSortMode || '',
+      patientSortDirection: sourceBundle.patientSortDirection || ''
     };
   }
 
+  function getPatientSummaryById(id) {
+    if (!id) return null;
+    const sourceBundle = getPatientSourceBundle();
+    const match = sourceBundle.rows.find((row) => String(row.id) === String(id));
+    return match ? buildPatientSummary(match) : null;
+  }
+
   window.HAHBoard.derived = {
-    getRawPatients,
+    getPatientSourceBundle,
     buildPatientSummary,
-    buildBoardViewModel
+    buildBoardViewModel,
+    getPatientSummaryById
   };
 })();
 
@@ -1084,17 +1360,23 @@ html, body {
 
   function renderLeftPane(state) {
     const savedView = state.board.savedView;
+    const vm = d.buildBoardViewModel(state);
+
     const buttons = [
       ['All active', 'all-active'],
       ['High priority', 'high-priority'],
       ['Overdue reviews', 'overdue-reviews'],
       ['Likely discharge', 'likely-discharge'],
       ['Oxygen patients', 'oxygen-patients'],
-      ['IV patients', 'iv-patients']
+      ['IV patients', 'iv-patients'],
+      ['Changed', 'changed']
     ].map(([label, key]) => {
       const cls = key === savedView ? 'class="hah-inline-pill is-active"' : 'class="hah-inline-pill"';
       return `<button type="button" ${cls} data-board-action="set-view" data-view-key="${c.escapeHtml(key)}">${c.escapeHtml(label)}</button>`;
     }).join('');
+
+    const sourceLabel = vm.source === 'live' ? 'Live app storage' : vm.source === 'adapter' ? 'Adapter data' : 'Fallback demo data';
+    const sourceMeta = vm.storageKey ? truncateText(vm.storageKey, 42) : 'No local app payload found';
 
     return c.stack([
       c.card('Board filters', `
@@ -1103,6 +1385,12 @@ html, body {
           ${buttons}
         </div>
       `),
+      c.card('Data source', c.keyValueGrid([
+        { label: 'Source', value: sourceLabel },
+        { label: 'Storage key', value: sourceMeta },
+        { label: 'Current patient', value: vm.currentPatientId || '—' },
+        { label: 'Sort mode', value: vm.patientSortMode || '—' }
+      ])),
       c.card('Current state', c.keyValueGrid([
         { label: 'Saved view', value: state.board.savedView },
         { label: 'Sort', value: state.board.sort },
@@ -1119,6 +1407,7 @@ html, body {
     }
     const metricsHtml = vm.metrics.map(c.metricCard).join('');
     const rowsHtml = vm.rows.map((row) => renderRow(row, vm.selectedPatient)).join('');
+    const sourceText = vm.source === 'live' ? 'Live patient data' : 'Prototype fallback data';
 
     return `
       <div class="hah-board-surface">
@@ -1132,7 +1421,7 @@ html, body {
               <div class="hah-board-toolbar-group">
                 <div>
                   <div class="hah-board-title">Board</div>
-                  <div class="hah-board-sub">${vm.totalPatients} patients in current view</div>
+                  <div class="hah-board-sub">${vm.totalPatients} patients in current view · ${c.escapeHtml(sourceText)}</div>
                 </div>
               </div>
 
@@ -1146,12 +1435,12 @@ html, body {
             ${c.table(
               [
                 { label: 'Patient', width: '280px' },
-                { label: 'Clinician', width: '120px' },
+                { label: 'Source/team', width: '120px' },
                 { label: 'Pathway', width: '130px' },
                 { label: 'Priority', width: '110px' },
                 { label: 'Current status', width: '170px' },
                 { label: 'Last review', width: '130px' },
-                { label: 'Obs / score', width: '180px' },
+                { label: 'Obs / score', width: '200px' },
                 { label: 'Blood trend', width: '180px' },
                 { label: 'Treatment flags', width: '180px' },
                 { label: 'Discharge', width: '150px' },
@@ -1171,19 +1460,22 @@ html, body {
       <tr class="${selected ? 'is-selected' : ''}" data-board-action="select-patient" data-patient-id="${c.escapeHtml(row.id)}">
         <td>
           <div class="hah-row-main">${c.escapeHtml(row.name)}</div>
-          <div class="hah-row-sub">${c.escapeHtml(`${row.age} · ${row.location}`)}</div>
+          <div class="hah-row-sub">${c.escapeHtml(`${row.age || '—'} · ${row.location}`)}</div>
         </td>
         <td><div class="hah-row-main">${c.escapeHtml(row.clinician)}</div></td>
-        <td><div class="hah-row-main">${c.escapeHtml(row.pathway)}</div></td>
+        <td>
+          <div class="hah-row-main">${c.escapeHtml(row.pathway)}</div>
+          <div class="hah-row-sub">${c.escapeHtml(row.summaryLine || '')}</div>
+        </td>
         <td>${priorityBadge(row.priority)}</td>
         <td><div class="hah-row-main">${c.escapeHtml(row.currentStatus)}</div></td>
         <td>
           <div class="hah-row-main">${formatDateTime(row.latestReviewAt)}</div>
-          <div class="hah-row-sub">${row.reviewOverdue ? 'Review overdue' : 'Review tracked'}</div>
+          <div class="hah-row-sub">${row.reviewOverdue ? 'Review overdue' : row.reviewDueAt ? 'Review tracked' : 'No review due set'}</div>
         </td>
         <td><div class="hah-row-main">${c.escapeHtml(row.obsSummary)}</div></td>
         <td><div class="hah-row-main">${c.escapeHtml(row.bloodTrendSummary)}</div></td>
-        <td><div class="hah-board-flags">${row.treatmentFlags.map(flag => c.badge(flag, 'neutral')).join('')}</div></td>
+        <td><div class="hah-board-flags">${row.treatmentFlags.map((flag) => c.badge(flag, 'neutral')).join('')}</div></td>
         <td>
           <div class="hah-row-main">${c.escapeHtml(row.dischargeReadiness)}</div>
           <div class="hah-row-sub">${c.escapeHtml(row.blockers[0] || 'No active blocker')}</div>
@@ -1205,7 +1497,8 @@ html, body {
       c.card(
         patient.name,
         `
-          <div class="hah-board-sub">${c.escapeHtml(`${patient.age} · ${patient.location} · ${patient.pathway}`)}</div>
+          <div class="hah-board-sub">${c.escapeHtml(`${patient.age || '—'} · ${patient.location} · ${patient.pathway}`)}</div>
+          <div style="margin-top:8px;" class="hah-board-sub">${c.escapeHtml(patient.summaryLine || '')}</div>
           <div style="margin-top:16px;" class="hah-board-flags">
             ${priorityBadge(patient.priority)}
             ${c.badge(patient.currentStatus, 'neutral')}
@@ -1225,10 +1518,10 @@ html, body {
       ])),
       c.card('Blockers and flags', `
         <div class="hah-board-flags">
-          ${(patient.blockers.length ? patient.blockers : ['No active blocker']).map(x => c.badge(x, 'warn')).join('')}
+          ${(patient.blockers.length ? patient.blockers : ['No active blocker']).map((x) => c.badge(x, 'warn')).join('')}
         </div>
         <div style="margin-top:16px;" class="hah-board-flags">
-          ${patient.treatmentFlags.map(x => c.badge(x, 'neutral')).join('')}
+          ${patient.treatmentFlags.map((x) => c.badge(x, 'neutral')).join('')}
         </div>
       `),
       c.card('Actions', `
@@ -1254,7 +1547,6 @@ html, body {
     if (action === 'metric-filter') {
       const metricKey = target.getAttribute('data-metric-key');
       if (!metricKey) return false;
-      if (metricKey === 'changed') return true;
       store.setState({ board: { savedView: metricKey } });
       return true;
     }
@@ -1293,10 +1585,22 @@ html, body {
   }
 
   function formatDateTime(value) {
-    if (!value) return '—';
-    const dt = new Date(value);
-    if (Number.isNaN(dt.getTime())) return '—';
-    return dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const raw = String(value || '').trim();
+    if (!raw) return '—';
+    const dt = new Date(raw);
+    if (!Number.isNaN(dt.getTime())) {
+      const showDate = dt.toDateString() !== new Date().toDateString();
+      return showDate
+        ? dt.toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+        : dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    return raw;
+  }
+
+  function truncateText(value, maxLen) {
+    const text = String(value || '').trim();
+    if (text.length <= maxLen) return text;
+    return text.slice(0, Math.max(0, maxLen - 1)).trimEnd() + '…';
   }
 
   window.HAHBoard.boardScreen = {
@@ -1563,18 +1867,22 @@ html, body {
   }
 
   function renderPatientPlaceholder(state) {
-    const patientId = state.route.entityId || state.selectedPatientId || 'none selected';
+    const patientId = state.route.entityId || state.selectedPatientId || '';
+    const patient = window.HAHBoard.derived && typeof window.HAHBoard.derived.getPatientSummaryById === 'function'
+      ? window.HAHBoard.derived.getPatientSummaryById(patientId)
+      : null;
     return `
       <div class="hah-surface-placeholder">
         <section class="hah-card hah-surface-hero">
           <h1 class="hah-surface-title">Patient workspace</h1>
-          <p class="hah-surface-subtitle">Single-patient command view placeholder for prototype 0.1</p>
+          <p class="hah-surface-subtitle">Single-patient command view placeholder for prototype 0.2</p>
         </section>
         <section class="hah-card">
           <div class="hah-card-inner">
             <div class="hah-card-title">Current patient</div>
-            <p class="hah-muted">Patient id: ${escapeHtml(patientId)}</p>
-            <p class="hah-muted">This route is live so the Board → Patient navigation can be tested now, before the full patient workspace is built.</p>
+            <p class="hah-muted">Patient id: ${escapeHtml(patientId || 'none selected')}</p>
+            <p class="hah-muted">Name: ${escapeHtml(patient ? patient.name : 'No patient selected')}</p>
+            <p class="hah-muted">Summary: ${escapeHtml(patient ? patient.summaryLine || patient.currentStatus || '—' : 'This route is live so the Board → Patient navigation can be tested now, before the full patient workspace is built.')}</p>
           </div>
         </section>
       </div>
@@ -1614,9 +1922,9 @@ html, body {
 </script>
 <script>
 window.__HAH_BOARD_BUILD__ = {
-  filename: 'hospital_at_home_board_v0_1_001_release.html',
-  source: 'hospital_at_home_board_v0_1_001_source.zip',
-  builtAt: '2026-04-15T16:49:55.673494',
+  filename: 'hospital_at_home_board_v0_2_001_release.html',
+  source: 'hospital_at_home_board_v0_2_001_source.zip',
+  builtAt: '2026-04-15T17:12:37.765640',
   entry: 'desktop.html'
 };
 </script>
