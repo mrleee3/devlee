@@ -563,6 +563,240 @@ html, body {
 }
 
 </style>
+  <style>
+/* inlined: css/desktop-patient.css */
+.hah-patient-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: calc(100dvh - var(--desk-header-h) - 40px);
+}
+
+.hah-patient-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  backdrop-filter: blur(14px);
+}
+
+.hah-patient-header-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr auto;
+  gap: 20px;
+  align-items: start;
+}
+
+.hah-patient-name-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.hah-patient-name {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.hah-patient-meta,
+.hah-patient-summary-line {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--desk-text-muted);
+  line-height: 1.45;
+}
+
+.hah-patient-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.hah-patient-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.hah-patient-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.hah-summary-banner {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(47, 111, 237, 0.07);
+  border: 1px solid rgba(47, 111, 237, 0.12);
+  font-size: 13px;
+  color: var(--desk-text);
+  line-height: 1.45;
+}
+
+.hah-issue-list,
+.hah-plain-list,
+.hah-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hah-issue-item,
+.hah-mini-item {
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(25,45,72,0.06);
+}
+
+.hah-issue-title,
+.hah-mini-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.hah-issue-sub,
+.hah-mini-sub {
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: var(--desk-text-muted);
+  line-height: 1.45;
+}
+
+.hah-review-body,
+.hah-text-block {
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--desk-text);
+}
+
+.hah-review-meta {
+  margin-bottom: 14px;
+  font-size: 12.5px;
+  color: var(--desk-text-muted);
+}
+
+.hah-blood-sample-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hah-blood-sample {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.64);
+  border: 1px solid rgba(25,45,72,0.06);
+}
+
+.hah-blood-sample-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.hah-blood-time {
+  font-size: 12.5px;
+  color: var(--desk-text-muted);
+}
+
+.hah-blood-main {
+  margin-top: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.hah-blood-sub {
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--desk-text-muted);
+  line-height: 1.45;
+}
+
+.hah-jump-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hah-jump-btn {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--desk-border);
+  background: rgba(255,255,255,0.82);
+  border-radius: 14px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.hah-jump-btn.is-active {
+  background: rgba(47,111,237,0.08);
+  border-color: rgba(47,111,237,0.18);
+}
+
+.hah-jump-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.hah-jump-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--desk-text-muted);
+}
+
+.hah-action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.hah-action-btn {
+  height: 40px;
+  border: 1px solid var(--desk-border);
+  background: rgba(255,255,255,0.86);
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hah-action-btn:hover {
+  background: rgba(255,255,255,1);
+}
+
+.hah-detail-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 2560px) {
+  .hah-patient-content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hah-patient-header-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hah-patient-header-actions {
+    justify-content: flex-start;
+  }
+}
+
+</style>
 </head>
 <body class="hah-desktop-body">
   <div id="desktop-root"></div>
@@ -1339,11 +1573,112 @@ html, body {
     return match ? buildPatientSummary(match) : null;
   }
 
+  function splitCleanLines(text) {
+    return String(text || '')
+      .split(/\n+/)
+      .map((line) => String(line || '').replace(/^\s*\d+[.)-]?\s*/, '').trim())
+      .filter(Boolean);
+  }
+
+  function buildLatestReviewText(raw) {
+    const form = raw.form || {};
+    const blocks = [];
+    if (raw.summary) blocks.push(String(raw.summary).trim());
+    if (form.examination) blocks.push(String(form.examination).trim());
+    if (form.plan) blocks.push('Plan\n' + String(form.plan).trim());
+    return blocks.filter(Boolean).join('\n\n');
+  }
+
+  function buildObsItems(raw, summary) {
+    const form = raw.form || {};
+    return [
+      { label: 'Temp', value: form.temp || '—' },
+      { label: 'BP', value: form.bp || '—' },
+      { label: 'HR', value: form.hr || '—' },
+      { label: 'SpO₂', value: form.spo2 ? `${form.spo2}%${form.oxygenFlow ? ` on ${form.oxygenFlow}` : ' RA'}` : '—' },
+      { label: 'RR', value: form.rr || '—' },
+      { label: 'BM', value: form.bm || '—' },
+      { label: 'Weight', value: form.weight ? `${form.weight}kg` : '—' },
+      { label: 'Scores', value: form.scoreMode || summary.currentStatus || '—' }
+    ];
+  }
+
+  function parseBloodSamples(text) {
+    const lines = String(text || '')
+      .split(/\n+/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+    return lines.slice(0, 5).map((line) => {
+      const parts = line.split('|').map((part) => part.trim()).filter(Boolean);
+      const time = parts[0] || 'Sample';
+      const main = parts.slice(1, 3).join(' | ') || line;
+      const tail = parts.slice(3).join(' | ');
+      return { time, main: truncateText(main, 140), tail: truncateText(tail, 160) };
+    });
+  }
+
+  function formatMedEntry(entry) {
+    if (!entry) return null;
+    const name = firstNonEmpty(entry.name, entry.medication);
+    if (!name) return null;
+    const parts = [name, entry.dose, entry.frequency].map((x) => String(x || '').trim()).filter(Boolean);
+    const detail = String(entry.details || entry.serialExpiry || '').trim();
+    return {
+      title: parts.join(' · '),
+      detail: detail || ''
+    };
+  }
+
+  function buildMedicationItems(raw) {
+    const form = raw.form || {};
+    const meds = Array.isArray(form.medEntries) ? form.medEntries.map(formatMedEntry).filter(Boolean) : [];
+    const ivs = Array.isArray(form.ivEntries) ? form.ivEntries.map(formatMedEntry).filter(Boolean) : [];
+    return { meds, ivs };
+  }
+
+  function buildPatientWorkspaceModel(state) {
+    const boardVm = buildBoardViewModel(state);
+    const selectedId = String(state.route.entityId || state.selectedPatientId || (boardVm.selectedPatient && boardVm.selectedPatient.id) || '');
+    const summary = getPatientSummaryById(selectedId) || boardVm.selectedPatient;
+    if (!summary) return null;
+
+    const raw = summary.sourcePatient || {};
+    const form = raw.form || {};
+    const issues = splitCleanLines(form.issues || raw.summary).slice(0, 6);
+    const planLines = splitCleanLines(form.plan).slice(0, 6);
+    const dischargeLines = splitCleanLines(form.forDischargeSummary).slice(0, 4);
+    const bloodSamples = parseBloodSamples(form.bloods);
+    const meds = buildMedicationItems(raw);
+    const obsItems = buildObsItems(raw, summary);
+    const contextRows = boardVm.rows;
+    const selectedIndex = contextRows.findIndex((row) => String(row.id) === String(summary.id));
+
+    return {
+      patient: summary,
+      summaryText: summary.summaryLine || raw.summary || 'No summary available',
+      reviewText: buildLatestReviewText(raw),
+      issues,
+      planLines,
+      dischargeLines,
+      bloodSamples,
+      obsItems,
+      medications: meds.meds,
+      ivs: meds.ivs,
+      listDetails: String(raw.listDetails || '').replace(/^Obs:\s*/i, '').trim(),
+      admissionDate: String(raw.doa || '').trim(),
+      referralSource: String(raw.referralSource || '').trim(),
+      contextRows,
+      selectedIndex
+    };
+  }
+
   window.HAHBoard.derived = {
     getPatientSourceBundle,
     buildPatientSummary,
     buildBoardViewModel,
-    getPatientSummaryById
+    getPatientSummaryById,
+    buildPatientWorkspaceModel,
+    splitCleanLines
   };
 })();
 
@@ -1613,6 +1948,295 @@ html, body {
 
 </script>
   <script>
+/* inlined: js/26-desktop-patient.js */
+(function () {
+  window.HAHBoard = window.HAHBoard || {};
+
+  const store = window.HAHBoard.store;
+  const router = window.HAHBoard.router;
+  const c = window.HAHBoard.components;
+  const d = window.HAHBoard.derived;
+
+  function renderLeftPane(state) {
+    const vm = d.buildPatientWorkspaceModel(state);
+    if (!vm) return c.stack([c.card('Patient jump list', c.emptyState('No patient selected', 'Choose a patient from the Board.'))]);
+
+    const buttons = vm.contextRows.map((row, index) => {
+      const active = String(row.id) === String(vm.patient.id) ? ' is-active' : '';
+      return `
+        <button type="button" class="hah-jump-btn${active}" data-patient-action="jump" data-patient-id="${c.escapeHtml(row.id)}">
+          <div class="hah-jump-name">${c.escapeHtml(row.name)}</div>
+          <div class="hah-jump-sub">${c.escapeHtml(row.currentStatus)} · ${c.escapeHtml(row.location)}</div>
+        </button>
+      `;
+    }).join('');
+
+    return c.stack([
+      c.card('Patient jump list', `
+        <div class="hah-board-sub">Current board context preserved from ${c.escapeHtml(state.board.savedView)}.</div>
+        <div style="margin-top:16px;" class="hah-jump-list">${buttons}</div>
+      `),
+      c.card('Position in board', c.keyValueGrid([
+        { label: 'Selected', value: vm.selectedIndex >= 0 ? `${vm.selectedIndex + 1} of ${vm.contextRows.length}` : '—' },
+        { label: 'Saved view', value: state.board.savedView },
+        { label: 'Priority', value: vm.patient.priority },
+        { label: 'Status', value: vm.patient.currentStatus }
+      ]))
+    ]);
+  }
+
+  function renderMainPane(state) {
+    const vm = d.buildPatientWorkspaceModel(state);
+    if (!vm) return renderEmpty();
+
+    return `
+      <div class="hah-patient-main">
+        <section class="hah-card hah-patient-header">
+          <div class="hah-card-inner">
+            <div class="hah-patient-header-grid">
+              <div>
+                <div class="hah-patient-name-row">
+                  <h1 class="hah-patient-name">${c.escapeHtml(vm.patient.name)}</h1>
+                  ${priorityBadge(vm.patient.priority)}
+                  ${c.badge(vm.patient.currentStatus, 'neutral')}
+                </div>
+                <div class="hah-patient-meta">${c.escapeHtml(buildHeaderMeta(vm))}</div>
+                <div class="hah-patient-summary-line">${c.escapeHtml(vm.summaryText)}</div>
+              </div>
+
+              <div>
+                ${c.keyValueGrid([
+                  { label: 'Latest review', value: formatDateTime(vm.patient.latestReviewAt) },
+                  { label: 'Review due', value: formatDateTime(vm.patient.reviewDueAt) },
+                  { label: 'Discharge', value: vm.patient.dischargeReadiness },
+                  { label: 'Escalation', value: vm.patient.escalationSummary }
+                ])}
+              </div>
+
+              <div class="hah-patient-header-actions">
+                <button type="button" class="hah-inline-pill" data-patient-action="back-board">Back to board</button>
+                <button type="button" class="hah-inline-pill" data-patient-action="prev">Previous</button>
+                <button type="button" class="hah-inline-pill" data-patient-action="next">Next</button>
+              </div>
+            </div>
+
+            <div class="hah-summary-banner">${c.escapeHtml(buildBannerText(vm))}</div>
+          </div>
+        </section>
+
+        <div class="hah-patient-content-grid">
+          <div class="hah-patient-column">
+            ${c.card('Today summary', c.keyValueGrid([
+              { label: 'Current state', value: vm.patient.currentStatus },
+              { label: 'Obs signal', value: vm.patient.obsSummary },
+              { label: 'Blood trend', value: vm.patient.bloodTrendSummary },
+              { label: 'Blocker', value: vm.patient.blockers[0] || 'No active blocker' },
+              { label: 'Treatment', value: vm.patient.treatmentFlags.join(', ') || 'No active flags' },
+              { label: 'Board status', value: vm.patient.boardStatus }
+            ]))}
+
+            ${c.card('Active issues', renderIssueList(vm.issues), { subtitle: `${vm.issues.length || 0} issue${vm.issues.length === 1 ? '' : 's'}` })}
+
+            ${c.card('Latest review', `
+              <div class="hah-review-meta">Narrative assembled from summary, examination, and plan in the current patient record.</div>
+              <div class="hah-review-body">${c.escapeHtml(vm.reviewText || 'No current narrative available.')}</div>
+            `)}
+
+            ${c.card('Plan and discharge', `
+              <div class="hah-kv-grid" style="margin-bottom:16px;">
+                <div class="hah-kv-item">
+                  <div class="hah-kv-label">Plan</div>
+                  <div class="hah-kv-value">${c.escapeHtml(vm.planLines[0] || 'No active plan line')}</div>
+                </div>
+                <div class="hah-kv-item">
+                  <div class="hah-kv-label">Discharge</div>
+                  <div class="hah-kv-value">${c.escapeHtml(vm.dischargeLines[0] || vm.patient.dischargeReadiness)}</div>
+                </div>
+              </div>
+              <div class="hah-plain-list">
+                ${vm.planLines.concat(vm.dischargeLines.map(line => `Discharge: ${line}`)).slice(0, 6).map((line) => `
+                  <div class="hah-mini-item">
+                    <div class="hah-mini-title">${c.escapeHtml(line)}</div>
+                  </div>
+                `).join('') || '<div class="hah-mini-item"><div class="hah-mini-title">No plan or discharge text recorded.</div></div>'}
+              </div>
+            `)}
+          </div>
+
+          <div class="hah-patient-column">
+            ${c.card('Obs and scores', `
+              ${c.keyValueGrid(vm.obsItems)}
+              <div style="margin-top:16px;" class="hah-detail-inline">
+                ${vm.patient.treatmentFlags.map((flag) => c.badge(flag, 'neutral')).join('')}
+              </div>
+            `)}
+
+            ${c.card('Bloods and trends', renderBloodSamples(vm.bloodSamples), { subtitle: vm.patient.bloodTrendSummary })}
+
+            ${c.card('Medications', renderMedList(vm.medications, 'No medication entries recorded.'))}
+
+            ${c.card('IV therapies', renderMedList(vm.ivs, 'No IV therapies recorded.'))}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRightPane(state) {
+    const vm = d.buildPatientWorkspaceModel(state);
+    if (!vm) return c.stack([c.card('Patient actions', c.emptyState('No patient selected', 'Choose a patient from the Board.'))]);
+
+    return c.stack([
+      c.card('Quick actions', `
+        <div class="hah-action-grid">
+          <button type="button" class="hah-action-btn" data-patient-action="back-board">Back to board</button>
+          <button type="button" class="hah-action-btn" data-patient-action="open-board-context">Board context</button>
+          <button type="button" class="hah-action-btn" data-patient-action="next">Next patient</button>
+          <button type="button" class="hah-action-btn" data-patient-action="prev">Previous patient</button>
+        </div>
+      `),
+      c.card('Review and service state', c.keyValueGrid([
+        { label: 'Priority', value: vm.patient.priority },
+        { label: 'Status', value: vm.patient.currentStatus },
+        { label: 'Review due', value: formatDateTime(vm.patient.reviewDueAt) },
+        { label: 'Board status', value: vm.patient.boardStatus },
+        { label: 'Location', value: vm.patient.location },
+        { label: 'Pathway', value: vm.patient.pathway }
+      ])),
+      c.card('Current blockers', renderMiniLines(vm.patient.blockers, 'No active blocker recorded.')),
+      c.card('Supporting context', renderMiniLines([
+        vm.listDetails && `Obs summary: ${vm.listDetails}`,
+        vm.referralSource && `Referral: ${vm.referralSource}`,
+        vm.admissionDate && `Admission date: ${vm.admissionDate}`
+      ].filter(Boolean), 'No additional context available.'))
+    ]);
+  }
+
+  function renderIssueList(issues) {
+    if (!issues.length) return '<div class="hah-mini-item"><div class="hah-mini-title">No active issue text recorded.</div></div>';
+    return `<div class="hah-issue-list">${issues.map((issue, index) => `
+      <div class="hah-issue-item">
+        <div class="hah-issue-title">Issue ${index + 1}</div>
+        <div class="hah-issue-sub">${c.escapeHtml(issue)}</div>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  function renderBloodSamples(samples) {
+    if (!samples.length) return '<div class="hah-mini-item"><div class="hah-mini-title">No blood history recorded.</div></div>';
+    return `<div class="hah-blood-sample-list">${samples.map((sample, index) => `
+      <div class="hah-blood-sample">
+        <div class="hah-blood-sample-head">
+          <div class="hah-blood-time">${c.escapeHtml(sample.time)}</div>
+          ${index === 0 ? c.badge('Latest', 'good') : ''}
+        </div>
+        <div class="hah-blood-main">${c.escapeHtml(sample.main)}</div>
+        ${sample.tail ? `<div class="hah-blood-sub">${c.escapeHtml(sample.tail)}</div>` : ''}
+      </div>
+    `).join('')}</div>`;
+  }
+
+  function renderMedList(items, emptyText) {
+    if (!items.length) return `<div class="hah-mini-item"><div class="hah-mini-title">${c.escapeHtml(emptyText)}</div></div>`;
+    return `<div class="hah-mini-list">${items.map((item) => `
+      <div class="hah-mini-item">
+        <div class="hah-mini-title">${c.escapeHtml(item.title)}</div>
+        ${item.detail ? `<div class="hah-mini-sub">${c.escapeHtml(item.detail)}</div>` : ''}
+      </div>
+    `).join('')}</div>`;
+  }
+
+  function renderMiniLines(lines, emptyText) {
+    if (!lines.length) return `<div class="hah-mini-item"><div class="hah-mini-title">${c.escapeHtml(emptyText)}</div></div>`;
+    return `<div class="hah-mini-list">${lines.map((line) => `
+      <div class="hah-mini-item">
+        <div class="hah-mini-title">${c.escapeHtml(line)}</div>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  function buildHeaderMeta(vm) {
+    return [
+      vm.patient.age ? `${vm.patient.age}` : '',
+      vm.patient.sex || '',
+      vm.patient.location || '',
+      vm.patient.pathway || '',
+      vm.patient.clinician ? `Clinician: ${vm.patient.clinician}` : ''
+    ].filter(Boolean).join(' · ');
+  }
+
+  function buildBannerText(vm) {
+    return `${vm.patient.currentStatus}. ${vm.patient.bloodTrendSummary}. ${vm.patient.blockers[0] || 'No active blocker recorded.'}`;
+  }
+
+  function handleClick(event, state) {
+    const target = event.target.closest('[data-patient-action]');
+    if (!target) return false;
+    const action = target.getAttribute('data-patient-action');
+    const vm = d.buildPatientWorkspaceModel(state);
+
+    if (action === 'jump') {
+      const patientId = target.getAttribute('data-patient-id');
+      if (!patientId) return false;
+      store.setState({ selectedPatientId: patientId });
+      router.goToPatient(patientId);
+      return true;
+    }
+
+    if (action === 'back-board' || action === 'open-board-context') {
+      router.goToBoard(state.board.savedView === 'all-active' ? null : state.board.savedView);
+      return true;
+    }
+
+    if ((action === 'prev' || action === 'next') && vm) {
+      const delta = action === 'next' ? 1 : -1;
+      const nextIndex = vm.selectedIndex + delta;
+      const nextPatient = vm.contextRows[nextIndex];
+      if (!nextPatient) return true;
+      store.setState({ selectedPatientId: nextPatient.id });
+      router.goToPatient(nextPatient.id);
+      return true;
+    }
+
+    return false;
+  }
+
+  function renderEmpty() {
+    return `
+      <div class="hah-surface-placeholder">
+        <section class="hah-card hah-surface-hero">
+          <h1 class="hah-surface-title">Patient workspace</h1>
+          <p class="hah-surface-subtitle">No patient selected from the current board context.</p>
+        </section>
+      </div>
+    `;
+  }
+
+  function priorityBadge(priority) {
+    let tone = 'neutral';
+    if (priority === 'Critical') tone = 'danger';
+    else if (priority === 'High') tone = 'warn';
+    else if (priority === 'Low') tone = 'good';
+    return c.badge(priority, tone);
+  }
+
+  function formatDateTime(value) {
+    if (!value) return '—';
+    const dt = new Date(value);
+    if (Number.isNaN(dt.getTime())) return String(value);
+    return dt.toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+
+  window.HAHBoard.patientScreen = {
+    renderLeftPane,
+    renderMainPane,
+    renderRightPane,
+    handleClick
+  };
+})();
+
+</script>
+  <script>
 /* inlined: js/22-desktop-shell.js */
 (function () {
   window.HAHBoard = window.HAHBoard || {};
@@ -1639,7 +2263,7 @@ html, body {
         <header class="hah-header" id="hahHeader">
           <div class="hah-header-group">
             <div class="hah-brand">H@H Board</div>
-            <div class="hah-muted" id="hahEnvironmentLabel">Desktop prototype 0.1</div>
+            <div class="hah-muted" id="hahEnvironmentLabel">Desktop prototype 0.3</div>
           </div>
 
           <div class="hah-header-group">
@@ -1725,6 +2349,7 @@ html, body {
   function getActiveScreenModule(state) {
     switch (state.route.view) {
       case 'board': return window.HAHBoard.boardScreen || null;
+      case 'patient': return window.HAHBoard.patientScreen || null;
       default: return null;
     }
   }
@@ -1762,7 +2387,9 @@ html, body {
       case 'board':
         if (window.HAHBoard.boardScreen && window.HAHBoard.boardScreen.renderLeftPane) return window.HAHBoard.boardScreen.renderLeftPane(state);
         return renderGenericPane('Board filters');
-      case 'patient': return renderPatientLeftPane(state);
+      case 'patient':
+        if (window.HAHBoard.patientScreen && window.HAHBoard.patientScreen.renderLeftPane) return window.HAHBoard.patientScreen.renderLeftPane(state);
+        return renderPatientLeftPane(state);
       case 'tasks': return renderTasksLeftPane(state);
       case 'insights': return renderInsightsLeftPane(state);
       default: return renderGenericPane('Navigation');
@@ -1774,7 +2401,9 @@ html, body {
       case 'board':
         if (window.HAHBoard.boardScreen && window.HAHBoard.boardScreen.renderMainPane) return window.HAHBoard.boardScreen.renderMainPane(state);
         return renderSurfacePlaceholder('Board', 'Whole-service working view');
-      case 'patient': return renderPatientPlaceholder(state);
+      case 'patient':
+        if (window.HAHBoard.patientScreen && window.HAHBoard.patientScreen.renderMainPane) return window.HAHBoard.patientScreen.renderMainPane(state);
+        return renderPatientPlaceholder(state);
       case 'tasks': return renderSurfacePlaceholder('Tasks', 'Action, ownership, and blockers');
       case 'insights': return renderSurfacePlaceholder('Insights', 'Service-level operational intelligence');
       case 'settings': return renderSurfacePlaceholder('Settings', 'Desktop options and configuration');
@@ -1787,7 +2416,9 @@ html, body {
       case 'board':
         if (window.HAHBoard.boardScreen && window.HAHBoard.boardScreen.renderRightPane) return window.HAHBoard.boardScreen.renderRightPane(state);
         return renderGenericPane('Selected patient preview');
-      case 'patient': return renderGenericPane('Patient actions');
+      case 'patient':
+        if (window.HAHBoard.patientScreen && window.HAHBoard.patientScreen.renderRightPane) return window.HAHBoard.patientScreen.renderRightPane(state);
+        return renderGenericPane('Patient actions');
       case 'tasks': return renderGenericPane('Selected task detail');
       case 'insights': return renderGenericPane('Selected cohort drill-in');
       default: return renderGenericPane('Context');
@@ -1922,9 +2553,9 @@ html, body {
 </script>
 <script>
 window.__HAH_BOARD_BUILD__ = {
-  filename: 'hospital_at_home_board_v0_2_001_release.html',
-  source: 'hospital_at_home_board_v0_2_001_source.zip',
-  builtAt: '2026-04-15T17:12:37.765640',
+  filename: 'hospital_at_home_board_v0_3_001_release.html',
+  source: 'hospital_at_home_board_v0_3_001_source.zip',
+  builtAt: '2026-04-15T17:29:42.273850',
   entry: 'desktop.html'
 };
 </script>
