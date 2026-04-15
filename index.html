@@ -1059,6 +1059,151 @@ html, body {
 }
 
 </style>
+  <style>
+/* inlined: css/desktop-tasks.css */
+.hah-tasks-surface {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: calc(100dvh - var(--desk-header-h) - 40px);
+}
+
+.hah-tasks-metrics {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.hah-task-metric-card {
+  border: 1px solid var(--desk-border);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.92);
+  box-shadow: var(--desk-shadow);
+  padding: 18px 18px 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.hah-task-metric-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(25,45,72,0.14);
+  background: rgba(255,255,255,1);
+}
+
+.hah-task-metric-card.is-active {
+  background: rgba(47,111,237,0.08);
+  border-color: rgba(47,111,237,0.18);
+}
+
+.hah-task-metric-card.is-danger {
+  border-color: rgba(193,59,59,0.18);
+}
+
+.hah-task-metric-card.is-warn {
+  border-color: rgba(187,121,12,0.18);
+}
+
+.hah-task-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hah-task-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hah-task-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.hah-task-sub {
+  font-size: 13px;
+  color: var(--desk-text-muted);
+}
+
+.hah-task-row-main {
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.hah-task-row-sub {
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: var(--desk-text-muted);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hah-task-owner {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hah-task-status-wrap,
+.hah-task-category-wrap,
+.hah-task-related-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hah-task-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hah-task-note {
+  font-size: 12.5px;
+  color: var(--desk-text-muted);
+  line-height: 1.45;
+}
+
+.hah-task-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hah-task-mini-item {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.64);
+  border: 1px solid rgba(25,45,72,0.06);
+}
+
+.hah-task-mini-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.hah-task-mini-sub {
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--desk-text-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 2560px) {
+  .hah-tasks-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+</style>
 </head>
 <body class="hah-desktop-body">
   <div id="desktop-root"></div>
@@ -1934,12 +2079,269 @@ html, body {
     };
   }
 
+  function inferTaskCategory(title) {
+    const text = String(title || '').toLowerCase();
+    if (/blood|crp|u&e|u&e|urea|electrolyte|result|sample|culture|micro/.test(text)) return 'Bloods/results';
+    if (/discharge|tto|transport|home|equipment/.test(text)) return 'Discharge';
+    if (/family|relative|carer/.test(text)) return 'Family update';
+    if (/iv|antibiotic|line|vip/.test(text)) return 'IV / treatment';
+    if (/oxygen|o2|sats|review/.test(text)) return 'Clinical review';
+    return 'Clinical review';
+  }
+
+  function inferTaskStatus(title) {
+    const text = String(title || '').toLowerCase();
+    if (/awaiting|pending|chase|follow up/.test(text)) return 'Waiting external';
+    return 'Open';
+  }
+
+  function normaliseTaskPriority(patient, category, title) {
+    if (patient.priority === 'Critical') return 'Critical';
+    if (category === 'Discharge' && (patient.dischargeReadiness === 'Possible today' || patient.dischargeReadiness === 'Ready')) return 'High';
+    if (category === 'Bloods/results' && /pending|awaiting/.test(String(title || '').toLowerCase())) return patient.priority === 'Low' ? 'Medium' : patient.priority;
+    return patient.priority === 'Low' ? 'Low' : patient.priority === 'Medium' ? 'Medium' : 'High';
+  }
+
+  function buildTaskId(patientId, slug, index) {
+    return `task:${patientId}:${slug}:${index}`;
+  }
+
+  function toSlug(text) {
+    return String(text || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'task';
+  }
+
+  function deriveDueState(dueAt) {
+    if (!dueAt) return 'No due date';
+    const ts = Date.parse(dueAt);
+    if (Number.isNaN(ts)) return 'No due date';
+    const now = new Date();
+    const due = new Date(ts);
+    const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const startTomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime();
+    const startDayAfter = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2).getTime();
+    if (ts < Date.now()) return 'Overdue';
+    if (ts >= startToday && ts < startTomorrow) return 'Due today';
+    if (ts >= startTomorrow && ts < startDayAfter) return 'Due tomorrow';
+    return 'Future';
+  }
+
+  function makeTask(patient, options, index) {
+    const title = String(options.title || '').trim();
+    if (!title) return null;
+    const category = options.category || inferTaskCategory(title);
+    const dueAt = options.dueAt || patient.reviewDueAt || patient.latestReviewAt || '';
+    const blocker = options.blocker || '';
+    const status = options.status || inferTaskStatus(title);
+    return {
+      id: buildTaskId(patient.id, toSlug(title), index),
+      patientId: patient.id,
+      title,
+      note: options.note || patient.summaryLine || '',
+      category,
+      owner: options.owner || patient.clinician || 'Unassigned',
+      dueAt,
+      dueState: deriveDueState(dueAt),
+      priority: options.priority || normaliseTaskPriority(patient, category, title),
+      status,
+      blocker,
+      createdFrom: options.createdFrom || 'Patient view',
+      createdBy: options.createdBy || patient.clinician || 'H@H Board',
+      updatedAt: options.updatedAt || patient.latestReviewAt || dueAt || '',
+      boardLink: options.boardLink || patient.boardStatus || 'Not discussed',
+      patient,
+      sourceLine: options.sourceLine || ''
+    };
+  }
+
+  function buildTasksForPatient(patient) {
+    const raw = patient.sourcePatient || {};
+    const form = raw.form || {};
+    const tasks = [];
+    let idx = 1;
+
+    const addTask = (options) => {
+      const task = makeTask(patient, options, idx++);
+      if (!task) return;
+      if (tasks.some((existing) => existing.title === task.title && existing.category === task.category)) return;
+      tasks.push(task);
+    };
+
+    if (patient.reviewDueAt) {
+      addTask({
+        title: patient.reviewOverdue ? 'Complete overdue clinical review' : 'Clinical review due',
+        category: 'Clinical review',
+        dueAt: patient.reviewDueAt,
+        status: 'Open',
+        createdFrom: 'Board cadence'
+      });
+    }
+
+    patient.blockers.forEach((blocker) => {
+      addTask({
+        title: blocker,
+        category: inferTaskCategory(blocker),
+        dueAt: patient.reviewDueAt || patient.latestReviewAt,
+        blocker,
+        status: inferTaskStatus(blocker),
+        createdFrom: 'Derived blocker'
+      });
+    });
+
+    if (patient.iv) {
+      addTask({
+        title: 'Review IV therapy plan',
+        category: 'IV / treatment',
+        dueAt: patient.reviewDueAt || patient.latestReviewAt,
+        createdFrom: 'Treatment state'
+      });
+    }
+
+    if (patient.oxygenLpm > 0) {
+      addTask({
+        title: `Review oxygen requirement (${patient.oxygenLpm}L)`,
+        category: 'Clinical review',
+        dueAt: patient.reviewDueAt || patient.latestReviewAt,
+        createdFrom: 'Treatment state'
+      });
+    }
+
+    if ((patient.dischargeReadiness === 'Possible today' || patient.dischargeReadiness === 'Ready') && !patient.blockers.some((x) => /tto|discharge/i.test(x))) {
+      addTask({
+        title: 'Progress discharge plan',
+        category: 'Discharge',
+        dueAt: patient.reviewDueAt || patient.latestReviewAt,
+        createdFrom: 'Discharge readiness'
+      });
+    }
+
+    splitCleanLines(form.plan).slice(0, 3).forEach((line) => {
+      addTask({
+        title: truncateText(line, 84),
+        category: inferTaskCategory(line),
+        dueAt: patient.reviewDueAt || patient.latestReviewAt,
+        sourceLine: line,
+        status: inferTaskStatus(line),
+        createdFrom: 'Plan'
+      });
+    });
+
+    if (/pending|awaiting|repeat blood|u&e|crp|wcc/i.test(patient.bloodTrendSummary) && !tasks.some((task) => task.category === 'Bloods/results')) {
+      addTask({
+        title: 'Review blood results / trend',
+        category: 'Bloods/results',
+        dueAt: patient.reviewDueAt || patient.latestReviewAt,
+        createdFrom: 'Blood trend'
+      });
+    }
+
+    return tasks.slice(0, 6);
+  }
+
+  function filterTasks(rows, state) {
+    let out = rows.slice();
+    const savedView = state.tasks.savedView;
+    const patientId = state.tasks.filters && state.tasks.filters.patientId;
+    if (patientId) {
+      out = out.filter((task) => String(task.patientId) === String(patientId));
+    }
+    switch (savedView) {
+      case 'due-today':
+        out = out.filter((task) => task.dueState === 'Due today');
+        break;
+      case 'overdue':
+        out = out.filter((task) => task.dueState === 'Overdue');
+        break;
+      case 'waiting-external':
+        out = out.filter((task) => task.status === 'Waiting external');
+        break;
+      case 'discharge-blockers':
+        out = out.filter((task) => task.category === 'Discharge' || /tto|transport|home|equipment|discharge/i.test(task.title + ' ' + task.blocker));
+        break;
+      case 'review-due':
+        out = out.filter((task) => task.category === 'Clinical review');
+        break;
+      case 'high-priority':
+        out = out.filter((task) => task.priority === 'High' || task.priority === 'Critical');
+        break;
+      case 'unassigned':
+        out = out.filter((task) => !task.owner || task.owner === 'Unassigned' || task.owner === '—');
+        break;
+      case 'patient-focus':
+        break;
+      default:
+        break;
+    }
+    return out;
+  }
+
+  function sortTasks(rows, sortKey) {
+    const out = rows.slice();
+    const dueRank = { 'Overdue': 0, 'Due today': 1, 'Due tomorrow': 2, 'Future': 3, 'No due date': 4 };
+    const priRank = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+    switch (sortKey) {
+      case 'priority':
+        out.sort((a, b) => (priRank[a.priority] ?? 99) - (priRank[b.priority] ?? 99) || a.title.localeCompare(b.title));
+        return out;
+      case 'patient':
+        out.sort((a, b) => a.patient.name.localeCompare(b.patient.name) || a.title.localeCompare(b.title));
+        return out;
+      case 'due':
+      default:
+        out.sort((a, b) => {
+          const dueCmp = (dueRank[a.dueState] ?? 99) - (dueRank[b.dueState] ?? 99);
+          if (dueCmp !== 0) return dueCmp;
+          const aTs = Date.parse(a.dueAt || '') || Number.MAX_SAFE_INTEGER;
+          const bTs = Date.parse(b.dueAt || '') || Number.MAX_SAFE_INTEGER;
+          if (aTs !== bTs) return aTs - bTs;
+          return a.title.localeCompare(b.title);
+        });
+        return out;
+    }
+  }
+
+  function buildTaskMetrics(rows) {
+    return [
+      { key: 'all-open', label: 'Open tasks', value: rows.length, subtext: 'Visible operational actions', tone: rows.length ? '' : 'good' },
+      { key: 'due-today', label: 'Due today', value: rows.filter((r) => r.dueState === 'Due today').length, subtext: 'Needs action today' },
+      { key: 'overdue', label: 'Overdue', value: rows.filter((r) => r.dueState === 'Overdue').length, subtext: 'Past due', tone: rows.some((r) => r.dueState === 'Overdue') ? 'danger' : '' },
+      { key: 'waiting-external', label: 'Waiting external', value: rows.filter((r) => r.status === 'Waiting external').length, subtext: 'Pending other input' },
+      { key: 'discharge-blockers', label: 'Discharge blockers', value: rows.filter((r) => r.category === 'Discharge' || /discharge|tto|transport|home/i.test(r.title + ' ' + r.blocker)).length, subtext: 'Flow-limiting work', tone: 'warn' },
+      { key: 'review-due', label: 'Review tasks', value: rows.filter((r) => r.category === 'Clinical review').length, subtext: 'Clinical review cadence' }
+    ];
+  }
+
+  function buildTasksViewModel(state) {
+    const boardVm = buildBoardViewModel(state);
+    const allTasks = boardVm.rows.flatMap(buildTasksForPatient);
+    const filtered = filterTasks(allTasks, state);
+    const sorted = sortTasks(filtered, state.tasks.sort || 'due');
+    const selectedTaskId = String(state.selectedTaskId || state.route.entityId || (sorted[0] && sorted[0].id) || '');
+    const selectedTask = sorted.find((task) => String(task.id) === selectedTaskId) || sorted[0] || null;
+    const selectedPatient = selectedTask ? selectedTask.patient : null;
+    const relatedTasks = selectedTask ? sorted.filter((task) => task.patientId === selectedTask.patientId && task.id !== selectedTask.id).slice(0, 4) : [];
+    return {
+      rows: sorted,
+      metrics: buildTaskMetrics(allTasks),
+      selectedTask,
+      selectedPatient,
+      relatedTasks,
+      totalTasks: sorted.length,
+      source: boardVm.source,
+      storageKey: boardVm.storageKey,
+      boardRows: boardVm.rows
+    };
+  }
+
   window.HAHBoard.derived = {
     getPatientSourceBundle,
     buildPatientSummary,
     buildBoardViewModel,
     getPatientSummaryById,
     buildPatientWorkspaceModel,
+    buildTasksViewModel,
     splitCleanLines
   };
 })();
@@ -2421,6 +2823,7 @@ html, body {
         <div style="margin-top:14px;" class="hah-action-grid">
           <button type="button" class="hah-action-btn" data-patient-action="back-board">Back to board</button>
           <button type="button" class="hah-action-btn" data-patient-action="open-board-context">Board context</button>
+          <button type="button" class="hah-action-btn" data-patient-action="open-tasks">Open tasks</button>
           <button type="button" class="hah-action-btn" data-patient-action="next">Next patient</button>
           <button type="button" class="hah-action-btn" data-patient-action="prev">Previous patient</button>
         </div>
@@ -2538,6 +2941,16 @@ html, body {
       return true;
     }
 
+    if (action === 'open-tasks' && vm) {
+      store.setState({
+        selectedPatientId: vm.patient.id,
+        selectedTaskId: null,
+        tasks: { savedView: 'patient-focus', filters: { patientId: vm.patient.id } }
+      });
+      router.goToTasks('patient-focus');
+      return true;
+    }
+
     if ((action === 'prev' || action === 'next') && vm) {
       const delta = action === 'next' ? 1 : -1;
       const nextIndex = vm.selectedIndex + delta;
@@ -2590,6 +3003,306 @@ html, body {
   }
 
   window.HAHBoard.patientScreen = {
+    renderLeftPane,
+    renderMainPane,
+    renderRightPane,
+    handleClick
+  };
+})();
+
+</script>
+  <script>
+/* inlined: js/27-desktop-tasks.js */
+(function () {
+  window.HAHBoard = window.HAHBoard || {};
+
+  const store = window.HAHBoard.store;
+  const router = window.HAHBoard.router;
+  const c = window.HAHBoard.components;
+  const d = window.HAHBoard.derived;
+
+  function renderLeftPane(state) {
+    const vm = d.buildTasksViewModel(state);
+    const savedView = state.tasks.savedView;
+    const patientFocusId = state.tasks.filters && state.tasks.filters.patientId;
+    const focusPatient = patientFocusId ? vm.boardRows.find((row) => String(row.id) === String(patientFocusId)) : null;
+
+    const buttons = [
+      ['All open', 'all-open'],
+      ['Due today', 'due-today'],
+      ['Overdue', 'overdue'],
+      ['Waiting external', 'waiting-external'],
+      ['Discharge blockers', 'discharge-blockers'],
+      ['Review tasks', 'review-due'],
+      ['High priority', 'high-priority'],
+      ['Unassigned', 'unassigned']
+    ].map(([label, key]) => {
+      const active = key === savedView ? ' is-active' : '';
+      return `<button type="button" class="hah-inline-pill${active}" data-task-action="set-view" data-view-key="${c.escapeHtml(key)}">${c.escapeHtml(label)}</button>`;
+    }).join('');
+
+    return c.stack([
+      c.card('Task views', `
+        <div class="hah-task-sub">Operational cohorts for the current service state.</div>
+        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:10px;">${buttons}</div>
+      `),
+      c.card('Current focus', `
+        ${c.keyValueGrid([
+          { label: 'Saved view', value: viewLabel(savedView) },
+          { label: 'Task count', value: vm.totalTasks },
+          { label: 'Source', value: vm.source === 'live' ? 'Live app storage' : vm.source === 'adapter' ? 'Adapter' : 'Demo data' },
+          { label: 'Patient filter', value: focusPatient ? focusPatient.name : 'None' }
+        ])}
+      `),
+      focusPatient ? c.card('Patient-linked view', `
+        <div class="hah-task-note">Tasks are focused on a single patient launched from Board or Patient.</div>
+        <div style="margin-top:14px;" class="hah-task-mini-list">
+          <div class="hah-task-mini-item">
+            <div class="hah-task-mini-title">${c.escapeHtml(focusPatient.name)}</div>
+            <div class="hah-task-mini-sub">${c.escapeHtml([focusPatient.location, focusPatient.pathway, focusPatient.currentStatus].filter(Boolean).join(' · '))}</div>
+          </div>
+        </div>
+      `, { headerRight: `<button type="button" class="hah-inline-pill" data-task-action="clear-patient-filter">Show all</button>` }) : ''
+    ].filter(Boolean));
+  }
+
+  function renderMainPane(state) {
+    const vm = d.buildTasksViewModel(state);
+    const metricsHtml = vm.metrics.map(renderMetricCard.bind(null, state)).join('');
+
+    if (!vm.rows.length) {
+      return `
+        <div class="hah-tasks-surface">
+          <section class="hah-tasks-metrics">${metricsHtml}</section>
+          ${c.emptyState('No tasks in this view', 'Try a different task cohort or clear the patient focus filter.')}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="hah-tasks-surface">
+        <section class="hah-tasks-metrics">${metricsHtml}</section>
+
+        <section class="hah-card">
+          <div class="hah-card-inner">
+            <div class="hah-task-toolbar">
+              <div class="hah-task-toolbar-group">
+                <div>
+                  <div class="hah-task-title">Tasks</div>
+                  <div class="hah-task-sub">${vm.totalTasks} tasks in current view</div>
+                </div>
+              </div>
+
+              <div class="hah-task-toolbar-group">
+                ${taskPill('Sort: due', 'set-sort', 'data-sort-key="due"')}
+                ${taskPill('Sort: priority', 'set-sort', 'data-sort-key="priority"')}
+                ${taskPill('Sort: patient', 'set-sort', 'data-sort-key="patient"')}
+                ${taskPill('Open patient', 'open-patient')}
+              </div>
+            </div>
+
+            ${c.table([
+              { label: 'Task', width: '320px' },
+              { label: 'Patient', width: '220px' },
+              { label: 'Category', width: '150px' },
+              { label: 'Owner', width: '130px' },
+              { label: 'Due', width: '140px' },
+              { label: 'Priority', width: '110px' },
+              { label: 'Status', width: '150px' },
+              { label: 'Blocker', width: '180px' }
+            ], vm.rows.map((row) => renderTaskRow(row, vm.selectedTask)).join(''))}
+          </div>
+        </section>
+      </div>
+    `;
+  }
+
+  function renderRightPane(state) {
+    const vm = d.buildTasksViewModel(state);
+    const task = vm.selectedTask;
+    if (!task) {
+      return c.stack([c.card('Task detail', c.emptyState('No task selected', 'Select a task to see patient context and related actions.'))]);
+    }
+
+    return c.stack([
+      c.card(task.title, `
+        <div class="hah-task-note">${c.escapeHtml(task.note || 'Operational task for the selected patient.')}</div>
+        <div style="margin-top:14px;" class="hah-task-status-wrap">
+          ${priorityBadge(task.priority)}
+          ${statusBadge(task.status)}
+          ${dueBadge(task.dueState)}
+          ${c.badge(task.category, 'neutral')}
+        </div>
+      `, { subtitle: task.owner || 'Unassigned' }),
+      c.card('Patient context', c.keyValueGrid([
+        { label: 'Patient', value: task.patient.name },
+        { label: 'Location', value: task.patient.location },
+        { label: 'Pathway', value: task.patient.pathway },
+        { label: 'Current status', value: task.patient.currentStatus },
+        { label: 'Bloods', value: task.patient.bloodTrendSummary },
+        { label: 'Discharge', value: task.patient.dischargeReadiness }
+      ])),
+      c.card('Related tasks', renderRelatedTasks(vm.relatedTasks), { subtitle: vm.relatedTasks.length ? `${vm.relatedTasks.length} other task${vm.relatedTasks.length === 1 ? '' : 's'} for this patient` : 'No additional task in current view' }),
+      c.card('Actions', `
+        <div class="hah-task-actions">
+          ${taskPill('Open patient', 'open-patient')}
+          ${taskPill('Patient-only tasks', 'focus-patient')}
+          ${taskPill('Show all tasks', 'set-view', 'data-view-key="all-open"')}
+        </div>
+      `)
+    ]);
+  }
+
+  function renderMetricCard(state, metric) {
+    const active = metric.key === state.tasks.savedView ? ' is-active' : '';
+    const tone = metric.tone ? ` is-${metric.tone}` : '';
+    return `
+      <button type="button" class="hah-task-metric-card${active}${tone}" data-task-action="set-view" data-view-key="${c.escapeHtml(metric.key)}">
+        <div class="hah-metric-label">${c.escapeHtml(metric.label)}</div>
+        <div class="hah-metric-value">${c.escapeHtml(metric.value)}</div>
+        <div class="hah-metric-sub">${c.escapeHtml(metric.subtext || '')}</div>
+      </button>
+    `;
+  }
+
+  function renderTaskRow(task, selectedTask) {
+    const selected = selectedTask && selectedTask.id === task.id ? 'is-selected' : '';
+    return `
+      <tr class="${selected}" data-task-action="select-task" data-task-id="${c.escapeHtml(task.id)}">
+        <td>
+          <div class="hah-task-row-main">${c.escapeHtml(task.title)}</div>
+          <div class="hah-task-row-sub">${c.escapeHtml(task.note || '')}</div>
+        </td>
+        <td>
+          <div class="hah-task-row-main">${c.escapeHtml(task.patient.name)}</div>
+          <div class="hah-task-row-sub">${c.escapeHtml([task.patient.location, task.patient.pathway].filter(Boolean).join(' · '))}</div>
+        </td>
+        <td><div class="hah-task-category-wrap">${c.badge(task.category, 'neutral')}</div></td>
+        <td><div class="hah-task-owner">${c.escapeHtml(task.owner || 'Unassigned')}</div></td>
+        <td>
+          <div class="hah-task-row-main">${c.escapeHtml(formatDue(task.dueAt, task.dueState))}</div>
+          <div class="hah-task-row-sub">${c.escapeHtml(task.dueState)}</div>
+        </td>
+        <td>${priorityBadge(task.priority)}</td>
+        <td><div class="hah-task-status-wrap">${statusBadge(task.status)}</div></td>
+        <td>
+          <div class="hah-task-row-main">${c.escapeHtml(task.blocker || '—')}</div>
+          <div class="hah-task-row-sub">${c.escapeHtml(task.boardLink || 'No board link')}</div>
+        </td>
+      </tr>
+    `;
+  }
+
+  function renderRelatedTasks(tasks) {
+    if (!tasks.length) return '<div class="hah-task-note">No related task in the current filtered view.</div>';
+    return `<div class="hah-task-mini-list">${tasks.map((task) => `
+      <div class="hah-task-mini-item">
+        <div class="hah-task-mini-title">${c.escapeHtml(task.title)}</div>
+        <div class="hah-task-mini-sub">${c.escapeHtml([task.category, task.dueState, task.owner].filter(Boolean).join(' · '))}</div>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  function handleClick(event, state) {
+    const target = event.target.closest('[data-task-action]');
+    if (!target) return false;
+    const action = target.getAttribute('data-task-action');
+    const vm = d.buildTasksViewModel(state);
+
+    if (action === 'set-view') {
+      const viewKey = target.getAttribute('data-view-key') || 'all-open';
+      store.setState({
+        selectedTaskId: null,
+        tasks: {
+          savedView: viewKey,
+          filters: viewKey === 'patient-focus' ? state.tasks.filters || {} : { patientId: null }
+        }
+      });
+      return true;
+    }
+
+    if (action === 'set-sort') {
+      const sortKey = target.getAttribute('data-sort-key') || 'due';
+      store.setState({ tasks: { sort: sortKey } });
+      return true;
+    }
+
+    if (action === 'select-task') {
+      const taskId = target.getAttribute('data-task-id');
+      if (!taskId) return false;
+      store.setState({ selectedTaskId: taskId });
+      return true;
+    }
+
+    if (action === 'clear-patient-filter') {
+      store.setState({ selectedTaskId: null, tasks: { savedView: 'all-open', filters: { patientId: null } } });
+      return true;
+    }
+
+    if ((action === 'open-patient' || action === 'focus-patient') && vm.selectedTask) {
+      const patientId = vm.selectedTask.patientId;
+      if (action === 'focus-patient') {
+        store.setState({ selectedTaskId: null, tasks: { savedView: 'patient-focus', filters: { patientId } } });
+        return true;
+      }
+      store.setState({ selectedPatientId: patientId });
+      router.goToPatient(patientId);
+      return true;
+    }
+
+    return false;
+  }
+
+  function taskPill(label, action, attrs) {
+    return `<button type="button" class="hah-inline-pill" data-task-action="${c.escapeHtml(action)}" ${attrs || ''}>${c.escapeHtml(label)}</button>`;
+  }
+
+  function priorityBadge(priority) {
+    let tone = 'neutral';
+    if (priority === 'Critical') tone = 'danger';
+    else if (priority === 'High') tone = 'warn';
+    else if (priority === 'Low') tone = 'good';
+    return c.badge(priority, tone);
+  }
+
+  function statusBadge(status) {
+    const lower = String(status || '').toLowerCase();
+    let tone = 'neutral';
+    if (lower.includes('waiting')) tone = 'warn';
+    else if (lower.includes('done')) tone = 'good';
+    return c.badge(status || 'Open', tone);
+  }
+
+  function dueBadge(dueState) {
+    let tone = 'neutral';
+    if (dueState === 'Overdue') tone = 'danger';
+    else if (dueState === 'Due today') tone = 'warn';
+    else if (dueState === 'Future' || dueState === 'No due date') tone = 'good';
+    return c.badge(dueState || 'No due date', tone);
+  }
+
+  function formatDue(value, dueState) {
+    if (!value) return dueState || 'No due date';
+    const dt = new Date(value);
+    if (Number.isNaN(dt.getTime())) return String(value);
+    return dt.toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function viewLabel(key) {
+    switch (key) {
+      case 'due-today': return 'Due today';
+      case 'overdue': return 'Overdue';
+      case 'waiting-external': return 'Waiting external';
+      case 'discharge-blockers': return 'Discharge blockers';
+      case 'review-due': return 'Review tasks';
+      case 'high-priority': return 'High priority';
+      case 'unassigned': return 'Unassigned';
+      case 'patient-focus': return 'Patient focus';
+      default: return 'All open';
+    }
+  }
+
+  window.HAHBoard.tasksScreen = {
     renderLeftPane,
     renderMainPane,
     renderRightPane,
@@ -2714,6 +3427,7 @@ html, body {
     switch (state.route.view) {
       case 'board': return window.HAHBoard.boardScreen || null;
       case 'patient': return window.HAHBoard.patientScreen || null;
+      case 'tasks': return window.HAHBoard.tasksScreen || null;
       default: return null;
     }
   }
@@ -2754,7 +3468,9 @@ html, body {
       case 'patient':
         if (window.HAHBoard.patientScreen && window.HAHBoard.patientScreen.renderLeftPane) return window.HAHBoard.patientScreen.renderLeftPane(state);
         return renderPatientLeftPane(state);
-      case 'tasks': return renderTasksLeftPane(state);
+      case 'tasks':
+        if (window.HAHBoard.tasksScreen && window.HAHBoard.tasksScreen.renderLeftPane) return window.HAHBoard.tasksScreen.renderLeftPane(state);
+        return renderTasksLeftPane(state);
       case 'insights': return renderInsightsLeftPane(state);
       default: return renderGenericPane('Navigation');
     }
@@ -2768,7 +3484,9 @@ html, body {
       case 'patient':
         if (window.HAHBoard.patientScreen && window.HAHBoard.patientScreen.renderMainPane) return window.HAHBoard.patientScreen.renderMainPane(state);
         return renderPatientPlaceholder(state);
-      case 'tasks': return renderSurfacePlaceholder('Tasks', 'Action, ownership, and blockers');
+      case 'tasks':
+        if (window.HAHBoard.tasksScreen && window.HAHBoard.tasksScreen.renderMainPane) return window.HAHBoard.tasksScreen.renderMainPane(state);
+        return renderSurfacePlaceholder('Tasks', 'Action, ownership, and blockers');
       case 'insights': return renderSurfacePlaceholder('Insights', 'Service-level operational intelligence');
       case 'settings': return renderSurfacePlaceholder('Settings', 'Desktop options and configuration');
       default: return renderSurfacePlaceholder('Board', 'Whole-service working view');
@@ -2783,7 +3501,9 @@ html, body {
       case 'patient':
         if (window.HAHBoard.patientScreen && window.HAHBoard.patientScreen.renderRightPane) return window.HAHBoard.patientScreen.renderRightPane(state);
         return renderGenericPane('Patient actions');
-      case 'tasks': return renderGenericPane('Selected task detail');
+      case 'tasks':
+        if (window.HAHBoard.tasksScreen && window.HAHBoard.tasksScreen.renderRightPane) return window.HAHBoard.tasksScreen.renderRightPane(state);
+        return renderGenericPane('Selected task detail');
       case 'insights': return renderGenericPane('Selected cohort drill-in');
       default: return renderGenericPane('Context');
     }
@@ -2917,9 +3637,9 @@ html, body {
 </script>
 <script>
 window.__HAH_BOARD_BUILD__ = {
-  filename: 'hospital_at_home_board_v0_3_003_release.html',
-  source: 'hospital_at_home_board_v0_3_003_source.zip',
-  builtAt: '2026-04-15T18:01:27.090251',
+  filename: 'hospital_at_home_board_v0_4_001_release.html',
+  source: 'hospital_at_home_board_v0_4_001_source.zip',
+  builtAt: '2026-04-15T18:10:01.850304',
   entry: 'desktop.html'
 };
 </script>
