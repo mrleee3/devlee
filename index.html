@@ -332,7 +332,7 @@ input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
 label{display:block;margin-top:2px}
 textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 #patientDetail textarea.clinical-review-textarea-expanded{resize:none;overflow:auto}
-.news-tts-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .12s}.news-tts-btn:active{background:rgba(255,255,255,.28);transform:scale(.97)}.news-tts-btn svg{flex-shrink:0}#headerTtsBtn svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round}#headerTtsBtn .tts-slash{display:none;stroke:currentColor}#headerTtsBtn.tts-muted .tts-slash{display:block}#headerTtsBtn.tts-muted .tts-waves{display:none}#headerTtsBtn.tts-muted{opacity:.5}.news-box{text-align:center;padding:16px;border-radius:16px;color:#fff;font-weight:700;margin-bottom:8px}
+.news-box{text-align:center;padding:16px;border-radius:16px;color:#fff;font-weight:700;margin-bottom:8px}
 .news-score{font-size:36px;line-height:1;margin-bottom:6px}.news-low{background:var(--green)} .news-medium{background:var(--amber)} .news-high{background:var(--red)}
 .result-box{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;min-height:160px;margin-bottom:8px;touch-action:pan-y}
 .nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:30;transition:transform .18s ease,opacity .18s ease} body.keyboard-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none} body.keyboard-open.dictation-active .nav{transform:none;opacity:1;pointer-events:auto}
@@ -2417,7 +2417,9 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 
 /* ── Patient page slide (Step 1) ──────────────────────────────── */
 /* Header bar shifts with the panel using a CSS variable */
-#appHeader{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform}
+#appHeader{position:relative;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+#headerContent{position:relative;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.header-content-ghost{position:absolute;inset:0;z-index:3;pointer-events:none;transform:translate3d(0,0,0);backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform}
 /* Panel open: prep = snap to 100% right, anim = slide to 0 */
 #patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-4px 0 20px rgba(15,23,42,.09)}
 #patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94),box-shadow 360ms ease;will-change:transform}
@@ -2636,7 +2638,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 </div>
-<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2"></div></div><div style="display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;align-self:center"><button aria-label="Voice readback on – tap to mute" class="header-lock" id="headerTtsBtn" title="Voice readback on"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><g class="tts-waves"><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></g><line class="tts-slash" x1="1" y1="1" x2="23" y2="23"/></svg></button><button aria-label="Lock app" class="header-lock" id="headerLockBtn" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></header>
+<header id="appHeader"><div id="headerContent"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2"></div></div><div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-end;flex-shrink:0;align-self:stretch"><button aria-label="Lock app" class="header-lock" id="headerLockBtn" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></div></header>
 <section class="container" id="patients">
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
@@ -2841,7 +2843,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <button class="options-nav-row" data-open-options-page="onedrive" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">OneDrive handover (beta)</span><span class="options-nav-subtitle">Workbook link, sign-in and import</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="aiscan" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">AI scan tools (beta)</span><span class="options-nav-subtitle">Groq for blister / IV / bloods, digitizer + Claude for ECG</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG Assist log</span><span class="options-nav-subtitle">Analysis history and debug info</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="deepgram" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Deepgram dictation (beta)</span><span class="options-nav-subtitle">API key, formatting and dictation options</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
-<button class="options-nav-row" data-open-options-page="ttsdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">TTS debug log</span><span class="options-nav-subtitle">Deepgram speech playback events and errors</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="patientlist" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Patient list</span><span class="options-nav-subtitle">Choose and reorder card details</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="clinicalreview" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Clinical review</span><span class="options-nav-subtitle">Examination presets</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="medlinkdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Medication link debug</span><span class="options-nav-subtitle">Recent long-press / link events for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG analysis log</span><span class="options-nav-subtitle">Last 10 analyses for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 </div>
@@ -2849,7 +2850,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_37_006_release.html</div><div>Source: hospital_at_home_v12_37_006_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_562_release.html</div><div>Source: hospital_at_home_v12_36_562_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -2980,15 +2981,6 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 </div>
 
-<div class="options-page-panel hidden" data-options-page="ttsdebug">
-<div class="card options-subpage-card">
-<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>TTS debug log</h3><div class="tiny muted">Deepgram speech playback events and errors</div></div></div>
-<div class="options-section-body" id="optionsSectionTtsDebug"><div class="tiny muted" id="ttsDebugStatus" style="margin-top:4px;margin-bottom:10px">No TTS events recorded yet.</div>
-<div class="top-actions" style="margin-top:0;margin-bottom:10px"><button class="fullwidth" id="copyTtsDebugBtn" type="button">Copy log</button><button class="fullwidth" id="clearTtsDebugBtn" type="button">Clear</button></div>
-<div class="tiny muted" id="ttsDebugLog" style="white-space:pre-wrap;word-break:break-word">No TTS events recorded yet.</div></div>
-</div>
-</div>
-
 <div class="options-page-panel hidden" data-options-page="patientlist">
 <div class="card options-subpage-card">
 <div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>Patient list</h3><div class="tiny muted">Choose and reorder card details</div></div></div>
@@ -3069,7 +3061,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 </section>
 <section class="container hidden" id="patientDetail">
-<div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div><button aria-label="Read score aloud" class="news-tts-btn" id="newsTtsBtn" title="Read score aloud" type="button"><svg aria-hidden="true" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" viewBox="0 0 24 24" width="14"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>Read score</button></div>
+<div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div></div>
 <div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><div class="obs-split-field" id="bpFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bp" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBpEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bpLying" type="hidden"/><input id="bpStanding1" type="hidden"/><input id="bpStanding3" type="hidden"/><input id="bpPosturalSymptoms" type="hidden"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Set clinical context above, then scan, upload or paste an ECG image for a structured AI draft review.</div><div class="ecg-assist-card ecg-context-card"><div class="ecg-assist-card-title" style="font-size:15px">Clinical context</div><div class="exam-findings-chip-row" id="ecgContextPresets"><button class="exam-findings-chip active" data-preset="" type="button">Unspecified</button><button class="exam-findings-chip" data-preset="Chest pain / possible ACS — look carefully for STEMI equivalents including posterior pattern, de Winter morphology, and Wellens signs" type="button">Chest pain</button><button class="exam-findings-chip" data-preset="Palpitations / arrhythmia query — focus on rhythm, PR interval, QTc, delta waves, and accessory pathway features" type="button">Palpitations</button><button class="exam-findings-chip" data-preset="Bradycardia / conduction concern — classify degree of block, assess escape rhythm, and note whether rate is appropriate for the clinical situation" type="button">Bradycardia</button><button class="exam-findings-chip" data-preset="Hyperkalaemia — actively grade the hyperkalaemic ECG progression (peaked T → PR prolongation → P-wave loss → wide QRS → sine wave) and state where on this spectrum the tracing sits" type="button">Hyperkalaemia</button><button class="exam-findings-chip" data-preset="Syncope / collapse — look carefully for QTc prolongation, Brugada pattern, epsilon waves, and high-degree AV block" type="button">Syncope</button><button class="exam-findings-chip" data-preset="Breathlessness / possible PE — look for sinus tachycardia, S1Q3T3, right heart strain pattern, and new RBBB" type="button">SOB</button><button class="exam-findings-chip" data-preset="Tachycardia — classify as sinus vs non-sinus; look for P-wave morphology, regularity, QRS width, delta waves, and assess for any underlying cause" type="button">Tachycardia</button></div></div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Lead review</div><div class="ecg-assist-lead-grid" id="ecgAssistLeadGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
 <div class="card patient-reorder-card" data-card-key="bloodsSummary" id="bloodsSummaryCard"><h3 class="bloods-summary-title" id="bloodsSummaryTitle" tabindex="0">Recent bloods <span class="bloods-summary-inline-hint patient-card-helper-text" id="bloodsSummaryHint">(Tap to collapse)</span></h3><div class="bloods-panel" id="bloodsPanel"><div class="bloods-panel-head hidden"><div class="bloods-panel-meta patient-card-helper-text" id="bloodsPanelMeta"></div></div><div class="bloods-grid hidden" id="bloodsGrid"></div><div class="bloods-table-wrap hidden" id="bloodsTableWrap"><table class="bloods-table" id="bloodsTable"><thead id="bloodsTableHead"></thead><tbody id="bloodsTableBody"></tbody></table></div><div class="bloods-empty" id="bloodsEmpty">No bloods entered.</div></div></div>
@@ -10198,7 +10190,7 @@ function resetLockTimer(){
 }
 
 function initSecurity(){
-  document.querySelectorAll('[data-key]').forEach(btn=>bindFastPress(btn, ()=>{if(typeof TTS!=='undefined')TTS.prime(); handlePinKey(btn.dataset.key);}));
+  document.querySelectorAll('[data-key]').forEach(btn=>bindFastPress(btn, ()=>handlePinKey(btn.dataset.key)));
   bindFastPress($('pinDeleteKey'), ()=>{
     if(pinSession.busy || pinSession.unlocking || !pinSession.entry.length) return;
     pinSession.entry = pinSession.entry.slice(0,-1);
@@ -10300,6 +10292,34 @@ function resetPatientDetailHeaderShift(){
   root.style.setProperty('--hah-header-shift-ease', 'linear');
 }
 
+function clearPatientHeaderGhost(){
+  const ghost=document.getElementById('headerContentGhost');
+  if(ghost) ghost.remove();
+}
+function createPatientHeaderGhost(){
+  clearPatientHeaderGhost();
+  const header=document.getElementById('appHeader');
+  const content=document.getElementById('headerContent');
+  if(!header || !content) return null;
+  const ghost=content.cloneNode(true);
+  ghost.id='headerContentGhost';
+  ghost.classList.add('header-content-ghost');
+  ghost.setAttribute('aria-hidden', 'true');
+  ghost.querySelectorAll('[id]').forEach(el=>{ if(el!==ghost) el.removeAttribute('id'); });
+  header.appendChild(ghost);
+  return ghost;
+}
+function setPatientHeaderGhostShift(dx, options){
+  const ghost=document.getElementById('headerContentGhost');
+  if(!ghost) return;
+  const nextDx=Math.round(Number(dx)||0);
+  const dragging=!!(options && options.dragging);
+  const duration=dragging ? '0ms' : String(options && options.duration ? options.duration : '240ms');
+  const easing=String(options && options.easing ? options.easing : 'cubic-bezier(.22,.9,.18,1)');
+  ghost.style.transition=dragging ? 'none' : `transform ${duration} ${easing}`;
+  ghost.style.transform=`translate3d(${nextDx}px,0,0)`;
+}
+
 /* ── Patient panel open animation ───────────────────────────── */
 let detailOpenAnimTimer=null;
 function updateHeaderForPatient(){
@@ -10323,46 +10343,51 @@ function animatePatientDetailOpen(){
   const detail=document.getElementById('patientDetail');
   const patients=document.getElementById('patients');
   if(!detail) return;
-  if(typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches){
-    // No animation — update header content immediately
+  const reduced=typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced){
+    clearPatientHeaderGhost();
     updateHeaderForPatient();
     return;
   }
   clearTimeout(detailOpenAnimTimer);
-  // Clear any stale inline styles from swipe gestures
+  clearPatientHeaderGhost();
+  const ghost=createPatientHeaderGhost();
+  const width=window.innerWidth||390;
+  const underlayOffset=getDetailUnderlayOffset();
+  const easing='cubic-bezier(.25,.46,.45,.94)';
   try{ detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow=''; }catch(_e){}
   try{ if(patients){ patients.style.transition=''; patients.style.transform=''; } }catch(_e){}
-  // Snap header to +windowWidth — old app title rides off-screen right invisibly
-  setPatientDetailHeaderShift(window.innerWidth||390, {dragging:true});
-  // Set up prep position via CSS classes
+  if(ghost) setPatientHeaderGhostShift(0, {dragging:true});
+  setPatientDetailHeaderShift(width, {dragging:true});
   detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
   if(patients) patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
   detail.classList.add('hah-detail-open-prep');
   if(patients) patients.classList.add('hah-detail-underlay-open-prep');
-  void detail.offsetWidth; // commit snap — header is now off-screen right with old content
+  void detail.offsetWidth;
   requestAnimationFrame(function(){
-    // Header is off-screen: safe to update content before sliding in
     updateHeaderForPatient();
-    // Start all three in the same frame: panel, list parallax, header
     detail.classList.add('hah-detail-open-anim');
     detail.classList.remove('hah-detail-open-prep');
     if(patients){
       patients.classList.add('hah-detail-underlay-open-anim');
       patients.classList.remove('hah-detail-underlay-open-prep');
     }
-    setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:'cubic-bezier(.25,.46,.45,.94)'});
+    setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:easing});
+    if(ghost){
+      setPatientHeaderGhostShift(underlayOffset, {dragging:false, duration:'360ms', easing:easing});
+    }
   });
   detailOpenAnimTimer=setTimeout(function(){
     detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
     if(patients){
       patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
-      // Hold parallax for edge-swipe — only if still in detail view (race condition guard)
       if(document.body.classList.contains('detail-view-active')){
         const offset=getDetailUnderlayOffset();
         try{ patients.style.transition='none'; patients.style.transform='translate3d('+offset+'px,0,0)'; }catch(_e){}
       }
     }
     setPatientDetailHeaderShift(0, {dragging:true});
+    clearPatientHeaderGhost();
   }, 410);
 }
 function patientDetailIsVisible(){
@@ -10428,8 +10453,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_37_006_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_37_006_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_562_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_562_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10591,6 +10616,7 @@ function resetPatientDetailSwipe(){
   },260);
 }
 function goBackToPatientList(opts){
+  if(typeof clearPatientHeaderGhost==='function') clearPatientHeaderGhost();
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
   if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
   detailSwipeCompleting=false;
@@ -10776,494 +10802,6 @@ function initPatientDetailEdgeSwipe(){
     setCollapsibleState
   });
 })(window);
-
-</script><script>
-// =============================================================================
-// 16-tts.js  —  Text-to-Speech  (Deepgram Aura-2 / aura-2-theia-en)
-// Uses Deepgram's WebSocket TTS in the browser because Deepgram's REST API
-// requires a proxy for browser calls due to CORS restrictions.
-// =============================================================================
-
-var TTS = (() => {
-
-  const MODEL = 'aura-2-theia-en';
-  const SAMPLE_RATE = 48000;
-  const ENCODING = 'linear16';
-  const WS_ENDPOINT = `wss://api.deepgram.com/v1/speak?model=${encodeURIComponent(MODEL)}&encoding=${encodeURIComponent(ENCODING)}&sample_rate=${SAMPLE_RATE}`;
-  const DEBUG_KEY = 'hahTtsDebugLog';
-  const DEBUG_LIMIT = 250;
-
-  let _ctx = null;
-  let _source = null;
-  let _audioEl = null;
-  let _ws = null;
-  let _speaking = false;
-  let _enabled = localStorage.getItem('ttsEnabled') !== 'false';
-  let _runId = 0;
-
-  function nowStamp(){
-    try{ return new Date().toLocaleTimeString([], { hour12:false }); }catch(_err){ return new Date().toISOString(); }
-  }
-
-  function loadDebugLog(){
-    try{
-      const parsed = JSON.parse(localStorage.getItem(DEBUG_KEY) || '[]');
-      return Array.isArray(parsed) ? parsed : [];
-    }catch(_err){
-      return [];
-    }
-  }
-
-  function saveDebugLog(items){
-    try{ localStorage.setItem(DEBUG_KEY, JSON.stringify(items.slice(-DEBUG_LIMIT))); }catch(_err){}
-  }
-
-  function logDebug(event, detail=''){
-    const line = `${nowStamp()}  ${event}${detail ? ' — ' + detail : ''}`;
-    const items = loadDebugLog();
-    items.push(line);
-    saveDebugLog(items);
-    renderDebugUI();
-    try{ console.log('[TTS]', line); }catch(_err){}
-    return line;
-  }
-
-  function getDebugLogText(){
-    const items = loadDebugLog();
-    return items.length ? items.join('\n') : 'No TTS events recorded yet.';
-  }
-
-  function clearDebugLog(){
-    try{ localStorage.removeItem(DEBUG_KEY); }catch(_err){}
-    renderDebugUI();
-  }
-
-  function renderDebugUI(){
-    const logEl = document.getElementById('ttsDebugLog');
-    const statusEl = document.getElementById('ttsDebugStatus');
-    const items = loadDebugLog();
-    if(logEl) logEl.textContent = items.length ? items.join('\n') : 'No TTS events recorded yet.';
-    if(statusEl) statusEl.textContent = items.length ? `${items.length} TTS event${items.length===1?'':'s'} recorded.` : 'No TTS events recorded yet.';
-  }
-
-  async function copyDebugLog(){
-    const text = getDebugLogText();
-    try{
-      if(navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
-      else throw new Error('Clipboard API unavailable');
-      logDebug('debug-copy', 'Copied TTS log to clipboard');
-      alert('TTS debug log copied.');
-    }catch(err){
-      logDebug('debug-copy-failed', err?.message || String(err));
-      alert('Unable to copy TTS debug log on this device.');
-    }
-  }
-
-  function bindDebugUI(){
-    const copyBtn = document.getElementById('copyTtsDebugBtn');
-    const clearBtn = document.getElementById('clearTtsDebugBtn');
-    if(copyBtn && copyBtn.dataset.bound !== '1'){
-      copyBtn.dataset.bound = '1';
-      copyBtn.addEventListener('click', copyDebugLog);
-    }
-    if(clearBtn && clearBtn.dataset.bound !== '1'){
-      clearBtn.dataset.bound = '1';
-      clearBtn.addEventListener('click', () => {
-        clearDebugLog();
-        logDebug('debug-cleared');
-      });
-    }
-    renderDebugUI();
-  }
-
-  function buildWavHeader(dataLength, sampleRate=SAMPLE_RATE, channels=1, bitsPerSample=16){
-    const blockAlign = channels * bitsPerSample / 8;
-    const byteRate = sampleRate * blockAlign;
-    const buffer = new ArrayBuffer(44);
-    const view = new DataView(buffer);
-    const writeString = (offset, text) => {
-      for(let i=0;i<text.length;i++) view.setUint8(offset + i, text.charCodeAt(i));
-    };
-    writeString(0, 'RIFF');
-    view.setUint32(4, 36 + dataLength, true);
-    writeString(8, 'WAVE');
-    writeString(12, 'fmt ');
-    view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true);
-    view.setUint16(22, channels, true);
-    view.setUint32(24, sampleRate, true);
-    view.setUint32(28, byteRate, true);
-    view.setUint16(32, blockAlign, true);
-    view.setUint16(34, bitsPerSample, true);
-    writeString(36, 'data');
-    view.setUint32(40, dataLength, true);
-    return new Uint8Array(buffer);
-  }
-
-  function mergeChunks(chunks){
-    const total = chunks.reduce((sum, chunk) => sum + chunk.byteLength, 0);
-    const out = new Uint8Array(total);
-    let offset = 0;
-    for(const chunk of chunks){
-      out.set(chunk, offset);
-      offset += chunk.byteLength;
-    }
-    return out;
-  }
-
-  function makeWavBytes(rawPcmBytes){
-    const header = buildWavHeader(rawPcmBytes.byteLength);
-    const wav = new Uint8Array(header.byteLength + rawPcmBytes.byteLength);
-    wav.set(header, 0);
-    wav.set(rawPcmBytes, header.byteLength);
-    return wav;
-  }
-
-  function base64ToBytes(str){
-    const cleaned = String(str || '').trim();
-    const binary = atob(cleaned);
-    const out = new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++) out[i] = binary.charCodeAt(i);
-    return out;
-  }
-
-  function explainError(err){
-    const msg = String(err?.message || err || 'Unknown TTS error');
-    if(/CORS|Failed to fetch|NetworkError/i.test(msg)){
-      return 'Browser blocked the TTS request. Deepgram REST TTS needs a proxy; browser TTS should use WebSocket.';
-    }
-    if(/401|403|auth|token/i.test(msg)) return 'Deepgram rejected the key or token.';
-    if(/decode/i.test(msg)) return 'Audio arrived but could not be decoded for playback.';
-    if(/play\(\)/i.test(msg) || /user didn.t interact|NotAllowedError/i.test(msg)) return 'Browser blocked audio playback until a user gesture.';
-    return msg;
-  }
-
-  function setSpeaking(val){
-    _speaking = !!val;
-    const newsBtn = document.getElementById('newsTtsBtn');
-    if(newsBtn) newsBtn.classList.toggle('is-speaking', _speaking);
-  }
-
-  function _getCtx() {
-    if (!_ctx || _ctx.state === 'closed') {
-      const Ctor = window.AudioContext || window.webkitAudioContext;
-      if (!Ctor) throw new Error('Web Audio API not supported');
-      _ctx = new Ctor();
-      logDebug('audio-context', `created (${_ctx.state || 'unknown'})`);
-    }
-    return _ctx;
-  }
-
-  async function _resume() {
-    const ctx = _getCtx();
-    if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
-      await ctx.resume();
-      logDebug('audio-context', `resumed (${ctx.state || 'unknown'})`);
-    }
-    return ctx;
-  }
-
-  async function playWavBytes(wavBytes){
-    const arrayBuffer = wavBytes.buffer.slice(wavBytes.byteOffset, wavBytes.byteOffset + wavBytes.byteLength);
-    try{
-      const ctx = await _resume();
-      const audioBuf = await ctx.decodeAudioData(arrayBuffer.slice(0));
-      if(!_enabled) return;
-      const src = ctx.createBufferSource();
-      src.buffer = audioBuf;
-      src.connect(ctx.destination);
-      src.onended = () => { setSpeaking(false); _source = null; logDebug('playback-ended'); };
-      _source = src;
-      setSpeaking(true);
-      src.start(0);
-      logDebug('playback-start', `AudioContext ${Math.round((audioBuf.duration || 0) * 1000)} ms`);
-      return;
-    }catch(err){
-      logDebug('decode-fallback', explainError(err));
-    }
-
-    const blob = new Blob([wavBytes], { type:'audio/wav' });
-    const url = URL.createObjectURL(blob);
-    if(_audioEl){
-      try{ _audioEl.pause(); }catch(_err){}
-      try{ if(_audioEl.src && _audioEl.src.startsWith('blob:')) URL.revokeObjectURL(_audioEl.src); }catch(_err){}
-    }
-    const audio = new Audio();
-    audio.preload = 'auto';
-    audio.src = url;
-    audio.onended = () => {
-      setSpeaking(false);
-      logDebug('playback-ended', 'HTMLAudio fallback');
-      try{ URL.revokeObjectURL(url); }catch(_err){}
-    };
-    audio.onerror = () => {
-      setSpeaking(false);
-      logDebug('playback-error', 'HTMLAudio fallback failed');
-      alert('TTS audio was generated but playback failed. Open Options → TTS debug log.');
-      try{ URL.revokeObjectURL(url); }catch(_err){}
-    };
-    _audioEl = audio;
-    setSpeaking(true);
-    await audio.play();
-    logDebug('playback-start', 'HTMLAudio fallback');
-  }
-
-  async function finalizePlayback(runId, chunks){
-    if(runId !== _runId) return;
-    if(!_enabled){
-      logDebug('finalize-skipped', 'TTS disabled before playback');
-      return;
-    }
-    const rawBytes = mergeChunks(chunks);
-    logDebug('audio-complete', `${rawBytes.byteLength} raw bytes`);
-    if(!rawBytes.byteLength) throw new Error('No audio bytes received from Deepgram');
-    const wavBytes = makeWavBytes(rawBytes);
-    logDebug('wav-built', `${wavBytes.byteLength} wav bytes`);
-    await playWavBytes(wavBytes);
-  }
-
-  async function _playViaWebSocket(text) {
-    const apiKey = (typeof getDeepgramApiKey === 'function') ? getDeepgramApiKey() : '';
-    if (!apiKey) throw new Error('No Deepgram API key set');
-    await _resume();
-
-    const runId = ++_runId;
-    const chunks = [];
-    let totalBytes = 0;
-    let resolved = false;
-
-    logDebug('speak-request', `run=${runId}; chars=${String(text||'').length}; endpoint=websocket`);
-
-    return await new Promise((resolve, reject) => {
-      const finish = (err) => {
-        if(resolved) return;
-        resolved = true;
-        if(_ws && _ws.__runId === runId) _ws = null;
-        if(err) reject(err);
-        else resolve();
-      };
-
-      let ws;
-      try{
-        ws = new WebSocket(WS_ENDPOINT, ['token', apiKey]);
-        ws.binaryType = 'arraybuffer';
-      }catch(err){
-        finish(err);
-        return;
-      }
-
-      _ws = ws;
-      ws.__runId = runId;
-      setSpeaking(true);
-
-      const safeClose = () => {
-        try{ if(ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) ws.close(); }catch(_err){}
-      };
-
-      ws.addEventListener('open', () => {
-        logDebug('ws-open', `run=${runId}`);
-        try{
-          ws.send(JSON.stringify({ type:'Speak', text }));
-          logDebug('ws-send', `Speak (${String(text||'').length} chars)`);
-          ws.send(JSON.stringify({ type:'Flush' }));
-          logDebug('ws-send', 'Flush');
-        }catch(err){
-          safeClose();
-          finish(err);
-        }
-      });
-
-      ws.addEventListener('message', async (event) => {
-        try{
-          if(typeof event.data === 'string'){
-            try{
-              const parsed = JSON.parse(event.data);
-              const type = parsed?.type || 'json';
-              logDebug('ws-json', JSON.stringify(parsed));
-              if(type === 'Flushed'){
-                await finalizePlayback(runId, chunks);
-                try{ ws.send(JSON.stringify({ type:'Close' })); logDebug('ws-send', 'Close'); }catch(_err){}
-                safeClose();
-                finish();
-              } else if(type === 'Warning' || type === 'Error'){
-                throw new Error(parsed?.description || parsed?.message || JSON.stringify(parsed));
-              }
-              return;
-            }catch(parseErr){
-              const bytes = base64ToBytes(event.data);
-              chunks.push(bytes);
-              totalBytes += bytes.byteLength;
-              logDebug('ws-audio', `base64 chunk ${bytes.byteLength} bytes (total ${totalBytes})`);
-              return;
-            }
-          }
-          if(event.data instanceof ArrayBuffer){
-            const bytes = new Uint8Array(event.data);
-            chunks.push(bytes);
-            totalBytes += bytes.byteLength;
-            logDebug('ws-audio', `arraybuffer chunk ${bytes.byteLength} bytes (total ${totalBytes})`);
-            return;
-          }
-          if(typeof Blob !== 'undefined' && event.data instanceof Blob){
-            const buf = await event.data.arrayBuffer();
-            const bytes = new Uint8Array(buf);
-            chunks.push(bytes);
-            totalBytes += bytes.byteLength;
-            logDebug('ws-audio', `blob chunk ${bytes.byteLength} bytes (total ${totalBytes})`);
-            return;
-          }
-          logDebug('ws-message-unknown', Object.prototype.toString.call(event.data));
-        }catch(err){
-          safeClose();
-          finish(err);
-        }
-      });
-
-      ws.addEventListener('error', (event) => {
-        const msg = event?.message || 'WebSocket error';
-        logDebug('ws-error', msg);
-      });
-
-      ws.addEventListener('close', (event) => {
-        logDebug('ws-close', `code=${event.code}; reason=${event.reason || '(none)'}`);
-        if(!resolved && chunks.length && totalBytes > 0){
-          finalizePlayback(runId, chunks).then(() => finish()).catch(finish);
-          return;
-        }
-        if(!resolved) finish(new Error(`TTS socket closed before audio was completed (${event.code})`));
-      });
-    });
-  }
-
-  function prime() {
-    try { _getCtx(); } catch (e) { logDebug('prime-failed', explainError(e)); }
-  }
-
-  async function speak(text) {
-    if (!_enabled || !text?.trim()) {
-      logDebug('speak-skipped', !_enabled ? 'TTS disabled' : 'No text provided');
-      return;
-    }
-    cancel();
-    prime();
-    try {
-      await _playViaWebSocket(text);
-    } catch (err) {
-      setSpeaking(false);
-      const msg = explainError(err);
-      logDebug('speak-failed', msg);
-      alert(`TTS failed: ${msg}\n\nOpen Options → TTS debug log.`);
-    }
-  }
-
-  function cancel() {
-    if (_source) {
-      try { _source.stop(); } catch (_) {}
-      _source = null;
-    }
-    if(_audioEl){
-      try{ _audioEl.pause(); }catch(_err){}
-      try{ if(_audioEl.src && _audioEl.src.startsWith('blob:')) URL.revokeObjectURL(_audioEl.src); }catch(_err){}
-      _audioEl = null;
-    }
-    if(_ws){
-      try{ if(_ws.readyState === WebSocket.OPEN) _ws.send(JSON.stringify({ type:'Close' })); }catch(_err){}
-      try{ _ws.close(); }catch(_err){}
-      _ws = null;
-    }
-    setSpeaking(false);
-    logDebug('cancel');
-  }
-
-  function setEnabled(val) {
-    _enabled = Boolean(val);
-    localStorage.setItem('ttsEnabled', _enabled);
-    if (!_enabled) cancel();
-    _syncHeaderBtn();
-    logDebug('toggle', _enabled ? 'enabled' : 'muted');
-  }
-
-  function isEnabled()  { return _enabled;  }
-  function isSpeaking() { return _speaking; }
-
-  function normaliseSpeechNumber(value){
-    const str = String(value ?? '').trim();
-    if(!str) return '';
-    return str.replace(/\./g, ' point ');
-  }
-
-  function normaliseBloodPressureForSpeech(value){
-    const str = String(value ?? '').trim();
-    if(!str) return '';
-    return str.replace(/\s*\/\s*/g, ' over ');
-  }
-
-  function buildNewsSpeechText(){
-    const score = parseInt(document.getElementById('newsScore')?.textContent || '0', 10) || 0;
-    const temp = String(document.getElementById('temp')?.value || '').trim();
-    const spo2 = String(document.getElementById('spo2')?.value || '').trim();
-    const bp = String(document.getElementById('bp')?.value || '').trim();
-    const hr = String(document.getElementById('hr')?.value || '').trim();
-    const rr = String(document.getElementById('rr')?.value || '').trim();
-
-    const parts = [
-      `Hey Doctor Lee, how ya going? The patient's news score is ${score}.`
-    ];
-
-    if(temp) parts.push(`Temperature ${normaliseSpeechNumber(temp)}.`);
-    if(spo2) parts.push(`Saturations ${normaliseSpeechNumber(spo2)} percent.`);
-    if(bp) parts.push(`Blood pressure ${normaliseBloodPressureForSpeech(bp)}.`);
-    if(hr) parts.push(`Heart rate ${normaliseSpeechNumber(hr)}.`);
-    if(rr) parts.push(`And respiratory rate is ${normaliseSpeechNumber(rr)}.`);
-
-    return parts.join(' ').replace(/\s{2,}/g, ' ').trim();
-  }
-
-  function speakNEWS2(score, riskClass, action) {
-    return speak(`Hey Doctor Lee, how ya going? The patient's news score is ${score}.`.trim().replace(/\s{2,}/g, ' '));
-  }
-
-  function _syncHeaderBtn() {
-    const btn = document.getElementById('headerTtsBtn');
-    if (!btn) return;
-    btn.classList.toggle('tts-muted', !_enabled);
-    btn.setAttribute('aria-label', _enabled ? 'Voice readback on – tap to mute' : 'Voice readback off – tap to unmute');
-    btn.title = _enabled ? 'Voice readback on' : 'Voice readback off';
-  }
-
-  function initTTSUI() {
-    bindDebugUI();
-
-    const ttsBtn = document.getElementById('headerTtsBtn');
-    if (ttsBtn && ttsBtn.dataset.bound !== '1') {
-      ttsBtn.dataset.bound = '1';
-      _syncHeaderBtn();
-      ttsBtn.addEventListener('click', () => setEnabled(!_enabled));
-    } else {
-      _syncHeaderBtn();
-    }
-
-    const newsBtn = document.getElementById('newsTtsBtn');
-    if (newsBtn && newsBtn.dataset.bound !== '1') {
-      newsBtn.dataset.bound = '1';
-      newsBtn.addEventListener('click', () => {
-        const scoreEl = document.getElementById('newsScore');
-        if (!scoreEl) {
-          logDebug('news-click-failed', 'Missing NEWS score node');
-          return;
-        }
-        const text = buildNewsSpeechText();
-        logDebug('news-click', text);
-        speak(text);
-      });
-    }
-
-    logDebug('init', 'TTS UI initialised');
-  }
-
-  return { prime, speak, cancel, setEnabled, isEnabled, isSpeaking, speakNEWS2, initTTSUI, getDebugLogText, clearDebugLog };
-
-})();
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
@@ -12331,7 +11869,7 @@ document.addEventListener("DOMContentLoaded",function(){
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 1100);
   }
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
-  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight(); if(typeof TTS!=='undefined')TTS.initTTSUI();
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -17823,7 +17361,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_37_006_release.html; source=hospital_at_home_v12_37_006_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_562_release.html; source=hospital_at_home_v12_36_562_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
