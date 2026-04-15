@@ -2850,7 +2850,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_564_release.html</div><div>Source: hospital_at_home_v12_36_564_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_565_release.html</div><div>Source: hospital_at_home_v12_36_565_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10430,8 +10430,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_564_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_564_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_565_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_565_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -17337,7 +17337,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_564_release.html; source=hospital_at_home_v12_36_564_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_565_release.html; source=hospital_at_home_v12_36_565_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
@@ -17510,8 +17510,10 @@ document.addEventListener('visibilitychange',()=>{
 </script><script>
 // =============================================================================
 // 16-tts.js — NEWS score text-to-speech via Deepgram WebSocket TTS
-// Rebuilt for reliability: browser-native HTMLAudio playback is the primary
-// path. No mute button. Keeps the NEWS read button UI and adds a debug log.
+// Lower-latency stable version:
+// - Split NEWS readout into short segments
+// - Fetch all segments in parallel
+// - Play buffered WAV segments sequentially with HTMLAudio
 // =============================================================================
 
 window.HAH = window.HAH || {};
@@ -17526,13 +17528,12 @@ window.HAH.modules.tts = true;
   const LOG_KEY = 'hahTtsDebugLog';
   const LOG_LIMIT = 600;
 
-  let activeRequest = null;
-  let currentObjectUrl = '';
+  let activeSession = null;
   let audioEl = null;
-  let uiInitialised = false;
+  let currentObjectUrl = '';
 
   function stamp(){
-    try{ return new Date().toLocaleTimeString([], {hour12:false}); }
+    try{ return new Date().toLocaleTimeString([], { hour12:false }); }
     catch(_){ return new Date().toISOString(); }
   }
 
@@ -17540,9 +17541,7 @@ window.HAH.modules.tts = true;
     try{
       const value = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
       return Array.isArray(value) ? value : [];
-    }catch(_){
-      return [];
-    }
+    }catch(_){ return []; }
   }
 
   function writeLog(items){
@@ -17555,7 +17554,7 @@ window.HAH.modules.tts = true;
     const items = readLog();
     const text = items.length ? items.join('\n') : 'No TTS events recorded yet.';
     if(logEl) logEl.textContent = text;
-    if(statusEl) statusEl.textContent = items.length ? `${items.length} TTS event${items.length===1?'':'s'} recorded.` : 'No TTS events recorded yet.';
+    if(statusEl) statusEl.textContent = items.length ? `${items.length} TTS event${items.length===1 ? '' : 's'} recorded.` : 'No TTS events recorded yet.';
   }
 
   function log(event, detail=''){
@@ -17569,14 +17568,10 @@ window.HAH.modules.tts = true;
   }
 
   async function copyDebugLog(){
-    const items = readLog();
-    const text = items.length ? items.join('\n') : 'No TTS events recorded yet.';
+    const text = readLog().join('\n') || 'No TTS events recorded yet.';
     try{
-      if(navigator.clipboard?.writeText){
-        await navigator.clipboard.writeText(text);
-      } else {
-        throw new Error('Clipboard API unavailable');
-      }
+      if(!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable');
+      await navigator.clipboard.writeText(text);
       log('debug-copy', 'Copied TTS log to clipboard');
       alert('TTS debug log copied.');
     }catch(err){
@@ -17637,10 +17632,15 @@ window.HAH.modules.tts = true;
     revokeObjectUrl();
   }
 
+  function isAudioPlaying(){
+    const el = ensureAudioElement();
+    return !!(el && !el.paused && !el.ended && el.currentTime > 0);
+  }
+
   function syncNewsButton(){
     const btn = document.getElementById('newsTtsBtn');
     if(!btn) return;
-    const busy = !!activeRequest || (!!audioEl && !audioEl.paused && !audioEl.ended);
+    const busy = !!activeSession || isAudioPlaying();
     btn.disabled = busy;
     btn.classList.toggle('is-speaking', busy);
     btn.setAttribute('aria-busy', busy ? 'true' : 'false');
@@ -17648,6 +17648,7 @@ window.HAH.modules.tts = true;
 
   function explainError(err){
     const msg = String(err?.message || err || 'Unknown TTS error');
+    if(/cancelled/i.test(msg)) return msg;
     if(/No Deepgram API key/i.test(msg)) return 'No Deepgram API key has been saved in Options.';
     if(/401|403|auth|token/i.test(msg)) return 'Deepgram rejected the API key.';
     if(/No audio bytes received/i.test(msg)) return 'Deepgram did not return any audio.';
@@ -17656,14 +17657,32 @@ window.HAH.modules.tts = true;
     return msg;
   }
 
-  function stopActiveRequest(reason='cancel'){
-    const req = activeRequest;
-    activeRequest = null;
-    if(req){
-      req.cancelled = true;
-      try{ clearTimeout(req.forceCloseTimer); }catch(_){ }
-      try{ if(req.ws && req.ws.readyState === WebSocket.OPEN){ req.ws.send(JSON.stringify({ type:'Close' })); log('ws-send', 'Close (cancel)'); } }catch(_){ }
-      try{ if(req.ws) req.ws.close(); }catch(_){ }
+  function cancelError(message='TTS cancelled'){
+    const err = new Error(message);
+    err.isCancelled = true;
+    return err;
+  }
+
+  function cancelRequest(req, reason='cancel'){
+    if(!req || req.cancelled) return;
+    req.cancelled = true;
+    try{ clearTimeout(req.forceCloseTimer); }catch(_){ }
+    try{
+      if(req.ws && req.ws.readyState === WebSocket.OPEN){
+        req.ws.send(JSON.stringify({ type:'Close' }));
+        log('ws-send', `seg=${req.segmentIndex}; Close (${reason})`);
+      }
+    }catch(_){ }
+    try{ if(req.ws) req.ws.close(); }catch(_){ }
+  }
+
+  function stopActiveSession(reason='cancel'){
+    const session = activeSession;
+    activeSession = null;
+    if(session){
+      session.cancelled = true;
+      session.requests.forEach((req) => cancelRequest(req, reason));
+      session.requests.clear();
       log(reason);
     }
     cleanupAudioSource();
@@ -17675,9 +17694,7 @@ window.HAH.modules.tts = true;
     const byteRate = sampleRate * blockAlign;
     const buffer = new ArrayBuffer(44);
     const view = new DataView(buffer);
-    const writeString = (offset, text) => {
-      for(let i=0;i<text.length;i++) view.setUint8(offset + i, text.charCodeAt(i));
-    };
+    const writeString = (offset, text) => { for(let i=0;i<text.length;i++) view.setUint8(offset + i, text.charCodeAt(i)); };
     writeString(0, 'RIFF');
     view.setUint32(4, 36 + dataLength, true);
     writeString(8, 'WAVE');
@@ -17713,12 +17730,12 @@ window.HAH.modules.tts = true;
     return wav;
   }
 
-  async function playWavBytes(wavBytes){
+  async function playWavBytes(wavBytes, segmentIndex, totalSegments){
     const el = ensureAudioElement();
     cleanupAudioSource();
     const blob = new Blob([wavBytes], { type:'audio/wav' });
     currentObjectUrl = URL.createObjectURL(blob);
-    log('playback-prepare', `${wavBytes.byteLength} wav bytes`);
+    log('playback-prepare', `seg=${segmentIndex}/${totalSegments}; ${wavBytes.byteLength} wav bytes`);
 
     return new Promise((resolve, reject) => {
       let settled = false;
@@ -17730,32 +17747,21 @@ window.HAH.modules.tts = true;
         el.onplaying = null;
         el.onended = null;
         el.onerror = null;
-        el.onpause = null;
         fn(arg);
       };
 
-      el.onloadedmetadata = () => {
-        log('audio-metadata', `${Math.round((el.duration || 0) * 1000)} ms duration`);
-      };
-      el.oncanplay = () => {
-        log('audio-canplay');
-      };
-      el.onplaying = () => {
-        log('playback-start', 'HTMLAudio');
-      };
+      el.onloadedmetadata = () => log('audio-metadata', `seg=${segmentIndex}/${totalSegments}; ${Math.round((el.duration || 0) * 1000)} ms duration`);
+      el.oncanplay = () => log('audio-canplay', `seg=${segmentIndex}/${totalSegments}`);
+      el.onplaying = () => log('playback-start', `seg=${segmentIndex}/${totalSegments}; HTMLAudio`);
       el.onended = () => {
-        log('playback-ended');
-        activeRequest = null;
-        syncNewsButton();
+        log('playback-ended', `seg=${segmentIndex}/${totalSegments}`);
         revokeObjectUrl();
         finish(resolve);
       };
       el.onerror = () => {
         const mediaError = el.error;
         const detail = mediaError ? `MediaError ${mediaError.code}` : 'HTMLAudio failed';
-        log('playback-error', detail);
-        activeRequest = null;
-        syncNewsButton();
+        log('playback-error', `seg=${segmentIndex}/${totalSegments}; ${detail}`);
         cleanupAudioSource();
         finish(reject, new Error(detail));
       };
@@ -17765,20 +17771,14 @@ window.HAH.modules.tts = true;
         el.load();
         const playResult = el.play();
         if(playResult && typeof playResult.then === 'function'){
-          playResult.then(() => {
-            log('play-promise-resolved');
-          }).catch((err) => {
-            activeRequest = null;
-            syncNewsButton();
+          playResult.then(() => log('play-promise-resolved', `seg=${segmentIndex}/${totalSegments}`)).catch((err) => {
             cleanupAudioSource();
             finish(reject, err);
           });
         } else {
-          log('play-invoked', 'No play promise returned');
+          log('play-invoked', `seg=${segmentIndex}/${totalSegments}; no play promise returned`);
         }
       }catch(err){
-        activeRequest = null;
-        syncNewsButton();
         cleanupAudioSource();
         finish(reject, err);
       }
@@ -17787,17 +17787,15 @@ window.HAH.modules.tts = true;
 
   function normaliseNumberForSpeech(value){
     const str = String(value ?? '').trim();
-    if(!str) return '';
-    return str.replace(/\./g, ' point ');
+    return str ? str.replace(/\./g, ' point ') : '';
   }
 
   function normaliseBloodPressureForSpeech(value){
     const str = String(value ?? '').trim();
-    if(!str) return '';
-    return str.replace(/\s*\/\s*/g, ' over ');
+    return str ? str.replace(/\s*\/\s*/g, ' over ') : '';
   }
 
-  function buildNewsSpeechText(){
+  function buildNewsSpeechSegments(){
     const score = parseInt(document.getElementById('newsScore')?.textContent || '0', 10) || 0;
     const temp = String(document.getElementById('temp')?.value || '').trim();
     const spo2 = String(document.getElementById('spo2')?.value || '').trim();
@@ -17805,56 +17803,50 @@ window.HAH.modules.tts = true;
     const hr = String(document.getElementById('hr')?.value || '').trim();
     const rr = String(document.getElementById('rr')?.value || '').trim();
 
-    const parts = [`Hey Dr Lee, how ya going? The patient's news score is ${score}.`];
-    if(temp) parts.push(`Temperature is ${normaliseNumberForSpeech(temp)}.`);
-    if(spo2) parts.push(`Saturations are ${normaliseNumberForSpeech(spo2)} percent.`);
-    if(bp) parts.push(`Blood pressure is ${normaliseBloodPressureForSpeech(bp)}.`);
-    if(hr) parts.push(`Heart rate is ${normaliseNumberForSpeech(hr)}.`);
-    if(rr) parts.push(`And respiratory rate is ${normaliseNumberForSpeech(rr)}.`);
-    return parts.join(' ').replace(/\s{2,}/g, ' ').trim();
+    const segments = [`Hey Dr Lee, how ya going? The patient's news score is ${score}.`];
+    const tail = [];
+    if(temp) tail.push(`Temperature is ${normaliseNumberForSpeech(temp)}.`);
+    if(spo2) tail.push(`Saturations are ${normaliseNumberForSpeech(spo2)} percent.`);
+    if(bp) tail.push(`Blood pressure is ${normaliseBloodPressureForSpeech(bp)}.`);
+    if(hr) tail.push(`Heart rate is ${normaliseNumberForSpeech(hr)}.`);
+    if(rr) tail.push(`And respiratory rate is ${normaliseNumberForSpeech(rr)}.`);
+
+    if(tail.length) segments.push(tail.slice(0, 2).join(' '));
+    if(tail.length > 2) segments.push(tail.slice(2, 4).join(' '));
+    if(tail.length > 4) segments.push(tail.slice(4).join(' '));
+    return segments.filter(Boolean);
   }
 
-  function finaliseRequest(req, rejectFn){
-    if(!req || req.finalised) return;
+  function finaliseRequest(req, resolveFn, rejectFn){
+    if(!req || req.finalised || req.cancelled) return;
     if(req.pendingBlobReads > 0){
       req.waitingToFinalise = true;
       return;
     }
     req.finalised = true;
     try{ clearTimeout(req.forceCloseTimer); }catch(_){ }
+    try{ req.session.requests.delete(req); }catch(_){ }
 
     try{
       const rawBytes = mergeChunks(req.chunks);
-      log('audio-complete', `${rawBytes.byteLength} raw bytes streamed across ${req.chunkCount} chunks`);
+      log('audio-complete', `seg=${req.segmentIndex}; ${rawBytes.byteLength} raw bytes streamed across ${req.chunkCount} chunks`);
       if(!rawBytes.byteLength) throw new Error('No audio bytes received');
       const wavBytes = toWavBytes(rawBytes);
-      log('wav-built', `${wavBytes.byteLength} wav bytes`);
-      playWavBytes(wavBytes).then(() => {
-        if(activeRequest === req) activeRequest = null;
-        syncNewsButton();
-        req.resolve();
-      }).catch((err) => {
-        if(activeRequest === req) activeRequest = null;
-        syncNewsButton();
-        rejectFn(err);
-      });
+      log('wav-built', `seg=${req.segmentIndex}; ${wavBytes.byteLength} wav bytes`);
+      resolveFn(wavBytes);
     }catch(err){
-      if(activeRequest === req) activeRequest = null;
-      syncNewsButton();
       rejectFn(err);
     }
   }
 
-  async function speakText(text){
-    const apiKey = (typeof getDeepgramApiKey === 'function') ? String(getDeepgramApiKey() || '').trim() : '';
-    if(!apiKey) throw new Error('No Deepgram API key');
-    if(!text) throw new Error('No speech text');
-
-    stopActiveRequest('cancel');
-
+  function fetchWavBytes(text, apiKey, session, segmentIndex){
     return new Promise((resolve, reject) => {
+      if(session.cancelled) return reject(cancelError());
+
       const req = {
         ws: null,
+        session,
+        segmentIndex,
         cancelled: false,
         finalised: false,
         chunks: [],
@@ -17864,171 +17856,160 @@ window.HAH.modules.tts = true;
         waitingToFinalise: false,
         sawAudio: false,
         sawFlush: false,
-        sawClose: false,
         forceCloseTimer: null,
-        resolve,
-        reject,
       };
-      activeRequest = req;
-      syncNewsButton();
-      log('speak-request', `chars=${text.length}; endpoint=websocket`);
+      session.requests.add(req);
+      log('speak-request', `seg=${segmentIndex}; chars=${text.length}; endpoint=websocket`);
 
       let ws;
-      try{
-        ws = new WebSocket(WS_URL, ['token', apiKey]);
-      }catch(err){
-        activeRequest = null;
-        syncNewsButton();
-        reject(err);
-        return;
-      }
+      try{ ws = new WebSocket(WS_URL, ['token', apiKey]); }
+      catch(err){ session.requests.delete(req); return reject(err); }
       req.ws = ws;
       ws.binaryType = 'arraybuffer';
 
       const fail = (err) => {
-        if(req.finalised) return;
+        if(req.finalised || req.cancelled) return;
         req.finalised = true;
         try{ clearTimeout(req.forceCloseTimer); }catch(_){ }
-        if(activeRequest === req) activeRequest = null;
-        syncNewsButton();
+        try{ session.requests.delete(req); }catch(_){ }
         reject(err);
       };
 
       const handleBytes = (bytes) => {
-        if(req.cancelled || req.finalised) return;
+        if(req.cancelled || req.finalised || session.cancelled) return;
         req.sawAudio = true;
         req.chunks.push(bytes);
         req.chunkCount += 1;
         req.byteCount += bytes.byteLength;
-        if(req.chunkCount === 1) log('ws-audio', `first chunk ${bytes.byteLength} bytes`);
-        else if(req.chunkCount % 100 === 0) log('ws-audio', `chunk ${req.chunkCount}; total ${req.byteCount} bytes`);
-        if(req.waitingToFinalise && req.pendingBlobReads === 0) finaliseRequest(req, fail);
+        if(req.chunkCount === 1) log('ws-audio', `seg=${segmentIndex}; first chunk ${bytes.byteLength} bytes`);
+        else if(req.chunkCount % 100 === 0) log('ws-audio', `seg=${segmentIndex}; chunk ${req.chunkCount}; total ${req.byteCount} bytes`);
+        if(req.waitingToFinalise && req.pendingBlobReads === 0) finaliseRequest(req, resolve, fail);
       };
 
       ws.onopen = () => {
-        if(req.cancelled || req.finalised) return;
-        log('ws-open');
+        if(req.cancelled || req.finalised || session.cancelled) return;
+        log('ws-open', `seg=${segmentIndex}`);
         try{
           ws.send(JSON.stringify({ type:'Speak', text }));
-          log('ws-send', `Speak (${text.length} chars)`);
+          log('ws-send', `seg=${segmentIndex}; Speak (${text.length} chars)`);
           ws.send(JSON.stringify({ type:'Flush' }));
-          log('ws-send', 'Flush');
-        }catch(err){
-          fail(err);
-        }
+          log('ws-send', `seg=${segmentIndex}; Flush`);
+        }catch(err){ fail(err); }
       };
 
       ws.onmessage = (event) => {
-        if(req.cancelled || req.finalised) return;
+        if(req.cancelled || req.finalised || session.cancelled) return;
         try{
           if(typeof event.data === 'string'){
             let payload = null;
             try{ payload = JSON.parse(event.data); }catch(_){ payload = null; }
             if(!payload) return;
-            if(payload.type === 'Metadata'){
-              log('ws-json', JSON.stringify(payload));
-              return;
-            }
-            if(payload.type === 'Warning'){
-              log('ws-warning', JSON.stringify(payload));
-              return;
-            }
+            if(payload.type === 'Metadata') return log('ws-json', `seg=${segmentIndex}; Metadata`);
+            if(payload.type === 'Warning') return log('ws-warning', `seg=${segmentIndex}; ${JSON.stringify(payload)}`);
             if(payload.type === 'Flushed'){
               req.sawFlush = true;
-              log('ws-json', JSON.stringify(payload));
+              log('ws-json', `seg=${segmentIndex}; Flushed`);
               try{
                 if(ws.readyState === WebSocket.OPEN){
                   ws.send(JSON.stringify({ type:'Close' }));
-                  log('ws-send', 'Close');
+                  log('ws-send', `seg=${segmentIndex}; Close`);
                 }
               }catch(_){ }
-              req.forceCloseTimer = setTimeout(() => {
-                try{ ws.close(); }catch(_){ }
-              }, 1200);
+              req.forceCloseTimer = setTimeout(() => { try{ ws.close(); }catch(_){ } }, 1200);
               return;
             }
-            if(payload.type === 'Error' || payload.type === 'error'){
-              log('ws-error', JSON.stringify(payload));
-              fail(new Error(payload.description || payload.message || 'Deepgram returned an error'));
-              return;
-            }
-            log('ws-json', JSON.stringify(payload));
-            return;
+            if(payload.type === 'Error' || payload.type === 'error') return fail(new Error(payload.description || payload.message || 'Deepgram returned an error'));
+            return log('ws-json', `seg=${segmentIndex}; ${JSON.stringify(payload)}`);
           }
-
-          if(event.data instanceof ArrayBuffer){
-            handleBytes(new Uint8Array(event.data));
-            return;
-          }
+          if(event.data instanceof ArrayBuffer) return handleBytes(new Uint8Array(event.data));
           if(event.data instanceof Blob){
             req.pendingBlobReads += 1;
             event.data.arrayBuffer().then((buf) => {
               req.pendingBlobReads -= 1;
               handleBytes(new Uint8Array(buf));
-              if(req.waitingToFinalise && req.pendingBlobReads === 0) finaliseRequest(req, fail);
+              if(req.waitingToFinalise && req.pendingBlobReads === 0) finaliseRequest(req, resolve, fail);
             }).catch((err) => {
               req.pendingBlobReads = Math.max(0, req.pendingBlobReads - 1);
               fail(err);
             });
           }
-        }catch(err){
-          fail(err);
-        }
+        }catch(err){ fail(err); }
       };
 
       ws.onerror = () => {
-        if(req.cancelled || req.finalised) return;
+        if(req.cancelled || req.finalised || session.cancelled) return;
         fail(new Error('Deepgram WebSocket connection error'));
       };
 
       ws.onclose = (event) => {
-        log('ws-close', `code=${event.code}; reason=${event.reason || '(none)'}`);
-        if(req.cancelled || req.finalised) return;
-        req.sawClose = true;
-        if(req.sawFlush || req.sawAudio){
-          setTimeout(() => finaliseRequest(req, fail), 80);
-          return;
-        }
+        log('ws-close', `seg=${segmentIndex}; code=${event.code}; reason=${event.reason || '(none)'}`);
+        if(req.cancelled || req.finalised || session.cancelled) return;
+        if(req.sawFlush || req.sawAudio) return setTimeout(() => finaliseRequest(req, resolve, fail), 60);
         fail(new Error('Deepgram socket closed before audio started'));
       };
     });
   }
 
-  async function onNewsButtonClick(){
-    const text = buildNewsSpeechText();
-    log('news-click', text);
+  async function speakSegments(segments){
+    const apiKey = (typeof getDeepgramApiKey === 'function') ? String(getDeepgramApiKey() || '').trim() : '';
+    if(!apiKey) throw new Error('No Deepgram API key');
+    if(!Array.isArray(segments) || !segments.length) throw new Error('No speech text');
+
+    stopActiveSession('cancel');
+
+    const session = { cancelled:false, requests:new Set() };
+    activeSession = session;
+    syncNewsButton();
+    log('segment-plan', `${segments.length} segments`);
+
+    const wavPromises = segments.map((text, index) => fetchWavBytes(text, apiKey, session, index + 1));
+
     try{
-      await speakText(text);
+      for(let i = 0; i < wavPromises.length; i++){
+        if(session.cancelled) throw cancelError();
+        const wavBytes = await wavPromises[i];
+        if(session.cancelled) throw cancelError();
+        await playWavBytes(wavBytes, i + 1, wavPromises.length);
+      }
+      if(activeSession === session){
+        activeSession = null;
+        syncNewsButton();
+      }
     }catch(err){
-      if(activeRequest && activeRequest.finalised) activeRequest = null;
+      if(activeSession === session) activeSession = null;
+      session.cancelled = true;
+      session.requests.forEach((req) => cancelRequest(req, 'segment-fail'));
+      session.requests.clear();
       syncNewsButton();
+      throw err;
+    }
+  }
+
+  async function onNewsButtonClick(){
+    const segments = buildNewsSpeechSegments();
+    log('news-click', segments.join(' '));
+    try{
+      await speakSegments(segments);
+    }catch(err){
+      syncNewsButton();
+      if(err?.isCancelled || /cancelled/i.test(String(err?.message || ''))) return;
       const message = explainError(err);
       log('speak-failed', message);
       alert(`TTS failed: ${message}\n\nOpen Options → TTS debug log.`);
     }
   }
 
-  function bindAudioEvents(){
-    const el = ensureAudioElement();
-    if(el.dataset.ttsBound === '1') return;
-    el.dataset.ttsBound = '1';
-    el.addEventListener('pause', () => {
-      if(el.ended) return;
-      if(el.currentTime > 0 && !el.paused) return;
-    });
-  }
-
   function bindUI(){
     bindDebugUI();
-    bindAudioEvents();
+    ensureAudioElement();
     const btn = document.getElementById('newsTtsBtn');
     if(btn && btn.dataset.bound !== '1'){
       btn.dataset.bound = '1';
       btn.addEventListener('click', onNewsButtonClick);
     }
     syncNewsButton();
-    if(!uiInitialised){
-      uiInitialised = true;
+    if(!window.__hahTtsInitLogged){
+      window.__hahTtsInitLogged = true;
       log('init', 'TTS module initialised');
     }
   }
@@ -18043,9 +18024,9 @@ window.HAH.modules.tts = true;
 
   window.HAH_TTS = {
     init,
-    cancel: stopActiveRequest,
-    speakText,
-    buildNewsSpeechText,
+    cancel: stopActiveSession,
+    speakSegments,
+    buildNewsSpeechSegments,
     clearDebugLog,
     getDebugLogText: () => (readLog().length ? readLog().join('\n') : 'No TTS events recorded yet.')
   };
