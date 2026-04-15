@@ -2841,6 +2841,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <button class="options-nav-row" data-open-options-page="onedrive" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">OneDrive handover (beta)</span><span class="options-nav-subtitle">Workbook link, sign-in and import</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="aiscan" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">AI scan tools (beta)</span><span class="options-nav-subtitle">Groq for blister / IV / bloods, digitizer + Claude for ECG</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG Assist log</span><span class="options-nav-subtitle">Analysis history and debug info</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="deepgram" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Deepgram dictation (beta)</span><span class="options-nav-subtitle">API key, formatting and dictation options</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
+<button class="options-nav-row" data-open-options-page="ttsdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">TTS debug log</span><span class="options-nav-subtitle">Deepgram speech playback events and errors</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="patientlist" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Patient list</span><span class="options-nav-subtitle">Choose and reorder card details</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="clinicalreview" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Clinical review</span><span class="options-nav-subtitle">Examination presets</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="medlinkdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Medication link debug</span><span class="options-nav-subtitle">Recent long-press / link events for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG analysis log</span><span class="options-nav-subtitle">Last 10 analyses for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 </div>
@@ -2976,6 +2977,15 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="tiny muted" style="margin-top:6px">These replacements are applied after dictation with more tolerant matching, and spoken forms are also sent to Deepgram as phrase hints.</div>
 </div>
 <div class="tiny muted" id="deepgramSettingsStatus" style="margin-top:8px"></div></div>
+</div>
+</div>
+
+<div class="options-page-panel hidden" data-options-page="ttsdebug">
+<div class="card options-subpage-card">
+<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>TTS debug log</h3><div class="tiny muted">Deepgram speech playback events and errors</div></div></div>
+<div class="options-section-body" id="optionsSectionTtsDebug"><div class="tiny muted" id="ttsDebugStatus" style="margin-top:4px;margin-bottom:10px">No TTS events recorded yet.</div>
+<div class="top-actions" style="margin-top:0;margin-bottom:10px"><button class="fullwidth" id="copyTtsDebugBtn" type="button">Copy log</button><button class="fullwidth" id="clearTtsDebugBtn" type="button">Clear</button></div>
+<div class="tiny muted" id="ttsDebugLog" style="white-space:pre-wrap;word-break:break-word">No TTS events recorded yet.</div></div>
 </div>
 </div>
 
@@ -10766,6 +10776,478 @@ function initPatientDetailEdgeSwipe(){
     setCollapsibleState
   });
 })(window);
+
+</script><script>
+// =============================================================================
+// 16-tts.js  —  Text-to-Speech  (Deepgram Aura-2 / aura-2-theia-en)
+// Uses Deepgram's WebSocket TTS in the browser because Deepgram's REST API
+// requires a proxy for browser calls due to CORS restrictions.
+// =============================================================================
+
+var TTS = (() => {
+
+  const MODEL = 'aura-2-theia-en';
+  const SAMPLE_RATE = 48000;
+  const ENCODING = 'linear16';
+  const WS_ENDPOINT = `wss://api.deepgram.com/v1/speak?model=${encodeURIComponent(MODEL)}&encoding=${encodeURIComponent(ENCODING)}&sample_rate=${SAMPLE_RATE}`;
+  const DEBUG_KEY = 'hahTtsDebugLog';
+  const DEBUG_LIMIT = 250;
+
+  let _ctx = null;
+  let _source = null;
+  let _audioEl = null;
+  let _ws = null;
+  let _speaking = false;
+  let _enabled = localStorage.getItem('ttsEnabled') !== 'false';
+  let _runId = 0;
+
+  function nowStamp(){
+    try{ return new Date().toLocaleTimeString([], { hour12:false }); }catch(_err){ return new Date().toISOString(); }
+  }
+
+  function loadDebugLog(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(DEBUG_KEY) || '[]');
+      return Array.isArray(parsed) ? parsed : [];
+    }catch(_err){
+      return [];
+    }
+  }
+
+  function saveDebugLog(items){
+    try{ localStorage.setItem(DEBUG_KEY, JSON.stringify(items.slice(-DEBUG_LIMIT))); }catch(_err){}
+  }
+
+  function logDebug(event, detail=''){
+    const line = `${nowStamp()}  ${event}${detail ? ' — ' + detail : ''}`;
+    const items = loadDebugLog();
+    items.push(line);
+    saveDebugLog(items);
+    renderDebugUI();
+    try{ console.log('[TTS]', line); }catch(_err){}
+    return line;
+  }
+
+  function getDebugLogText(){
+    const items = loadDebugLog();
+    return items.length ? items.join('\n') : 'No TTS events recorded yet.';
+  }
+
+  function clearDebugLog(){
+    try{ localStorage.removeItem(DEBUG_KEY); }catch(_err){}
+    renderDebugUI();
+  }
+
+  function renderDebugUI(){
+    const logEl = document.getElementById('ttsDebugLog');
+    const statusEl = document.getElementById('ttsDebugStatus');
+    const items = loadDebugLog();
+    if(logEl) logEl.textContent = items.length ? items.join('\n') : 'No TTS events recorded yet.';
+    if(statusEl) statusEl.textContent = items.length ? `${items.length} TTS event${items.length===1?'':'s'} recorded.` : 'No TTS events recorded yet.';
+  }
+
+  async function copyDebugLog(){
+    const text = getDebugLogText();
+    try{
+      if(navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
+      else throw new Error('Clipboard API unavailable');
+      logDebug('debug-copy', 'Copied TTS log to clipboard');
+      alert('TTS debug log copied.');
+    }catch(err){
+      logDebug('debug-copy-failed', err?.message || String(err));
+      alert('Unable to copy TTS debug log on this device.');
+    }
+  }
+
+  function bindDebugUI(){
+    const copyBtn = document.getElementById('copyTtsDebugBtn');
+    const clearBtn = document.getElementById('clearTtsDebugBtn');
+    if(copyBtn && copyBtn.dataset.bound !== '1'){
+      copyBtn.dataset.bound = '1';
+      copyBtn.addEventListener('click', copyDebugLog);
+    }
+    if(clearBtn && clearBtn.dataset.bound !== '1'){
+      clearBtn.dataset.bound = '1';
+      clearBtn.addEventListener('click', () => {
+        clearDebugLog();
+        logDebug('debug-cleared');
+      });
+    }
+    renderDebugUI();
+  }
+
+  function buildWavHeader(dataLength, sampleRate=SAMPLE_RATE, channels=1, bitsPerSample=16){
+    const blockAlign = channels * bitsPerSample / 8;
+    const byteRate = sampleRate * blockAlign;
+    const buffer = new ArrayBuffer(44);
+    const view = new DataView(buffer);
+    const writeString = (offset, text) => {
+      for(let i=0;i<text.length;i++) view.setUint8(offset + i, text.charCodeAt(i));
+    };
+    writeString(0, 'RIFF');
+    view.setUint32(4, 36 + dataLength, true);
+    writeString(8, 'WAVE');
+    writeString(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, channels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, byteRate, true);
+    view.setUint16(32, blockAlign, true);
+    view.setUint16(34, bitsPerSample, true);
+    writeString(36, 'data');
+    view.setUint32(40, dataLength, true);
+    return new Uint8Array(buffer);
+  }
+
+  function mergeChunks(chunks){
+    const total = chunks.reduce((sum, chunk) => sum + chunk.byteLength, 0);
+    const out = new Uint8Array(total);
+    let offset = 0;
+    for(const chunk of chunks){
+      out.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+    return out;
+  }
+
+  function makeWavBytes(rawPcmBytes){
+    const header = buildWavHeader(rawPcmBytes.byteLength);
+    const wav = new Uint8Array(header.byteLength + rawPcmBytes.byteLength);
+    wav.set(header, 0);
+    wav.set(rawPcmBytes, header.byteLength);
+    return wav;
+  }
+
+  function base64ToBytes(str){
+    const cleaned = String(str || '').trim();
+    const binary = atob(cleaned);
+    const out = new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++) out[i] = binary.charCodeAt(i);
+    return out;
+  }
+
+  function explainError(err){
+    const msg = String(err?.message || err || 'Unknown TTS error');
+    if(/CORS|Failed to fetch|NetworkError/i.test(msg)){
+      return 'Browser blocked the TTS request. Deepgram REST TTS needs a proxy; browser TTS should use WebSocket.';
+    }
+    if(/401|403|auth|token/i.test(msg)) return 'Deepgram rejected the key or token.';
+    if(/decode/i.test(msg)) return 'Audio arrived but could not be decoded for playback.';
+    if(/play\(\)/i.test(msg) || /user didn.t interact|NotAllowedError/i.test(msg)) return 'Browser blocked audio playback until a user gesture.';
+    return msg;
+  }
+
+  function setSpeaking(val){
+    _speaking = !!val;
+    const newsBtn = document.getElementById('newsTtsBtn');
+    if(newsBtn) newsBtn.classList.toggle('is-speaking', _speaking);
+  }
+
+  function _getCtx() {
+    if (!_ctx || _ctx.state === 'closed') {
+      const Ctor = window.AudioContext || window.webkitAudioContext;
+      if (!Ctor) throw new Error('Web Audio API not supported');
+      _ctx = new Ctor();
+      logDebug('audio-context', `created (${_ctx.state || 'unknown'})`);
+    }
+    return _ctx;
+  }
+
+  async function _resume() {
+    const ctx = _getCtx();
+    if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
+      await ctx.resume();
+      logDebug('audio-context', `resumed (${ctx.state || 'unknown'})`);
+    }
+    return ctx;
+  }
+
+  async function playWavBytes(wavBytes){
+    const arrayBuffer = wavBytes.buffer.slice(wavBytes.byteOffset, wavBytes.byteOffset + wavBytes.byteLength);
+    try{
+      const ctx = await _resume();
+      const audioBuf = await ctx.decodeAudioData(arrayBuffer.slice(0));
+      if(!_enabled) return;
+      const src = ctx.createBufferSource();
+      src.buffer = audioBuf;
+      src.connect(ctx.destination);
+      src.onended = () => { setSpeaking(false); _source = null; logDebug('playback-ended'); };
+      _source = src;
+      setSpeaking(true);
+      src.start(0);
+      logDebug('playback-start', `AudioContext ${Math.round((audioBuf.duration || 0) * 1000)} ms`);
+      return;
+    }catch(err){
+      logDebug('decode-fallback', explainError(err));
+    }
+
+    const blob = new Blob([wavBytes], { type:'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    if(_audioEl){
+      try{ _audioEl.pause(); }catch(_err){}
+      try{ if(_audioEl.src && _audioEl.src.startsWith('blob:')) URL.revokeObjectURL(_audioEl.src); }catch(_err){}
+    }
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = url;
+    audio.onended = () => {
+      setSpeaking(false);
+      logDebug('playback-ended', 'HTMLAudio fallback');
+      try{ URL.revokeObjectURL(url); }catch(_err){}
+    };
+    audio.onerror = () => {
+      setSpeaking(false);
+      logDebug('playback-error', 'HTMLAudio fallback failed');
+      alert('TTS audio was generated but playback failed. Open Options → TTS debug log.');
+      try{ URL.revokeObjectURL(url); }catch(_err){}
+    };
+    _audioEl = audio;
+    setSpeaking(true);
+    await audio.play();
+    logDebug('playback-start', 'HTMLAudio fallback');
+  }
+
+  async function finalizePlayback(runId, chunks){
+    if(runId !== _runId) return;
+    if(!_enabled){
+      logDebug('finalize-skipped', 'TTS disabled before playback');
+      return;
+    }
+    const rawBytes = mergeChunks(chunks);
+    logDebug('audio-complete', `${rawBytes.byteLength} raw bytes`);
+    if(!rawBytes.byteLength) throw new Error('No audio bytes received from Deepgram');
+    const wavBytes = makeWavBytes(rawBytes);
+    logDebug('wav-built', `${wavBytes.byteLength} wav bytes`);
+    await playWavBytes(wavBytes);
+  }
+
+  async function _playViaWebSocket(text) {
+    const apiKey = (typeof getDeepgramApiKey === 'function') ? getDeepgramApiKey() : '';
+    if (!apiKey) throw new Error('No Deepgram API key set');
+    await _resume();
+
+    const runId = ++_runId;
+    const chunks = [];
+    let totalBytes = 0;
+    let resolved = false;
+
+    logDebug('speak-request', `run=${runId}; chars=${String(text||'').length}; endpoint=websocket`);
+
+    return await new Promise((resolve, reject) => {
+      const finish = (err) => {
+        if(resolved) return;
+        resolved = true;
+        if(_ws && _ws.__runId === runId) _ws = null;
+        if(err) reject(err);
+        else resolve();
+      };
+
+      let ws;
+      try{
+        ws = new WebSocket(WS_ENDPOINT, ['token', apiKey]);
+        ws.binaryType = 'arraybuffer';
+      }catch(err){
+        finish(err);
+        return;
+      }
+
+      _ws = ws;
+      ws.__runId = runId;
+      setSpeaking(true);
+
+      const safeClose = () => {
+        try{ if(ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) ws.close(); }catch(_err){}
+      };
+
+      ws.addEventListener('open', () => {
+        logDebug('ws-open', `run=${runId}`);
+        try{
+          ws.send(JSON.stringify({ type:'Speak', text }));
+          logDebug('ws-send', `Speak (${String(text||'').length} chars)`);
+          ws.send(JSON.stringify({ type:'Flush' }));
+          logDebug('ws-send', 'Flush');
+        }catch(err){
+          safeClose();
+          finish(err);
+        }
+      });
+
+      ws.addEventListener('message', async (event) => {
+        try{
+          if(typeof event.data === 'string'){
+            try{
+              const parsed = JSON.parse(event.data);
+              const type = parsed?.type || 'json';
+              logDebug('ws-json', JSON.stringify(parsed));
+              if(type === 'Flushed'){
+                await finalizePlayback(runId, chunks);
+                try{ ws.send(JSON.stringify({ type:'Close' })); logDebug('ws-send', 'Close'); }catch(_err){}
+                safeClose();
+                finish();
+              } else if(type === 'Warning' || type === 'Error'){
+                throw new Error(parsed?.description || parsed?.message || JSON.stringify(parsed));
+              }
+              return;
+            }catch(parseErr){
+              const bytes = base64ToBytes(event.data);
+              chunks.push(bytes);
+              totalBytes += bytes.byteLength;
+              logDebug('ws-audio', `base64 chunk ${bytes.byteLength} bytes (total ${totalBytes})`);
+              return;
+            }
+          }
+          if(event.data instanceof ArrayBuffer){
+            const bytes = new Uint8Array(event.data);
+            chunks.push(bytes);
+            totalBytes += bytes.byteLength;
+            logDebug('ws-audio', `arraybuffer chunk ${bytes.byteLength} bytes (total ${totalBytes})`);
+            return;
+          }
+          if(typeof Blob !== 'undefined' && event.data instanceof Blob){
+            const buf = await event.data.arrayBuffer();
+            const bytes = new Uint8Array(buf);
+            chunks.push(bytes);
+            totalBytes += bytes.byteLength;
+            logDebug('ws-audio', `blob chunk ${bytes.byteLength} bytes (total ${totalBytes})`);
+            return;
+          }
+          logDebug('ws-message-unknown', Object.prototype.toString.call(event.data));
+        }catch(err){
+          safeClose();
+          finish(err);
+        }
+      });
+
+      ws.addEventListener('error', (event) => {
+        const msg = event?.message || 'WebSocket error';
+        logDebug('ws-error', msg);
+      });
+
+      ws.addEventListener('close', (event) => {
+        logDebug('ws-close', `code=${event.code}; reason=${event.reason || '(none)'}`);
+        if(!resolved && chunks.length && totalBytes > 0){
+          finalizePlayback(runId, chunks).then(() => finish()).catch(finish);
+          return;
+        }
+        if(!resolved) finish(new Error(`TTS socket closed before audio was completed (${event.code})`));
+      });
+    });
+  }
+
+  function prime() {
+    try { _getCtx(); } catch (e) { logDebug('prime-failed', explainError(e)); }
+  }
+
+  async function speak(text) {
+    if (!_enabled || !text?.trim()) {
+      logDebug('speak-skipped', !_enabled ? 'TTS disabled' : 'No text provided');
+      return;
+    }
+    cancel();
+    prime();
+    try {
+      await _playViaWebSocket(text);
+    } catch (err) {
+      setSpeaking(false);
+      const msg = explainError(err);
+      logDebug('speak-failed', msg);
+      alert(`TTS failed: ${msg}\n\nOpen Options → TTS debug log.`);
+    }
+  }
+
+  function cancel() {
+    if (_source) {
+      try { _source.stop(); } catch (_) {}
+      _source = null;
+    }
+    if(_audioEl){
+      try{ _audioEl.pause(); }catch(_err){}
+      try{ if(_audioEl.src && _audioEl.src.startsWith('blob:')) URL.revokeObjectURL(_audioEl.src); }catch(_err){}
+      _audioEl = null;
+    }
+    if(_ws){
+      try{ if(_ws.readyState === WebSocket.OPEN) _ws.send(JSON.stringify({ type:'Close' })); }catch(_err){}
+      try{ _ws.close(); }catch(_err){}
+      _ws = null;
+    }
+    setSpeaking(false);
+    logDebug('cancel');
+  }
+
+  function setEnabled(val) {
+    _enabled = Boolean(val);
+    localStorage.setItem('ttsEnabled', _enabled);
+    if (!_enabled) cancel();
+    _syncHeaderBtn();
+    logDebug('toggle', _enabled ? 'enabled' : 'muted');
+  }
+
+  function isEnabled()  { return _enabled;  }
+  function isSpeaking() { return _speaking; }
+
+  function speakNEWS2(score, riskClass, action) {
+    const risk = riskClass ? riskClass.charAt(0).toUpperCase() + riskClass.slice(1) : '';
+    const act  = action !== undefined ? action
+               : riskClass === 'high'   ? 'Urgent escalation required.'
+               : riskClass === 'medium' ? 'Prompt review required.'
+               : '';
+    return speak(`Score ${score}. ${risk} risk. ${act}`.trim().replace(/\s{2,}/g, ' '));
+  }
+
+  function _syncHeaderBtn() {
+    const btn = document.getElementById('headerTtsBtn');
+    if (!btn) return;
+    btn.classList.toggle('tts-muted', !_enabled);
+    btn.setAttribute('aria-label', _enabled ? 'Voice readback on – tap to mute' : 'Voice readback off – tap to unmute');
+    btn.title = _enabled ? 'Voice readback on' : 'Voice readback off';
+  }
+
+  function initTTSUI() {
+    bindDebugUI();
+
+    const ttsBtn = document.getElementById('headerTtsBtn');
+    if (ttsBtn && ttsBtn.dataset.bound !== '1') {
+      ttsBtn.dataset.bound = '1';
+      _syncHeaderBtn();
+      ttsBtn.addEventListener('click', () => setEnabled(!_enabled));
+    } else {
+      _syncHeaderBtn();
+    }
+
+    const newsBtn = document.getElementById('newsTtsBtn');
+    if (newsBtn && newsBtn.dataset.bound !== '1') {
+      newsBtn.dataset.bound = '1';
+      newsBtn.addEventListener('click', () => {
+        const banner  = document.getElementById('newsBanner');
+        const scoreEl = document.getElementById('newsScore');
+        if (!banner || !scoreEl) {
+          logDebug('news-click-failed', 'Missing NEWS DOM nodes');
+          return;
+        }
+
+        const score     = parseInt(scoreEl.textContent, 10) || 0;
+        const riskClass = banner.classList.contains('news-high')   ? 'high'
+                        : banner.classList.contains('news-medium') ? 'medium'
+                        : 'low';
+        const mode   = (typeof getScoreMode === 'function') ? getScoreMode() : '';
+        const prefix = mode ? mode + ' ' : '';
+        const risk   = riskClass.charAt(0).toUpperCase() + riskClass.slice(1);
+        const action = riskClass === 'high'   ? 'Urgent escalation required.'
+                     : riskClass === 'medium' ? 'Prompt review required.'
+                     : '';
+        const text = `${prefix}score ${score}. ${risk} risk. ${action}`.trim().replace(/\s{2,}/g, ' ');
+        logDebug('news-click', text);
+        speak(text);
+      });
+    }
+
+    logDebug('init', 'TTS UI initialised');
+  }
+
+  return { prime, speak, cancel, setEnabled, isEnabled, isSpeaking, speakNEWS2, initTTSUI, getDebugLogText, clearDebugLog };
+
+})();
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
