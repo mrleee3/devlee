@@ -2156,6 +2156,242 @@ html, body {
 
 </script>
   <script>
+/* inlined: js/29-desktop-ops.js */
+(function () {
+  window.HAHBoard = window.HAHBoard || {};
+
+  const STORAGE_KEY = 'hah_board_desktop_v0_6_ops';
+  const BOARD_STATUS_CYCLE = ['Not discussed', 'In discussion', 'Discussed', 'Actioned', 'Deferred'];
+  const DISCHARGE_CYCLE = ['Not ready', 'Possible today', 'Likely tomorrow', 'Ready'];
+
+  const DEFAULT_STATE = {
+    patientStates: {},
+    taskPatches: {},
+    customTasks: [],
+    updatedAt: ''
+  };
+
+  let state = loadState();
+
+  function clone(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return clone(DEFAULT_STATE);
+      const parsed = JSON.parse(raw);
+      return {
+        patientStates: parsed && parsed.patientStates && typeof parsed.patientStates === 'object' ? parsed.patientStates : {},
+        taskPatches: parsed && parsed.taskPatches && typeof parsed.taskPatches === 'object' ? parsed.taskPatches : {},
+        customTasks: Array.isArray(parsed && parsed.customTasks) ? parsed.customTasks : [],
+        updatedAt: parsed && parsed.updatedAt ? parsed.updatedAt : ''
+      };
+    } catch (_err) {
+      return clone(DEFAULT_STATE);
+    }
+  }
+
+  function saveState() {
+    state.updatedAt = new Date().toISOString();
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (_err) {}
+  }
+
+  function bumpRender() {
+    const store = window.HAHBoard.store;
+    if (store && typeof store.setState === 'function') {
+      store.setState({ ui: { syncState: 'Ready', revision: Date.now() } });
+    }
+  }
+
+  function getState() {
+    return clone(state);
+  }
+
+  function getPatientState(patientId) {
+    return clone(state.patientStates[String(patientId)] || {});
+  }
+
+  function patchPatientState(patientId, patch) {
+    const key = String(patientId);
+    const current = state.patientStates[key] || {};
+    state.patientStates[key] = {
+      ...current,
+      ...cleanObject(patch)
+    };
+    saveState();
+    bumpRender();
+    return getPatientState(patientId);
+  }
+
+  function cycleValue(values, current) {
+    const index = values.indexOf(String(current || '').trim());
+    if (index < 0) return values[0];
+    return values[(index + 1) % values.length];
+  }
+
+  function cycleBoardStatus(patientId, currentValue) {
+    return patchPatientState(patientId, { boardStatus: cycleValue(BOARD_STATUS_CYCLE, currentValue) });
+  }
+
+  function cycleDischargeReadiness(patientId, currentValue) {
+    return patchPatientState(patientId, { dischargeReadiness: cycleValue(DISCHARGE_CYCLE, currentValue) });
+  }
+
+  function setBoardNote(patientId, note) {
+    return patchPatientState(patientId, { boardNote: String(note || '').trim() });
+  }
+
+  function getTaskPatch(taskId) {
+    return clone(state.taskPatches[String(taskId)] || {});
+  }
+
+  function updateTask(taskId, patch) {
+    const key = String(taskId);
+    const existingIndex = state.customTasks.findIndex((task) => String(task.id) === key);
+    if (existingIndex >= 0) {
+      state.customTasks[existingIndex] = {
+        ...state.customTasks[existingIndex],
+        ...cleanObject(patch),
+        updatedAt: new Date().toISOString()
+      };
+      saveState();
+      bumpRender();
+      return clone(state.customTasks[existingIndex]);
+    }
+
+    const current = state.taskPatches[key] || {};
+    state.taskPatches[key] = {
+      ...current,
+      ...cleanObject(patch),
+      updatedAt: new Date().toISOString()
+    };
+    saveState();
+    bumpRender();
+    return getTaskPatch(taskId);
+  }
+
+  function createTask(taskInput) {
+    const task = {
+      id: buildManualTaskId(taskInput.patientId),
+      patientId: String(taskInput.patientId || ''),
+      title: String(taskInput.title || '').trim(),
+      note: String(taskInput.note || '').trim(),
+      category: String(taskInput.category || 'Clinical review').trim(),
+      owner: String(taskInput.owner || 'Unassigned').trim(),
+      dueAt: String(taskInput.dueAt || '').trim(),
+      priority: String(taskInput.priority || 'Medium').trim(),
+      status: String(taskInput.status || 'Open').trim(),
+      blocker: String(taskInput.blocker || '').trim(),
+      createdFrom: String(taskInput.createdFrom || 'Board').trim(),
+      createdBy: String(taskInput.createdBy || 'H@H Board').trim(),
+      boardLink: String(taskInput.boardLink || '').trim(),
+      updatedAt: new Date().toISOString()
+    };
+    if (!task.patientId || !task.title) return null;
+    state.customTasks.unshift(task);
+    saveState();
+    bumpRender();
+    return clone(task);
+  }
+
+  function buildManualTaskId(patientId) {
+    return `manual:${String(patientId)}:${Date.now().toString(36)}:${Math.random().toString(36).slice(2, 6)}`;
+  }
+
+  function cleanObject(obj) {
+    const out = {};
+    Object.keys(obj || {}).forEach((key) => {
+      const value = obj[key];
+      if (value === undefined) return;
+      out[key] = value;
+    });
+    return out;
+  }
+
+  function promptForBoardNote(patient) {
+    const current = getPatientState(patient.id).boardNote || '';
+    const next = window.prompt(`Board note for ${patient.name}`, current);
+    if (next === null) return null;
+    return setBoardNote(patient.id, next);
+  }
+
+  function promptCreateTask(patient, seed) {
+    const defaults = seed || {};
+    const title = window.prompt(`New task for ${patient.name}`, defaults.title || '');
+    if (title == null) return null;
+    if (!String(title).trim()) return null;
+
+    const note = window.prompt('Task note (optional)', defaults.note || patient.summaryLine || '') || '';
+    const category = window.prompt('Category', defaults.category || 'Clinical review') || defaults.category || 'Clinical review';
+    const owner = window.prompt('Owner', defaults.owner || patient.clinician || 'Unassigned') || defaults.owner || patient.clinician || 'Unassigned';
+    const dueDefault = defaults.dueAt || patient.reviewDueAt || toLocalPromptValue(new Date(Date.now() + 4 * 60 * 60 * 1000));
+    const dueInput = window.prompt('Due (YYYY-MM-DD HH:MM or leave blank)', dueDefault) || '';
+    const dueAt = normaliseDueInput(dueInput);
+    const priority = window.prompt('Priority', defaults.priority || patient.priority || 'Medium') || defaults.priority || patient.priority || 'Medium';
+
+    return createTask({
+      patientId: patient.id,
+      title,
+      note,
+      category,
+      owner,
+      dueAt,
+      priority,
+      status: defaults.status || 'Open',
+      blocker: defaults.blocker || '',
+      createdFrom: defaults.createdFrom || 'Manual',
+      createdBy: defaults.createdBy || 'H@H Board',
+      boardLink: defaults.boardLink || patient.boardStatus || ''
+    });
+  }
+
+  function promptReassignTask(task) {
+    const next = window.prompt(`Owner for ${task.title}`, task.owner || 'Unassigned');
+    if (next === null) return null;
+    return updateTask(task.id, { owner: String(next || 'Unassigned').trim() || 'Unassigned' });
+  }
+
+  function normaliseDueInput(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    const direct = Date.parse(raw);
+    if (!Number.isNaN(direct)) return new Date(direct).toISOString();
+    const patched = raw.replace(' ', 'T');
+    const parsed = Date.parse(patched);
+    if (!Number.isNaN(parsed)) return new Date(parsed).toISOString();
+    return raw;
+  }
+
+  function toLocalPromptValue(date) {
+    const dt = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(dt.getTime())) return '';
+    const pad = (v) => String(v).padStart(2, '0');
+    return `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+  }
+
+  window.HAHBoard.ops = {
+    STORAGE_KEY,
+    getState,
+    getPatientState,
+    patchPatientState,
+    cycleBoardStatus,
+    cycleDischargeReadiness,
+    setBoardNote,
+    getTaskPatch,
+    updateTask,
+    createTask,
+    promptForBoardNote,
+    promptCreateTask,
+    promptReassignTask
+  };
+})();
+
+</script>
+  <script>
 /* inlined: js/24-desktop-derived.js */
 (function () {
   window.HAHBoard = window.HAHBoard || {};
@@ -2248,6 +2484,45 @@ html, body {
 
     return { source: 'demo', storageKey: null, currentPatientId: null, rows: demoPatients.slice() };
   }
+
+
+  function getOpsState() {
+    const api = window.HAHBoard.ops;
+    if (!api || typeof api.getState !== 'function') {
+      return { patientStates: {}, taskPatches: {}, customTasks: [] };
+    }
+    return api.getState();
+  }
+
+  function getPatientOps(patientId) {
+    const state = getOpsState();
+    return (state.patientStates && state.patientStates[String(patientId)]) || {};
+  }
+
+  function getTaskPatch(taskId) {
+    const state = getOpsState();
+    return (state.taskPatches && state.taskPatches[String(taskId)]) || {};
+  }
+
+  function applyPatientOperationalState(summary) {
+    const patch = getPatientOps(summary.id);
+    const next = { ...summary, boardNote: String(patch.boardNote || '').trim() };
+    if (patch.priority) next.priority = patch.priority;
+    if (patch.currentStatus) next.currentStatus = patch.currentStatus;
+    if (patch.boardStatus) next.boardStatus = patch.boardStatus;
+    if (patch.dischargeReadiness) next.dischargeReadiness = patch.dischargeReadiness;
+    if (Array.isArray(patch.blockers)) next.blockers = patch.blockers.slice();
+    return next;
+  }
+
+  function applyTaskPatch(task) {
+    const patch = getTaskPatch(task.id);
+    if (!patch || !Object.keys(patch).length) return task;
+    const merged = { ...task, ...patch };
+    merged.dueState = deriveDueState(merged.dueAt);
+    return merged;
+  }
+
 
   function isReviewOverdue(reviewDueAt) {
     if (!reviewDueAt) return false;
@@ -2498,7 +2773,7 @@ html, body {
     const dischargeReadiness = deriveDischargeReadiness(raw, oxygenLpm, iv, priority);
     const treatmentFlags = deriveTreatmentFlags(raw, oxygenLpm, iv, escalationFlags.dnar);
 
-    return {
+    const summary = {
       id: String(raw.id),
       name: firstNonEmpty(raw.name, `Patient ${raw.id}`),
       age: raw.age || '',
@@ -2525,8 +2800,11 @@ html, body {
       dnar: escalationFlags.dnar,
       acp: escalationFlags.acp,
       sourcePatient: raw,
-      summaryLine: deriveSummaryLine(raw)
+      summaryLine: deriveSummaryLine(raw),
+      boardNote: ''
     };
+
+    return applyPatientOperationalState(summary);
   }
 
   function filterPatients(rows, savedView) {
@@ -2969,9 +3247,46 @@ html, body {
     };
   }
 
+
+  function buildCustomTask(customTask, patientMap) {
+    const patient = patientMap.get(String(customTask.patientId));
+    if (!patient) return null;
+    const task = {
+      id: String(customTask.id),
+      patientId: String(customTask.patientId),
+      title: String(customTask.title || '').trim(),
+      note: String(customTask.note || patient.summaryLine || '').trim(),
+      category: String(customTask.category || 'Clinical review').trim(),
+      owner: String(customTask.owner || patient.clinician || 'Unassigned').trim(),
+      dueAt: String(customTask.dueAt || '').trim(),
+      dueState: deriveDueState(customTask.dueAt),
+      priority: String(customTask.priority || patient.priority || 'Medium').trim(),
+      status: String(customTask.status || 'Open').trim(),
+      blocker: String(customTask.blocker || '').trim(),
+      createdFrom: String(customTask.createdFrom || 'Manual').trim(),
+      createdBy: String(customTask.createdBy || 'H@H Board').trim(),
+      updatedAt: String(customTask.updatedAt || '').trim(),
+      boardLink: String(customTask.boardLink || patient.boardStatus || '').trim(),
+      patient,
+      sourceLine: ''
+    };
+    return applyTaskPatch(task);
+  }
+
+  function buildAllTasks(boardRows) {
+    const patientMap = new Map(boardRows.map((row) => [String(row.id), row]));
+    const opsState = getOpsState();
+    const derivedTasks = boardRows.flatMap(buildTasksForPatient).map(applyTaskPatch);
+    const customTasks = Array.isArray(opsState.customTasks)
+      ? opsState.customTasks.map((task) => buildCustomTask(task, patientMap)).filter(Boolean)
+      : [];
+    return derivedTasks.concat(customTasks);
+  }
+
+
   function buildTasksViewModel(state) {
     const boardVm = buildBoardViewModel(state);
-    const allTasks = boardVm.rows.flatMap(buildTasksForPatient);
+    const allTasks = buildAllTasks(boardVm.rows).filter((task) => !['Done', 'Cancelled'].includes(task.status));
     const filtered = filterTasks(allTasks, state);
     const sorted = sortTasks(filtered, state.tasks.sort || 'due');
     const selectedTaskId = String(state.selectedTaskId || state.route.entityId || (sorted[0] && sorted[0].id) || '');
@@ -3025,7 +3340,7 @@ html, body {
   function buildInsightsViewModel(state) {
     const boardVm = buildBoardViewModel(state);
     const allPatients = boardVm.rows;
-    const allTasks = boardVm.rows.flatMap(buildTasksForPatient);
+    const allTasks = buildAllTasks(boardVm.rows).filter((task) => !['Done', 'Cancelled'].includes(task.status));
     const preset = getInsightsPreset(state);
     const range = state.insights.range || '7d';
 
@@ -3321,6 +3636,7 @@ html, body {
     buildPatientWorkspaceModel,
     buildTasksViewModel,
     buildInsightsViewModel,
+    buildAllTasks,
     splitCleanLines
   };
 })();
@@ -3335,6 +3651,7 @@ html, body {
   const router = window.HAHBoard.router;
   const c = window.HAHBoard.components;
   const d = window.HAHBoard.derived;
+  const ops = window.HAHBoard.ops;
 
   const VIEW_DEFS = [
     { key: 'all-active', label: 'All active' },
@@ -3507,30 +3824,34 @@ html, body {
         `,
         { subtitle: patient.clinician }
       ),
+      c.card('Board decision', `
+        ${c.keyValueGrid([
+          { label: 'Board status', value: patient.boardStatus },
+          { label: 'Discharge', value: patient.dischargeReadiness },
+          { label: 'Review due', value: formatDateTime(patient.reviewDueAt) },
+          { label: 'Tasks', value: patient.blockers[0] || 'No active blocker' }
+        ])}
+        <div style="margin-top:16px;" class="hah-task-note">${c.escapeHtml(patient.boardNote || 'No board note recorded yet.')}</div>
+      `),
       c.card('Today focus', `
         <div class="hah-summary-banner hah-summary-banner-tight">${c.escapeHtml(buildTodayFocusText(patient))}</div>
         <div style="margin-top:16px;">
           ${c.keyValueGrid([
-            { label: 'Review due', value: formatDateTime(patient.reviewDueAt) },
             { label: 'Obs', value: patient.obsSummary },
             { label: 'Bloods', value: patient.bloodTrendSummary },
+            { label: 'Escalation', value: patient.escalationSummary },
             { label: 'Discharge', value: patient.dischargeReadiness }
           ])}
-        </div>
-      `),
-      c.card('Blockers and flags', `
-        <div class="hah-board-flags">
-          ${(patient.blockers.length ? patient.blockers : ['No active blocker']).map((x) => c.badge(x, 'warn')).join('')}
-        </div>
-        <div style="margin-top:16px;" class="hah-board-flags">
-          ${patient.treatmentFlags.length ? patient.treatmentFlags.map((x) => c.badge(x, 'neutral')).join('') : c.badge('No active flags', 'good')}
         </div>
       `),
       c.card('Actions', `
         <div class="hah-board-right-actions">
           ${c.pillButton('Open patient', 'open-selected-patient')}
-          ${c.pillButton('Back to all active', 'set-view', 'data-view-key="all-active"')}
-          ${c.pillButton('Likely discharge', 'set-view', 'data-view-key="likely-discharge"')}
+          ${c.pillButton('Open tasks', 'open-selected-tasks')}
+          ${c.pillButton('Cycle board status', 'cycle-board-status')}
+          ${c.pillButton('Cycle discharge', 'cycle-discharge')}
+          ${c.pillButton('Board note', 'edit-board-note')}
+          ${c.pillButton('Add task', 'add-task')}
         </div>
       `)
     ]);
@@ -3540,6 +3861,8 @@ html, body {
     const target = event.target.closest('[data-board-action]');
     if (!target) return false;
     const action = target.getAttribute('data-board-action');
+    const vm = d.buildBoardViewModel(state);
+    const patient = vm.selectedPatient;
 
     if (action === 'set-view') {
       const viewKey = target.getAttribute('data-view-key') || 'all-active';
@@ -3564,11 +3887,38 @@ html, body {
       return true;
     }
     if (action === 'open-selected-patient') {
-      const vm = d.buildBoardViewModel(state);
-      const patient = vm.selectedPatient;
       if (!patient) return true;
       store.setState({ selectedPatientId: patient.id });
       router.goToPatient(patient.id);
+      return true;
+    }
+    if (action === 'open-selected-tasks') {
+      if (!patient) return true;
+      store.setState({ selectedPatientId: patient.id, selectedTaskId: null, tasks: { savedView: 'patient-focus', filters: { patientId: patient.id } } });
+      router.goToTasks('patient-focus');
+      return true;
+    }
+    if (action === 'cycle-board-status') {
+      if (!patient || !ops) return true;
+      ops.cycleBoardStatus(patient.id, patient.boardStatus);
+      return true;
+    }
+    if (action === 'cycle-discharge') {
+      if (!patient || !ops) return true;
+      ops.cycleDischargeReadiness(patient.id, patient.dischargeReadiness);
+      return true;
+    }
+    if (action === 'edit-board-note') {
+      if (!patient || !ops) return true;
+      ops.promptForBoardNote(patient);
+      return true;
+    }
+    if (action === 'add-task') {
+      if (!patient || !ops) return true;
+      const created = ops.promptCreateTask(patient, { createdFrom: 'Board', boardLink: patient.boardStatus, dueAt: patient.reviewDueAt || '' });
+      if (created) {
+        store.setState({ selectedTaskId: created.id });
+      }
       return true;
     }
     return false;
@@ -3668,6 +4018,7 @@ html, body {
   const router = window.HAHBoard.router;
   const c = window.HAHBoard.components;
   const d = window.HAHBoard.derived;
+  const ops = window.HAHBoard.ops;
 
   function renderLeftPane(state) {
     const vm = d.buildPatientWorkspaceModel(state);
@@ -3761,6 +4112,16 @@ html, body {
               ])}</div>
             `)}
 
+            ${c.card('Board decisions', `
+              ${c.keyValueGrid([
+                { label: 'Board status', value: vm.patient.boardStatus },
+                { label: 'Discharge readiness', value: vm.patient.dischargeReadiness },
+                { label: 'Escalation', value: vm.patient.escalationSummary },
+                { label: 'Review due', value: formatDateTime(vm.patient.reviewDueAt) }
+              ])}
+              <div style="margin-top:16px;" class="hah-task-note">${c.escapeHtml(vm.patient.boardNote || 'No board note recorded yet.')}</div>
+            `)}
+
             ${c.card('Active issues', issueCards || '<div class="hah-mini-item"><div class="hah-mini-title">No active issue text recorded.</div></div>', { subtitle: `${vm.issues.length || 0} issue${vm.issues.length === 1 ? '' : 's'}` })}
 
             ${c.card('Clinical narrative', `
@@ -3803,18 +4164,25 @@ html, body {
           <button type="button" class="hah-action-btn" data-patient-action="back-board">Back to board</button>
           <button type="button" class="hah-action-btn" data-patient-action="open-board-context">Board context</button>
           <button type="button" class="hah-action-btn" data-patient-action="open-tasks">Open tasks</button>
+          <button type="button" class="hah-action-btn" data-patient-action="add-task">Add task</button>
+          <button type="button" class="hah-action-btn" data-patient-action="cycle-board-status">Cycle board</button>
+          <button type="button" class="hah-action-btn" data-patient-action="cycle-discharge">Cycle discharge</button>
+          <button type="button" class="hah-action-btn" data-patient-action="edit-board-note">Board note</button>
           <button type="button" class="hah-action-btn" data-patient-action="next">Next patient</button>
           <button type="button" class="hah-action-btn" data-patient-action="prev">Previous patient</button>
         </div>
       `),
-      c.card('Review and service state', c.keyValueGrid([
-        { label: 'Priority', value: vm.patient.priority },
-        { label: 'Status', value: vm.patient.currentStatus },
-        { label: 'Review due', value: formatDateTime(vm.patient.reviewDueAt) },
-        { label: 'Board status', value: vm.patient.boardStatus },
-        { label: 'Location', value: vm.patient.location },
-        { label: 'Pathway', value: vm.patient.pathway }
-      ])),
+      c.card('Review and service state', `
+        ${c.keyValueGrid([
+          { label: 'Priority', value: vm.patient.priority },
+          { label: 'Status', value: vm.patient.currentStatus },
+          { label: 'Review due', value: formatDateTime(vm.patient.reviewDueAt) },
+          { label: 'Board status', value: vm.patient.boardStatus },
+          { label: 'Location', value: vm.patient.location },
+          { label: 'Pathway', value: vm.patient.pathway }
+        ])}
+        <div style="margin-top:16px;" class="hah-task-note">${c.escapeHtml(vm.patient.boardNote || 'No board note recorded yet.')}</div>
+      `),
       c.card('Current blockers', renderMiniLines(vm.patient.blockers, 'No active blocker recorded.')),
       c.card('Board context', renderMiniLines([
         `Current view: ${viewLabel(state.board.savedView)}`,
@@ -3930,6 +4298,29 @@ html, body {
       return true;
     }
 
+    if (action === 'add-task' && vm && ops) {
+      const created = ops.promptCreateTask(vm.patient, { createdFrom: 'Patient workspace', boardLink: vm.patient.boardStatus, dueAt: vm.patient.reviewDueAt || '' });
+      if (created) {
+        store.setState({ selectedTaskId: created.id });
+      }
+      return true;
+    }
+
+    if (action === 'cycle-board-status' && vm && ops) {
+      ops.cycleBoardStatus(vm.patient.id, vm.patient.boardStatus);
+      return true;
+    }
+
+    if (action === 'cycle-discharge' && vm && ops) {
+      ops.cycleDischargeReadiness(vm.patient.id, vm.patient.dischargeReadiness);
+      return true;
+    }
+
+    if (action === 'edit-board-note' && vm && ops) {
+      ops.promptForBoardNote(vm.patient);
+      return true;
+    }
+
     if ((action === 'prev' || action === 'next') && vm) {
       const delta = action === 'next' ? 1 : -1;
       const nextIndex = vm.selectedIndex + delta;
@@ -3999,6 +4390,7 @@ html, body {
   const router = window.HAHBoard.router;
   const c = window.HAHBoard.components;
   const d = window.HAHBoard.derived;
+  const ops = window.HAHBoard.ops;
 
   function renderLeftPane(state) {
     const vm = d.buildTasksViewModel(state);
@@ -4079,6 +4471,7 @@ html, body {
                 ${taskPill('Priority', 'set-sort', 'data-sort-key="priority"', state.tasks.sort === 'priority')}
                 ${taskPill('Patient', 'set-sort', 'data-sort-key="patient"', state.tasks.sort === 'patient')}
                 ${taskPill('Open patient', 'open-patient')}
+                ${taskPill('Add task', 'add-task')}
               </div>
             </div>
 
@@ -4141,6 +4534,12 @@ html, body {
         <div class="hah-task-actions">
           ${taskPill('Open patient', 'open-patient')}
           ${taskPill('Patient-only tasks', 'focus-patient')}
+          ${taskPill('Mark done', 'mark-done')}
+          ${taskPill('Reopen', 'mark-open')}
+          ${taskPill('Waiting external', 'mark-waiting')}
+          ${taskPill('Reassign', 'reassign-task')}
+          ${taskPill('Due tomorrow', 'due-tomorrow')}
+          ${taskPill('Add follow-on', 'add-task')}
           ${taskPill('Show all tasks', 'set-view', 'data-view-key="all-open"')}
         </div>
       `)
@@ -4277,6 +4676,44 @@ html, body {
       }
       store.setState({ selectedPatientId: patientId });
       router.goToPatient(patientId);
+      return true;
+    }
+
+    if (action === 'add-task' && ops) {
+      const patient = (vm.selectedTask && vm.selectedTask.patient) || vm.selectedPatient || null;
+      if (!patient) return true;
+      const created = ops.promptCreateTask(patient, { createdFrom: 'Tasks', boardLink: patient.boardStatus, dueAt: patient.reviewDueAt || '' });
+      if (created) {
+        store.setState({ selectedTaskId: created.id, tasks: { savedView: 'patient-focus', filters: { patientId: patient.id } } });
+      }
+      return true;
+    }
+
+    if (action === 'mark-done' && vm.selectedTask && ops) {
+      ops.updateTask(vm.selectedTask.id, { status: 'Done' });
+      store.setState({ selectedTaskId: null });
+      return true;
+    }
+
+    if (action === 'mark-open' && vm.selectedTask && ops) {
+      ops.updateTask(vm.selectedTask.id, { status: 'Open' });
+      return true;
+    }
+
+    if (action === 'mark-waiting' && vm.selectedTask && ops) {
+      ops.updateTask(vm.selectedTask.id, { status: 'Waiting external' });
+      return true;
+    }
+
+    if (action === 'reassign-task' && vm.selectedTask && ops) {
+      ops.promptReassignTask(vm.selectedTask);
+      return true;
+    }
+
+    if (action === 'due-tomorrow' && vm.selectedTask && ops) {
+      const next = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      next.setHours(10, 0, 0, 0);
+      ops.updateTask(vm.selectedTask.id, { dueAt: next.toISOString(), status: 'Open' });
       return true;
     }
 
@@ -4996,9 +5433,9 @@ html, body {
 </script>
 <script>
 window.__HAH_BOARD_BUILD__ = {
-  filename: 'hospital_at_home_board_v0_5_003_release.html',
-  source: 'hospital_at_home_board_v0_5_003_source.zip',
-  builtAt: '2026-04-15T21:35:00.020872',
+  filename: 'hospital_at_home_board_v0_6_001_release.html',
+  source: 'hospital_at_home_board_v0_6_001_source.zip',
+  builtAt: '2026-04-15T21:56:10.207500',
   entry: 'desktop.html'
 };
 </script>
