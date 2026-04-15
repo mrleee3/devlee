@@ -217,6 +217,7 @@ body{background:#0a84ff;color:#fff;}
 #appSplash .app-splash-company{font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72);}#appSplash .app-splash-logo-button{appearance:none;-webkit-appearance:none;border:0;padding:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:30px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}#appSplash .app-splash-logo-button:active{transform:scale(.97);}#appSnapshotShield{position:fixed;inset:0;background:#f2f2f7;z-index:9999;opacity:0;visibility:hidden;pointer-events:none;transition:none;}#appSnapshotShield.active{opacity:1;visibility:visible;transition:opacity .08s linear;}
 </style>
 <style>
+.news-tts-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .12s}.news-tts-btn:active{background:rgba(255,255,255,.28);transform:scale(.97)}.news-tts-btn svg{flex-shrink:0}#headerTtsBtn svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round}#headerTtsBtn .tts-slash{display:none}#headerTtsBtn.tts-muted .tts-slash{display:block}#headerTtsBtn.tts-muted .tts-waves{display:none}#headerTtsBtn.tts-muted{opacity:.5}
 html,body{background:var(--bg)!important;}
 :root{--bg:#f2f2f7;--card:#fff;--text:#111;--sub:#6b7280;--line:#e5e7eb;--blue:#0a84ff;--green:#16a34a;--amber:#d97706;--red:#dc2626;--app-header-height:88px;--keyboard-extra-bottom:0px}
 *{box-sizing:border-box} html{background:var(--bg)} html.patients-section-active,body.patients-section-active,html.detail-view-active,body.detail-view-active{height:100%;overflow:hidden;overscroll-behavior:none} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg)!important;color:var(--text);padding-bottom:92px}
@@ -332,7 +333,7 @@ input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px soli
 label{display:block;margin-top:2px}
 textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 #patientDetail textarea.clinical-review-textarea-expanded{resize:none;overflow:auto}
-.news-tts-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .12s}.news-tts-btn:active{background:rgba(255,255,255,.28);transform:scale(.97)}.news-tts-btn svg{flex-shrink:0}#headerTtsBtn svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round}#headerTtsBtn .tts-slash{display:none;stroke:currentColor}#headerTtsBtn.tts-muted .tts-slash{display:block}#headerTtsBtn.tts-muted .tts-waves{display:none}#headerTtsBtn.tts-muted{opacity:.5}.news-box{text-align:center;padding:16px;border-radius:16px;color:#fff;font-weight:700;margin-bottom:8px}
+.news-box{text-align:center;padding:16px;border-radius:16px;color:#fff;font-weight:700;margin-bottom:8px}
 .news-score{font-size:36px;line-height:1;margin-bottom:6px}.news-low{background:var(--green)} .news-medium{background:var(--amber)} .news-high{background:var(--red)}
 .result-box{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;min-height:160px;margin-bottom:8px;touch-action:pan-y}
 .nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:30;transition:transform .18s ease,opacity .18s ease} body.keyboard-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none} body.keyboard-open.dictation-active .nav{transform:none;opacity:1;pointer-events:auto}
@@ -2636,7 +2637,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 </div>
-<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2"></div></div><div style="display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;align-self:center"><button aria-label="Voice readback on – tap to mute" class="header-lock" id="headerTtsBtn" title="Voice readback on"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><g class="tts-waves"><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></g><line class="tts-slash" x1="1" y1="1" x2="23" y2="23"/></svg></button><button aria-label="Lock app" class="header-lock" id="headerLockBtn" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></header>
+<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2"></div></div><div style="display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;align-self:center"><button aria-label="Voice readback on" class="header-lock" id="headerTtsBtn" title="Voice readback on"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><g class="tts-waves"><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></g><line class="tts-slash" x1="1" y1="1" x2="23" y2="23"/></svg></button><button aria-label="Lock app" class="header-lock" id="headerLockBtn" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></header>
 <section class="container" id="patients">
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
@@ -2841,7 +2842,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <button class="options-nav-row" data-open-options-page="onedrive" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">OneDrive handover (beta)</span><span class="options-nav-subtitle">Workbook link, sign-in and import</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="aiscan" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">AI scan tools (beta)</span><span class="options-nav-subtitle">Groq for blister / IV / bloods, digitizer + Claude for ECG</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG Assist log</span><span class="options-nav-subtitle">Analysis history and debug info</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="deepgram" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Deepgram dictation (beta)</span><span class="options-nav-subtitle">API key, formatting and dictation options</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
-<button class="options-nav-row" data-open-options-page="ttsdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">TTS debug log</span><span class="options-nav-subtitle">Deepgram speech playback events and errors</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="patientlist" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Patient list</span><span class="options-nav-subtitle">Choose and reorder card details</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="clinicalreview" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Clinical review</span><span class="options-nav-subtitle">Examination presets</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="medlinkdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Medication link debug</span><span class="options-nav-subtitle">Recent long-press / link events for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG analysis log</span><span class="options-nav-subtitle">Last 10 analyses for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 </div>
@@ -2849,7 +2849,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_37_000_release.html</div><div>Source: hospital_at_home_v12_37_000_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_38_000_release.html</div><div>Source: hospital_at_home_v12_38_000_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -2977,15 +2977,6 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="tiny muted" style="margin-top:6px">These replacements are applied after dictation with more tolerant matching, and spoken forms are also sent to Deepgram as phrase hints.</div>
 </div>
 <div class="tiny muted" id="deepgramSettingsStatus" style="margin-top:8px"></div></div>
-</div>
-</div>
-
-<div class="options-page-panel hidden" data-options-page="ttsdebug">
-<div class="card options-subpage-card">
-<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>TTS debug log</h3><div class="tiny muted">Deepgram speech playback events and errors</div></div></div>
-<div class="options-section-body" id="optionsSectionTtsDebug"><div class="tiny muted" id="ttsDebugStatus" style="margin-top:4px;margin-bottom:10px">No TTS events recorded yet.</div>
-<div class="top-actions" style="margin-top:0;margin-bottom:10px"><button class="fullwidth" id="copyTtsDebugBtn" type="button">Copy log</button><button class="fullwidth" id="clearTtsDebugBtn" type="button">Clear</button></div>
-<div class="tiny muted" id="ttsDebugLog" style="white-space:pre-wrap;word-break:break-word">No TTS events recorded yet.</div></div>
 </div>
 </div>
 
@@ -10428,8 +10419,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_37_000_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_37_000_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_38_000_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_38_000_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10779,475 +10770,214 @@ function initPatientDetailEdgeSwipe(){
 
 </script><script>
 // =============================================================================
-// 16-tts.js  —  Text-to-Speech  (Deepgram Aura-2 / aura-2-theia-en)
-// Uses Deepgram's WebSocket TTS in the browser because Deepgram's REST API
-// requires a proxy for browser calls due to CORS restrictions.
+// 16-tts.js  —  TTS DEBUG BUILD  (Deepgram Aura-2 / aura-2-theia-en)
+// Hospital at Home Companion  v12_38_000
 // =============================================================================
 
-var TTS = (() => {
+// --- Debug panel (injected multiple times to guarantee visibility) ----------
+var _ttsLogs = [];
 
-  const MODEL = 'aura-2-theia-en';
-  const SAMPLE_RATE = 48000;
-  const ENCODING = 'linear16';
-  const WS_ENDPOINT = `wss://api.deepgram.com/v1/speak?model=${encodeURIComponent(MODEL)}&encoding=${encodeURIComponent(ENCODING)}&sample_rate=${SAMPLE_RATE}`;
-  const DEBUG_KEY = 'hahTtsDebugLog';
-  const DEBUG_LIMIT = 250;
+function _ttsLog(msg, level) {
+  _ttsLogs.push({ msg: msg, level: level || 'info', t: new Date().toISOString().slice(11,23) });
+  document.title = '[TTS:' + (level||'info').toUpperCase() + '] ' + msg;
+  console.log('[TTS ' + (level||'info') + '] ' + msg);
+  _ttsRender();
+}
 
-  let _ctx = null;
-  let _source = null;
-  let _audioEl = null;
-  let _ws = null;
-  let _speaking = false;
-  let _enabled = localStorage.getItem('ttsEnabled') !== 'false';
-  let _runId = 0;
+function _ttsRender() {
+  var la = document.getElementById('_ttsLA');
+  if (!la) return;
+  var html = _ttsLogs.slice(-40).map(function(e) {
+    var c = ({info:'#93c5fd',ok:'#86efac',warn:'#fde68a',err:'#fca5a5'})[e.level]||'#e2e8f0';
+    return '<div style="color:'+c+'">['+e.t+'] '+e.msg+'</div>';
+  }).join('');
+  la.innerHTML = html;
+  la.scrollTop = 99999;
+}
 
-  function nowStamp(){
-    try{ return new Date().toLocaleTimeString([], { hour12:false }); }catch(_err){ return new Date().toISOString(); }
-  }
+function _ttsInject() {
+  if (document.getElementById('_ttsPnl')) return;
+  var p = document.createElement('div');
+  p.id = '_ttsPnl';
+  p.setAttribute('style',
+    'position:fixed!important;top:110px!important;left:0!important;right:0!important;'+
+    'max-height:45vh!important;z-index:2147483647!important;background:#0f172a!important;'+
+    'border-top:3px solid #f59e0b!important;border-bottom:3px solid #f59e0b!important;'+
+    'font-family:monospace!important;font-size:11px!important;color:#e2e8f0!important;'+
+    'display:flex!important;flex-direction:column!important;overflow:hidden!important;');
+  p.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:space-between;'+
+    'padding:5px 10px;background:#1e293b;flex-shrink:0">'+
+    '<b style="color:#f59e0b">&#9658; TTS DEBUG v12_38_000</b>'+
+    '<button onclick="document.getElementById(\'_ttsPnl\').remove()" '+
+    'style="background:#475569;border:none;color:#f8fafc;padding:2px 10px;'+
+    'border-radius:4px;font-size:11px;cursor:pointer">close</button></div>'+
+    '<div id="_ttsLA" style="overflow-y:auto;padding:6px 10px;flex:1;'+
+    'line-height:1.6;white-space:pre-wrap;word-break:break-all"></div>';
+  var anchor = document.getElementById('appHeader');
+  if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(p, anchor.nextSibling);
+  else if (document.body) document.body.appendChild(p);
+  else document.documentElement.appendChild(p);
+  _ttsRender();
+}
 
-  function loadDebugLog(){
-    try{
-      const parsed = JSON.parse(localStorage.getItem(DEBUG_KEY) || '[]');
-      return Array.isArray(parsed) ? parsed : [];
-    }catch(_err){
-      return [];
-    }
-  }
+_ttsInject();
+document.addEventListener('DOMContentLoaded', _ttsInject);
+setTimeout(_ttsInject, 300);
+setTimeout(_ttsInject, 1200);
+setTimeout(_ttsInject, 3000);
 
-  function saveDebugLog(items){
-    try{ localStorage.setItem(DEBUG_KEY, JSON.stringify(items.slice(-DEBUG_LIMIT))); }catch(_err){}
-  }
+_ttsLog('16-tts.js start', 'info');
 
-  function logDebug(event, detail=''){
-    const line = `${nowStamp()}  ${event}${detail ? ' — ' + detail : ''}`;
-    const items = loadDebugLog();
-    items.push(line);
-    saveDebugLog(items);
-    renderDebugUI();
-    try{ console.log('[TTS]', line); }catch(_err){}
-    return line;
-  }
+// --- TTS module -------------------------------------------------------------
+var TTS = (function() {
 
-  function getDebugLogText(){
-    const items = loadDebugLog();
-    return items.length ? items.join('\n') : 'No TTS events recorded yet.';
-  }
+  var ENDPOINT = 'https://api.deepgram.com/v1/speak?model=aura-2-theia-en';
+  var _ctx = null, _source = null, _speaking = false;
+  var _enabled = localStorage.getItem('ttsEnabled') !== 'false';
 
-  function clearDebugLog(){
-    try{ localStorage.removeItem(DEBUG_KEY); }catch(_err){}
-    renderDebugUI();
-  }
-
-  function renderDebugUI(){
-    const logEl = document.getElementById('ttsDebugLog');
-    const statusEl = document.getElementById('ttsDebugStatus');
-    const items = loadDebugLog();
-    if(logEl) logEl.textContent = items.length ? items.join('\n') : 'No TTS events recorded yet.';
-    if(statusEl) statusEl.textContent = items.length ? `${items.length} TTS event${items.length===1?'':'s'} recorded.` : 'No TTS events recorded yet.';
-  }
-
-  async function copyDebugLog(){
-    const text = getDebugLogText();
-    try{
-      if(navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
-      else throw new Error('Clipboard API unavailable');
-      logDebug('debug-copy', 'Copied TTS log to clipboard');
-      alert('TTS debug log copied.');
-    }catch(err){
-      logDebug('debug-copy-failed', err?.message || String(err));
-      alert('Unable to copy TTS debug log on this device.');
-    }
-  }
-
-  function bindDebugUI(){
-    const copyBtn = document.getElementById('copyTtsDebugBtn');
-    const clearBtn = document.getElementById('clearTtsDebugBtn');
-    if(copyBtn && copyBtn.dataset.bound !== '1'){
-      copyBtn.dataset.bound = '1';
-      copyBtn.addEventListener('click', copyDebugLog);
-    }
-    if(clearBtn && clearBtn.dataset.bound !== '1'){
-      clearBtn.dataset.bound = '1';
-      clearBtn.addEventListener('click', () => {
-        clearDebugLog();
-        logDebug('debug-cleared');
-      });
-    }
-    renderDebugUI();
-  }
-
-  function buildWavHeader(dataLength, sampleRate=SAMPLE_RATE, channels=1, bitsPerSample=16){
-    const blockAlign = channels * bitsPerSample / 8;
-    const byteRate = sampleRate * blockAlign;
-    const buffer = new ArrayBuffer(44);
-    const view = new DataView(buffer);
-    const writeString = (offset, text) => {
-      for(let i=0;i<text.length;i++) view.setUint8(offset + i, text.charCodeAt(i));
-    };
-    writeString(0, 'RIFF');
-    view.setUint32(4, 36 + dataLength, true);
-    writeString(8, 'WAVE');
-    writeString(12, 'fmt ');
-    view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true);
-    view.setUint16(22, channels, true);
-    view.setUint32(24, sampleRate, true);
-    view.setUint32(28, byteRate, true);
-    view.setUint16(32, blockAlign, true);
-    view.setUint16(34, bitsPerSample, true);
-    writeString(36, 'data');
-    view.setUint32(40, dataLength, true);
-    return new Uint8Array(buffer);
-  }
-
-  function mergeChunks(chunks){
-    const total = chunks.reduce((sum, chunk) => sum + chunk.byteLength, 0);
-    const out = new Uint8Array(total);
-    let offset = 0;
-    for(const chunk of chunks){
-      out.set(chunk, offset);
-      offset += chunk.byteLength;
-    }
-    return out;
-  }
-
-  function makeWavBytes(rawPcmBytes){
-    const header = buildWavHeader(rawPcmBytes.byteLength);
-    const wav = new Uint8Array(header.byteLength + rawPcmBytes.byteLength);
-    wav.set(header, 0);
-    wav.set(rawPcmBytes, header.byteLength);
-    return wav;
-  }
-
-  function base64ToBytes(str){
-    const cleaned = String(str || '').trim();
-    const binary = atob(cleaned);
-    const out = new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++) out[i] = binary.charCodeAt(i);
-    return out;
-  }
-
-  function explainError(err){
-    const msg = String(err?.message || err || 'Unknown TTS error');
-    if(/CORS|Failed to fetch|NetworkError/i.test(msg)){
-      return 'Browser blocked the TTS request. Deepgram REST TTS needs a proxy; browser TTS should use WebSocket.';
-    }
-    if(/401|403|auth|token/i.test(msg)) return 'Deepgram rejected the key or token.';
-    if(/decode/i.test(msg)) return 'Audio arrived but could not be decoded for playback.';
-    if(/play\(\)/i.test(msg) || /user didn.t interact|NotAllowedError/i.test(msg)) return 'Browser blocked audio playback until a user gesture.';
-    return msg;
-  }
-
-  function setSpeaking(val){
-    _speaking = !!val;
-    const newsBtn = document.getElementById('newsTtsBtn');
-    if(newsBtn) newsBtn.classList.toggle('is-speaking', _speaking);
-  }
+  _ttsLog('TTS init. _enabled='+_enabled, 'info');
 
   function _getCtx() {
     if (!_ctx || _ctx.state === 'closed') {
-      const Ctor = window.AudioContext || window.webkitAudioContext;
-      if (!Ctor) throw new Error('Web Audio API not supported');
-      _ctx = new Ctor();
-      logDebug('audio-context', `created (${_ctx.state || 'unknown'})`);
+      var C = window.AudioContext || window.webkitAudioContext;
+      if (!C) throw new Error('No Web Audio API');
+      _ctx = new C();
+      _ttsLog('AudioContext created state='+_ctx.state, 'ok');
     }
     return _ctx;
   }
 
   async function _resume() {
-    const ctx = _getCtx();
+    var ctx = _getCtx();
+    _ttsLog('_resume state='+ctx.state, 'info');
     if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
+      _ttsLog('calling ctx.resume()...', 'warn');
       await ctx.resume();
-      logDebug('audio-context', `resumed (${ctx.state || 'unknown'})`);
+      _ttsLog('resumed. state='+ctx.state, 'ok');
     }
     return ctx;
   }
 
-  async function playWavBytes(wavBytes){
-    const arrayBuffer = wavBytes.buffer.slice(wavBytes.byteOffset, wavBytes.byteOffset + wavBytes.byteLength);
-    try{
-      const ctx = await _resume();
-      const audioBuf = await ctx.decodeAudioData(arrayBuffer.slice(0));
-      if(!_enabled) return;
-      const src = ctx.createBufferSource();
-      src.buffer = audioBuf;
-      src.connect(ctx.destination);
-      src.onended = () => { setSpeaking(false); _source = null; logDebug('playback-ended'); };
-      _source = src;
-      setSpeaking(true);
-      src.start(0);
-      logDebug('playback-start', `AudioContext ${Math.round((audioBuf.duration || 0) * 1000)} ms`);
-      return;
-    }catch(err){
-      logDebug('decode-fallback', explainError(err));
+  async function _play(text) {
+    _ttsLog('_play: "'+text.slice(0,40)+'"', 'info');
+    var key = typeof getDeepgramApiKey==='function' ? getDeepgramApiKey() : '';
+    _ttsLog('key len='+key.length+(key?' pfx='+key.slice(0,6):'  *** EMPTY ***'), key?'ok':'err');
+    if (!key) return;
+
+    var ctx;
+    try { ctx = await _resume(); }
+    catch(e) { _ttsLog('resume err: '+e.message, 'err'); throw e; }
+
+    var res;
+    try {
+      _ttsLog('fetch '+ENDPOINT, 'info');
+      res = await fetch(ENDPOINT, {
+        method:'POST',
+        headers:{'Authorization':'Token '+key,'Content-Type':'application/json'},
+        body:JSON.stringify({text:text})
+      });
+    } catch(e) { _ttsLog('fetch threw: '+e.message, 'err'); throw e; }
+
+    _ttsLog('HTTP '+res.status+' ct='+(res.headers.get('content-type')||'?'), res.ok?'ok':'err');
+    if (!res.ok) {
+      var eb = await res.text().catch(function(){return '';});
+      _ttsLog('body: '+eb.slice(0,120), 'err'); throw new Error('HTTP '+res.status);
     }
 
-    const blob = new Blob([wavBytes], { type:'audio/wav' });
-    const url = URL.createObjectURL(blob);
-    if(_audioEl){
-      try{ _audioEl.pause(); }catch(_err){}
-      try{ if(_audioEl.src && _audioEl.src.startsWith('blob:')) URL.revokeObjectURL(_audioEl.src); }catch(_err){}
-    }
-    const audio = new Audio();
-    audio.preload = 'auto';
-    audio.src = url;
-    audio.onended = () => {
-      setSpeaking(false);
-      logDebug('playback-ended', 'HTMLAudio fallback');
-      try{ URL.revokeObjectURL(url); }catch(_err){}
-    };
-    audio.onerror = () => {
-      setSpeaking(false);
-      logDebug('playback-error', 'HTMLAudio fallback failed');
-      alert('TTS audio was generated but playback failed. Open Options → TTS debug log.');
-      try{ URL.revokeObjectURL(url); }catch(_err){}
-    };
-    _audioEl = audio;
-    setSpeaking(true);
-    await audio.play();
-    logDebug('playback-start', 'HTMLAudio fallback');
-  }
+    var buf;
+    try { buf = await res.arrayBuffer(); _ttsLog('buf='+buf.byteLength+'b', 'ok'); }
+    catch(e) { _ttsLog('arrayBuffer err: '+e.message,'err'); throw e; }
 
-  async function finalizePlayback(runId, chunks){
-    if(runId !== _runId) return;
-    if(!_enabled){
-      logDebug('finalize-skipped', 'TTS disabled before playback');
-      return;
-    }
-    const rawBytes = mergeChunks(chunks);
-    logDebug('audio-complete', `${rawBytes.byteLength} raw bytes`);
-    if(!rawBytes.byteLength) throw new Error('No audio bytes received from Deepgram');
-    const wavBytes = makeWavBytes(rawBytes);
-    logDebug('wav-built', `${wavBytes.byteLength} wav bytes`);
-    await playWavBytes(wavBytes);
-  }
+    if (!_enabled) { _ttsLog('muted mid-fetch','warn'); return; }
 
-  async function _playViaWebSocket(text) {
-    const apiKey = (typeof getDeepgramApiKey === 'function') ? getDeepgramApiKey() : '';
-    if (!apiKey) throw new Error('No Deepgram API key set');
-    await _resume();
+    var ab;
+    try { ab = await ctx.decodeAudioData(buf); _ttsLog('decoded '+ab.duration.toFixed(2)+'s','ok'); }
+    catch(e) { _ttsLog('decodeAudioData err: '+e.message,'err'); throw e; }
 
-    const runId = ++_runId;
-    const chunks = [];
-    let totalBytes = 0;
-    let resolved = false;
-
-    logDebug('speak-request', `run=${runId}; chars=${String(text||'').length}; endpoint=websocket`);
-
-    return await new Promise((resolve, reject) => {
-      const finish = (err) => {
-        if(resolved) return;
-        resolved = true;
-        if(_ws && _ws.__runId === runId) _ws = null;
-        if(err) reject(err);
-        else resolve();
-      };
-
-      let ws;
-      try{
-        ws = new WebSocket(WS_ENDPOINT, ['token', apiKey]);
-        ws.binaryType = 'arraybuffer';
-      }catch(err){
-        finish(err);
-        return;
-      }
-
-      _ws = ws;
-      ws.__runId = runId;
-      setSpeaking(true);
-
-      const safeClose = () => {
-        try{ if(ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) ws.close(); }catch(_err){}
-      };
-
-      ws.addEventListener('open', () => {
-        logDebug('ws-open', `run=${runId}`);
-        try{
-          ws.send(JSON.stringify({ type:'Speak', text }));
-          logDebug('ws-send', `Speak (${String(text||'').length} chars)`);
-          ws.send(JSON.stringify({ type:'Flush' }));
-          logDebug('ws-send', 'Flush');
-        }catch(err){
-          safeClose();
-          finish(err);
-        }
-      });
-
-      ws.addEventListener('message', async (event) => {
-        try{
-          if(typeof event.data === 'string'){
-            try{
-              const parsed = JSON.parse(event.data);
-              const type = parsed?.type || 'json';
-              logDebug('ws-json', JSON.stringify(parsed));
-              if(type === 'Flushed'){
-                await finalizePlayback(runId, chunks);
-                try{ ws.send(JSON.stringify({ type:'Close' })); logDebug('ws-send', 'Close'); }catch(_err){}
-                safeClose();
-                finish();
-              } else if(type === 'Warning' || type === 'Error'){
-                throw new Error(parsed?.description || parsed?.message || JSON.stringify(parsed));
-              }
-              return;
-            }catch(parseErr){
-              const bytes = base64ToBytes(event.data);
-              chunks.push(bytes);
-              totalBytes += bytes.byteLength;
-              logDebug('ws-audio', `base64 chunk ${bytes.byteLength} bytes (total ${totalBytes})`);
-              return;
-            }
-          }
-          if(event.data instanceof ArrayBuffer){
-            const bytes = new Uint8Array(event.data);
-            chunks.push(bytes);
-            totalBytes += bytes.byteLength;
-            logDebug('ws-audio', `arraybuffer chunk ${bytes.byteLength} bytes (total ${totalBytes})`);
-            return;
-          }
-          if(typeof Blob !== 'undefined' && event.data instanceof Blob){
-            const buf = await event.data.arrayBuffer();
-            const bytes = new Uint8Array(buf);
-            chunks.push(bytes);
-            totalBytes += bytes.byteLength;
-            logDebug('ws-audio', `blob chunk ${bytes.byteLength} bytes (total ${totalBytes})`);
-            return;
-          }
-          logDebug('ws-message-unknown', Object.prototype.toString.call(event.data));
-        }catch(err){
-          safeClose();
-          finish(err);
-        }
-      });
-
-      ws.addEventListener('error', (event) => {
-        const msg = event?.message || 'WebSocket error';
-        logDebug('ws-error', msg);
-      });
-
-      ws.addEventListener('close', (event) => {
-        logDebug('ws-close', `code=${event.code}; reason=${event.reason || '(none)'}`);
-        if(!resolved && chunks.length && totalBytes > 0){
-          finalizePlayback(runId, chunks).then(() => finish()).catch(finish);
-          return;
-        }
-        if(!resolved) finish(new Error(`TTS socket closed before audio was completed (${event.code})`));
-      });
-    });
+    if (!_enabled) return;
+    var src = ctx.createBufferSource();
+    src.buffer = ab;
+    src.connect(ctx.destination);
+    src.onended = function(){ _ttsLog('ended','ok'); _speaking=false; _source=null; };
+    _source=src; _speaking=true;
+    try { src.start(0); _ttsLog('START — audio playing','ok'); }
+    catch(e) { _ttsLog('start err: '+e.message,'err'); throw e; }
   }
 
   function prime() {
-    try { _getCtx(); } catch (e) { logDebug('prime-failed', explainError(e)); }
+    _ttsLog('prime()', 'info');
+    try { _getCtx(); } catch(e) { _ttsLog('prime err: '+e.message,'err'); }
   }
 
   async function speak(text) {
-    if (!_enabled || !text?.trim()) {
-      logDebug('speak-skipped', !_enabled ? 'TTS disabled' : 'No text provided');
-      return;
-    }
+    _ttsLog('speak enabled='+_enabled+' "'+String(text||'').slice(0,20)+'"', 'info');
+    if (!_enabled || !text || !String(text).trim()) { _ttsLog('speak early-exit','warn'); return; }
     cancel();
-    prime();
-    try {
-      await _playViaWebSocket(text);
-    } catch (err) {
-      setSpeaking(false);
-      const msg = explainError(err);
-      logDebug('speak-failed', msg);
-      alert(`TTS failed: ${msg}\n\nOpen Options → TTS debug log.`);
-    }
+    try { await _play(text); }
+    catch(e) { _speaking=false; _source=null; _ttsLog('speak err: '+e.message,'err'); }
   }
 
   function cancel() {
-    if (_source) {
-      try { _source.stop(); } catch (_) {}
-      _source = null;
-    }
-    if(_audioEl){
-      try{ _audioEl.pause(); }catch(_err){}
-      try{ if(_audioEl.src && _audioEl.src.startsWith('blob:')) URL.revokeObjectURL(_audioEl.src); }catch(_err){}
-      _audioEl = null;
-    }
-    if(_ws){
-      try{ if(_ws.readyState === WebSocket.OPEN) _ws.send(JSON.stringify({ type:'Close' })); }catch(_err){}
-      try{ _ws.close(); }catch(_err){}
-      _ws = null;
-    }
-    setSpeaking(false);
-    logDebug('cancel');
+    if (_source) { try{_source.stop();}catch(_){} _source=null; }
+    _speaking=false;
   }
 
   function setEnabled(val) {
-    _enabled = Boolean(val);
-    localStorage.setItem('ttsEnabled', _enabled);
+    _enabled=!!val; localStorage.setItem('ttsEnabled',_enabled);
+    _ttsLog('setEnabled '+_enabled,'info');
     if (!_enabled) cancel();
-    _syncHeaderBtn();
-    logDebug('toggle', _enabled ? 'enabled' : 'muted');
+    _syncBtn();
   }
 
-  function isEnabled()  { return _enabled;  }
-  function isSpeaking() { return _speaking; }
+  function isEnabled() { return _enabled; }
+  function isSpeaking(){ return _speaking; }
 
-  function speakNEWS2(score, riskClass, action) {
-    const risk = riskClass ? riskClass.charAt(0).toUpperCase() + riskClass.slice(1) : '';
-    const act  = action !== undefined ? action
-               : riskClass === 'high'   ? 'Urgent escalation required.'
-               : riskClass === 'medium' ? 'Prompt review required.'
-               : '';
-    return speak(`Score ${score}. ${risk} risk. ${act}`.trim().replace(/\s{2,}/g, ' '));
+  function speakNEWS2(score, risk, action) {
+    var r = risk ? risk[0].toUpperCase()+risk.slice(1) : '';
+    var a = action!==undefined ? action
+          : risk==='high' ? 'Urgent escalation required.'
+          : risk==='medium' ? 'Prompt review required.' : '';
+    return speak(('Score '+score+'. '+r+' risk. '+a).trim().replace(/\s{2,}/g,' '));
   }
 
-  function _syncHeaderBtn() {
-    const btn = document.getElementById('headerTtsBtn');
-    if (!btn) return;
-    btn.classList.toggle('tts-muted', !_enabled);
-    btn.setAttribute('aria-label', _enabled ? 'Voice readback on – tap to mute' : 'Voice readback off – tap to unmute');
-    btn.title = _enabled ? 'Voice readback on' : 'Voice readback off';
+  function _syncBtn() {
+    var b = document.getElementById('headerTtsBtn');
+    if (!b) return;
+    b.classList.toggle('tts-muted',!_enabled);
+    b.title = _enabled ? 'Voice readback on' : 'Voice readback off';
   }
 
   function initTTSUI() {
-    bindDebugUI();
+    _ttsLog('initTTSUI()', 'info');
+    _ttsInject();
 
-    const ttsBtn = document.getElementById('headerTtsBtn');
-    if (ttsBtn && ttsBtn.dataset.bound !== '1') {
-      ttsBtn.dataset.bound = '1';
-      _syncHeaderBtn();
-      ttsBtn.addEventListener('click', () => setEnabled(!_enabled));
-    } else {
-      _syncHeaderBtn();
-    }
+    var hb = document.getElementById('headerTtsBtn');
+    _ttsLog('headerTtsBtn='+!!hb, hb?'ok':'err');
+    if (hb) { _syncBtn(); hb.addEventListener('click', function(){ _ttsLog('header btn click','info'); setEnabled(!_enabled); }); }
 
-    const newsBtn = document.getElementById('newsTtsBtn');
-    if (newsBtn && newsBtn.dataset.bound !== '1') {
-      newsBtn.dataset.bound = '1';
-      newsBtn.addEventListener('click', () => {
-        const banner  = document.getElementById('newsBanner');
-        const scoreEl = document.getElementById('newsScore');
-        if (!banner || !scoreEl) {
-          logDebug('news-click-failed', 'Missing NEWS DOM nodes');
-          return;
-        }
-
-        const score     = parseInt(scoreEl.textContent, 10) || 0;
-        const riskClass = banner.classList.contains('news-high')   ? 'high'
-                        : banner.classList.contains('news-medium') ? 'medium'
-                        : 'low';
-        const mode   = (typeof getScoreMode === 'function') ? getScoreMode() : '';
-        const prefix = mode ? mode + ' ' : '';
-        const risk   = riskClass.charAt(0).toUpperCase() + riskClass.slice(1);
-        const action = riskClass === 'high'   ? 'Urgent escalation required.'
-                     : riskClass === 'medium' ? 'Prompt review required.'
-                     : '';
-        const text = `${prefix}score ${score}. ${risk} risk. ${action}`.trim().replace(/\s{2,}/g, ' ');
-        logDebug('news-click', text);
-        speak(text);
+    var nb = document.getElementById('newsTtsBtn');
+    _ttsLog('newsTtsBtn='+!!nb, nb?'ok':'err');
+    if (nb) {
+      nb.addEventListener('click', function() {
+        _ttsLog('news btn click','info');
+        var banner = document.getElementById('newsBanner');
+        var scoreEl = document.getElementById('newsScore');
+        if (!banner||!scoreEl) { _ttsLog('elements missing','err'); return; }
+        var score = parseInt(scoreEl.textContent,10)||0;
+        var rc = banner.classList.contains('news-high')?'high':banner.classList.contains('news-medium')?'medium':'low';
+        var mode = typeof getScoreMode==='function' ? getScoreMode() : '';
+        var txt = ((mode?mode+' ':'')+'score '+score+'. '+rc[0].toUpperCase()+rc.slice(1)+' risk. '+(rc==='high'?'Urgent escalation required.':rc==='medium'?'Prompt review required.':'')).trim().replace(/\s{2,}/g,' ');
+        _ttsLog('text: "'+txt+'"','info');
+        speak(txt);
       });
     }
-
-    logDebug('init', 'TTS UI initialised');
   }
 
-  return { prime, speak, cancel, setEnabled, isEnabled, isSpeaking, speakNEWS2, initTTSUI, getDebugLogText, clearDebugLog };
-
-})();
+  _ttsLog('TTS ready', 'ok');
+  return {prime:prime, speak:speak, cancel:cancel, setEnabled:setEnabled,
+          isEnabled:isEnabled, isSpeaking:isSpeaking, speakNEWS2:speakNEWS2, initTTSUI:initTTSUI};
+}());
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
@@ -17807,7 +17537,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_37_000_release.html; source=hospital_at_home_v12_37_000_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_38_000_release.html; source=hospital_at_home_v12_38_000_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
