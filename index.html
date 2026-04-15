@@ -39,7 +39,7 @@ html[data-graph-auth-return-boot="1"] body{
 
 .patient-status-chip{display:inline-flex;align-items:center;justify-content:center;min-height:24px;padding:0 10px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#475467;font-size:11px;font-weight:800;line-height:1;white-space:nowrap;max-width:100%}.patient-actions{align-self:flex-start}.patient-list-display-preview-panel .swipe-shell{margin-bottom:0}.patient-list-display-preview-shell{pointer-events:none}.patient-list-display-preview-shell .swipe-background{display:none}.patient-list-display-preview-shell .swipe-foreground{transform:none!important}.patient-list-display-preview-shell .patient-btn{pointer-events:none}.patient-list-display-preview-shell .patient-main{padding:0;background:none;border:none;text-align:left}.patient-list-display-preview-shell .patient-main:active{transform:none}
 .patient-status-chip.acp{background:#f8fafc;color:#475467;border-color:rgba(15,23,42,.08)}
-.patient-status-chip.dnacpr{background:#fbf2f8;color:#8a2c6b;border-color:#e7c7da}
+.patient-status-chip.dnacpr{background:#fef2f2;color:#b42318;border-color:#fecaca}
 .patient-actions{position:relative;display:flex;align-items:flex-start;justify-content:flex-end;min-width:76px;flex-shrink:0}
 .patient-acuity-stack{position:relative;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-start;gap:6px;min-width:76px}
 .patient-acuity-stack .patient-status-chip{position:static}
@@ -339,7 +339,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 #patientDetail{padding-bottom:40px;}
 #patientDetail.detail-overlay-active{padding-bottom:40px;}
 .nav button{background:none;padding:8px 10px;font-size:13px;color:#374151}.nav .active{color:var(--blue);font-weight:800}
-.copy-note{color:var(--sub);font-size:12px;margin-top:8px}.plus-btn{display:inline-flex;align-items:center;justify-content:center;background:#e8f1ff;color:#0a84ff;font-size:22px;line-height:1;padding:8px 14px;border-radius:14px;border:1px solid rgba(10,132,255,.16)}
+.copy-note{color:var(--sub);font-size:12px;margin-top:8px}.plus-btn{background:#e8f1ff;color:#0a84ff;font-size:22px;line-height:1;padding:8px 14px;border-radius:14px}
 .patient-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}.patient-main{flex:1;min-width:0}.fullwidth{width:100%;margin-top:10px}
 .status-chip{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;background:#eef2ff;color:#1d4ed8}
 .choice-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.choice-btn{padding:10px 12px;border-radius:10px;border:1px solid #d1d5db;background:#fff;color:#111}
@@ -380,7 +380,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .blister-row-meta{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:12px;color:#6b7280}
 .blister-scan-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
 .blister-inline-note{font-size:12px;color:#6b7280}
-.iv-scan-overlay{position:fixed;inset:0;z-index:10061}.iv-scan-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.iv-scan-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:max(14px,calc(env(safe-area-inset-bottom) + 14px));padding:14px;border-radius:18px;display:flex;flex-direction:column;gap:10px;overflow:hidden}.iv-scan-modal h3{margin:0}.iv-scan-body{min-height:0;overflow:auto;padding-right:2px}.iv-scan-form{display:flex;flex-direction:column;gap:10px;margin-top:10px}.iv-scan-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.iv-scan-field{min-width:0}.iv-scan-field label{margin:0 0 6px}.iv-scan-field input{margin:0}.iv-scan-meta{font-size:12px;color:#6b7280;line-height:1.4}.iv-scan-open #patientDetail{pointer-events:none}.iv-scan-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none}@media (max-width:390px){.iv-scan-grid{grid-template-columns:1fr}}.blood-scan-form{display:flex;flex-direction:column;gap:10px;margin-top:10px}.blood-scan-field{min-width:0}.blood-scan-field label{margin:0 0 6px}.blood-scan-field input{margin:0}.blood-scan-meta{font-size:12px;color:#6b7280;line-height:1.4}.blood-scan-row-main{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(88px,.9fr) auto auto;gap:8px;align-items:center}.blood-scan-row-main input{margin:0;padding:10px 12px;font-size:15px}.blood-scan-row-label{text-transform:none}@media (max-width:390px){.blood-scan-row-main{grid-template-columns:minmax(0,1fr) minmax(76px,.85fr) auto auto}}.blood-scan-crop-stage{display:flex;flex-direction:column;gap:10px;margin-top:10px}.blood-scan-crop-note{font-size:12px;color:#6b7280;line-height:1.4}.blood-scan-crop-wrap{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#f8fafc;min-height:240px;max-height:min(46vh,420px);display:flex;align-items:center;justify-content:center;touch-action:none}.blood-scan-crop-image{display:block;max-width:100%;max-height:min(46vh,420px);width:auto;height:auto;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;pointer-events:none}.blood-scan-crop-box{position:absolute;border:2px solid rgba(10,132,255,.96);border-radius:10px;box-shadow:0 0 0 9999px rgba(15,23,42,.24);touch-action:none;cursor:move}.blood-scan-crop-handle{position:absolute;width:18px;height:18px;border-radius:999px;background:#fff;border:2px solid rgba(10,132,255,.96);box-shadow:0 1px 4px rgba(15,23,42,.16)}.blood-scan-crop-handle.nw{left:-10px;top:-10px;cursor:nwse-resize}.blood-scan-crop-handle.ne{right:-10px;top:-10px;cursor:nesw-resize}.blood-scan-crop-handle.sw{left:-10px;bottom:-10px;cursor:nesw-resize}.blood-scan-crop-handle.se{right:-10px;bottom:-10px;cursor:nwse-resize}.blood-scan-crop-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.blood-scan-crop-actions button{margin:0}@media (max-width:390px){.blood-scan-crop-actions{grid-template-columns:1fr}}
+.iv-scan-overlay{position:fixed;inset:0;z-index:10061}.iv-scan-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.iv-scan-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:max(14px,calc(env(safe-area-inset-bottom) + 14px));padding:14px;border-radius:18px;display:flex;flex-direction:column;gap:10px;overflow:hidden}.iv-scan-modal h3{margin:0}.iv-scan-body{min-height:0;overflow:auto;padding-right:2px}.iv-scan-form{display:flex;flex-direction:column;gap:10px;margin-top:10px}.iv-scan-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.iv-scan-field{min-width:0}.iv-scan-field label{margin:0 0 6px}.iv-scan-field input{margin:0}.iv-scan-meta{font-size:12px;color:#6b7280;line-height:1.4}.iv-scan-open #patientDetail{pointer-events:none}.iv-scan-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none}@media (max-width:390px){.iv-scan-grid{grid-template-columns:1fr}}
 
 .linklike{background:none;padding:0;border:none;color:inherit;font:inherit;cursor:pointer;text-align:left}
 .med-entry{border:1px solid var(--line);border-radius:14px;background:#fff;margin-top:12px;overflow:hidden}.med-entry:first-child{margin-top:0}.med-entry-head{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f8fafc;padding:12px 14px}.med-entry-summary{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.med-entry-delete{background:none;color:#6b7280;padding:2px 4px;border-radius:8px;font-size:22px;line-height:1.1;min-width:auto}.med-entry-body{padding:0 14px 14px}.med-entry-body label{margin-top:12px}.med-entry-body .med-dose-row,.med-entry-body .med-frequency-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 10px}.med-entry-body .med-details-label{margin-top:14px}.med-dose-btn,.med-frequency-btn,.med-prn-btn{padding:8px 10px;font-size:13px;border-radius:10px;border:1px solid #d1d5db;background:#fff;color:#111}.med-dose-btn.active,.med-frequency-btn.active,.med-prn-btn.active{background:#0a84ff;color:#fff;border-color:#0a84ff}.done-green{background:var(--green)!important;color:#fff!important}.meds-inline-open #medsContainer{margin-top:12px}.log-item{padding:8px 0;border-top:1px solid var(--line)}.log-item:first-child{border-top:none}.restore-btn{margin-top:6px;padding:8px 10px;font-size:13px;border-radius:10px;background:#eef2f7}
@@ -426,9 +426,9 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 @keyframes pullRefreshSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @keyframes pullRefreshPop{0%{transform:scale(.92)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
 @keyframes refreshSpin{to{transform:rotate(360deg)}}
-.refresh-btn{display:inline-flex;align-items:center;justify-content:center;min-width:50px;height:44px;padding:8px 14px;border-radius:14px;background:#e8f1ff;color:#0a84ff;border:1px solid rgba(10,132,255,.16);box-shadow:none;transition:transform .14s ease,background .18s ease,box-shadow .18s ease,color .18s ease,border-color .18s ease}
+.refresh-btn{display:inline-flex;align-items:center;justify-content:center;min-width:50px;height:44px;padding:8px 14px;border-radius:14px;background:#e8f1ff;color:#0a84ff;box-shadow:none;transition:transform .14s ease,background .18s ease,box-shadow .18s ease,color .18s ease}
 .refresh-btn:active{transform:scale(.96)}
-.refresh-btn:hover{background:#dcecff;border-color:rgba(10,132,255,.22)}
+.refresh-btn:hover{background:#dcecff}
 .refresh-btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(10,132,255,.18)}
 .refresh-btn.importing{background:#0a84ff;color:#fff;box-shadow:0 3px 10px rgba(10,132,255,.22)}
 .refresh-btn.done{background:#dcfce7;color:#16a34a;box-shadow:none}
@@ -2411,92 +2411,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
   flex:0 0 auto;
 }
 
-/* v12_36_551 patient list metrics strip + inline helper status */
-.patient-helper-line{display:block;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.patient-helper-default{display:inline;min-width:0;overflow:hidden;text-overflow:ellipsis}.patient-helper-status{display:inline-flex;align-items:center;gap:8px;min-width:0;max-width:100%;vertical-align:top}.patient-helper-status.hidden{display:none!important}.patient-helper-copy{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:#667085}.patient-helper-copy.status-updated{opacity:.88}.patient-helper-status[data-tone="saved"] .patient-helper-copy,.patient-helper-status[data-tone="action"] .patient-helper-copy,.patient-helper-status[data-tone="sync"] .patient-helper-copy,.patient-helper-status[data-tone="undo"] .patient-helper-copy{color:#0a84ff}.patient-helper-status[data-tone="alert"] .patient-helper-copy{color:#b42318}.patient-helper-undo{flex:0 0 auto;padding:0;border:none;background:none;color:#0a84ff;font-size:12px;font-weight:800;line-height:1.1}.patient-helper-undo.hidden{display:none!important}.patient-helper-undo:active{transform:translateY(1px)}
-.patient-metrics-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 12px}.patient-metric-card{position:relative;overflow:hidden;min-height:78px;padding:12px 12px 11px;border-radius:18px;background:#f8fafc;border:1px solid rgba(148,163,184,.18);box-shadow:none;display:flex;flex-direction:column;justify-content:space-between;gap:8px;transition:background .18s ease,border-color .18s ease,color .18s ease}.patient-metric-value{font-size:31px;line-height:.92;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"ss01" 1;color:#0f172a}.patient-metric-label{font-size:11px;line-height:1.2;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#475467;white-space:nowrap}.patient-metric-card.is-good{background:#ecfdf3;border-color:#bbf7d0}.patient-metric-card.is-good .patient-metric-value{color:#166534}.patient-metric-card.is-good .patient-metric-label{color:#15803d}.patient-metric-card.is-bad{background:#fef2f2;border-color:#fecaca}.patient-metric-card.is-bad .patient-metric-value{color:#b42318}.patient-metric-card.is-bad .patient-metric-label{color:#b42318}.patient-metric-card.is-neutral{background:#f8fafc;border-color:rgba(148,163,184,.18)}.patient-metric-card.is-neutral .patient-metric-value{color:#0f172a}.patient-metric-card.is-neutral .patient-metric-label{color:#475467}@media (max-width:420px){.patient-helper-line{display:block}.patient-helper-copy{font-size:12.5px}.patient-helper-undo{font-size:11.5px}.patient-metrics-strip{gap:8px}.patient-metric-card{min-height:74px;padding:11px 10px 10px;border-radius:17px}.patient-metric-value{font-size:28px}.patient-metric-label{font-size:10.5px}}
-
-/* ── Patient page slide (Step 1) ──────────────────────────────── */
-/* Header bar shifts with the panel using a CSS variable */
-#appHeader{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform}
-/* Panel open: prep = snap to 100% right, anim = slide to 0 */
-#patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-4px 0 20px rgba(15,23,42,.09)}
-#patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94),box-shadow 360ms ease;will-change:transform}
-/* Patient list parallax: prep = 0, anim = slide to -28% */
-#patients.hah-detail-underlay-open-prep{transform:translate3d(0,0,0)}
-#patients.hah-detail-underlay-open-anim{transform:translate3d(-28%,0,0);transition:transform 360ms cubic-bezier(.25,.46,.45,.94);will-change:transform}
-@media(prefers-reduced-motion:reduce){
-  #patientDetail.hah-detail-open-anim,#patients.hah-detail-underlay-open-anim{transition:none!important}
-}
-
-</style>
-<style>
-/* H@H UI standards: patient-page typography and helper text live here. */
-:root{
-  --patient-card-header-font-size:16px;
-  --patient-card-header-font-weight:800;
-  --patient-card-header-line-height:1.2;
-  --patient-card-header-letter-spacing:0;
-  --patient-card-header-color:#1c1c1e;
-  --patient-card-helper-font-size:12px;
-  --patient-card-helper-font-weight:600;
-  --patient-card-helper-line-height:1.35;
-  --patient-card-helper-color:#475467;
-}
-
-.patient-card-header-text{
-  font-size:var(--patient-card-header-font-size)!important;
-  font-weight:var(--patient-card-header-font-weight)!important;
-  line-height:var(--patient-card-header-line-height)!important;
-  letter-spacing:var(--patient-card-header-letter-spacing)!important;
-  color:var(--patient-card-header-color)!important;
-}
-
-.patient-card-helper-text{
-  font-size:var(--patient-card-helper-font-size)!important;
-  font-weight:var(--patient-card-helper-font-weight)!important;
-  line-height:var(--patient-card-helper-line-height)!important;
-  color:var(--patient-card-helper-color)!important;
-}
-
-#patientDetail .patient-reorder-card[data-card-key="obs"] h3,
-#patientDetail #bloodsSummaryTitle,
-#patientDetail .clinical-review-header h3,
-#patientDetail .meds-header-row #medsToggleText,
-#patientDetail .acp-header-row #acpToggleText,
-#patientDetail .iv-header-row #ivToggleText,
-#patientDetail .patient-reorder-card[data-card-key="output"] h3,
-#patientDetail.reorder-mode .patient-reorder-card[data-card-key="meds"] #medsToggleText,
-#patientDetail.reorder-mode .patient-reorder-card[data-card-key="iv"] #ivToggleText,
-.reorder-floating-card.patient-reorder-card[data-card-key="meds"] #medsToggleText,
-.reorder-floating-card.patient-reorder-card[data-card-key="iv"] #ivToggleText{
-  font-size:var(--patient-card-header-font-size)!important;
-  font-weight:var(--patient-card-header-font-weight)!important;
-  line-height:var(--patient-card-header-line-height)!important;
-  letter-spacing:var(--patient-card-header-letter-spacing)!important;
-  color:var(--patient-card-header-color)!important;
-}
-
-#patientDetail #bloodsSummaryTitle{
-  margin:0!important;
-  cursor:pointer;
-  user-select:none;
-  -webkit-user-select:none;
-}
-
-#patientDetail #bloodsSummaryTitle .bloods-summary-inline-hint,
-#patientDetail #bloodsSummaryCard .bloods-panel-meta,
-.patient-card-helper-text{
-  font-size:var(--patient-card-helper-font-size)!important;
-  font-weight:var(--patient-card-helper-font-weight)!important;
-  line-height:var(--patient-card-helper-line-height)!important;
-  color:var(--patient-card-helper-color)!important;
-}
-
-#patientDetail #bloodsSummaryTitle .bloods-summary-inline-hint{white-space:nowrap}
-#patientDetail #bloodsSummaryTitle:active{opacity:.72}
-#patientDetail #bloodsSummaryTitle:focus-visible{box-shadow:0 0 0 3px rgba(10,132,255,.18);border-radius:10px}
-#patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
-
 </style></head>
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
@@ -2602,7 +2516,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 <div class="onboarding-panel hidden" data-onboarding-panel="api">
 <label for="onboardingGroqKeyInput">Groq API key</label>
-<input autocapitalize="off" autocorrect="off" id="onboardingGroqKeyInput" placeholder="Blister / IV / bloods scan" spellcheck="false" type="password"/>
+<input autocapitalize="off" autocorrect="off" id="onboardingGroqKeyInput" placeholder="Blister pack / IV scan" spellcheck="false" type="password"/>
 <label for="onboardingGeminiKeyInput" style="margin-top:12px">Gemini API key <span class="tiny muted">(ECG analysis)</span></label>
 <input autocapitalize="off" autocorrect="off" id="onboardingGeminiKeyInput" placeholder="ECG analysis" spellcheck="false" type="password"/>
 <label for="onboardingDeepgramKeyInput" style="margin-top:12px">Deepgram API key</label>
@@ -2641,7 +2555,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
 <div class="section-header" style="margin-bottom:12px;">
-<div><h3 style="margin-bottom:2px">Patients</h3><div class="tiny muted patient-helper-line" id="patientStatusHelper" style="margin-top:10px;"><span class="patient-helper-default" id="patientRefreshText">Pull to refresh list</span><span class="patient-helper-status hidden" id="patientInlineStatus"><span aria-live="polite" class="patient-helper-copy" id="saveStatus"></span><button class="patient-helper-undo hidden" id="undoBtn" type="button">Undo</button></span></div></div>
+<div><h3 style="margin-bottom:2px">Patients</h3><div class="tiny muted" style="margin-top:10px;">Pull to refresh list</div></div>
 <div class="top-actions" style="margin:0">
 <div class="sort-wrap">
 <button aria-expanded="false" aria-haspopup="menu" aria-label="Sort patients" class="refresh-btn sort-btn" id="sortPatientsBtn" title="Sort patients">
@@ -2672,21 +2586,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <button aria-label="Clear search" class="patient-search-clear" id="patientSearchClearBtn" type="button">×</button>
 </div>
 </div>
-<div class="patient-metrics-strip" id="patientMetricsStrip" aria-label="Patient list metrics">
-<div class="patient-metric-card patient-metric-caseload">
-<div class="patient-metric-value" id="patientMetricCaseload">0</div>
-<div class="patient-metric-label">Caseload</div>
-</div>
-<div class="patient-metric-card patient-metric-longstay">
-<div class="patient-metric-value" id="patientMetricLongstay">0</div>
-<div class="patient-metric-label">&gt;7d LoS</div>
-</div>
-<div class="patient-metric-card patient-metric-average">
-<div class="patient-metric-value" id="patientMetricAverage">—</div>
-<div class="patient-metric-label">Avg LoS</div>
-</div>
-</div>
-
+<div class="underlay-stable-card"><div class="card" style="padding:10px 14px"><div class="status-row"><span class="status-chip" id="saveStatus">Autosave enabled</span><button class="mini-btn" id="undoBtn">Undo</button></div><div class="tiny muted save-sync-note" style="margin-top:6px">Saves locally in this browser. Imported OneDrive patients can also sync Issues and Plan back to the workbook when signed in.</div></div></div>
 <div id="patientList"></div>
 </div>
 </section>
@@ -2782,38 +2682,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 <input accept="image/*" capture="environment" class="hidden" id="ivScanInput" type="file"/>
 </div>
-<div aria-hidden="true" class="hidden blister-scan-overlay" id="bloodScanOverlay">
-<div class="blister-scan-backdrop" id="bloodScanBackdrop"></div>
-<div class="card blister-scan-modal" id="bloodScanCard">
-<div class="top-actions" style="margin-top:0;margin-bottom:0;align-items:center"><h3>Scan bloods</h3></div>
-<div class="blister-inline-note">Photo → review values → add accepted bloods. Check before saving.</div>
-<img alt="Selected blood results" class="blister-scan-preview hidden" id="bloodScanPreview"/>
-<div class="blister-scan-body" id="bloodScanBody">
-<div class="blister-scan-status" id="bloodScanStatus">Take a photo or screenshot of one blood result set.</div>
-<div class="top-actions" id="bloodScanStartActions" style="margin-top:10px"><button class="primary fullwidth" id="chooseBloodPhotoBtn" type="button">Take photo</button></div>
-<div class="blood-scan-crop-stage hidden" id="bloodScanCropStage">
-<div class="blood-scan-crop-note">Move and resize the crop box around the blood result table before scanning.</div>
-<div class="blood-scan-crop-wrap" id="bloodScanCropWrap">
-<img alt="Blood results to crop" class="blood-scan-crop-image" id="bloodScanCropImage"/>
-<div class="blood-scan-crop-box hidden" id="bloodScanCropBox">
-<span class="blood-scan-crop-handle nw" data-handle="nw"></span>
-<span class="blood-scan-crop-handle ne" data-handle="ne"></span>
-<span class="blood-scan-crop-handle sw" data-handle="sw"></span>
-<span class="blood-scan-crop-handle se" data-handle="se"></span>
-</div>
-</div>
-<div class="blood-scan-crop-actions" id="bloodScanCropActions"><button id="retakeBloodPhotoBtn" type="button">Retake photo</button><button class="primary" id="scanBloodCropBtn" type="button">Scan selected area</button></div>
-</div>
-<div class="blood-scan-form hidden" id="bloodScanForm">
-<div class="blood-scan-field"><label>Sample date / time</label><input autocapitalize="off" autocomplete="off" autocorrect="off" id="bloodScanSampleLabel" placeholder="e.g. 05/04 09:20" spellcheck="false" type="text"/></div>
-<div class="blister-scan-rows hidden" id="bloodScanRows"></div>
-<div class="blood-scan-meta" id="bloodScanMeta"></div>
-</div>
-</div>
-<div class="blister-scan-actions hidden" id="bloodScanActions"><button id="closeBloodScanBtn" type="button">Close</button><button class="primary" id="useBloodScanBtn" type="button">Use scan</button></div>
-</div>
-<input accept="image/*" capture="environment" class="hidden" id="bloodScanInput" type="file"/>
-</div>
 <div aria-hidden="true" class="med-edit-overlay hidden" id="medEditOverlay"><div class="med-edit-backdrop" id="medEditBackdrop"></div><div class="med-edit-modal" id="medEditCard"><div class="med-edit-body"><div class="med-edit-card"><div class="med-entry-head"><span class="med-entry-summary" id="medEditSummary">Medication</span><div class="med-edit-head-actions"><button aria-label="Cancel medication edit" class="med-edit-actionbtn" id="medEditCancelBtn" type="button">Cancel</button><button aria-label="Save medication edit" class="med-edit-actionbtn primary" id="medEditSaveBtn" type="button">Save</button></div></div><div class="med-entry-body"><label>Medication</label><input autocapitalize="off" autocomplete="off" autocorrect="off" class="med-name" id="medEditName" placeholder="Start typing drug name" spellcheck="false" type="text"/><label class="med-dose-label">Dose</label><div class="med-dose-row hidden" id="medEditDoseRow"></div><input class="med-dose" id="medEditDose" placeholder="Dose" type="text"/><label>Frequency</label><div class="med-frequency-row" id="medEditFrequencyRow"></div><input class="med-frequency" id="medEditFrequency" placeholder="Frequency e.g. QDS PRN" type="text"/><label class="med-details-label">Details</label><input class="med-details" id="medEditDetails" placeholder="Optional notes" type="text"/></div></div></div></div></div>
 <div aria-hidden="true" class="meds-overlay hidden" id="medsOverlay"><div class="meds-overlay-backdrop" id="medsOverlayBackdrop"></div><div class="card meds-overlay-modal meds-overlay-modal-single" id="medsOverlayModal"><div class="meds-overlay-body" id="medsOverlayBody"><div class="meds-overlay-card meds-overlay-card-single" id="medsOverlayCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="medsOverlayTitle">Add medication</span><button aria-label="Close medications" class="med-entry-delete meds-overlay-close-inline" id="medsOverlayCloseBtn" type="button">×</button></div><div class="med-entry-body meds-overlay-entry-body"><label>Medication</label><input autocapitalize="off" autocomplete="off" autocorrect="off" class="med-name" id="medsOverlayName" placeholder="Start typing drug name" spellcheck="false" type="text"/><label class="med-dose-label">Dose</label><div class="med-dose-row hidden" id="medsOverlayDoseRow"></div><input class="med-dose" id="medsOverlayDose" placeholder="Dose" type="text"/><label>Frequency</label><div class="med-frequency-row" id="medsOverlayFrequencyRow"></div><input class="med-frequency" id="medsOverlayFrequency" placeholder="Frequency e.g. QDS PRN" type="text"/><label class="med-details-label">Details</label><input class="med-details" id="medsOverlayDetails" placeholder="Optional notes" type="text"/><div id="medsOverlayBottomButtons" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px"><button id="medsOverlayAddAnotherBtn" type="button">Add another</button><button id="medsOverlayClearBtn" type="button">Clear</button><button class="done-green" id="medsOverlayDoneBtn" type="button">Done</button></div></div></div></div></div></div>
 <div aria-hidden="true" class="exam-findings-overlay hidden" id="examFindingsOverlay"><div class="exam-findings-backdrop" id="examFindingsBackdrop"></div><div class="card exam-findings-modal" id="examFindingsModal"><div class="exam-findings-head"><h3>Examination findings</h3><button aria-label="Close examination findings" class="exam-findings-close" id="examFindingsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="examFindingsText">Edit findings</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="examFindingsText" type="button">Dictate</button></div><textarea id="examFindingsText" placeholder="Enter or edit examination findings"></textarea></div><div class="exam-findings-presets" id="examFindingsPresets"></div></div></div><div class="exam-findings-footer"><button id="examFindingsClearBtn" type="button">Clear</button><button class="primary" id="examFindingsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="exam-findings-overlay hidden" id="pmhPresetsOverlay"><div class="exam-findings-backdrop" id="pmhPresetsBackdrop"></div><div class="card exam-findings-modal" id="pmhPresetsModal"><div class="exam-findings-head"><h3>PMH presets</h3><button aria-label="Close PMH presets" class="exam-findings-close" id="pmhPresetsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="pmhPresetsText">Edit PMH</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="pmhPresetsText" type="button">Dictate</button></div><textarea id="pmhPresetsText" placeholder="Enter or edit PMH"></textarea></div><div class="exam-findings-presets" id="pmhPresetsList"></div></div></div><div class="exam-findings-footer"><button id="pmhPresetsClearBtn" type="button">Clear</button><button class="primary" id="pmhPresetsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="exam-findings-overlay hidden" id="socialHistoryPresetsOverlay"><div class="exam-findings-backdrop" id="socialHistoryPresetsBackdrop"></div><div class="card exam-findings-modal" id="socialHistoryPresetsModal"><div class="exam-findings-head"><h3>Social history presets</h3><button aria-label="Close social history presets" class="exam-findings-close" id="socialHistoryPresetsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="socialHistoryPresetsText">Edit social history</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="socialHistoryPresetsText" type="button">Dictate</button></div><textarea id="socialHistoryPresetsText" placeholder="Enter or edit social history"></textarea></div><div class="exam-findings-presets" id="socialHistoryPresetsList"></div></div></div><div class="exam-findings-footer"><button id="socialHistoryPresetsClearBtn" type="button">Clear</button><button class="primary" id="socialHistoryPresetsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="meds-overlay iv-rebuilt-overlay hidden" id="ivEditOverlay"><div class="meds-overlay-backdrop iv-edit-backdrop" id="ivEditBackdrop"></div><div aria-labelledby="ivEditTitle" aria-modal="true" class="card meds-overlay-modal meds-overlay-modal-single iv-rebuilt-modal" id="ivEditModal" role="dialog"><div class="meds-overlay-body" id="ivEditBody"><div class="meds-overlay-card meds-overlay-card-single iv-rebuilt-card" id="ivEditCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="ivEditTitle">IV medications administered</span><button aria-label="Close IV medications" class="med-entry-delete meds-overlay-close-inline iv-edit-close" id="ivEditCloseBtn" type="button">×</button></div><div class="meds-overlay-entry-body iv-overlay-entry-body hidden" id="ivSection"><button class="iv-info-label-btn" id="ivVipInfoBtn" type="button">VIP score</button><input enterkeyhint="next" id="ivVIP" type="text"/><div id="ivContainer"></div><div id="ivBottomButtons"><button id="addIVBtn" type="button">Add another</button><button id="clearIVBtn" type="button">Clear</button><button id="doneIVBtn" type="button">Done</button></div><button class="danger hidden" id="deleteIVBtn" type="button">Delete</button></div></div></div></div></div><div aria-hidden="true" class="vip-score-overlay hidden" id="vipScoreOverlay"><div class="vip-score-backdrop" id="vipScoreBackdrop"></div><div aria-labelledby="vipScoreTitle" aria-modal="true" class="card vip-score-modal" id="vipScoreModal" role="dialog"><div class="vip-score-head"><h3 id="vipScoreTitle">Visual Infusion Phlebitis (VIP) score</h3><button aria-label="Close VIP score table" class="vip-score-close" id="vipScoreCloseBtn" type="button">×</button></div><div class="vip-score-body"><div class="vip-score-card"><table class="vip-score-table"><thead><tr><th>Score</th><th>Findings</th><th>Suggested action</th></tr></thead><tbody><tr><td>0</td><td>Site appears healthy</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-safe">Observe cannula</span></td></tr><tr><td>1</td><td>Slight pain near site or slight redness</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-caution">Observe closely</span></td></tr><tr><td>2</td><td>Pain near site with redness and/or swelling</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula</span></td></tr><tr><td>3</td><td>Pain along cannula path with redness and induration</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>4</td><td>As score 3 plus a palpable venous cord</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>5</td><td>As score 4 plus pyrexia</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-urgent">Urgent review and treat per local policy</span></td></tr></tbody></table><div class="vip-score-note">Use local policy if it differs. Scores 2 or above usually mean the cannula should be removed or re-sited.</div></div></div></div></div><div aria-hidden="true" class="score-tools-overlay hidden" id="scoreToolsOverlay"><div class="score-tools-backdrop" id="scoreToolsBackdrop"></div><div class="card score-tools-modal" id="scoreToolsCard"><div class="score-tools-head"><button aria-expanded="false" aria-label="Show all score tools" class="score-tools-title-btn" id="scoreToolsTitleBtn" type="button"><h3>Scores</h3></button><button aria-label="Close scores" class="score-tools-close" id="scoreToolsCloseBtn" type="button">×</button></div><div class="score-tools-tabs-wrap" id="scoreToolsTabsWrap"><div class="score-tools-tabs" id="scoreToolsTabs"><button class="score-tool-tab active" data-score-tool-tab="cfs" type="button">CFS</button><button class="score-tool-tab" data-score-tool-tab="amt10" type="button">AMT10</button><button class="score-tool-tab" data-score-tool-tab="4at" type="button">4AT</button><button class="score-tool-tab" data-score-tool-tab="gcs" type="button">GCS</button><button class="score-tool-tab" data-score-tool-tab="must" type="button">MUST</button><button class="score-tool-tab" data-score-tool-tab="waterlow" type="button">Waterlow</button></div></div><div class="score-tools-body" id="scoreToolsBody"><div class="score-tool-panel" data-score-tool-panel="cfs"><div class="score-tool-card"><h4>Clinical Frailty Scale</h4><div class="score-tool-help">Score baseline frailty rather than the acute illness state.</div><div class="score-choice-grid" id="cfsChoiceGrid"></div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="amt10"><div class="score-tool-card"><h4>AMT10</h4><div class="score-tool-help">1 point per correct answer · Tap Yes for correct, No for incorrect or unable</div><div class="score-qrows" id="amt10Rows"></div><div class="score-summary-box" id="amt10SummaryBox">AMT10 - score pending</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="4at"><div class="score-tool-card"><div class="score-subhead"><h4>4AT</h4><div class="score-mini-note">Rapid delirium screen /12</div></div><div class="score-tool-help">Use the official 4AT scoring below · AMT4 is shown automatically from AMT10 when all 4 orientation items have been answered; otherwise manual AMT4 scoring is available here</div><div class="score-4at-grid"><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Alertness</div><div class="score-4at-task">Observe whether the patient is fully alert or clearly abnormally drowsy or agitated</div></div><div class="score-4at-options" id="fourAtAlertnessRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">AMT4</div><div class="score-4at-task">Test age, date of birth, place, and current year</div><div class="score-inline-note score-4at-subnote" id="fourAtAmt4Note">Manual scoring is available if the AMT10 orientation items have not all been completed</div></div><div class="score-4at-options" id="fourAtAmt4Row"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Attention</div><div class="score-4at-task">Ask the patient to say the months of the year backwards, starting from December</div></div><div class="score-4at-options" id="fourAtAttentionRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Acute change or fluctuating course</div><div class="score-4at-task">Is there evidence of a significant change or fluctuation in mental state over the last 2 weeks, still present in the last 24 hours</div></div><div class="score-4at-options" id="fourAtAcuteRow"></div></div></div><div class="score-summary-box" id="fourAtSummaryBox">4AT incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="gcs"><div class="score-tool-card"><div class="score-subhead"><h4>GCS</h4><div class="score-mini-note">Glasgow Coma Scale /15</div></div><div class="score-tool-help">Select the best eye, verbal and motor response.</div><div class="score-section-stack"><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Eye opening</h4></div><div class="score-qrows" id="gcsEyeRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Verbal response</h4></div><div class="score-qrows" id="gcsVerbalRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Motor response</h4></div><div class="score-qrows" id="gcsMotorRows"></div></div></div><div class="score-summary-box" id="gcsSummaryBox">GCS incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="must"><div class="score-tool-card"><div class="score-subhead"><h4>MUST</h4><div class="score-mini-note">Malnutrition Universal Screening Tool</div></div><div class="score-tool-help">Enter height and weight to calculate BMI, or select the BMI score directly if measurements are not available.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="must" for="mustHeightInput" id="mustHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="mustHeightMetricWrap"><input id="mustHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="mustHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="mustHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="must" for="mustWeightInput" id="mustWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="mustWeightMetricWrap"><input id="mustWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="mustWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="mustWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>BMI score</h4><div class="score-mini-note" id="mustBmiValue">BMI pending</div></div><div class="score-chip-row" id="mustBmiScoreRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Unplanned weight loss in past 3–6 months</h4></div><div class="score-chip-row" id="mustWeightLossRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Acute disease effect</h4></div><div class="score-chip-row" id="mustAcuteRow"></div><div class="score-inline-note">Add 2 if acutely ill and there has been or is likely to be no nutritional intake for more than 5 days.</div></div><div class="score-summary-box" id="mustSummaryBox">MUST incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="waterlow"><div class="score-tool-card"><div class="score-subhead"><h4>Waterlow</h4><div class="score-mini-note">Pressure ulcer risk screen</div></div><div class="score-tool-help">Complete each category using the option that best fits the patient. Enter weight and height to calculate BMI, or choose the build / BMI option directly if BMI is already known.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="waterlow" for="waterlowWeightInput" id="waterlowWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="waterlowWeightMetricWrap"><input id="waterlowWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="waterlowWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="waterlowWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="waterlow" for="waterlowHeightInput" id="waterlowHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="waterlowHeightMetricWrap"><input id="waterlowHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="waterlowHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="waterlowHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Build / BMI</h4><div class="score-mini-note" id="waterlowBmiValue">BMI optional</div></div><div class="score-chip-row" id="waterlowBuildRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Sex and age</h4></div><div class="score-chip-row" id="waterlowSexRow"></div><div class="score-chip-row" id="waterlowAgeRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Continence</h4></div><div class="score-chip-row" id="waterlowContinenceRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Skin / visual risk areas</h4></div><div class="score-chip-row" id="waterlowSkinRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Mobility</h4></div><div class="score-chip-row" id="waterlowMobilityRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Nutrition / appetite</h4></div><div class="score-chip-row" id="waterlowAppetiteRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Tissue malnutrition</h4></div><div class="score-chip-row" id="waterlowTissueRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Neurological deficit</h4></div><div class="score-chip-row" id="waterlowNeuroRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Major surgery / trauma</h4></div><div class="score-chip-row" id="waterlowSurgeryRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Medication</h4></div><div class="score-chip-row" id="waterlowMedicationRow"></div></div><div class="score-summary-box" id="waterlowSummaryBox">Waterlow incomplete</div></div></div></div><div class="score-tools-footer"><button id="scoreToolsClearBtn" type="button">Clear</button><button class="primary" id="scoreToolsInsertBtn" type="button">Done</button></div></div></div>
@@ -2839,7 +2707,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <button class="options-nav-row" data-open-options-page="security" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Security</span><span class="options-nav-subtitle">PIN, Face ID / Touch ID, wrong-PIN sound</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="nhsmail" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">NHSmail address</span><span class="options-nav-subtitle">Used by Email to NHSmail in reviews</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="onedrive" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">OneDrive handover (beta)</span><span class="options-nav-subtitle">Workbook link, sign-in and import</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
-<button class="options-nav-row" data-open-options-page="aiscan" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">AI scan tools (beta)</span><span class="options-nav-subtitle">Groq for blister / IV / bloods, digitizer + Claude for ECG</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG Assist log</span><span class="options-nav-subtitle">Analysis history and debug info</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
+<button class="options-nav-row" data-open-options-page="aiscan" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">AI scan tools (beta)</span><span class="options-nav-subtitle">Groq for blister / IV, digitizer + Claude for ECG</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG Assist log</span><span class="options-nav-subtitle">Analysis history and debug info</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="deepgram" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Deepgram dictation (beta)</span><span class="options-nav-subtitle">API key, formatting and dictation options</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="patientlist" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Patient list</span><span class="options-nav-subtitle">Choose and reorder card details</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="clinicalreview" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Clinical review</span><span class="options-nav-subtitle">Examination presets</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="medlinkdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Medication link debug</span><span class="options-nav-subtitle">Recent long-press / link events for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG analysis log</span><span class="options-nav-subtitle">Last 10 analyses for troubleshooting</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
@@ -2848,7 +2716,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_561_release.html</div><div>Source: hospital_at_home_v12_36_561_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_543_release.html</div><div>Source: hospital_at_home_v12_36_543_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -2919,9 +2787,9 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 
 <div class="options-page-panel hidden" data-options-page="aiscan">
 <div class="card options-subpage-card">
-<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>AI scan tools (beta)</h3><div class="tiny muted">Groq for blister / IV / bloods, Gemini for ECG</div></div></div>
+<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>AI scan tools (beta)</h3><div class="tiny muted">Groq for blister / IV, Gemini for ECG</div></div></div>
 <div class="options-section-body" id="optionsSectionAiScan"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Store scan settings locally on this device. Keys stay in this browser only.</div>
-<label>Groq API key <span class="tiny muted">(blister pack / IV / bloods)</span></label>
+<label>Groq API key <span class="tiny muted">(blister pack / IV label)</span></label>
 <input autocapitalize="off" autocorrect="off" id="xaiApiKeyInput" placeholder="Paste your Groq API key" spellcheck="false" type="password"/>
 <div class="top-actions" style="margin-top:10px">
 <button class="primary fullwidth" id="saveXaiSettingsBtn">Save key</button>
@@ -2996,7 +2864,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 <div class="options-page-panel hidden" data-options-page="clinicalreview">
 <div class="card options-subpage-card">
-<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>Clinical review</h3><div class="tiny muted">Examination and PMH presets</div></div></div>
+<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>Clinical review</h3><div class="tiny muted">Examination presets</div></div></div>
 <div class="options-section-body" id="optionsSectionClinicalReview"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Customise the examination chips shown in the findings overlay. One line = one chip. Blank lines are ignored and duplicate lines are removed automatically.</div>
 <div class="clinical-review-presets-grid">
 <div class="clinical-review-preset-card"><label for="examPresetGeneralInput">General</label><textarea id="examPresetGeneralInput" placeholder="One chip per line"></textarea></div>
@@ -3010,22 +2878,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <button class="primary fullwidth" id="saveClinicalReviewSettingsBtn" type="button">Save examination presets</button>
 <button class="fullwidth" id="restoreExamPresetsBtn" type="button">Restore defaults</button>
 </div>
-<div class="clinical-review-preset-help" id="clinicalReviewSettingsStatus"></div>
-
-<div class="tiny muted" style="margin-top:18px;margin-bottom:10px">Customise the PMH chips shown in the PMH preset overlay. Add one condition at a time below, then tap a chip to remove it. The Recent section still updates automatically from use.</div>
-<div class="clinical-review-preset-card">
-<label for="pmhPresetAddInput">PMH chips</label>
-<div style="display:flex;gap:10px;align-items:center">
-<input id="pmhPresetAddInput" type="text" placeholder="Add condition" autocapitalize="words" enterkeyhint="done" />
-<button class="clinical-tools-btn" id="addPmhPresetBtn" type="button">Add</button>
-</div>
-<div class="exam-findings-chip-row" id="pmhPresetSettingsChips"></div>
-</div>
-<div class="clinical-review-presets-grid" style="margin-top:12px">
-<button class="primary fullwidth" id="savePmhPresetSettingsBtn" type="button">Save PMH presets</button>
-<button class="fullwidth" id="restorePmhPresetsBtn" type="button">Restore defaults</button>
-</div>
-<div class="clinical-review-preset-help" id="pmhPresetSettingsStatus"></div></div>
+<div class="clinical-review-preset-help" id="clinicalReviewSettingsStatus"></div></div>
 </div>
 </div>
 
@@ -3060,10 +2913,11 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </section>
 <section class="container hidden" id="patientDetail">
 <div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div></div>
-<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><div class="obs-split-field" id="bpFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bp" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBpEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bpLying" type="hidden"/><input id="bpStanding1" type="hidden"/><input id="bpStanding3" type="hidden"/><input id="bpPosturalSymptoms" type="hidden"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
+<div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><div class="obs-split-field" id="bpFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bp" placeholder="e.g. 118/72" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBpEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bpLying" type="hidden"/><input id="bpStanding1" type="hidden"/><input id="bpStanding3" type="hidden"/><input id="bpPosturalSymptoms" type="hidden"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Set clinical context above, then scan, upload or paste an ECG image for a structured AI draft review.</div><div class="ecg-assist-card ecg-context-card"><div class="ecg-assist-card-title" style="font-size:15px">Clinical context</div><div class="exam-findings-chip-row" id="ecgContextPresets"><button class="exam-findings-chip active" data-preset="" type="button">Unspecified</button><button class="exam-findings-chip" data-preset="Chest pain / possible ACS — look carefully for STEMI equivalents including posterior pattern, de Winter morphology, and Wellens signs" type="button">Chest pain</button><button class="exam-findings-chip" data-preset="Palpitations / arrhythmia query — focus on rhythm, PR interval, QTc, delta waves, and accessory pathway features" type="button">Palpitations</button><button class="exam-findings-chip" data-preset="Bradycardia / conduction concern — classify degree of block, assess escape rhythm, and note whether rate is appropriate for the clinical situation" type="button">Bradycardia</button><button class="exam-findings-chip" data-preset="Hyperkalaemia — actively grade the hyperkalaemic ECG progression (peaked T → PR prolongation → P-wave loss → wide QRS → sine wave) and state where on this spectrum the tracing sits" type="button">Hyperkalaemia</button><button class="exam-findings-chip" data-preset="Syncope / collapse — look carefully for QTc prolongation, Brugada pattern, epsilon waves, and high-degree AV block" type="button">Syncope</button><button class="exam-findings-chip" data-preset="Breathlessness / possible PE — look for sinus tachycardia, S1Q3T3, right heart strain pattern, and new RBBB" type="button">SOB</button><button class="exam-findings-chip" data-preset="Tachycardia — classify as sinus vs non-sinus; look for P-wave morphology, regularity, QRS width, delta waves, and assess for any underlying cause" type="button">Tachycardia</button></div></div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Lead review</div><div class="ecg-assist-lead-grid" id="ecgAssistLeadGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
-<div class="card patient-reorder-card" data-card-key="bloodsSummary" id="bloodsSummaryCard"><h3 class="bloods-summary-title" id="bloodsSummaryTitle" tabindex="0">Recent bloods <span class="bloods-summary-inline-hint patient-card-helper-text" id="bloodsSummaryHint">(Tap to collapse)</span></h3><div class="bloods-panel" id="bloodsPanel"><div class="bloods-panel-head hidden"><div class="bloods-panel-meta patient-card-helper-text" id="bloodsPanelMeta"></div></div><div class="bloods-grid hidden" id="bloodsGrid"></div><div class="bloods-table-wrap hidden" id="bloodsTableWrap"><table class="bloods-table" id="bloodsTable"><thead id="bloodsTableHead"></thead><tbody id="bloodsTableBody"></tbody></table></div><div class="bloods-empty" id="bloodsEmpty">No bloods entered.</div></div></div>
-<div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><div class="field-label-row"><label for="issues">Issues</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="issues" type="button">Dictate</button></div><textarea id="issues"></textarea><div class="field-label-row"><label for="bloods">Bloods</label><div class="field-label-actions"><button class="clinical-tools-btn" id="scanBloodsBtn" type="button">Scan</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="bloods" type="button">Dictate</button></div></div><textarea autocapitalize="off" autocorrect="off" id="bloods" spellcheck="false"></textarea><div class="field-label-row"><label for="currently">Currently</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="currently" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="currently"></textarea><div class="field-label-row"><label for="pmh">PMH</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openPmhPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="pmh" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="pmh"></textarea><div class="field-label-row"><label for="socialHistory">Social History</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openSocialHistoryPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="socialHistory" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="socialHistory"></textarea><div class="field-label-row"><label for="examination">Examination</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="examination" type="button">Dictate</button></div></div><textarea id="examination"></textarea><div class="field-label-row"><label for="plan">Plan</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="plan" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="plan"></textarea><div class="field-label-row"><label for="forDischargeSummary">For discharge summary</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="forDischargeSummary" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
+<div class="card patient-reorder-card" data-card-key="bloodsSummary" id="bloodsSummaryCard"><h3 class="bloods-summary-title" id="bloodsSummaryTitle" tabindex="0">Recent bloods <span class="bloods-summary-inline-hint" id="bloodsSummaryHint">(Tap to collapse)</span></h3><div class="bloods-panel" id="bloodsPanel"><div class="bloods-panel-head hidden"><div class="bloods-panel-meta" id="bloodsPanelMeta"></div></div><div class="bloods-grid hidden" id="bloodsGrid"></div><div class="bloods-table-wrap hidden" id="bloodsTableWrap"><table class="bloods-table" id="bloodsTable"><thead id="bloodsTableHead"></thead><tbody id="bloodsTableBody"></tbody></table></div><div class="bloods-empty" id="bloodsEmpty">No bloods entered.</div></div></div>
+<div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><div class="field-label-row"><label for="issues">Issues</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="issues" type="button">Dictate</button></div><textarea id="issues"></textarea><div class="field-label-row"><label for="bloods">Bloods</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="bloods" type="button">Dictate</button></div><textarea autocapitalize="off" autocorrect="off" id="bloods" placeholder="05/04 09:20 | Hb 109 WCC 12.4 Neut 10.1 Plt 245 | Na 131 K+ 5.0 Urea 9.2 Cr 142 eGFR 44 | CRP 86 | Alb 30 ALT 52 ALP 118 Bili 11 CCa 2.16
+03/04 08:50 | Hb 111 WCC 14.8 Neut 12.3 Plt 238 | Na 134 K+ 4.7 Urea 8.4 Cr 118 eGFR 53 | CRP 124 | Alb 29 ALT 49 ALP 120 Bili 13 CCa 2.19" spellcheck="false"></textarea><div class="field-label-row"><label for="currently">Currently</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="currently" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="currently"></textarea><div class="field-label-row"><label for="pmh">PMH</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openPmhPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="pmh" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="pmh"></textarea><div class="field-label-row"><label for="socialHistory">Social History</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openSocialHistoryPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="socialHistory" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="socialHistory"></textarea><div class="field-label-row"><label for="examination">Examination</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="examination" type="button">Dictate</button></div></div><textarea id="examination"></textarea><div class="field-label-row"><label for="plan">Plan</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="plan" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="plan"></textarea><div class="field-label-row"><label for="forDischargeSummary">For discharge summary</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="forDischargeSummary" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
 <div class="card patient-reorder-card" data-card-key="meds">
 <div class="toggle-row meds-header-row">
 <input hidden="" id="medsGiven" type="checkbox"/>
@@ -3307,7 +3161,7 @@ const MED_DOSE_PRESETS={"Amlodipine":["2.5mg","5mg","10mg"],"Amoxicillin":["500m
 const MED_FREQUENCY_PRESETS={"Amlodipine":["OD"],"Amoxicillin":["OD","BD","TDS","QDS"],"Apixaban":["BD"],"Aspirin":["OD"],"Atorvastatin":["ON"],"Azithromycin":["OD"],"Bendroflumethiazide":["OD"],"Bisacodyl":["ON"],"Bisoprolol":["OD"],"Budesonide nebules":["BD","QDS"],"Bumetanide":["OD","BD"],"Carbocisteine":["TDS","QDS"],"Cefalexin":["BD","TDS","QDS"],"Cetirizine":["OD"],"Clarithromycin":["BD"],"Clopidogrel":["OD"],"Codeine":["OD","BD","TDS","QDS"],"Co-codamol":["OD","BD","TDS","QDS"],"Cyclizine":["TDS"],"Dexamethasone":["OD","BD"],"Diazepam":["OD","BD","TDS","ON"],"Digoxin":["OD"],"Diltiazem":["BD","TDS","OD"],"Docusate":["BD","TDS"],"Doxycycline":["OD","BD"],"Empagliflozin":["OD"],"Esomeprazole":["OD","BD"],"Ferrous sulfate":["OD","BD","TDS"],"Flucloxacillin":["QDS"],"Fluconazole":["OD"],"Folic acid":["OD"],"Frusemide":["OD","BD","alternate days"],"Furosemide":["OD","BD","alternate days"],"Gabapentin":["OD","BD","TDS"],"Gliclazide":["OD","BD"],"Haloperidol":["OD","BD","TDS","ON"],"Hydrocortisone":["OD","BD","TDS"],"Hyoscine butylbromide":["QDS"],"Ibuprofen":["OD","BD","TDS"],"Ipratropium nebules":["QDS"],"Lactulose":["BD","TDS"],"Lansoprazole":["OD","BD"],"Levetiracetam":["BD"],"Levothyroxine":["OD"],"Loperamide":["OD","BD","TDS","QDS"],"Lorazepam":["OD","BD","TDS","ON"],"Losartan":["OD"],"Metformin":["OD","BD","TDS"],"Metoclopramide":["TDS"],"Metolazone":["OD","alternate days"],"Mirtazapine":["ON"],"Morphine sulfate":["OD","BD","QDS"],"Movicol":["OD","BD","TDS"],"Nitrofurantoin":["BD","QDS"],"Omeprazole":["OD","BD"],"Ondansetron":["BD","TDS"],"Oxycodone":["BD","QDS"],"Paracetamol":["OD","BD","TDS","QDS"],"Penicillin V":["QDS"],"Phenoxymethylpenicillin":["QDS"],"Prednisolone":["OD"],"Pregabalin":["BD","TDS"],"Ramipril":["OD","BD"],"Rivaroxaban":["OD","BD"],"Salbutamol inhaler":["OD","BD","TDS","QDS"],"Salbutamol nebules":["OD","BD","TDS","QDS"],"Senna":["ON","BD"],"Sertraline":["OD"],"Simvastatin":["ON"],"Spironolactone":["OD"],"Tamsulosin":["ON"],"Temazepam":["ON"],"Torasemide":["OD","BD"],"Trimethoprim":["BD"],"Warfarin":["OD"],"Zopiclone":["ON"],"Adcal-D3":["OD","BD"],"Alendronic acid":["weekly"],"Allopurinol":["OD"],"Amiodarone":["OD","BD"],"Budesonide inhaler":["BD"],"Calcichew D3":["OD","BD"],"Colecalciferol":["OD","weekly","monthly"],"Dapagliflozin":["OD"],"Donepezil":["ON"],"Ferrous fumarate":["OD","BD","TDS"],"Fusidic acid cream":["BD","TDS"],"Glyceryl trinitrate spray":["PRN"],"Indapamide":["OD"],"Ipratropium inhaler":["QDS"],"Isosorbide mononitrate":["OD","BD"],"Linagliptin":["OD"],"Macrogol":["OD","BD","TDS"],"Magnesium oxide":["OD","BD","TDS"],"Mebeverine":["TDS"],"Metronidazole":["TDS"],"Nystatin":["QDS"],"Pravastatin":["ON"],"Prochlorperazine":["TDS"],"Quetiapine":["OD","BD","ON"],"Sitagliptin":["OD"],"Valproate":["BD","TDS"],"Co-amoxiclav":["TDS"]};
 const DEFAULT_MED_FREQUENCIES=["OD","BD","TDS","QDS","ON"];
 const defaultPatients={"1":{"name":"Mrs Law-test","age":82,"sex":"F","summary":"LRTI • IV ceftriaxone day 1","acuity":"AMBER","acuityClass":"amber","referralSource":"GSTT","timestamp":"","doa":"10 Mar 2026","listDetails":"Obs: T 37.8°C, BP 116/68, HR 94, SpO₂ 94% RA, RR 20","form":{"rr":"20","spo2":"94","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"37.8","bp":"116/68","hr":"94","weight":"64.2","bm":"6.8","hrPulse":"","conscious":"0","confusion":"0","issues":"1. LRTI cough\n2. Poor intake\n3. Pleuritic pain","examination":"Alert and engaging. Mild tachypnoea but speaking in full sentences. Scattered right basal crackles with no wheeze. Warm peripheries and no new oedema.","bloods":"05/04 09:20 | Hb 112 WCC 10.8 Neut 8.6 Plt 272 | Na 133 K+ 4.0 Urea 7.9 Cr 112 eGFR 46 | CRP 64 | Alb 32 ALT 40 ALP 116 Bili 11 CCa 2.20\n04/04 09:10 | Hb 111 WCC 12.4 Neut 10.1 Plt 268 | Na 132 K+ 4.1 Urea 8.4 Cr 118 eGFR 43 | CRP 86 | Alb 31 ALT 42 ALP 118 Bili 12 CCa 2.18\n03/04 08:30 | Hb 109 WCC 14.6 Neut 12.1 Plt 254 | Na 130 K+ 4.3 Urea 9.1 Cr 126 eGFR 38 | CRP 124 | Alb 29 ALT 45 ALP 121 Bili 13 CCa 2.16\n02/04 08:45 | Hb 110 WCC 15.2 Neut 12.9 Plt 248 | Na 129 K+ 4.5 Urea 9.8 Cr 132 eGFR 34 | CRP 148 | Alb 28 ALT 47 ALP 123 Bili 14 CCa 2.15\n01/04 08:15 | Hb 108 WCC 16.8 Neut 14.0 Plt 241 | Na 128 K+ 4.4 Urea 10.4 Cr 139 eGFR 31 | CRP 176 | Alb 27 ALT 49 ALP 126 Bili 15 CCa 2.13","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For fever / pleuritic discomfort"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"ceftriaxone","dose":"2g","serialExpiry":"A4821 / 10/27"}],"plan":"1. Give IV ceftriaxone today.\n2. Encourage fluids and monitor oral intake.\n3. Repeat obs later today and review if worsening breathlessness.","forDischargeSummary":"1. Complete antibiotic course.\n2. Safety-net re worsening breathlessness, fever or confusion.\n3. Consider CXR / hospital review if not improving."}},"2":{"name":"Mr Ree-test","age":76,"sex":"M","summary":"Heart failure • weight / diuresis review","acuity":"GREEN","acuityClass":"green","referralSource":"GP","timestamp":"","doa":"11 Mar 2026","listDetails":"Obs: T 36.6°C, BP 122/70, HR 80, SpO₂ 95% RA, RR 18","form":{"rr":"18","spo2":"95","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.6","bp":"122/70","hr":"80","weight":"83.5","bm":"6.2","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Oedema\n2. Diuresis review\n3. No CP/syncope","examination":"Comfortable at rest. Mild bilateral ankle oedema only. Bibasal crackles minimal and improved from yesterday. JVP not obviously elevated.","bloods":"04/04 08:35 | Hb 124 WCC 6.8 Neut 4.3 Plt 241 | Na 136 K+ 4.9 Urea 10.2 Cr 132 eGFR 46 | CRP 14 | Alb 34 ALT 31 ALP 102 Bili 9 CCa 2.24\n03/04 08:20 | Hb 126 WCC 7.1 Neut 4.8 Plt 236 | Na 138 K+ 4.6 Urea 9.4 Cr 118 eGFR 54 | CRP 18 | Alb 35 ALT 29 ALP 100 Bili 8 CCa 2.25","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Furosemide","dose":"80mg","frequency":"OD","details":"Current oral dose"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue current oral diuretic plan.\n2. Repeat weight and U&E tomorrow.\n3. Escalate if dizziness, hypotension or worsening dyspnoea.","forDischargeSummary":"1. Community HF follow-up.\n2. Repeat renal function in 1 week.\n3. Continue daily weights if possible."}},"3":{"name":"Mrs Coo-test","age":89,"sex":"F","summary":"Delirium • suspected UTI","acuity":"RED","acuityClass":"red","referralSource":"LAS","timestamp":"","doa":"12 Mar 2026","listDetails":"Obs: T 38.4°C, BP 96/54, HR 110, SpO₂ 91% RA, RR 24","form":{"rr":"24","spo2":"91","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"38.4","bp":"96/54","hr":"110","weight":"57.0","bm":"8.9","hrPulse":"","conscious":"0","confusion":"3","issues":"1. Acute delirium\n2. Suspected UTI\n3. Poor intake","examination":"Drowsy but rousable. Disorientated to place and time. Suprapubic tenderness present. No meningism. Peripheral perfusion slightly reduced.","bloods":"04/04 07:55 | Hb 103 WCC 15.9 Neut 13.8 Plt 312 | Na 128 K+ 4.7 Urea 12.4 Cr 156 eGFR 29 | CRP 124 | Alb 28 ALT 38 ALP 97 Bili 13 CCa 2.11\n03/04 08:05 | Hb 106 WCC 13.1 Neut 10.7 Plt 301 | Na 131 K+ 4.5 Urea 10.9 Cr 142 eGFR 34 | CRP 96 | Alb 30 ALT 34 ALP 93 Bili 11 CCa 2.18","medsGiven":false,"medsCollapsed":false,"medsFocusedIndex":null,"medEntries":[],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Senior clinical review today.\n2. Send urine sample if obtainable and check bloods.\n3. Low threshold for hospital conveyance if BP remains low or confusion worsens.","forDischargeSummary":"1. Update family and document escalation plan.\n2. Review culture results when available.\n3. Reassess need for admission if not settling."}},"4":{"name":"Mr Sha-test","age":68,"sex":"M","summary":"Cellulitis • oral step-down review","acuity":"GREEN","acuityClass":"green","referralSource":"PRUH","timestamp":"","doa":"13 Mar 2026","listDetails":"Obs: T 36.9°C, BP 128/74, HR 82, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.9","bp":"128/74","hr":"82","weight":"79.4","bm":"7.1","hrPulse":"","conscious":"0","confusion":"0","issues":"1. L leg cellulitis\n2. Pain improved\n3. Systemically well","examination":"Bright and comfortable. Erythema receding within marker line. Mild warmth only. No fluctuance, crepitus or discharge.","bloods":"03/04 10:20 | Hb 136 WCC 9.4 Neut 6.7 Plt 289 | Na 139 K+ 4.3 Urea 5.6 Cr 84 eGFR 78 | CRP 42 | Alb 37 ALT 24 ALP 88 Bili 8 CCa 2.29\n02/04 09:40 | Hb 134 WCC 11.6 Neut 8.5 Plt 276 | Na 138 K+ 4.2 Urea 5.9 Cr 88 eGFR 74 | CRP 68 | Alb 36 ALT 26 ALP 92 Bili 9 CCa 2.27","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Flucloxacillin","dose":"1g","frequency":"QDS","details":"Day 4 oral step-down"},{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For pain"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue oral flucloxacillin.\n2. Elevate leg and continue emollient / skin care.\n3. Review for discharge if improving again tomorrow.","forDischargeSummary":"1. Complete oral antibiotic course.\n2. Safety-net re spreading erythema, fever or increasing pain."}},"5":{"name":"Mrs Tur-test","age":73,"sex":"F","summary":"COPD exacerbation • oxygen / steroids","acuity":"AMBER","acuityClass":"amber","referralSource":"KCH","timestamp":"","doa":"15 Mar 2026","listDetails":"Obs: T 37.2°C, BP 134/78, HR 92, SpO₂ 90% 1.5L, RR 22","form":{"rr":"22","spo2":"90","oxygen":"2","oxygenFlow":"1.5L","scoreMode":"","temp":"37.2","bp":"134/78","hr":"92","weight":"69.0","bm":"9.8","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Infective COPD\n2. O2 requirement\n3. Wheeze improved","examination":"Mild work of breathing on 1.5L oxygen. Widespread expiratory wheeze with prolonged expiratory phase. No central cyanosis. Able to speak in full sentences.","bloods":"04/04 09:40 | Hb 127 WCC 11.2 Neut 8.6 Plt 255 | Na 134 K+ 4.6 Urea 7.8 Cr 92 eGFR 63 | CRP 58 | Alb 33 ALT 29 ALP 94 Bili 10 CCa 2.21\n03/04 09:05 | Hb 125 WCC 13.4 Neut 10.2 Plt 248 | Na 132 K+ 4.4 Urea 7.1 Cr 88 eGFR 68 | CRP 76 | Alb 31 ALT 33 ALP 96 Bili 11 CCa 2.19","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Prednisolone","dose":"30mg","frequency":"OD","details":"Day 2"},{"name":"Salbutamol nebules","dose":"2.5mg","frequency":"QDS","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue controlled oxygen aiming 88-92%.\n2. Continue rescue medications.\n3. Review later today if increased work of breathing or rising oxygen requirement.","forDischargeSummary":"1. Complete rescue pack course.\n2. Check inhaler technique and smoking status.\n3. COPD nurse follow-up if available."}},"6":{"name":"Mr Doy-test","age":84,"sex":"M","summary":"AKI / renal medication review","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"17 Mar 2026","listDetails":"Obs: T 36.7°C, BP 102/60, HR 94, SpO₂ 96% RA, RR 19","form":{"rr":"19","spo2":"96","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.7","bp":"102/60","hr":"94","weight":"71.0","bm":"5.7","hrPulse":"","conscious":"0","confusion":"0","issues":"1. AKI with worsening renal function\n2. Postural symptoms / likely dehydration\n3. Renally cleared / nephrotoxic medications need review","examination":"Alert and cooperative. Mucous membranes dry. Chest clear and no peripheral oedema. Abdomen soft and non-tender.","bloods":"05/04 08:20 | Hb 116 WCC 7.9 Neut 5.2 Plt 218 | Na 131 K+ 5.6 Urea 17.8 Cr 274 eGFR 20 | CRP 18 | Alb 35 ALT 25 ALP 88 Bili 10 CCa 2.18\n04/04 08:10 | Hb 117 WCC 8.1 Neut 5.4 Plt 222 | Na 130 K+ 5.3 Urea 15.6 Cr 218 eGFR 25 | CRP 21 | Alb 35 ALT 26 ALP 89 Bili 10 CCa 2.17\n03/04 08:00 | Hb 118 WCC 8.5 Neut 5.8 Plt 227 | Na 132 K+ 5.0 Urea 13.9 Cr 176 eGFR 30 | CRP 24 | Alb 35 ALT 26 ALP 90 Bili 10 CCa 2.18\n02/04 08:15 | Hb 119 WCC 8.8 Neut 6.1 Plt 230 | Na 133 K+ 4.7 Urea 11.8 Cr 148 eGFR 37 | CRP 27 | Alb 36 ALT 25 ALP 92 Bili 9 CCa 2.20\n01/04 08:05 | Hb 120 WCC 9.1 Neut 6.3 Plt 234 | Na 134 K+ 4.5 Urea 10.4 Cr 129 eGFR 45 | CRP 31 | Alb 36 ALT 24 ALP 94 Bili 9 CCa 2.21","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Apixaban","dose":"5mg","frequency":"BD","details":"AF usual regular medication"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":"Usual regular medication"},{"name":"Furosemide","dose":"40mg","frequency":"OD","details":"Usual regular medication"},{"name":"Metformin","dose":"500mg","frequency":"BD","details":"Usual regular medication"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"normal saline","dose":"500ml","serialExpiry":"NS284 / 08/27"}],"plan":"1. Give 500 mL normal saline slowly as prescribed and review renally active medicines.\n2. Hold / review metformin, ramipril and diuretic while assessing volume status.\n3. Check apixaban dose / suitability against current Cockcroft–Gault CrCl and repeat renal function tomorrow.","forDischargeSummary":"1. Reintroduce longer-term medicines only when renal function stable.\n2. Recheck renal function and potassium after medication changes.\n3. Safety-net re reduced urine output, vomiting or dizziness."}},"7":{"name":"Mrs Ben-test","age":70,"sex":"F","summary":"Diabetic foot infection • IV co-amoxiclav","acuity":"AMBER","acuityClass":"amber","referralSource":"GSTT","timestamp":"","doa":"19 Mar 2026","listDetails":"Obs: T 37.5°C, BP 118/72, HR 88, SpO₂ 98% RA, RR 18","form":{"rr":"18","spo2":"98","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"37.5","bp":"118/72","hr":"88","weight":"86.4","bm":"12.6","hrPulse":"","conscious":"0","confusion":"0","issues":"1. R diabetic foot\n2. Hyperglycaemia\n3. Podiatry involved","examination":"Systemically well. Dressing dry with no strike-through. Surrounding erythema mild and improving. Foot warm and perfused with no spreading streaking.","bloods":"05/04 09:00 | Hb 122 WCC 9.6 Neut 6.9 Plt 279 | Na 138 K+ 4.6 Urea 8.1 Cr 104 eGFR 56 | CRP 58 | Alb 33 ALT 32 ALP 118 Bili 11 CCa 2.24\n04/04 09:05 | Hb 121 WCC 10.7 Neut 7.8 Plt 274 | Na 137 K+ 4.8 Urea 8.9 Cr 109 eGFR 51 | CRP 74 | Alb 32 ALT 34 ALP 121 Bili 12 CCa 2.23\n03/04 09:15 | Hb 119 WCC 12.8 Neut 9.6 Plt 266 | Na 135 K+ 4.6 Urea 8.2 Cr 102 eGFR 56 | CRP 96 | Alb 31 ALT 36 ALP 124 Bili 13 CCa 2.21\n02/04 09:10 | Hb 118 WCC 14.2 Neut 10.8 Plt 258 | Na 134 K+ 4.7 Urea 7.9 Cr 98 eGFR 59 | CRP 118 | Alb 30 ALT 39 ALP 128 Bili 14 CCa 2.20\n01/04 09:00 | Hb 117 WCC 15.1 Neut 11.6 Plt 251 | Na 133 K+ 4.5 Urea 7.4 Cr 94 eGFR 62 | CRP 146 | Alb 30 ALT 41 ALP 130 Bili 14 CCa 2.18","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For pain"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"co-amoxiclav","dose":"1.2g","serialExpiry":"CA771 / 11/27"}],"plan":"1. Continue IV co-amoxiclav today.\n2. Recheck glucose profile and encourage hydration.\n3. Review with podiatry plan and consider oral step-down if improving.","forDischargeSummary":"1. Podiatry follow-up arranged.\n2. Continue off-loading and dressing plan.\n3. Step down to oral antibiotics when clinically appropriate."}},"8":{"name":"Mr Hug-test","age":91,"sex":"M","summary":"Constipation / frailty review","acuity":"GREEN","acuityClass":"green","referralSource":"RR","timestamp":"","doa":"21 Mar 2026","listDetails":"Obs: T 36.4°C, BP 130/76, HR 76, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.4","bp":"130/76","hr":"76","weight":"61.5","bm":"6.1","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Frailty\n2. Constipation\n3. No red flags","examination":"Well in self and comfortable in chair. Abdomen soft, non-distended and non-tender. Bowel sounds present. Hydration reasonable today.","bloods":"05/04 10:50 | Hb 117 WCC 6.4 Neut 3.9 Plt 223 | Na 139 K+ 4.0 Urea 5.8 Cr 84 eGFR 72 | CRP 6 | Alb 37 ALT 21 ALP 82 Bili 7 CCa 2.29\n04/04 10:35 | Hb 116 WCC 6.8 Neut 4.1 Plt 221 | Na 139 K+ 4.1 Urea 5.9 Cr 86 eGFR 70 | CRP 7 | Alb 37 ALT 21 ALP 83 Bili 7 CCa 2.28\n03/04 10:20 | Hb 116 WCC 7.0 Neut 4.2 Plt 220 | Na 138 K+ 4.1 Urea 6.0 Cr 87 eGFR 69 | CRP 8 | Alb 36 ALT 22 ALP 83 Bili 7 CCa 2.28\n02/04 11:00 | Hb 116 WCC 7.2 Neut 4.4 Plt 219 | Na 138 K+ 4.1 Urea 6.2 Cr 88 eGFR 68 | CRP 9 | Alb 36 ALT 22 ALP 84 Bili 7 CCa 2.27\n01/04 10:40 | Hb 114 WCC 8.0 Neut 5.1 Plt 214 | Na 137 K+ 4.2 Urea 6.8 Cr 92 eGFR 64 | CRP 14 | Alb 35 ALT 24 ALP 86 Bili 8 CCa 2.25","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Movicol","dose":"2 sachets","frequency":"BD","details":""},{"name":"Senna","dose":"15mg","frequency":"ON","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue laxatives and encourage fluids.\n2. Mobilise as able with support.\n3. Review bowel action and abdominal symptoms tomorrow.","forDischargeSummary":"1. Continue bowel regimen short term then titrate down.\n2. Safety-net re pain, vomiting or failure to open bowels."}},"9":{"name":"Mrs Sid-test","age":78,"sex":"F","summary":"Hyponatraemia • possible SIAD / drug review","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"22 Mar 2026","listDetails":"Obs: T 36.5°C, BP 126/72, HR 78, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.5","bp":"126/72","hr":"78","weight":"63.5","bm":"5.9","hrPulse":"","conscious":"0","confusion":"0","sodiumFluidStatus":"euvolaemic","issues":"1. Hyponatraemia\n2. Mild fatigue / reduced appetite\n3. Medication review needed","examination":"Clinically euvolaemic. No oedema, no overt dehydration, chest clear.","bloods":"05/04 09:10 | Hb 121 WCC 6.7 Neut 4.1 Plt 248 | Na 127 K+ 4.1 Urea 4.6 Cr 64 eGFR 81 | CRP 8 | Serum Osm 264 | Urine Osm 542 | Urine Na 52 | TSH 1.6 | Cortisol 468 | Alb 36 ALT 22 ALP 84 Bili 9 CCa 2.24\n04/04 09:00 | Hb 122 WCC 6.9 Neut 4.3 Plt 252 | Na 128 K+ 4.2 Urea 4.8 Cr 66 eGFR 79 | CRP 9 | Serum Osm 266 | Urine Osm 518 | Urine Na 49 | Alb 36 ALT 21 ALP 83 Bili 8 CCa 2.23\n03/04 09:15 | Hb 123 WCC 7.1 Neut 4.5 Plt 256 | Na 130 K+ 4.3 Urea 5.0 Cr 68 eGFR 76 | CRP 11 | Alb 35 ALT 22 ALP 83 Bili 9 CCa 2.22","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Sertraline","dose":"50mg","frequency":"OD","details":"Usual regular medication"},{"name":"Omeprazole","dose":"20mg","frequency":"OD","details":"Usual regular medication"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Review medications that may contribute to hyponatraemia.\n2. Use sodium analysis overlay with current urine studies.\n3. Repeat sodium tomorrow and escalate if symptoms develop.","forDischargeSummary":"1. Continue sodium monitoring until stable.\n2. Review antidepressant / PPI contribution if sodium remains low."}},"10":{"name":"Mr Dry-test","age":83,"sex":"M","summary":"Hyponatraemia • dizziness / likely volume depletion","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"23 Mar 2026","listDetails":"Obs: T 36.4°C, BP 102/58, HR 92, SpO₂ 96% RA, RR 17","form":{"rr":"17","spo2":"96","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.4","bp":"102/58","hr":"92","weight":"72.0","bm":"6.4","hrPulse":"","conscious":"0","confusion":"0","sodiumFluidStatus":"hypovolaemic","issues":"1. Hyponatraemia\n2. Postural dizziness\n3. Likely dehydration / diuretic contribution","examination":"Dry mucous membranes and postural symptoms. No oedema. Clinically looks hypovolaemic.","bloods":"05/04 08:40 | Hb 129 WCC 7.4 Neut 4.8 Plt 231 | Na 126 K+ 3.2 Urea 14.8 Cr 118 eGFR 55 | CRP 7 | Serum Osm 268 | Urine Osm 418 | Urine Na 18 | TSH 2.3 | Cortisol 522 | Alb 35 ALT 24 ALP 88 Bili 10 CCa 2.20\n04/04 08:30 | Hb 130 WCC 7.8 Neut 5.1 Plt 236 | Na 128 K+ 3.4 Urea 12.9 Cr 109 eGFR 60 | CRP 8 | Serum Osm 270 | Urine Osm 392 | Urine Na 16 | Alb 35 ALT 24 ALP 87 Bili 10 CCa 2.21\n03/04 08:20 | Hb 131 WCC 8.0 Neut 5.4 Plt 240 | Na 131 K+ 3.7 Urea 11.2 Cr 101 eGFR 66 | CRP 9 | Alb 36 ALT 23 ALP 86 Bili 9 CCa 2.22","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Bendroflumethiazide","dose":"2.5mg","frequency":"OD","details":"Usual regular medication"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":"Usual regular medication"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Review volume status and contributing medications.\n2. Consider holding thiazide while correcting likely volume depletion.\n3. Repeat sodium and electrolytes after treatment.","forDischargeSummary":"1. Sodium follow-up needed after medication changes.\n2. Safety-net re worsening dizziness, confusion or vomiting."}}};
-let patients={}, currentPatient=null, deletedPatients=[], eventLogEntries=[], undoState=null, detailLoadedForCurrentPatient=false, selectedNewReferral="", selectedNewSex="", editingPatientId=null, patientSortMode="dateImported", patientSortDirection="desc", patientSearchQuery="", patientSearchVisible=false, patientStatusMeta={visible:false,allowUndo:false};
+let patients={}, currentPatient=null, deletedPatients=[], eventLogEntries=[], undoState=null, detailLoadedForCurrentPatient=false, selectedNewReferral="", selectedNewSex="", editingPatientId=null, patientSortMode="dateImported", patientSortDirection="desc", patientSearchQuery="", patientSearchVisible=false;
 const $=id=>document.getElementById(id), clone=obj=>JSON.parse(JSON.stringify(obj));
 function currentState(){return {patients:clone(patients),deletedPatients:clone(deletedPatients),eventLogEntries:clone(eventLogEntries),currentPatient}}
 function restoreState(state){patients=clone(state.patients||{});deletedPatients=clone(state.deletedPatients||[]);eventLogEntries=clone(state.eventLogEntries||[]);currentPatient=state.currentPatient||Number(Object.keys(patients)[0]||1);detailLoadedForCurrentPatient=false}
@@ -3329,7 +3183,7 @@ function loadUndo(){
     }
   }catch(e){}
 }
-function updateUndoButton(){const btn=$("undoBtn"); if(!btn) return; const visible=!!undoState && !!(patientStatusMeta && patientStatusMeta.visible && patientStatusMeta.allowUndo); btn.disabled=!visible; btn.classList.toggle("hidden", !visible); btn.setAttribute("aria-hidden", visible ? "false" : "true")}
+function updateUndoButton(){$("undoBtn").disabled=!undoState;$("undoBtn").style.opacity=undoState?"1":"0.5"}
 function undoLastChange(){
   if(!undoState) return;
   const present = currentState();
@@ -3352,126 +3206,7 @@ function undoLastChange(){
   updateUndoButton();
 }
 
-function normaliseSaveStatusMessage(message){
-  let text=String(message==null ? '' : message).trim();
-  if(!text) return '';
-  text=text.replace(/^Saved locally\s*[•·-]\s*/i,'');
-  if(/^Saved locally$/i.test(text)) return '';
-  if(/^Autosave on$/i.test(text)) return '';
-  if(/^Ready$/i.test(text)) return '';
-  return text;
-}
-function deriveStatusRailTone(message){
-  const text=String(message||'').toLowerCase();
-  const allowUndo=/deleted|restored|reset/.test(text);
-  if(/fail|error|not found|unable|missing/.test(text)) return {tone:'alert',pill:'Alert',allowUndo:false};
-  if(/importing|signing|syncing|signed in|onedrive|imported/.test(text)) return {tone:'sync',pill:'Sync',allowUndo:false};
-  if(/undone|undo/.test(text)) return {tone:'undo',pill:'Undo',allowUndo:false};
-  if(/deleted|restored|reset|added|updated|changed|set|removed|inserted|sent/.test(text)) return {tone:'action',pill:'Update',allowUndo};
-  return {tone:'saved',pill:'Update',allowUndo:false};
-}
-function clearSaveStatus(){
-  const defaultEl=$("patientRefreshText");
-  const statusEl=$("patientInlineStatus");
-  const textEl=$("saveStatus");
-  const pillEl=$("saveStatusPill");
-  clearTimeout(setSaveStatus.timer);
-  patientStatusMeta={visible:false,allowUndo:false};
-  if(defaultEl) defaultEl.classList.remove('hidden');
-  if(statusEl){
-    statusEl.classList.add('hidden');
-    delete statusEl.dataset.tone;
-  }
-  if(textEl){
-    textEl.textContent='';
-    textEl.classList.remove('status-updated');
-  }
-  if(pillEl) pillEl.textContent='';
-  updateUndoButton();
-}
-function setSaveStatus(t){
-  const message=normaliseSaveStatusMessage(t);
-  if(!message){
-    clearSaveStatus();
-    return;
-  }
-  const defaultEl=$("patientRefreshText");
-  const statusEl=$("patientInlineStatus");
-  const textEl=$("saveStatus");
-  const pillEl=$("saveStatusPill");
-  const statusMeta=deriveStatusRailTone(message);
-  patientStatusMeta={visible:true,allowUndo:!!statusMeta.allowUndo};
-  if(defaultEl) defaultEl.classList.add('hidden');
-  if(statusEl){
-    statusEl.classList.remove('hidden');
-    statusEl.dataset.tone=statusMeta.tone;
-  }
-  if(textEl) textEl.textContent=message;
-  if(pillEl) pillEl.textContent=statusMeta.pill;
-  updateUndoButton();
-  if(textEl){
-    textEl.classList.remove('status-updated');
-    void textEl.offsetWidth;
-    textEl.classList.add('status-updated');
-    clearTimeout(setSaveStatus.animTimer);
-    setSaveStatus.animTimer=setTimeout(()=>{ if(textEl) textEl.classList.remove('status-updated'); },220);
-  }
-  clearTimeout(setSaveStatus.timer);
-  setSaveStatus.timer=setTimeout(()=>{ clearSaveStatus(); },5000);
-}
-function patientLosDays(patient){
-  if(!patient || typeof patient!=='object') return null;
-  let iso='';
-  if(typeof patientDoAToIso==='function' && patient.doa) iso=patientDoAToIso(patient.doa)||'';
-  let start=null;
-  if(iso){
-    const m=iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    if(m) start=new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
-  }
-  if((!start || isNaN(start.getTime())) && patient.createdAt){
-    const fallback=new Date(patient.createdAt);
-    if(!isNaN(fallback.getTime())) start=new Date(fallback.getFullYear(), fallback.getMonth(), fallback.getDate());
-  }
-  if(!start || isNaN(start.getTime())) return null;
-  const now=new Date();
-  const today=new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const diff=Math.floor((today - start) / 86400000);
-  return Number.isFinite(diff) ? Math.max(0, diff) : null;
-}
-function getPatientListMetrics(){
-  const activePatients=Object.values(patients||{});
-  const losValues=activePatients.map(patientLosDays).filter(v=>Number.isFinite(v));
-  const caseload=activePatients.length;
-  const over7d=losValues.filter(v=>v>7).length;
-  const avgLos=losValues.length ? (losValues.reduce((sum,v)=>sum+v,0) / losValues.length) : null;
-  return {
-    caseload,
-    over7d,
-    avgLos,
-    avgLosDisplay: avgLos==null ? '—' : (Math.abs(avgLos - Math.round(avgLos)) < 0.05 ? String(Math.round(avgLos)) : avgLos.toFixed(1))
-  };
-}
-function updatePatientMetricsUI(){
-  const metrics=getPatientListMetrics();
-  const cardStates=[
-    {className:'patient-metric-caseload', isGood:metrics.caseload < 30},
-    {className:'patient-metric-longstay', isGood:metrics.over7d === 0},
-    {className:'patient-metric-average', isGood:metrics.avgLos == null ? null : metrics.avgLos < 7}
-  ];
-  if($("patientMetricCaseload")) $("patientMetricCaseload").textContent=String(metrics.caseload);
-  if($("patientMetricLongstay")) $("patientMetricLongstay").textContent=String(metrics.over7d);
-  if($("patientMetricAverage")) $("patientMetricAverage").textContent=metrics.avgLosDisplay;
-  cardStates.forEach(({className,isGood})=>{
-    const card=document.querySelector('.'+className);
-    if(!card) return;
-    card.classList.remove('is-good','is-bad','is-neutral');
-    if(isGood === null){
-      card.classList.add('is-neutral');
-    } else {
-      card.classList.add(isGood ? 'is-good' : 'is-bad');
-    }
-  });
-}
+function setSaveStatus(t){$("saveStatus").textContent=t;clearTimeout(setSaveStatus.timer);setSaveStatus.timer=setTimeout(()=>{$("saveStatus").textContent="Autosave enabled"},5000)}
 function clearAppLocalData(){
   const keysToRemove=[
     STORAGE_KEY,
@@ -4192,17 +3927,6 @@ function normaliseBlisterScanItems(items){
 async function fileToDataUrl(file){
   return await new Promise((resolve,reject)=>{ const reader=new FileReader(); reader.onload=()=>resolve(String(reader.result||'')); reader.onerror=()=>reject(new Error('Could not read image.')); reader.readAsDataURL(file); });
 }
-function dataUrlToFile(dataUrl, filename='scan.jpg'){
-  const match=String(dataUrl||'').match(/^data:([^;,]+)?(?:;base64)?,(.*)$/);
-  if(!match) throw new Error('Could not prepare cropped image.');
-  const mime=match[1] || 'image/jpeg';
-  const payload=match[2] || '';
-  const binary=atob(payload);
-  const len=binary.length;
-  const bytes=new Uint8Array(len);
-  for(let i=0;i<len;i+=1) bytes[i]=binary.charCodeAt(i);
-  return new File([bytes], filename, {type:mime});
-}
 async function normaliseImageForBase64Upload(file, options={}){
   const type=String(file?.type||'').toLowerCase();
   if(type && !['image/jpeg','image/jpg','image/png'].includes(type)) throw new Error('Unsupported image type. Use JPG or PNG.');
@@ -4348,202 +4072,6 @@ function applyIvScanResultToEntry(result){ const merged=normaliseIvScanResult(re
 async function runIvScan(file){ const apiKey=getXaiApiKey(); if(!apiKey){ setIvScanStatus('Please add your Groq API key in Options first.',true); return; } ivScanState.busy=true; setIvScanStatus('Reading photo…'); try{ const dataUrl=await normaliseBlisterScanImage(file); ivScanState.file=file; ivScanState.dataUrl=dataUrl; const preview=$('ivScanPreview'); if(preview){ preview.src=dataUrl; preview.classList.remove('hidden'); } setIvScanStatus('Scanning label…'); const barcodePromise=detectIvBarcodeFromFile(file); const prompt='Read this IV medication label, box or infusion bag and extract a single medicine entry. Return medication name, dose, serial, expiry, batch, confidence, and brief notes. Prioritise the visible IV product being shown. Do not invent values. If a field is unclear, leave it blank rather than guessing. For IV fluids and infusion bags, the dose field should be the administered volume such as 500ml or 1000ml, not the concentration or strength. For non-fluid medicines, use the displayed dose/strength. Prefer barcode-derived batch and expiry when available for the user-facing batch/expiry field, but still use the image text for medication and dose. Keep serial separately if present. Ignore patient identifiers, pharmacy addresses, and unrelated packaging text.'; const barcodeHint=await barcodePromise; const userParts=[{type:'text',text:prompt + (barcodeHint && (barcodeHint.serial || barcodeHint.expiry || barcodeHint.productCode || barcodeHint.batch) ? `\nBarcode hint: ${JSON.stringify(barcodeHint)}` : '')},{type:'image_url',image_url:{url:dataUrl}}]; const body={model:'meta-llama/llama-4-scout-17b-16e-instruct',messages:[{role:'system',content:'You extract one IV medication entry from a photographed label.'},{role:'user',content:userParts}],response_format:{type:'json_schema',json_schema:{name:'iv_med_scan',strict:true,schema:IV_SCAN_SCHEMA}},temperature:0.2,max_completion_tokens:600}; const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify(body)}); const rawResponse=await res.text(); let data={}; try{ data=rawResponse ? JSON.parse(rawResponse) : {}; }catch(_err){ data={}; } if(!res.ok) throw new Error(getXaiErrorMessage(res.status,data,rawResponse.slice(0,220))); const rawText=extractStructuredTextFromXaiResponse(data); let parsed={}; try{ parsed=rawText?JSON.parse(rawText):data; }catch(parseErr){ throw new Error('Groq returned unreadable scan JSON. Try again with a clearer crop.'); } const merged=mergeIvScanResult(parsed, barcodeHint); ivScanState.barcode=barcodeHint; ivScanState.result=merged; populateIvScanForm(merged, barcodeHint); if(merged.medication || merged.dose || merged.batch || merged.serial || merged.expiry) setIvScanStatus('Review the fields below, then use scan.'); else setIvScanStatus('No IV fields were found. Try a closer, clearer photo of just the label.',true); }catch(err){ console.error(err); const message=String(err?.message||'').trim() || 'Scan failed.'; if(/Failed to fetch|Load failed|NetworkError/i.test(message)){ setIvScanStatus('Network/CORS error talking to Groq. Check connection, then try again. If it persists, the browser may be blocking direct API calls from the app.',true); }else{ setIvScanStatus(message,true); } if($('ivScanForm')) $('ivScanForm').classList.add('hidden'); if($('ivScanActions')) $('ivScanActions').classList.add('hidden'); }finally{ ivScanState.busy=false; } }
 function useIvScan(){ applyIvScanResultToEntry(getIvScanFormResult()); }
 
-let bloodScanState={file:null,dataUrl:'',sampleLabel:'',items:[],busy:false};
-let bloodScanCropState={file:null,objectUrl:'',rect:null,bounds:null,dragMode:'',pointerId:null,startX:0,startY:0,startRect:null};
-function resetBloodScanCropState(){
-  if(bloodScanCropState.objectUrl){ try{ URL.revokeObjectURL(bloodScanCropState.objectUrl); }catch(_err){} }
-  bloodScanCropState={file:null,objectUrl:'',rect:null,bounds:null,dragMode:'',pointerId:null,startX:0,startY:0,startRect:null};
-  const stage=$('bloodScanCropStage'); if(stage) stage.classList.add('hidden');
-  const wrap=$('bloodScanCropWrap'); if(wrap) wrap.classList.remove('is-ready');
-  const img=$('bloodScanCropImage'); if(img){ img.onload=null; img.src=''; }
-  const box=$('bloodScanCropBox'); if(box){ box.classList.add('hidden'); box.style.left=''; box.style.top=''; box.style.width=''; box.style.height=''; }
-}
-function triggerBloodScanPicker(){ const input=$('bloodScanInput'); if(!input) return; input.value=''; input.click(); }
-function getBloodScanCropBounds(){
-  const img=$('bloodScanCropImage'); const wrap=$('bloodScanCropWrap');
-  if(!img || !wrap || !img.clientWidth || !img.clientHeight) return null;
-  const bounds={left:img.offsetLeft, top:img.offsetTop, width:img.clientWidth, height:img.clientHeight};
-  bloodScanCropState.bounds=bounds;
-  return bounds;
-}
-function setBloodScanCropRect(rect){
-  const bounds=getBloodScanCropBounds();
-  const box=$('bloodScanCropBox');
-  if(!bounds || !box) return;
-  const minW=Math.min(bounds.width, Math.max(56, Math.min(96, bounds.width)));
-  const minH=Math.min(bounds.height, Math.max(56, Math.min(96, bounds.height)));
-  const next={...rect};
-  next.w=Math.max(minW, Math.min(next.w, bounds.width));
-  next.h=Math.max(minH, Math.min(next.h, bounds.height));
-  next.x=Math.max(bounds.left, Math.min(next.x, bounds.left + bounds.width - next.w));
-  next.y=Math.max(bounds.top, Math.min(next.y, bounds.top + bounds.height - next.h));
-  bloodScanCropState.rect=next;
-  box.classList.remove('hidden');
-  box.style.left=`${next.x}px`;
-  box.style.top=`${next.y}px`;
-  box.style.width=`${next.w}px`;
-  box.style.height=`${next.h}px`;
-}
-function initialiseBloodScanCropRect(){
-  const bounds=getBloodScanCropBounds();
-  if(!bounds) return;
-  const marginX=Math.max(12, Math.round(bounds.width*0.08));
-  const marginY=Math.max(12, Math.round(bounds.height*0.12));
-  setBloodScanCropRect({x:bounds.left+marginX, y:bounds.top+marginY, w:Math.max(72, bounds.width - marginX*2), h:Math.max(72, bounds.height - marginY*2)});
-}
-function startBloodScanCropDrag(ev){
-  if(!bloodScanCropState.rect) return;
-  const handle=ev.target.closest('.blood-scan-crop-handle');
-  bloodScanCropState.dragMode=handle ? String(handle.dataset.handle||'se') : 'move';
-  bloodScanCropState.pointerId=ev.pointerId;
-  bloodScanCropState.startX=ev.clientX;
-  bloodScanCropState.startY=ev.clientY;
-  bloodScanCropState.startRect={...bloodScanCropState.rect};
-  ev.preventDefault();
-  ev.stopPropagation();
-}
-function updateBloodScanCropDrag(ev){
-  if(bloodScanCropState.pointerId==null || ev.pointerId!==bloodScanCropState.pointerId || !bloodScanCropState.startRect) return;
-  const bounds=getBloodScanCropBounds();
-  if(!bounds) return;
-  const start=bloodScanCropState.startRect;
-  const dx=ev.clientX - bloodScanCropState.startX;
-  const dy=ev.clientY - bloodScanCropState.startY;
-  const minW=Math.min(bounds.width, Math.max(56, Math.min(96, bounds.width)));
-  const minH=Math.min(bounds.height, Math.max(56, Math.min(96, bounds.height)));
-  const right=start.x + start.w;
-  const bottom=start.y + start.h;
-  let x=start.x, y=start.y, w=start.w, h=start.h;
-  const mode=bloodScanCropState.dragMode || 'move';
-  if(mode==='move'){
-    x=Math.max(bounds.left, Math.min(start.x + dx, bounds.left + bounds.width - start.w));
-    y=Math.max(bounds.top, Math.min(start.y + dy, bounds.top + bounds.height - start.h));
-  }else{
-    if(mode.includes('n')){
-      y=Math.max(bounds.top, Math.min(start.y + dy, bottom - minH));
-      h=bottom - y;
-    }
-    if(mode.includes('s')){
-      h=Math.max(minH, Math.min(start.h + dy, bounds.top + bounds.height - start.y));
-    }
-    if(mode.includes('w')){
-      x=Math.max(bounds.left, Math.min(start.x + dx, right - minW));
-      w=right - x;
-    }
-    if(mode.includes('e')){
-      w=Math.max(minW, Math.min(start.w + dx, bounds.left + bounds.width - start.x));
-    }
-  }
-  setBloodScanCropRect({x,y,w,h});
-  ev.preventDefault();
-}
-function endBloodScanCropDrag(ev){
-  if(bloodScanCropState.pointerId==null) return;
-  if(ev && ev.pointerId!=null && ev.pointerId!==bloodScanCropState.pointerId) return;
-  bloodScanCropState.pointerId=null;
-  bloodScanCropState.dragMode='';
-  bloodScanCropState.startRect=null;
-}
-async function beginBloodScanCrop(file){
-  resetBloodScanCropState();
-  const stage=$('bloodScanCropStage'); const startActions=$('bloodScanStartActions'); const form=$('bloodScanForm'); const actions=$('bloodScanActions'); const preview=$('bloodScanPreview');
-  if(startActions) startActions.classList.add('hidden');
-  if(form) form.classList.add('hidden');
-  if(actions) actions.classList.add('hidden');
-  if(preview){ preview.src=''; preview.classList.add('hidden'); }
-  const img=$('bloodScanCropImage');
-  if(!stage || !img) return;
-  stage.classList.remove('hidden');
-  setBloodScanStatus('Adjust the crop box around one visible blood result set, then scan.', false);
-  bloodScanCropState.file=file;
-  bloodScanCropState.objectUrl=URL.createObjectURL(file);
-  await new Promise((resolve,reject)=>{
-    img.onload=()=>{ requestAnimationFrame(()=>{ initialiseBloodScanCropRect(); resolve(); }); };
-    img.onerror=()=>reject(new Error('Could not prepare the image for cropping.'));
-    img.src=bloodScanCropState.objectUrl;
-  });
-}
-async function createBloodScanCropDataUrl(){
-  const img=$('bloodScanCropImage');
-  const rect=bloodScanCropState.rect;
-  const bounds=getBloodScanCropBounds();
-  if(!img || !rect || !bounds) throw new Error('Could not prepare the selected crop.');
-  const scaleX=(img.naturalWidth||0) / bounds.width;
-  const scaleY=(img.naturalHeight||0) / bounds.height;
-  if(!Number.isFinite(scaleX) || !Number.isFinite(scaleY) || scaleX<=0 || scaleY<=0) throw new Error('Could not prepare the selected crop.');
-  const sx=Math.max(0, Math.round((rect.x - bounds.left) * scaleX));
-  const sy=Math.max(0, Math.round((rect.y - bounds.top) * scaleY));
-  const sw=Math.max(1, Math.round(rect.w * scaleX));
-  const sh=Math.max(1, Math.round(rect.h * scaleY));
-  const canvas=document.createElement('canvas');
-  canvas.width=sw; canvas.height=sh;
-  const ctx=canvas.getContext('2d');
-  if(!ctx) throw new Error('Could not crop the image.');
-  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
-  const rawDataUrl=canvas.toDataURL('image/jpeg', 0.95);
-  const croppedFile=dataUrlToFile(rawDataUrl, 'blood-scan-crop.jpg');
-  return await normaliseBlisterScanImage(croppedFile);
-}
-function resetBloodScanState(){ bloodScanState={file:null,dataUrl:'',sampleLabel:'',items:[],busy:false}; resetBloodScanCropState(); if($('bloodScanInput')) $('bloodScanInput').value=''; if($('bloodScanPreview')){ $('bloodScanPreview').src=''; $('bloodScanPreview').classList.add('hidden'); } if($('bloodScanSampleLabel')) $('bloodScanSampleLabel').value=''; if($('bloodScanRows')){ $('bloodScanRows').innerHTML=''; $('bloodScanRows').classList.add('hidden'); } if($('bloodScanForm')) $('bloodScanForm').classList.add('hidden'); if($('bloodScanActions')) $('bloodScanActions').classList.add('hidden'); if($('bloodScanStartActions')) $('bloodScanStartActions').classList.remove('hidden'); if($('bloodScanMeta')) $('bloodScanMeta').textContent=''; setBloodScanStatus('Take a photo or screenshot of one blood result set.',false); }
-function setBloodScanStatus(msg,isError=false){ const el=$('bloodScanStatus'); if(!el) return; el.textContent=msg||''; el.classList.toggle('error',!!isError); }
-function openBloodScanOverlay(){ const key=getXaiApiKey(); if(!key){ alert('Please add your Groq API key in Options first.'); showSection('handover'); return false; } const overlay=$('bloodScanOverlay'); if(!overlay) return false; resetBloodScanState(); overlay.classList.remove('hidden'); overlay.setAttribute('aria-hidden','false'); return true; }
-function closeBloodScanOverlay(){ const overlay=$('bloodScanOverlay'); if(!overlay) return; overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); resetBloodScanState(); }
-function defaultBloodScanItem(){ return {key:'',label:'',value:'',rejected:false}; }
-function normaliseBloodAnalyteKey(value){
-  const raw=String(value||'').trim();
-  if(!raw) return '';
-  const compact=raw.toLowerCase().replace(/[^a-z0-9]+/g,'');
-  const direct={kplus:'k',egfr:'egfr',cca:'ca',correctedcalcium:'ca',calciumcorrected:'ca',adjustedcalcium:'ca',adjustedca:'ca',adjca:'ca'};
-  if(direct[compact]) return direct[compact];
-  if(Array.isArray(BLOODS_ANALYTES)) {
-    for(const analyte of BLOODS_ANALYTES){
-      if(!analyte) continue;
-      if(String(analyte.key||'').toLowerCase()===raw.toLowerCase()) return analyte.key;
-      if(String(analyte.key||'').toLowerCase().replace(/[^a-z0-9]+/g,'')===compact) return analyte.key;
-      if(Array.isArray(analyte.labels) && analyte.labels.some(label=>String(label||'').toLowerCase().replace(/[^a-z0-9]+/g,'')===compact)) return analyte.key;
-      if(String(analyte.label||'').toLowerCase().replace(/[^a-z0-9]+/g,'')===compact) return analyte.key;
-      if(String(analyte.trendLabel||'').toLowerCase().replace(/[^a-z0-9]+/g,'')===compact) return analyte.key;
-    }
-  }
-  return '';
-}
-function canonicaliseBloodAnalyteKey(value){ const raw=String(value||'').trim(); if(!raw) return ''; const key=normaliseBloodAnalyteKey(raw); if(key) return key; const compact=raw.toLowerCase().replace(/[^a-z0-9]+/g,''); const map={hb:'hb',haemoglobin:'hb',hemoglobin:'hb',wcc:'wcc',whitecells:'wcc',whitecellcount:'wcc',neut:'neut',neuts:'neut',neutrophils:'neut',plt:'plt',platelets:'plt',plateletcount:'plt',na:'na',sodium:'na',k:'k',potassium:'k',urea:'urea',cr:'cr',creatinine:'cr',egfr:'egfr',crp:'crp',alb:'alb',albumin:'alb',alt:'alt',alp:'alp',bili:'bili',bilirubin:'bili',cca:'ca',correctedcalcium:'ca',calciumcorrected:'ca',adjustedcalcium:'ca',adjustedca:'ca',adjca:'ca',calcium:'ca',ca:'ca',serumosm:'serumosm',serumosmolality:'serumosm',urineosm:'urineosm',urineosmolality:'urineosm',urinena:'urinena',urinesodium:'urinena',tsh:'tsh',cortisol:'cortisol'}; return map[compact] || ''; }
-function normaliseBloodScanValue(value){ return String(value==null?'':value).replace(/[<>]/g,'').replace(/\s+/g,' ').trim(); }
-function normaliseBloodScanItem(item){ const label=String(item?.label || item?.key || '').trim(); const key=canonicaliseBloodAnalyteKey(item?.key || label); return { key, label: label || (key ? ((typeof getBloodAnalyteConfig==='function' ? getBloodAnalyteConfig(key)?.label : '') || key.toUpperCase()) : ''), value: normaliseBloodScanValue(item?.value), rejected: !!item?.rejected }; }
-function normaliseBloodScanItems(items){ return (Array.isArray(items)?items:[]).map(item=>normaliseBloodScanItem(item)).filter(item=>item.key || item.label || item.value); }
-const BLOOD_SCAN_ALLOWED_KEYS=['hb','wcc','neut','plt','na','k','urea','cr','egfr','crp','alb','alt','alp','bili','ca','serumosm','urineosm','urinena','tsh','cortisol'];
-const BLOOD_SCAN_SCHEMA={type:'object',additionalProperties:false,required:['sampleLabel','items'],properties:{sampleLabel:{type:'string'},items:{type:'array',items:{type:'object',additionalProperties:false,required:['key','value'],properties:{key:{type:'string'},value:{type:'string'}}}}}};
-const BLOOD_SCAN_OUTPUT_GROUPS=[['hb','wcc','neut','plt'],['na','k','urea','cr','egfr'],['crp'],['serumosm','urineosm','urinena','tsh','cortisol'],['alb','alt','alp','bili','ca']];
-function renderBloodScanRows(){ const holder=$('bloodScanRows'); if(!holder) return; holder.innerHTML=''; bloodScanState.items.forEach((item,idx)=>{ const row=document.createElement('div'); row.className='blister-scan-row blood-scan-row'; row.dataset.index=String(idx); row.innerHTML=`<div class="blood-scan-row-main"><input class="blood-scan-label" placeholder="Analyte" value="${escapeHtml(item.label || item.key || '')}"><input class="blood-scan-value" placeholder="Value" value="${escapeHtml(item.value || '')}"><button type="button" class="small accept">Keep</button><button type="button" class="small reject">Skip</button></div>`; if(item.rejected) row.classList.add('rejected'); holder.appendChild(row); row.querySelector('.accept').onclick=()=>{ item.rejected=false; renderBloodScanRows(); }; row.querySelector('.reject').onclick=()=>{ item.rejected=true; renderBloodScanRows(); }; const labelInput=row.querySelector('.blood-scan-label'); const valueInput=row.querySelector('.blood-scan-value'); if(labelInput) labelInput.addEventListener('input',()=>{ const mappedKey=canonicaliseBloodAnalyteKey(labelInput.value); item.key=mappedKey; item.label=labelInput.value; renderBloodScanMetaLine(); }); if(valueInput) valueInput.addEventListener('input',()=>{ item.value=valueInput.value; }); }); holder.classList.toggle('hidden', bloodScanState.items.length===0); $('bloodScanForm')?.classList.toggle('hidden', bloodScanState.items.length===0 && !String($('bloodScanSampleLabel')?.value||'').trim()); $('bloodScanActions')?.classList.toggle('hidden', bloodScanState.items.length===0); renderBloodScanMetaLine(); }
-function renderBloodScanMetaLine(){ const el=$('bloodScanMeta'); if(!el) return; const accepted=bloodScanState.items.filter(item=>!item.rejected && item.value); const mapped=accepted.filter(item=>canonicaliseBloodAnalyteKey(item.key || item.label)); const unmapped=accepted.filter(item=>!canonicaliseBloodAnalyteKey(item.key || item.label)); const parts=[]; if(mapped.length) parts.push(`${mapped.length} value${mapped.length===1?'':'s'} ready`); if(unmapped.length) parts.push(`${unmapped.length} need${unmapped.length===1?'s':''} label review`); if(!parts.length) parts.push('Only accepted, mapped values will be added to the bloods field.'); el.textContent=parts.join(' · '); }
-function populateBloodScanForm(sampleLabel, items){ bloodScanState.sampleLabel=String(sampleLabel||'').trim(); bloodScanState.items=normaliseBloodScanItems(items); if($('bloodScanSampleLabel')) $('bloodScanSampleLabel').value=bloodScanState.sampleLabel; $('bloodScanForm')?.classList.remove('hidden'); $('bloodScanActions')?.classList.remove('hidden'); $('bloodScanStartActions')?.classList.add('hidden'); $('bloodScanCropStage')?.classList.add('hidden'); renderBloodScanRows(); }
-function getBloodScanFormResult(){ const sampleLabel=String($('bloodScanSampleLabel')?.value||'').trim(); const rows=Array.from(document.querySelectorAll('#bloodScanRows .blood-scan-row')); const items=rows.map(row=>{ const idx=Number(row.dataset.index||0); const existing=bloodScanState.items[idx] || defaultBloodScanItem(); const label=row.querySelector('.blood-scan-label')?.value || existing.label || ''; const key=canonicaliseBloodAnalyteKey(label || existing.key); const value=normaliseBloodScanValue(row.querySelector('.blood-scan-value')?.value || existing.value || ''); return normaliseBloodScanItem({...existing,key,label,value,rejected:existing.rejected}); }).filter(item=>item.label || item.value || item.key); return {sampleLabel, items}; }
-function formatBloodScanOutputLine(scan){ const accepted=Array.isArray(scan?.items) ? scan.items.filter(item=>!item.rejected && canonicaliseBloodAnalyteKey(item.key || item.label) && normaliseBloodScanValue(item.value)) : []; if(!accepted.length) return ''; const byKey=new Map(); accepted.forEach(item=>{ const key=canonicaliseBloodAnalyteKey(item.key || item.label); if(!key || byKey.has(key)) return; const analyte=(typeof getBloodAnalyteConfig==='function') ? getBloodAnalyteConfig(key) : null; byKey.set(key,{key,label: analyte && analyte.label ? analyte.label : String(item.label||'').trim(), value: normaliseBloodScanValue(item.value)}); }); const groups=[]; BLOOD_SCAN_OUTPUT_GROUPS.forEach(keys=>{ const bits=keys.map(key=>byKey.get(key)).filter(Boolean).map(item=>`${item.label} ${item.value}`); if(bits.length) groups.push(bits.join(' ')); }); const leftover=Array.from(byKey.values()).filter(item=>!BLOOD_SCAN_OUTPUT_GROUPS.some(group=>group.includes(item.key))).map(item=>`${item.label} ${item.value}`); if(leftover.length) groups.push(leftover.join(' ')); const sampleLabel=String(scan?.sampleLabel||'').trim(); return [sampleLabel].concat(groups).filter(Boolean).join(' | '); }
-function appendBloodScanLineToField(line){
-  const field=$("bloods");
-  if(!field) return {added:false,reason:'missing'};
-  const next=String(line||'').trim().replace(/\s{2,}/g,' ');
-  if(!next) return {added:false,reason:'empty'};
-  const existingLines=String(field.value||'').split(/\n+/).map(v=>String(v||'').trim()).filter(Boolean);
-  const normalise=v=>String(v||'').replace(/\s+/g,' ').trim().toLowerCase();
-  if(existingLines.some(existing=>normalise(existing)===normalise(next))) return {added:false,reason:'duplicate'};
-  existingLines.push(next);
-  field.value=existingLines.join('\n');
-  return {added:true,reason:''};
-}
-function useBloodScan(){ const scan=getBloodScanFormResult(); const accepted=scan.items.filter(item=>!item.rejected && normaliseBloodScanValue(item.value)); const mapped=accepted.filter(item=>canonicaliseBloodAnalyteKey(item.key || item.label)); if(!mapped.length){ alert('No accepted blood values to add.'); return; } const line=formatBloodScanOutputLine({...scan, items:mapped}); if(!line){ alert('No mappable blood values found.'); return; } const result=appendBloodScanLineToField(line); if(!result.added){ if(result.reason==='duplicate') alert('These bloods are already in the field.'); else alert('Could not add scanned bloods.'); return; } if(typeof renderBloodsSummaryCard==='function') renderBloodsSummaryCard(); calculateNews(); saveCurrentPatientForm(); saveData('Saved locally'); closeBloodScanOverlay(); }
-async function runBloodScan(source){ const apiKey=getXaiApiKey(); if(!apiKey){ setBloodScanStatus('Please add your Groq API key in Options first.',true); return; } bloodScanState.busy=true; setBloodScanStatus('Reading photo…'); try{ const dataUrl=typeof source==='string' ? source : await normaliseBlisterScanImage(source); bloodScanState.file=source instanceof File ? source : null; bloodScanState.dataUrl=dataUrl; $('bloodScanCropStage')?.classList.add('hidden'); const preview=$('bloodScanPreview'); if(preview){ preview.src=dataUrl; preview.classList.remove('hidden'); } setBloodScanStatus('Scanning blood results…'); const prompt=`Read this blood result screenshot or photo and extract one blood result set only. Use the main or latest visible set. Return sampleLabel if a date/time is visible. Return only analytes that are clearly shown. Use only these keys: ${BLOOD_SCAN_ALLOWED_KEYS.join(', ')}. Strip units from the numeric value and return only the result value, not the reference range. Ignore patient identifiers, headings, arrows that only mark abnormality, and reference ranges. Do not invent values. If an analyte is unclear, leave it out.`; const body={model:'meta-llama/llama-4-scout-17b-16e-instruct',messages:[{role:'system',content:'You extract structured blood result values from a photographed lab report.'},{role:'user',content:[{type:'text',text:prompt},{type:'image_url',image_url:{url:dataUrl}}]}],response_format:{type:'json_schema',json_schema:{name:'blood_result_scan',strict:true,schema:BLOOD_SCAN_SCHEMA}},temperature:0.1,max_completion_tokens:900}; const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify(body)}); const rawResponse=await res.text(); let data={}; try{ data=rawResponse ? JSON.parse(rawResponse) : {}; }catch(_err){ data={}; } if(!res.ok) throw new Error(getXaiErrorMessage(res.status,data,rawResponse.slice(0,220))); const rawText=extractStructuredTextFromXaiResponse(data); let parsed={}; try{ parsed=rawText ? JSON.parse(rawText) : data; }catch(parseErr){ throw new Error('Groq returned unreadable blood scan JSON. Try again with a clearer crop.'); } const sampleLabel=String(parsed?.sampleLabel||'').trim(); const items=normaliseBloodScanItems(parsed?.items||[]); bloodScanState.sampleLabel=sampleLabel; bloodScanState.items=items; populateBloodScanForm(sampleLabel, items); if(items.length){ setBloodScanStatus('Review the values below, then use scan.'); }else{ setBloodScanStatus('No blood values were found. Try a closer, clearer crop of just the result table.',true); $('bloodScanActions')?.classList.add('hidden'); } }catch(err){ console.error(err); const message=String(err?.message||'').trim() || 'Scan failed.'; if(/Failed to fetch|Load failed|NetworkError/i.test(message)){ setBloodScanStatus('Network/CORS error talking to Groq. Check connection, then try again. If it persists, the browser may be blocking direct API calls from the app.',true); } else { setBloodScanStatus(message,true); } if($('bloodScanForm')) $('bloodScanForm').classList.add('hidden'); if($('bloodScanActions')) $('bloodScanActions').classList.add('hidden'); } finally { bloodScanState.busy=false; } }
-async function scanSelectedBloodCrop(){
-  if(bloodScanState.busy) return;
-  try{
-    setBloodScanStatus('Preparing cropped photo…', false);
-    const croppedDataUrl=await createBloodScanCropDataUrl();
-    await runBloodScan(croppedDataUrl);
-  }catch(err){
-    console.error(err);
-    setBloodScanStatus(String(err?.message||'Could not prepare the cropped image.'), true);
-  }
-}
 function importAcceptedBlisterMeds(){
   const accepted=blisterScanState.items.filter(item=>!item.rejected && (item.medication||item.dose||item.frequency));
   if(!accepted.length){ alert('No accepted medications to add.'); return; }
@@ -6507,7 +6035,7 @@ function openWorkbookLink(){
 }
 
 </script><script>
-function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
+function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){$("saveStatus").textContent="Save failed"}}
 function nowString(){return new Date().toLocaleString([],{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}
 function hideAll(){["patients","tasks","handover","patientDetail","deletedPage","eventLogPage"].forEach(id=>$(id).classList.add("hidden"))}
 function setPatientViewportMode(active){document.body.classList.toggle("patients-section-active",!!active);document.documentElement.classList.toggle("patients-section-active",!!active)}
@@ -7213,7 +6741,6 @@ function toggleDnacprFormSeen(){
 
 function renderPatientList() {
   const list = $("patientList");
-  if(typeof updatePatientMetricsUI === "function") updatePatientMetricsUI();
   list.innerHTML = "";
   const ids = Object.keys(patients).map(Number).sort(comparePatientsForList).filter(id=>patientMatchesSearch(patients[id]));
   updatePatientSortMenuUI();
@@ -8842,13 +8369,22 @@ function openPatient(id) {
     requestAnimationFrame(()=>{ patientDetailEl.scrollTop=0; });
   }
   try{ window.scrollTo(0,0); }catch(e){}
+  $("backBtn").classList.remove("hidden");
+  $("appHeader").classList.add("has-back");
+  $("headerTitle").textContent = p.name;
+  const ageSexStr = ageSex(p.age, p.sex);
+  $("headerAge").textContent = ageSexStr ? ` ${ageSexStr}` : "";
+  $("headerAge").classList.toggle("hidden", !ageSexStr);
+  $("headerSub").textContent = "";
+  $("headerPatientMeta2").textContent = p.referralSource ? `${p.referralSource} referral` : "";
+  $("headerPatientMeta2").classList.toggle("hidden", !p.referralSource);
   setFieldValues(p.form || {});
   detailLoadedForCurrentPatient = true;
   updateTimestampButton();
   setActive("navPatients");
+  syncSharedHeaderHeight();
   setPatientDetailStackActive(true);
   animatePatientDetailSwipe(0,true);
-  animatePatientDetailOpen(); // slide panel + header in from right
   saveData();
   calculateNews();
   if(typeof renderBloodsSummaryCard==='function'){
@@ -9012,33 +8548,16 @@ function setBloodsSummaryCollapsed(collapsed, options={}){
   const hint = $("bloodsSummaryHint");
   const panel = $("bloodsPanel");
   const isCollapsed = !!collapsed;
-  if(window.HAH_UI_STANDARDS && typeof window.HAH_UI_STANDARDS.setCollapsibleState === 'function'){
-    window.HAH_UI_STANDARDS.setCollapsibleState({
-      container: card,
-      body: panel,
-      toggle: title,
-      hint,
-      collapsed: isCollapsed,
-      collapsedClass: 'is-collapsed',
-      expandedClass: 'is-expanded',
-      hiddenClass: 'hidden',
-      hintWhenCollapsed: '(Tap to expand)',
-      hintWhenExpanded: '(Tap to collapse)',
-      titleWhenCollapsed: 'Tap to expand',
-      titleWhenExpanded: 'Tap to collapse'
-    });
-  } else {
-    if(card) card.classList.toggle("is-collapsed", isCollapsed);
-    if(panel){
-      panel.classList.toggle("hidden", isCollapsed);
-      panel.setAttribute("aria-hidden", isCollapsed ? "true" : "false");
-    }
-    if(title){
-      title.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
-      title.setAttribute("title", isCollapsed ? "Tap to expand" : "Tap to collapse");
-    }
-    if(hint) hint.textContent = isCollapsed ? "(Tap to expand)" : "(Tap to collapse)";
+  if(card) card.classList.toggle("is-collapsed", isCollapsed);
+  if(panel){
+    panel.classList.toggle("hidden", isCollapsed);
+    panel.setAttribute("aria-hidden", isCollapsed ? "true" : "false");
   }
+  if(title){
+    title.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
+    title.setAttribute("title", isCollapsed ? "Tap to expand" : "Tap to collapse");
+  }
+  if(hint) hint.textContent = isCollapsed ? "(Tap to expand)" : "(Tap to collapse)";
   if(persist && patients[currentPatient] && patients[currentPatient].form){
     patients[currentPatient].form.bloodsSummaryCollapsed = isCollapsed;
   }
@@ -10270,91 +9789,7 @@ function bulletKeyHandler(e){const el=e.target; if(e.key==="Enter"){e.preventDef
 let detailEdgeSwipeState=null;
 let detailSwipeCompleting=false;
 let sharedHeaderMinHeight=0;
-function getDetailUnderlayOffset(){ return -Math.round((window.innerWidth||390)*0.28); }
-
-/* ── Header shift mechanism ──────────────────────────────────── */
-function setPatientDetailHeaderShift(dx, options){
-  const root=document.documentElement; if(!root) return;
-  const nextDx=Math.round(Number(dx)||0); // no clamp — supports negative (leftward)
-  const dragging=!!(options && options.dragging);
-  const duration=dragging ? '0ms' : String(options && options.duration ? options.duration : '240ms');
-  const easing=String(options && options.easing ? options.easing : 'cubic-bezier(.22,.9,.18,1)');
-  root.style.setProperty('--hah-header-shift', nextDx+'px');
-  root.style.setProperty('--hah-header-shift-duration', duration);
-  root.style.setProperty('--hah-header-shift-ease', easing);
-}
-function resetPatientDetailHeaderShift(){
-  const root=document.documentElement; if(!root) return;
-  root.style.setProperty('--hah-header-shift', '0px');
-  root.style.setProperty('--hah-header-shift-duration', '0ms');
-  root.style.setProperty('--hah-header-shift-ease', 'linear');
-}
-
-/* ── Patient panel open animation ───────────────────────────── */
-let detailOpenAnimTimer=null;
-function updateHeaderForPatient(){
-  // Updates header content — called once header is off-screen (safe to swap content invisibly)
-  try{
-    const p=(typeof patients!=='undefined' && currentPatient!=null) ? patients[currentPatient] : null;
-    if(!p) return;
-    $("backBtn").classList.remove("hidden");
-    $("appHeader").classList.add("has-back");
-    $("headerTitle").textContent=p.name;
-    const ageSexStr=typeof ageSex==='function' ? ageSex(p.age,p.sex) : '';
-    $("headerAge").textContent=ageSexStr ? ' '+ageSexStr : '';
-    $("headerAge").classList.toggle("hidden",!ageSexStr);
-    $("headerSub").textContent='';
-    $("headerPatientMeta2").textContent=p.referralSource ? p.referralSource+' referral' : '';
-    $("headerPatientMeta2").classList.toggle("hidden",!p.referralSource);
-    if(typeof syncSharedHeaderHeight==='function') syncSharedHeaderHeight();
-  }catch(_e){}
-}
-function animatePatientDetailOpen(){
-  const detail=document.getElementById('patientDetail');
-  const patients=document.getElementById('patients');
-  if(!detail) return;
-  if(typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches){
-    // No animation — update header content immediately
-    updateHeaderForPatient();
-    return;
-  }
-  clearTimeout(detailOpenAnimTimer);
-  // Clear any stale inline styles from swipe gestures
-  try{ detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow=''; }catch(_e){}
-  try{ if(patients){ patients.style.transition=''; patients.style.transform=''; } }catch(_e){}
-  // Snap header to +windowWidth — old app title rides off-screen right invisibly
-  setPatientDetailHeaderShift(window.innerWidth||390, {dragging:true});
-  // Set up prep position via CSS classes
-  detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
-  if(patients) patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
-  detail.classList.add('hah-detail-open-prep');
-  if(patients) patients.classList.add('hah-detail-underlay-open-prep');
-  void detail.offsetWidth; // commit snap — header is now off-screen right with old content
-  requestAnimationFrame(function(){
-    // Header is off-screen: safe to update content before sliding in
-    updateHeaderForPatient();
-    // Start all three in the same frame: panel, list parallax, header
-    detail.classList.add('hah-detail-open-anim');
-    detail.classList.remove('hah-detail-open-prep');
-    if(patients){
-      patients.classList.add('hah-detail-underlay-open-anim');
-      patients.classList.remove('hah-detail-underlay-open-prep');
-    }
-    setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:'cubic-bezier(.25,.46,.45,.94)'});
-  });
-  detailOpenAnimTimer=setTimeout(function(){
-    detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
-    if(patients){
-      patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
-      // Hold parallax for edge-swipe — only if still in detail view (race condition guard)
-      if(document.body.classList.contains('detail-view-active')){
-        const offset=getDetailUnderlayOffset();
-        try{ patients.style.transition='none'; patients.style.transform='translate3d('+offset+'px,0,0)'; }catch(_e){}
-      }
-    }
-    setPatientDetailHeaderShift(0, {dragging:true});
-  }, 410);
-}
+const DETAIL_UNDERLAY_START_OFFSET=-36;
 function patientDetailIsVisible(){
   const el=$("patientDetail");
   return !!(el && !el.classList.contains("hidden"));
@@ -10392,7 +9827,6 @@ function setPatientDetailStackActive(active){
     detail.style.transition="";
     detail.style.transform="";
     detail.style.boxShadow="";
-    resetPatientDetailHeaderShift();
   }
 }
 function animatePatientDetailSwipe(dx=0, dragging=false){
@@ -10402,24 +9836,21 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
   const activeDx=Math.max(0, Math.round(dx||0));
   const width=Math.max(window.innerWidth||390,320);
   const progress=Math.max(0,Math.min(1,activeDx/width));
-  const underlayShift=Math.round(getDetailUnderlayOffset()*(1-progress));
-  const swipeEasing='cubic-bezier(.22,.9,.18,1)';
-  const transition=dragging?"none":"transform .24s "+swipeEasing;
+  const underlayShift=Math.round(DETAIL_UNDERLAY_START_OFFSET*(1-progress));
+  const transition=dragging?"none":"transform .24s cubic-bezier(.22,.9,.18,1)";
   detail.style.transition=transition;
   patients.style.transition=transition;
   detail.style.transform=`translate3d(${activeDx}px,0,0)`;
   patients.style.transform=`translate3d(${underlayShift}px,0,0)`;
   detail.style.boxShadow=activeDx>0?"0 12px 32px rgba(15,23,42,.12)":"";
-  // Header follows the panel in sync during swipe gesture
-  setPatientDetailHeaderShift(activeDx, {dragging:dragging, duration:'.24s', easing:swipeEasing});
 }
 
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_561_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_561_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_543_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_543_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10577,61 +10008,14 @@ function resetPatientDetailSwipe(){
     detail.style.boxShadow="";
     patients.style.transition="";
     patients.style.transform="";
-    resetPatientDetailHeaderShift();
   },260);
 }
-function goBackToPatientList(opts){
+function goBackToPatientList(){
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
   if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
   detailSwipeCompleting=false;
-  detailEdgeSwipeState=null;
-
-  const skipAnimation=!!(opts && opts.skipAnimation);
-  const detail=$("patientDetail");
-  const patients=$("patients");
-  const reduced=typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if(!skipAnimation && detail && patients && !reduced){
-    // Animated back-slide — exact mirror of forward open animation
-    const offset=getDetailUnderlayOffset();
-    // Snap patient list and header to their starting positions (both shifted left)
-    patients.style.transition='none';
-    patients.style.transform='translate3d('+offset+'px,0,0)';
-    try{
-      // Update header content while title is invisible
-      $("headerTitle").textContent='Hospital at Home Companion (DEMO)';
-      $("headerSub").textContent='LK Medica Software Solutions Inc.';
-      $("headerAge").classList.add('hidden'); $("headerAge").textContent='';
-      $("headerPatientMeta2").classList.add('hidden'); $("headerPatientMeta2").textContent='';
-      $("backBtn").classList.add('hidden');
-      $("appHeader").classList.remove('has-back');
-      setPatientDetailHeaderShift(offset, {dragging:true});
-    }catch(_e){}
-    void detail.offsetWidth; // single reflow commits all three snap positions
-    const easing='cubic-bezier(.25,.46,.45,.94)';
-    // Start all three animations in the same frame — mirrors the forward open
-    detail.style.transition='transform 360ms '+easing+',box-shadow 360ms ease';
-    patients.style.transition='transform 360ms '+easing;
-    setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:easing});
-    detail.style.transform='translate3d(100%,0,0)';
-    detail.style.boxShadow='-4px 0 20px rgba(15,23,42,.09)';
-    patients.style.transform='translate3d(0,0,0)';
-    let done_called=false;
-    const done=()=>{
-      if(done_called) return; done_called=true;
-      detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow='';
-      patients.style.transition=''; patients.style.transform='';
-      resetPatientDetailHeaderShift();
-      detailLoadedForCurrentPatient=false;
-      saveData(); renderPatientList(); showSection("patients");
-    };
-    detail.addEventListener('transitionend', done, {once:true});
-    setTimeout(done, 420);
-    return;
-  }
-
-  // Instant path (after swipe-back gesture, or reduced-motion)
   resetPatientDetailSwipe();
+  detailEdgeSwipeState=null;
   detailLoadedForCurrentPatient=false;
   saveData();
   renderPatientList();
@@ -10645,12 +10029,12 @@ function completePatientDetailSwipeBack(){
   const detail=$("patientDetail");
   if(!detail){
     detailSwipeCompleting=false;
-    goBackToPatientList({skipAnimation:true});
+    goBackToPatientList();
     return;
   }
   const finish=()=>{
     detailSwipeCompleting=false;
-    goBackToPatientList({skipAnimation:true});
+    goBackToPatientList();
   };
   detail.addEventListener("transitionend", finish, {once:true});
 }
@@ -10700,72 +10084,6 @@ function initPatientDetailEdgeSwipe(){
   window.addEventListener("resize",()=>{ syncSharedHeaderHeight(); if(patientDetailIsVisible() && !detailEdgeSwipeState && !detailSwipeCompleting) animatePatientDetailSwipe(0,true); });
 }
 
-
-</script><script>
-(function(global){
-  const PROJECT_RULES = Object.freeze({
-    patientCardHeader: Object.freeze({
-      fontSize: '16px',
-      fontWeight: 800,
-      lineHeight: 1.2,
-      color: '#1c1c1e'
-    }),
-    helperText: Object.freeze({
-      fontSize: '12px',
-      fontWeight: 600,
-      lineHeight: 1.35,
-      color: '#475467'
-    }),
-    collapseState: Object.freeze({
-      expandedClass: 'is-expanded',
-      collapsedClass: 'is-collapsed',
-      hiddenClass: 'hidden'
-    })
-  });
-
-  function setCollapsibleState(config){
-    if(!config) return null;
-    const container = config.container || null;
-    const body = config.body || null;
-    const toggle = config.toggle || null;
-    const hint = config.hint || null;
-    const collapsed = !!config.collapsed;
-    const collapsedClass = config.collapsedClass || PROJECT_RULES.collapseState.collapsedClass;
-    const expandedClass = config.expandedClass || PROJECT_RULES.collapseState.expandedClass;
-    const hiddenClass = config.hiddenClass || PROJECT_RULES.collapseState.hiddenClass;
-    const hintWhenCollapsed = config.hintWhenCollapsed || '(Tap to expand)';
-    const hintWhenExpanded = config.hintWhenExpanded || '(Tap to collapse)';
-    if(container){
-      container.classList.toggle(collapsedClass, collapsed);
-      container.classList.toggle(expandedClass, !collapsed);
-      container.dataset.collapsed = collapsed ? 'true' : 'false';
-    }
-    if(body){
-      body.classList.toggle(hiddenClass, collapsed);
-      body.setAttribute('aria-hidden', collapsed ? 'true' : 'false');
-    }
-    if(toggle){
-      toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-      toggle.dataset.collapsed = collapsed ? 'true' : 'false';
-      if(config.titleWhenCollapsed || config.titleWhenExpanded){
-        toggle.setAttribute('title', collapsed ? (config.titleWhenCollapsed || hintWhenCollapsed.replace(/[()]/g,'')) : (config.titleWhenExpanded || hintWhenExpanded.replace(/[()]/g,'')));
-      }
-    }
-    if(hint){
-      hint.textContent = collapsed ? hintWhenCollapsed : hintWhenExpanded;
-    }
-    if(typeof config.onAfter === 'function'){
-      config.onAfter({collapsed, container, body, toggle, hint});
-    }
-    return collapsed;
-  }
-
-  global.HAH_PROJECT_RULES = PROJECT_RULES;
-  global.HAH_UI_STANDARDS = Object.freeze({
-    rules: PROJECT_RULES,
-    setCollapsibleState
-  });
-})(window);
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
@@ -11123,7 +10441,7 @@ const ONBOARDING_WIZARD_STEPS=[
   {
     kicker:'Step 4',
     title:'Paste in your testing keys',
-    text:'<p>Groq powers blister pack, IV label and bloods scan. Gemini powers ECG Assist. Deepgram powers live dictation.</p><p>Any of these can be left blank and edited later in Options.</p>',
+    text:'<p>Groq powers blister pack and IV label scan. Gemini powers ECG Assist. Deepgram powers live dictation.</p><p>Any of these can be left blank and edited later in Options.</p>',
     image:ONBOARDING_GUIDE_IMAGES.think,
     panel:'api',
     figureClass:'api-step',
@@ -11833,7 +11151,7 @@ document.addEventListener("DOMContentLoaded",function(){
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 1100);
   }
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
-  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -12134,7 +11452,6 @@ document.addEventListener("DOMContentLoaded",function(){
   };
   if($("scanBlisterBtn")) $("scanBlisterBtn").onclick=()=>{ noteBlisterPickerLaunch(); $("blisterScanInput")?.click(); };
   if($("scanIVBtn")) $("scanIVBtn").onclick=()=>{ $("ivScanInput")?.click(); };
-  if($("scanBloodsBtn")) $("scanBloodsBtn").onclick=()=>{ if(openBloodScanOverlay()) triggerBloodScanPicker(); };
   $("ivVipInfoBtn")?.addEventListener("click", e=>{ e.preventDefault(); openVipScoreOverlay(); });
   $("vipScoreBackdrop")?.addEventListener("click", ()=>closeVipScoreOverlay(true));
   $("vipScoreCloseBtn")?.addEventListener("click", ()=>closeVipScoreOverlay(true));
@@ -12143,18 +11460,6 @@ document.addEventListener("DOMContentLoaded",function(){
   if($("useIvScanBtn")) $("useIvScanBtn").onclick=useIvScan;
   if($("ivScanBackdrop")) $("ivScanBackdrop").onclick=closeIvScanOverlay;
   if($("ivScanInput")) $("ivScanInput").addEventListener('change',e=>{ const file=e.target.files && e.target.files[0]; if(file){ if(openIvScanOverlay()) runIvScan(file); } });
-  if($("chooseBloodPhotoBtn")) $("chooseBloodPhotoBtn").onclick=()=>{ if(openBloodScanOverlay()) triggerBloodScanPicker(); };
-  if($("retakeBloodPhotoBtn")) $("retakeBloodPhotoBtn").onclick=()=>{ if(openBloodScanOverlay()) triggerBloodScanPicker(); };
-  if($("scanBloodCropBtn")) $("scanBloodCropBtn").onclick=scanSelectedBloodCrop;
-  if($("closeBloodScanBtn")) $("closeBloodScanBtn").onclick=closeBloodScanOverlay;
-  if($("useBloodScanBtn")) $("useBloodScanBtn").onclick=useBloodScan;
-  if($("bloodScanBackdrop")) $("bloodScanBackdrop").onclick=closeBloodScanOverlay;
-  if($("bloodScanSampleLabel")) $("bloodScanSampleLabel").addEventListener('input',()=>{ if(typeof renderBloodScanMetaLine==='function') renderBloodScanMetaLine(); });
-  if($("bloodScanCropBox")) $("bloodScanCropBox").addEventListener('pointerdown',startBloodScanCropDrag);
-  document.addEventListener('pointermove',updateBloodScanCropDrag);
-  document.addEventListener('pointerup',endBloodScanCropDrag);
-  document.addEventListener('pointercancel',endBloodScanCropDrag);
-  if($("bloodScanInput")) $("bloodScanInput").addEventListener('change',async e=>{ const file=e.target.files && e.target.files[0]; if(file){ try{ await beginBloodScanCrop(file); }catch(err){ console.error(err); setBloodScanStatus(String(err?.message||'Could not prepare the image for cropping.'), true); } } });
   if($("medEditName")) attachMedAutocomplete($("medEditName"));
   if($("blisterPhotoLightbox")) $("blisterPhotoLightbox").onclick=closeBlisterPhotoLightbox;
   if($("chooseBlisterPhotoBtn")) $("chooseBlisterPhotoBtn").onclick=()=>{ noteBlisterPickerLaunch(); $("blisterScanInput")?.click(); };
@@ -12243,17 +11548,6 @@ document.addEventListener("DOMContentLoaded",function(){
     const restored=restoreDefaultClinicalReviewSettings(true);
     if(restored) renderExamFindingsPresets();
   });
-  $("addPmhPresetBtn")?.addEventListener('click', addPmhPresetSetting);
-  $("pmhPresetAddInput")?.addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault(); addPmhPresetSetting();}});
-  $("pmhPresetSettingsChips")?.addEventListener('click', handlePmhPresetSettingsClick);
-  $("savePmhPresetSettingsBtn")?.addEventListener('click',()=>{
-    savePmhPresetSettings(true);
-    renderPmhPresets();
-  });
-  $("restorePmhPresetsBtn")?.addEventListener('click',()=>{
-    const restored=restoreDefaultPmhPresetSettings(true);
-    if(restored) renderPmhPresets();
-  });
   $("saveGraphSettingsBtn").onclick=()=>{
     if($("graphClientIdInput").readOnly){
       setGraphSettingsLocked(false);
@@ -12292,66 +11586,11 @@ const PMH_DEFAULT_RECENT=Object.freeze([
 const PMH_OTHER_PRESETS=Object.freeze([
   'AAA','B12 deficiency',"Barrett's",'Bipolar disorder','Bladder ca','BPH','Breast ca','Bronchiectasis','Cervical ca','Chronic liver disease','Coeliac disease','Colorectal ca','Diverticular disease','DVT','Endometrial ca','Gallstones','Glaucoma','Gout','Hearing impairment','Hepatitis B','Hepatitis C','IBD','Learning disability','Leukaemia','Lung ca','Lymphoma','MDS','Melanoma','MGUS','Migraine','Multiple sclerosis','Myeloma','NAFLD','Neuropathy','Oesophagogastric ca','Osteoporosis','Ovarian ca','PAD','Pancreatic ca','Peptic ulcer disease','PMR','Previous malignancy','Prostate ca','Psoriasis','RA','Recurrent cellulitis','Renal stones','Schizophrenia','Seizure disorder','Valvular heart disease','Venous insufficiency','Visual impairment'
 ]);
-const PMH_PRESET_CATALOG_STORAGE_KEY='hahPmhPresetCatalogV1';
 const PMH_PRESET_RECENT_STORAGE_KEY='hahPmhPresetRecentV1';
 const PMH_PRESET_USE_COUNTS_STORAGE_KEY='hahPmhPresetUseCountsV1';
 const PMH_RECENT_LIMIT=PMH_DEFAULT_RECENT.length;
 const PMH_PROMOTION_MIN_USES=6;
-const PMH_DEFAULT_ALL_PRESETS=Object.freeze(Array.from(new Map([...PMH_DEFAULT_RECENT, ...PMH_OTHER_PRESETS].map(item=>[String(item).toLowerCase(), item])).values()));
-function sanitisePmhPresetCatalog(raw){
-  const source=Array.isArray(raw)?raw:(raw&&Array.isArray(raw.allPresets)?raw.allPresets:[]);
-  const seen=new Set();
-  const cleaned=source.map(normalisePmhPresetLine).filter(item=>{
-    if(!item) return false;
-    const key=item.toLowerCase();
-    if(seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-  return cleaned.length?cleaned:PMH_DEFAULT_ALL_PRESETS.slice();
-}
-function defaultPmhPresetCatalog(){return {allPresets:PMH_DEFAULT_ALL_PRESETS.slice()};}
-function loadPmhPresetCatalog(){
-  try{
-    const stored=JSON.parse(localStorage.getItem(PMH_PRESET_CATALOG_STORAGE_KEY)||'{}');
-    return {allPresets:sanitisePmhPresetCatalog(stored)};
-  }catch(_e){}
-  return defaultPmhPresetCatalog();
-}
-function savePmhPresetCatalog(items){
-  const catalog={allPresets:sanitisePmhPresetCatalog(Array.isArray(items)?items:(items&&items.allPresets)||[])};
-  try{localStorage.setItem(PMH_PRESET_CATALOG_STORAGE_KEY, JSON.stringify(catalog));}catch(_e){}
-  const validKeys=new Set(catalog.allPresets.map(item=>item.toLowerCase()));
-  const currentRecent=loadPmhPresetRecentList().filter(item=>validKeys.has(String(item||'').toLowerCase()));
-  savePmhPresetRecentList(currentRecent);
-  return catalog;
-}
-function restoreDefaultPmhPresetCatalog(confirmRestore=true){
-  if(confirmRestore && !window.confirm('Restore the default PMH preset chips?')) return false;
-  savePmhPresetCatalog(PMH_DEFAULT_ALL_PRESETS);
-  savePmhPresetRecentList(getConfiguredPmhRecentSeed());
-  savePmhPresetUseCounts({});
-  return true;
-}
-function getConfiguredPmhAllPresets(){return loadPmhPresetCatalog().allPresets||PMH_DEFAULT_ALL_PRESETS.slice();}
-function getConfiguredPmhRecentSeed(){
-  const allPresets=getConfiguredPmhAllPresets();
-  const valid=new Map(allPresets.map(item=>[item.toLowerCase(), item]));
-  const seen=new Set();
-  const recent=[];
-  const limit=Math.min(PMH_RECENT_LIMIT, allPresets.length||PMH_RECENT_LIMIT);
-  const push=(label)=>{
-    const canonical=valid.get(String(label||'').toLowerCase());
-    if(!canonical) return;
-    const key=canonical.toLowerCase();
-    if(seen.has(key) || recent.length>=limit) return;
-    seen.add(key);
-    recent.push(canonical);
-  };
-  PMH_DEFAULT_RECENT.forEach(push);
-  allPresets.forEach(push);
-  return recent;
-}
+const PMH_ALL_PRESETS=Object.freeze(Array.from(new Map([...PMH_DEFAULT_RECENT, ...PMH_OTHER_PRESETS].map(item=>[String(item).toLowerCase(), item])).values()));
 
 const SOCIAL_HISTORY_PRESET_GROUPS=Object.freeze({
   'Occupation':[
@@ -12382,16 +11621,16 @@ let pmhPresetsLastFocus=null;
 function scrollExamFindingsToEnd(){const area=$('examFindingsText'); if(!area) return; requestAnimationFrame(()=>{area.scrollTop=area.scrollHeight;});}
 function scrollPmhPresetsToEnd(){const area=$('pmhPresetsText'); if(!area) return; requestAnimationFrame(()=>{area.scrollTop=area.scrollHeight;});}
 function normalisePmhPresetLine(text){return String(text||'').replace(/\r\n/g,'\n').replace(/\s+/g,' ').trim();}
-function getCanonicalPmhPresetLabel(text){const clean=normalisePmhPresetLine(text).toLowerCase(); if(!clean) return ''; const match=getConfiguredPmhAllPresets().find(item=>item.toLowerCase()===clean); return match||'';}
+function getCanonicalPmhPresetLabel(text){const clean=normalisePmhPresetLine(text).toLowerCase(); if(!clean) return ''; const match=PMH_ALL_PRESETS.find(item=>item.toLowerCase()===clean); return match||'';}
 function loadPmhPresetRecentList(){try{const raw=localStorage.getItem(PMH_PRESET_RECENT_STORAGE_KEY); const parsed=JSON.parse(raw||'[]'); if(Array.isArray(parsed)) return parsed.map(normalisePmhPresetLine).filter(Boolean);}catch(_e){} return [];}
 function savePmhPresetRecentList(items){try{localStorage.setItem(PMH_PRESET_RECENT_STORAGE_KEY, JSON.stringify((Array.isArray(items)?items:[]).slice(0, PMH_RECENT_LIMIT)));}catch(_e){}}
-function getPmhPresetRecentList(){const allPresets=getConfiguredPmhAllPresets(); const seen=new Set(); const valid=new Map(allPresets.map(item=>[item.toLowerCase(), item])); const recent=[]; const limit=Math.min(PMH_RECENT_LIMIT, allPresets.length||PMH_RECENT_LIMIT); const push=(label)=>{const canonical=valid.get(String(label||'').toLowerCase()); if(!canonical) return; const key=canonical.toLowerCase(); if(seen.has(key) || recent.length>=limit) return; seen.add(key); recent.push(canonical);}; loadPmhPresetRecentList().forEach(push); getConfiguredPmhRecentSeed().forEach(push); allPresets.forEach(push); return recent;}
+function getPmhPresetRecentList(){const seen=new Set(); const valid=new Map(PMH_ALL_PRESETS.map(item=>[item.toLowerCase(), item])); const recent=[]; const push=(label)=>{const canonical=valid.get(String(label||'').toLowerCase()); if(!canonical) return; const key=canonical.toLowerCase(); if(seen.has(key) || recent.length>=PMH_RECENT_LIMIT) return; seen.add(key); recent.push(canonical);}; loadPmhPresetRecentList().forEach(push); PMH_DEFAULT_RECENT.forEach(push); PMH_ALL_PRESETS.forEach(push); return recent;}
 function loadPmhPresetUseCounts(){try{const raw=localStorage.getItem(PMH_PRESET_USE_COUNTS_STORAGE_KEY); const parsed=JSON.parse(raw||'{}'); if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed)) return parsed;}catch(_e){} return {};}
 function savePmhPresetUseCounts(counts){try{localStorage.setItem(PMH_PRESET_USE_COUNTS_STORAGE_KEY, JSON.stringify(counts&&typeof counts==='object'?counts:{}));}catch(_e){}}
 function getPmhPresetUseCount(text, counts){const canonical=getCanonicalPmhPresetLabel(text); if(!canonical) return 0; const source=(counts&&typeof counts==='object')?counts:loadPmhPresetUseCounts(); const value=Number(source[canonical.toLowerCase()]||0); return Number.isFinite(value)&&value>0?value:0;}
 function recordPmhPresetUse(text){const canonical=getCanonicalPmhPresetLabel(text); if(!canonical) return; const counts=loadPmhPresetUseCounts(); const key=canonical.toLowerCase(); counts[key]=getPmhPresetUseCount(canonical, counts)+1; savePmhPresetUseCounts(counts);}
-function rebalancePmhRecentList(){const recent=getPmhPresetRecentList(); const allPresets=getConfiguredPmhAllPresets(); const recentSet=new Set(recent.map(item=>item.toLowerCase())); const counts=loadPmhPresetUseCounts(); const challengers=allPresets.filter(item=>!recentSet.has(item.toLowerCase())).map(item=>({label:item,count:getPmhPresetUseCount(item, counts)})).filter(item=>item.count>=PMH_PROMOTION_MIN_USES).sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label, undefined, {sensitivity:'base'})); if(!challengers.length||!recent.length){savePmhPresetRecentList(recent); return recent;} let lowestIndex=0; let lowestCount=getPmhPresetUseCount(recent[0], counts); for(let i=1;i<recent.length;i+=1){const count=getPmhPresetUseCount(recent[i], counts); if(count<lowestCount){lowestIndex=i; lowestCount=count;}} const challenger=challengers[0]; if(challenger.count>lowestCount){recent.splice(lowestIndex,1,challenger.label); savePmhPresetRecentList(recent); return recent;} savePmhPresetRecentList(recent); return recent;}
-function getPmhPresetGroups(){const recent=rebalancePmhRecentList(); const allPresets=getConfiguredPmhAllPresets(); const recentSeen=new Set(recent.map(item=>item.toLowerCase())); const other=allPresets.filter(item=>!recentSeen.has(item.toLowerCase())).slice().sort((a,b)=>a.localeCompare(b, undefined, {sensitivity:'base'})); return {'Recent':recent,'Other A–Z':other};}
+function rebalancePmhRecentList(){const recent=getPmhPresetRecentList(); const recentSet=new Set(recent.map(item=>item.toLowerCase())); const counts=loadPmhPresetUseCounts(); const challengers=PMH_ALL_PRESETS.filter(item=>!recentSet.has(item.toLowerCase())).map(item=>({label:item,count:getPmhPresetUseCount(item, counts)})).filter(item=>item.count>=PMH_PROMOTION_MIN_USES).sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label, undefined, {sensitivity:'base'})); if(!challengers.length){savePmhPresetRecentList(recent); return recent;} let lowestIndex=0; let lowestCount=getPmhPresetUseCount(recent[0], counts); for(let i=1;i<recent.length;i+=1){const count=getPmhPresetUseCount(recent[i], counts); if(count<lowestCount){lowestIndex=i; lowestCount=count;}} const challenger=challengers[0]; if(challenger.count>lowestCount){recent.splice(lowestIndex,1,challenger.label); savePmhPresetRecentList(recent); return recent;} savePmhPresetRecentList(recent); return recent;}
+function getPmhPresetGroups(){const recent=rebalancePmhRecentList(); const recentSeen=new Set(recent.map(item=>item.toLowerCase())); const other=PMH_ALL_PRESETS.filter(item=>!recentSeen.has(item.toLowerCase())).slice().sort((a,b)=>a.localeCompare(b, undefined, {sensitivity:'base'})); return {'Recent':recent,'Other A–Z':other};}
 function getPmhPresetLines(text){const seen=new Set(); return String(text||'').replace(/\r\n/g,'\n').split(/\n+/).map(normalisePmhPresetLine).filter(item=>{if(!item) return false; const key=item.toLowerCase(); if(seen.has(key)) return false; seen.add(key); return true;});}
 function setPmhPresetEditorValue(lines){const area=$('pmhPresetsText'); if(!area) return; area.value=(Array.isArray(lines)?lines:getPmhPresetLines(lines)).join('\n'); const end=area.value.length; if(area.setSelectionRange) area.setSelectionRange(end,end); syncPmhPresetChipStates(); scrollPmhPresetsToEnd();}
 function renderPmhPresets(){const wrap=$('pmhPresetsList'); if(!wrap) return; const presetGroups=getPmhPresetGroups(); wrap.innerHTML=Object.entries(presetGroups).map(([group,items])=>`<div class="exam-findings-group"><div class="exam-findings-group-title">${escapeHtml(group)}</div><div class="exam-findings-chip-row">${items.map(item=>`<button class="exam-findings-chip" data-pmh-preset="${escapeHtml(item)}" type="button">${escapeHtml(item)}</button>`).join('')}</div></div>`).join(''); syncPmhPresetChipStates();}
@@ -12403,16 +11642,6 @@ function removePmhPreset(text){const clean=normalisePmhPresetLine(text); if(!cle
 function clearPmhPresets(){const area=$('pmhPresetsText'); if(!area) return; const active=document.activeElement; if(active&&typeof active.blur==='function'&&(active===area||active.tagName==='TEXTAREA'||active.tagName==='INPUT')){try{active.blur();}catch(_e){}} area.value=''; syncPmhPresetChipStates(); scrollPmhPresetsToEnd();}
 function applyPmhPresetsOverlay(){const area=$('pmhPresetsText'); const field=$('pmh'); if(!area||!field) return; field.value=getPmhPresetLines(area.value||'').join('\n'); saveCurrentPatientForm(); saveData('PMH updated'); generateClinicalOutput(); closePmhPresetsOverlay();}
 function handlePmhPresetClick(ev){const btn=ev.target.closest('[data-pmh-preset]'); if(!btn) return; ev.preventDefault(); const label=btn.dataset.pmhPreset||btn.textContent||''; if(btn.classList.contains('active')) removePmhPreset(label); else appendPmhPreset(label);}
-let pmhPresetSettingsDraft=[];
-function setPmhPresetSettingsStatus(msg,isError=false){const el=$('pmhPresetSettingsStatus'); if(!el) return; el.textContent=msg||''; el.style.color=isError?'#b91c1c':'#6b7280';}
-function sortPmhPresetSettingsDraft(){pmhPresetSettingsDraft=Array.from(new Map((Array.isArray(pmhPresetSettingsDraft)?pmhPresetSettingsDraft:[]).map(item=>[normalisePmhPresetLine(item).toLowerCase(), normalisePmhPresetLine(item)])).values()).filter(Boolean).sort((a,b)=>a.localeCompare(b, undefined, {sensitivity:'base'}));}
-function renderPmhPresetSettingsChips(){const wrap=$('pmhPresetSettingsChips'); if(!wrap) return; if(!pmhPresetSettingsDraft.length){wrap.innerHTML='<div class="tiny muted">No PMH chips added.</div>'; return;} wrap.innerHTML=pmhPresetSettingsDraft.map(item=>`<button class="exam-findings-chip" data-pmh-settings-chip="${escapeHtml(item)}" type="button" aria-label="Remove ${escapeHtml(item)}">${escapeHtml(item)} <span aria-hidden="true">×</span></button>`).join('');}
-function fillPmhPresetSettingsUI(){pmhPresetSettingsDraft=getConfiguredPmhAllPresets().slice(); sortPmhPresetSettingsDraft(); const input=$('pmhPresetAddInput'); if(input) input.value=''; renderPmhPresetSettingsChips();}
-function addPmhPresetSetting(){const input=$('pmhPresetAddInput'); if(!input) return; const clean=normalisePmhPresetLine(input.value); if(!clean){setPmhPresetSettingsStatus('Enter a condition to add.', true); return;} if(pmhPresetSettingsDraft.some(item=>item.toLowerCase()===clean.toLowerCase())){setPmhPresetSettingsStatus('That PMH chip is already in the list.', true); input.value=''; return;} pmhPresetSettingsDraft.push(clean); sortPmhPresetSettingsDraft(); renderPmhPresetSettingsChips(); input.value=''; setPmhPresetSettingsStatus('PMH chip added. Save to keep this change.');}
-function removePmhPresetSetting(text){const clean=normalisePmhPresetLine(text); if(!clean) return; const next=pmhPresetSettingsDraft.filter(item=>item.toLowerCase()!==clean.toLowerCase()); if(next.length===pmhPresetSettingsDraft.length) return; pmhPresetSettingsDraft=next; renderPmhPresetSettingsChips(); setPmhPresetSettingsStatus('PMH chip removed. Save to keep this change.');}
-function savePmhPresetSettings(showMsg=true){savePmhPresetCatalog(pmhPresetSettingsDraft); fillPmhPresetSettingsUI(); if(showMsg) setPmhPresetSettingsStatus('PMH presets saved on this device.'); return true;}
-function restoreDefaultPmhPresetSettings(confirmRestore=true){const restored=restoreDefaultPmhPresetCatalog(confirmRestore); if(!restored) return false; fillPmhPresetSettingsUI(); setPmhPresetSettingsStatus('Default PMH presets restored.'); return true;}
-function handlePmhPresetSettingsClick(ev){const btn=ev.target.closest('[data-pmh-settings-chip]'); if(!btn) return; ev.preventDefault(); removePmhPresetSetting(btn.dataset.pmhSettingsChip||btn.textContent||'');}
 
 function scrollSocialHistoryPresetsToEnd(){const area=$('socialHistoryPresetsText'); if(!area) return; requestAnimationFrame(()=>{area.scrollTop=area.scrollHeight;});}
 function normaliseSocialHistoryPresetLine(text){return String(text||'').replace(/\r\n/g,'\n').replace(/\s+/g,' ').trim();}
@@ -12486,7 +11715,7 @@ function appendExamFinding(text){const area=$('examFindingsText'); if(!area||!te
 function removeExamFinding(text){const area=$('examFindingsText'); if(!area||!text) return; const clean=String(text).trim(); if(!clean) return; const active=document.activeElement; if(active&&typeof active.blur==='function'&&(active===area||active.tagName==='TEXTAREA'||active.tagName==='INPUT')){try{active.blur();}catch(_e){}} const lines=String(area.value||'').replace(/\r\n/g,'\n').split(/\n{2,}/).map(s=>s.trim()).filter(Boolean); const idx=lines.indexOf(clean); if(idx===-1) return; lines.splice(idx,1); area.value=lines.join('\n\n'); const end=area.value.length; if(area.setSelectionRange) area.setSelectionRange(end,end); syncExamFindingChipStates(); scrollExamFindingsToEnd();}
 function clearExamFindings(){const area=$('examFindingsText'); if(!area) return; const active=document.activeElement; if(active&&typeof active.blur==='function'&&(active===area||active.tagName==='TEXTAREA'||active.tagName==='INPUT')){try{active.blur();}catch(_e){}} area.value=''; syncExamFindingChipStates(); scrollExamFindingsToEnd();}
 function applyExamFindingsOverlay(){const area=$('examFindingsText'); const exam=$('examination'); if(!area||!exam) return; exam.value=area.value; saveCurrentPatientForm(); saveData('Examination updated'); generateClinicalOutput(); closeExamFindingsOverlay();}
-function handleExamFindingsClick(ev){const toggle=ev.target.closest('[data-exam-group-toggle]'); if(toggle){const group=toggle.closest('.exam-findings-group'); const body=group?.querySelector('.exam-findings-group-body'); const willExpand=!!body?.classList.contains('hidden'); const collapsed=!willExpand; if(window.HAH_UI_STANDARDS&&typeof window.HAH_UI_STANDARDS.setCollapsibleState==='function'){ window.HAH_UI_STANDARDS.setCollapsibleState({container:group, body, toggle, collapsed, collapsedClass:'collapsed', expandedClass:'expanded', hiddenClass:'hidden'}); } else { body?.classList.toggle('hidden',collapsed); group?.classList.toggle('collapsed',collapsed); toggle.setAttribute('aria-expanded',collapsed?'false':'true'); } return;} const chip=ev.target.closest('[data-exam-finding]'); if(chip){const value=chip.getAttribute('data-exam-finding')||''; if(chip.classList.contains('active')) removeExamFinding(value); else appendExamFinding(value);}}
+function handleExamFindingsClick(ev){const toggle=ev.target.closest('[data-exam-group-toggle]'); if(toggle){const group=toggle.closest('.exam-findings-group'); const body=group?.querySelector('.exam-findings-group-body'); const willExpand=!!body?.classList.contains('hidden'); body?.classList.toggle('hidden',!willExpand); group?.classList.toggle('collapsed',!willExpand); toggle.setAttribute('aria-expanded',willExpand?'true':'false'); return;} const chip=ev.target.closest('[data-exam-finding]'); if(chip){const value=chip.getAttribute('data-exam-finding')||''; if(chip.classList.contains('active')) removeExamFinding(value); else appendExamFinding(value);}}
 function renderCfsChoices(){const wrap=$('cfsChoiceGrid'); if(!wrap) return; wrap.innerHTML=CFS_OPTIONS.map(opt=>`<button class="score-choice-btn${scoreToolsState.cfs.score===opt.score?' active':''}" data-cfs-score="${opt.score}" type="button"><span class="num">${opt.score}</span><span class="score-choice-content"><span class="lbl">${opt.label}</span><span class="desc">${opt.desc}</span></span></button>`).join('');}
 function renderAmt10Rows(){const wrap=$('amt10Rows'); if(!wrap) return; wrap.innerHTML=AMT10_ITEMS.map((label,idx)=>{const val=scoreToolsState.amt10.answers[idx]; return `<div class="score-qrow"><div class="score-qtext"><div class="score-qtitle"><span class="score-qnumber">${idx+1}</span><span class="score-qmain">${escapeHtml(label)}</span></div></div><div class="score-qactions"><button class="score-yn-btn yes${val===true?' active':''}" data-amt10-index="${idx}" data-amt10-value="yes" type="button">Yes</button><button class="score-yn-btn no${val===false?' active':''}" data-amt10-index="${idx}" data-amt10-value="no" type="button">No</button></div></div>`}).join(''); const box=$('amt10SummaryBox'); if(box){const answered=getAmt10AnsweredCount(); if(answered===10){const score=getAmt10Score(); box.innerHTML=`<span>AMT10 - ${score}/10</span><span class="score-interpretation">${getAmt10Interpretation(score)}</span>`;} else {box.innerHTML=`<span>AMT10 - score pending</span><span class="score-interpretation">${answered}/10 answered · Complete all 10 items</span>`;}}}
 function renderFourAtOptionRows(targetId, options, activeValue, dataKey){const wrap=$(targetId); if(!wrap) return; wrap.innerHTML=options.map(opt=>`<div class="score-4at-option"><button class="score-4at-scorebtn${String(activeValue)===String(opt.value)?' active':''}" data-score-key="${dataKey}" data-score-value="${opt.value}" type="button">${escapeHtml(String(opt.value))}</button><div class="score-4at-criterion">${escapeHtml(String(opt.criterion))}</div></div>`).join('');}
@@ -17325,7 +16554,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_561_release.html; source=hospital_at_home_v12_36_561_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_543_release.html; source=hospital_at_home_v12_36_543_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
