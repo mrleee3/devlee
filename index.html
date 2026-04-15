@@ -82,8 +82,8 @@
 :root {
   --desk-header-h: 72px;
   --desk-nav-w: 84px;
-  --desk-left-w: 320px;
-  --desk-right-w: 760px;
+  --desk-left-w: 300px;
+  --desk-right-w: 700px;
 
   --desk-bg: #f4f7fb;
   --desk-panel: rgba(255, 255, 255, 0.88);
@@ -150,10 +150,10 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  padding: 18px 12px;
+  gap: 12px;
+  padding: 16px 10px;
   border-right: 1px solid var(--desk-border);
-  background: rgba(244, 247, 251, 0.70);
+  background: rgba(244, 247, 251, 0.72);
 }
 
 .hah-left-pane,
@@ -175,7 +175,7 @@ html, body {
 .hah-right-pane {
   grid-area: right;
   border-left: 1px solid var(--desk-border);
-  background: rgba(244, 247, 251, 0.72);
+  background: rgba(244, 247, 251, 0.66);
 }
 
 .hah-header-group {
@@ -185,11 +185,23 @@ html, body {
   min-width: 0;
 }
 
+.hah-brand-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .hah-brand {
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.02em;
   white-space: nowrap;
+}
+
+.hah-brand-kicker {
+  font-size: 12px;
+  color: var(--desk-text-muted);
+  line-height: 1.2;
 }
 
 .hah-search {
@@ -237,6 +249,13 @@ html, body {
   padding: 0 14px;
   border-radius: 14px;
   cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hah-pill-btn.is-status {
+  background: rgba(42, 128, 84, 0.08);
+  border-color: rgba(42, 128, 84, 0.16);
 }
 
 .hah-pill-btn.is-active,
@@ -246,12 +265,28 @@ html, body {
 }
 
 .hah-nav-btn {
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
+  width: 58px;
+  min-height: 64px;
+  padding: 8px 6px;
+  border-radius: 18px;
   cursor: pointer;
-  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.hah-nav-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.hah-nav-label {
+  font-size: 10px;
   font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
 }
 
 .hah-card {
@@ -301,15 +336,15 @@ html, body {
 
 @media (max-width: 2560px) {
   :root {
-    --desk-left-w: 280px;
-    --desk-right-w: 640px;
+    --desk-left-w: 270px;
+    --desk-right-w: 620px;
   }
 }
 
 @media (max-width: 1920px) {
   :root {
-    --desk-left-w: 260px;
-    --desk-right-w: 520px;
+    --desk-left-w: 244px;
+    --desk-right-w: 500px;
   }
 }
 
@@ -663,6 +698,64 @@ html, body {
   .hah-board-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
+
+.hah-board-metrics-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hah-metric-meta {
+  font-size: 12px;
+  color: var(--desk-text-muted);
+}
+
+.hah-table tbody tr.is-selected td:first-child {
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
+}
+
+.hah-table tbody tr.is-selected td:last-child {
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
+}
+
+.hah-saved-view-sub {
+  margin-top: 4px;
+  font-size: 11.5px;
+  color: var(--desk-text-muted);
+  text-align: left;
+}
+
+.hah-board-context-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hah-board-context-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--desk-text-muted);
+}
+
+.hah-board-context-row strong {
+  color: var(--desk-text);
+  font-size: 13px;
+}
+
+.hah-summary-banner-tight {
+  margin-top: 0;
+}
+
+.hah-row-main.hah-clamp-2 {
+  font-size: 13.5px;
+}
+
 </style>
   <style>
 /* inlined: css/desktop-patient.css */
@@ -678,6 +771,15 @@ html, body {
   top: 0;
   z-index: 5;
   backdrop-filter: blur(14px);
+}
+
+.hah-patient-breadcrumb {
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--desk-text-muted);
 }
 
 .hah-patient-header-grid {
@@ -696,7 +798,7 @@ html, body {
 
 .hah-patient-name {
   margin: 0;
-  font-size: 26px;
+  font-size: 25px;
   font-weight: 600;
   letter-spacing: -0.03em;
 }
@@ -721,6 +823,7 @@ html, body {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: flex-end;
+  align-content: flex-start;
 }
 
 .hah-patient-content-grid {
@@ -741,7 +844,7 @@ html, body {
   margin-top: 16px;
   padding: 14px 16px;
   border-radius: 16px;
-  background: rgba(47, 111, 237, 0.07);
+  background: linear-gradient(180deg, rgba(47, 111, 237, 0.08), rgba(47, 111, 237, 0.05));
   border: 1px solid rgba(47, 111, 237, 0.12);
   font-size: 13px;
   color: var(--desk-text);
@@ -918,6 +1021,41 @@ html, body {
   .hah-patient-header-actions {
     justify-content: flex-start;
   }
+}
+
+
+.hah-patient-header .hah-kv-item {
+  background: rgba(255,255,255,0.72);
+}
+
+.hah-review-body {
+  max-width: 82ch;
+}
+
+.hah-mini-item.is-soft {
+  background: rgba(47,111,237,0.04);
+}
+
+.hah-issue-item {
+  position: relative;
+  padding-left: 16px;
+}
+
+.hah-issue-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 16px;
+  width: 4px;
+  height: calc(100% - 32px);
+  border-radius: 999px;
+  background: rgba(47, 111, 237, 0.22);
+}
+
+.hah-patient-rail-note {
+  font-size: 12.5px;
+  color: var(--desk-text-muted);
+  line-height: 1.45;
 }
 
 </style>
@@ -1868,6 +2006,14 @@ html, body {
 
     return `
       <div class="hah-board-surface">
+        <div class="hah-board-metrics-head">
+          <div>
+            <div class="hah-board-title">${c.escapeHtml(viewLabel(state.board.savedView))}</div>
+            <div class="hah-board-sub">${vm.totalPatients} patients in current view</div>
+          </div>
+          <div class="hah-metric-meta">${c.escapeHtml(sourceText)}${state.boardroundMode ? ' · boardround mode' : ''}</div>
+        </div>
+
         <section class="hah-board-metrics">
           ${metricsHtml}
         </section>
@@ -1876,10 +2022,7 @@ html, body {
           <div class="hah-card-inner">
             <div class="hah-board-toolbar">
               <div class="hah-board-toolbar-group hah-board-toolbar-copy">
-                <div>
-                  <div class="hah-board-title">${c.escapeHtml(viewLabel(state.board.savedView))}</div>
-                  <div class="hah-board-sub">${vm.totalPatients} patients · ${c.escapeHtml(sourceText)}${state.boardroundMode ? ' · boardround mode' : ''}</div>
-                </div>
+                <div class="hah-board-sub">Prioritise, open a patient, and keep the service context visible.</div>
               </div>
 
               <div class="hah-board-toolbar-group">
@@ -2069,10 +2212,25 @@ html, body {
     const active = view.key === activeView ? ' is-active' : '';
     return `
       <button type="button" class="hah-saved-view-btn${active}" data-board-action="set-view" data-view-key="${c.escapeHtml(view.key)}">
-        <span class="hah-saved-view-label">${c.escapeHtml(view.label)}</span>
+        <span>
+          <span class="hah-saved-view-label">${c.escapeHtml(view.label)}</span>
+          <span class="hah-saved-view-sub">${c.escapeHtml(savedViewSub(view.key, count))}</span>
+        </span>
         <span class="hah-saved-view-count">${c.escapeHtml(count)}</span>
       </button>
     `;
+  }
+
+  function savedViewSub(key, count) {
+    switch (key) {
+      case 'high-priority': return count ? 'Needs senior attention' : 'No current red flags';
+      case 'overdue-reviews': return count ? 'Past planned review time' : 'All reviews on track';
+      case 'likely-discharge': return count ? 'Possible today or ready' : 'No immediate discharge cohort';
+      case 'oxygen-patients': return count ? 'Currently requiring oxygen' : 'No oxygen patients';
+      case 'iv-patients': return count ? 'Receiving IV treatment' : 'No IV therapies';
+      case 'changed': return count ? 'Status shifted recently' : 'Stable service state';
+      default: return 'Whole active service';
+    }
   }
 
   function renderSortButton(label, key, activeKey) {
@@ -2173,6 +2331,7 @@ html, body {
       <div class="hah-patient-main">
         <section class="hah-card hah-patient-header">
           <div class="hah-card-inner">
+            <div class="hah-patient-breadcrumb">${c.escapeHtml(viewLabel(state.board.savedView))} · patient workspace</div>
             <div class="hah-patient-header-grid">
               <div>
                 <div class="hah-patient-name-row">
@@ -2210,19 +2369,21 @@ html, body {
         <div class="hah-patient-content-grid">
           <div class="hah-patient-column">
             ${c.card('Today summary', `
-              ${c.keyValueGrid([
+              <div class="hah-patient-rail-note">Live briefing for the selected patient in the current board context.</div>
+              <div style="margin-top:16px;">${c.keyValueGrid([
                 { label: 'Current state', value: vm.patient.currentStatus },
                 { label: 'Review due', value: formatDateTime(vm.patient.reviewDueAt) },
                 { label: 'Blood trend', value: vm.patient.bloodTrendSummary },
                 { label: 'Obs signal', value: vm.patient.obsSummary },
                 { label: 'Main blocker', value: vm.patient.blockers[0] || 'No active blocker' },
                 { label: 'Board status', value: vm.patient.boardStatus }
-              ])}
+              ])}</div>
             `)}
 
             ${c.card('Active issues', issueCards || '<div class="hah-mini-item"><div class="hah-mini-title">No active issue text recorded.</div></div>', { subtitle: `${vm.issues.length || 0} issue${vm.issues.length === 1 ? '' : 's'}` })}
 
             ${c.card('Clinical narrative', `
+              <div class="hah-review-meta">Latest review ${c.escapeHtml(formatDateTime(vm.patient.latestReviewAt))}</div>
               <div class="hah-review-body">${c.escapeHtml(vm.reviewText || 'No current narrative available.')}</div>
             `)}
 
@@ -2241,9 +2402,9 @@ html, body {
 
             ${c.card('Bloods and trends', renderBloodSamples(vm.bloodSamples), { subtitle: vm.patient.bloodTrendSummary })}
 
-            ${c.card('Medications', renderMedList(vm.medications, 'No medication entries recorded.'))}
+            ${c.card('Medications', renderMedList(vm.medications, 'No medication entries recorded.'), { subtitle: `${vm.medications.length} current entr${vm.medications.length === 1 ? 'y' : 'ies'}` })}
 
-            ${c.card('IV therapies', renderMedList(vm.ivs, 'No IV therapies recorded.'))}
+            ${c.card('IV therapies', renderMedList(vm.ivs, 'No IV therapies recorded.'), { subtitle: `${vm.ivs.length} IV entr${vm.ivs.length === 1 ? 'y' : 'ies'}` })}
           </div>
         </div>
       </div>
@@ -2256,7 +2417,8 @@ html, body {
 
     return c.stack([
       c.card('Quick actions', `
-        <div class="hah-action-grid">
+        <div class="hah-patient-rail-note">Keep board context while moving through the current cohort.</div>
+        <div style="margin-top:14px;" class="hah-action-grid">
           <button type="button" class="hah-action-btn" data-patient-action="back-board">Back to board</button>
           <button type="button" class="hah-action-btn" data-patient-action="open-board-context">Board context</button>
           <button type="button" class="hah-action-btn" data-patient-action="next">Next patient</button>
@@ -2462,8 +2624,10 @@ html, body {
       <div class="hah-desktop-app" id="hahDesktopApp">
         <header class="hah-header" id="hahHeader">
           <div class="hah-header-group">
-            <div class="hah-brand">H@H Board</div>
-            <div class="hah-muted" id="hahEnvironmentLabel">Desktop prototype 0.3</div>
+            <div class="hah-brand-wrap">
+              <div class="hah-brand">H@H Board</div>
+              <div class="hah-brand-kicker" id="hahEnvironmentLabel">MDM / boardround workspace</div>
+            </div>
           </div>
 
           <div class="hah-header-group">
@@ -2479,16 +2643,16 @@ html, body {
           <div class="hah-header-group">
             <button class="hah-pill-btn" data-action="open-board" type="button">Board</button>
             <button class="hah-pill-btn" data-action="toggle-boardround" type="button" id="hahBoardroundBtn">Boardround</button>
-            <button class="hah-pill-btn" type="button" id="hahSyncPill">Prototype</button>
+            <button class="hah-pill-btn is-status" type="button" id="hahSyncPill">Ready</button>
           </div>
         </header>
 
         <nav class="hah-nav" id="hahNav">
-          <button class="hah-nav-btn" data-nav="board" aria-label="Board" title="Board">B</button>
-          <button class="hah-nav-btn" data-nav="patient" aria-label="Patient" title="Patient">P</button>
-          <button class="hah-nav-btn" data-nav="tasks" aria-label="Tasks" title="Tasks">T</button>
-          <button class="hah-nav-btn" data-nav="insights" aria-label="Insights" title="Insights">I</button>
-          <button class="hah-nav-btn" data-nav="settings" aria-label="Settings" title="Settings">S</button>
+          <button class="hah-nav-btn" data-nav="board" aria-label="Board" title="Board"><span class="hah-nav-icon">▦</span><span class="hah-nav-label">Board</span></button>
+          <button class="hah-nav-btn" data-nav="patient" aria-label="Patient" title="Patient"><span class="hah-nav-icon">◫</span><span class="hah-nav-label">Patient</span></button>
+          <button class="hah-nav-btn" data-nav="tasks" aria-label="Tasks" title="Tasks"><span class="hah-nav-icon">✓</span><span class="hah-nav-label">Tasks</span></button>
+          <button class="hah-nav-btn" data-nav="insights" aria-label="Insights" title="Insights"><span class="hah-nav-icon">◌</span><span class="hah-nav-label">Insights</span></button>
+          <button class="hah-nav-btn" data-nav="settings" aria-label="Settings" title="Settings"><span class="hah-nav-icon">⚙</span><span class="hah-nav-label">Settings</span></button>
         </nav>
 
         <aside class="hah-left-pane" id="hahLeftPane"></aside>
@@ -2725,7 +2889,7 @@ html, body {
       case 'syncing': return 'Syncing';
       case 'update-available': return 'Update available';
       case 'error': return 'Sync error';
-      default: return 'Prototype';
+      default: return 'Ready';
     }
   }
 
@@ -2753,9 +2917,9 @@ html, body {
 </script>
 <script>
 window.__HAH_BOARD_BUILD__ = {
-  filename: 'hospital_at_home_board_v0_3_002_release.html',
-  source: 'hospital_at_home_board_v0_3_002_source.zip',
-  builtAt: '2026-04-15T17:43:48.158505',
+  filename: 'hospital_at_home_board_v0_3_003_release.html',
+  source: 'hospital_at_home_board_v0_3_003_source.zip',
+  builtAt: '2026-04-15T18:01:27.090251',
   entry: 'desktop.html'
 };
 </script>
