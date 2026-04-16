@@ -7803,6 +7803,9 @@ function deleteMedEntryByElement(div){
     calculateNews();
     return;
   }
+  const medNameEl=div.querySelector('.med-name');
+  const medName=(medNameEl && medNameEl.value || '').trim() || 'Medication';
+  if(typeof setUndoSnapshot==='function') setUndoSnapshot();
   const compact=!!(patients[currentPatient] && patients[currentPatient].form && patients[currentPatient].form.medsCollapsed);
   div.remove();
   const remaining=document.querySelectorAll('#medsContainer .med-entry').length;
@@ -7814,6 +7817,18 @@ function deleteMedEntryByElement(div){
   refreshAllMedEntryHeaders();
   updateMedSummary();
   calculateNews();
+  if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
+  if(typeof saveData==='function') saveData('Medication removed');
+  if(typeof updateUndoButton==='function') updateUndoButton();
+  if(window.HAH_UNDO){
+    window.HAH_UNDO.show({
+      message:  medName + ' removed',
+      icon:     'pill',
+      batchKey: 'med-delete',
+      undoLabel: 'Undo removal of ' + medName,
+      onUndo:   () => { if(typeof undoLastChange==='function') undoLastChange(); }
+    });
+  }
 }
 
 window.syncIVEntryButtonState=syncIVEntryButtonState;
@@ -9472,12 +9487,12 @@ function resetToDemo(){
 function deletePatient(id) {
   const p = patients[id];
   if (!p) return;
-  if (!confirm(`Delete ${p.name}?`)) return;
+  const patientName = p.name || 'Patient';
   if (detailLoadedForCurrentPatient) saveCurrentPatientForm();
   setUndoSnapshot();
   deletedPatients.unshift(clone(p));
   deletedPatients = deletedPatients.slice(0, 20);
-  addEventLog(`Deleted ${p.name}`);
+  addEventLog(`Deleted ${patientName}`);
   delete patients[id];
   const remaining = Object.keys(patients).map(Number).sort((a, b) => a - b);
   if (currentPatient === id) {
@@ -9494,6 +9509,15 @@ function deletePatient(id) {
   renderDeletedList();
   renderEventLog();
   updateUndoButton();
+  if (window.HAH_UNDO) {
+    window.HAH_UNDO.show({
+      message:  patientName + ' deleted',
+      icon:     'trash',
+      batchKey: 'patient-delete',
+      undoLabel: 'Undo deletion of ' + patientName,
+      onUndo:   () => { if (typeof undoLastChange === 'function') undoLastChange(); }
+    });
+  }
 }
 function focusNextField(currentId){const addOrder=["newName","newAge","newReferralOther"]; const addIdx=addOrder.indexOf(currentId); if(addIdx>=0){ for(let i=addIdx+1;i<addOrder.length;i++){ const next=$(addOrder[i]); if(next && !next.classList.contains("hidden") && !next.disabled){ try{next.focus({preventScroll:true})}catch(e){next.focus()} return; } } const save=$("saveAddBtn"); if(save) save.focus(); return; } const order=["rr","spo2","temp","bp","hr","weight","openBmEditorBtn","issues","bloods","currently","pmh","socialHistory","examination","plan","forDischargeSummary"]; const idx=order.indexOf(currentId); if(idx>=0&&idx<order.length-1){const next=$(order[idx+1]); if(next){ try{next.focus({preventScroll:true})}catch(e){next.focus()} }}}
 
@@ -18034,6 +18058,490 @@ window.HAH.modules.tts = true;
     getDebugLogText: () => (readLog().length ? readLog().join('\n') : 'No TTS events recorded yet.')
   };
 })();
+
+</script><script>
+/* ============================================================
+   17-undo-toast.js
+   ------------------------------------------------------------
+   Two primitives:
+     window.HAH_HAPTICS  - semantic vibration helper
+     window.HAH_UNDO     - transient toast with Undo action
+
+   Design intent (see docs/ux_interaction_specs.md):
+   - Destructive actions execute immediately, toast follows.
+   - Toast is additive: existing status-rail undoBtn continues
+     to work independently as the 20-deep history fallback.
+   - Batch rapid deletes within batchWindowMs via a shared
+     batchKey; undo then reverses the oldest pending action,
+     which (because undoState is symmetric) unwinds everything
+     that happened since.
+   - Respects prefers-reduced-motion, keyboard-open state, and
+     the visualViewport API on iOS PWAs.
+   ============================================================ */
+
+(function(global){
+  'use strict';
+
+  /* ---------------- HAPTICS -------------------------------- */
+
+  const canVibrate = typeof navigator !== 'undefined'
+    && typeof navigator.vibrate === 'function';
+
+  function vibe(pattern){
+    if(!canVibrate) return;
+    try { navigator.vibrate(pattern); } catch(e){}
+  }
+
+  const HAH_HAPTICS = Object.freeze({
+    selection: () => vibe(8),
+    success:   () => vibe([4, 40, 4]),
+    warning:   () => vibe([6, 80, 6]),
+    impact:    () => vibe(16)
+  });
+
+  global.HAH_HAPTICS = HAH_HAPTICS;
+
+  /* ---------------- UNDO TOAST ----------------------------- */
+
+  const DEFAULT_TIMEOUT_MS  = 6000;
+  const BATCH_WINDOW_MS     = 4000;
+  const ROOT_ID             = 'hahUndoToastRoot';
+  const Z_INDEX             = 10085; // above patient list, below overlays
+
+  const state = {
+    root:      null,
+    current:   null,   // active toast descriptor
+    timer:     null,   // drain timer handle
+    startedAt: 0,      // ms since epoch when visible drain last started
+    remaining: 0,      // ms left at last pause
+    paused:    false,
+    reducedMotion: false
+  };
+
+  function prefersReducedMotion(){
+    try {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch(e){
+      return false;
+    }
+  }
+
+  /* --- styles (self-installing on first use) ---------------- */
+
+  function installStyles(){
+    if(document.getElementById('hahUndoToastStyles')) return;
+    const css = `
+      #${ROOT_ID}{
+        position:fixed;left:50%;
+        bottom:calc(env(safe-area-inset-bottom) + 12px + 56px);
+        transform:translate3d(-50%, 24px, 0) scale(.96);
+        opacity:0;
+        pointer-events:none;
+        z-index:${Z_INDEX};
+        transition:transform 220ms cubic-bezier(.25,.46,.45,.94),
+                   opacity 220ms cubic-bezier(.25,.46,.45,.94);
+        width:min(calc(100vw - 28px), 420px);
+      }
+      #${ROOT_ID}.is-visible{
+        transform:translate3d(-50%, 0, 0) scale(1);
+        opacity:1;
+        pointer-events:auto;
+      }
+      body.keyboard-open #${ROOT_ID}:not(.is-anchor-keyboard){
+        bottom:calc(env(safe-area-inset-bottom) + 12px);
+      }
+      .hah-undo-toast{
+        position:relative;
+        display:flex;align-items:center;gap:10px;
+        width:100%;height:48px;padding:0 6px 0 14px;
+        border-radius:16px;
+        background:rgba(17, 24, 39, 0.92);
+        backdrop-filter:blur(20px) saturate(160%);
+        -webkit-backdrop-filter:blur(20px) saturate(160%);
+        border:1px solid rgba(255,255,255,0.08);
+        box-shadow:0 12px 28px rgba(0,0,0,.22),
+                   0 2px 6px rgba(0,0,0,.14);
+        color:#fff;
+        overflow:hidden;
+        -webkit-tap-highlight-color:transparent;
+      }
+      .hah-undo-toast-icon{
+        width:18px;height:18px;flex:0 0 auto;
+        display:inline-flex;align-items:center;justify-content:center;
+        color:rgba(255,255,255,.82);
+      }
+      .hah-undo-toast-icon svg{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+      .hah-undo-toast-message{
+        flex:1 1 auto;min-width:0;
+        font-size:14px;font-weight:600;line-height:1.3;
+        letter-spacing:0;color:#fff;
+        white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      }
+      .hah-undo-toast-action{
+        flex:0 0 auto;
+        min-height:32px;padding:0 14px;margin:0;
+        border:none;border-radius:10px;
+        background:rgba(255,255,255,.14);
+        color:#fff;
+        font-size:13px;font-weight:700;letter-spacing:0;
+        display:inline-flex;align-items:center;justify-content:center;
+        cursor:pointer;
+        -webkit-tap-highlight-color:transparent;
+        transition:background 120ms ease, transform 120ms ease;
+      }
+      .hah-undo-toast-action:active{
+        background:rgba(255,255,255,.22);
+        transform:scale(.97);
+      }
+      .hah-undo-toast-action:focus-visible{
+        outline:none;
+        box-shadow:0 0 0 2px rgba(10,132,255,.55);
+      }
+      .hah-undo-toast-progress{
+        position:absolute;left:0;right:0;bottom:0;height:2px;
+        background:rgba(255,255,255,.10);
+        overflow:hidden;
+      }
+      .hah-undo-toast-progress-fill{
+        position:absolute;left:0;top:0;height:100%;width:100%;
+        background:rgba(255,255,255,.55);
+        transform-origin:left center;
+        transform:scaleX(1);
+        transition:transform linear;
+      }
+      @media (prefers-reduced-motion: reduce){
+        #${ROOT_ID}{
+          transition:opacity 120ms ease;
+          transform:translate3d(-50%, 0, 0) scale(1);
+        }
+        #${ROOT_ID}.is-visible{
+          transform:translate3d(-50%, 0, 0) scale(1);
+        }
+        .hah-undo-toast-progress-fill{transition:none}
+      }
+    `;
+    const style = document.createElement('style');
+    style.id = 'hahUndoToastStyles';
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  /* --- DOM construction ------------------------------------- */
+
+  const ICONS = {
+    trash: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>',
+    pill:  '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="4"/><path d="M12 8v8"/></svg>',
+    info:  '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>',
+    sync:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5"/><path d="M20 12a8 8 0 0 1-14 5"/><path d="M18 3v5h-5"/><path d="M6 21v-5h5"/></svg>'
+  };
+
+  function ensureRoot(){
+    if(state.root && document.body.contains(state.root)) return state.root;
+    installStyles();
+    const root = document.createElement('div');
+    root.id = ROOT_ID;
+    root.setAttribute('role', 'status');
+    root.setAttribute('aria-live', 'polite');
+    root.setAttribute('aria-atomic', 'true');
+    document.body.appendChild(root);
+    state.root = root;
+    return root;
+  }
+
+  function buildToastDom(descriptor){
+    const wrap = document.createElement('div');
+    wrap.className = 'hah-undo-toast';
+
+    const iconEl = document.createElement('span');
+    iconEl.className = 'hah-undo-toast-icon';
+    iconEl.innerHTML = ICONS[descriptor.icon] || ICONS.info;
+    wrap.appendChild(iconEl);
+
+    const msg = document.createElement('span');
+    msg.className = 'hah-undo-toast-message';
+    msg.textContent = descriptor.message;
+    wrap.appendChild(msg);
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'hah-undo-toast-action';
+    btn.textContent = 'Undo';
+    btn.setAttribute('aria-label', descriptor.undoLabel || ('Undo: ' + descriptor.message));
+    btn.addEventListener('click', () => {
+      HAH_HAPTICS.success();
+      performUndo();
+    });
+    wrap.appendChild(btn);
+
+    const progress = document.createElement('div');
+    progress.className = 'hah-undo-toast-progress';
+    const fill = document.createElement('div');
+    fill.className = 'hah-undo-toast-progress-fill';
+    progress.appendChild(fill);
+    wrap.appendChild(progress);
+
+    return { wrap, msg, btn, fill };
+  }
+
+  /* --- timer / drain --------------------------------------- */
+
+  function startDrain(descriptor){
+    const reduced = prefersReducedMotion();
+    state.reducedMotion = reduced;
+    state.startedAt = Date.now();
+    state.remaining = descriptor.timeoutMs;
+    state.paused = false;
+    if(descriptor.dom && descriptor.dom.fill){
+      if(reduced){
+        descriptor.dom.fill.style.transition = 'none';
+        descriptor.dom.fill.style.transform = 'scaleX(0)';
+      } else {
+        // next frame so the transition actually animates
+        descriptor.dom.fill.style.transition = 'none';
+        descriptor.dom.fill.style.transform = 'scaleX(1)';
+        requestAnimationFrame(() => {
+          if(!state.current || state.current.id !== descriptor.id) return;
+          descriptor.dom.fill.style.transition = `transform ${descriptor.timeoutMs}ms linear`;
+          descriptor.dom.fill.style.transform = 'scaleX(0)';
+        });
+      }
+    }
+    clearTimeout(state.timer);
+    state.timer = setTimeout(() => commitCurrent(), descriptor.timeoutMs);
+  }
+
+  function pauseDrain(){
+    if(!state.current || state.paused) return;
+    state.paused = true;
+    const elapsed = Date.now() - state.startedAt;
+    state.remaining = Math.max(0, state.remaining - elapsed);
+    clearTimeout(state.timer);
+    const fill = state.current.dom && state.current.dom.fill;
+    if(fill){
+      const computed = getComputedStyle(fill).transform;
+      fill.style.transition = 'none';
+      fill.style.transform = computed;
+    }
+  }
+
+  function resumeDrain(delayMs){
+    if(!state.current || !state.paused) return;
+    const delay = Math.max(0, Number(delayMs) || 0);
+    setTimeout(() => {
+      if(!state.current) return;
+      state.paused = false;
+      state.startedAt = Date.now();
+      const fill = state.current.dom && state.current.dom.fill;
+      const ms = state.remaining;
+      if(fill && !state.reducedMotion && ms > 0){
+        requestAnimationFrame(() => {
+          if(!state.current) return;
+          fill.style.transition = `transform ${ms}ms linear`;
+          fill.style.transform = 'scaleX(0)';
+        });
+      }
+      clearTimeout(state.timer);
+      state.timer = setTimeout(() => commitCurrent(), ms);
+    }, delay);
+  }
+
+  /* --- show / commit / undo -------------------------------- */
+
+  function show(config){
+    if(!config || typeof config.onUndo !== 'function') return null;
+    ensureRoot();
+
+    // Batching: if a pending toast with the same batchKey exists and is
+    // within the batch window, replace its message with a count and keep
+    // the original onUndo (which restores the oldest snapshot).
+    if(state.current
+       && config.batchKey
+       && state.current.batchKey === config.batchKey
+       && (Date.now() - state.current.firstAt) < BATCH_WINDOW_MS){
+      state.current.count += 1;
+      const label = buildBatchMessage(config.batchKey, state.current.count, config.message);
+      state.current.message = label;
+      if(state.current.dom && state.current.dom.msg){
+        state.current.dom.msg.textContent = label;
+      }
+      // Reset the drain to give the user the full window after the latest action.
+      clearTimeout(state.timer);
+      startDrain(state.current);
+      HAH_HAPTICS.selection();
+      // The new action's onUndo is discarded - the original one already
+      // restores the world as it was before the batch began.
+      return state.current.id;
+    }
+
+    // Otherwise commit any currently-visible toast, then show a new one.
+    if(state.current){
+      commitCurrent({ skipExitAnim: true });
+    }
+
+    const id = 'toast-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+    const descriptor = {
+      id,
+      message:   String(config.message || 'Action done'),
+      icon:      config.icon || 'info',
+      batchKey:  config.batchKey || null,
+      onUndo:    config.onUndo,
+      onCommit:  typeof config.onCommit === 'function' ? config.onCommit : null,
+      timeoutMs: Number.isFinite(config.timeoutMs) ? config.timeoutMs : DEFAULT_TIMEOUT_MS,
+      count:     1,
+      firstAt:   Date.now(),
+      dom:       null,
+      undoLabel: config.undoLabel || null
+    };
+
+    const dom = buildToastDom(descriptor);
+    descriptor.dom = dom;
+
+    const root = state.root;
+    root.innerHTML = '';
+    root.appendChild(dom.wrap);
+    state.current = descriptor;
+
+    // Respect keyboard state
+    if(document.body.classList.contains('keyboard-open')){
+      root.classList.remove('is-anchor-keyboard');
+    }
+
+    // Animate in on next frame
+    requestAnimationFrame(() => {
+      root.classList.add('is-visible');
+      startDrain(descriptor);
+    });
+
+    HAH_HAPTICS.selection();
+    return id;
+  }
+
+  function buildBatchMessage(batchKey, count, lastMessage){
+    if(count <= 1) return lastMessage;
+    switch(batchKey){
+      case 'patient-delete': return count + ' patients deleted';
+      case 'med-delete':     return count + ' medications deleted';
+      case 'chip-remove':    return count + ' items removed';
+      default:               return count + ' items deleted';
+    }
+  }
+
+  function performUndo(){
+    const descriptor = state.current;
+    if(!descriptor) return;
+    try { descriptor.onUndo(); }
+    catch(e){ console.error('[HAH_UNDO] undo handler threw', e); }
+    hide({ reason: 'undo' });
+  }
+
+  function commitCurrent(options){
+    const descriptor = state.current;
+    if(!descriptor) return;
+    if(descriptor.onCommit){
+      try { descriptor.onCommit(); }
+      catch(e){ console.error('[HAH_UNDO] commit handler threw', e); }
+    }
+    hide({ reason: 'commit', skipExitAnim: options && options.skipExitAnim });
+  }
+
+  function hide(options){
+    const opts = options || {};
+    clearTimeout(state.timer);
+    state.timer = null;
+    const descriptor = state.current;
+    const root = state.root;
+    state.current = null;
+    state.paused = false;
+    state.remaining = 0;
+
+    if(!root || !descriptor) return;
+
+    if(opts.skipExitAnim){
+      root.classList.remove('is-visible');
+      root.innerHTML = '';
+      return;
+    }
+    root.classList.remove('is-visible');
+    const reduced = prefersReducedMotion();
+    setTimeout(() => {
+      // Only clear if nothing new has taken over.
+      if(!state.current && root && root.innerHTML){
+        root.innerHTML = '';
+      }
+    }, reduced ? 120 : 200);
+  }
+
+  /* --- public API ------------------------------------------ */
+
+  const HAH_UNDO = Object.freeze({
+    show,
+    commit: () => commitCurrent(),
+    undo:   performUndo,
+    hide:   () => hide({ reason: 'manual' }),
+    pause:  pauseDrain,
+    resume: resumeDrain,
+    isOpen: () => !!state.current
+  });
+
+  global.HAH_UNDO = HAH_UNDO;
+
+  /* --- lifecycle hooks ------------------------------------- */
+
+  // Pause drain during nav transitions so the user has time to orient.
+  // When a section change happens, setActive() in 03-ui-actions.js swaps
+  // the `.active` class on the nav buttons. We watch clicks on nav.
+  function wireNavPauseResume(){
+    const navBtns = document.querySelectorAll('.nav button');
+    if(!navBtns.length){
+      // The nav may not be in the DOM yet on very early init.
+      setTimeout(wireNavPauseResume, 120);
+      return;
+    }
+    navBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(state.current){
+          pauseDrain();
+          resumeDrain(1000);
+        }
+      });
+    });
+  }
+
+  // visualViewport: keep the toast above an iOS keyboard.
+  function wireViewport(){
+    if(!window.visualViewport) return;
+    const adjust = () => {
+      if(!state.root || !state.current) return;
+      // If keyboard is up, anchor to viewport bottom rather than layout bottom.
+      const keyboardOpen = document.body.classList.contains('keyboard-open');
+      if(keyboardOpen){
+        const offsetFromBottom = (window.innerHeight - (window.visualViewport.height + window.visualViewport.offsetTop));
+        state.root.style.bottom = (offsetFromBottom + 12) + 'px';
+        state.root.classList.add('is-anchor-keyboard');
+      } else {
+        state.root.style.bottom = '';
+        state.root.classList.remove('is-anchor-keyboard');
+      }
+    };
+    window.visualViewport.addEventListener('resize', adjust);
+    window.visualViewport.addEventListener('scroll', adjust);
+    // Also respond to body class flips.
+    const obs = new MutationObserver(adjust);
+    obs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  function init(){
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+      return;
+    }
+    wireNavPauseResume();
+    wireViewport();
+  }
+
+  init();
+
+})(window);
 
 </script></body>
 </html>
