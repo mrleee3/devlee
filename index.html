@@ -2850,7 +2850,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_576_release.html</div><div>Source: hospital_at_home_v12_36_576_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_577_release.html</div><div>Source: hospital_at_home_v12_36_577_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10491,8 +10491,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_576_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_576_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_577_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_577_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10655,9 +10655,7 @@ function resetPatientDetailSwipe(){
 }
 function goBackToPatientList(opts){
   const options=(opts && typeof opts==='object') ? opts : {};
-  if(!options.skipRoute && window.HAHNavigation && window.HAHNavigation.started){
-    return window.HAHNavigation.goBackFromPatient(options);
-  }
+  const routeManagedBack=!options.skipRoute && window.HAHNavigation && window.HAHNavigation.started && typeof window.HAHNavigation.commitBackToPatients==='function';
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
   if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
   detailSwipeCompleting=false;
@@ -10699,8 +10697,13 @@ function goBackToPatientList(opts){
       detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow='';
       patients.style.transition=''; patients.style.transform='';
       resetPatientDetailHeaderShift();
+      if(routeManagedBack){
+        try{ window.HAHNavigation.commitBackToPatients({reason:'patient-back'}); }catch(e){}
+      }
       detailLoadedForCurrentPatient=false;
-      saveData(); renderPatientList(); showSection("patients", {skipRoute:true});
+      saveData();
+      renderPatientList();
+      showSection("patients", {skipRoute:routeManagedBack || !!options.skipRoute});
     };
     detail.addEventListener('transitionend', done, {once:true});
     setTimeout(done, 420);
@@ -10709,10 +10712,13 @@ function goBackToPatientList(opts){
 
   // Instant path (after swipe-back gesture, or reduced-motion)
   resetPatientDetailSwipe();
+  if(routeManagedBack){
+    try{ window.HAHNavigation.commitBackToPatients({reason:'patient-back'}); }catch(e){}
+  }
   detailLoadedForCurrentPatient=false;
   saveData();
   renderPatientList();
-  showSection("patients", {skipRoute:!!options.skipRoute});
+  showSection("patients", {skipRoute:routeManagedBack || !!options.skipRoute});
 }
 function completePatientDetailSwipeBack(){
   if(detailSwipeCompleting) return;
@@ -11026,15 +11032,18 @@ window.HAH.modules.navigation = true;
       return false;
     }
   }
-  function traverseBackOr(routeLike, fallbackOptions={}){
-    const fallbackRoute=normalizeRoute(routeLike);
-    const currentState=getEntryState();
+  function shouldTraverseBackToRoute(fallbackRoute, currentState=getEntryState()){
     const expected=fallbackRoute.section==='patientDetail'
       ? (candidate)=>candidate.section==='patientDetail' && Number(candidate.patientId)===Number(fallbackRoute.patientId)
       : (candidate)=>candidate.section===fallbackRoute.section && candidate.optionsSection===fallbackRoute.optionsSection;
-    const shouldBack = canUseNavigationApi()
-      ? canTraverseBackTo(expected) || (currentState && currentState.openedFromSection && fallbackRoute.section!== 'patientDetail' && currentState.openedFromSection===fallbackRoute.section)
+    return canUseNavigationApi()
+      ? canTraverseBackTo(expected) || (currentState && currentState.openedFromSection && fallbackRoute.section!=='patientDetail' && currentState.openedFromSection===fallbackRoute.section)
       : !!(currentState && currentState.openedFromSection && currentState.openedFromSection===fallbackRoute.section);
+  }
+  function traverseBackOr(routeLike, fallbackOptions={}){
+    const fallbackRoute=normalizeRoute(routeLike);
+    const currentState=getEntryState();
+    const shouldBack=shouldTraverseBackToRoute(fallbackRoute, currentState);
     syncCurrentEntryState(getVisibleAppRoute());
     if(shouldBack){
       pendingNavInfo={ __hahRoute:true, route:fallbackRoute, skipAnimation:!!fallbackOptions.skipAnimation, reason: fallbackOptions.reason || 'back' };
@@ -11047,6 +11056,46 @@ window.HAH.modules.navigation = true;
       try{ history.back(); return fallbackRoute; }catch(e){}
     }
     return navigateWithHistory(fallbackRoute, {...fallbackOptions, replace:true});
+  }
+  function commitBackToPatients(options={}){
+    const currentState=getEntryState();
+    const fallbackScroll=(currentState && currentState.patientsScrollTop!=null) ? Number(currentState.patientsScrollTop||0) : capturePatientsScrollTop();
+    const fallbackRoute=normalizeRoute({section:'patients'});
+    const shouldBack=shouldTraverseBackToRoute(fallbackRoute, currentState);
+    syncCurrentEntryState(getVisibleAppRoute(), {patientsScrollTop:fallbackScroll});
+    if(shouldBack){
+      suppressNextRouteApply=true;
+      pendingNavInfo={ __hahRoute:true, route:fallbackRoute, skipAnimation:true, suppressApply:true, reason: options.reason || 'back-commit' };
+      try{
+        if(canUseNavigationApi()){
+          navigation.back();
+          return fallbackRoute;
+        }
+      }catch(e){
+        suppressNextRouteApply=false;
+        pendingNavInfo=null;
+      }
+      try{ history.back(); return fallbackRoute; }catch(e){
+        suppressNextRouteApply=false;
+        pendingNavInfo=null;
+      }
+    }
+    const state=createEntryState(fallbackRoute, {patientsScrollTop:fallbackScroll});
+    if(canUseNavigationApi()){
+      pendingNavInfo={ __hahRoute:true, route:fallbackRoute, skipAnimation:true, suppressApply:true, reason: options.reason || 'back-commit-replace' };
+      try{
+        navigation.navigate(routeToUrl(fallbackRoute), {
+          history:'replace',
+          state,
+          info: pendingNavInfo,
+        });
+        return fallbackRoute;
+      }catch(e){
+        pendingNavInfo=null;
+      }
+    }
+    try{ history.replaceState(state, '', routeToUrl(fallbackRoute)); }catch(e){}
+    return fallbackRoute;
   }
   function navigateToSection(section, options={}){
     return navigateWithHistory({section:String(section||'patients').trim()}, options);
@@ -11072,6 +11121,10 @@ window.HAH.modules.navigation = true;
     const info=asObject(pendingNavInfo);
     pendingNavInfo=null;
     const route=routeFromStateOrUrl(state, window.location.href);
+    if(suppressNextRouteApply || info.suppressApply){
+      suppressNextRouteApply=false;
+      return route;
+    }
     applyRoute(route, {entryState:state, skipAnimation:!!info.skipAnimation});
   }
   function bindListeners(){
@@ -11093,6 +11146,10 @@ window.HAH.modules.navigation = true;
     fallbackPopstateBound=true;
     window.addEventListener('popstate', event=>{
       if(applyingRoute) return;
+      if(suppressNextRouteApply){
+        suppressNextRouteApply=false;
+        return;
+      }
       const route=routeFromStateOrUrl(event.state, window.location.href);
       applyRoute(route, {entryState:event.state||{}});
     });
@@ -11128,6 +11185,7 @@ window.HAH.modules.navigation = true;
     navigateToPatient,
     navigateToOptionsPage,
     goBackFromPatient,
+    commitBackToPatients,
     applyRoute,
     syncCurrentEntryState,
     routeToUrl,
@@ -17764,7 +17822,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_576_release.html; source=hospital_at_home_v12_36_576_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_577_release.html; source=hospital_at_home_v12_36_577_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
