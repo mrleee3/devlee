@@ -2434,6 +2434,11 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 }
 
 .news-tts-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;margin-top:10px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .12s,opacity .15s}.news-tts-btn:active{background:rgba(255,255,255,.28);transform:scale(.97)}.news-tts-btn svg{flex-shrink:0}.news-tts-btn.is-speaking,.news-tts-btn:disabled{background:rgba(255,255,255,.24);opacity:.9}.tts-hidden-audio{position:fixed;left:-9999px;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none}
+
+/* v580 patient swipe underlay header clip fix */
+#patientListUnderlayHeader{left:0;right:auto;width:100vw;max-width:100vw;overflow:hidden;clip-path:inset(0 calc(100vw - var(--hah-underlay-header-reveal,0px)) 0 0);transition:transform var(--hah-underlay-header-shift-duration,0ms) var(--hah-underlay-header-shift-ease,linear),clip-path var(--hah-underlay-header-reveal-duration,0ms) var(--hah-underlay-header-reveal-ease,linear),opacity .12s linear,visibility 0s linear .12s}
+body.detail-view-active #patientListUnderlayHeader,html.detail-view-active #patientListUnderlayHeader{transition:transform var(--hah-underlay-header-shift-duration,0ms) var(--hah-underlay-header-shift-ease,linear),clip-path var(--hah-underlay-header-reveal-duration,0ms) var(--hah-underlay-header-reveal-ease,linear),opacity .12s linear}
+
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -2856,7 +2861,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_579_release.html</div><div>Source: hospital_at_home_v12_36_579_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_580_release.html</div><div>Source: hospital_at_home_v12_36_580_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -8887,9 +8892,6 @@ function saveCurrentPatientForm() {
 }
 function openPatient(id, options={}) {
   const opts=(options && typeof options==='object') ? options : {};
-  if(!opts.skipRoute && window.HAHNavigation && window.HAHNavigation.started){
-    return window.HAHNavigation.navigateToPatient(id, opts);
-  }
   if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) return;
   if (detailLoadedForCurrentPatient) saveCurrentPatientForm();
   detailSwipeCompleting=false;
@@ -8912,6 +8914,7 @@ function openPatient(id, options={}) {
   updateTimestampButton();
   setActive("navPatients");
   setPatientDetailStackActive(true);
+  if(typeof setPatientListUnderlayHeaderReveal==='function') setPatientListUnderlayHeaderReveal(0, {dragging:true});
   animatePatientDetailSwipe(0,true);
   if(!opts.skipOpenAnimation) animatePatientDetailOpen(); // slide panel + header in from right
   saveData();
@@ -10361,11 +10364,25 @@ function setPatientListUnderlayHeaderShift(dx, options){
   root.style.setProperty('--hah-underlay-header-shift-duration', duration);
   root.style.setProperty('--hah-underlay-header-shift-ease', easing);
 }
+function setPatientListUnderlayHeaderReveal(width, options){
+  const root=document.documentElement; if(!root) return;
+  const viewport=Math.max(window.innerWidth||390, 320);
+  const nextWidth=Math.max(0, Math.min(viewport, Math.round(Number(width)||0)));
+  const dragging=!!(options && options.dragging);
+  const duration=dragging ? '0ms' : String(options && options.duration ? options.duration : '240ms');
+  const easing=String(options && options.easing ? options.easing : 'cubic-bezier(.22,.9,.18,1)');
+  root.style.setProperty('--hah-underlay-header-reveal', nextWidth+'px');
+  root.style.setProperty('--hah-underlay-header-reveal-duration', duration);
+  root.style.setProperty('--hah-underlay-header-reveal-ease', easing);
+}
 function resetPatientListUnderlayHeaderShift(){
   const root=document.documentElement; if(!root) return;
   root.style.setProperty('--hah-underlay-header-shift', '0px');
   root.style.setProperty('--hah-underlay-header-shift-duration', '0ms');
   root.style.setProperty('--hah-underlay-header-shift-ease', 'linear');
+  root.style.setProperty('--hah-underlay-header-reveal', '0px');
+  root.style.setProperty('--hah-underlay-header-reveal-duration', '0ms');
+  root.style.setProperty('--hah-underlay-header-reveal-ease', 'linear');
 }
 
 /* ── Header shift mechanism ──────────────────────────────────── */
@@ -10422,6 +10439,7 @@ function animatePatientDetailOpen(){
   setPatientDetailHeaderShift(window.innerWidth||390, {dragging:true});
   // Set up prep position via CSS classes
   setPatientListUnderlayHeaderShift(0, {dragging:true});
+  setPatientListUnderlayHeaderReveal(0, {dragging:true});
   detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
   if(patients) patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
   detail.classList.add('hah-detail-open-prep');
@@ -10439,6 +10457,7 @@ function animatePatientDetailOpen(){
     }
     const underlayOffset=getDetailUnderlayOffset();
     setPatientListUnderlayHeaderShift(underlayOffset, {dragging:false, duration:'360ms', easing:'cubic-bezier(.25,.46,.45,.94)'});
+    setPatientListUnderlayHeaderReveal(0, {dragging:true});
     setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:'cubic-bezier(.25,.46,.45,.94)'});
   });
   detailOpenAnimTimer=setTimeout(function(){
@@ -10452,6 +10471,7 @@ function animatePatientDetailOpen(){
       }
     }
     setPatientListUnderlayHeaderShift(getDetailUnderlayOffset(), {dragging:true});
+    setPatientListUnderlayHeaderReveal(0, {dragging:true});
     setPatientDetailHeaderShift(0, {dragging:true});
   }, 410);
 }
@@ -10512,6 +10532,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
   patients.style.transform=`translate3d(${underlayShift}px,0,0)`;
   detail.style.boxShadow=activeDx>0?"0 12px 32px rgba(15,23,42,.12)":"";
   setPatientListUnderlayHeaderShift(underlayShift, {dragging:dragging, duration:'.24s', easing:swipeEasing});
+  setPatientListUnderlayHeaderReveal(activeDx, {dragging:dragging, duration:'.24s', easing:swipeEasing});
   // Header follows the panel in sync during swipe gesture
   setPatientDetailHeaderShift(activeDx, {dragging:dragging, duration:'.24s', easing:swipeEasing});
 }
@@ -10520,8 +10541,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_579_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_579_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_580_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_580_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10682,6 +10703,7 @@ function resetPatientDetailSwipe(){
       const offset=getDetailUnderlayOffset();
       patients.style.transform='translate3d('+offset+'px,0,0)';
       if(typeof setPatientListUnderlayHeaderShift==='function') setPatientListUnderlayHeaderShift(offset, {dragging:true});
+      if(typeof setPatientListUnderlayHeaderReveal==='function') setPatientListUnderlayHeaderReveal(0, {dragging:true});
     }else{
       patients.style.transform="";
       if(typeof resetPatientListUnderlayHeaderShift==='function') resetPatientListUnderlayHeaderShift();
@@ -10709,6 +10731,7 @@ function goBackToPatientList(opts){
     patients.style.transition='none';
     patients.style.transform='translate3d('+offset+'px,0,0)';
     if(typeof setPatientListUnderlayHeaderShift==='function') setPatientListUnderlayHeaderShift(offset, {dragging:true});
+    if(typeof setPatientListUnderlayHeaderReveal==='function') setPatientListUnderlayHeaderReveal(0, {dragging:true});
     try{
       // Update header content while title is invisible
       $("headerTitle").textContent='Hospital at Home Companion (DEMO)';
@@ -10725,6 +10748,7 @@ function goBackToPatientList(opts){
     detail.style.transition='transform 360ms '+easing+',box-shadow 360ms ease';
     patients.style.transition='transform 360ms '+easing;
     if(typeof setPatientListUnderlayHeaderShift==='function') setPatientListUnderlayHeaderShift(0, {dragging:false, duration:'360ms', easing:easing});
+    if(typeof setPatientListUnderlayHeaderReveal==='function') setPatientListUnderlayHeaderReveal(window.innerWidth||390, {dragging:false, duration:'360ms', easing:easing});
     setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:easing});
     detail.style.transform='translate3d(100%,0,0)';
     detail.style.boxShadow='-4px 0 20px rgba(15,23,42,.09)';
@@ -10830,6 +10854,7 @@ window.HAH.modules.navigation = true;
   const APP_ROUTE_PARAM_KEYS=['view','section','patient','options'];
   const TOP_LEVEL_SECTIONS=['patients','tasks','handover','deletedPage','eventLogPage'];
   const NAV_API_AVAILABLE=!!(window.navigation && typeof window.navigation.navigate==='function' && typeof window.navigation.addEventListener==='function');
+  const ENABLE_PATIENT_DETAIL_ROUTE=false;
   let started=false;
   let applyingRoute=false;
   let navListenersBound=false;
@@ -10850,7 +10875,7 @@ window.HAH.modules.navigation = true;
     const raw=asObject(route);
     const patientId=Number(raw.patientId||raw.patient||0) || null;
     let section=String(raw.section||'').trim();
-    if((raw.view==='patient' || section==='patient' || section==='patientDetail') && patientId){
+    if(ENABLE_PATIENT_DETAIL_ROUTE && (raw.view==='patient' || section==='patient' || section==='patientDetail') && patientId){
       return { section:'patientDetail', patientId, optionsSection:'' };
     }
     if(!TOP_LEVEL_SECTIONS.includes(section)) section='patients';
@@ -10866,7 +10891,7 @@ window.HAH.modules.navigation = true;
     const url=new URL(urlLike, window.location.href);
     const view=String(url.searchParams.get('view')||'').trim();
     const patientId=Number(url.searchParams.get('patient')||0) || null;
-    if(view==='patient' && patientId) return normalizeRoute({section:'patientDetail', patientId});
+    if(ENABLE_PATIENT_DETAIL_ROUTE && view==='patient' && patientId) return normalizeRoute({section:'patientDetail', patientId});
     const section=String(url.searchParams.get('section')||'').trim();
     const optionsSection=String(url.searchParams.get('options')||'').trim();
     return normalizeRoute({section, optionsSection});
@@ -10888,7 +10913,7 @@ window.HAH.modules.navigation = true;
   }
   function getVisibleAppRoute(){
     const visible=(typeof getVisibleSectionId==='function' ? getVisibleSectionId() : (detailVisible() ? 'patientDetail' : 'patients')) || 'patients';
-    if(visible==='patientDetail' && currentPatient && patients && patients[currentPatient]){
+    if(ENABLE_PATIENT_DETAIL_ROUTE && visible==='patientDetail' && currentPatient && patients && patients[currentPatient]){
       return normalizeRoute({section:'patientDetail', patientId:Number(currentPatient)});
     }
     if(visible==='handover'){
@@ -11097,6 +11122,7 @@ window.HAH.modules.navigation = true;
     return navigateWithHistory(fallbackRoute, {...fallbackOptions, replace:true});
   }
   function commitBackToPatients(options={}){
+    if(!ENABLE_PATIENT_DETAIL_ROUTE) return normalizeRoute({section:'patients'});
     const currentState=getEntryState();
     const fallbackScroll=(currentState && currentState.patientsScrollTop!=null) ? Number(currentState.patientsScrollTop||0) : capturePatientsScrollTop();
     const fallbackRoute=normalizeRoute({section:'patients'});
@@ -11141,6 +11167,10 @@ window.HAH.modules.navigation = true;
   }
   function navigateToPatient(patientId, options={}){
     const route={section:'patientDetail', patientId:Number(patientId)||null};
+    if(!ENABLE_PATIENT_DETAIL_ROUTE){
+      openPatient(Number(patientId)||null, {...options, skipRoute:true});
+      return normalizeRoute({section:'patients'});
+    }
     return navigateWithHistory(route, options);
   }
   function navigateToOptionsPage(openKey, options={}){
@@ -11151,6 +11181,10 @@ window.HAH.modules.navigation = true;
     return navigateWithHistory({section:'handover', optionsSection:key}, options);
   }
   function goBackFromPatient(options={}){
+    if(!ENABLE_PATIENT_DETAIL_ROUTE){
+      goBackToPatientList({skipRoute:true, skipAnimation:!!options.skipAnimation});
+      return normalizeRoute({section:'patients'});
+    }
     const state=getEntryState();
     const fallbackScroll=(state && state.patientsScrollTop!=null) ? Number(state.patientsScrollTop||0) : capturePatientsScrollTop();
     return traverseBackOr({section:'patients'}, {state:{patientsScrollTop:fallbackScroll}, skipAnimation:!!options.skipAnimation});
@@ -17861,7 +17895,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_579_release.html; source=hospital_at_home_v12_36_579_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_580_release.html; source=hospital_at_home_v12_36_580_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
