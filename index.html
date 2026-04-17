@@ -224,11 +224,6 @@ html,body{background:var(--bg)!important;}
 #appSplash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.025) 16%,rgba(0,0,0,.055) 100%),var(--blue);color:#fff;z-index:10000;opacity:1;visibility:visible;pointer-events:auto;overflow:hidden;transition:opacity .9s ease,visibility 0s linear .9s}#appSplash.hidden{opacity:0;visibility:hidden;pointer-events:none}#appSplash.hidden .app-splash-stack{opacity:0;transform:translateY(-4px) scale(.985)}#appSplash.hidden .app-splash-glow{opacity:0;transform:scale(1.08)}.app-splash-stack{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 28px;text-align:center;transform:translateY(0) scale(1);opacity:1;transition:opacity .82s ease,transform .82s cubic-bezier(.22,.78,.2,1)}.app-splash-glow{position:absolute;border-radius:999px;filter:blur(0);pointer-events:none;opacity:.9;transition:opacity .82s ease,transform .82s ease}.app-splash-glow-a{width:320px;height:320px;left:-84px;top:calc(50% - 240px);background:radial-gradient(circle,rgba(255,255,255,.24) 0%,rgba(255,255,255,.08) 34%,rgba(255,255,255,0) 72%)}.app-splash-glow-b{width:280px;height:280px;right:-82px;bottom:calc(50% - 230px);background:radial-gradient(circle,rgba(255,255,255,.18) 0%,rgba(255,255,255,.05) 32%,rgba(255,255,255,0) 72%)}.app-splash-animate{opacity:1;transform:none;animation:none}.app-splash-logo-wrap{display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(8px) scale(.968);animation:appSplashLogoIn .58s cubic-bezier(.22,.88,.24,1) .06s forwards;animation-play-state:paused}.app-splash-logo-button{appearance:none;-webkit-appearance:none;border:0;padding:0;background:transparent;border-radius:30px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}.app-splash-logo-button:focus-visible{outline:2px solid rgba(255,255,255,.92);outline-offset:8px}.app-splash-logo-button:active .app-splash-logo{transform:scale(.97)}.app-splash-logo{display:flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.11));box-shadow:0 16px 34px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .18s ease}.app-splash-logo-svg{width:54px;height:54px;display:block}.app-splash-logo-svg rect{fill:none;stroke:rgba(255,255,255,.94);stroke-width:3.5}.app-splash-logo-svg path{fill:none;stroke:rgba(255,255,255,.96);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.app-splash-title-block{display:flex;flex-direction:column;align-items:center;gap:7px}.app-splash-title,.app-splash-tagline{display:block}.app-splash-company{display:block}.app-splash-title{font-size:31px;font-weight:760;line-height:1.05;letter-spacing:-.028em;text-shadow:0 1px 0 rgba(0,0,0,.08);opacity:0;transform:translateY(8px);animation:appSplashTitleIn .72s cubic-bezier(.16,.84,.2,1) .18s forwards;will-change:opacity,transform;animation-play-state:paused}.app-splash-tagline{font-size:14px;font-weight:600;line-height:1.2;letter-spacing:.01em;color:rgba(255,255,255,.86);opacity:0;transform:translateY(8px);animation:appSplashTitleIn .72s cubic-bezier(.16,.84,.2,1) .46s forwards;will-change:opacity,transform;animation-play-state:paused}.app-splash-company{position:relative;font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.82);opacity:0;animation:appSplashCompanyFadeIn 2.2s cubic-bezier(0,0,.2,1) 1.1s forwards;will-change:opacity;-webkit-font-smoothing:antialiased;font-kerning:none;font-variant-ligatures:none;animation-play-state:paused}#appSplash.splash-ready .app-splash-logo-wrap,#appSplash.splash-ready .app-splash-title,#appSplash.splash-ready .app-splash-tagline,#appSplash.splash-ready .app-splash-company{animation-play-state:running}#appSplash.splash-transition-active .app-splash-logo-wrap{opacity:0;transform:translateY(-10px) scale(.98)}#appSplash.splash-transition-active .app-splash-company{opacity:0}#appSplash.splash-transition-active .app-splash-glow{opacity:0;transform:scale(1.06)}#appSplash.splash-transition-active .app-splash-title{opacity:0}#appSplash .app-splash-title{transition:opacity .12s linear}.app-splash-title-ghost{position:fixed;left:0;top:0;width:100%;display:block;margin:0;color:#fff;z-index:10020;pointer-events:none;text-align:center;transform-origin:center center;will-change:transform,opacity;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;backface-visibility:hidden;-webkit-backface-visibility:hidden}#lockScreen.splash-title-transition .lock-title{opacity:0}#lockScreen.splash-title-transition .lock-subtitle,#lockScreen.splash-title-transition .pin-dots,#lockScreen.splash-title-transition .pin-error,#lockScreen.splash-title-transition .pin-pad,#lockScreen.splash-title-transition .pin-biometric-row{opacity:0;transform:translateY(12px);transition:opacity .32s ease,transform .42s cubic-bezier(.18,.82,.2,1)}#lockScreen.splash-title-transition.splash-title-transition-ready .lock-subtitle,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-dots,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-error,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-pad,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-biometric-row{opacity:1;transform:translateY(0)}@keyframes appSplashLogoIn{from{opacity:0;transform:translateY(8px) scale(.968)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes appSplashTitleIn{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}@keyframes appSplashCompanyFadeIn{from{opacity:0}to{opacity:1}}
  body::before{content:"";position:fixed;left:0;right:0;top:0;height:calc(var(--app-header-height,88px) + env(safe-area-inset-top) + 24px);background:var(--blue);pointer-events:none;z-index:0;transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden} body[style]{background:var(--bg)!important} body.keyboard-open{padding-bottom:12px} body.keyboard-open #patients{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 24px)} body.keyboard-open #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 40px)} body.add-patient-open #patients{pointer-events:none} body.add-patient-open #pullRefreshIndicator{opacity:0!important;transform:translateY(-12px)!important}
 header{position:fixed;left:0;right:0;top:0;z-index:40;background:var(--blue);color:#fff;padding:calc(env(safe-area-inset-top) + 16px) 18px 16px;font-size:20px;font-weight:700;transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform}
-#patientListUnderlayHeader{z-index:38;pointer-events:none;opacity:0;visibility:hidden;transform:translate3d(var(--hah-underlay-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-underlay-header-shift-duration,0ms) var(--hah-underlay-header-shift-ease,linear),opacity .12s linear,visibility 0s linear .12s;will-change:transform}
-body.detail-view-active #patientListUnderlayHeader,html.detail-view-active #patientListUnderlayHeader{opacity:1;visibility:visible;transition:transform var(--hah-underlay-header-shift-duration,0ms) var(--hah-underlay-header-shift-ease,linear),opacity .12s linear}
-#patientListUnderlayHeader .header-row{pointer-events:none}
-#patientListUnderlayHeader .header-left{min-width:0}
-#patientListUnderlayHeader .header-lock{opacity:.92}
 .subhead{font-size:12px;opacity:.9;margin-top:4px}.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.header-left{min-width:0}.header-meta{font-size:13px;opacity:.95;margin-top:6px}.header-age{font-size:18px;opacity:.95;font-weight:600;margin-left:2px}.header-meta2{font-size:12px;opacity:.9;margin-top:4px}.header-back{position:absolute;left:18px;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;padding:0 4px;min-width:auto;font-size:22px;line-height:1;z-index:2}.header-back.hidden{display:none!important}.header-lock{display:inline-flex;align-items:center;justify-content:center;min-width:50px;width:50px;height:44px;margin-top:0;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(255,255,255,.12);color:#fff;padding:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);transition:transform .14s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease;-webkit-tap-highlight-color:transparent}.header-lock svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round}.header-lock:active{transform:scale(.96);background:rgba(255,255,255,.16)}.header-lock:hover{background:rgba(255,255,255,.14)}.header-lock:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.18), inset 0 1px 0 rgba(255,255,255,.10)}header.has-back .header-left{padding-left:42px}.container{position:relative;z-index:1;padding:14px;padding-top:calc(var(--app-header-height,88px) + 14px);min-height:calc(100vh - var(--app-header-height,88px) - env(safe-area-inset-top) - 83px - env(safe-area-inset-bottom));background:var(--bg)}#patients{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:1;padding-top:14px;min-height:0;background:var(--bg);overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}#tasks.hidden,#handover.hidden,#patientDetail.hidden,#deletedPage.hidden,#eventLogPage.hidden{display:none!important}.hidden{display:none!important} #tasks,#handover{background:var(--bg);}.add-patient-overlay{position:fixed;left:0;right:0;top:0;bottom:0;z-index:28;pointer-events:none}.add-patient-overlay.show{pointer-events:auto}.add-patient-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}.add-patient-modal{position:fixed;left:14px;right:14px;top:var(--add-patient-modal-top,calc(var(--app-header-height,88px) + 16px));max-height:var(--add-patient-modal-max-height,calc(100dvh - var(--app-header-height,88px) - 112px));overflow:auto;margin:0;z-index:29;border-radius:20px;box-shadow:0 20px 48px rgba(15,23,42,.18);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.add-patient-modal.hidden{display:none!important}#patients.detail-underlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:4;background:var(--bg);pointer-events:none;transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;padding-top:14px}#patientDetail.detail-overlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:6;background:var(--bg);transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;box-shadow:-12px 0 32px rgba(15,23,42,.12);padding-top:14px;-webkit-overflow-scrolling:touch;touch-action:pan-y}body.detail-view-active #patientDetail.hidden{display:block!important}
 .card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .card.visit-selected{border:2px solid #0a84ff;padding:12px;box-sizing:border-box;box-shadow:0 0 0 1px rgba(10,132,255,.12),0 1px 4px rgba(10,132,255,.12)}
@@ -356,7 +351,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .flow-btn.active{background:#0a84ff;color:#fff;border-color:#0a84ff}
 .summary-chip{display:inline-block;padding:8px 10px;border-radius:10px;background:#f3f4f6;font-size:13px;margin:4px 6px 0 0}
 .med-summary-chip{border:none;cursor:pointer;color:inherit;font-size:13px;font-weight:400;line-height:1.2}
-#medsCollapsedSummary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px;row-gap:8px}#medsCollapsedSummary.hidden{display:none!important}#medsCollapsedSummary .summary-chip{margin:0}#ivCollapsedSummary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px;row-gap:8px}#ivCollapsedSummary.hidden{display:none!important}#ivCollapsedSummary .summary-chip{margin:0}.iv-summary-chip{width:100%;text-align:left}.meds-inline-open{margin-top:8px}.meds-header-row,.iv-header-row{align-items:center;gap:8px}.meds-header-row #medsToggleText,.iv-header-row #ivToggleText{margin-right:auto;min-width:0;font-size:16px;font-weight:800;line-height:1.2}.meds-header-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto;margin-left:8px}.meds-action-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;min-width:40px;padding:0;border-radius:14px;flex:0 0 auto}.acp-edit-btn{width:auto;min-width:72px;padding:0 14px;font-size:14px;font-weight:700;line-height:1}.meds-action-spacer{display:inline-flex;width:40px;height:40px;min-width:40px;flex:0 0 auto;visibility:hidden;pointer-events:none}.meds-quick-add{margin-left:0;font-size:22px;line-height:1}.med-summary-chip{position:relative;display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:34px;padding:8px 10px;border-radius:10px;background:#f3f4f6;border:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}.med-summary-chip .med-summary-line{display:block;max-width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;font-size:13px;letter-spacing:-.01em;-webkit-user-select:none;user-select:none;pointer-events:none}.med-summary-chip-longpress{background:rgba(229,231,235,.95)}#medsCollapsedSummary,#medsCollapsedSummary *{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}.med-edit-overlay{position:fixed;inset:0;z-index:10070}.med-edit-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.med-edit-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:max(14px,calc(env(safe-area-inset-bottom) + 14px));padding:0;background:transparent;border:none;box-shadow:none;display:flex;flex-direction:column;overflow:hidden}.med-edit-actionbtn{display:inline-flex;align-items:center;justify-content:center;min-width:72px;height:34px;padding:0 12px;border-radius:11px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-size:14px;font-weight:600;line-height:1;flex:0 0 auto}.med-edit-actionbtn.primary{background:#0a84ff;color:#fff;border-color:#0a84ff}.med-edit-body{min-height:0;overflow:auto;padding-right:2px}.med-edit-card{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}.med-edit-card .med-entry-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.med-edit-card .med-entry-delete{display:none}.med-edit-head-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}.med-edit-card .med-entry-summary{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#medsCollapsedSummary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px;row-gap:8px}#medsCollapsedSummary.hidden{display:none!important}#medsCollapsedSummary .summary-chip{margin:0}#ivCollapsedSummary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px;row-gap:8px}#ivCollapsedSummary.hidden{display:none!important}#ivCollapsedSummary .summary-chip{margin:0}.iv-summary-chip{width:100%;text-align:left}.meds-inline-open{margin-top:8px}.meds-header-row,.iv-header-row{align-items:center;gap:8px}.meds-header-row #medsToggleText,.iv-header-row #ivToggleText{margin-right:auto;min-width:0;font-size:16px;font-weight:800;line-height:1.2}.meds-header-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto;margin-left:8px}.meds-action-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;min-width:40px;padding:0;border-radius:14px;flex:0 0 auto}.acp-edit-btn{width:auto;min-width:72px;padding:0 14px;font-size:14px;font-weight:700;line-height:1}.meds-action-spacer{display:inline-flex;width:40px;height:40px;min-width:40px;flex:0 0 auto;visibility:hidden;pointer-events:none}.meds-quick-add{margin-left:0;font-size:22px;line-height:1}.med-summary-chip{position:relative;display:flex;align-items:center;justify-content:flex-start;min-width:0;min-height:34px;padding:8px 10px;border-radius:10px;background:#f3f4f6;border:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}.med-summary-chip .med-summary-line{display:block;max-width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;font-size:13px;letter-spacing:-.01em;-webkit-user-select:none;user-select:none;pointer-events:none}.med-summary-chip.delete-mode{padding-right:28px}.med-summary-chip-delete{position:absolute;top:4px;right:4px;width:18px;height:18px;border:none;border-radius:999px;background:rgba(239,68,68,.12);color:#dc2626;font-size:14px;line-height:18px;padding:0;display:flex;align-items:center;justify-content:center;font-weight:700;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}.med-summary-chip-delete:active{transform:scale(.96)}.med-summary-chip.delete-mode .med-summary-line{max-width:100%}.med-summary-chip-longpress{background:rgba(229,231,235,.95)}#medsCollapsedSummary,#medsCollapsedSummary *{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}.med-edit-overlay{position:fixed;inset:0;z-index:10070}.med-edit-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.med-edit-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:max(14px,calc(env(safe-area-inset-bottom) + 14px));padding:0;background:transparent;border:none;box-shadow:none;display:flex;flex-direction:column;overflow:hidden}.med-edit-actionbtn{display:inline-flex;align-items:center;justify-content:center;min-width:72px;height:34px;padding:0 12px;border-radius:11px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-size:14px;font-weight:600;line-height:1;flex:0 0 auto}.med-edit-actionbtn.primary{background:#0a84ff;color:#fff;border-color:#0a84ff}.med-edit-body{min-height:0;overflow:auto;padding-right:2px}.med-edit-card{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}.med-edit-card .med-entry-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.med-edit-card .med-entry-delete{display:none}.med-edit-head-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}.med-edit-card .med-entry-summary{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .scoremode-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;margin-bottom:8px}.scoremode-btn.active{background:#0a84ff;color:#fff}
 #medsToggleText,#ivToggleText{font-size:16px;font-weight:800;line-height:1.2}
 .clinical-review-header{display:flex;align-items:center;justify-content:space-between;gap:10px}.clinical-review-header h3{margin:0}.clinical-tools-btn{display:inline-flex;align-items:center;justify-content:center;min-width:72px;height:34px;padding:0 12px;border-radius:11px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-size:14px;font-weight:600;line-height:1;flex:0 0 auto}.clinical-tools-btn:active{transform:scale(.98)}.field-label-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:2px;margin-bottom:0}.field-label-row label{margin:0}.field-label-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.dictation-btn{min-width:34px;width:34px;padding:0;gap:0;overflow:hidden}.dictation-btn svg{width:16px;height:16px;display:block;pointer-events:none}.dictation-btn.recording{background:#fef2f2;border-color:#fda4af;color:#b42318;box-shadow:0 0 0 1px rgba(180,35,24,.08) inset}.dictation-btn.finalizing{background:#fff7ed;border-color:#fdba74;color:#b54708;box-shadow:0 0 0 1px rgba(181,71,8,.08) inset}.dictation-btn.finalizing svg{animation:dictationSpin .9s linear infinite}.dictation-btn:disabled{opacity:.6}.exam-findings-btn{min-width:84px}.exam-findings-toolbar{margin-top:0;margin-bottom:8px}.exam-findings-overlay{position:fixed;inset:0;z-index:10084}.exam-findings-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.exam-findings-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:calc(env(safe-area-inset-bottom) + 10px);padding:12px;border-radius:18px;display:flex;flex-direction:column;gap:12px;overflow:hidden}.exam-findings-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.exam-findings-head h3{margin:0;font-size:20px;line-height:1.1}.exam-findings-close{width:34px;height:34px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#475467;font-size:18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;flex:0 0 auto}.exam-findings-body{min-height:0;overflow:auto;padding-right:2px;-webkit-overflow-scrolling:touch}.exam-findings-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:12px}.exam-findings-editor{position:sticky;top:0;z-index:2;background:#fff;padding-bottom:4px}.exam-findings-card textarea{min-height:256px;max-height:256px;resize:none;overflow:auto;-webkit-overflow-scrolling:touch}.exam-findings-presets{display:flex;flex-direction:column;gap:12px}.exam-findings-group{display:flex;flex-direction:column;gap:8px}.exam-findings-group-title{font-size:12px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.04em}.exam-findings-group-toggle{display:inline-flex;align-items:center;gap:1px;padding:0;border:none;background:transparent;color:inherit;font:inherit;align-self:flex-start;text-align:left}.exam-findings-group-toggle .exam-findings-group-title{margin:0}.exam-findings-group-chevron{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;flex:0 0 22px;font-size:22px;color:#667085;line-height:1;transform:rotate(0deg);transform-origin:50% 50%;transition:transform .16s ease}.exam-findings-group:not(.collapsed) .exam-findings-group-chevron{transform:rotate(90deg)}.exam-findings-chip-row{display:flex;flex-wrap:wrap;gap:6px}.exam-findings-chip{min-height:34px;padding:7px 11px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-weight:700;font-size:12.5px;line-height:1.15;display:inline-flex;align-items:center;justify-content:center;text-align:center;white-space:nowrap}.exam-findings-chip.active{background:#eaf4ff;border-color:#0a84ff;color:#0a3d91;box-shadow:0 0 0 1px rgba(10,132,255,.12) inset}.exam-findings-chip:active{transform:scale(.98)}.exam-findings-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}.exam-findings-footer button{height:40px}@keyframes dictationSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}@media (max-width:390px){.field-label-row{align-items:flex-start}.field-label-actions{gap:6px}.exam-findings-btn{min-width:76px;padding:0 10px;font-size:13px}.exam-findings-chip{font-size:12px;padding:7px 11px}}.score-tools-overlay{position:fixed;inset:0;z-index:10085}.score-tools-backdrop{position:fixed;left:0;right:0;bottom:0;top:var(--shared-header-offset,0px);background:rgba(15,23,42,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.score-tools-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:max(10px,calc(env(safe-area-inset-bottom) + 10px));padding:12px;border-radius:18px;display:flex;flex-direction:column;gap:12px;overflow:hidden}.score-tools-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.score-tools-head h3{margin:0;font-size:20px;line-height:1.1}.score-tools-close{width:34px;height:34px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#475467;font-size:18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;flex:0 0 auto}.score-tools-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.score-tool-tab{height:36px;border-radius:12px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;font-weight:700;font-size:13px;padding:0 8px}.score-tool-tab.active{background:#0a84ff;border-color:#0a84ff;color:#fff}.score-tools-body{min-height:0;overflow:auto;padding-right:2px;padding-bottom:6px;display:flex;flex-direction:column;gap:12px}.score-tool-panel{display:flex;flex-direction:column;gap:12px;padding-bottom:2px}.score-tool-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:12px}.score-tool-card h4{margin:0;font-size:16px;line-height:1.2}.score-subhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}.score-subhead h4{margin:0}.score-mini-note{font-size:11px;color:#667085;line-height:1.3}.score-tool-help{font-size:11.5px;color:#6b7280;line-height:1.35;margin:0}.cfs-reference-card{border:1px solid rgba(15,23,42,.08);border-radius:14px;background:#f8fafc;padding:10px;display:flex;flex-direction:column;gap:8px}.cfs-reference-title{font-size:12px;font-weight:700;color:#475467}.cfs-reference-thumb{width:100%;display:block;border-radius:10px;border:1px solid rgba(15,23,42,.08);background:#fff;object-fit:cover}.score-choice-grid{display:flex;flex-direction:column;gap:12px}.score-choice-btn{display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;align-items:flex-start;min-height:0;border-radius:14px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#111;padding:12px;text-align:left}.score-choice-btn .num{width:42px;height:42px;border-radius:12px;background:#fff;border:1px solid rgba(15,23,42,.08);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;line-height:1;color:#111}.score-choice-content{display:flex;flex-direction:column;gap:4px;min-width:0}.score-choice-btn .lbl{display:block;font-size:14px;font-weight:700;color:#111;line-height:1.25}.score-choice-btn .desc{display:block;font-size:12px;color:#6b7280;line-height:1.35}.score-choice-btn.active{background:#eaf4ff;border-color:#0a84ff;box-shadow:0 0 0 1px rgba(10,132,255,.14) inset}.score-choice-btn.active .num{background:#0a84ff;border-color:#0a84ff;color:#fff}.score-summary-box{border-radius:12px;background:#f8fafc;border:1px solid rgba(15,23,42,.06);padding:10px 12px;font-size:14px;font-weight:700;line-height:1.35;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.score-summary-box .score-interpretation{font-size:12px;font-weight:600;color:#667085}.score-qrows{display:flex;flex-direction:column;gap:0}.score-qrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid rgba(15,23,42,.06)}.score-qrow:first-child{border-top:none;padding-top:0}.score-qtext{font-size:14px;line-height:1.32;min-width:0;display:flex;flex-direction:column;gap:4px}.score-qtitle{display:flex;align-items:baseline;gap:10px;min-width:0}.score-qnumber{width:22px;flex:0 0 auto;font-weight:800;color:#667085;text-align:left}.score-qmain{font-weight:700;color:#101828;line-height:1.3}.score-qactions{display:flex;gap:7px;flex:0 0 auto;flex-wrap:wrap;justify-content:flex-end;align-items:center}.score-yn-btn{min-width:60px;height:34px;border-radius:999px;border:1px solid rgba(15,23,42,.10);background:#fff;color:#344054;font-weight:700;display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:0 14px;box-shadow:0 1px 1px rgba(15,23,42,.04);line-height:1}.score-yn-btn.yes.active{background:#ecfdf3;color:#027a48;border-color:#86efac}.score-yn-btn.no.active{background:#fef3f2;color:#b42318;border-color:#fda29b}.score-chip-btn{height:34px;padding:0 12px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#fff;color:#344054;font-weight:700;display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1}.score-chip-btn.active{background:#eef2f6;color:#101828;border-color:#98a2b3}.score-tools-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}.score-inline-note{font-size:11.5px;color:#6b7280;line-height:1.35}.score-tools-footer button{height:40px}.score-4at-grid{display:flex;flex-direction:column;gap:10px}.score-4at-item{border:1px solid rgba(15,23,42,.07);border-radius:14px;background:#f8fafc;padding:12px;display:flex;flex-direction:column;gap:10px}.score-4at-titlewrap{display:flex;flex-direction:column;gap:6px;min-width:0}.score-4at-title{font-size:15px;font-weight:800;color:#101828;line-height:1.2}.score-4at-task{font-size:12.5px;color:#475467;line-height:1.4}.score-4at-options{display:flex;flex-direction:column;gap:8px}.score-4at-option{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:flex-start}.score-4at-scorebtn{min-width:44px;height:34px;padding:0 12px;border-radius:999px;border:1px solid rgba(15,23,42,.10);background:#fff;color:#344054;font-weight:800;display:inline-flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 1px 1px rgba(15,23,42,.04)}.score-4at-criterion{font-size:12.5px;color:#344054;line-height:1.4;font-weight:600;padding-top:6px}.score-4at-subnote{margin-top:-2px}.score-4at-scorebtn.derived,.score-4at-scorebtn[data-score-key="alertness"][data-score-value="0"].active,.score-4at-scorebtn[data-score-key="acute"][data-score-value="0"].active,.score-4at-scorebtn[data-score-key="attention"][data-score-value="0"].active,.score-4at-scorebtn[data-score-key="manualAmt4"][data-score-value="0"].active{background:#ecfdf3;border-color:#86efac;color:#027a48}.score-4at-scorebtn[data-score-key="acute"][data-score-value="4"].active,.score-4at-scorebtn[data-score-key="alertness"][data-score-value="4"].active,.score-4at-scorebtn[data-score-key="attention"][data-score-value="2"].active,.score-4at-scorebtn[data-score-key="manualAmt4"][data-score-value="2"].active{background:#fef3f2;border-color:#fda29b;color:#b42318}.score-4at-scorebtn[data-score-key="attention"][data-score-value="1"].active,.score-4at-scorebtn[data-score-key="manualAmt4"][data-score-value="1"].active{background:#fff7ed;border-color:#fdba74;color:#b54708}@media (max-width:390px){.score-choice-btn{grid-template-columns:38px minmax(0,1fr);gap:10px;padding:11px}.score-choice-btn .num{width:38px;height:38px}.score-4at-option{grid-template-columns:1fr}.score-4at-scorebtn{justify-self:start}}
@@ -2434,11 +2429,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 }
 
 .news-tts-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;margin-top:10px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .12s,opacity .15s}.news-tts-btn:active{background:rgba(255,255,255,.28);transform:scale(.97)}.news-tts-btn svg{flex-shrink:0}.news-tts-btn.is-speaking,.news-tts-btn:disabled{background:rgba(255,255,255,.24);opacity:.9}.tts-hidden-audio{position:fixed;left:-9999px;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none}
-
-/* v580 patient swipe underlay header clip fix */
-#patientListUnderlayHeader{left:0;right:auto;width:100vw;max-width:100vw;overflow:hidden;clip-path:inset(0 calc(100vw - var(--hah-underlay-header-reveal,0px)) 0 0);transition:transform var(--hah-underlay-header-shift-duration,0ms) var(--hah-underlay-header-shift-ease,linear),clip-path var(--hah-underlay-header-reveal-duration,0ms) var(--hah-underlay-header-reveal-ease,linear),opacity .12s linear,visibility 0s linear .12s}
-body.detail-view-active #patientListUnderlayHeader,html.detail-view-active #patientListUnderlayHeader{transition:transform var(--hah-underlay-header-shift-duration,0ms) var(--hah-underlay-header-shift-ease,linear),clip-path var(--hah-underlay-header-reveal-duration,0ms) var(--hah-underlay-header-reveal-ease,linear),opacity .12s linear}
-
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -2648,7 +2638,6 @@ body.detail-view-active #patientListUnderlayHeader,html.detail-view-active #pati
 </div>
 </div>
 <header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2"></div></div><div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-end;flex-shrink:0;align-self:stretch"><button aria-label="Lock app" class="header-lock" id="headerLockBtn" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></header>
-<header aria-hidden="true" id="patientListUnderlayHeader"><div class="header-row"><div class="header-left"><div>Hospital at Home Companion (DEMO)</div><div class="subhead">LK Medica Software Solutions Inc.</div></div><div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-end;flex-shrink:0;align-self:stretch"><div aria-hidden="true" class="header-lock"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></div></div></div></header>
 <section class="container" id="patients">
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
@@ -2861,7 +2850,7 @@ body.detail-view-active #patientListUnderlayHeader,html.detail-view-active #pati
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_580_release.html</div><div>Source: hospital_at_home_v12_36_580_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_568_release.html</div><div>Source: hospital_at_home_v12_36_568_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -6535,11 +6524,7 @@ function nowString(){return new Date().toLocaleString([],{year:"numeric",month:"
 function hideAll(){["patients","tasks","handover","patientDetail","deletedPage","eventLogPage"].forEach(id=>$(id).classList.add("hidden"))}
 function setPatientViewportMode(active){document.body.classList.toggle("patients-section-active",!!active);document.documentElement.classList.toggle("patients-section-active",!!active)}
 function setActive(which){["navPatients","navTasks","navHandover"].forEach(id=>$(id).classList.remove("active")); $(which).classList.add("active")}
-function showSection(id, options={}) {
-  const opts=(options && typeof options==='object') ? options : {};
-  if(!opts.skipRoute && window.HAHNavigation && window.HAHNavigation.started){
-    return window.HAHNavigation.navigateToSection(id, opts);
-  }
+function showSection(id) {
   closeWeightHistoryModal();
   if(id !== "patients" && typeof toggleAddPatient === "function") toggleAddPatient(false);
   setPatientDetailStackActive(false);
@@ -7818,16 +7803,6 @@ function deleteMedEntryByElement(div){
     calculateNews();
     return;
   }
-  const medNameEl=div.querySelector('.med-name');
-  const medName=(medNameEl && medNameEl.value || '').trim() || 'Medication';
-  // Flush current DOM state into patient.form so the pre-delete snapshot
-  // contains the medication we're about to remove.
-  if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
-  // Skip setUndoSnapshot() when a med-delete batch is already in progress,
-  // so the snapshot from the first delete survives and one undoLastChange()
-  // can restore every medication in the batch.
-  const batchActive = !!(window.HAH_UNDO && window.HAH_UNDO.hasActiveBatch('med-delete'));
-  if(!batchActive && typeof setUndoSnapshot==='function') setUndoSnapshot();
   const compact=!!(patients[currentPatient] && patients[currentPatient].form && patients[currentPatient].form.medsCollapsed);
   div.remove();
   const remaining=document.querySelectorAll('#medsContainer .med-entry').length;
@@ -7839,18 +7814,6 @@ function deleteMedEntryByElement(div){
   refreshAllMedEntryHeaders();
   updateMedSummary();
   calculateNews();
-  if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
-  if(typeof saveData==='function') saveData('Medication removed');
-  if(typeof updateUndoButton==='function') updateUndoButton();
-  if(window.HAH_UNDO){
-    window.HAH_UNDO.show({
-      message:  medName + ' removed',
-      icon:     'pill',
-      batchKey: 'med-delete',
-      undoLabel: 'Undo removal of ' + medName,
-      onUndo:   () => { if(typeof undoLastChange==='function') undoLastChange(); }
-    });
-  }
 }
 
 window.syncIVEntryButtonState=syncIVEntryButtonState;
@@ -7915,6 +7878,7 @@ function addMedEntry(){
 function getMedEntries(){
   return Array.from(document.querySelectorAll('#medsContainer .med-entry')).map((div,idx)=>{ const entry={name:div.querySelector('.med-name').value, dose:div.querySelector('.med-dose').value, frequency:div.querySelector('.med-frequency').value, details:div.querySelector('.med-details').value, collapsed:div.classList.contains('collapsed')}; const resolved=resolveMedicationReferenceUrls(entry,idx); return {...entry, bnfLookupName:resolved.bnfLookupName||'', bnfSlug:resolved.bnfSlug||'', bnfStrategy:resolved.bnfStrategy||'', bnfUrl:resolved.bnfUrl||'', medicinesUrl:resolved.medicinesUrl||''}; });
 }
+let medSummaryDeleteMode=false;
 let suppressMedSummaryClickUntil=0;
 let medContextIndex=null;
 let medReferenceCurrentUrl='';
@@ -7980,6 +7944,7 @@ async function copyMedicationDebugLog(){
   }catch(_e){ addMedicationDebugLog('Copy medication-link debug log failed'); return false; }
 }
 function clearMedicationDebugLog(){ medRefDebugEntries=[]; persistMedicationDebugLog(); renderMedicationDebugLog(); }
+function setMedSummaryDeleteMode(on){ medSummaryDeleteMode=!!on; updateMedSummary(); }
 function getMedEntryAtIndex(index){
   const entries=getMedEntries();
   return Number.isInteger(index) && index>=0 && index<entries.length ? entries[index] : null;
@@ -8488,15 +8453,6 @@ function removeMedEntryAtIndex(index){
   const entries=Array.from(document.querySelectorAll("#medsContainer .med-entry"));
   const target=entries[index];
   if(!target) return;
-  // Capture the name BEFORE removal so the toast can announce it.
-  const nameEl=target.querySelector('.med-name');
-  const medName=(nameEl && nameEl.value || '').trim() || 'Medication';
-  // Flush current DOM state into patient.form so the snapshot contains the
-  // medication we're about to remove. Then skip setUndoSnapshot if a batch
-  // is already live, so the first pre-batch snapshot survives.
-  if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
-  const batchActive=!!(window.HAH_UNDO && window.HAH_UNDO.hasActiveBatch('med-delete'));
-  if(!batchActive && typeof setUndoSnapshot==='function') setUndoSnapshot();
   target.remove();
   const remaining=document.querySelectorAll("#medsContainer .med-entry").length;
   if(!remaining && $("medsGiven").checked){ createMedEntry(); }
@@ -8508,16 +8464,6 @@ function removeMedEntryAtIndex(index){
   updateMedSummary();
   calculateNews();
   if(typeof queueRenalMedicationReviewRender==='function') queueRenalMedicationReviewRender();
-  if(typeof updateUndoButton==='function') updateUndoButton();
-  if(window.HAH_UNDO){
-    window.HAH_UNDO.show({
-      message:  medName + ' removed',
-      icon:     'pill',
-      batchKey: 'med-delete',
-      undoLabel: 'Undo removal of ' + medName,
-      onUndo:   () => { if(typeof undoLastChange==='function') undoLastChange(); }
-    });
-  }
 }
 
 function updateMedSummary(){
@@ -8526,7 +8472,7 @@ function updateMedSummary(){
     const dose=(item.entry.dose||'').trim();
     const frequency=(item.entry.frequency||'').trim();
     const line=[item.label,dose,frequency].filter(Boolean).join(' ');
-    return `<button type="button" class="summary-chip med-summary-chip" data-med-index="${item.index}"><span class="med-summary-line">${escapeHtml(line)}</span></button>`;
+    return `<button type="button" class="summary-chip med-summary-chip${medSummaryDeleteMode?' delete-mode':''}" data-med-index="${item.index}">${medSummaryDeleteMode?`<span class="med-summary-chip-delete" data-med-delete="${item.index}" aria-label="Delete medication">×</span>`:''}<span class="med-summary-line">${escapeHtml(line)}</span></button>`;
   }).join('');
   if(typeof queueRenalMedicationReviewRender==='function') queueRenalMedicationReviewRender();
 }
@@ -8890,8 +8836,7 @@ function saveCurrentPatientForm() {
     if(issuesChanged || planChanged) queuePush(currentPatient);
   }
 }
-function openPatient(id, options={}) {
-  const opts=(options && typeof options==='object') ? options : {};
+function openPatient(id) {
   if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) return;
   if (detailLoadedForCurrentPatient) saveCurrentPatientForm();
   detailSwipeCompleting=false;
@@ -8914,9 +8859,8 @@ function openPatient(id, options={}) {
   updateTimestampButton();
   setActive("navPatients");
   setPatientDetailStackActive(true);
-  if(typeof setPatientListUnderlayHeaderReveal==='function') setPatientListUnderlayHeaderReveal(0, {dragging:true});
   animatePatientDetailSwipe(0,true);
-  if(!opts.skipOpenAnimation) animatePatientDetailOpen(); // slide panel + header in from right
+  animatePatientDetailOpen(); // slide panel + header in from right
   saveData();
   calculateNews();
   if(typeof renderBloodsSummaryCard==='function'){
@@ -9528,17 +9472,12 @@ function resetToDemo(){
 function deletePatient(id) {
   const p = patients[id];
   if (!p) return;
-  const patientName = p.name || 'Patient';
+  if (!confirm(`Delete ${p.name}?`)) return;
   if (detailLoadedForCurrentPatient) saveCurrentPatientForm();
-  // Skip setUndoSnapshot() when a delete batch is already in progress:
-  // the snapshot from the first delete in the batch still represents the
-  // pre-batch world, and overwriting it here would lose earlier deletes.
-  // One undoLastChange() then restores every patient in the batch.
-  const batchActive = !!(window.HAH_UNDO && window.HAH_UNDO.hasActiveBatch('patient-delete'));
-  if (!batchActive) setUndoSnapshot();
+  setUndoSnapshot();
   deletedPatients.unshift(clone(p));
   deletedPatients = deletedPatients.slice(0, 20);
-  addEventLog(`Deleted ${patientName}`);
+  addEventLog(`Deleted ${p.name}`);
   delete patients[id];
   const remaining = Object.keys(patients).map(Number).sort((a, b) => a - b);
   if (currentPatient === id) {
@@ -9555,15 +9494,6 @@ function deletePatient(id) {
   renderDeletedList();
   renderEventLog();
   updateUndoButton();
-  if (window.HAH_UNDO) {
-    window.HAH_UNDO.show({
-      message:  patientName + ' deleted',
-      icon:     'trash',
-      batchKey: 'patient-delete',
-      undoLabel: 'Undo deletion of ' + patientName,
-      onUndo:   () => { if (typeof undoLastChange === 'function') undoLastChange(); }
-    });
-  }
 }
 function focusNextField(currentId){const addOrder=["newName","newAge","newReferralOther"]; const addIdx=addOrder.indexOf(currentId); if(addIdx>=0){ for(let i=addIdx+1;i<addOrder.length;i++){ const next=$(addOrder[i]); if(next && !next.classList.contains("hidden") && !next.disabled){ try{next.focus({preventScroll:true})}catch(e){next.focus()} return; } } const save=$("saveAddBtn"); if(save) save.focus(); return; } const order=["rr","spo2","temp","bp","hr","weight","openBmEditorBtn","issues","bloods","currently","pmh","socialHistory","examination","plan","forDischargeSummary"]; const idx=order.indexOf(currentId); if(idx>=0&&idx<order.length-1){const next=$(order[idx+1]); if(next){ try{next.focus({preventScroll:true})}catch(e){next.focus()} }}}
 
@@ -10354,37 +10284,6 @@ let detailSwipeCompleting=false;
 let sharedHeaderMinHeight=0;
 function getDetailUnderlayOffset(){ return -Math.round((window.innerWidth||390)*0.28); }
 
-function setPatientListUnderlayHeaderShift(dx, options){
-  const root=document.documentElement; if(!root) return;
-  const nextDx=Math.round(Number(dx)||0);
-  const dragging=!!(options && options.dragging);
-  const duration=dragging ? '0ms' : String(options && options.duration ? options.duration : '240ms');
-  const easing=String(options && options.easing ? options.easing : 'cubic-bezier(.22,.9,.18,1)');
-  root.style.setProperty('--hah-underlay-header-shift', nextDx+'px');
-  root.style.setProperty('--hah-underlay-header-shift-duration', duration);
-  root.style.setProperty('--hah-underlay-header-shift-ease', easing);
-}
-function setPatientListUnderlayHeaderReveal(width, options){
-  const root=document.documentElement; if(!root) return;
-  const viewport=Math.max(window.innerWidth||390, 320);
-  const nextWidth=Math.max(0, Math.min(viewport, Math.round(Number(width)||0)));
-  const dragging=!!(options && options.dragging);
-  const duration=dragging ? '0ms' : String(options && options.duration ? options.duration : '240ms');
-  const easing=String(options && options.easing ? options.easing : 'cubic-bezier(.22,.9,.18,1)');
-  root.style.setProperty('--hah-underlay-header-reveal', nextWidth+'px');
-  root.style.setProperty('--hah-underlay-header-reveal-duration', duration);
-  root.style.setProperty('--hah-underlay-header-reveal-ease', easing);
-}
-function resetPatientListUnderlayHeaderShift(){
-  const root=document.documentElement; if(!root) return;
-  root.style.setProperty('--hah-underlay-header-shift', '0px');
-  root.style.setProperty('--hah-underlay-header-shift-duration', '0ms');
-  root.style.setProperty('--hah-underlay-header-shift-ease', 'linear');
-  root.style.setProperty('--hah-underlay-header-reveal', '0px');
-  root.style.setProperty('--hah-underlay-header-reveal-duration', '0ms');
-  root.style.setProperty('--hah-underlay-header-reveal-ease', 'linear');
-}
-
 /* ── Header shift mechanism ──────────────────────────────────── */
 function setPatientDetailHeaderShift(dx, options){
   const root=document.documentElement; if(!root) return;
@@ -10438,8 +10337,6 @@ function animatePatientDetailOpen(){
   // Snap header to +windowWidth — old app title rides off-screen right invisibly
   setPatientDetailHeaderShift(window.innerWidth||390, {dragging:true});
   // Set up prep position via CSS classes
-  setPatientListUnderlayHeaderShift(0, {dragging:true});
-  setPatientListUnderlayHeaderReveal(0, {dragging:true});
   detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
   if(patients) patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
   detail.classList.add('hah-detail-open-prep');
@@ -10455,9 +10352,6 @@ function animatePatientDetailOpen(){
       patients.classList.add('hah-detail-underlay-open-anim');
       patients.classList.remove('hah-detail-underlay-open-prep');
     }
-    const underlayOffset=getDetailUnderlayOffset();
-    setPatientListUnderlayHeaderShift(underlayOffset, {dragging:false, duration:'360ms', easing:'cubic-bezier(.25,.46,.45,.94)'});
-    setPatientListUnderlayHeaderReveal(0, {dragging:true});
     setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:'cubic-bezier(.25,.46,.45,.94)'});
   });
   detailOpenAnimTimer=setTimeout(function(){
@@ -10470,8 +10364,6 @@ function animatePatientDetailOpen(){
         try{ patients.style.transition='none'; patients.style.transform='translate3d('+offset+'px,0,0)'; }catch(_e){}
       }
     }
-    setPatientListUnderlayHeaderShift(getDetailUnderlayOffset(), {dragging:true});
-    setPatientListUnderlayHeaderReveal(0, {dragging:true});
     setPatientDetailHeaderShift(0, {dragging:true});
   }, 410);
 }
@@ -10512,7 +10404,6 @@ function setPatientDetailStackActive(active){
     detail.style.transition="";
     detail.style.transform="";
     detail.style.boxShadow="";
-    resetPatientListUnderlayHeaderShift();
     resetPatientDetailHeaderShift();
   }
 }
@@ -10531,8 +10422,6 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
   detail.style.transform=`translate3d(${activeDx}px,0,0)`;
   patients.style.transform=`translate3d(${underlayShift}px,0,0)`;
   detail.style.boxShadow=activeDx>0?"0 12px 32px rgba(15,23,42,.12)":"";
-  setPatientListUnderlayHeaderShift(underlayShift, {dragging:dragging, duration:'.24s', easing:swipeEasing});
-  setPatientListUnderlayHeaderReveal(activeDx, {dragging:dragging, duration:'.24s', easing:swipeEasing});
   // Header follows the panel in sync during swipe gesture
   setPatientDetailHeaderShift(activeDx, {dragging:dragging, duration:'.24s', easing:swipeEasing});
 }
@@ -10541,8 +10430,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_580_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_580_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_568_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_568_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10699,21 +10588,11 @@ function resetPatientDetailSwipe(){
     detail.style.transform="";
     detail.style.boxShadow="";
     patients.style.transition="";
-    if(patientDetailIsVisible && patientDetailIsVisible() && document.body.classList.contains('detail-view-active')){
-      const offset=getDetailUnderlayOffset();
-      patients.style.transform='translate3d('+offset+'px,0,0)';
-      if(typeof setPatientListUnderlayHeaderShift==='function') setPatientListUnderlayHeaderShift(offset, {dragging:true});
-      if(typeof setPatientListUnderlayHeaderReveal==='function') setPatientListUnderlayHeaderReveal(0, {dragging:true});
-    }else{
-      patients.style.transform="";
-      if(typeof resetPatientListUnderlayHeaderShift==='function') resetPatientListUnderlayHeaderShift();
-    }
+    patients.style.transform="";
     resetPatientDetailHeaderShift();
   },260);
 }
 function goBackToPatientList(opts){
-  const options=(opts && typeof opts==='object') ? opts : {};
-  const routeManagedBack=!options.skipRoute && window.HAHNavigation && window.HAHNavigation.started && typeof window.HAHNavigation.commitBackToPatients==='function';
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
   if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
   detailSwipeCompleting=false;
@@ -10730,8 +10609,6 @@ function goBackToPatientList(opts){
     // Snap patient list and header to their starting positions (both shifted left)
     patients.style.transition='none';
     patients.style.transform='translate3d('+offset+'px,0,0)';
-    if(typeof setPatientListUnderlayHeaderShift==='function') setPatientListUnderlayHeaderShift(offset, {dragging:true});
-    if(typeof setPatientListUnderlayHeaderReveal==='function') setPatientListUnderlayHeaderReveal(0, {dragging:true});
     try{
       // Update header content while title is invisible
       $("headerTitle").textContent='Hospital at Home Companion (DEMO)';
@@ -10747,8 +10624,6 @@ function goBackToPatientList(opts){
     // Start all three animations in the same frame — mirrors the forward open
     detail.style.transition='transform 360ms '+easing+',box-shadow 360ms ease';
     patients.style.transition='transform 360ms '+easing;
-    if(typeof setPatientListUnderlayHeaderShift==='function') setPatientListUnderlayHeaderShift(0, {dragging:false, duration:'360ms', easing:easing});
-    if(typeof setPatientListUnderlayHeaderReveal==='function') setPatientListUnderlayHeaderReveal(window.innerWidth||390, {dragging:false, duration:'360ms', easing:easing});
     setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:easing});
     detail.style.transform='translate3d(100%,0,0)';
     detail.style.boxShadow='-4px 0 20px rgba(15,23,42,.09)';
@@ -10759,13 +10634,8 @@ function goBackToPatientList(opts){
       detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow='';
       patients.style.transition=''; patients.style.transform='';
       resetPatientDetailHeaderShift();
-      if(routeManagedBack){
-        try{ window.HAHNavigation.commitBackToPatients({reason:'patient-back'}); }catch(e){}
-      }
       detailLoadedForCurrentPatient=false;
-      saveData();
-      renderPatientList();
-      showSection("patients", {skipRoute:routeManagedBack || !!options.skipRoute});
+      saveData(); renderPatientList(); showSection("patients");
     };
     detail.addEventListener('transitionend', done, {once:true});
     setTimeout(done, 420);
@@ -10774,13 +10644,10 @@ function goBackToPatientList(opts){
 
   // Instant path (after swipe-back gesture, or reduced-motion)
   resetPatientDetailSwipe();
-  if(routeManagedBack){
-    try{ window.HAHNavigation.commitBackToPatients({reason:'patient-back'}); }catch(e){}
-  }
   detailLoadedForCurrentPatient=false;
   saveData();
   renderPatientList();
-  showSection("patients", {skipRoute:routeManagedBack || !!options.skipRoute});
+  showSection("patients");
 }
 function completePatientDetailSwipeBack(){
   if(detailSwipeCompleting) return;
@@ -10845,426 +10712,6 @@ function initPatientDetailEdgeSwipe(){
   window.addEventListener("resize",()=>{ syncSharedHeaderHeight(); if(patientDetailIsVisible() && !detailEdgeSwipeState && !detailSwipeCompleting) animatePatientDetailSwipe(0,true); });
 }
 
-
-</script><script>
-window.HAH = window.HAH || { modules: {} };
-window.HAH.modules.navigation = true;
-
-(function(){
-  const APP_ROUTE_PARAM_KEYS=['view','section','patient','options'];
-  const TOP_LEVEL_SECTIONS=['patients','tasks','handover','deletedPage','eventLogPage'];
-  const NAV_API_AVAILABLE=!!(window.navigation && typeof window.navigation.navigate==='function' && typeof window.navigation.addEventListener==='function');
-  const ENABLE_PATIENT_DETAIL_ROUTE=false;
-  let started=false;
-  let applyingRoute=false;
-  let navListenersBound=false;
-  let fallbackPopstateBound=false;
-  let pendingNavInfo=null;
-  let suppressNextRouteApply=false;
-
-  function asObject(value){ return value && typeof value==='object' ? value : {}; }
-  function currentUrl(){ return new URL(window.location.href); }
-  function canUseNavigationApi(){ return NAV_API_AVAILABLE; }
-  function patientListEl(){ return typeof $==='function' ? $("patients") : document.getElementById('patients'); }
-  function handoverEl(){ return typeof $==='function' ? $("handover") : document.getElementById('handover'); }
-  function detailVisible(){
-    const el=typeof $==='function' ? $("patientDetail") : document.getElementById('patientDetail');
-    return !!(el && !el.classList.contains('hidden'));
-  }
-  function normalizeRoute(route){
-    const raw=asObject(route);
-    const patientId=Number(raw.patientId||raw.patient||0) || null;
-    let section=String(raw.section||'').trim();
-    if(ENABLE_PATIENT_DETAIL_ROUTE && (raw.view==='patient' || section==='patient' || section==='patientDetail') && patientId){
-      return { section:'patientDetail', patientId, optionsSection:'' };
-    }
-    if(!TOP_LEVEL_SECTIONS.includes(section)) section='patients';
-    const optionsSection=section==='handover' ? String(raw.optionsSection||raw.options||'').trim() : '';
-    return { section, patientId:null, optionsSection };
-  }
-  function routesEqual(a,b){
-    const left=normalizeRoute(a);
-    const right=normalizeRoute(b);
-    return left.section===right.section && left.patientId===right.patientId && left.optionsSection===right.optionsSection;
-  }
-  function parseRouteFromUrl(urlLike){
-    const url=new URL(urlLike, window.location.href);
-    const view=String(url.searchParams.get('view')||'').trim();
-    const patientId=Number(url.searchParams.get('patient')||0) || null;
-    if(ENABLE_PATIENT_DETAIL_ROUTE && view==='patient' && patientId) return normalizeRoute({section:'patientDetail', patientId});
-    const section=String(url.searchParams.get('section')||'').trim();
-    const optionsSection=String(url.searchParams.get('options')||'').trim();
-    return normalizeRoute({section, optionsSection});
-  }
-  function routeToUrl(route){
-    const normalized=normalizeRoute(route);
-    const url=currentUrl();
-    APP_ROUTE_PARAM_KEYS.forEach(key=>url.searchParams.delete(key));
-    if(normalized.section==='patientDetail' && normalized.patientId){
-      url.searchParams.set('view','patient');
-      url.searchParams.set('patient', String(normalized.patientId));
-    }else if(normalized.section!=='patients'){
-      url.searchParams.set('section', normalized.section);
-      if(normalized.section==='handover' && normalized.optionsSection){
-        url.searchParams.set('options', normalized.optionsSection);
-      }
-    }
-    return url.toString();
-  }
-  function getVisibleAppRoute(){
-    const visible=(typeof getVisibleSectionId==='function' ? getVisibleSectionId() : (detailVisible() ? 'patientDetail' : 'patients')) || 'patients';
-    if(ENABLE_PATIENT_DETAIL_ROUTE && visible==='patientDetail' && currentPatient && patients && patients[currentPatient]){
-      return normalizeRoute({section:'patientDetail', patientId:Number(currentPatient)});
-    }
-    if(visible==='handover'){
-      const optionsSection=typeof getOpenOptionsSection==='function' ? String(getOpenOptionsSection()||'').trim() : '';
-      return normalizeRoute({section:'handover', optionsSection});
-    }
-    return normalizeRoute({section:visible});
-  }
-  function capturePatientsScrollTop(){
-    const el=patientListEl();
-    return el ? Math.max(0, Math.round(el.scrollTop||0)) : 0;
-  }
-  function captureHandoverScrollTop(){
-    const el=handoverEl();
-    return el ? Math.max(0, Math.round(el.scrollTop||0)) : 0;
-  }
-  function getEntryState(){
-    try{
-      if(canUseNavigationApi() && navigation.currentEntry && typeof navigation.currentEntry.getState==='function'){
-        return asObject(navigation.currentEntry.getState());
-      }
-    }catch(e){}
-    return asObject(history.state);
-  }
-  function createEntryState(route, extraState={}){
-    const normalized=normalizeRoute(route);
-    const base=getEntryState();
-    const state={
-      ...base,
-      __hahRoute:true,
-      section:normalized.section,
-      patientId:normalized.patientId || null,
-      optionsSection:normalized.optionsSection || '',
-      patientsScrollTop: capturePatientsScrollTop(),
-      handoverScrollTop: captureHandoverScrollTop(),
-      ...asObject(extraState),
-    };
-    if(normalized.section==='patientDetail' && normalized.patientId){
-      state.patientId=normalized.patientId;
-      state.section='patientDetail';
-      if(!state.openedFromSection) state.openedFromSection='patients';
-    }
-    if(normalized.section==='handover'){
-      state.optionsSection=normalized.optionsSection || '';
-    }
-    return state;
-  }
-  function syncCurrentEntryState(route=getVisibleAppRoute(), extraState={}){
-    const state=createEntryState(route, extraState);
-    try{
-      if(canUseNavigationApi() && navigation.currentEntry){
-        navigation.updateCurrentEntry({state});
-        return state;
-      }
-    }catch(e){}
-    try{ history.replaceState(state, '', routeToUrl(route)); }catch(e){}
-    return state;
-  }
-  function routeFromStateOrUrl(state, urlLike){
-    const routeFromState = state && state.__hahRoute ? normalizeRoute(state) : null;
-    return routeFromState || parseRouteFromUrl(urlLike || window.location.href);
-  }
-  function shouldInterceptNavigateEvent(event){
-    try{
-      if(!event || !event.canIntercept || event.hashChange || event.downloadRequest!==null) return false;
-      const destinationUrl=new URL(event.destination.url, window.location.href);
-      const current=currentUrl();
-      if(destinationUrl.origin!==current.origin || destinationUrl.pathname!==current.pathname) return false;
-      const info=asObject(event.info);
-      const destinationHasRouteParams=APP_ROUTE_PARAM_KEYS.some(key=>destinationUrl.searchParams.has(key));
-      const destinationLooksLikeAppEntry=!!(info && info.__hahRoute);
-      if(destinationHasRouteParams || destinationLooksLikeAppEntry) return true;
-      return false;
-    }catch(e){
-      return false;
-    }
-  }
-  function restoreSectionState(route, entryState){
-    const state=asObject(entryState);
-    if(route.section==='patients'){
-      const top=Number(state.patientsScrollTop||0) || 0;
-      requestAnimationFrame(()=>{
-        const el=patientListEl();
-        if(el) el.scrollTop=top;
-      });
-      return;
-    }
-    if(route.section==='handover'){
-      requestAnimationFrame(()=>{
-        if(typeof openOptionsSectionPage==='function'){
-          openOptionsSectionPage(route.optionsSection || '', {saveState:true, scroll:false, skipRoute:true});
-        }
-        const top=Number(state.handoverScrollTop||0) || 0;
-        const el=handoverEl();
-        if(el) el.scrollTop=top;
-      });
-    }
-  }
-  function applyRoute(routeLike, options={}){
-    const route=normalizeRoute(routeLike);
-    const entryState=asObject(options.entryState);
-    const currentRoute=getVisibleAppRoute();
-    applyingRoute=true;
-    try{
-      if(route.section==='patientDetail'){
-        if(route.patientId && patients && patients[route.patientId]){
-          const samePatient=currentRoute.section==='patientDetail' && Number(currentRoute.patientId)===Number(route.patientId);
-          openPatient(route.patientId, {skipRoute:true, skipOpenAnimation:samePatient});
-        }else{
-          showSection('patients', {skipRoute:true});
-          restoreSectionState({section:'patients'}, entryState);
-        }
-        return route;
-      }
-      if(currentRoute.section==='patientDetail' && route.section==='patients'){
-        const skipAnimation=!!options.skipAnimation;
-        goBackToPatientList({skipRoute:true, skipAnimation});
-        restoreSectionState(route, entryState);
-        return route;
-      }
-      showSection(route.section, {skipRoute:true});
-      if(route.section==='handover' && typeof openOptionsSectionPage==='function'){
-        openOptionsSectionPage(route.optionsSection || '', {saveState:true, scroll:false, skipRoute:true});
-      }
-      restoreSectionState(route, entryState);
-      return route;
-    } finally {
-      applyingRoute=false;
-    }
-  }
-  function navigateWithHistory(routeLike, navOptions={}){
-    const route=normalizeRoute(routeLike);
-    const options=asObject(navOptions);
-    const currentRoute=getVisibleAppRoute();
-    const currentEntryState=syncCurrentEntryState(currentRoute);
-    const explicitState=asObject(options.state);
-    const state=createEntryState(route, explicitState);
-    if(route.section==='patientDetail' && !('openedFromSection' in explicitState)){
-      state.openedFromSection=currentRoute.section || 'patients';
-      if(currentEntryState && currentEntryState.patientsScrollTop!=null) state.patientsScrollTop=currentEntryState.patientsScrollTop;
-    }
-    if(route.section==='handover' && route.optionsSection && !('openedFromSection' in explicitState)){
-      state.openedFromSection=currentRoute.section || 'handover';
-    }
-    const url=routeToUrl(route);
-    if(routesEqual(currentRoute, route)){
-      applyRoute(route, {entryState:state, skipAnimation:true});
-      syncCurrentEntryState(route, state);
-      return route;
-    }
-    if(canUseNavigationApi()){
-      pendingNavInfo={ __hahRoute:true, route, state, animation: options.animation || '', reason: options.reason || '' };
-      try{
-        navigation.navigate(url, {
-          history: options.replace ? 'replace' : 'push',
-          state,
-          info: pendingNavInfo,
-        });
-      }catch(e){
-        pendingNavInfo=null;
-        if(options.replace) history.replaceState(state, '', url);
-        else history.pushState(state, '', url);
-        applyRoute(route, {entryState:state, skipAnimation:!!options.skipAnimation});
-      }
-      return route;
-    }
-    if(options.replace) history.replaceState(state, '', url);
-    else history.pushState(state, '', url);
-    applyRoute(route, {entryState:state, skipAnimation:!!options.skipAnimation});
-    return route;
-  }
-  function canTraverseBackTo(predicate){
-    if(!canUseNavigationApi() || !navigation.currentEntry || !Array.isArray(navigation.entries?.())) return false;
-    try{
-      const entries=navigation.entries();
-      const prev=entries[navigation.currentEntry.index - 1];
-      if(!prev || !prev.url) return false;
-      return !!predicate(routeFromStateOrUrl(typeof prev.getState==='function' ? prev.getState() : null, prev.url));
-    }catch(e){
-      return false;
-    }
-  }
-  function shouldTraverseBackToRoute(fallbackRoute, currentState=getEntryState()){
-    const expected=fallbackRoute.section==='patientDetail'
-      ? (candidate)=>candidate.section==='patientDetail' && Number(candidate.patientId)===Number(fallbackRoute.patientId)
-      : (candidate)=>candidate.section===fallbackRoute.section && candidate.optionsSection===fallbackRoute.optionsSection;
-    return canUseNavigationApi()
-      ? canTraverseBackTo(expected) || (currentState && currentState.openedFromSection && fallbackRoute.section!=='patientDetail' && currentState.openedFromSection===fallbackRoute.section)
-      : !!(currentState && currentState.openedFromSection && currentState.openedFromSection===fallbackRoute.section);
-  }
-  function traverseBackOr(routeLike, fallbackOptions={}){
-    const fallbackRoute=normalizeRoute(routeLike);
-    const currentState=getEntryState();
-    const shouldBack=shouldTraverseBackToRoute(fallbackRoute, currentState);
-    syncCurrentEntryState(getVisibleAppRoute());
-    if(shouldBack){
-      pendingNavInfo={ __hahRoute:true, route:fallbackRoute, skipAnimation:!!fallbackOptions.skipAnimation, reason: fallbackOptions.reason || 'back' };
-      try{
-        if(canUseNavigationApi()){
-          navigation.back();
-          return fallbackRoute;
-        }
-      }catch(e){}
-      try{ history.back(); return fallbackRoute; }catch(e){}
-    }
-    return navigateWithHistory(fallbackRoute, {...fallbackOptions, replace:true});
-  }
-  function commitBackToPatients(options={}){
-    if(!ENABLE_PATIENT_DETAIL_ROUTE) return normalizeRoute({section:'patients'});
-    const currentState=getEntryState();
-    const fallbackScroll=(currentState && currentState.patientsScrollTop!=null) ? Number(currentState.patientsScrollTop||0) : capturePatientsScrollTop();
-    const fallbackRoute=normalizeRoute({section:'patients'});
-    const shouldBack=shouldTraverseBackToRoute(fallbackRoute, currentState);
-    syncCurrentEntryState(getVisibleAppRoute(), {patientsScrollTop:fallbackScroll});
-    if(shouldBack){
-      suppressNextRouteApply=true;
-      pendingNavInfo={ __hahRoute:true, route:fallbackRoute, skipAnimation:true, suppressApply:true, reason: options.reason || 'back-commit' };
-      try{
-        if(canUseNavigationApi()){
-          navigation.back();
-          return fallbackRoute;
-        }
-      }catch(e){
-        suppressNextRouteApply=false;
-        pendingNavInfo=null;
-      }
-      try{ history.back(); return fallbackRoute; }catch(e){
-        suppressNextRouteApply=false;
-        pendingNavInfo=null;
-      }
-    }
-    const state=createEntryState(fallbackRoute, {patientsScrollTop:fallbackScroll});
-    if(canUseNavigationApi()){
-      pendingNavInfo={ __hahRoute:true, route:fallbackRoute, skipAnimation:true, suppressApply:true, reason: options.reason || 'back-commit-replace' };
-      try{
-        navigation.navigate(routeToUrl(fallbackRoute), {
-          history:'replace',
-          state,
-          info: pendingNavInfo,
-        });
-        return fallbackRoute;
-      }catch(e){
-        pendingNavInfo=null;
-      }
-    }
-    try{ history.replaceState(state, '', routeToUrl(fallbackRoute)); }catch(e){}
-    return fallbackRoute;
-  }
-  function navigateToSection(section, options={}){
-    return navigateWithHistory({section:String(section||'patients').trim()}, options);
-  }
-  function navigateToPatient(patientId, options={}){
-    const route={section:'patientDetail', patientId:Number(patientId)||null};
-    if(!ENABLE_PATIENT_DETAIL_ROUTE){
-      openPatient(Number(patientId)||null, {...options, skipRoute:true});
-      return normalizeRoute({section:'patients'});
-    }
-    return navigateWithHistory(route, options);
-  }
-  function navigateToOptionsPage(openKey, options={}){
-    const key=String(openKey||'').trim();
-    if(!key){
-      return traverseBackOr({section:'handover', optionsSection:''}, {skipAnimation:true});
-    }
-    return navigateWithHistory({section:'handover', optionsSection:key}, options);
-  }
-  function goBackFromPatient(options={}){
-    if(!ENABLE_PATIENT_DETAIL_ROUTE){
-      goBackToPatientList({skipRoute:true, skipAnimation:!!options.skipAnimation});
-      return normalizeRoute({section:'patients'});
-    }
-    const state=getEntryState();
-    const fallbackScroll=(state && state.patientsScrollTop!=null) ? Number(state.patientsScrollTop||0) : capturePatientsScrollTop();
-    return traverseBackOr({section:'patients'}, {state:{patientsScrollTop:fallbackScroll}, skipAnimation:!!options.skipAnimation});
-  }
-  function handleCommittedNavigation(){
-    const state=getEntryState();
-    const info=asObject(pendingNavInfo);
-    pendingNavInfo=null;
-    const route=routeFromStateOrUrl(state, window.location.href);
-    if(suppressNextRouteApply || info.suppressApply){
-      suppressNextRouteApply=false;
-      return route;
-    }
-    applyRoute(route, {entryState:state, skipAnimation:!!info.skipAnimation});
-  }
-  function bindListeners(){
-    if(navListenersBound) return;
-    navListenersBound=true;
-    if(canUseNavigationApi()){
-      navigation.addEventListener('navigate', event=>{
-        if(!shouldInterceptNavigateEvent(event)) return;
-        pendingNavInfo=asObject(event.info);
-        event.intercept({scroll:'manual', focusReset:'manual', async handler(){} });
-      });
-      navigation.addEventListener('currententrychange', ()=>{
-        if(applyingRoute) return;
-        try{ handleCommittedNavigation(); }catch(e){ console.error('[HAHNavigation] currententrychange failed', e); }
-      });
-      return;
-    }
-    if(fallbackPopstateBound) return;
-    fallbackPopstateBound=true;
-    window.addEventListener('popstate', event=>{
-      if(applyingRoute) return;
-      if(suppressNextRouteApply){
-        suppressNextRouteApply=false;
-        return;
-      }
-      const route=routeFromStateOrUrl(event.state, window.location.href);
-      try{ applyRoute(route, {entryState:event.state||{}}); }catch(e){ console.error('[HAHNavigation] popstate apply failed', e); }
-    });
-  }
-  function start(){
-    if(started) return window.HAHNavigation;
-    bindListeners();
-    started=true;
-    const urlRoute=parseRouteFromUrl(window.location.href);
-    const visibleRoute=getVisibleAppRoute();
-    const initialRoute=(APP_ROUTE_PARAM_KEYS.some(key=>currentUrl().searchParams.has(key))) ? urlRoute : visibleRoute;
-    const initialState=createEntryState(initialRoute, getEntryState());
-    if(canUseNavigationApi()){
-      try{ navigation.updateCurrentEntry({state:initialState}); }catch(e){}
-    }else{
-      try{ history.replaceState(initialState, '', routeToUrl(initialRoute)); }catch(e){}
-    }
-    if(!routesEqual(visibleRoute, initialRoute) || (initialRoute.section==='handover' && initialRoute.optionsSection) || initialRoute.section==='patientDetail'){
-      applyRoute(initialRoute, {entryState:initialState, skipAnimation:true});
-    }else{
-      restoreSectionState(initialRoute, initialState);
-    }
-    return window.HAHNavigation;
-  }
-
-  window.HAHNavigation={
-    get started(){ return started; },
-    start,
-    parseRouteFromUrl,
-    getVisibleAppRoute,
-    getEntryState,
-    navigateToSection,
-    navigateToPatient,
-    navigateToOptionsPage,
-    goBackFromPatient,
-    commitBackToPatients,
-    applyRoute,
-    syncCurrentEntryState,
-    routeToUrl,
-    routesEqual,
-  };
-})();
 
 </script><script>
 (function(global){
@@ -11439,11 +10886,7 @@ function isValidOptionsPageKey(key){
 }
 
 function openOptionsSectionPage(openKey='', options={}){
-  const opts=(options && typeof options==='object') ? options : {};
   const normalized=isValidOptionsPageKey(openKey) ? String(openKey||'').trim() : '';
-  if(!opts.skipRoute && opts.saveState!==false && window.HAHNavigation && window.HAHNavigation.started){
-    return window.HAHNavigation.navigateToOptionsPage(normalized, opts);
-  }
   const saveState=options && options.saveState===false ? false : true;
   const shouldScroll=options && options.scroll===false ? false : true;
   const home=$('optionsHomePanel');
@@ -12580,7 +12023,7 @@ document.addEventListener("DOMContentLoaded",function(){
     };
     const begin=e=>{
       const chip=e.target.closest('[data-med-index]');
-      if(!chip) return;
+      if(!chip || e.target.closest('.med-summary-chip-delete')) return;
       clearSelection();
       const point=e.touches?e.touches[0]:e;
       startX=point.clientX; startY=point.clientY;
@@ -12843,7 +12286,6 @@ document.addEventListener("DOMContentLoaded",function(){
   $("patientContextDeleteBtn").onclick=()=>{ const id=patientContextMenuId; closePatientContextMenu(); if(id) deletePatient(id); };
   document.addEventListener("keydown",e=>{ if(e.key==="Escape") closePatientContextMenu(); });
   if(!applyGraphPostAuthUiRestore()) showSection("patients");
-  if(window.HAHNavigation && typeof window.HAHNavigation.start==='function') window.HAHNavigation.start();
   if(pendingGraphPostAuthRestore && pendingGraphPostAuthRestore.skipSplash){
     setTimeout(()=>{ hideGraphAuthReturnCover(); }, 160);
   }
@@ -17895,7 +17337,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_580_release.html; source=hospital_at_home_v12_36_580_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_568_release.html; source=hospital_at_home_v12_36_568_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
@@ -18592,501 +18034,6 @@ window.HAH.modules.tts = true;
     getDebugLogText: () => (readLog().length ? readLog().join('\n') : 'No TTS events recorded yet.')
   };
 })();
-
-</script><script>
-/* ============================================================
-   17-undo-toast.js
-   ------------------------------------------------------------
-   Two primitives:
-     window.HAH_HAPTICS  - semantic vibration helper
-     window.HAH_UNDO     - transient toast with Undo action
-
-   Design intent (see docs/ux_interaction_specs.md):
-   - Destructive actions execute immediately, toast follows.
-   - Toast is additive: existing status-rail undoBtn continues
-     to work independently as the 20-deep history fallback.
-   - Batch rapid deletes within batchWindowMs via a shared
-     batchKey; undo then reverses the oldest pending action,
-     which (because undoState is symmetric) unwinds everything
-     that happened since.
-   - Respects prefers-reduced-motion, keyboard-open state, and
-     the visualViewport API on iOS PWAs.
-   ============================================================ */
-
-(function(global){
-  'use strict';
-
-  /* ---------------- HAPTICS -------------------------------- */
-
-  const canVibrate = typeof navigator !== 'undefined'
-    && typeof navigator.vibrate === 'function';
-
-  function vibe(pattern){
-    if(!canVibrate) return;
-    try { navigator.vibrate(pattern); } catch(e){}
-  }
-
-  const HAH_HAPTICS = Object.freeze({
-    selection: () => vibe(8),
-    success:   () => vibe([4, 40, 4]),
-    warning:   () => vibe([6, 80, 6]),
-    impact:    () => vibe(16)
-  });
-
-  global.HAH_HAPTICS = HAH_HAPTICS;
-
-  /* ---------------- UNDO TOAST ----------------------------- */
-
-  const DEFAULT_TIMEOUT_MS  = 6000;
-  const BATCH_WINDOW_MS     = 4000;
-  const ROOT_ID             = 'hahUndoToastRoot';
-  const Z_INDEX             = 10085; // above patient list, below overlays
-
-  const state = {
-    root:      null,
-    current:   null,   // active toast descriptor
-    timer:     null,   // drain timer handle
-    startedAt: 0,      // ms since epoch when visible drain last started
-    remaining: 0,      // ms left at last pause
-    paused:    false,
-    reducedMotion: false
-  };
-
-  function prefersReducedMotion(){
-    try {
-      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    } catch(e){
-      return false;
-    }
-  }
-
-  /* --- styles (self-installing on first use) ---------------- */
-
-  function installStyles(){
-    if(document.getElementById('hahUndoToastStyles')) return;
-    const css = `
-      #${ROOT_ID}{
-        position:fixed;left:50%;
-        bottom:calc(env(safe-area-inset-bottom) + 12px + 56px);
-        transform:translate3d(-50%, 24px, 0) scale(.96);
-        opacity:0;
-        pointer-events:none;
-        z-index:${Z_INDEX};
-        transition:transform 220ms cubic-bezier(.25,.46,.45,.94),
-                   opacity 220ms cubic-bezier(.25,.46,.45,.94);
-        width:min(calc(100vw - 28px), 420px);
-      }
-      #${ROOT_ID}.is-visible{
-        transform:translate3d(-50%, 0, 0) scale(1);
-        opacity:1;
-        pointer-events:auto;
-      }
-      body.keyboard-open #${ROOT_ID}:not(.is-anchor-keyboard){
-        bottom:calc(env(safe-area-inset-bottom) + 12px);
-      }
-      .hah-undo-toast{
-        position:relative;
-        display:flex;align-items:center;gap:10px;
-        width:100%;height:48px;padding:0 6px 0 14px;
-        border-radius:16px;
-        background:rgba(17, 24, 39, 0.92);
-        backdrop-filter:blur(20px) saturate(160%);
-        -webkit-backdrop-filter:blur(20px) saturate(160%);
-        border:1px solid rgba(255,255,255,0.08);
-        box-shadow:0 12px 28px rgba(0,0,0,.22),
-                   0 2px 6px rgba(0,0,0,.14);
-        color:#fff;
-        overflow:hidden;
-        -webkit-tap-highlight-color:transparent;
-      }
-      .hah-undo-toast-icon{
-        width:18px;height:18px;flex:0 0 auto;
-        display:inline-flex;align-items:center;justify-content:center;
-        color:rgba(255,255,255,.82);
-      }
-      .hah-undo-toast-icon svg{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-      .hah-undo-toast-message{
-        flex:1 1 auto;min-width:0;
-        font-size:14px;font-weight:600;line-height:1.3;
-        letter-spacing:0;color:#fff;
-        white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-      }
-      .hah-undo-toast-action{
-        flex:0 0 auto;
-        min-height:32px;padding:0 14px;margin:0;
-        border:none;border-radius:10px;
-        background:rgba(255,255,255,.14);
-        color:#fff;
-        font-size:13px;font-weight:700;letter-spacing:0;
-        display:inline-flex;align-items:center;justify-content:center;
-        cursor:pointer;
-        -webkit-tap-highlight-color:transparent;
-        transition:background 120ms ease, transform 120ms ease;
-      }
-      .hah-undo-toast-action:active{
-        background:rgba(255,255,255,.22);
-        transform:scale(.97);
-      }
-      .hah-undo-toast-action:focus-visible{
-        outline:none;
-        box-shadow:0 0 0 2px rgba(10,132,255,.55);
-      }
-      .hah-undo-toast-progress{
-        position:absolute;left:0;right:0;bottom:0;height:2px;
-        background:rgba(255,255,255,.10);
-        overflow:hidden;
-      }
-      .hah-undo-toast-progress-fill{
-        position:absolute;left:0;top:0;height:100%;width:100%;
-        background:rgba(255,255,255,.55);
-        transform-origin:left center;
-        transform:scaleX(1);
-        transition:transform linear;
-      }
-      @media (prefers-reduced-motion: reduce){
-        #${ROOT_ID}{
-          transition:opacity 120ms ease;
-          transform:translate3d(-50%, 0, 0) scale(1);
-        }
-        #${ROOT_ID}.is-visible{
-          transform:translate3d(-50%, 0, 0) scale(1);
-        }
-        .hah-undo-toast-progress-fill{transition:none}
-      }
-    `;
-    const style = document.createElement('style');
-    style.id = 'hahUndoToastStyles';
-    style.textContent = css;
-    document.head.appendChild(style);
-  }
-
-  /* --- DOM construction ------------------------------------- */
-
-  const ICONS = {
-    trash: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>',
-    pill:  '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="4"/><path d="M12 8v8"/></svg>',
-    info:  '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>',
-    sync:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5"/><path d="M20 12a8 8 0 0 1-14 5"/><path d="M18 3v5h-5"/><path d="M6 21v-5h5"/></svg>'
-  };
-
-  function ensureRoot(){
-    if(state.root && document.body.contains(state.root)) return state.root;
-    installStyles();
-    const root = document.createElement('div');
-    root.id = ROOT_ID;
-    root.setAttribute('role', 'status');
-    root.setAttribute('aria-live', 'polite');
-    root.setAttribute('aria-atomic', 'true');
-    document.body.appendChild(root);
-    state.root = root;
-    return root;
-  }
-
-  function buildToastDom(descriptor){
-    const wrap = document.createElement('div');
-    wrap.className = 'hah-undo-toast';
-
-    const iconEl = document.createElement('span');
-    iconEl.className = 'hah-undo-toast-icon';
-    iconEl.innerHTML = ICONS[descriptor.icon] || ICONS.info;
-    wrap.appendChild(iconEl);
-
-    const msg = document.createElement('span');
-    msg.className = 'hah-undo-toast-message';
-    msg.textContent = descriptor.message;
-    wrap.appendChild(msg);
-
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'hah-undo-toast-action';
-    btn.textContent = 'Undo';
-    btn.setAttribute('aria-label', descriptor.undoLabel || ('Undo: ' + descriptor.message));
-    btn.addEventListener('click', () => {
-      HAH_HAPTICS.success();
-      performUndo();
-    });
-    wrap.appendChild(btn);
-
-    const progress = document.createElement('div');
-    progress.className = 'hah-undo-toast-progress';
-    const fill = document.createElement('div');
-    fill.className = 'hah-undo-toast-progress-fill';
-    progress.appendChild(fill);
-    wrap.appendChild(progress);
-
-    return { wrap, msg, btn, fill };
-  }
-
-  /* --- timer / drain --------------------------------------- */
-
-  function startDrain(descriptor){
-    const reduced = prefersReducedMotion();
-    state.reducedMotion = reduced;
-    state.startedAt = Date.now();
-    state.remaining = descriptor.timeoutMs;
-    state.paused = false;
-    if(descriptor.dom && descriptor.dom.fill){
-      if(reduced){
-        descriptor.dom.fill.style.transition = 'none';
-        descriptor.dom.fill.style.transform = 'scaleX(0)';
-      } else {
-        // next frame so the transition actually animates
-        descriptor.dom.fill.style.transition = 'none';
-        descriptor.dom.fill.style.transform = 'scaleX(1)';
-        requestAnimationFrame(() => {
-          if(!state.current || state.current.id !== descriptor.id) return;
-          descriptor.dom.fill.style.transition = `transform ${descriptor.timeoutMs}ms linear`;
-          descriptor.dom.fill.style.transform = 'scaleX(0)';
-        });
-      }
-    }
-    clearTimeout(state.timer);
-    state.timer = setTimeout(() => commitCurrent(), descriptor.timeoutMs);
-  }
-
-  function pauseDrain(){
-    if(!state.current || state.paused) return;
-    state.paused = true;
-    const elapsed = Date.now() - state.startedAt;
-    state.remaining = Math.max(0, state.remaining - elapsed);
-    clearTimeout(state.timer);
-    const fill = state.current.dom && state.current.dom.fill;
-    if(fill){
-      const computed = getComputedStyle(fill).transform;
-      fill.style.transition = 'none';
-      fill.style.transform = computed;
-    }
-  }
-
-  function resumeDrain(delayMs){
-    if(!state.current || !state.paused) return;
-    const delay = Math.max(0, Number(delayMs) || 0);
-    setTimeout(() => {
-      if(!state.current) return;
-      state.paused = false;
-      state.startedAt = Date.now();
-      const fill = state.current.dom && state.current.dom.fill;
-      const ms = state.remaining;
-      if(fill && !state.reducedMotion && ms > 0){
-        requestAnimationFrame(() => {
-          if(!state.current) return;
-          fill.style.transition = `transform ${ms}ms linear`;
-          fill.style.transform = 'scaleX(0)';
-        });
-      }
-      clearTimeout(state.timer);
-      state.timer = setTimeout(() => commitCurrent(), ms);
-    }, delay);
-  }
-
-  /* --- show / commit / undo -------------------------------- */
-
-  function show(config){
-    if(!config || typeof config.onUndo !== 'function') return null;
-    ensureRoot();
-
-    // Batching: if a pending toast with the same batchKey exists and is
-    // within the batch window, replace its message with a count and keep
-    // the original onUndo (which restores the oldest snapshot).
-    if(state.current
-       && config.batchKey
-       && state.current.batchKey === config.batchKey
-       && (Date.now() - state.current.firstAt) < BATCH_WINDOW_MS){
-      state.current.count += 1;
-      const label = buildBatchMessage(config.batchKey, state.current.count, config.message);
-      state.current.message = label;
-      if(state.current.dom && state.current.dom.msg){
-        state.current.dom.msg.textContent = label;
-      }
-      // Reset the drain to give the user the full window after the latest action.
-      clearTimeout(state.timer);
-      startDrain(state.current);
-      HAH_HAPTICS.selection();
-      // The new action's onUndo is discarded - the original one already
-      // restores the world as it was before the batch began.
-      return state.current.id;
-    }
-
-    // Otherwise commit any currently-visible toast, then show a new one.
-    if(state.current){
-      commitCurrent({ skipExitAnim: true });
-    }
-
-    const id = 'toast-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
-    const descriptor = {
-      id,
-      message:   String(config.message || 'Action done'),
-      icon:      config.icon || 'info',
-      batchKey:  config.batchKey || null,
-      onUndo:    config.onUndo,
-      onCommit:  typeof config.onCommit === 'function' ? config.onCommit : null,
-      timeoutMs: Number.isFinite(config.timeoutMs) ? config.timeoutMs : DEFAULT_TIMEOUT_MS,
-      count:     1,
-      firstAt:   Date.now(),
-      dom:       null,
-      undoLabel: config.undoLabel || null
-    };
-
-    const dom = buildToastDom(descriptor);
-    descriptor.dom = dom;
-
-    const root = state.root;
-    root.innerHTML = '';
-    root.appendChild(dom.wrap);
-    state.current = descriptor;
-
-    // Respect keyboard state
-    if(document.body.classList.contains('keyboard-open')){
-      root.classList.remove('is-anchor-keyboard');
-    }
-
-    // Animate in on next frame
-    requestAnimationFrame(() => {
-      root.classList.add('is-visible');
-      startDrain(descriptor);
-    });
-
-    HAH_HAPTICS.selection();
-    return id;
-  }
-
-  function buildBatchMessage(batchKey, count, lastMessage){
-    if(count <= 1) return lastMessage;
-    switch(batchKey){
-      case 'patient-delete': return count + ' patients deleted';
-      case 'med-delete':     return count + ' medications deleted';
-      case 'chip-remove':    return count + ' items removed';
-      default:               return count + ' items deleted';
-    }
-  }
-
-  function performUndo(){
-    const descriptor = state.current;
-    if(!descriptor) return;
-    try { descriptor.onUndo(); }
-    catch(e){ console.error('[HAH_UNDO] undo handler threw', e); }
-    hide({ reason: 'undo' });
-  }
-
-  function commitCurrent(options){
-    const descriptor = state.current;
-    if(!descriptor) return;
-    if(descriptor.onCommit){
-      try { descriptor.onCommit(); }
-      catch(e){ console.error('[HAH_UNDO] commit handler threw', e); }
-    }
-    hide({ reason: 'commit', skipExitAnim: options && options.skipExitAnim });
-  }
-
-  function hide(options){
-    const opts = options || {};
-    clearTimeout(state.timer);
-    state.timer = null;
-    const descriptor = state.current;
-    const root = state.root;
-    state.current = null;
-    state.paused = false;
-    state.remaining = 0;
-
-    if(!root || !descriptor) return;
-
-    if(opts.skipExitAnim){
-      root.classList.remove('is-visible');
-      root.innerHTML = '';
-      return;
-    }
-    root.classList.remove('is-visible');
-    const reduced = prefersReducedMotion();
-    setTimeout(() => {
-      // Only clear if nothing new has taken over.
-      if(!state.current && root && root.innerHTML){
-        root.innerHTML = '';
-      }
-    }, reduced ? 120 : 200);
-  }
-
-  /* --- public API ------------------------------------------ */
-
-  const HAH_UNDO = Object.freeze({
-    show,
-    commit: () => commitCurrent(),
-    undo:   performUndo,
-    hide:   () => hide({ reason: 'manual' }),
-    pause:  pauseDrain,
-    resume: resumeDrain,
-    isOpen: () => !!state.current,
-    /**
-     * Returns true if there is a live toast with this batchKey that is still
-     * within the batch window. Callers that mutate persistent undo state
-     * (e.g. setUndoSnapshot) should SKIP that call when this returns true,
-     * so the pre-batch snapshot is preserved across the whole batch.
-     */
-    hasActiveBatch: (batchKey) => {
-      if(!state.current || !batchKey) return false;
-      if(state.current.batchKey !== batchKey) return false;
-      return (Date.now() - state.current.firstAt) < BATCH_WINDOW_MS;
-    }
-  });
-
-  global.HAH_UNDO = HAH_UNDO;
-
-  /* --- lifecycle hooks ------------------------------------- */
-
-  // Pause drain during nav transitions so the user has time to orient.
-  // When a section change happens, setActive() in 03-ui-actions.js swaps
-  // the `.active` class on the nav buttons. We watch clicks on nav.
-  function wireNavPauseResume(){
-    const navBtns = document.querySelectorAll('.nav button');
-    if(!navBtns.length){
-      // The nav may not be in the DOM yet on very early init.
-      setTimeout(wireNavPauseResume, 120);
-      return;
-    }
-    navBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        if(state.current){
-          pauseDrain();
-          resumeDrain(1000);
-        }
-      });
-    });
-  }
-
-  // visualViewport: keep the toast above an iOS keyboard.
-  function wireViewport(){
-    if(!window.visualViewport) return;
-    const adjust = () => {
-      if(!state.root || !state.current) return;
-      // If keyboard is up, anchor to viewport bottom rather than layout bottom.
-      const keyboardOpen = document.body.classList.contains('keyboard-open');
-      if(keyboardOpen){
-        const offsetFromBottom = (window.innerHeight - (window.visualViewport.height + window.visualViewport.offsetTop));
-        state.root.style.bottom = (offsetFromBottom + 12) + 'px';
-        state.root.classList.add('is-anchor-keyboard');
-      } else {
-        state.root.style.bottom = '';
-        state.root.classList.remove('is-anchor-keyboard');
-      }
-    };
-    window.visualViewport.addEventListener('resize', adjust);
-    window.visualViewport.addEventListener('scroll', adjust);
-    // Also respond to body class flips.
-    const obs = new MutationObserver(adjust);
-    obs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-  }
-
-  function init(){
-    if(document.readyState === 'loading'){
-      document.addEventListener('DOMContentLoaded', init, { once: true });
-      return;
-    }
-    wireNavPauseResume();
-    wireViewport();
-  }
-
-  init();
-
-})(window);
 
 </script></body>
 </html>
