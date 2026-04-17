@@ -2850,7 +2850,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_573_release.html</div><div>Source: hospital_at_home_v12_36_573_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_574_release.html</div><div>Source: hospital_at_home_v12_36_574_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -6524,7 +6524,11 @@ function nowString(){return new Date().toLocaleString([],{year:"numeric",month:"
 function hideAll(){["patients","tasks","handover","patientDetail","deletedPage","eventLogPage"].forEach(id=>$(id).classList.add("hidden"))}
 function setPatientViewportMode(active){document.body.classList.toggle("patients-section-active",!!active);document.documentElement.classList.toggle("patients-section-active",!!active)}
 function setActive(which){["navPatients","navTasks","navHandover"].forEach(id=>$(id).classList.remove("active")); $(which).classList.add("active")}
-function showSection(id) {
+function showSection(id, options={}) {
+  const opts=(options && typeof options==='object') ? options : {};
+  if(!opts.skipRoute && window.HAHNavigation && window.HAHNavigation.started){
+    return window.HAHNavigation.navigateToSection(id, opts);
+  }
   closeWeightHistoryModal();
   if(id !== "patients" && typeof toggleAddPatient === "function") toggleAddPatient(false);
   setPatientDetailStackActive(false);
@@ -8875,7 +8879,11 @@ function saveCurrentPatientForm() {
     if(issuesChanged || planChanged) queuePush(currentPatient);
   }
 }
-function openPatient(id) {
+function openPatient(id, options={}) {
+  const opts=(options && typeof options==='object') ? options : {};
+  if(!opts.skipRoute && window.HAHNavigation && window.HAHNavigation.started){
+    return window.HAHNavigation.navigateToPatient(id, opts);
+  }
   if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) return;
   if (detailLoadedForCurrentPatient) saveCurrentPatientForm();
   detailSwipeCompleting=false;
@@ -8899,7 +8907,7 @@ function openPatient(id) {
   setActive("navPatients");
   setPatientDetailStackActive(true);
   animatePatientDetailSwipe(0,true);
-  animatePatientDetailOpen(); // slide panel + header in from right
+  if(!opts.skipOpenAnimation) animatePatientDetailOpen(); // slide panel + header in from right
   saveData();
   calculateNews();
   if(typeof renderBloodsSummaryCard==='function'){
@@ -10483,8 +10491,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_573_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_573_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_574_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_574_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10646,6 +10654,10 @@ function resetPatientDetailSwipe(){
   },260);
 }
 function goBackToPatientList(opts){
+  const options=(opts && typeof opts==='object') ? opts : {};
+  if(!options.skipRoute && window.HAHNavigation && window.HAHNavigation.started){
+    return window.HAHNavigation.goBackFromPatient(options);
+  }
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
   if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
   detailSwipeCompleting=false;
@@ -10765,6 +10777,362 @@ function initPatientDetailEdgeSwipe(){
   window.addEventListener("resize",()=>{ syncSharedHeaderHeight(); if(patientDetailIsVisible() && !detailEdgeSwipeState && !detailSwipeCompleting) animatePatientDetailSwipe(0,true); });
 }
 
+
+</script><script>
+window.HAH = window.HAH || { modules: {} };
+window.HAH.modules.navigation = true;
+
+(function(){
+  const APP_ROUTE_PARAM_KEYS=['view','section','patient','options'];
+  const TOP_LEVEL_SECTIONS=['patients','tasks','handover','deletedPage','eventLogPage'];
+  const NAV_API_AVAILABLE=!!(window.navigation && typeof window.navigation.navigate==='function' && typeof window.navigation.addEventListener==='function');
+  let started=false;
+  let applyingRoute=false;
+  let navListenersBound=false;
+  let fallbackPopstateBound=false;
+  let pendingNavInfo=null;
+
+  function asObject(value){ return value && typeof value==='object' ? value : {}; }
+  function currentUrl(){ return new URL(window.location.href); }
+  function canUseNavigationApi(){ return NAV_API_AVAILABLE; }
+  function patientListEl(){ return typeof $==='function' ? $("patients") : document.getElementById('patients'); }
+  function handoverEl(){ return typeof $==='function' ? $("handover") : document.getElementById('handover'); }
+  function detailVisible(){
+    const el=typeof $==='function' ? $("patientDetail") : document.getElementById('patientDetail');
+    return !!(el && !el.classList.contains('hidden'));
+  }
+  function normalizeRoute(route){
+    const raw=asObject(route);
+    const patientId=Number(raw.patientId||raw.patient||0) || null;
+    let section=String(raw.section||'').trim();
+    if((raw.view==='patient' || section==='patient' || section==='patientDetail') && patientId){
+      return { section:'patientDetail', patientId, optionsSection:'' };
+    }
+    if(!TOP_LEVEL_SECTIONS.includes(section)) section='patients';
+    const optionsSection=section==='handover' ? String(raw.optionsSection||raw.options||'').trim() : '';
+    return { section, patientId:null, optionsSection };
+  }
+  function routesEqual(a,b){
+    const left=normalizeRoute(a);
+    const right=normalizeRoute(b);
+    return left.section===right.section && left.patientId===right.patientId && left.optionsSection===right.optionsSection;
+  }
+  function parseRouteFromUrl(urlLike){
+    const url=new URL(urlLike, window.location.href);
+    const view=String(url.searchParams.get('view')||'').trim();
+    const patientId=Number(url.searchParams.get('patient')||0) || null;
+    if(view==='patient' && patientId) return normalizeRoute({section:'patientDetail', patientId});
+    const section=String(url.searchParams.get('section')||'').trim();
+    const optionsSection=String(url.searchParams.get('options')||'').trim();
+    return normalizeRoute({section, optionsSection});
+  }
+  function routeToUrl(route){
+    const normalized=normalizeRoute(route);
+    const url=currentUrl();
+    APP_ROUTE_PARAM_KEYS.forEach(key=>url.searchParams.delete(key));
+    if(normalized.section==='patientDetail' && normalized.patientId){
+      url.searchParams.set('view','patient');
+      url.searchParams.set('patient', String(normalized.patientId));
+    }else if(normalized.section!=='patients'){
+      url.searchParams.set('section', normalized.section);
+      if(normalized.section==='handover' && normalized.optionsSection){
+        url.searchParams.set('options', normalized.optionsSection);
+      }
+    }
+    return url.toString();
+  }
+  function getVisibleAppRoute(){
+    const visible=(typeof getVisibleSectionId==='function' ? getVisibleSectionId() : (detailVisible() ? 'patientDetail' : 'patients')) || 'patients';
+    if(visible==='patientDetail' && currentPatient && patients && patients[currentPatient]){
+      return normalizeRoute({section:'patientDetail', patientId:Number(currentPatient)});
+    }
+    if(visible==='handover'){
+      const optionsSection=typeof getOpenOptionsSection==='function' ? String(getOpenOptionsSection()||'').trim() : '';
+      return normalizeRoute({section:'handover', optionsSection});
+    }
+    return normalizeRoute({section:visible});
+  }
+  function capturePatientsScrollTop(){
+    const el=patientListEl();
+    return el ? Math.max(0, Math.round(el.scrollTop||0)) : 0;
+  }
+  function captureHandoverScrollTop(){
+    const el=handoverEl();
+    return el ? Math.max(0, Math.round(el.scrollTop||0)) : 0;
+  }
+  function getEntryState(){
+    try{
+      if(canUseNavigationApi() && navigation.currentEntry && typeof navigation.currentEntry.getState==='function'){
+        return asObject(navigation.currentEntry.getState());
+      }
+    }catch(e){}
+    return asObject(history.state);
+  }
+  function createEntryState(route, extraState={}){
+    const normalized=normalizeRoute(route);
+    const base=getEntryState();
+    const state={
+      ...base,
+      __hahRoute:true,
+      section:normalized.section,
+      patientId:normalized.patientId || null,
+      optionsSection:normalized.optionsSection || '',
+      patientsScrollTop: capturePatientsScrollTop(),
+      handoverScrollTop: captureHandoverScrollTop(),
+      ...asObject(extraState),
+    };
+    if(normalized.section==='patientDetail' && normalized.patientId){
+      state.patientId=normalized.patientId;
+      state.section='patientDetail';
+      if(!state.openedFromSection) state.openedFromSection='patients';
+    }
+    if(normalized.section==='handover'){
+      state.optionsSection=normalized.optionsSection || '';
+    }
+    return state;
+  }
+  function syncCurrentEntryState(route=getVisibleAppRoute(), extraState={}){
+    const state=createEntryState(route, extraState);
+    try{
+      if(canUseNavigationApi() && navigation.currentEntry){
+        navigation.updateCurrentEntry({state});
+        return state;
+      }
+    }catch(e){}
+    try{ history.replaceState(state, '', routeToUrl(route)); }catch(e){}
+    return state;
+  }
+  function routeFromStateOrUrl(state, urlLike){
+    const routeFromState = state && state.__hahRoute ? normalizeRoute(state) : null;
+    return routeFromState || parseRouteFromUrl(urlLike || window.location.href);
+  }
+  function shouldInterceptNavigateEvent(event){
+    try{
+      if(!event || !event.canIntercept || event.hashChange || event.downloadRequest!==null) return false;
+      const destinationUrl=new URL(event.destination.url, window.location.href);
+      const current=currentUrl();
+      if(destinationUrl.origin!==current.origin || destinationUrl.pathname!==current.pathname) return false;
+      const info=asObject(event.info);
+      const destinationHasRouteParams=APP_ROUTE_PARAM_KEYS.some(key=>destinationUrl.searchParams.has(key));
+      const destinationLooksLikeAppEntry=!!(info && info.__hahRoute);
+      if(destinationHasRouteParams || destinationLooksLikeAppEntry) return true;
+      return false;
+    }catch(e){
+      return false;
+    }
+  }
+  function restoreSectionState(route, entryState){
+    const state=asObject(entryState);
+    if(route.section==='patients'){
+      const top=Number(state.patientsScrollTop||0) || 0;
+      requestAnimationFrame(()=>{
+        const el=patientListEl();
+        if(el) el.scrollTop=top;
+      });
+      return;
+    }
+    if(route.section==='handover'){
+      requestAnimationFrame(()=>{
+        if(typeof openOptionsSectionPage==='function'){
+          openOptionsSectionPage(route.optionsSection || '', {saveState:true, scroll:false, skipRoute:true});
+        }
+        const top=Number(state.handoverScrollTop||0) || 0;
+        const el=handoverEl();
+        if(el) el.scrollTop=top;
+      });
+    }
+  }
+  function applyRoute(routeLike, options={}){
+    const route=normalizeRoute(routeLike);
+    const entryState=asObject(options.entryState);
+    const currentRoute=getVisibleAppRoute();
+    applyingRoute=true;
+    try{
+      if(route.section==='patientDetail'){
+        if(route.patientId && patients && patients[route.patientId]){
+          const samePatient=currentRoute.section==='patientDetail' && Number(currentRoute.patientId)===Number(route.patientId);
+          openPatient(route.patientId, {skipRoute:true, skipOpenAnimation:samePatient});
+        }else{
+          showSection('patients', {skipRoute:true});
+          restoreSectionState({section:'patients'}, entryState);
+        }
+        return route;
+      }
+      if(currentRoute.section==='patientDetail' && route.section==='patients'){
+        const skipAnimation=!!options.skipAnimation;
+        goBackToPatientList({skipRoute:true, skipAnimation});
+        restoreSectionState(route, entryState);
+        return route;
+      }
+      showSection(route.section, {skipRoute:true});
+      if(route.section==='handover' && typeof openOptionsSectionPage==='function'){
+        openOptionsSectionPage(route.optionsSection || '', {saveState:true, scroll:false, skipRoute:true});
+      }
+      restoreSectionState(route, entryState);
+      return route;
+    } finally {
+      applyingRoute=false;
+    }
+  }
+  function navigateWithHistory(routeLike, navOptions={}){
+    const route=normalizeRoute(routeLike);
+    const options=asObject(navOptions);
+    const currentRoute=getVisibleAppRoute();
+    const currentEntryState=syncCurrentEntryState(currentRoute);
+    const explicitState=asObject(options.state);
+    const state=createEntryState(route, explicitState);
+    if(route.section==='patientDetail' && !('openedFromSection' in explicitState)){
+      state.openedFromSection=currentRoute.section || 'patients';
+      if(currentEntryState && currentEntryState.patientsScrollTop!=null) state.patientsScrollTop=currentEntryState.patientsScrollTop;
+    }
+    if(route.section==='handover' && route.optionsSection && !('openedFromSection' in explicitState)){
+      state.openedFromSection=currentRoute.section || 'handover';
+    }
+    const url=routeToUrl(route);
+    if(routesEqual(currentRoute, route)){
+      applyRoute(route, {entryState:state, skipAnimation:true});
+      syncCurrentEntryState(route, state);
+      return route;
+    }
+    if(canUseNavigationApi()){
+      pendingNavInfo={ __hahRoute:true, route, state, animation: options.animation || '', reason: options.reason || '' };
+      try{
+        navigation.navigate(url, {
+          history: options.replace ? 'replace' : 'push',
+          state,
+          info: pendingNavInfo,
+        });
+      }catch(e){
+        pendingNavInfo=null;
+        if(options.replace) history.replaceState(state, '', url);
+        else history.pushState(state, '', url);
+        applyRoute(route, {entryState:state, skipAnimation:!!options.skipAnimation});
+      }
+      return route;
+    }
+    if(options.replace) history.replaceState(state, '', url);
+    else history.pushState(state, '', url);
+    applyRoute(route, {entryState:state, skipAnimation:!!options.skipAnimation});
+    return route;
+  }
+  function canTraverseBackTo(predicate){
+    if(!canUseNavigationApi() || !navigation.currentEntry || !Array.isArray(navigation.entries?.())) return false;
+    try{
+      const entries=navigation.entries();
+      const prev=entries[navigation.currentEntry.index - 1];
+      if(!prev || !prev.url) return false;
+      return !!predicate(routeFromStateOrUrl(typeof prev.getState==='function' ? prev.getState() : null, prev.url));
+    }catch(e){
+      return false;
+    }
+  }
+  function traverseBackOr(routeLike, fallbackOptions={}){
+    const fallbackRoute=normalizeRoute(routeLike);
+    const currentState=getEntryState();
+    const expected=fallbackRoute.section==='patientDetail'
+      ? (candidate)=>candidate.section==='patientDetail' && Number(candidate.patientId)===Number(fallbackRoute.patientId)
+      : (candidate)=>candidate.section===fallbackRoute.section && candidate.optionsSection===fallbackRoute.optionsSection;
+    const shouldBack = canUseNavigationApi()
+      ? canTraverseBackTo(expected) || (currentState && currentState.openedFromSection && fallbackRoute.section!== 'patientDetail' && currentState.openedFromSection===fallbackRoute.section)
+      : !!(currentState && currentState.openedFromSection && currentState.openedFromSection===fallbackRoute.section);
+    syncCurrentEntryState(getVisibleAppRoute());
+    if(shouldBack){
+      try{
+        if(canUseNavigationApi()){
+          navigation.back();
+          return fallbackRoute;
+        }
+      }catch(e){}
+      try{ history.back(); return fallbackRoute; }catch(e){}
+    }
+    return navigateWithHistory(fallbackRoute, {...fallbackOptions, replace:true});
+  }
+  function navigateToSection(section, options={}){
+    return navigateWithHistory({section:String(section||'patients').trim()}, options);
+  }
+  function navigateToPatient(patientId, options={}){
+    const route={section:'patientDetail', patientId:Number(patientId)||null};
+    return navigateWithHistory(route, options);
+  }
+  function navigateToOptionsPage(openKey, options={}){
+    const key=String(openKey||'').trim();
+    if(!key){
+      return traverseBackOr({section:'handover', optionsSection:''}, {skipAnimation:true});
+    }
+    return navigateWithHistory({section:'handover', optionsSection:key}, options);
+  }
+  function goBackFromPatient(options={}){
+    const state=getEntryState();
+    const fallbackScroll=(state && state.patientsScrollTop!=null) ? Number(state.patientsScrollTop||0) : capturePatientsScrollTop();
+    return traverseBackOr({section:'patients'}, {state:{patientsScrollTop:fallbackScroll}, skipAnimation:!!options.skipAnimation});
+  }
+  function handleCommittedNavigation(){
+    const state=getEntryState();
+    const info=asObject(pendingNavInfo);
+    pendingNavInfo=null;
+    const route=routeFromStateOrUrl(state, window.location.href);
+    applyRoute(route, {entryState:state, skipAnimation:!!info.skipAnimation});
+  }
+  function bindListeners(){
+    if(navListenersBound) return;
+    navListenersBound=true;
+    if(canUseNavigationApi()){
+      navigation.addEventListener('navigate', event=>{
+        if(!shouldInterceptNavigateEvent(event)) return;
+        pendingNavInfo=asObject(event.info);
+        event.intercept({scroll:'manual', focusReset:'manual', async handler(){} });
+      });
+      navigation.addEventListener('currententrychange', ()=>{
+        if(applyingRoute) return;
+        handleCommittedNavigation();
+      });
+      return;
+    }
+    if(fallbackPopstateBound) return;
+    fallbackPopstateBound=true;
+    window.addEventListener('popstate', event=>{
+      if(applyingRoute) return;
+      const route=routeFromStateOrUrl(event.state, window.location.href);
+      applyRoute(route, {entryState:event.state||{}});
+    });
+  }
+  function start(){
+    if(started) return window.HAHNavigation;
+    bindListeners();
+    started=true;
+    const urlRoute=parseRouteFromUrl(window.location.href);
+    const visibleRoute=getVisibleAppRoute();
+    const initialRoute=(APP_ROUTE_PARAM_KEYS.some(key=>currentUrl().searchParams.has(key))) ? urlRoute : visibleRoute;
+    const initialState=createEntryState(initialRoute, getEntryState());
+    if(canUseNavigationApi()){
+      try{ navigation.updateCurrentEntry({state:initialState}); }catch(e){}
+    }else{
+      try{ history.replaceState(initialState, '', routeToUrl(initialRoute)); }catch(e){}
+    }
+    if(!routesEqual(visibleRoute, initialRoute) || (initialRoute.section==='handover' && initialRoute.optionsSection) || initialRoute.section==='patientDetail'){
+      applyRoute(initialRoute, {entryState:initialState, skipAnimation:true});
+    }else{
+      restoreSectionState(initialRoute, initialState);
+    }
+    return window.HAHNavigation;
+  }
+
+  window.HAHNavigation={
+    get started(){ return started; },
+    start,
+    parseRouteFromUrl,
+    getVisibleAppRoute,
+    getEntryState,
+    navigateToSection,
+    navigateToPatient,
+    navigateToOptionsPage,
+    goBackFromPatient,
+    applyRoute,
+    syncCurrentEntryState,
+    routeToUrl,
+    routesEqual,
+  };
+})();
 
 </script><script>
 (function(global){
@@ -10939,7 +11307,11 @@ function isValidOptionsPageKey(key){
 }
 
 function openOptionsSectionPage(openKey='', options={}){
+  const opts=(options && typeof options==='object') ? options : {};
   const normalized=isValidOptionsPageKey(openKey) ? String(openKey||'').trim() : '';
+  if(!opts.skipRoute && opts.saveState!==false && window.HAHNavigation && window.HAHNavigation.started){
+    return window.HAHNavigation.navigateToOptionsPage(normalized, opts);
+  }
   const saveState=options && options.saveState===false ? false : true;
   const shouldScroll=options && options.scroll===false ? false : true;
   const home=$('optionsHomePanel');
@@ -12339,6 +12711,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("patientContextDeleteBtn").onclick=()=>{ const id=patientContextMenuId; closePatientContextMenu(); if(id) deletePatient(id); };
   document.addEventListener("keydown",e=>{ if(e.key==="Escape") closePatientContextMenu(); });
   if(!applyGraphPostAuthUiRestore()) showSection("patients");
+  if(window.HAHNavigation && typeof window.HAHNavigation.start==='function') window.HAHNavigation.start();
   if(pendingGraphPostAuthRestore && pendingGraphPostAuthRestore.skipSplash){
     setTimeout(()=>{ hideGraphAuthReturnCover(); }, 160);
   }
@@ -17390,7 +17763,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_573_release.html; source=hospital_at_home_v12_36_573_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_574_release.html; source=hospital_at_home_v12_36_574_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
