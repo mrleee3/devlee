@@ -37,7 +37,7 @@ html[data-graph-auth-return-boot="1"] body{
 }
 #graphAuthReturnCover{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.025) 16%,rgba(0,0,0,.055) 100%),var(--blue);color:#fff;z-index:10040;opacity:0;visibility:hidden;pointer-events:none;overflow:hidden;transition:opacity .28s ease,visibility 0s linear .28s}#graphAuthReturnCover.active,html[data-graph-auth-return-boot="1"] #graphAuthReturnCover{opacity:1;visibility:visible;pointer-events:auto}#graphAuthReturnCover.hidden{opacity:0;visibility:hidden;pointer-events:none}.graph-auth-return-cover-glow{position:absolute;border-radius:999px;pointer-events:none;opacity:.9}.graph-auth-return-cover-glow-a{width:320px;height:320px;left:-84px;top:calc(50% - 240px);background:radial-gradient(circle,rgba(255,255,255,.24) 0%,rgba(255,255,255,.08) 34%,rgba(255,255,255,0) 72%)}.graph-auth-return-cover-glow-b{width:280px;height:280px;right:-82px;bottom:calc(50% - 230px);background:radial-gradient(circle,rgba(255,255,255,.18) 0%,rgba(255,255,255,.05) 32%,rgba(255,255,255,0) 72%)}.graph-auth-return-cover-stack{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 28px;text-align:center}.graph-auth-return-cover-logo{display:flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.11));box-shadow:0 16px 34px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}.graph-auth-return-cover-logo-svg{width:54px;height:54px;display:block}.graph-auth-return-cover-logo-svg rect{fill:none;stroke:rgba(255,255,255,.94);stroke-width:3.5}.graph-auth-return-cover-logo-svg path{fill:none;stroke:rgba(255,255,255,.96);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.graph-auth-return-cover-title{font-size:29px;font-weight:760;line-height:1.05;letter-spacing:-.028em;text-shadow:0 1px 0 rgba(0,0,0,.08)}.graph-auth-return-cover-subtitle{font-size:14px;font-weight:600;line-height:1.2;letter-spacing:.01em;color:rgba(255,255,255,.88)}.graph-auth-return-cover-company{font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.76)}
 
-.patient-status-chip{display:inline-flex;align-items:center;justify-content:center;min-height:24px;padding:0 10px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#475467;font-size:11px;font-weight:800;line-height:1;white-space:nowrap;max-width:100%}.patient-task-badge{display:inline-flex;align-items:center;justify-content:center;min-height:24px;padding:0 10px;border-radius:999px;border:1px solid rgba(10,132,255,.08);background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:800;line-height:1;white-space:nowrap;max-width:100%}.patient-task-badge.now{background:#fff7ed;color:#b45309;border-color:rgba(245,158,11,.16)}.patient-actions{align-self:flex-start}.patient-list-display-preview-panel .swipe-shell{margin-bottom:0}.patient-list-display-preview-shell{pointer-events:none}.patient-list-display-preview-shell .swipe-background{display:none}.patient-list-display-preview-shell .swipe-foreground{transform:none!important}.patient-list-display-preview-shell .patient-btn{pointer-events:none}.patient-list-display-preview-shell .patient-main{padding:0;background:none;border:none;text-align:left}.patient-list-display-preview-shell .patient-main:active{transform:none}
+.patient-status-chip{display:inline-flex;align-items:center;justify-content:center;min-height:24px;padding:0 10px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#f8fafc;color:#475467;font-size:11px;font-weight:800;line-height:1;white-space:nowrap;max-width:100%}.patient-actions{align-self:flex-start}.patient-list-display-preview-panel .swipe-shell{margin-bottom:0}.patient-list-display-preview-shell{pointer-events:none}.patient-list-display-preview-shell .swipe-background{display:none}.patient-list-display-preview-shell .swipe-foreground{transform:none!important}.patient-list-display-preview-shell .patient-btn{pointer-events:none}.patient-list-display-preview-shell .patient-main{padding:0;background:none;border:none;text-align:left}.patient-list-display-preview-shell .patient-main:active{transform:none}
 .patient-status-chip.acp{background:#f8fafc;color:#475467;border-color:rgba(15,23,42,.08)}
 .patient-status-chip.dnacpr{background:#fbf2f8;color:#8a2c6b;border-color:#e7c7da}
 .patient-actions{position:relative;display:flex;align-items:flex-start;justify-content:flex-end;min-width:76px;flex-shrink:0}
@@ -69,7 +69,7 @@ html[data-graph-auth-return-boot="1"] body{
 #acpNotes{min-height:96px;padding:10px 12px;border-radius:14px;resize:none}
 .acp-short-input:focus,#acpNotes:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.14)}
 .acp-overlay-footer{margin-top:0}
-@media (max-width:420px){.patient-status-chip,.patient-task-badge{font-size:10.5px;padding:0 9px}.patient-actions{min-width:68px}.patient-acuity-stack{min-width:68px}.acp-card-summary{font-size:12px}.acp-overlay-grid{grid-template-columns:1fr}.acp-choice-btn{font-size:11.5px;padding:7px 9px}}
+@media (max-width:420px){.patient-status-chip{font-size:10.5px;padding:0 9px}.patient-actions{min-width:68px}.patient-acuity-stack{min-width:68px}.acp-card-summary{font-size:12px}.acp-overlay-grid{grid-template-columns:1fr}.acp-choice-btn{font-size:11.5px;padding:7px 9px}}
 
 .med-ref-backdrop{position:fixed;left:0;right:0;top:var(--shared-header-offset,0px);bottom:0;background:rgba(15,23,42,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:10078;opacity:0;pointer-events:none;transition:opacity .18s ease}
 .med-ref-backdrop.show{opacity:1;pointer-events:auto}
@@ -224,10 +224,10 @@ html,body{background:var(--bg)!important;}
 #appSplash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.025) 16%,rgba(0,0,0,.055) 100%),var(--blue);color:#fff;z-index:10000;opacity:1;visibility:visible;pointer-events:auto;overflow:hidden;transition:opacity .9s ease,visibility 0s linear .9s}#appSplash.hidden{opacity:0;visibility:hidden;pointer-events:none}#appSplash.hidden .app-splash-stack{opacity:0;transform:translateY(-4px) scale(.985)}#appSplash.hidden .app-splash-glow{opacity:0;transform:scale(1.08)}.app-splash-stack{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 28px;text-align:center;transform:translateY(0) scale(1);opacity:1;transition:opacity .82s ease,transform .82s cubic-bezier(.22,.78,.2,1)}.app-splash-glow{position:absolute;border-radius:999px;filter:blur(0);pointer-events:none;opacity:.9;transition:opacity .82s ease,transform .82s ease}.app-splash-glow-a{width:320px;height:320px;left:-84px;top:calc(50% - 240px);background:radial-gradient(circle,rgba(255,255,255,.24) 0%,rgba(255,255,255,.08) 34%,rgba(255,255,255,0) 72%)}.app-splash-glow-b{width:280px;height:280px;right:-82px;bottom:calc(50% - 230px);background:radial-gradient(circle,rgba(255,255,255,.18) 0%,rgba(255,255,255,.05) 32%,rgba(255,255,255,0) 72%)}.app-splash-animate{opacity:1;transform:none;animation:none}.app-splash-logo-wrap{display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(8px) scale(.968);animation:appSplashLogoIn .58s cubic-bezier(.22,.88,.24,1) .06s forwards;animation-play-state:paused}.app-splash-logo-button{appearance:none;-webkit-appearance:none;border:0;padding:0;background:transparent;border-radius:30px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}.app-splash-logo-button:focus-visible{outline:2px solid rgba(255,255,255,.92);outline-offset:8px}.app-splash-logo-button:active .app-splash-logo{transform:scale(.97)}.app-splash-logo{display:flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.11));box-shadow:0 16px 34px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .18s ease}.app-splash-logo-svg{width:54px;height:54px;display:block}.app-splash-logo-svg rect{fill:none;stroke:rgba(255,255,255,.94);stroke-width:3.5}.app-splash-logo-svg path{fill:none;stroke:rgba(255,255,255,.96);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.app-splash-title-block{display:flex;flex-direction:column;align-items:center;gap:7px}.app-splash-title,.app-splash-tagline{display:block}.app-splash-company{display:block}.app-splash-title{font-size:31px;font-weight:760;line-height:1.05;letter-spacing:-.028em;text-shadow:0 1px 0 rgba(0,0,0,.08);opacity:0;transform:translateY(8px);animation:appSplashTitleIn .72s cubic-bezier(.16,.84,.2,1) .18s forwards;will-change:opacity,transform;animation-play-state:paused}.app-splash-tagline{font-size:14px;font-weight:600;line-height:1.2;letter-spacing:.01em;color:rgba(255,255,255,.86);opacity:0;transform:translateY(8px);animation:appSplashTitleIn .72s cubic-bezier(.16,.84,.2,1) .46s forwards;will-change:opacity,transform;animation-play-state:paused}.app-splash-company{position:relative;font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.82);opacity:0;animation:appSplashCompanyFadeIn 2.2s cubic-bezier(0,0,.2,1) 1.1s forwards;will-change:opacity;-webkit-font-smoothing:antialiased;font-kerning:none;font-variant-ligatures:none;animation-play-state:paused}#appSplash.splash-ready .app-splash-logo-wrap,#appSplash.splash-ready .app-splash-title,#appSplash.splash-ready .app-splash-tagline,#appSplash.splash-ready .app-splash-company{animation-play-state:running}#appSplash.splash-transition-active .app-splash-logo-wrap{opacity:0;transform:translateY(-10px) scale(.98)}#appSplash.splash-transition-active .app-splash-company{opacity:0}#appSplash.splash-transition-active .app-splash-glow{opacity:0;transform:scale(1.06)}#appSplash.splash-transition-active .app-splash-title{opacity:0}#appSplash .app-splash-title{transition:opacity .12s linear}.app-splash-title-ghost{position:fixed;left:0;top:0;width:100%;display:block;margin:0;color:#fff;z-index:10020;pointer-events:none;text-align:center;transform-origin:center center;will-change:transform,opacity;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;backface-visibility:hidden;-webkit-backface-visibility:hidden}#lockScreen.splash-title-transition .lock-title{opacity:0}#lockScreen.splash-title-transition .lock-subtitle,#lockScreen.splash-title-transition .pin-dots,#lockScreen.splash-title-transition .pin-error,#lockScreen.splash-title-transition .pin-pad,#lockScreen.splash-title-transition .pin-biometric-row{opacity:0;transform:translateY(12px);transition:opacity .32s ease,transform .42s cubic-bezier(.18,.82,.2,1)}#lockScreen.splash-title-transition.splash-title-transition-ready .lock-subtitle,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-dots,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-error,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-pad,#lockScreen.splash-title-transition.splash-title-transition-ready .pin-biometric-row{opacity:1;transform:translateY(0)}@keyframes appSplashLogoIn{from{opacity:0;transform:translateY(8px) scale(.968)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes appSplashTitleIn{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}@keyframes appSplashCompanyFadeIn{from{opacity:0}to{opacity:1}}
  body::before{content:"";position:fixed;left:0;right:0;top:0;height:calc(var(--app-header-height,88px) + env(safe-area-inset-top) + 24px);background:var(--blue);pointer-events:none;z-index:0;transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden} body[style]{background:var(--bg)!important} body.keyboard-open{padding-bottom:12px} body.keyboard-open #patients{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 24px)} body.keyboard-open #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom, 0px) + 40px)} body.add-patient-open #patients{pointer-events:none} body.add-patient-open #pullRefreshIndicator{opacity:0!important;transform:translateY(-12px)!important}
 header{position:fixed;left:0;right:0;top:0;z-index:40;background:var(--blue);color:#fff;padding:calc(env(safe-area-inset-top) + 16px) 18px 16px;font-size:20px;font-weight:700;transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform}
-.subhead{font-size:12px;opacity:.9;margin-top:4px}.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.header-left{min-width:0}.header-meta{font-size:13px;opacity:.95;margin-top:6px}.header-age{font-size:18px;opacity:.95;font-weight:600;margin-left:2px}.header-meta2{font-size:12px;opacity:.9;margin-top:4px}.header-back{position:absolute;left:18px;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;padding:0 4px;min-width:auto;font-size:22px;line-height:1;z-index:2}.header-back.hidden{display:none!important}.header-lock{display:inline-flex;align-items:center;justify-content:center;min-width:50px;width:50px;height:44px;margin-top:0;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(255,255,255,.12);color:#fff;padding:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);transition:transform .14s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease;-webkit-tap-highlight-color:transparent}.header-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-shrink:0;align-self:stretch}.header-lock svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round}.header-task-btn{position:relative}.header-task-count{position:absolute;top:-5px;right:-5px;display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#fff;color:#0a84ff;font-size:10px;font-weight:800;line-height:1;box-shadow:0 4px 12px rgba(15,23,42,.16)}.header-task-count.urgent{background:#fbbf24;color:#78350f}.header-lock:active{transform:scale(.96);background:rgba(255,255,255,.16)}.header-lock:hover{background:rgba(255,255,255,.14)}.header-lock:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.18), inset 0 1px 0 rgba(255,255,255,.10)}header.has-back .header-left{padding-left:42px}.container{position:relative;z-index:1;padding:14px;padding-top:calc(var(--app-header-height,88px) + 14px);min-height:calc(100vh - var(--app-header-height,88px) - env(safe-area-inset-top) - 83px - env(safe-area-inset-bottom));background:var(--bg)}#patients{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:1;padding-top:14px;min-height:0;background:var(--bg);overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}#tasks.hidden,#handover.hidden,#patientDetail.hidden,#deletedPage.hidden,#eventLogPage.hidden{display:none!important}.hidden{display:none!important} #tasks,#handover{background:var(--bg);}.add-patient-overlay{position:fixed;left:0;right:0;top:0;bottom:0;z-index:28;pointer-events:none}.add-patient-overlay.show{pointer-events:auto}.add-patient-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}.add-patient-modal{position:fixed;left:14px;right:14px;top:var(--add-patient-modal-top,calc(var(--app-header-height,88px) + 16px));max-height:var(--add-patient-modal-max-height,calc(100dvh - var(--app-header-height,88px) - 112px));overflow:auto;margin:0;z-index:29;border-radius:20px;box-shadow:0 20px 48px rgba(15,23,42,.18);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.add-patient-modal.hidden{display:none!important}#patients.detail-underlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:4;background:var(--bg);pointer-events:none;transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;padding-top:14px}#patientDetail.detail-overlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:6;background:var(--bg);transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;box-shadow:-12px 0 32px rgba(15,23,42,.12);padding-top:14px;-webkit-overflow-scrolling:touch;touch-action:pan-y}body.detail-view-active #patientDetail.hidden{display:block!important}
+.subhead{font-size:12px;opacity:.9;margin-top:4px}.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.header-left{min-width:0}.header-meta{font-size:13px;opacity:.95;margin-top:6px}.header-age{font-size:18px;opacity:.95;font-weight:600;margin-left:2px}.header-meta2{font-size:12px;opacity:.9;margin-top:4px}.header-back{position:absolute;left:18px;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;padding:0 4px;min-width:auto;font-size:22px;line-height:1;z-index:2}.header-back.hidden{display:none!important}.header-lock{display:inline-flex;align-items:center;justify-content:center;min-width:50px;width:50px;height:44px;margin-top:0;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(255,255,255,.12);color:#fff;padding:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);transition:transform .14s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease;-webkit-tap-highlight-color:transparent}.header-lock svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round}.header-lock:active{transform:scale(.96);background:rgba(255,255,255,.16)}.header-lock:hover{background:rgba(255,255,255,.14)}.header-lock:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.18), inset 0 1px 0 rgba(255,255,255,.10)}header.has-back .header-left{padding-left:42px}.container{position:relative;z-index:1;padding:14px;padding-top:calc(var(--app-header-height,88px) + 14px);min-height:calc(100vh - var(--app-header-height,88px) - env(safe-area-inset-top) - 83px - env(safe-area-inset-bottom));background:var(--bg)}#patients{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:1;padding-top:14px;min-height:0;background:var(--bg);overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}#tasks.hidden,#handover.hidden,#patientDetail.hidden,#deletedPage.hidden,#eventLogPage.hidden{display:none!important}.hidden{display:none!important} #tasks,#handover{background:var(--bg);}.add-patient-overlay{position:fixed;left:0;right:0;top:0;bottom:0;z-index:28;pointer-events:none}.add-patient-overlay.show{pointer-events:auto}.add-patient-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}.add-patient-modal{position:fixed;left:14px;right:14px;top:var(--add-patient-modal-top,calc(var(--app-header-height,88px) + 16px));max-height:var(--add-patient-modal-max-height,calc(100dvh - var(--app-header-height,88px) - 112px));overflow:auto;margin:0;z-index:29;border-radius:20px;box-shadow:0 20px 48px rgba(15,23,42,.18);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.add-patient-modal.hidden{display:none!important}#patients.detail-underlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:4;background:var(--bg);pointer-events:none;transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;padding-top:14px}#patientDetail.detail-overlay-active{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:83px;overflow:auto;z-index:6;background:var(--bg);transform:translate3d(0,0,0);will-change:transform;overscroll-behavior:contain;box-shadow:-12px 0 32px rgba(15,23,42,.12);padding-top:14px;-webkit-overflow-scrolling:touch;touch-action:pan-y}body.detail-view-active #patientDetail.hidden{display:block!important}
 .card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .card.visit-selected{border:2px solid #0a84ff;padding:12px;box-sizing:border-box;box-shadow:0 0 0 1px rgba(10,132,255,.12),0 1px 4px rgba(10,132,255,.12)}
-.swipe-shell{position:relative;border-radius:16px;margin-bottom:12px;overflow:hidden;touch-action:pan-y;--visit-pill-width:54px;--visit-pill-scale:.88;--visit-pill-opacity:0;--visit-pill-shift:-16px;--visit-bg-opacity:0}.swipe-shell .card{margin-bottom:0}.swipe-background{position:absolute;left:0;top:0;bottom:0;width:286px;display:flex;align-items:center;justify-content:flex-start;gap:10px;padding-left:12px;z-index:0;pointer-events:none;opacity:var(--visit-bg-opacity);transition:opacity .18s ease}.swipe-foreground{position:relative;z-index:2;will-change:transform,background-color;transform:translate3d(0,0,0);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .26s cubic-bezier(.22,.9,.18,1),background-color .18s ease;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}.swipe-shell.swiping .swipe-foreground{transition:none;background:var(--card)}.swipe-shell.pressing .swipe-foreground{transition:none;background:rgba(15,23,42,.06);box-shadow:inset 0 0 0 1px rgba(15,23,42,.08)}.swipe-shell.revealed .swipe-foreground{box-shadow:0 10px 20px rgba(15,23,42,.08)}.visit-action-wrap,.flag-action-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:84px;opacity:var(--visit-pill-opacity);transform:translateX(var(--visit-pill-shift)) scale(var(--visit-pill-scale));transform-origin:left center;transition:opacity .18s ease, transform .24s cubic-bezier(.18,.9,.24,1.22)}.swipe-shell.swiping .visit-action-wrap,.swipe-shell.swiping .flag-action-wrap{transition:none}.swipe-shell.popped .visit-action-wrap,.swipe-shell.popped .flag-action-wrap{transform:translateX(0) scale(1.08)}.visit-reveal-btn,.flag-reveal-btn{position:relative;width:var(--visit-pill-width);height:48px;border:none;border-radius:999px;color:#fff;display:flex;align-items:center;justify-content:center;z-index:1;opacity:var(--visit-pill-opacity);transition:width .24s cubic-bezier(.22,.9,.18,1), opacity .18s ease, filter .18s ease;pointer-events:none;box-shadow:none}.visit-reveal-btn{background:#0a84ff}.flag-reveal-btn{background:#f5c542;color:#fff}.context-menu-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.16);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:120;opacity:0;pointer-events:none;transition:opacity .18s ease}.context-menu-backdrop.show{opacity:1;pointer-events:auto}.patient-context-menu{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);width:min(280px,calc(100vw - 32px));background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.65);border-radius:20px;box-shadow:0 18px 48px rgba(15,23,42,.18);overflow:hidden;z-index:121;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .2s cubic-bezier(.2,.9,.2,1)}.patient-context-menu.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}.patient-context-header{padding:14px 16px 10px;border-bottom:1px solid rgba(148,163,184,.18);text-align:center}.patient-context-title{font-size:16px;font-weight:800;color:#111827}.patient-context-subtitle{margin-top:4px;font-size:12px;color:#6b7280}.patient-context-actions{padding:8px}.patient-context-action{width:100%;border:none;background:transparent;padding:13px 14px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:700;color:#111827}.patient-context-action + .patient-context-action{margin-top:2px}.patient-context-action:active{background:rgba(10,132,255,.1)}.patient-context-action.disabled{color:#9ca3af}.patient-context-action.disabled:active{background:transparent}.patient-context-action.danger{color:#dc2626}.patient-context-sep{height:8px}.patient-context-right{font-size:18px;line-height:1;color:#9ca3af}.patient-context-badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 8px;border-radius:999px;background:#eef2ff;color:#1d4ed8;font-size:11px;font-weight:800}.patient-context-badge.tasks{background:#fef3c7;color:#92400e}.patient-context-badge.tasks.has-open{background:#eff6ff;color:#1d4ed8}.patient-context-badge.tasks.urgent{background:#fff7ed;color:#b45309}.swipe-shell.show-action .visit-reveal-btn,.swipe-shell.show-action .flag-reveal-btn{pointer-events:auto}.swipe-shell.swiping .visit-reveal-btn,.swipe-shell.swiping .flag-reveal-btn{transition:none}.visit-reveal-btn .house-icon,.flag-reveal-btn .flag-icon{width:20px;height:20px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}.visit-reveal-btn .house-icon path.house-fill{fill:rgba(255,255,255,.16);stroke:none}.visit-action-wrap .visit-label,.flag-action-wrap .flag-label{font-size:12px;font-weight:700;line-height:1;color:#6b7280;letter-spacing:.01em;opacity:var(--visit-pill-opacity);transition:opacity .18s ease}.visit-reveal-btn:active,.flag-reveal-btn:active{filter:brightness(.95)}
+.swipe-shell{position:relative;border-radius:16px;margin-bottom:12px;overflow:hidden;touch-action:pan-y;--visit-pill-width:54px;--visit-pill-scale:.88;--visit-pill-opacity:0;--visit-pill-shift:-16px;--visit-bg-opacity:0}.swipe-shell .card{margin-bottom:0}.swipe-background{position:absolute;left:0;top:0;bottom:0;width:286px;display:flex;align-items:center;justify-content:flex-start;gap:10px;padding-left:12px;z-index:0;pointer-events:none;opacity:var(--visit-bg-opacity);transition:opacity .18s ease}.swipe-foreground{position:relative;z-index:2;will-change:transform,background-color;transform:translate3d(0,0,0);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .26s cubic-bezier(.22,.9,.18,1),background-color .18s ease;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}.swipe-shell.swiping .swipe-foreground{transition:none;background:var(--card)}.swipe-shell.pressing .swipe-foreground{transition:none;background:rgba(15,23,42,.06);box-shadow:inset 0 0 0 1px rgba(15,23,42,.08)}.swipe-shell.revealed .swipe-foreground{box-shadow:0 10px 20px rgba(15,23,42,.08)}.visit-action-wrap,.flag-action-wrap{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:84px;opacity:var(--visit-pill-opacity);transform:translateX(var(--visit-pill-shift)) scale(var(--visit-pill-scale));transform-origin:left center;transition:opacity .18s ease, transform .24s cubic-bezier(.18,.9,.24,1.22)}.swipe-shell.swiping .visit-action-wrap,.swipe-shell.swiping .flag-action-wrap{transition:none}.swipe-shell.popped .visit-action-wrap,.swipe-shell.popped .flag-action-wrap{transform:translateX(0) scale(1.08)}.visit-reveal-btn,.flag-reveal-btn{position:relative;width:var(--visit-pill-width);height:48px;border:none;border-radius:999px;color:#fff;display:flex;align-items:center;justify-content:center;z-index:1;opacity:var(--visit-pill-opacity);transition:width .24s cubic-bezier(.22,.9,.18,1), opacity .18s ease, filter .18s ease;pointer-events:none;box-shadow:none}.visit-reveal-btn{background:#0a84ff}.flag-reveal-btn{background:#f5c542;color:#fff}.context-menu-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.16);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:120;opacity:0;pointer-events:none;transition:opacity .18s ease}.context-menu-backdrop.show{opacity:1;pointer-events:auto}.patient-context-menu{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);width:min(280px,calc(100vw - 32px));background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.65);border-radius:20px;box-shadow:0 18px 48px rgba(15,23,42,.18);overflow:hidden;z-index:121;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .2s cubic-bezier(.2,.9,.2,1)}.patient-context-menu.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}.patient-context-header{padding:14px 16px 10px;border-bottom:1px solid rgba(148,163,184,.18);text-align:center}.patient-context-title{font-size:16px;font-weight:800;color:#111827}.patient-context-subtitle{margin-top:4px;font-size:12px;color:#6b7280}.patient-context-actions{padding:8px}.patient-context-action{width:100%;border:none;background:transparent;padding:13px 14px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:700;color:#111827}.patient-context-action + .patient-context-action{margin-top:2px}.patient-context-action:active{background:rgba(10,132,255,.1)}.patient-context-action.disabled{color:#9ca3af}.patient-context-action.disabled:active{background:transparent}.patient-context-action.danger{color:#dc2626}.patient-context-sep{height:8px}.patient-context-right{font-size:18px;line-height:1;color:#9ca3af}.patient-context-badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 8px;border-radius:999px;background:#eef2ff;color:#1d4ed8;font-size:11px;font-weight:800}.patient-context-badge.tasks{background:#fef3c7;color:#92400e}.swipe-shell.show-action .visit-reveal-btn,.swipe-shell.show-action .flag-reveal-btn{pointer-events:auto}.swipe-shell.swiping .visit-reveal-btn,.swipe-shell.swiping .flag-reveal-btn{transition:none}.visit-reveal-btn .house-icon,.flag-reveal-btn .flag-icon{width:20px;height:20px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}.visit-reveal-btn .house-icon path.house-fill{fill:rgba(255,255,255,.16);stroke:none}.visit-action-wrap .visit-label,.flag-action-wrap .flag-label{font-size:12px;font-weight:700;line-height:1;color:#6b7280;letter-spacing:.01em;opacity:var(--visit-pill-opacity);transition:opacity .18s ease}.visit-reveal-btn:active,.flag-reveal-btn:active{filter:brightness(.95)}
 .patient-btn{display:block;width:100%;text-align:left;border:none;background:transparent;padding:0;margin:0}
 .patient-card-inner,.row,.status-row,.section-header{display:flex;justify-content:space-between;align-items:center;gap:12px}.patient-card-inner{align-items:flex-start}
 /* patient card reorder */
@@ -2455,9 +2455,82 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 }
 
 .news-tts-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;margin-top:10px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .12s,opacity .15s}.news-tts-btn:active{background:rgba(255,255,255,.28);transform:scale(.97)}.news-tts-btn svg{flex-shrink:0}.news-tts-btn.is-speaking,.news-tts-btn:disabled{background:rgba(255,255,255,.24);opacity:.9}.tts-hidden-audio{position:fixed;left:-9999px;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none}
-/* v12_36_578 Tasks build B2 */
-.tasks-shell{display:flex;flex-direction:column;gap:12px;padding-bottom:4px}.tasks-sticky{position:sticky;top:0;z-index:4;background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 82%,rgba(248,250,252,0) 100%);padding-bottom:2px}.tasks-header-card{margin-bottom:10px;padding:14px 14px 12px}.tasks-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.tasks-title-wrap{min-width:0;display:flex;flex-direction:column;gap:8px}.tasks-title-wrap h3{margin:0;font-size:20px;line-height:1.15}.tasks-add-btn{width:50px;min-width:50px;height:46px;padding:0}.tasks-metrics{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;font-weight:700;color:#667085}.tasks-metrics span{display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:999px;background:#f8fafc;border:1px solid rgba(15,23,42,.06)}.tasks-metrics strong{font-size:12px;color:#111827}.tasks-filter-bar{display:flex;gap:8px;padding:4px 2px 0;overflow:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.tasks-filter-bar::-webkit-scrollbar{display:none}.tasks-filter-btn{border:none;background:#e5e7eb;color:#4b5563;padding:10px 14px;border-radius:999px;font-size:13px;font-weight:800;line-height:1;white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(15,23,42,.04)}.tasks-filter-btn.active{background:#0a84ff;color:#fff;box-shadow:none}.tasks-list,.tasks-done-wrap{display:flex;flex-direction:column;gap:12px}.task-group{display:flex;flex-direction:column;gap:8px}.task-patient-card{padding:0;overflow:hidden;position:relative}.task-patient-card.urgent{box-shadow:inset 0 0 0 1px rgba(245,158,11,.18),0 1px 2px rgba(15,23,42,.04)}.task-patient-card.urgent::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#fbbf24 0%,#f59e0b 100%)}.task-patient-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:13px 14px 10px}.task-patient-card-titlewrap{min-width:0}.task-patient-card-meta{margin-top:2px;font-size:11px;font-weight:650;line-height:1.35;color:#667085}.task-patient-card-badges{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:6px;flex:0 0 auto}.task-patient-badge{display:inline-flex;align-items:center;justify-content:center;min-height:22px;padding:0 9px;border-radius:999px;background:#f8fafc;border:1px solid rgba(15,23,42,.06);font-size:11px;font-weight:800;line-height:1;color:#667085;white-space:nowrap}.task-patient-badge.urgent{background:#fff7ed;border-color:rgba(245,158,11,.24);color:#b45309}.task-items{display:flex;flex-direction:column}.task-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:11px 14px 12px;align-items:center}.task-item.is-done .task-item-title{text-decoration:line-through;color:#6b7280}.task-item-sep{height:1px;background:rgba(15,23,42,.06);margin:0 14px}.task-item-main{min-width:0;display:flex;flex-direction:column;gap:4px}.task-item-title-row{display:flex;align-items:flex-start;gap:10px;min-width:0}.task-priority-dot{width:9px;height:9px;border-radius:999px;margin-top:5px;flex:0 0 auto;box-shadow:0 0 0 4px rgba(15,23,42,.04)}.task-priority-dot.now{background:#f59e0b;box-shadow:0 0 0 4px rgba(245,158,11,.12)}.task-priority-dot.today{background:#0a84ff;box-shadow:0 0 0 4px rgba(10,132,255,.10)}.task-priority-dot.later{background:#9ca3af;box-shadow:0 0 0 4px rgba(156,163,175,.12)}.task-item-title{font-size:14px;font-weight:700;line-height:1.3;color:#111827;word-break:break-word}.task-item-meta{padding-left:19px;font-size:11px;font-weight:700;line-height:1.35;color:#667085}.task-item-note{padding-left:19px;font-size:12px;line-height:1.35;color:#475467;word-break:break-word}.task-item-actions{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex:0 0 auto}.task-icon-btn{width:34px;min-width:34px;height:34px;padding:0;border:none;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;transition:transform .14s ease,background .18s ease,box-shadow .18s ease}.task-icon-btn:active{transform:scale(.96)}.task-icon-btn svg{width:18px;height:18px;display:block;stroke:currentColor;fill:none;stroke-width:2.15;stroke-linecap:round;stroke-linejoin:round}.task-icon-btn.secondary{background:#f3f4f6;color:#4b5563}.task-icon-btn.primary{background:#0a84ff;color:#fff}.task-patient-card.done .task-icon-btn.primary{background:#ecfdf3;color:#027a48;box-shadow:inset 0 0 0 1px rgba(134,239,172,.45)}.task-patient-card-title{font-size:16px;font-weight:800;line-height:1.2;color:#111827;word-break:break-word}@keyframes tc-fill-in{0%{transform:scale(0);opacity:1}55%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}@keyframes tc-draw{from{stroke-dashoffset:22}to{stroke-dashoffset:0}}.task-complete-btn{background:none!important;box-shadow:none!important;border:none!important;padding:0!important;width:34px;min-width:34px;height:34px}.task-complete-btn svg{display:block;overflow:visible}.tc-fill{transform-origin:17px 17px;transform:scale(0);opacity:0}.tc-tick{opacity:0}.task-complete-btn.animating .tc-ring{opacity:0}.task-complete-btn.animating .tc-fill{opacity:1;animation:tc-fill-in 0.32s cubic-bezier(0.4,0,0.2,1) forwards}.task-complete-btn.animating .tc-tick{opacity:1;animation:tc-draw 0.22s cubic-bezier(0.4,0,0.2,1) 0.12s forwards}.nav button{background:none;padding:6px 10px 8px;font-size:10px;color:#374151;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}.nav button svg{width:22px;height:22px;display:block;flex-shrink:0}.nav button span{display:block;line-height:1;font-size:10px}.nav .active{color:var(--blue);font-weight:800}.task-done-toggle{width:100%;border:none;background:#fff;border-radius:16px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px;font-weight:800;color:#111827;box-shadow:inset 0 0 0 1px rgba(15,23,42,.06)}.task-done-chevron{font-size:20px;line-height:1;color:#94a3b8;transform:rotate(90deg);transition:transform .18s ease}.task-done-toggle.expanded .task-done-chevron{transform:rotate(-90deg)}.task-done-body{display:flex;flex-direction:column;gap:8px}.task-done-empty{padding:14px;border-radius:16px;background:#fff;color:#667085;font-size:13px;font-weight:600;box-shadow:inset 0 0 0 1px rgba(15,23,42,.06)}.tasks-empty-card{padding:16px 14px}.tasks-empty-title{font-size:15px;font-weight:800;line-height:1.25;color:#111827}.tasks-empty-copy{margin-top:6px;font-size:12px;line-height:1.4;color:#667085}.task-overlay{position:fixed;inset:0;z-index:10082}.task-overlay-backdrop{position:fixed;left:0;right:0;top:var(--shared-header-offset,0px);bottom:0;background:rgba(15,23,42,.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.task-overlay-modal{position:fixed;left:14px;right:14px;top:calc(var(--shared-header-offset,0px) + 14px);bottom:calc(env(safe-area-inset-bottom) + 14px + var(--keyboard-extra-bottom,0px));margin:0;border-radius:20px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 48px rgba(15,23,42,.18)}.task-overlay-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 14px 12px;border-bottom:1px solid rgba(15,23,42,.06)}.task-overlay-head h3{margin:0;font-size:20px;line-height:1.2}.task-overlay-close{width:34px;height:34px;border:none;border-radius:999px;background:#f3f4f6;color:#111827;display:inline-flex;align-items:center;justify-content:center;font-size:24px;line-height:1;padding:0}.task-overlay-body{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch}.task-field{display:flex;flex-direction:column;gap:8px}.task-field label{margin:0;font-size:13px;font-weight:800;color:#111827}.task-field input,.task-field select,.task-field textarea{margin:0}.task-field textarea{min-height:94px;resize:vertical}.task-chip-row{display:flex;flex-wrap:wrap;gap:8px}.task-chip-btn{min-height:42px;padding:10px 12px;font-size:13px;font-weight:800}.task-overlay-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-top:1px solid rgba(15,23,42,.06);padding-bottom:calc(14px + env(safe-area-inset-bottom))}.task-overlay-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex:1}.task-overlay-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none}
-@media (max-width:560px){.task-patient-card-head{flex-direction:column;align-items:flex-start}.task-patient-card-badges{justify-content:flex-start}.task-item{gap:10px;padding:10px 12px 11px}.task-item-sep{margin:0 12px}.task-item-meta,.task-item-note{padding-left:17px}.task-item-actions{gap:6px}.task-overlay-footer{flex-direction:column;align-items:stretch}.task-overlay-actions{width:100%}.task-overlay-actions button,.task-overlay-footer>.danger{width:100%}}
+/* ── Tasks tab ───────────────────────────────────────────────────────── */
+.tasks-shell{display:flex;flex-direction:column;gap:12px;padding-bottom:4px}
+.tasks-sticky{position:sticky;top:0;z-index:4;background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 82%,rgba(248,250,252,0) 100%);padding:0 0 8px}
+.tasks-toolbar{display:flex;align-items:center;gap:10px}
+.tasks-filter-bar{display:flex;gap:8px;flex:1;overflow:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0}
+.tasks-filter-bar::-webkit-scrollbar{display:none}
+.tasks-filter-btn{border:none;background:#e5e7eb;color:#4b5563;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:700;line-height:1;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:background .15s ease,color .15s ease}
+.tasks-filter-btn .tasks-filter-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:rgba(15,23,42,.08);color:inherit;font-size:11px;font-weight:700;line-height:1}
+.tasks-filter-btn.active{background:var(--blue);color:#fff}
+.tasks-filter-btn.active .tasks-filter-count{background:rgba(255,255,255,.22);color:#fff}
+.tasks-add-btn{width:44px;min-width:44px;height:44px;padding:0;border-radius:14px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center}
+.tasks-add-btn svg{width:18px;height:18px;display:block}
+.task-patient-card{padding:0;overflow:hidden;position:relative}
+.task-patient-card.has-urgent::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--amber)}
+.task-patient-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px 8px}
+.task-patient-name-btn{background:none;border:none;padding:0;margin:0;font-size:16px;font-weight:800;line-height:1.2;color:var(--text);text-align:left;-webkit-tap-highlight-color:transparent;cursor:pointer;min-height:0}
+.task-patient-name-btn:active{opacity:.6}
+.task-patient-name-static{font-size:16px;font-weight:800;line-height:1.2;color:var(--text)}
+.task-urgent-badge{flex-shrink:0}
+.task-rows{display:flex;flex-direction:column}
+.task-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px}
+.task-row + .task-row{border-top:1px solid var(--line)}
+.task-row.is-done .task-text{color:var(--sub);text-decoration:line-through}
+.task-text{min-width:0;font-size:14px;font-weight:600;line-height:1.35;color:var(--text);word-break:break-word}
+.task-toggle-btn,.task-edit-btn{background:none;border:none;padding:0;display:inline-flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;cursor:pointer;flex-shrink:0;transition:transform .14s ease}
+.task-toggle-btn{width:34px;min-width:34px;height:34px}
+.task-toggle-btn:active{transform:scale(.94)}
+.task-toggle-btn svg{display:block;overflow:visible}
+.task-edit-btn{width:34px;height:34px;border-radius:10px;background:#f3f4f6;color:#4b5563}
+.task-edit-btn:active{transform:scale(.96)}
+.task-edit-btn svg{width:16px;height:16px;display:block}
+.tc-fill{transform-origin:17px 17px;transform:scale(0);opacity:0}
+.tc-tick{opacity:0}
+.task-complete-btn.animating .tc-ring{opacity:0;transition:opacity .12s}
+.task-complete-btn.animating .tc-fill{opacity:1;animation:tc-fill-in .32s cubic-bezier(0.4,0,0.2,1) forwards}
+.task-complete-btn.animating .tc-tick{opacity:1;animation:tc-draw .22s cubic-bezier(0.4,0,0.2,1) .12s forwards}
+@keyframes tc-fill-in{0%{transform:scale(0);opacity:1}55%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes tc-draw{from{stroke-dashoffset:22}to{stroke-dashoffset:0}}
+.task-done-card{opacity:.78}
+.tasks-empty-card{padding:18px 14px;text-align:center}
+.tasks-empty-title{font-size:15px;font-weight:800;color:var(--text)}
+.tasks-empty-copy{margin-top:6px;font-size:12px;color:var(--sub);line-height:1.45}
+
+/* ── Header task button ──────────────────────────────────────────────── */
+.header-task-btn{position:relative}
+.header-task-btn svg{width:21px;height:21px;display:block;stroke:currentColor;stroke-width:2.05;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.header-task-count{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#fff;color:var(--blue);font-size:11px;font-weight:800;line-height:18px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.header-task-count.urgent{background:var(--amber);color:#fff}
+
+/* ── Task overlay ────────────────────────────────────────────────────── */
+.task-overlay{position:fixed;inset:0;z-index:10082}
+.task-overlay-backdrop{position:fixed;left:0;right:0;top:var(--app-header-height,88px);bottom:0;background:rgba(15,23,42,.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.task-overlay-modal{position:fixed;left:14px;right:14px;top:calc(var(--app-header-height,88px) + 14px);bottom:calc(env(safe-area-inset-bottom) + 14px + var(--keyboard-extra-bottom,0px));margin:0;border-radius:20px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 48px rgba(15,23,42,.18);padding:0}
+.task-overlay-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px 12px;border-bottom:1px solid var(--line)}
+.task-overlay-head h3{margin:0;font-size:20px;line-height:1.2}
+.task-overlay-close{width:34px;height:34px;border:none;border-radius:999px;background:#f3f4f6;color:var(--text);display:inline-flex;align-items:center;justify-content:center;font-size:24px;line-height:1;padding:0}
+.task-overlay-body{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch}
+.task-field{display:flex;flex-direction:column;gap:8px}
+.task-field label{margin:0;font-size:13px;font-weight:800;color:var(--text)}
+.task-field input,.task-field select,.task-field textarea{margin:0;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:#f8fafc;font-size:15px;font-family:inherit}
+.task-field textarea{min-height:80px;resize:vertical}
+.task-field select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' stroke='%23667085' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 12px center;background-size:12px;padding-right:32px}
+.task-urgent-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:#f8fafc;border:1px solid var(--line);cursor:pointer}
+.task-urgent-row input[type="checkbox"]{margin:0;width:20px;height:20px;flex-shrink:0;accent-color:var(--amber)}
+.task-urgent-label-text{font-size:14px;font-weight:700;color:var(--text)}
+.task-overlay-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-top:1px solid var(--line);padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+.task-overlay-footer button{height:42px;padding:0 16px;border-radius:12px;font-weight:700;font-size:14px;border:none}
+.task-overlay-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:1}
+body.task-overlay-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none}
+
+/* ── Bottom nav with icons ───────────────────────────────────────────── */
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 10px;background:none;color:#374151;font-size:10px;line-height:1;min-width:0;border:none;-webkit-tap-highlight-color:transparent}
+.nav button svg{width:22px;height:22px;display:block;flex-shrink:0}
+.nav button span{display:block;line-height:1;font-size:10px;font-weight:600}
+.nav .active{color:var(--blue)}
+.nav .active span{font-weight:800}
 
 </style>
 <style>
@@ -2667,7 +2740,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 </div>
-<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2"></div></div><div class="header-actions"><button aria-label="Add task for current patient" class="header-lock header-task-btn hidden" id="headerTaskBtn" title="Add task"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 20V4"></path><path d="M7 5h10l-2 3 2 3H7z"></path></svg><span class="header-task-count hidden" id="headerTaskCountBadge">0</span></button><button aria-label="Lock app" class="header-lock" id="headerLockBtn" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></header>
+<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2"></div></div><div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-end;flex-shrink:0;align-self:stretch"><div style="display:flex;align-items:center;gap:8px"><button aria-label="Add task for current patient" class="header-lock header-task-btn hidden" id="headerTaskBtn" title="Add task"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6l2 2 4-4"></path><path d="M12 6h8"></path><path d="M4 14l2 2 4-4"></path><path d="M12 14h8"></path></svg><span class="header-task-count hidden" id="headerTaskCountBadge">0</span></button><button aria-label="Lock app" class="header-lock" id="headerLockBtn" title="Lock app"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="11"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button></div></div></div></header>
 <section class="container" id="patients">
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
@@ -2848,7 +2921,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div aria-hidden="true" class="med-edit-overlay hidden" id="medEditOverlay"><div class="med-edit-backdrop" id="medEditBackdrop"></div><div class="med-edit-modal" id="medEditCard"><div class="med-edit-body"><div class="med-edit-card"><div class="med-entry-head"><span class="med-entry-summary" id="medEditSummary">Medication</span><div class="med-edit-head-actions"><button aria-label="Cancel medication edit" class="med-edit-actionbtn" id="medEditCancelBtn" type="button">Cancel</button><button aria-label="Save medication edit" class="med-edit-actionbtn primary" id="medEditSaveBtn" type="button">Save</button></div></div><div class="med-entry-body"><label>Medication</label><input autocapitalize="off" autocomplete="off" autocorrect="off" class="med-name" id="medEditName" placeholder="Start typing drug name" spellcheck="false" type="text"/><label class="med-dose-label">Dose</label><div class="med-dose-row hidden" id="medEditDoseRow"></div><input class="med-dose" id="medEditDose" placeholder="Dose" type="text"/><label>Frequency</label><div class="med-frequency-row" id="medEditFrequencyRow"></div><input class="med-frequency" id="medEditFrequency" placeholder="Frequency e.g. QDS PRN" type="text"/><label class="med-details-label">Details</label><input class="med-details" id="medEditDetails" placeholder="Optional notes" type="text"/></div></div></div></div></div>
 <div aria-hidden="true" class="meds-overlay hidden" id="medsOverlay"><div class="meds-overlay-backdrop" id="medsOverlayBackdrop"></div><div class="card meds-overlay-modal meds-overlay-modal-single" id="medsOverlayModal"><div class="meds-overlay-body" id="medsOverlayBody"><div class="meds-overlay-card meds-overlay-card-single" id="medsOverlayCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="medsOverlayTitle">Add medication</span><button aria-label="Close medications" class="med-entry-delete meds-overlay-close-inline" id="medsOverlayCloseBtn" type="button">×</button></div><div class="med-entry-body meds-overlay-entry-body"><label>Medication</label><input autocapitalize="off" autocomplete="off" autocorrect="off" class="med-name" id="medsOverlayName" placeholder="Start typing drug name" spellcheck="false" type="text"/><label class="med-dose-label">Dose</label><div class="med-dose-row hidden" id="medsOverlayDoseRow"></div><input class="med-dose" id="medsOverlayDose" placeholder="Dose" type="text"/><label>Frequency</label><div class="med-frequency-row" id="medsOverlayFrequencyRow"></div><input class="med-frequency" id="medsOverlayFrequency" placeholder="Frequency e.g. QDS PRN" type="text"/><label class="med-details-label">Details</label><input class="med-details" id="medsOverlayDetails" placeholder="Optional notes" type="text"/><div id="medsOverlayBottomButtons" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px"><button id="medsOverlayAddAnotherBtn" type="button">Add another</button><button id="medsOverlayClearBtn" type="button">Clear</button><button class="done-green" id="medsOverlayDoneBtn" type="button">Done</button></div></div></div></div></div></div>
 <div aria-hidden="true" class="exam-findings-overlay hidden" id="examFindingsOverlay"><div class="exam-findings-backdrop" id="examFindingsBackdrop"></div><div class="card exam-findings-modal" id="examFindingsModal"><div class="exam-findings-head"><h3>Examination findings</h3><button aria-label="Close examination findings" class="exam-findings-close" id="examFindingsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="examFindingsText">Edit findings</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="examFindingsText" type="button">Dictate</button></div><textarea id="examFindingsText" placeholder="Enter or edit examination findings"></textarea></div><div class="exam-findings-presets" id="examFindingsPresets"></div></div></div><div class="exam-findings-footer"><button id="examFindingsClearBtn" type="button">Clear</button><button class="primary" id="examFindingsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="exam-findings-overlay hidden" id="pmhPresetsOverlay"><div class="exam-findings-backdrop" id="pmhPresetsBackdrop"></div><div class="card exam-findings-modal" id="pmhPresetsModal"><div class="exam-findings-head"><h3>PMH presets</h3><button aria-label="Close PMH presets" class="exam-findings-close" id="pmhPresetsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="pmhPresetsText">Edit PMH</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="pmhPresetsText" type="button">Dictate</button></div><textarea id="pmhPresetsText" placeholder="Enter or edit PMH"></textarea></div><div class="exam-findings-presets" id="pmhPresetsList"></div></div></div><div class="exam-findings-footer"><button id="pmhPresetsClearBtn" type="button">Clear</button><button class="primary" id="pmhPresetsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="exam-findings-overlay hidden" id="socialHistoryPresetsOverlay"><div class="exam-findings-backdrop" id="socialHistoryPresetsBackdrop"></div><div class="card exam-findings-modal" id="socialHistoryPresetsModal"><div class="exam-findings-head"><h3>Social history presets</h3><button aria-label="Close social history presets" class="exam-findings-close" id="socialHistoryPresetsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="socialHistoryPresetsText">Edit social history</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="socialHistoryPresetsText" type="button">Dictate</button></div><textarea id="socialHistoryPresetsText" placeholder="Enter or edit social history"></textarea></div><div class="exam-findings-presets" id="socialHistoryPresetsList"></div></div></div><div class="exam-findings-footer"><button id="socialHistoryPresetsClearBtn" type="button">Clear</button><button class="primary" id="socialHistoryPresetsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="meds-overlay iv-rebuilt-overlay hidden" id="ivEditOverlay"><div class="meds-overlay-backdrop iv-edit-backdrop" id="ivEditBackdrop"></div><div aria-labelledby="ivEditTitle" aria-modal="true" class="card meds-overlay-modal meds-overlay-modal-single iv-rebuilt-modal" id="ivEditModal" role="dialog"><div class="meds-overlay-body" id="ivEditBody"><div class="meds-overlay-card meds-overlay-card-single iv-rebuilt-card" id="ivEditCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="ivEditTitle">IV medications administered</span><button aria-label="Close IV medications" class="med-entry-delete meds-overlay-close-inline iv-edit-close" id="ivEditCloseBtn" type="button">×</button></div><div class="meds-overlay-entry-body iv-overlay-entry-body hidden" id="ivSection"><button class="iv-info-label-btn" id="ivVipInfoBtn" type="button">VIP score</button><input enterkeyhint="next" id="ivVIP" type="text"/><div id="ivContainer"></div><div id="ivBottomButtons"><button id="addIVBtn" type="button">Add another</button><button id="clearIVBtn" type="button">Clear</button><button id="doneIVBtn" type="button">Done</button></div><button class="danger hidden" id="deleteIVBtn" type="button">Delete</button></div></div></div></div></div><div aria-hidden="true" class="vip-score-overlay hidden" id="vipScoreOverlay"><div class="vip-score-backdrop" id="vipScoreBackdrop"></div><div aria-labelledby="vipScoreTitle" aria-modal="true" class="card vip-score-modal" id="vipScoreModal" role="dialog"><div class="vip-score-head"><h3 id="vipScoreTitle">Visual Infusion Phlebitis (VIP) score</h3><button aria-label="Close VIP score table" class="vip-score-close" id="vipScoreCloseBtn" type="button">×</button></div><div class="vip-score-body"><div class="vip-score-card"><table class="vip-score-table"><thead><tr><th>Score</th><th>Findings</th><th>Suggested action</th></tr></thead><tbody><tr><td>0</td><td>Site appears healthy</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-safe">Observe cannula</span></td></tr><tr><td>1</td><td>Slight pain near site or slight redness</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-caution">Observe closely</span></td></tr><tr><td>2</td><td>Pain near site with redness and/or swelling</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula</span></td></tr><tr><td>3</td><td>Pain along cannula path with redness and induration</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>4</td><td>As score 3 plus a palpable venous cord</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>5</td><td>As score 4 plus pyrexia</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-urgent">Urgent review and treat per local policy</span></td></tr></tbody></table><div class="vip-score-note">Use local policy if it differs. Scores 2 or above usually mean the cannula should be removed or re-sited.</div></div></div></div></div><div aria-hidden="true" class="score-tools-overlay hidden" id="scoreToolsOverlay"><div class="score-tools-backdrop" id="scoreToolsBackdrop"></div><div class="card score-tools-modal" id="scoreToolsCard"><div class="score-tools-head"><button aria-expanded="false" aria-label="Show all score tools" class="score-tools-title-btn" id="scoreToolsTitleBtn" type="button"><h3>Scores</h3></button><button aria-label="Close scores" class="score-tools-close" id="scoreToolsCloseBtn" type="button">×</button></div><div class="score-tools-tabs-wrap" id="scoreToolsTabsWrap"><div class="score-tools-tabs" id="scoreToolsTabs"><button class="score-tool-tab active" data-score-tool-tab="cfs" type="button">CFS</button><button class="score-tool-tab" data-score-tool-tab="amt10" type="button">AMT10</button><button class="score-tool-tab" data-score-tool-tab="4at" type="button">4AT</button><button class="score-tool-tab" data-score-tool-tab="gcs" type="button">GCS</button><button class="score-tool-tab" data-score-tool-tab="must" type="button">MUST</button><button class="score-tool-tab" data-score-tool-tab="waterlow" type="button">Waterlow</button></div></div><div class="score-tools-body" id="scoreToolsBody"><div class="score-tool-panel" data-score-tool-panel="cfs"><div class="score-tool-card"><h4>Clinical Frailty Scale</h4><div class="score-tool-help">Score baseline frailty rather than the acute illness state.</div><div class="score-choice-grid" id="cfsChoiceGrid"></div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="amt10"><div class="score-tool-card"><h4>AMT10</h4><div class="score-tool-help">1 point per correct answer · Tap Yes for correct, No for incorrect or unable</div><div class="score-qrows" id="amt10Rows"></div><div class="score-summary-box" id="amt10SummaryBox">AMT10 - score pending</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="4at"><div class="score-tool-card"><div class="score-subhead"><h4>4AT</h4><div class="score-mini-note">Rapid delirium screen /12</div></div><div class="score-tool-help">Use the official 4AT scoring below · AMT4 is shown automatically from AMT10 when all 4 orientation items have been answered; otherwise manual AMT4 scoring is available here</div><div class="score-4at-grid"><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Alertness</div><div class="score-4at-task">Observe whether the patient is fully alert or clearly abnormally drowsy or agitated</div></div><div class="score-4at-options" id="fourAtAlertnessRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">AMT4</div><div class="score-4at-task">Test age, date of birth, place, and current year</div><div class="score-inline-note score-4at-subnote" id="fourAtAmt4Note">Manual scoring is available if the AMT10 orientation items have not all been completed</div></div><div class="score-4at-options" id="fourAtAmt4Row"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Attention</div><div class="score-4at-task">Ask the patient to say the months of the year backwards, starting from December</div></div><div class="score-4at-options" id="fourAtAttentionRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Acute change or fluctuating course</div><div class="score-4at-task">Is there evidence of a significant change or fluctuation in mental state over the last 2 weeks, still present in the last 24 hours</div></div><div class="score-4at-options" id="fourAtAcuteRow"></div></div></div><div class="score-summary-box" id="fourAtSummaryBox">4AT incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="gcs"><div class="score-tool-card"><div class="score-subhead"><h4>GCS</h4><div class="score-mini-note">Glasgow Coma Scale /15</div></div><div class="score-tool-help">Select the best eye, verbal and motor response.</div><div class="score-section-stack"><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Eye opening</h4></div><div class="score-qrows" id="gcsEyeRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Verbal response</h4></div><div class="score-qrows" id="gcsVerbalRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Motor response</h4></div><div class="score-qrows" id="gcsMotorRows"></div></div></div><div class="score-summary-box" id="gcsSummaryBox">GCS incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="must"><div class="score-tool-card"><div class="score-subhead"><h4>MUST</h4><div class="score-mini-note">Malnutrition Universal Screening Tool</div></div><div class="score-tool-help">Enter height and weight to calculate BMI, or select the BMI score directly if measurements are not available.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="must" for="mustHeightInput" id="mustHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="mustHeightMetricWrap"><input id="mustHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="mustHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="mustHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="must" for="mustWeightInput" id="mustWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="mustWeightMetricWrap"><input id="mustWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="mustWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="mustWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>BMI score</h4><div class="score-mini-note" id="mustBmiValue">BMI pending</div></div><div class="score-chip-row" id="mustBmiScoreRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Unplanned weight loss in past 3–6 months</h4></div><div class="score-chip-row" id="mustWeightLossRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Acute disease effect</h4></div><div class="score-chip-row" id="mustAcuteRow"></div><div class="score-inline-note">Add 2 if acutely ill and there has been or is likely to be no nutritional intake for more than 5 days.</div></div><div class="score-summary-box" id="mustSummaryBox">MUST incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="waterlow"><div class="score-tool-card"><div class="score-subhead"><h4>Waterlow</h4><div class="score-mini-note">Pressure ulcer risk screen</div></div><div class="score-tool-help">Complete each category using the option that best fits the patient. Enter weight and height to calculate BMI, or choose the build / BMI option directly if BMI is already known.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="waterlow" for="waterlowWeightInput" id="waterlowWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="waterlowWeightMetricWrap"><input id="waterlowWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="waterlowWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="waterlowWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="waterlow" for="waterlowHeightInput" id="waterlowHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="waterlowHeightMetricWrap"><input id="waterlowHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="waterlowHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="waterlowHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Build / BMI</h4><div class="score-mini-note" id="waterlowBmiValue">BMI optional</div></div><div class="score-chip-row" id="waterlowBuildRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Sex and age</h4></div><div class="score-chip-row" id="waterlowSexRow"></div><div class="score-chip-row" id="waterlowAgeRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Continence</h4></div><div class="score-chip-row" id="waterlowContinenceRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Skin / visual risk areas</h4></div><div class="score-chip-row" id="waterlowSkinRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Mobility</h4></div><div class="score-chip-row" id="waterlowMobilityRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Nutrition / appetite</h4></div><div class="score-chip-row" id="waterlowAppetiteRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Tissue malnutrition</h4></div><div class="score-chip-row" id="waterlowTissueRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Neurological deficit</h4></div><div class="score-chip-row" id="waterlowNeuroRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Major surgery / trauma</h4></div><div class="score-chip-row" id="waterlowSurgeryRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Medication</h4></div><div class="score-chip-row" id="waterlowMedicationRow"></div></div><div class="score-summary-box" id="waterlowSummaryBox">Waterlow incomplete</div></div></div></div><div class="score-tools-footer"><button id="scoreToolsClearBtn" type="button">Clear</button><button class="primary" id="scoreToolsInsertBtn" type="button">Done</button></div></div></div>
-<section class="container hidden" id="tasks"><div class="tasks-shell"><div class="tasks-sticky"><div class="card tasks-header-card"><div class="tasks-title-row"><div class="tasks-title-wrap"><h3>Tasks</h3><div class="tasks-metrics" id="tasksMetrics"><span>Open <strong id="tasksOpenCount">0</strong></span><span>Now <strong id="tasksNowCount">0</strong></span><span>Done <strong id="tasksDoneCount">0</strong></span></div></div><button aria-label="Add task" class="plus-btn tasks-add-btn" id="tasksAddBtn" type="button">＋</button></div></div><div class="tasks-filter-bar" id="tasksFilterBar"></div></div><div class="tasks-list" id="tasksOpenList"></div><div class="tasks-done-wrap" id="tasksDoneWrap"></div></div></section>
+<section class="container hidden" id="tasks"><div class="tasks-shell"><div class="tasks-sticky"><div class="tasks-toolbar"><div class="tasks-filter-bar" id="tasksFilterBar"></div><button aria-label="Add task" class="tasks-add-btn primary" id="tasksAddBtn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div><div id="tasksList"></div></div></section><div aria-hidden="true" class="task-overlay hidden" id="taskOverlay"><div class="task-overlay-backdrop" id="taskOverlayBackdrop"></div><div aria-labelledby="taskOverlayTitle" aria-modal="true" class="card task-overlay-modal" id="taskOverlayModal" role="dialog"><div class="task-overlay-head"><h3 id="taskOverlayTitle">Add task</h3><button aria-label="Close" class="task-overlay-close" id="taskOverlayCloseBtn" type="button">×</button></div><div class="task-overlay-body"><div class="task-field"><label for="taskPatientSelect">Patient</label><select id="taskPatientSelect"></select></div><div class="task-field"><label for="taskTextInput">Task</label><textarea id="taskTextInput" placeholder="What needs doing?" rows="3"></textarea></div><div class="task-field task-urgent-field"><label class="task-urgent-row" for="taskUrgentInput"><input id="taskUrgentInput" type="checkbox"/><span class="task-urgent-label-text">Mark as urgent</span></label></div></div><div class="task-overlay-footer"><button class="danger hidden" id="taskDeleteBtn" type="button">Delete</button><div class="task-overlay-actions"><button id="taskCancelBtn" type="button">Cancel</button><button class="primary" id="taskSaveBtn" type="button">Save</button></div></div></div></div>
 <section class="container hidden" id="handover">
 <div class="options-page-panel" id="optionsHomePanel">
 <div class="card">
@@ -2880,7 +2953,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_579_release.html</div><div>Source: hospital_at_home_v12_36_579_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_580_release.html</div><div>Source: hospital_at_home_v12_36_580_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3137,7 +3210,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <button class="reorder-reset-btn" id="reorderResetBtn" type="button">Reset</button>
 <button class="reorder-done-btn" id="reorderDoneBtn" type="button">Done</button>
 </div>
-<nav class="nav"><button id="navPatients"><svg aria-hidden="true" viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="12" y="3" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="3" y="12" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="12" y="12" width="7" height="7" rx="1.5" fill="currentColor"/></svg><span>Patients</span></button><button id="navTasks"><svg aria-hidden="true" viewBox="0 0 22 22" fill="none"><path d="M4 6h14M4 11h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="16" r="4" fill="currentColor"/><path d="M15.5 16l1 1 2-2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Tasks</span></button><button id="navHandover"><svg aria-hidden="true" viewBox="0 0 22 22" fill="none"><path d="M11 3a1.3 1.3 0 011.26.98l.28 1.1a6.1 6.1 0 011.1.64l1.07-.36a1.3 1.3 0 011.56.6l.5.86a1.3 1.3 0 01-.3 1.65l-.86.7c.04.27.06.54.06.83s-.02.56-.06.83l.86.7a1.3 1.3 0 01.3 1.65l-.5.86a1.3 1.3 0 01-1.56.6l-1.07-.36c-.34.25-.71.46-1.1.64l-.28 1.1A1.3 1.3 0 0111 19a1.3 1.3 0 01-1.26-.98l-.28-1.1a6.1 6.1 0 01-1.1-.64l-1.07.36a1.3 1.3 0 01-1.56-.6l-.5-.86a1.3 1.3 0 01.3-1.65l.86-.7A6.3 6.3 0 016.33 11c0-.29.02-.56.06-.83l-.86-.7a1.3 1.3 0 01-.3-1.65l.5-.86a1.3 1.3 0 011.56-.6l1.07.36c.34-.25.71-.46 1.1-.64l.28-1.1A1.3 1.3 0 0111 3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="11" cy="11" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg><span>Options</span></button></nav>
+<nav class="nav"><button id="navPatients"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>Patients</span></button><button id="navTasks"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l2 2 4-4"/><path d="M12 6h8"/><path d="M4 14l2 2 4-4"/><path d="M12 14h8"/></svg><span>Tasks</span></button><button id="navHandover"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Options</span></button></nav>
 <div class="context-menu-backdrop hidden" id="patientContextBackdrop"></div>
 <div aria-labelledby="patientContextTitle" aria-modal="true" class="patient-context-menu hidden" id="patientContextMenu" role="dialog">
 <div class="patient-context-header">
@@ -3148,7 +3221,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <button class="patient-context-action" id="patientContextOpenBtn" type="button"><span>Open patient</span><span class="patient-context-right">›</span></button>
 <button class="patient-context-action" id="patientContextEditBtn" type="button"><span>Edit patient details</span><span class="patient-context-right">›</span></button>
 <button class="patient-context-action" id="patientContextVisitBtn" type="button"><span>Visit</span><span class="patient-context-badge">Home</span></button>
-<button class="patient-context-action" id="patientContextTasksBtn" type="button"><span>Add task</span><span class="patient-context-badge tasks">＋</span></button>
+<button class="patient-context-action" id="patientContextTasksBtn" type="button"><span>Tasks</span><span class="patient-context-badge tasks">Flag</span></button>
 <div class="patient-context-sep"></div>
 <button class="patient-context-action danger" id="patientContextDeleteBtn" type="button"><span>Delete patient</span><span class="patient-context-right">×</span></button>
 </div>
@@ -3165,7 +3238,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="patient-context-sep"></div>
 <button class="patient-context-action danger" id="medContextDeleteBtn" type="button"><span>Delete medication</span><span class="patient-context-right">×</span></button>
 </div>
-</div><div aria-hidden="true" class="task-overlay hidden" id="taskOverlay"><div class="task-overlay-backdrop" id="taskOverlayBackdrop"></div><div aria-labelledby="taskOverlayTitle" aria-modal="true" class="card task-overlay-modal" id="taskOverlayModal" role="dialog"><div class="task-overlay-head"><h3 id="taskOverlayTitle">Add task</h3><button aria-label="Close tasks" class="task-overlay-close" id="taskOverlayCloseBtn" type="button">×</button></div><div class="task-overlay-body"><div class="task-field"><label for="taskTextInput">Task</label><input autocapitalize="sentences" autocomplete="off" enterkeyhint="done" id="taskTextInput" placeholder="Enter task" type="text"/></div><div class="task-field"><label for="taskPatientSelect">Linked patient</label><select id="taskPatientSelect"></select></div><div class="task-field"><label>Priority</label><input id="taskDueInput" type="hidden" value="today"/><div class="task-chip-row"><button class="choice-btn task-chip-btn" data-task-due="now" type="button">Now</button><button class="choice-btn task-chip-btn selected" data-task-due="today" type="button">Today</button><button class="choice-btn task-chip-btn" data-task-due="later" type="button">Later</button></div></div><div class="task-field"><label>Category</label><input id="taskCategoryInput" type="hidden" value="review"/><div class="task-chip-row task-chip-row-categories"><button class="choice-btn task-chip-btn selected" data-task-category="review" type="button">Review</button><button class="choice-btn task-chip-btn" data-task-category="bloods" type="button">Bloods</button><button class="choice-btn task-chip-btn" data-task-category="meds" type="button">Meds</button><button class="choice-btn task-chip-btn" data-task-category="admin" type="button">Admin</button><button class="choice-btn task-chip-btn" data-task-category="visit" type="button">Visit</button><button class="choice-btn task-chip-btn" data-task-category="discharge" type="button">Discharge</button></div></div><div class="task-field"><label for="taskNoteInput">Note</label><textarea id="taskNoteInput" placeholder="Optional short note"></textarea></div></div><div class="task-overlay-footer"><button class="danger hidden" id="taskDeleteBtn" type="button">Delete</button><div class="task-overlay-actions"><button id="taskCancelBtn" type="button">Cancel</button><button class="primary" id="taskSaveBtn" type="button">Save</button></div></div></div></div>
+</div>
 <div class="weight-history-backdrop hidden" id="renalReviewBackdrop"></div>
 <div aria-labelledby="renalReviewTitle" aria-modal="true" class="weight-history-modal renal-review-modal hidden" id="renalReviewModal" role="dialog">
 <button aria-label="Close medication alerts" class="weight-history-close" id="renalReviewCloseBtn" type="button">×</button>
@@ -3351,8 +3424,8 @@ const DEFAULT_MED_FREQUENCIES=["OD","BD","TDS","QDS","ON"];
 const defaultPatients={"1":{"name":"Mrs Law-test","age":82,"sex":"F","summary":"LRTI • IV ceftriaxone day 1","acuity":"AMBER","acuityClass":"amber","referralSource":"GSTT","timestamp":"","doa":"10 Mar 2026","listDetails":"Obs: T 37.8°C, BP 116/68, HR 94, SpO₂ 94% RA, RR 20","form":{"rr":"20","spo2":"94","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"37.8","bp":"116/68","hr":"94","weight":"64.2","bm":"6.8","hrPulse":"","conscious":"0","confusion":"0","issues":"1. LRTI cough\n2. Poor intake\n3. Pleuritic pain","examination":"Alert and engaging. Mild tachypnoea but speaking in full sentences. Scattered right basal crackles with no wheeze. Warm peripheries and no new oedema.","bloods":"05/04 09:20 | Hb 112 WCC 10.8 Neut 8.6 Plt 272 | Na 133 K+ 4.0 Urea 7.9 Cr 112 eGFR 46 | CRP 64 | Alb 32 ALT 40 ALP 116 Bili 11 CCa 2.20\n04/04 09:10 | Hb 111 WCC 12.4 Neut 10.1 Plt 268 | Na 132 K+ 4.1 Urea 8.4 Cr 118 eGFR 43 | CRP 86 | Alb 31 ALT 42 ALP 118 Bili 12 CCa 2.18\n03/04 08:30 | Hb 109 WCC 14.6 Neut 12.1 Plt 254 | Na 130 K+ 4.3 Urea 9.1 Cr 126 eGFR 38 | CRP 124 | Alb 29 ALT 45 ALP 121 Bili 13 CCa 2.16\n02/04 08:45 | Hb 110 WCC 15.2 Neut 12.9 Plt 248 | Na 129 K+ 4.5 Urea 9.8 Cr 132 eGFR 34 | CRP 148 | Alb 28 ALT 47 ALP 123 Bili 14 CCa 2.15\n01/04 08:15 | Hb 108 WCC 16.8 Neut 14.0 Plt 241 | Na 128 K+ 4.4 Urea 10.4 Cr 139 eGFR 31 | CRP 176 | Alb 27 ALT 49 ALP 126 Bili 15 CCa 2.13","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For fever / pleuritic discomfort"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"ceftriaxone","dose":"2g","serialExpiry":"A4821 / 10/27"}],"plan":"1. Give IV ceftriaxone today.\n2. Encourage fluids and monitor oral intake.\n3. Repeat obs later today and review if worsening breathlessness.","forDischargeSummary":"1. Complete antibiotic course.\n2. Safety-net re worsening breathlessness, fever or confusion.\n3. Consider CXR / hospital review if not improving."}},"2":{"name":"Mr Ree-test","age":76,"sex":"M","summary":"Heart failure • weight / diuresis review","acuity":"GREEN","acuityClass":"green","referralSource":"GP","timestamp":"","doa":"11 Mar 2026","listDetails":"Obs: T 36.6°C, BP 122/70, HR 80, SpO₂ 95% RA, RR 18","form":{"rr":"18","spo2":"95","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.6","bp":"122/70","hr":"80","weight":"83.5","bm":"6.2","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Oedema\n2. Diuresis review\n3. No CP/syncope","examination":"Comfortable at rest. Mild bilateral ankle oedema only. Bibasal crackles minimal and improved from yesterday. JVP not obviously elevated.","bloods":"04/04 08:35 | Hb 124 WCC 6.8 Neut 4.3 Plt 241 | Na 136 K+ 4.9 Urea 10.2 Cr 132 eGFR 46 | CRP 14 | Alb 34 ALT 31 ALP 102 Bili 9 CCa 2.24\n03/04 08:20 | Hb 126 WCC 7.1 Neut 4.8 Plt 236 | Na 138 K+ 4.6 Urea 9.4 Cr 118 eGFR 54 | CRP 18 | Alb 35 ALT 29 ALP 100 Bili 8 CCa 2.25","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Furosemide","dose":"80mg","frequency":"OD","details":"Current oral dose"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue current oral diuretic plan.\n2. Repeat weight and U&E tomorrow.\n3. Escalate if dizziness, hypotension or worsening dyspnoea.","forDischargeSummary":"1. Community HF follow-up.\n2. Repeat renal function in 1 week.\n3. Continue daily weights if possible."}},"3":{"name":"Mrs Coo-test","age":89,"sex":"F","summary":"Delirium • suspected UTI","acuity":"RED","acuityClass":"red","referralSource":"LAS","timestamp":"","doa":"12 Mar 2026","listDetails":"Obs: T 38.4°C, BP 96/54, HR 110, SpO₂ 91% RA, RR 24","form":{"rr":"24","spo2":"91","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"38.4","bp":"96/54","hr":"110","weight":"57.0","bm":"8.9","hrPulse":"","conscious":"0","confusion":"3","issues":"1. Acute delirium\n2. Suspected UTI\n3. Poor intake","examination":"Drowsy but rousable. Disorientated to place and time. Suprapubic tenderness present. No meningism. Peripheral perfusion slightly reduced.","bloods":"04/04 07:55 | Hb 103 WCC 15.9 Neut 13.8 Plt 312 | Na 128 K+ 4.7 Urea 12.4 Cr 156 eGFR 29 | CRP 124 | Alb 28 ALT 38 ALP 97 Bili 13 CCa 2.11\n03/04 08:05 | Hb 106 WCC 13.1 Neut 10.7 Plt 301 | Na 131 K+ 4.5 Urea 10.9 Cr 142 eGFR 34 | CRP 96 | Alb 30 ALT 34 ALP 93 Bili 11 CCa 2.18","medsGiven":false,"medsCollapsed":false,"medsFocusedIndex":null,"medEntries":[],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Senior clinical review today.\n2. Send urine sample if obtainable and check bloods.\n3. Low threshold for hospital conveyance if BP remains low or confusion worsens.","forDischargeSummary":"1. Update family and document escalation plan.\n2. Review culture results when available.\n3. Reassess need for admission if not settling."}},"4":{"name":"Mr Sha-test","age":68,"sex":"M","summary":"Cellulitis • oral step-down review","acuity":"GREEN","acuityClass":"green","referralSource":"PRUH","timestamp":"","doa":"13 Mar 2026","listDetails":"Obs: T 36.9°C, BP 128/74, HR 82, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.9","bp":"128/74","hr":"82","weight":"79.4","bm":"7.1","hrPulse":"","conscious":"0","confusion":"0","issues":"1. L leg cellulitis\n2. Pain improved\n3. Systemically well","examination":"Bright and comfortable. Erythema receding within marker line. Mild warmth only. No fluctuance, crepitus or discharge.","bloods":"03/04 10:20 | Hb 136 WCC 9.4 Neut 6.7 Plt 289 | Na 139 K+ 4.3 Urea 5.6 Cr 84 eGFR 78 | CRP 42 | Alb 37 ALT 24 ALP 88 Bili 8 CCa 2.29\n02/04 09:40 | Hb 134 WCC 11.6 Neut 8.5 Plt 276 | Na 138 K+ 4.2 Urea 5.9 Cr 88 eGFR 74 | CRP 68 | Alb 36 ALT 26 ALP 92 Bili 9 CCa 2.27","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Flucloxacillin","dose":"1g","frequency":"QDS","details":"Day 4 oral step-down"},{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For pain"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue oral flucloxacillin.\n2. Elevate leg and continue emollient / skin care.\n3. Review for discharge if improving again tomorrow.","forDischargeSummary":"1. Complete oral antibiotic course.\n2. Safety-net re spreading erythema, fever or increasing pain."}},"5":{"name":"Mrs Tur-test","age":73,"sex":"F","summary":"COPD exacerbation • oxygen / steroids","acuity":"AMBER","acuityClass":"amber","referralSource":"KCH","timestamp":"","doa":"15 Mar 2026","listDetails":"Obs: T 37.2°C, BP 134/78, HR 92, SpO₂ 90% 1.5L, RR 22","form":{"rr":"22","spo2":"90","oxygen":"2","oxygenFlow":"1.5L","scoreMode":"","temp":"37.2","bp":"134/78","hr":"92","weight":"69.0","bm":"9.8","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Infective COPD\n2. O2 requirement\n3. Wheeze improved","examination":"Mild work of breathing on 1.5L oxygen. Widespread expiratory wheeze with prolonged expiratory phase. No central cyanosis. Able to speak in full sentences.","bloods":"04/04 09:40 | Hb 127 WCC 11.2 Neut 8.6 Plt 255 | Na 134 K+ 4.6 Urea 7.8 Cr 92 eGFR 63 | CRP 58 | Alb 33 ALT 29 ALP 94 Bili 10 CCa 2.21\n03/04 09:05 | Hb 125 WCC 13.4 Neut 10.2 Plt 248 | Na 132 K+ 4.4 Urea 7.1 Cr 88 eGFR 68 | CRP 76 | Alb 31 ALT 33 ALP 96 Bili 11 CCa 2.19","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Prednisolone","dose":"30mg","frequency":"OD","details":"Day 2"},{"name":"Salbutamol nebules","dose":"2.5mg","frequency":"QDS","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue controlled oxygen aiming 88-92%.\n2. Continue rescue medications.\n3. Review later today if increased work of breathing or rising oxygen requirement.","forDischargeSummary":"1. Complete rescue pack course.\n2. Check inhaler technique and smoking status.\n3. COPD nurse follow-up if available."}},"6":{"name":"Mr Doy-test","age":84,"sex":"M","summary":"AKI / renal medication review","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"17 Mar 2026","listDetails":"Obs: T 36.7°C, BP 102/60, HR 94, SpO₂ 96% RA, RR 19","form":{"rr":"19","spo2":"96","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.7","bp":"102/60","hr":"94","weight":"71.0","bm":"5.7","hrPulse":"","conscious":"0","confusion":"0","issues":"1. AKI with worsening renal function\n2. Postural symptoms / likely dehydration\n3. Renally cleared / nephrotoxic medications need review","examination":"Alert and cooperative. Mucous membranes dry. Chest clear and no peripheral oedema. Abdomen soft and non-tender.","bloods":"05/04 08:20 | Hb 116 WCC 7.9 Neut 5.2 Plt 218 | Na 131 K+ 5.6 Urea 17.8 Cr 274 eGFR 20 | CRP 18 | Alb 35 ALT 25 ALP 88 Bili 10 CCa 2.18\n04/04 08:10 | Hb 117 WCC 8.1 Neut 5.4 Plt 222 | Na 130 K+ 5.3 Urea 15.6 Cr 218 eGFR 25 | CRP 21 | Alb 35 ALT 26 ALP 89 Bili 10 CCa 2.17\n03/04 08:00 | Hb 118 WCC 8.5 Neut 5.8 Plt 227 | Na 132 K+ 5.0 Urea 13.9 Cr 176 eGFR 30 | CRP 24 | Alb 35 ALT 26 ALP 90 Bili 10 CCa 2.18\n02/04 08:15 | Hb 119 WCC 8.8 Neut 6.1 Plt 230 | Na 133 K+ 4.7 Urea 11.8 Cr 148 eGFR 37 | CRP 27 | Alb 36 ALT 25 ALP 92 Bili 9 CCa 2.20\n01/04 08:05 | Hb 120 WCC 9.1 Neut 6.3 Plt 234 | Na 134 K+ 4.5 Urea 10.4 Cr 129 eGFR 45 | CRP 31 | Alb 36 ALT 24 ALP 94 Bili 9 CCa 2.21","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Apixaban","dose":"5mg","frequency":"BD","details":"AF usual regular medication"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":"Usual regular medication"},{"name":"Furosemide","dose":"40mg","frequency":"OD","details":"Usual regular medication"},{"name":"Metformin","dose":"500mg","frequency":"BD","details":"Usual regular medication"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"normal saline","dose":"500ml","serialExpiry":"NS284 / 08/27"}],"plan":"1. Give 500 mL normal saline slowly as prescribed and review renally active medicines.\n2. Hold / review metformin, ramipril and diuretic while assessing volume status.\n3. Check apixaban dose / suitability against current Cockcroft–Gault CrCl and repeat renal function tomorrow.","forDischargeSummary":"1. Reintroduce longer-term medicines only when renal function stable.\n2. Recheck renal function and potassium after medication changes.\n3. Safety-net re reduced urine output, vomiting or dizziness."}},"7":{"name":"Mrs Ben-test","age":70,"sex":"F","summary":"Diabetic foot infection • IV co-amoxiclav","acuity":"AMBER","acuityClass":"amber","referralSource":"GSTT","timestamp":"","doa":"19 Mar 2026","listDetails":"Obs: T 37.5°C, BP 118/72, HR 88, SpO₂ 98% RA, RR 18","form":{"rr":"18","spo2":"98","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"37.5","bp":"118/72","hr":"88","weight":"86.4","bm":"12.6","hrPulse":"","conscious":"0","confusion":"0","issues":"1. R diabetic foot\n2. Hyperglycaemia\n3. Podiatry involved","examination":"Systemically well. Dressing dry with no strike-through. Surrounding erythema mild and improving. Foot warm and perfused with no spreading streaking.","bloods":"05/04 09:00 | Hb 122 WCC 9.6 Neut 6.9 Plt 279 | Na 138 K+ 4.6 Urea 8.1 Cr 104 eGFR 56 | CRP 58 | Alb 33 ALT 32 ALP 118 Bili 11 CCa 2.24\n04/04 09:05 | Hb 121 WCC 10.7 Neut 7.8 Plt 274 | Na 137 K+ 4.8 Urea 8.9 Cr 109 eGFR 51 | CRP 74 | Alb 32 ALT 34 ALP 121 Bili 12 CCa 2.23\n03/04 09:15 | Hb 119 WCC 12.8 Neut 9.6 Plt 266 | Na 135 K+ 4.6 Urea 8.2 Cr 102 eGFR 56 | CRP 96 | Alb 31 ALT 36 ALP 124 Bili 13 CCa 2.21\n02/04 09:10 | Hb 118 WCC 14.2 Neut 10.8 Plt 258 | Na 134 K+ 4.7 Urea 7.9 Cr 98 eGFR 59 | CRP 118 | Alb 30 ALT 39 ALP 128 Bili 14 CCa 2.20\n01/04 09:00 | Hb 117 WCC 15.1 Neut 11.6 Plt 251 | Na 133 K+ 4.5 Urea 7.4 Cr 94 eGFR 62 | CRP 146 | Alb 30 ALT 41 ALP 130 Bili 14 CCa 2.18","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Paracetamol","dose":"1g","frequency":"QDS PRN","details":"For pain"}],"ivGiven":true,"ivCollapsed":true,"_ivCollapseTouched":false,"ivVIP":"0","ivEntries":[{"medication":"co-amoxiclav","dose":"1.2g","serialExpiry":"CA771 / 11/27"}],"plan":"1. Continue IV co-amoxiclav today.\n2. Recheck glucose profile and encourage hydration.\n3. Review with podiatry plan and consider oral step-down if improving.","forDischargeSummary":"1. Podiatry follow-up arranged.\n2. Continue off-loading and dressing plan.\n3. Step down to oral antibiotics when clinically appropriate."}},"8":{"name":"Mr Hug-test","age":91,"sex":"M","summary":"Constipation / frailty review","acuity":"GREEN","acuityClass":"green","referralSource":"RR","timestamp":"","doa":"21 Mar 2026","listDetails":"Obs: T 36.4°C, BP 130/76, HR 76, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.4","bp":"130/76","hr":"76","weight":"61.5","bm":"6.1","hrPulse":"","conscious":"0","confusion":"0","issues":"1. Frailty\n2. Constipation\n3. No red flags","examination":"Well in self and comfortable in chair. Abdomen soft, non-distended and non-tender. Bowel sounds present. Hydration reasonable today.","bloods":"05/04 10:50 | Hb 117 WCC 6.4 Neut 3.9 Plt 223 | Na 139 K+ 4.0 Urea 5.8 Cr 84 eGFR 72 | CRP 6 | Alb 37 ALT 21 ALP 82 Bili 7 CCa 2.29\n04/04 10:35 | Hb 116 WCC 6.8 Neut 4.1 Plt 221 | Na 139 K+ 4.1 Urea 5.9 Cr 86 eGFR 70 | CRP 7 | Alb 37 ALT 21 ALP 83 Bili 7 CCa 2.28\n03/04 10:20 | Hb 116 WCC 7.0 Neut 4.2 Plt 220 | Na 138 K+ 4.1 Urea 6.0 Cr 87 eGFR 69 | CRP 8 | Alb 36 ALT 22 ALP 83 Bili 7 CCa 2.28\n02/04 11:00 | Hb 116 WCC 7.2 Neut 4.4 Plt 219 | Na 138 K+ 4.1 Urea 6.2 Cr 88 eGFR 68 | CRP 9 | Alb 36 ALT 22 ALP 84 Bili 7 CCa 2.27\n01/04 10:40 | Hb 114 WCC 8.0 Neut 5.1 Plt 214 | Na 137 K+ 4.2 Urea 6.8 Cr 92 eGFR 64 | CRP 14 | Alb 35 ALT 24 ALP 86 Bili 8 CCa 2.25","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Movicol","dose":"2 sachets","frequency":"BD","details":""},{"name":"Senna","dose":"15mg","frequency":"ON","details":""}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Continue laxatives and encourage fluids.\n2. Mobilise as able with support.\n3. Review bowel action and abdominal symptoms tomorrow.","forDischargeSummary":"1. Continue bowel regimen short term then titrate down.\n2. Safety-net re pain, vomiting or failure to open bowels."}},"9":{"name":"Mrs Sid-test","age":78,"sex":"F","summary":"Hyponatraemia • possible SIAD / drug review","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"22 Mar 2026","listDetails":"Obs: T 36.5°C, BP 126/72, HR 78, SpO₂ 97% RA, RR 16","form":{"rr":"16","spo2":"97","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.5","bp":"126/72","hr":"78","weight":"63.5","bm":"5.9","hrPulse":"","conscious":"0","confusion":"0","sodiumFluidStatus":"euvolaemic","issues":"1. Hyponatraemia\n2. Mild fatigue / reduced appetite\n3. Medication review needed","examination":"Clinically euvolaemic. No oedema, no overt dehydration, chest clear.","bloods":"05/04 09:10 | Hb 121 WCC 6.7 Neut 4.1 Plt 248 | Na 127 K+ 4.1 Urea 4.6 Cr 64 eGFR 81 | CRP 8 | Serum Osm 264 | Urine Osm 542 | Urine Na 52 | TSH 1.6 | Cortisol 468 | Alb 36 ALT 22 ALP 84 Bili 9 CCa 2.24\n04/04 09:00 | Hb 122 WCC 6.9 Neut 4.3 Plt 252 | Na 128 K+ 4.2 Urea 4.8 Cr 66 eGFR 79 | CRP 9 | Serum Osm 266 | Urine Osm 518 | Urine Na 49 | Alb 36 ALT 21 ALP 83 Bili 8 CCa 2.23\n03/04 09:15 | Hb 123 WCC 7.1 Neut 4.5 Plt 256 | Na 130 K+ 4.3 Urea 5.0 Cr 68 eGFR 76 | CRP 11 | Alb 35 ALT 22 ALP 83 Bili 9 CCa 2.22","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Sertraline","dose":"50mg","frequency":"OD","details":"Usual regular medication"},{"name":"Omeprazole","dose":"20mg","frequency":"OD","details":"Usual regular medication"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Review medications that may contribute to hyponatraemia.\n2. Use sodium analysis overlay with current urine studies.\n3. Repeat sodium tomorrow and escalate if symptoms develop.","forDischargeSummary":"1. Continue sodium monitoring until stable.\n2. Review antidepressant / PPI contribution if sodium remains low."}},"10":{"name":"Mr Dry-test","age":83,"sex":"M","summary":"Hyponatraemia • dizziness / likely volume depletion","acuity":"AMBER","acuityClass":"amber","referralSource":"RR","timestamp":"","doa":"23 Mar 2026","listDetails":"Obs: T 36.4°C, BP 102/58, HR 92, SpO₂ 96% RA, RR 17","form":{"rr":"17","spo2":"96","oxygen":"0","oxygenFlow":"","scoreMode":"","temp":"36.4","bp":"102/58","hr":"92","weight":"72.0","bm":"6.4","hrPulse":"","conscious":"0","confusion":"0","sodiumFluidStatus":"hypovolaemic","issues":"1. Hyponatraemia\n2. Postural dizziness\n3. Likely dehydration / diuretic contribution","examination":"Dry mucous membranes and postural symptoms. No oedema. Clinically looks hypovolaemic.","bloods":"05/04 08:40 | Hb 129 WCC 7.4 Neut 4.8 Plt 231 | Na 126 K+ 3.2 Urea 14.8 Cr 118 eGFR 55 | CRP 7 | Serum Osm 268 | Urine Osm 418 | Urine Na 18 | TSH 2.3 | Cortisol 522 | Alb 35 ALT 24 ALP 88 Bili 10 CCa 2.20\n04/04 08:30 | Hb 130 WCC 7.8 Neut 5.1 Plt 236 | Na 128 K+ 3.4 Urea 12.9 Cr 109 eGFR 60 | CRP 8 | Serum Osm 270 | Urine Osm 392 | Urine Na 16 | Alb 35 ALT 24 ALP 87 Bili 10 CCa 2.21\n03/04 08:20 | Hb 131 WCC 8.0 Neut 5.4 Plt 240 | Na 131 K+ 3.7 Urea 11.2 Cr 101 eGFR 66 | CRP 9 | Alb 36 ALT 23 ALP 86 Bili 9 CCa 2.22","medsGiven":true,"medsCollapsed":true,"_medsCollapseTouched":false,"medsFocusedIndex":null,"medEntries":[{"name":"Bendroflumethiazide","dose":"2.5mg","frequency":"OD","details":"Usual regular medication"},{"name":"Ramipril","dose":"5mg","frequency":"OD","details":"Usual regular medication"}],"ivGiven":false,"ivCollapsed":false,"ivVIP":"","ivEntries":[],"plan":"1. Review volume status and contributing medications.\n2. Consider holding thiazide while correcting likely volume depletion.\n3. Repeat sodium and electrolytes after treatment.","forDischargeSummary":"1. Sodium follow-up needed after medication changes.\n2. Safety-net re worsening dizziness, confusion or vomiting."}}};
 let patients={}, currentPatient=null, deletedPatients=[], eventLogEntries=[], undoState=null, detailLoadedForCurrentPatient=false, selectedNewReferral="", selectedNewSex="", editingPatientId=null, patientSortMode="dateImported", patientSortDirection="desc", patientSearchQuery="", patientSearchVisible=false, patientStatusMeta={visible:false,allowUndo:false};
 const $=id=>document.getElementById(id), clone=obj=>JSON.parse(JSON.stringify(obj));
-function currentState(){return {patients:clone(patients),deletedPatients:clone(deletedPatients),eventLogEntries:clone(eventLogEntries),tasks:clone(typeof tasks!=='undefined'?tasks:[]),currentPatient}}
-function restoreState(state){patients=clone(state.patients||{});deletedPatients=clone(state.deletedPatients||[]);eventLogEntries=clone(state.eventLogEntries||[]);tasks=clone(state.tasks||[]);currentPatient=state.currentPatient||Number(Object.keys(patients)[0]||1);detailLoadedForCurrentPatient=false}
+function currentState(){return {patients:clone(patients),deletedPatients:clone(deletedPatients),eventLogEntries:clone(eventLogEntries),currentPatient}}
+function restoreState(state){patients=clone(state.patients||{});deletedPatients=clone(state.deletedPatients||[]);eventLogEntries=clone(state.eventLogEntries||[]);currentPatient=state.currentPatient||Number(Object.keys(patients)[0]||1);detailLoadedForCurrentPatient=false}
 function setUndoSnapshot(){undoState=currentState();try{localStorage.setItem(UNDO_KEY,JSON.stringify(undoState))}catch(e){}}
 function loadUndo(){
   try{
@@ -3543,9 +3616,6 @@ function loadData() {
         patients = parsed.patients;
         deletedPatients = parsed.deletedPatients || [];
         eventLogEntries = parsed.eventLogEntries || [];
-        tasks = (typeof normaliseTaskCollection === "function")
-          ? normaliseTaskCollection(Array.isArray(parsed.tasks) ? parsed.tasks : [], false)
-          : (Array.isArray(parsed.tasks) ? parsed.tasks : []);
         patientSortMode = parsed.patientSortMode === "az" ? "az" : "dateImported";
         patientSortDirection = parsed.patientSortDirection === "asc" ? "asc" : "desc";
         if (patientSortMode === "az" && !(parsed && parsed.patientSortDirection)) patientSortDirection = "asc";
@@ -3554,10 +3624,25 @@ function loadData() {
         if (patients[3] && !patients[3].sex) patients[3].sex = "F";
         currentPatient = parsed.currentPatient || Number(Object.keys(patients)[0] || 1);
         detailLoadedForCurrentPatient = false;
+        if(Array.isArray(parsed.tasks)){
+          parsed.tasks.forEach(legacy => {
+            if(!legacy || !legacy.text) return;
+            const pid = Number(legacy.patientId);
+            if(!Number.isFinite(pid) || !patients[pid]) return;
+            if(!Array.isArray(patients[pid].tasks)) patients[pid].tasks = [];
+            patients[pid].tasks.push({
+              id: String(legacy.id || ('task-legacy-' + Math.random().toString(36).slice(2,8))),
+              text: String(legacy.text).trim(),
+              urgent: legacy.due === 'now',
+              createdAt: legacy.createdAt || new Date().toISOString(),
+              completedAt: legacy.completedAt || (legacy.done ? new Date().toISOString() : null)
+            });
+          });
+        }
         upgradeStoredPatients();
         if (key !== STORAGE_KEY) {
           try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,tasks,patientSortMode,patientSortDirection}));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));
             localStorage.removeItem(key);
           } catch(e) {}
         }
@@ -3568,7 +3653,6 @@ function loadData() {
   patients = clone(defaultPatients);
   deletedPatients = [];
   eventLogEntries = [];
-  tasks = typeof getDefaultTasks === 'function' ? clone(getDefaultTasks()) : [];
   currentPatient = 1;
 }
 
@@ -5981,6 +6065,29 @@ function upgradeStoredPatients(){
       if(patient.form.weight) recordWeightHistory(patient, patient.form.weight, patient.importedAt || patient.createdAt || new Date().toISOString(), 'legacy');
     }
     if(patient.syncState) delete patient.syncState;
+    if(Array.isArray(patient.tasks)){
+      patient.tasks = patient.tasks.map(t => {
+        if(!t || !t.text) return null;
+        const text = String(t.text || '').trim();
+        if(!text) return null;
+        if('due' in t && !('urgent' in t)){
+          return {
+            id: String(t.id || ('task-legacy-' + Math.random().toString(36).slice(2,8))),
+            text,
+            urgent: t.due === 'now',
+            createdAt: t.createdAt || new Date().toISOString(),
+            completedAt: t.completedAt || (t.done ? new Date().toISOString() : null)
+          };
+        }
+        return {
+          id: String(t.id || ('task-legacy-' + Math.random().toString(36).slice(2,8))),
+          text,
+          urgent: !!t.urgent,
+          createdAt: t.createdAt || new Date().toISOString(),
+          completedAt: t.completedAt || null
+        };
+      }).filter(Boolean);
+    }
   });
 }
 // ─────────────────────────────────────────────────────────────────────────────
@@ -6553,7 +6660,7 @@ function openWorkbookLink(){
 }
 
 </script><script>
-function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,tasks:typeof tasks!=='undefined'?tasks:[],patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
+function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
 function nowString(){return new Date().toLocaleString([],{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}
 function hideAll(){["patients","tasks","handover","patientDetail","deletedPage","eventLogPage"].forEach(id=>$(id).classList.add("hidden"))}
 function setPatientViewportMode(active){document.body.classList.toggle("patients-section-active",!!active);document.documentElement.classList.toggle("patients-section-active",!!active)}
@@ -6579,7 +6686,7 @@ function showSection(id) {
   $("backBtn").classList.add("hidden");
   $("appHeader").classList.remove("has-back");
   if (id === "patients") setActive("navPatients");
-  if (id === "tasks") { setActive("navTasks"); if(typeof renderTasksPage === "function") renderTasksPage(); }
+  if (id === "tasks") { setActive("navTasks"); if(typeof renderTasksPage === 'function') renderTasksPage(); }
   if (id === "handover") {
     setActive("navHandover");
     populateNhsEmailField();
@@ -6589,7 +6696,6 @@ function showSection(id) {
   if (id === "deletedPage") { setActive("navHandover"); renderDeletedList(); }
   if (id === "eventLogPage") { setActive("navHandover"); renderEventLog(); }
   syncSharedHeaderHeight();
-  if(typeof updateHeaderTaskButton==='function') updateHeaderTaskButton();
 }
 
 function acuityClassFromValue(v){if(v==="RED") return "red"; if(v==="AMBER") return "amber"; if(v==="GREEN") return "green"; return "grey"}
@@ -6736,14 +6842,6 @@ function openPatientContextMenu(id, anchorEl){
   const meta=[ageSex(p.age,p.sex), referralLabel(p.referralSource)].filter(Boolean).join(' • ');
   $("patientContextSubtitle").textContent = meta || 'Quick actions';
   $("patientContextVisitBtn").querySelector('.patient-context-badge').textContent = p.visitSelected ? 'Added' : 'Home';
-  const taskMenuBadge=$("patientContextTasksBtn") && $("patientContextTasksBtn").querySelector('.patient-context-badge.tasks');
-  if(taskMenuBadge && typeof getPatientTaskCounts==='function'){
-    const taskCounts=getPatientTaskCounts(id);
-    taskMenuBadge.textContent = taskCounts.open ? String(taskCounts.open) : '＋';
-    taskMenuBadge.classList.toggle('has-open', !!taskCounts.open);
-    taskMenuBadge.classList.toggle('urgent', !!taskCounts.now);
-    taskMenuBadge.title = taskCounts.open ? `${taskCounts.open} open tasks` : 'Add task';
-  }
   document.body.classList.add('patient-context-open');
   if(backdrop){backdrop.classList.remove("hidden"); requestAnimationFrame(()=>backdrop.classList.add("show"));}
   if(menu){
@@ -7136,12 +7234,11 @@ function toggleAcpCollapse(){
   openAcpOverlay();
 }
 
-function getPatientListActionMarkup(patient, patientId){
+function getPatientListActionMarkup(patient){
   const chip = getPatientEscalationChip(patient);
-  const taskBadge = typeof getPatientTaskBadgeMarkup==='function' ? getPatientTaskBadgeMarkup(patientId) : '';
   const acuityClass = escapeHtml(patient && patient.acuityClass || 'green');
   const acuityLabel = escapeHtml(patient && patient.acuity || 'GREEN');
-  return `<div class="patient-actions"><div class="patient-acuity-stack${chip || taskBadge ? ' has-chip' : ''}">${taskBadge}${chip ? `<div class="patient-status-chip ${escapeHtml(chip.className)}" title="${escapeHtml(chip.title)}">${escapeHtml(chip.label)}</div>` : ''}<div class="badge ${acuityClass}">${acuityLabel}</div></div></div>`;
+  return `<div class="patient-actions"><div class="patient-acuity-stack${chip ? ' has-chip' : ''}">${chip ? `<div class="patient-status-chip ${escapeHtml(chip.className)}" title="${escapeHtml(chip.title)}">${escapeHtml(chip.label)}</div>` : ''}<div class="badge ${acuityClass}">${acuityLabel}</div></div></div>`;
 }
 
 function getPatientListCardMarkup(patient, id, options={}){
@@ -7165,13 +7262,13 @@ function getPatientListCardMarkup(patient, id, options={}){
           <span class="visit-label">Visit</span>
         </div>
         <div class="flag-action-wrap" aria-hidden="true">
-          <button class="flag-reveal-btn" data-flag-preview="${patientId}" aria-label="Add task" title="Add task">
+          <button class="flag-reveal-btn" data-flag-preview="${patientId}" aria-label="Flag for tasks" title="Flag for tasks">
             <svg class="flag-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M6 20V4"></path>
               <path d="M7 5h9l-2 3 2 3H7z"></path>
             </svg>
           </button>
-          <span class="flag-label">Task</span>
+          <span class="flag-label">Tasks</span>
         </div>
       </div>`;
   return `
@@ -7185,7 +7282,7 @@ function getPatientListCardMarkup(patient, id, options={}){
                 ${displaySettings.order.map(key=>displaySettings.enabled[key] ? getPatientListSectionMarkup(p,key) : '').join('')}
               </div>
             </button>
-            ${getPatientListActionMarkup(p, id)}
+            ${getPatientListActionMarkup(p)}
           </div>
         </div>
       </div>`;
@@ -7426,24 +7523,6 @@ function renderPatientList() {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const id = Number(btn.dataset.flagPreview || 0);
-      const shell = btn.closest('.swipe-shell');
-      if(typeof closeAllSwipeShells === 'function') closeAllSwipeShells();
-      if(id && typeof openTaskOverlayForPatient === 'function') openTaskOverlayForPatient(id);
-      if(shell){
-        shell.classList.remove('revealed','swiping','show-action','popped','pressing');
-        shell.style.removeProperty('--visit-pill-width');
-        shell.style.removeProperty('--visit-pill-scale');
-        shell.style.removeProperty('--visit-pill-opacity');
-        shell.style.removeProperty('--visit-bg-opacity');
-        shell.style.removeProperty('--visit-pill-shift');
-        const fg = shell.querySelector('.swipe-foreground');
-        if(fg){
-          fg.style.transform = 'translate3d(0,0,0)';
-          fg.dataset.offsetX = '0';
-          fg.dataset.justSwiped = '0';
-        }
-      }
     });
   });
 
@@ -8925,7 +9004,6 @@ function openPatient(id) {
   animatePatientDetailOpen(); // slide panel + header in from right
   saveData();
   calculateNews();
-  if(typeof updateHeaderTaskButton==='function') updateHeaderTaskButton();
   if(typeof renderBloodsSummaryCard==='function'){
     requestAnimationFrame(()=>{ try{ renderBloodsSummaryCard(); }catch(e){} });
   }
@@ -10493,8 +10571,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_579_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_579_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_580_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_580_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -10841,622 +10919,6 @@ function initPatientDetailEdgeSwipe(){
     setCollapsibleState
   });
 })(window);
-
-</script><script>
-window.HAH = window.HAH || { modules: {} };
-window.HAH.modules.tasks = true;
-
-const TASK_DUE_OPTIONS = [
-  { value: 'now', label: 'Now', order: 0 },
-  { value: 'today', label: 'Today', order: 1 },
-  { value: 'later', label: 'Later', order: 2 }
-];
-const TASK_CATEGORY_OPTIONS = [
-  { value: 'review', label: 'Review' },
-  { value: 'bloods', label: 'Bloods' },
-  { value: 'meds', label: 'Meds' },
-  { value: 'admin', label: 'Admin' },
-  { value: 'visit', label: 'Visit' },
-  { value: 'discharge', label: 'Discharge' }
-];
-const TASK_FILTER_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'now', label: 'Now' },
-  { value: 'today', label: 'Today' },
-  { value: 'done', label: 'Done' }
-];
-
-let tasks = [];
-let taskFilter = 'all';
-let taskDoneExpanded = false;
-let taskEditingId = null;
-let taskOverlayLastFocus = null;
-
-function getDefaultTasks(){
-  const now = Date.now();
-  return normaliseTaskCollection([
-    { id:'task-demo-1', patientId:1, text:'Give IV ceftriaxone and review temperature / oral intake', due:'now', category:'review', note:'Check later obs after antibiotics.', createdAt:new Date(now - (65 * 60 * 1000)).toISOString(), done:false },
-    { id:'task-demo-2', patientId:3, text:'Reassess delirium, chase urine sample, confirm escalation plan', due:'today', category:'review', createdAt:new Date(now - (32 * 60 * 1000)).toISOString(), done:false },
-    { id:'task-demo-3', patientId:6, text:'Repeat U&Es, review fluid balance and oral intake', due:'today', category:'bloods', createdAt:new Date(now - (14 * 60 * 1000)).toISOString(), done:false }
-  ], false);
-}
-
-function normaliseTaskDue(value){
-  return TASK_DUE_OPTIONS.some(item=>item.value===value) ? value : 'today';
-}
-function normaliseTaskCategory(value){
-  return TASK_CATEGORY_OPTIONS.some(item=>item.value===value) ? value : 'review';
-}
-function makeTaskId(){
-  return `task-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`;
-}
-function normaliseTask(task={}, index=0){
-  const createdAt = task && task.createdAt ? String(task.createdAt) : new Date(Date.now() + index).toISOString();
-  const done = !!(task && task.done);
-  const patientIdRaw = task && task.patientId;
-  const patientId = patientIdRaw==null || patientIdRaw===''
-    ? null
-    : (Number.isFinite(Number(patientIdRaw)) ? Number(patientIdRaw) : null);
-  const completedAt = done
-    ? String(task && task.completedAt || createdAt)
-    : '';
-  return {
-    id: String(task && task.id || makeTaskId()),
-    patientId,
-    text: String(task && task.text || '').trim(),
-    due: normaliseTaskDue(String(task && task.due || 'today')),
-    category: normaliseTaskCategory(String(task && task.category || 'review')),
-    note: String(task && task.note || '').trim(),
-    done,
-    createdAt,
-    completedAt
-  };
-}
-function normaliseTaskCollection(list, useDefaultsIfEmpty=false){
-  const source = Array.isArray(list) ? list : [];
-  const cleaned = source
-    .map((item, index)=>normaliseTask(item, index))
-    .filter(item=>item.text);
-  if(cleaned.length || !useDefaultsIfEmpty) return cleaned;
-  return getDefaultTasks().map((item, index)=>normaliseTask(item, index));
-}
-function getTaskById(taskId){
-  return tasks.find(task=>String(task.id)===String(taskId)) || null;
-}
-function taskDueMeta(value){
-  return TASK_DUE_OPTIONS.find(item=>item.value===value) || TASK_DUE_OPTIONS[1];
-}
-function taskCategoryLabel(value){
-  return (TASK_CATEGORY_OPTIONS.find(item=>item.value===value) || TASK_CATEGORY_OPTIONS[0]).label;
-}
-function taskDueLabel(value){
-  return taskDueMeta(value).label;
-}
-function taskOrderValue(task){
-  return taskDueMeta(task && task.due).order;
-}
-function taskTimeLabel(iso){
-  if(!iso) return '';
-  const dt = new Date(iso);
-  if(Number.isNaN(dt.getTime())) return '';
-  try{
-    return dt.toLocaleString([], { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
-  }catch(_e){
-    return dt.toISOString();
-  }
-}
-function taskPatientName(task){
-  if(task && task.patientId != null){
-    const patient = patients && patients[task.patientId];
-    if(patient && patient.name) return patient.name;
-    return 'Deleted patient';
-  }
-  return 'General task';
-}
-function taskPatientMeta(_task){
-  return '';
-}
-function getPatientTaskCounts(patientId){
-  const safeId = Number(patientId);
-  if(!Number.isFinite(safeId)) return { open:0, now:0 };
-  let open = 0;
-  let now = 0;
-  tasks.forEach(task=>{
-    if(task && !task.done && Number(task.patientId)===safeId){
-      open += 1;
-      if(task.due==='now') now += 1;
-    }
-  });
-  return { open, now };
-}
-function getPatientTaskBadgeMarkup(patientId){
-  const counts = getPatientTaskCounts(patientId);
-  if(!counts.open) return '';
-  const label = counts.open === 1 ? '1 task' : `${counts.open} tasks`;
-  const title = counts.now
-    ? `${counts.open} open tasks • ${counts.now} for now`
-    : `${counts.open} open tasks`;
-  return `<div class="patient-task-badge${counts.now ? ' now' : ''}" title="${escapeHtml(title)}">${escapeHtml(label)}</div>`;
-}
-function updateHeaderTaskButton(){
-  const btn = $('headerTaskBtn');
-  const countBadge = $('headerTaskCountBadge');
-  if(!btn) return;
-  const detailVisible = !!($('patientDetail') && !$('patientDetail').classList.contains('hidden') && currentPatient && patients && patients[currentPatient]);
-  btn.classList.toggle('hidden', !detailVisible);
-  if(!detailVisible){
-    if(countBadge){
-      countBadge.textContent = '0';
-      countBadge.classList.add('hidden');
-      countBadge.classList.remove('urgent');
-    }
-    btn.setAttribute('aria-hidden', 'true');
-    return;
-  }
-  btn.removeAttribute('aria-hidden');
-  const counts = getPatientTaskCounts(currentPatient);
-  const openCount = counts.open || 0;
-  const label = openCount ? `Add task for current patient • ${openCount} open` : 'Add task for current patient';
-  btn.setAttribute('aria-label', label);
-  btn.title = label;
-  if(countBadge){
-    countBadge.textContent = String(openCount);
-    countBadge.classList.toggle('hidden', !openCount);
-    countBadge.classList.toggle('urgent', !!counts.now);
-  }
-}
-function refreshTaskDependentUi(opts={}){
-  if(typeof renderPatientList==='function') renderPatientList();
-  if(typeof updateHeaderTaskButton==='function') updateHeaderTaskButton();
-  if(opts.renderTasks !== false && $('tasks') && !$('tasks').classList.contains('hidden')) renderTasksPage();
-}
-function compareTasksOpen(a, b){
-  const dueDiff = taskOrderValue(a) - taskOrderValue(b);
-  if(dueDiff) return dueDiff;
-  const aTime = new Date(a && a.createdAt || 0).getTime();
-  const bTime = new Date(b && b.createdAt || 0).getTime();
-  return bTime - aTime;
-}
-function compareTasksDone(a, b){
-  const aTime = new Date(a && (a.completedAt || a.createdAt) || 0).getTime();
-  const bTime = new Date(b && (b.completedAt || b.createdAt) || 0).getTime();
-  return bTime - aTime;
-}
-function getTaskCounts(){
-  const open = tasks.filter(task=>!task.done).length;
-  const now = tasks.filter(task=>!task.done && task.due==='now').length;
-  const done = tasks.filter(task=>task.done).length;
-  return { open, now, done };
-}
-function fireTaskHaptic(){
-  try{
-    if(typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') navigator.vibrate(10);
-  }catch(_e){}
-}
-function taskStatusText(task){
-  if(task.done) return `Done • ${taskTimeLabel(task.completedAt || task.createdAt)}`;
-  const bits = [taskCategoryLabel(task.category), taskDueLabel(task.due).toLowerCase()];
-  const created = taskTimeLabel(task.createdAt);
-  if(created) bits.push(created);
-  return bits.filter(Boolean).join(' • ');
-}
-function taskNoteMarkup(task){
-  if(!task.note) return '';
-  return `<div class="task-item-note">${escapeHtml(task.note)}</div>`;
-}
-function taskActionIconMarkup(kind){
-  if(kind === 'edit'){
-    return '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4Z"></path></svg>';
-  }
-  if(kind === 'undo'){
-    return '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"></path><path d="M20 20a8 8 0 0 0-8-8H4"></path></svg>';
-  }
-  return '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"></path></svg>';
-}
-function taskActionButtonMarkup(task, action, opts={}){
-  const done = !!opts.done;
-  const isToggle = action === 'toggle';
-  const kind = isToggle ? (done ? 'undo' : 'check') : 'edit';
-  const label = isToggle
-    ? (done ? 'Reopen task' : 'Complete task')
-    : 'Edit task';
-  const attrName = isToggle ? 'data-task-toggle' : 'data-task-edit';
-  if(kind === 'check'){
-    return `<button class="task-icon-btn task-complete-btn" ${attrName}="${escapeHtml(task.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><svg viewBox="0 0 34 34" width="34" height="34" aria-hidden="true"><circle class="tc-ring" cx="17" cy="17" r="15" fill="none" stroke="#34C759" stroke-width="2.2"/><circle class="tc-fill" cx="17" cy="17" r="15" fill="#34C759"/><path class="tc-tick" d="M9.5 17l5 5 10-10" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke-dasharray="22" stroke-dashoffset="22"/></svg></button>`;
-  }
-  return `<button class="task-icon-btn ${isToggle ? 'primary' : 'secondary'}" ${attrName}="${escapeHtml(task.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">${taskActionIconMarkup(kind)}</button>`;
-}
-function taskItemMarkup(task, opts={}){
-  const done = !!opts.done;
-  const dueClass = escapeHtml(task.due || 'today');
-  return `
-    <div class="task-item${done ? ' is-done' : ''}" data-task-row="${escapeHtml(task.id)}">
-      <div class="task-item-main">
-        <div class="task-item-title-row">
-          <div class="task-priority-dot ${dueClass}"></div>
-          <div class="task-item-title">${escapeHtml(task.text)}</div>
-        </div>
-        <div class="task-item-meta">${escapeHtml(taskStatusText(task))}</div>
-        ${taskNoteMarkup(task)}
-      </div>
-      <div class="task-item-actions">
-        ${taskActionButtonMarkup(task, 'edit', opts)}
-        ${taskActionButtonMarkup(task, 'toggle', opts)}
-      </div>
-    </div>`;
-}
-function taskGroupKey(task){
-  return task && task.patientId != null ? `patient-${Number(task.patientId)}` : 'general';
-}
-function groupTasksByPatient(items, opts={}){
-  const done = !!opts.done;
-  const grouped = new Map();
-  items.forEach(task=>{
-    const key = taskGroupKey(task);
-    if(!grouped.has(key)){
-      grouped.set(key, {
-        key,
-        patientId: task && task.patientId != null ? Number(task.patientId) : null,
-        patientName: taskPatientName(task),
-        patientMeta: taskPatientMeta(task),
-        tasks: [],
-        hasNow: false,
-        general: !(task && task.patientId != null),
-        priorityOrder: 99,
-        latestTime: 0
-      });
-    }
-    const group = grouped.get(key);
-    group.tasks.push(task);
-    if(task && task.due === 'now') group.hasNow = true;
-    group.priorityOrder = Math.min(group.priorityOrder, taskOrderValue(task));
-    const timeValue = new Date(done ? (task && (task.completedAt || task.createdAt)) : (task && task.createdAt) || 0).getTime();
-    if(Number.isFinite(timeValue) && timeValue > group.latestTime) group.latestTime = timeValue;
-  });
-  const compare = done ? compareTasksDone : compareTasksOpen;
-  const groups = Array.from(grouped.values()).map(group=>{
-    group.tasks.sort(compare);
-    return group;
-  });
-  groups.sort((a,b)=>{
-    if(a.general !== b.general) return a.general ? 1 : -1;
-    if(a.priorityOrder !== b.priorityOrder) return a.priorityOrder - b.priorityOrder;
-    if(a.hasNow !== b.hasNow) return a.hasNow ? -1 : 1;
-    if(a.latestTime !== b.latestTime) return b.latestTime - a.latestTime;
-    return String(a.patientName || '').localeCompare(String(b.patientName || ''), undefined, { sensitivity:'base' });
-  });
-  return groups;
-}
-function taskPatientBadgesMarkup(group, opts={}){
-  const done = !!opts.done;
-  const badges = [];
-  if(group.tasks.length > 1){
-    badges.push(`<span class="task-patient-badge count">${group.tasks.length} tasks</span>`);
-  }
-  if(group.hasNow && !done){
-    badges.push('<span class="task-patient-badge urgent">Now</span>');
-  }
-  return badges.join('');
-}
-function taskPatientCardMarkup(group, opts={}){
-  const done = !!opts.done;
-  const badges = taskPatientBadgesMarkup(group, opts);
-  return `
-    <div class="card task-patient-card${group.hasNow && !done ? ' urgent' : ''}${group.general ? ' general' : ''}${done ? ' done' : ''}">
-      <div class="task-patient-card-head">
-        <div class="task-patient-card-titlewrap">
-          <div class="task-patient-card-title">${escapeHtml(group.patientName || 'General tasks')}</div>
-          ${group.patientMeta ? `<div class="task-patient-card-meta">${escapeHtml(group.patientMeta)}</div>` : ''}
-        </div>
-        ${badges ? `<div class="task-patient-card-badges">${badges}</div>` : ''}
-      </div>
-      <div class="task-items">${group.tasks.map((task,index)=>`${index ? '<div class="task-item-sep"></div>' : ''}${taskItemMarkup(task, opts)}`).join('')}</div>
-    </div>`;
-}
-function taskPatientCardsMarkup(items, opts={}){
-  if(!items.length) return '';
-  return groupTasksByPatient(items, opts).map(group=>taskPatientCardMarkup(group, opts)).join('');
-}
-function taskEmptyMarkup(message, subcopy=''){
-  return `<div class="card tasks-empty-card"><div class="tasks-empty-title">${escapeHtml(message)}</div>${subcopy ? `<div class="tasks-empty-copy">${escapeHtml(subcopy)}</div>` : ''}</div>`;
-}
-
-function renderTasksPage(){
-  const section = $('tasks');
-  if(!section) return;
-  updateHeaderTaskButton();
-  const counts = getTaskCounts();
-  if($('tasksOpenCount')) $('tasksOpenCount').textContent = String(counts.open);
-  if($('tasksNowCount')) $('tasksNowCount').textContent = String(counts.now);
-  if($('tasksDoneCount')) $('tasksDoneCount').textContent = String(counts.done);
-
-  const filterBar = $('tasksFilterBar');
-  if(filterBar){
-    filterBar.innerHTML = TASK_FILTER_OPTIONS.map(item=>`<button class="tasks-filter-btn${taskFilter===item.value ? ' active' : ''}" data-task-filter="${item.value}" type="button">${escapeHtml(item.label)}</button>`).join('');
-  }
-
-  const openTasks = tasks.filter(task=>!task.done).sort(compareTasksOpen);
-  const doneTasks = tasks.filter(task=>task.done).sort(compareTasksDone);
-  const openWrap = $('tasksOpenList');
-  const doneWrap = $('tasksDoneWrap');
-  if(openWrap) openWrap.innerHTML = '';
-  if(doneWrap) doneWrap.innerHTML = '';
-
-  if(taskFilter === 'done'){
-    if(openWrap) openWrap.innerHTML = doneTasks.length
-      ? taskPatientCardsMarkup(doneTasks, { done:true })
-      : taskEmptyMarkup('Completed tasks', 'No tasks completed yet.');
-  } else {
-    let visibleOpenTasks = openTasks;
-    let emptyTitle = 'No open tasks';
-    let emptyCopy = 'A suspiciously calm little board round.';
-    if(taskFilter === 'now'){
-      visibleOpenTasks = openTasks.filter(task=>task.due === 'now');
-      emptyTitle = 'No tasks for now';
-      emptyCopy = 'You’ve cleared the urgent jobs.';
-    } else if(taskFilter === 'today'){
-      visibleOpenTasks = openTasks.filter(task=>task.due === 'today');
-      emptyTitle = 'No tasks for today';
-      emptyCopy = 'Nothing is queued in the today list.';
-    }
-    if(openWrap) openWrap.innerHTML = visibleOpenTasks.length
-      ? taskPatientCardsMarkup(visibleOpenTasks)
-      : taskEmptyMarkup(emptyTitle, emptyCopy);
-
-    if(taskFilter === 'all' && doneWrap){
-      const doneBody = doneTasks.length
-        ? taskPatientCardsMarkup(doneTasks, { done:true })
-        : '<div class="task-done-empty">No completed tasks yet.</div>';
-      doneWrap.innerHTML = `
-        <div class="task-group done-group">
-          <button class="task-done-toggle${taskDoneExpanded ? ' expanded' : ''}" id="tasksDoneToggle" type="button" aria-expanded="${taskDoneExpanded ? 'true' : 'false'}">
-            <span>Done (${doneTasks.length})</span>
-            <span class="task-done-chevron">›</span>
-          </button>
-          <div class="task-done-body${taskDoneExpanded ? '' : ' hidden'}" id="tasksDoneBody">${doneBody}</div>
-        </div>`;
-    }
-  }
-
-  section.querySelectorAll('[data-task-filter]').forEach(btn=>{
-    btn.onclick = ()=>{
-      taskFilter = String(btn.dataset.taskFilter || 'all');
-      renderTasksPage();
-    };
-  });
-  section.querySelectorAll('[data-task-edit]').forEach(btn=>{
-    btn.onclick = ()=>openTaskOverlay({ taskId: btn.dataset.taskEdit });
-  });
-  section.querySelectorAll('[data-task-toggle]').forEach(btn=>{
-    btn.onclick = ()=>{
-      const taskId = btn.dataset.taskToggle;
-      const task = getTaskById(taskId);
-      if(!task || task.done){
-        toggleTaskDone(taskId);
-        return;
-      }
-      btn.classList.add('animating');
-      setTimeout(()=>toggleTaskDone(taskId), 420);
-    };
-  });
-  const doneToggle = $('tasksDoneToggle');
-  if(doneToggle){
-    doneToggle.onclick = ()=>{
-      taskDoneExpanded = !taskDoneExpanded;
-      renderTasksPage();
-    };
-  }
-}
-
-function populateTaskPatientSelect(selectedId=null){
-  const select = $('taskPatientSelect');
-  if(!select) return;
-  const currentValue = selectedId==null ? '' : String(selectedId);
-  const ids = Object.keys(patients || {}).map(Number).filter(Number.isFinite).sort(comparePatientsForList);
-  select.innerHTML = [`<option value="">No linked patient</option>`].concat(ids.map(id=>{
-    const patient = patients[id] || {};
-    const meta = [ageSex(patient.age, patient.sex), referralLabel(patient.referralSource)].filter(Boolean).join(' • ');
-    return `<option value="${escapeHtml(String(id))}">${escapeHtml(patient.name || 'Patient')}${meta ? ` — ${escapeHtml(meta)}` : ''}</option>`;
-  })).join('');
-  select.value = currentValue;
-}
-function updateTaskDueButtons(){
-  const selected = String($('taskDueInput')?.value || 'today');
-  document.querySelectorAll('[data-task-due]').forEach(btn=>{
-    const active = String(btn.dataset.taskDue || '') === selected;
-    btn.classList.toggle('selected', active);
-    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-  });
-}
-function updateTaskCategoryButtons(){
-  const selected = String($('taskCategoryInput')?.value || 'review');
-  document.querySelectorAll('[data-task-category]').forEach(btn=>{
-    const active = String(btn.dataset.taskCategory || '') === selected;
-    btn.classList.toggle('selected', active);
-    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-  });
-}
-function fillTaskOverlay(task=null, patientId=null){
-  const editing = !!task;
-  if($('taskOverlayTitle')) $('taskOverlayTitle').textContent = editing ? 'Edit task' : 'Add task';
-  if($('taskTextInput')) $('taskTextInput').value = editing ? (task.text || '') : '';
-  if($('taskNoteInput')) $('taskNoteInput').value = editing ? (task.note || '') : '';
-  if($('taskDueInput')) $('taskDueInput').value = editing ? normaliseTaskDue(task.due) : 'today';
-  if($('taskCategoryInput')) $('taskCategoryInput').value = editing ? normaliseTaskCategory(task.category) : 'review';
-  populateTaskPatientSelect(editing ? task.patientId : patientId);
-  updateTaskDueButtons();
-  updateTaskCategoryButtons();
-  if($('taskDeleteBtn')) $('taskDeleteBtn').classList.toggle('hidden', !editing);
-}
-function openTaskOverlay(opts={}){
-  const overlay = $('taskOverlay');
-  if(!overlay) return;
-  const task = opts.taskId ? getTaskById(opts.taskId) : null;
-  taskEditingId = task ? task.id : null;
-  taskOverlayLastFocus = document.activeElement;
-  fillTaskOverlay(task, opts.patientId == null ? null : opts.patientId);
-  document.body.classList.add('task-overlay-open');
-  overlay.classList.remove('hidden');
-  overlay.setAttribute('aria-hidden', 'false');
-  requestAnimationFrame(()=>{
-    const input = $('taskTextInput');
-    if(input){
-      try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
-      if(input.select && !task) input.select();
-    }
-  });
-}
-function closeTaskOverlay(refocus=true){
-  const overlay = $('taskOverlay');
-  if(!overlay) return;
-  overlay.classList.add('hidden');
-  overlay.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('task-overlay-open');
-  taskEditingId = null;
-  if(refocus !== false){
-    const target = (taskOverlayLastFocus && taskOverlayLastFocus.focus) ? taskOverlayLastFocus : $('tasksAddBtn');
-    if(target && target.focus){
-      requestAnimationFrame(()=>{
-        try{ target.focus({preventScroll:true}); }catch(_e){ target.focus(); }
-      });
-    }
-  }
-}
-function collectTaskOverlayPayload(){
-  return {
-    text: String($('taskTextInput')?.value || '').trim(),
-    note: String($('taskNoteInput')?.value || '').trim(),
-    due: normaliseTaskDue(String($('taskDueInput')?.value || 'today')),
-    category: normaliseTaskCategory(String($('taskCategoryInput')?.value || 'review')),
-    patientId: $('taskPatientSelect')?.value ? Number($('taskPatientSelect').value) : null
-  };
-}
-function saveTaskFromOverlay(){
-  const payload = collectTaskOverlayPayload();
-  if(!payload.text){
-    alert('Enter a task.');
-    const input = $('taskTextInput');
-    if(input) input.focus();
-    return;
-  }
-  setUndoSnapshot();
-  if(taskEditingId){
-    const task = getTaskById(taskEditingId);
-    if(!task) return;
-    task.text = payload.text;
-    task.note = payload.note;
-    task.due = payload.due;
-    task.category = payload.category;
-    task.patientId = payload.patientId;
-    saveData('Task updated');
-  } else {
-    tasks.unshift(normaliseTask({
-      id: makeTaskId(),
-      text: payload.text,
-      note: payload.note,
-      due: payload.due,
-      category: payload.category,
-      patientId: payload.patientId,
-      done: false,
-      createdAt: new Date().toISOString()
-    }));
-    saveData('Task added');
-  }
-  fireTaskHaptic();
-  refreshTaskDependentUi();
-  closeTaskOverlay();
-}
-function deleteTask(taskId){
-  const task = getTaskById(taskId);
-  if(!task) return;
-  if(!confirm('Delete this task?')) return;
-  setUndoSnapshot();
-  tasks = tasks.filter(item=>String(item.id)!==String(taskId));
-  saveData('Task deleted');
-  refreshTaskDependentUi();
-  closeTaskOverlay();
-}
-function toggleTaskDone(taskId){
-  const task = getTaskById(taskId);
-  if(!task) return;
-  setUndoSnapshot();
-  task.done = !task.done;
-  task.completedAt = task.done ? new Date().toISOString() : '';
-  fireTaskHaptic();
-  saveData(task.done ? 'Task completed' : 'Task reopened');
-  refreshTaskDependentUi();
-}
-
-function openTaskOverlayForPatient(patientId, opts={}){
-  const id = Number(patientId || 0);
-  const safePatientId = id && patients[id] ? id : null;
-  if(opts && opts.showTasksSection) showSection('tasks');
-  openTaskOverlay({ patientId: safePatientId });
-}
-function initTasksUI(){
-  const addBtn = $('tasksAddBtn');
-  if(addBtn && addBtn.dataset.bound !== '1'){
-    addBtn.dataset.bound = '1';
-    addBtn.onclick = ()=>openTaskOverlay();
-  }
-  const headerTaskBtn = $('headerTaskBtn');
-  if(headerTaskBtn && headerTaskBtn.dataset.bound !== '1'){
-    headerTaskBtn.dataset.bound = '1';
-    headerTaskBtn.onclick = ()=>{ if(currentPatient && patients && patients[currentPatient]) openTaskOverlayForPatient(currentPatient); };
-  }
-  const closeBtn = $('taskOverlayCloseBtn');
-  if(closeBtn && closeBtn.dataset.bound !== '1'){
-    closeBtn.dataset.bound = '1';
-    closeBtn.onclick = ()=>closeTaskOverlay();
-  }
-  const cancelBtn = $('taskCancelBtn');
-  if(cancelBtn && cancelBtn.dataset.bound !== '1'){
-    cancelBtn.dataset.bound = '1';
-    cancelBtn.onclick = ()=>closeTaskOverlay();
-  }
-  const backdrop = $('taskOverlayBackdrop');
-  if(backdrop && backdrop.dataset.bound !== '1'){
-    backdrop.dataset.bound = '1';
-    backdrop.onclick = ()=>closeTaskOverlay();
-  }
-  const saveBtn = $('taskSaveBtn');
-  if(saveBtn && saveBtn.dataset.bound !== '1'){
-    saveBtn.dataset.bound = '1';
-    saveBtn.onclick = ()=>saveTaskFromOverlay();
-  }
-  const deleteBtn = $('taskDeleteBtn');
-  if(deleteBtn && deleteBtn.dataset.bound !== '1'){
-    deleteBtn.dataset.bound = '1';
-    deleteBtn.onclick = ()=>{ if(taskEditingId) deleteTask(taskEditingId); };
-  }
-  document.querySelectorAll('[data-task-due]').forEach(btn=>{
-    if(btn.dataset.bound === '1') return;
-    btn.dataset.bound = '1';
-    btn.onclick = ()=>{
-      if($('taskDueInput')) $('taskDueInput').value = normaliseTaskDue(btn.dataset.taskDue || 'today');
-      updateTaskDueButtons();
-    };
-  });
-  document.querySelectorAll('[data-task-category]').forEach(btn=>{
-    if(btn.dataset.bound === '1') return;
-    btn.dataset.bound = '1';
-    btn.onclick = ()=>{
-      if($('taskCategoryInput')) $('taskCategoryInput').value = normaliseTaskCategory(btn.dataset.taskCategory || 'review');
-      updateTaskCategoryButtons();
-    };
-  });
-  const textInput = $('taskTextInput');
-  if(textInput && textInput.dataset.bound !== '1'){
-    textInput.dataset.bound = '1';
-    textInput.addEventListener('keydown', ev=>{
-      if(ev.key === 'Enter' && !ev.shiftKey){
-        ev.preventDefault();
-        saveTaskFromOverlay();
-      }
-    });
-  }
-  updateHeaderTaskButton();
-}
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
@@ -12524,7 +11986,7 @@ document.addEventListener("DOMContentLoaded",function(){
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 1100);
   }
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
-  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); if(typeof initTasksUI==='function') initTasksUI(); if(typeof renderTasksPage==='function') renderTasksPage(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); syncSharedHeaderHeight();
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); if(typeof initTasksUI === 'function') initTasksUI(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -12756,7 +12218,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("ivEditCloseBtn").onclick=closeIVEditOverlay;
   $("ivEditBackdrop").onclick=closeIVEditOverlay;
   $("navPatients").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("patients")};
-  $("navTasks").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); if(typeof renderTasksPage==='function') renderTasksPage(); showSection("tasks")};
+  $("navTasks").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("tasks")};
   $("navHandover").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("handover")};
   $("backBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; goBackToPatientList(); };
   $("copyBtn").onclick=copyClinicalText; $("emailBtn").onclick=emailToNHSmail; if($("oneNoteBtn")) $("oneNoteBtn").onclick=sendToOneNote; if($("openOneNoteBtn")) $("openOneNoteBtn").onclick=openCurrentPatientOneNotePage; $("timestampBtn").onclick=addTimestamp;
@@ -12961,7 +12423,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("patientContextOpenBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; const id=patientContextMenuId; closePatientContextMenu(); if(id) openPatient(id); };
   $("patientContextEditBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; const id=patientContextMenuId; closePatientContextMenu(); if(id) openEditPatient(id); };
   $("patientContextVisitBtn").onclick=()=>{ const id=patientContextMenuId; closePatientContextMenu(); if(id) toggleVisitSelection(id); };
-  $("patientContextTasksBtn").onclick=()=>{ const id=patientContextMenuId; closePatientContextMenu(); if(id && typeof openTaskOverlayForPatient==='function') openTaskOverlayForPatient(id); };
+  $("patientContextTasksBtn").onclick=()=>{ const id=patientContextMenuId; const p=id?patients[id]:null; setSaveStatus(p ? `${p.name} - tasks flag coming soon` : 'Tasks flag coming soon'); closePatientContextMenu(); };
   $("patientContextDeleteBtn").onclick=()=>{ const id=patientContextMenuId; closePatientContextMenu(); if(id) deletePatient(id); };
   document.addEventListener("keydown",e=>{ if(e.key==="Escape") closePatientContextMenu(); });
   if(!applyGraphPostAuthUiRestore()) showSection("patients");
@@ -18016,7 +17478,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_579_release.html; source=hospital_at_home_v12_36_579_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_580_release.html; source=hospital_at_home_v12_36_580_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
