@@ -2457,9 +2457,8 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 .news-tts-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;margin-top:10px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .12s,opacity .15s}.news-tts-btn:active{background:rgba(255,255,255,.28);transform:scale(.97)}.news-tts-btn svg{flex-shrink:0}.news-tts-btn.is-speaking,.news-tts-btn:disabled{background:rgba(255,255,255,.24);opacity:.9}.tts-hidden-audio{position:fixed;left:-9999px;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none}
 /* ── Tasks tab ───────────────────────────────────────────────────────── */
 .tasks-shell{display:flex;flex-direction:column;gap:12px;padding-bottom:4px}
-.tasks-sticky{position:sticky;top:0;z-index:4;background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 82%,rgba(248,250,252,0) 100%);padding:0 0 8px}
-.tasks-toolbar{display:flex;align-items:center;gap:10px}
-.tasks-filter-bar{display:flex;gap:8px;flex:1;overflow:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0}
+.tasks-toolbar-card{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:0}
+.tasks-filter-bar{display:flex;gap:8px;flex:1;min-width:0;overflow:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0}
 .tasks-filter-bar::-webkit-scrollbar{display:none}
 .tasks-filter-btn{border:none;background:#e5e7eb;color:#4b5563;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:700;line-height:1;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:background .15s ease,color .15s ease}
 .tasks-filter-btn .tasks-filter-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:rgba(15,23,42,.08);color:inherit;font-size:11px;font-weight:700;line-height:1}
@@ -2921,7 +2920,7 @@ body.task-overlay-open .nav{transform:translateY(calc(100% + env(safe-area-inset
 <div aria-hidden="true" class="med-edit-overlay hidden" id="medEditOverlay"><div class="med-edit-backdrop" id="medEditBackdrop"></div><div class="med-edit-modal" id="medEditCard"><div class="med-edit-body"><div class="med-edit-card"><div class="med-entry-head"><span class="med-entry-summary" id="medEditSummary">Medication</span><div class="med-edit-head-actions"><button aria-label="Cancel medication edit" class="med-edit-actionbtn" id="medEditCancelBtn" type="button">Cancel</button><button aria-label="Save medication edit" class="med-edit-actionbtn primary" id="medEditSaveBtn" type="button">Save</button></div></div><div class="med-entry-body"><label>Medication</label><input autocapitalize="off" autocomplete="off" autocorrect="off" class="med-name" id="medEditName" placeholder="Start typing drug name" spellcheck="false" type="text"/><label class="med-dose-label">Dose</label><div class="med-dose-row hidden" id="medEditDoseRow"></div><input class="med-dose" id="medEditDose" placeholder="Dose" type="text"/><label>Frequency</label><div class="med-frequency-row" id="medEditFrequencyRow"></div><input class="med-frequency" id="medEditFrequency" placeholder="Frequency e.g. QDS PRN" type="text"/><label class="med-details-label">Details</label><input class="med-details" id="medEditDetails" placeholder="Optional notes" type="text"/></div></div></div></div></div>
 <div aria-hidden="true" class="meds-overlay hidden" id="medsOverlay"><div class="meds-overlay-backdrop" id="medsOverlayBackdrop"></div><div class="card meds-overlay-modal meds-overlay-modal-single" id="medsOverlayModal"><div class="meds-overlay-body" id="medsOverlayBody"><div class="meds-overlay-card meds-overlay-card-single" id="medsOverlayCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="medsOverlayTitle">Add medication</span><button aria-label="Close medications" class="med-entry-delete meds-overlay-close-inline" id="medsOverlayCloseBtn" type="button">×</button></div><div class="med-entry-body meds-overlay-entry-body"><label>Medication</label><input autocapitalize="off" autocomplete="off" autocorrect="off" class="med-name" id="medsOverlayName" placeholder="Start typing drug name" spellcheck="false" type="text"/><label class="med-dose-label">Dose</label><div class="med-dose-row hidden" id="medsOverlayDoseRow"></div><input class="med-dose" id="medsOverlayDose" placeholder="Dose" type="text"/><label>Frequency</label><div class="med-frequency-row" id="medsOverlayFrequencyRow"></div><input class="med-frequency" id="medsOverlayFrequency" placeholder="Frequency e.g. QDS PRN" type="text"/><label class="med-details-label">Details</label><input class="med-details" id="medsOverlayDetails" placeholder="Optional notes" type="text"/><div id="medsOverlayBottomButtons" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px"><button id="medsOverlayAddAnotherBtn" type="button">Add another</button><button id="medsOverlayClearBtn" type="button">Clear</button><button class="done-green" id="medsOverlayDoneBtn" type="button">Done</button></div></div></div></div></div></div>
 <div aria-hidden="true" class="exam-findings-overlay hidden" id="examFindingsOverlay"><div class="exam-findings-backdrop" id="examFindingsBackdrop"></div><div class="card exam-findings-modal" id="examFindingsModal"><div class="exam-findings-head"><h3>Examination findings</h3><button aria-label="Close examination findings" class="exam-findings-close" id="examFindingsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="examFindingsText">Edit findings</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="examFindingsText" type="button">Dictate</button></div><textarea id="examFindingsText" placeholder="Enter or edit examination findings"></textarea></div><div class="exam-findings-presets" id="examFindingsPresets"></div></div></div><div class="exam-findings-footer"><button id="examFindingsClearBtn" type="button">Clear</button><button class="primary" id="examFindingsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="exam-findings-overlay hidden" id="pmhPresetsOverlay"><div class="exam-findings-backdrop" id="pmhPresetsBackdrop"></div><div class="card exam-findings-modal" id="pmhPresetsModal"><div class="exam-findings-head"><h3>PMH presets</h3><button aria-label="Close PMH presets" class="exam-findings-close" id="pmhPresetsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="pmhPresetsText">Edit PMH</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="pmhPresetsText" type="button">Dictate</button></div><textarea id="pmhPresetsText" placeholder="Enter or edit PMH"></textarea></div><div class="exam-findings-presets" id="pmhPresetsList"></div></div></div><div class="exam-findings-footer"><button id="pmhPresetsClearBtn" type="button">Clear</button><button class="primary" id="pmhPresetsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="exam-findings-overlay hidden" id="socialHistoryPresetsOverlay"><div class="exam-findings-backdrop" id="socialHistoryPresetsBackdrop"></div><div class="card exam-findings-modal" id="socialHistoryPresetsModal"><div class="exam-findings-head"><h3>Social history presets</h3><button aria-label="Close social history presets" class="exam-findings-close" id="socialHistoryPresetsCloseBtn" type="button">×</button></div><div class="exam-findings-body"><div class="exam-findings-card"><div class="exam-findings-editor"><div class="field-label-row exam-findings-toolbar"><label for="socialHistoryPresetsText">Edit social history</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="socialHistoryPresetsText" type="button">Dictate</button></div><textarea id="socialHistoryPresetsText" placeholder="Enter or edit social history"></textarea></div><div class="exam-findings-presets" id="socialHistoryPresetsList"></div></div></div><div class="exam-findings-footer"><button id="socialHistoryPresetsClearBtn" type="button">Clear</button><button class="primary" id="socialHistoryPresetsDoneBtn" type="button">Done</button></div></div></div><div aria-hidden="true" class="meds-overlay iv-rebuilt-overlay hidden" id="ivEditOverlay"><div class="meds-overlay-backdrop iv-edit-backdrop" id="ivEditBackdrop"></div><div aria-labelledby="ivEditTitle" aria-modal="true" class="card meds-overlay-modal meds-overlay-modal-single iv-rebuilt-modal" id="ivEditModal" role="dialog"><div class="meds-overlay-body" id="ivEditBody"><div class="meds-overlay-card meds-overlay-card-single iv-rebuilt-card" id="ivEditCardInner"><div class="med-entry-head"><span class="med-entry-summary" id="ivEditTitle">IV medications administered</span><button aria-label="Close IV medications" class="med-entry-delete meds-overlay-close-inline iv-edit-close" id="ivEditCloseBtn" type="button">×</button></div><div class="meds-overlay-entry-body iv-overlay-entry-body hidden" id="ivSection"><button class="iv-info-label-btn" id="ivVipInfoBtn" type="button">VIP score</button><input enterkeyhint="next" id="ivVIP" type="text"/><div id="ivContainer"></div><div id="ivBottomButtons"><button id="addIVBtn" type="button">Add another</button><button id="clearIVBtn" type="button">Clear</button><button id="doneIVBtn" type="button">Done</button></div><button class="danger hidden" id="deleteIVBtn" type="button">Delete</button></div></div></div></div></div><div aria-hidden="true" class="vip-score-overlay hidden" id="vipScoreOverlay"><div class="vip-score-backdrop" id="vipScoreBackdrop"></div><div aria-labelledby="vipScoreTitle" aria-modal="true" class="card vip-score-modal" id="vipScoreModal" role="dialog"><div class="vip-score-head"><h3 id="vipScoreTitle">Visual Infusion Phlebitis (VIP) score</h3><button aria-label="Close VIP score table" class="vip-score-close" id="vipScoreCloseBtn" type="button">×</button></div><div class="vip-score-body"><div class="vip-score-card"><table class="vip-score-table"><thead><tr><th>Score</th><th>Findings</th><th>Suggested action</th></tr></thead><tbody><tr><td>0</td><td>Site appears healthy</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-safe">Observe cannula</span></td></tr><tr><td>1</td><td>Slight pain near site or slight redness</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-caution">Observe closely</span></td></tr><tr><td>2</td><td>Pain near site with redness and/or swelling</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula</span></td></tr><tr><td>3</td><td>Pain along cannula path with redness and induration</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>4</td><td>As score 3 plus a palpable venous cord</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-remove">Re-site cannula and consider treatment</span></td></tr><tr><td>5</td><td>As score 4 plus pyrexia</td><td class="vip-action-cell"><span class="vip-action-badge vip-action-urgent">Urgent review and treat per local policy</span></td></tr></tbody></table><div class="vip-score-note">Use local policy if it differs. Scores 2 or above usually mean the cannula should be removed or re-sited.</div></div></div></div></div><div aria-hidden="true" class="score-tools-overlay hidden" id="scoreToolsOverlay"><div class="score-tools-backdrop" id="scoreToolsBackdrop"></div><div class="card score-tools-modal" id="scoreToolsCard"><div class="score-tools-head"><button aria-expanded="false" aria-label="Show all score tools" class="score-tools-title-btn" id="scoreToolsTitleBtn" type="button"><h3>Scores</h3></button><button aria-label="Close scores" class="score-tools-close" id="scoreToolsCloseBtn" type="button">×</button></div><div class="score-tools-tabs-wrap" id="scoreToolsTabsWrap"><div class="score-tools-tabs" id="scoreToolsTabs"><button class="score-tool-tab active" data-score-tool-tab="cfs" type="button">CFS</button><button class="score-tool-tab" data-score-tool-tab="amt10" type="button">AMT10</button><button class="score-tool-tab" data-score-tool-tab="4at" type="button">4AT</button><button class="score-tool-tab" data-score-tool-tab="gcs" type="button">GCS</button><button class="score-tool-tab" data-score-tool-tab="must" type="button">MUST</button><button class="score-tool-tab" data-score-tool-tab="waterlow" type="button">Waterlow</button></div></div><div class="score-tools-body" id="scoreToolsBody"><div class="score-tool-panel" data-score-tool-panel="cfs"><div class="score-tool-card"><h4>Clinical Frailty Scale</h4><div class="score-tool-help">Score baseline frailty rather than the acute illness state.</div><div class="score-choice-grid" id="cfsChoiceGrid"></div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="amt10"><div class="score-tool-card"><h4>AMT10</h4><div class="score-tool-help">1 point per correct answer · Tap Yes for correct, No for incorrect or unable</div><div class="score-qrows" id="amt10Rows"></div><div class="score-summary-box" id="amt10SummaryBox">AMT10 - score pending</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="4at"><div class="score-tool-card"><div class="score-subhead"><h4>4AT</h4><div class="score-mini-note">Rapid delirium screen /12</div></div><div class="score-tool-help">Use the official 4AT scoring below · AMT4 is shown automatically from AMT10 when all 4 orientation items have been answered; otherwise manual AMT4 scoring is available here</div><div class="score-4at-grid"><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Alertness</div><div class="score-4at-task">Observe whether the patient is fully alert or clearly abnormally drowsy or agitated</div></div><div class="score-4at-options" id="fourAtAlertnessRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">AMT4</div><div class="score-4at-task">Test age, date of birth, place, and current year</div><div class="score-inline-note score-4at-subnote" id="fourAtAmt4Note">Manual scoring is available if the AMT10 orientation items have not all been completed</div></div><div class="score-4at-options" id="fourAtAmt4Row"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Attention</div><div class="score-4at-task">Ask the patient to say the months of the year backwards, starting from December</div></div><div class="score-4at-options" id="fourAtAttentionRow"></div></div><div class="score-4at-item"><div class="score-4at-titlewrap"><div class="score-4at-title">Acute change or fluctuating course</div><div class="score-4at-task">Is there evidence of a significant change or fluctuation in mental state over the last 2 weeks, still present in the last 24 hours</div></div><div class="score-4at-options" id="fourAtAcuteRow"></div></div></div><div class="score-summary-box" id="fourAtSummaryBox">4AT incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="gcs"><div class="score-tool-card"><div class="score-subhead"><h4>GCS</h4><div class="score-mini-note">Glasgow Coma Scale /15</div></div><div class="score-tool-help">Select the best eye, verbal and motor response.</div><div class="score-section-stack"><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Eye opening</h4></div><div class="score-qrows" id="gcsEyeRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Verbal response</h4></div><div class="score-qrows" id="gcsVerbalRows"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Motor response</h4></div><div class="score-qrows" id="gcsMotorRows"></div></div></div><div class="score-summary-box" id="gcsSummaryBox">GCS incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="must"><div class="score-tool-card"><div class="score-subhead"><h4>MUST</h4><div class="score-mini-note">Malnutrition Universal Screening Tool</div></div><div class="score-tool-help">Enter height and weight to calculate BMI, or select the BMI score directly if measurements are not available.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="must" for="mustHeightInput" id="mustHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="mustHeightMetricWrap"><input id="mustHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="mustHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="mustHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="must" for="mustWeightInput" id="mustWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="mustWeightMetricWrap"><input id="mustWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="mustWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="mustWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="mustWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>BMI score</h4><div class="score-mini-note" id="mustBmiValue">BMI pending</div></div><div class="score-chip-row" id="mustBmiScoreRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Unplanned weight loss in past 3–6 months</h4></div><div class="score-chip-row" id="mustWeightLossRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Acute disease effect</h4></div><div class="score-chip-row" id="mustAcuteRow"></div><div class="score-inline-note">Add 2 if acutely ill and there has been or is likely to be no nutritional intake for more than 5 days.</div></div><div class="score-summary-box" id="mustSummaryBox">MUST incomplete</div></div></div><div class="score-tool-panel hidden" data-score-tool-panel="waterlow"><div class="score-tool-card"><div class="score-subhead"><h4>Waterlow</h4><div class="score-mini-note">Pressure ulcer risk screen</div></div><div class="score-tool-help">Complete each category using the option that best fits the patient. Enter weight and height to calculate BMI, or choose the build / BMI option directly if BMI is already known.</div><div class="score-form-grid"><div><label class="score-unit-toggle unit-metric" data-score-unit-field="weight" data-score-unit-tool="waterlow" for="waterlowWeightInput" id="waterlowWeightLabel" role="button" tabindex="0">Weight (kg)</label><div id="waterlowWeightMetricWrap"><input id="waterlowWeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowWeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">st</span><input id="waterlowWeightStoneInput" inputmode="decimal" placeholder="st" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">lb</span><input id="waterlowWeightPoundsInput" inputmode="decimal" placeholder="lb" type="text"/></div></div></div><div><label class="score-unit-toggle unit-metric" data-score-unit-field="height" data-score-unit-tool="waterlow" for="waterlowHeightInput" id="waterlowHeightLabel" role="button" tabindex="0">Height (cm)</label><div id="waterlowHeightMetricWrap"><input id="waterlowHeightInput" inputmode="decimal" placeholder="Enter" type="text"/></div><div class="score-inline-dual hidden" id="waterlowHeightImperialWrap"><div class="score-dual-field"><span class="score-dual-mini">ft</span><input id="waterlowHeightFeetInput" inputmode="decimal" placeholder="ft" type="text"/></div><div class="score-dual-field"><span class="score-dual-mini">in</span><input id="waterlowHeightInchesInput" inputmode="decimal" placeholder="in" type="text"/></div></div></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Build / BMI</h4><div class="score-mini-note" id="waterlowBmiValue">BMI optional</div></div><div class="score-chip-row" id="waterlowBuildRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Sex and age</h4></div><div class="score-chip-row" id="waterlowSexRow"></div><div class="score-chip-row" id="waterlowAgeRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Continence</h4></div><div class="score-chip-row" id="waterlowContinenceRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Skin / visual risk areas</h4></div><div class="score-chip-row" id="waterlowSkinRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Mobility</h4></div><div class="score-chip-row" id="waterlowMobilityRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Nutrition / appetite</h4></div><div class="score-chip-row" id="waterlowAppetiteRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Tissue malnutrition</h4></div><div class="score-chip-row" id="waterlowTissueRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Neurological deficit</h4></div><div class="score-chip-row" id="waterlowNeuroRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Major surgery / trauma</h4></div><div class="score-chip-row" id="waterlowSurgeryRow"></div></div><div class="score-tool-card score-tool-subcard"><div class="score-subhead"><h4>Medication</h4></div><div class="score-chip-row" id="waterlowMedicationRow"></div></div><div class="score-summary-box" id="waterlowSummaryBox">Waterlow incomplete</div></div></div></div><div class="score-tools-footer"><button id="scoreToolsClearBtn" type="button">Clear</button><button class="primary" id="scoreToolsInsertBtn" type="button">Done</button></div></div></div>
-<section class="container hidden" id="tasks"><div class="tasks-shell"><div class="tasks-sticky"><div class="tasks-toolbar"><div class="tasks-filter-bar" id="tasksFilterBar"></div><button aria-label="Add task" class="tasks-add-btn primary" id="tasksAddBtn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div><div id="tasksList"></div></div></section><div aria-hidden="true" class="task-overlay hidden" id="taskOverlay"><div class="task-overlay-backdrop" id="taskOverlayBackdrop"></div><div aria-labelledby="taskOverlayTitle" aria-modal="true" class="card task-overlay-modal" id="taskOverlayModal" role="dialog"><div class="task-overlay-head"><h3 id="taskOverlayTitle">Add task</h3><button aria-label="Close" class="task-overlay-close" id="taskOverlayCloseBtn" type="button">×</button></div><div class="task-overlay-body"><div class="task-field"><label for="taskPatientSelect">Patient</label><select id="taskPatientSelect"></select></div><div class="task-field"><label for="taskTextInput">Task</label><textarea id="taskTextInput" placeholder="What needs doing?" rows="3"></textarea></div><div class="task-field task-urgent-field"><label class="task-urgent-row" for="taskUrgentInput"><input id="taskUrgentInput" type="checkbox"/><span class="task-urgent-label-text">Mark as urgent</span></label></div></div><div class="task-overlay-footer"><button class="danger hidden" id="taskDeleteBtn" type="button">Delete</button><div class="task-overlay-actions"><button id="taskCancelBtn" type="button">Cancel</button><button class="primary" id="taskSaveBtn" type="button">Save</button></div></div></div></div>
+<section class="container hidden" id="tasks"><div class="tasks-shell"><div class="card tasks-toolbar-card"><div class="tasks-filter-bar" id="tasksFilterBar"></div><button aria-label="Add task" class="tasks-add-btn primary" id="tasksAddBtn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div><div id="tasksList"></div></div></section><div aria-hidden="true" class="task-overlay hidden" id="taskOverlay"><div class="task-overlay-backdrop" id="taskOverlayBackdrop"></div><div aria-labelledby="taskOverlayTitle" aria-modal="true" class="card task-overlay-modal" id="taskOverlayModal" role="dialog"><div class="task-overlay-head"><h3 id="taskOverlayTitle">Add task</h3><button aria-label="Close" class="task-overlay-close" id="taskOverlayCloseBtn" type="button">×</button></div><div class="task-overlay-body"><div class="task-field"><label for="taskPatientSelect">Patient</label><select id="taskPatientSelect"></select></div><div class="task-field"><label for="taskTextInput">Task</label><textarea id="taskTextInput" placeholder="What needs doing?" rows="3"></textarea></div><div class="task-field task-urgent-field"><label class="task-urgent-row" for="taskUrgentInput"><input id="taskUrgentInput" type="checkbox"/><span class="task-urgent-label-text">Mark as urgent</span></label></div></div><div class="task-overlay-footer"><button class="danger hidden" id="taskDeleteBtn" type="button">Delete</button><div class="task-overlay-actions"><button id="taskCancelBtn" type="button">Cancel</button><button class="primary" id="taskSaveBtn" type="button">Save</button></div></div></div></div>
 <section class="container hidden" id="handover">
 <div class="options-page-panel" id="optionsHomePanel">
 <div class="card">
@@ -2953,7 +2952,7 @@ body.task-overlay-open .nav{transform:translateY(calc(100% + env(safe-area-inset
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_580_release.html</div><div>Source: hospital_at_home_v12_36_580_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_582_release.html</div><div>Source: hospital_at_home_v12_36_582_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10571,8 +10570,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_580_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_580_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_582_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_582_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11986,7 +11985,7 @@ document.addEventListener("DOMContentLoaded",function(){
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 1100);
   }
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
-  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); if(typeof initTasksUI === 'function') initTasksUI(); syncSharedHeaderHeight();
+  loadData(); loadUndo(); loadNhsEmail(); fillGraphSettingsUI(); fillXaiSettingsUI(); fillPulseSettingsUI(); fillGeminiSettingsUI(); fillAnthropicSettingsUI(); fillClinicalReviewSettingsUI(); fillPmhPresetSettingsUI(); loadPatientListDisplaySettings(); applyPatientCardOrder(); renderPatientList(); updateUndoButton(); updateReferralButtons(); updateSexButtons(); initSecurity(); initPatientListDisplaySettingsUI(); initPatientCardReorder(); initPatientDetailEdgeSwipe(); if(typeof initTasksUI === 'function') initTasksUI(); if(typeof renderTasksPage === 'function') renderTasksPage(); syncSharedHeaderHeight();
 
   function syncAddPatientViewportPosition(force=false){
     if(typeof window.scrollAddPatientCardIntoView === "function") requestAnimationFrame(()=>window.scrollAddPatientCardIntoView(!!force));
@@ -17478,7 +17477,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_580_release.html; source=hospital_at_home_v12_36_580_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_582_release.html; source=hospital_at_home_v12_36_582_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
@@ -18172,6 +18171,444 @@ window.HAH.modules.tts = true;
     getDebugLogText: () => (readLog().length ? readLog().join('\n') : 'No TTS events recorded yet.')
   };
 })();
+
+</script><script>
+window.HAH = window.HAH || { modules: {} };
+window.HAH.modules.tasks = true;
+
+const TASK_FILTER_OPTIONS = [
+  { value: 'all', label: 'All' },
+  { value: 'urgent', label: 'Urgent' },
+  { value: 'done', label: 'Done' }
+];
+
+let taskFilter = 'all';
+let taskEditingPatientId = null;
+let taskEditingTaskId = null;
+let taskOverlayLastFocus = null;
+
+function makeTaskId(){
+  return 'task-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
+}
+
+function getPatientTasksArray(patient){
+  if(!patient) return [];
+  if(!Array.isArray(patient.tasks)) patient.tasks = [];
+  return patient.tasks;
+}
+
+function getTaskById(patientId, taskId){
+  const patient = patients && patients[patientId];
+  if(!patient) return null;
+  return getPatientTasksArray(patient).find(t => String(t.id) === String(taskId)) || null;
+}
+
+function flattenTasks(filter){
+  const out = [];
+  Object.entries(patients || {}).forEach(([id, patient])=>{
+    if(!patient) return;
+    getPatientTasksArray(patient).forEach(task => {
+      if(!task || !task.text) return;
+      if(filter === 'open' && task.completedAt) return;
+      if(filter === 'done' && !task.completedAt) return;
+      if(filter === 'urgent' && (task.completedAt || !task.urgent)) return;
+      out.push({ patientId: Number(id), patient, task });
+    });
+  });
+  return out;
+}
+
+function compareTasksOpen(a, b){
+  const aUrgent = a.task && a.task.urgent ? 0 : 1;
+  const bUrgent = b.task && b.task.urgent ? 0 : 1;
+  if(aUrgent !== bUrgent) return aUrgent - bUrgent;
+  const aTime = new Date(a.task && a.task.createdAt || 0).getTime();
+  const bTime = new Date(b.task && b.task.createdAt || 0).getTime();
+  return bTime - aTime;
+}
+
+function compareTasksDone(a, b){
+  const aTime = new Date(a.task && (a.task.completedAt || a.task.createdAt) || 0).getTime();
+  const bTime = new Date(b.task && (b.task.completedAt || b.task.createdAt) || 0).getTime();
+  return bTime - aTime;
+}
+
+function getTaskCounts(){
+  let open = 0, urgent = 0, done = 0;
+  Object.values(patients || {}).forEach(patient => {
+    if(!patient) return;
+    getPatientTasksArray(patient).forEach(task => {
+      if(!task || !task.text) return;
+      if(task.completedAt){ done++; return; }
+      open++;
+      if(task.urgent) urgent++;
+    });
+  });
+  return { open, urgent, done };
+}
+
+function getPatientOpenTaskCount(patientId){
+  const patient = patients && patients[patientId];
+  if(!patient) return 0;
+  return getPatientTasksArray(patient).filter(t => t && !t.completedAt).length;
+}
+
+function getPatientUrgentTaskCount(patientId){
+  const patient = patients && patients[patientId];
+  if(!patient) return 0;
+  return getPatientTasksArray(patient).filter(t => t && !t.completedAt && t.urgent).length;
+}
+
+function groupOpenTasksByPatient(rows){
+  const groups = new Map();
+  rows.forEach(({ patientId, patient, task }) => {
+    const key = String(patientId);
+    if(!groups.has(key)) groups.set(key, { patientId, patient, tasks: [], hasUrgent: false });
+    const g = groups.get(key);
+    g.tasks.push(task);
+    if(task.urgent) g.hasUrgent = true;
+  });
+  return Array.from(groups.values()).sort((a, b)=>{
+    if(a.hasUrgent !== b.hasUrgent) return a.hasUrgent ? -1 : 1;
+    const an = String(a.patient && a.patient.name || '').toLowerCase();
+    const bn = String(b.patient && b.patient.name || '').toLowerCase();
+    return an.localeCompare(bn);
+  });
+}
+
+function fireTaskHaptic(){
+  try{ if(typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') navigator.vibrate(10); }catch(e){}
+}
+
+function addTask(patientId, payload){
+  const patient = patients && patients[patientId];
+  if(!patient) return;
+  const text = String(payload && payload.text || '').trim();
+  if(!text) return;
+  const list = getPatientTasksArray(patient);
+  if(typeof setUndoSnapshot === 'function') setUndoSnapshot();
+  list.unshift({
+    id: makeTaskId(),
+    text,
+    urgent: !!(payload && payload.urgent),
+    createdAt: new Date().toISOString(),
+    completedAt: null
+  });
+  saveData('Task added');
+  fireTaskHaptic();
+  refreshTaskUi();
+}
+
+function updateTask(patientId, taskId, payload){
+  const task = getTaskById(patientId, taskId);
+  if(!task) return;
+  if(typeof setUndoSnapshot === 'function') setUndoSnapshot();
+  task.text = String(payload && payload.text || '').trim();
+  task.urgent = !!(payload && payload.urgent);
+  saveData('Task updated');
+  refreshTaskUi();
+}
+
+function deleteTask(patientId, taskId){
+  const patient = patients && patients[patientId];
+  if(!patient) return;
+  if(!confirm('Delete this task?')) return;
+  if(typeof setUndoSnapshot === 'function') setUndoSnapshot();
+  patient.tasks = getPatientTasksArray(patient).filter(t => String(t.id) !== String(taskId));
+  saveData('Task deleted');
+  refreshTaskUi();
+}
+
+function toggleTaskDone(patientId, taskId){
+  const task = getTaskById(patientId, taskId);
+  if(!task) return;
+  if(typeof setUndoSnapshot === 'function') setUndoSnapshot();
+  task.completedAt = task.completedAt ? null : new Date().toISOString();
+  fireTaskHaptic();
+  saveData(task.completedAt ? 'Task completed' : 'Task reopened');
+  refreshTaskUi();
+}
+
+function refreshTaskUi(){
+  if(typeof renderPatientList === 'function') renderPatientList();
+  updateHeaderTaskButton();
+  const tasksSection = $('tasks');
+  if(tasksSection && !tasksSection.classList.contains('hidden')) renderTasksPage();
+}
+
+function updateHeaderTaskButton(){
+  const btn = $('headerTaskBtn');
+  const badge = $('headerTaskCountBadge');
+  if(!btn) return;
+  const detailVisible = !!($('patientDetail') && !$('patientDetail').classList.contains('hidden') && currentPatient && patients && patients[currentPatient]);
+  btn.classList.toggle('hidden', !detailVisible);
+  if(!detailVisible){
+    if(badge){ badge.textContent = '0'; badge.classList.add('hidden'); }
+    return;
+  }
+  const openCount = getPatientOpenTaskCount(currentPatient);
+  const urgentCount = getPatientUrgentTaskCount(currentPatient);
+  if(badge){
+    badge.textContent = String(openCount);
+    badge.classList.toggle('hidden', !openCount);
+    badge.classList.toggle('urgent', urgentCount > 0);
+  }
+}
+
+function escAtt(s){ return escapeHtml(String(s == null ? '' : s)); }
+
+function taskRowMarkup(patientId, task){
+  const done = !!task.completedAt;
+  const urgent = !done && !!task.urgent;
+  const togglePayload = patientId + ':' + task.id;
+  const editPayload = patientId + ':' + task.id;
+  const editIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+  if(done){
+    return `<div class="task-row is-done" data-task-row="${escAtt(task.id)}">
+      <button class="task-toggle-btn task-toggle-done" data-task-toggle="${escAtt(togglePayload)}" type="button" aria-label="Reopen task" title="Reopen">
+        <svg viewBox="0 0 34 34" width="34" height="34" aria-hidden="true">
+          <circle cx="17" cy="17" r="15" fill="var(--green)"/>
+          <path d="M9.5 17l5 5 10-10" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </button>
+      <div class="task-text">${escAtt(task.text)}</div>
+      <button class="task-edit-btn" data-task-edit="${escAtt(editPayload)}" type="button" aria-label="Edit task">${editIcon}</button>
+    </div>`;
+  }
+  return `<div class="task-row${urgent ? ' is-urgent' : ''}" data-task-row="${escAtt(task.id)}">
+    <button class="task-toggle-btn task-complete-btn" data-task-toggle="${escAtt(togglePayload)}" type="button" aria-label="Complete task" title="Complete">
+      <svg viewBox="0 0 34 34" width="34" height="34" aria-hidden="true">
+        <circle class="tc-ring" cx="17" cy="17" r="15" fill="none" stroke="var(--green)" stroke-width="2.2"/>
+        <circle class="tc-fill" cx="17" cy="17" r="15" fill="var(--green)"/>
+        <path class="tc-tick" d="M9.5 17l5 5 10-10" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke-dasharray="22" stroke-dashoffset="22"/>
+      </svg>
+    </button>
+    <div class="task-text">${escAtt(task.text)}</div>
+    <button class="task-edit-btn" data-task-edit="${escAtt(editPayload)}" type="button" aria-label="Edit task">${editIcon}</button>
+  </div>`;
+}
+
+function taskGroupMarkup(group){
+  const { patientId, patient, tasks, hasUrgent } = group;
+  const urgentBadge = hasUrgent ? '<span class="badge amber task-urgent-badge">Urgent</span>' : '';
+  return `<div class="card task-patient-card${hasUrgent ? ' has-urgent' : ''}">
+    <div class="task-patient-head">
+      <button class="task-patient-name-btn" data-task-open-patient="${escAtt(patientId)}" type="button">${escAtt(patient.name || 'Patient')}</button>
+      ${urgentBadge}
+    </div>
+    <div class="task-rows">${tasks.map(t => taskRowMarkup(patientId, t)).join('')}</div>
+  </div>`;
+}
+
+function tasksEmptyMarkup(filter){
+  let title = 'No tasks';
+  let copy = 'Add a task with the + button.';
+  if(filter === 'urgent'){ title = 'Nothing urgent'; copy = 'No tasks marked as urgent right now.'; }
+  if(filter === 'done'){ title = 'No completed tasks'; copy = 'Tasks you complete will appear here.'; }
+  return `<div class="card tasks-empty-card"><div class="tasks-empty-title">${escAtt(title)}</div><div class="tasks-empty-copy">${escAtt(copy)}</div></div>`;
+}
+
+function renderTasksPage(){
+  const section = $('tasks');
+  if(!section) return;
+  updateHeaderTaskButton();
+
+  const counts = getTaskCounts();
+  const filterBar = $('tasksFilterBar');
+  if(filterBar){
+    filterBar.innerHTML = TASK_FILTER_OPTIONS.map(item => {
+      let count = 0;
+      if(item.value === 'all') count = counts.open;
+      else if(item.value === 'urgent') count = counts.urgent;
+      else if(item.value === 'done') count = counts.done;
+      return `<button class="tasks-filter-btn${taskFilter === item.value ? ' active' : ''}" data-task-filter="${item.value}" type="button">${escAtt(item.label)} <span class="tasks-filter-count">${count}</span></button>`;
+    }).join('');
+  }
+
+  const list = $('tasksList');
+  if(!list) return;
+
+  if(taskFilter === 'done'){
+    const doneRows = flattenTasks('done').sort(compareTasksDone);
+    list.innerHTML = doneRows.length
+      ? doneRows.map(({patientId, patient, task}) => `<div class="card task-patient-card task-done-card"><div class="task-patient-head"><div class="task-patient-name-static">${escAtt(patient.name || 'Patient')}</div></div><div class="task-rows">${taskRowMarkup(patientId, task)}</div></div>`).join('')
+      : tasksEmptyMarkup('done');
+  } else {
+    const filterKey = taskFilter === 'urgent' ? 'urgent' : 'open';
+    const openRows = flattenTasks(filterKey).sort(compareTasksOpen);
+    if(!openRows.length){
+      list.innerHTML = tasksEmptyMarkup(taskFilter);
+    } else {
+      const groups = groupOpenTasksByPatient(openRows);
+      list.innerHTML = groups.map(g => taskGroupMarkup(g)).join('');
+    }
+  }
+
+  bindTaskEvents(section);
+}
+
+function bindTaskEvents(section){
+  section.querySelectorAll('[data-task-filter]').forEach(btn => {
+    btn.onclick = () => {
+      taskFilter = String(btn.dataset.taskFilter || 'all');
+      renderTasksPage();
+    };
+  });
+  section.querySelectorAll('[data-task-edit]').forEach(btn => {
+    btn.onclick = () => {
+      const [pid, tid] = String(btn.dataset.taskEdit || '').split(':');
+      openTaskOverlay({ patientId: Number(pid), taskId: tid });
+    };
+  });
+  section.querySelectorAll('[data-task-toggle]').forEach(btn => {
+    btn.onclick = () => {
+      const [pid, tid] = String(btn.dataset.taskToggle || '').split(':');
+      const patientId = Number(pid);
+      const task = getTaskById(patientId, tid);
+      if(!task) return;
+      if(task.completedAt){
+        toggleTaskDone(patientId, tid);
+        return;
+      }
+      btn.classList.add('animating');
+      setTimeout(() => toggleTaskDone(patientId, tid), 420);
+    };
+  });
+  section.querySelectorAll('[data-task-open-patient]').forEach(btn => {
+    btn.onclick = () => {
+      const pid = Number(btn.dataset.taskOpenPatient);
+      if(typeof openPatient === 'function') openPatient(pid);
+    };
+  });
+}
+
+function populateTaskPatientSelect(selectedId){
+  const select = $('taskPatientSelect');
+  if(!select) return;
+  const ids = Object.keys(patients || {}).map(Number).filter(Number.isFinite).sort((a, b) => {
+    const an = String((patients[a] || {}).name || '').toLowerCase();
+    const bn = String((patients[b] || {}).name || '').toLowerCase();
+    return an.localeCompare(bn);
+  });
+  if(!ids.length){
+    select.innerHTML = '<option value="">No patients available</option>';
+    return;
+  }
+  select.innerHTML = ids.map(id => {
+    const p = patients[id] || {};
+    return `<option value="${escAtt(id)}">${escAtt(p.name || 'Patient')}</option>`;
+  }).join('');
+  if(selectedId != null && patients[selectedId]) select.value = String(selectedId);
+}
+
+function openTaskOverlay(opts){
+  const overlay = $('taskOverlay');
+  if(!overlay) return;
+  const patientId = opts && opts.patientId != null ? Number(opts.patientId) : (typeof currentPatient !== 'undefined' ? currentPatient : null);
+  const taskId = opts && opts.taskId ? opts.taskId : null;
+  taskEditingPatientId = patientId;
+  taskEditingTaskId = taskId;
+  taskOverlayLastFocus = document.activeElement;
+
+  populateTaskPatientSelect(patientId);
+
+  const existing = taskId ? getTaskById(patientId, taskId) : null;
+  $('taskOverlayTitle').textContent = existing ? 'Edit task' : 'Add task';
+  $('taskTextInput').value = existing ? (existing.text || '') : '';
+  $('taskUrgentInput').checked = existing ? !!existing.urgent : false;
+  $('taskDeleteBtn').classList.toggle('hidden', !existing);
+
+  overlay.classList.remove('hidden');
+  overlay.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('task-overlay-open');
+  requestAnimationFrame(() => {
+    const input = $('taskTextInput');
+    if(input){ try{ input.focus({ preventScroll: true }); }catch(e){ input.focus(); } }
+  });
+}
+
+function closeTaskOverlay(){
+  const overlay = $('taskOverlay');
+  if(!overlay) return;
+  overlay.classList.add('hidden');
+  overlay.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('task-overlay-open');
+  taskEditingPatientId = null;
+  taskEditingTaskId = null;
+  if(taskOverlayLastFocus && taskOverlayLastFocus.focus){
+    requestAnimationFrame(() => { try{ taskOverlayLastFocus.focus({ preventScroll: true }); }catch(e){ taskOverlayLastFocus.focus(); } });
+  }
+}
+
+function saveTaskOverlay(){
+  const text = String($('taskTextInput').value || '').trim();
+  if(!text){ alert('Enter task text.'); $('taskTextInput').focus(); return; }
+  const patientId = Number($('taskPatientSelect').value);
+  if(!Number.isFinite(patientId) || !patients[patientId]){ alert('Pick a patient.'); return; }
+  const urgent = !!$('taskUrgentInput').checked;
+  if(taskEditingTaskId){
+    updateTask(taskEditingPatientId, taskEditingTaskId, { text, urgent });
+  } else {
+    addTask(patientId, { text, urgent });
+  }
+  closeTaskOverlay();
+}
+
+function initTasksUI(){
+  const addBtn = $('tasksAddBtn');
+  if(addBtn && addBtn.dataset.bound !== '1'){
+    addBtn.dataset.bound = '1';
+    addBtn.onclick = () => openTaskOverlay({});
+  }
+  const headerBtn = $('headerTaskBtn');
+  if(headerBtn && headerBtn.dataset.bound !== '1'){
+    headerBtn.dataset.bound = '1';
+    headerBtn.onclick = () => {
+      if(currentPatient && patients && patients[currentPatient]) openTaskOverlay({ patientId: currentPatient });
+    };
+  }
+  const closeBtn = $('taskOverlayCloseBtn');
+  if(closeBtn && closeBtn.dataset.bound !== '1'){
+    closeBtn.dataset.bound = '1';
+    closeBtn.onclick = () => closeTaskOverlay();
+  }
+  const cancelBtn = $('taskCancelBtn');
+  if(cancelBtn && cancelBtn.dataset.bound !== '1'){
+    cancelBtn.dataset.bound = '1';
+    cancelBtn.onclick = () => closeTaskOverlay();
+  }
+  const backdrop = $('taskOverlayBackdrop');
+  if(backdrop && backdrop.dataset.bound !== '1'){
+    backdrop.dataset.bound = '1';
+    backdrop.onclick = () => closeTaskOverlay();
+  }
+  const saveBtn = $('taskSaveBtn');
+  if(saveBtn && saveBtn.dataset.bound !== '1'){
+    saveBtn.dataset.bound = '1';
+    saveBtn.onclick = () => saveTaskOverlay();
+  }
+  const deleteBtn = $('taskDeleteBtn');
+  if(deleteBtn && deleteBtn.dataset.bound !== '1'){
+    deleteBtn.dataset.bound = '1';
+    deleteBtn.onclick = () => {
+      if(taskEditingPatientId && taskEditingTaskId){
+        deleteTask(taskEditingPatientId, taskEditingTaskId);
+        closeTaskOverlay();
+      }
+    };
+  }
+  const textInput = $('taskTextInput');
+  if(textInput && textInput.dataset.bound !== '1'){
+    textInput.dataset.bound = '1';
+    textInput.addEventListener('keydown', ev => {
+      if(ev.key === 'Enter' && !ev.shiftKey){
+        ev.preventDefault();
+        saveTaskOverlay();
+      }
+    });
+  }
+  updateHeaderTaskButton();
+}
 
 </script></body>
 </html>
