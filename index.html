@@ -366,7 +366,7 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 #patientDetail.detail-overlay-active{padding-bottom:40px;}
 .nav button{background:none;border:none;box-shadow:none;padding:6px 10px 4px;min-width:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:700;color:#374151;line-height:1.15}.nav button:active{transform:none}.nav-icon{width:24px;height:24px;display:block;stroke:currentColor;fill:none;flex:0 0 auto}.nav-icon *{vector-effect:non-scaling-stroke}.nav-label{display:block;font-size:13px;line-height:1.15}.nav .active{color:var(--blue)}
 .copy-note{color:var(--sub);font-size:12px;margin-top:8px}.plus-btn{display:inline-flex;align-items:center;justify-content:center;background:#e8f1ff;color:#0a84ff;font-size:22px;line-height:1;padding:8px 14px;border-radius:14px;border:1px solid rgba(10,132,255,.16)}
-.patient-actions{display:flex;align-items:flex-start;justify-content:flex-end;gap:8px;flex:0 0 auto;flex-shrink:0;min-width:112px}.patient-actions-placeholder{visibility:hidden;pointer-events:none}.patient-main{flex:1;min-width:0}.patient-main-copy,.patient-card-titleline,.patient-card-titleline *{-webkit-text-size-adjust:100%;text-size-adjust:100%}.patient-card-titleline{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;min-width:0}.fullwidth{width:100%;margin-top:10px}
+.patient-actions{display:flex;align-items:flex-start;justify-content:flex-end;gap:8px;flex:0 0 auto;flex-shrink:0;min-width:112px}.patient-actions-placeholder{visibility:hidden;pointer-events:none}.patient-main{flex:1;min-width:0}.patient-main-copy,.patient-card-titleline,.patient-card-titleline *{-webkit-text-size-adjust:100%;text-size-adjust:100%}.patient-card-titleline{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;min-width:0}.swipe-foreground.patient-card-acuity-rail{position:relative;overflow:hidden}.swipe-foreground.patient-card-acuity-rail::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:transparent;border-radius:16px 0 0 16px;pointer-events:none}.swipe-foreground.patient-card-acuity-rail.acuity-green::before{background:var(--green)}.swipe-foreground.patient-card-acuity-rail.acuity-amber::before{background:var(--amber)}.swipe-foreground.patient-card-acuity-rail.acuity-red::before{background:var(--red)}.swipe-foreground.patient-card-acuity-rail.acuity-grey::before{background:#94a3b8}.fullwidth{width:100%;margin-top:10px}
 .status-chip{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;background:#eef2ff;color:#1d4ed8}
 .choice-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.choice-btn{padding:10px 12px;border-radius:10px;border:1px solid #d1d5db;background:#fff;color:#111}
 .choice-btn.selected{background:#0a84ff;color:#fff;border-color:#0a84ff}.referral-other-input{flex:1 1 110px;min-width:110px;width:auto;height:46px;margin-top:0;padding:12px;border-radius:12px;border:1px solid #d1d5db;background:#fff;color:#111;font-size:16px;font-weight:400;line-height:1.2;text-align:left;box-sizing:border-box;appearance:none;-webkit-appearance:none}.referral-other-input::placeholder{font:inherit;color:#9ca3af;opacity:1}.referral-other-input.selected{background:#fff;color:#111;border-color:#0a84ff;box-shadow:inset 0 0 0 1px rgba(10,132,255,.12)}.referral-other-input:focus{outline:none;border-color:#7fc3ff;box-shadow:0 0 0 1px #7fc3ff inset}.button-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -2879,7 +2879,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_585_release.html</div><div>Source: hospital_at_home_v12_36_585_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_586_release.html</div><div>Source: hospital_at_home_v12_36_586_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3035,6 +3035,13 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="patient-list-display-toggle-subtitle">Show Green / Amber / Red on the patient list</div>
 </label>
 <input id="patientListShowAcuityToggle" type="checkbox"/>
+</div>
+<div class="patient-list-display-toggle-row">
+<label class="patient-list-display-toggle-copy" for="patientListShowAcuityRailToggle">
+<div class="patient-list-display-toggle-title">Show acuity rail</div>
+<div class="patient-list-display-toggle-subtitle">Show a slim coloured rail on the left of each patient card</div>
+</label>
+<input id="patientListShowAcuityRailToggle" type="checkbox"/>
 </div>
 <div class="tiny muted">Name, age and referral always stay on each patient card. Choose the other sections to show and drag them into the order you want.</div>
 <div class="patient-list-display-card">
@@ -4106,10 +4113,11 @@ function normalisePatientListDisplaySettings(raw){
   });
   DEFAULT_PATIENT_LIST_SECTION_ORDER.forEach(key=>{ if(!seen.has(key)) order.push(key); });
   const showAcuityBadge=Object.prototype.hasOwnProperty.call(source,'showAcuityBadge') ? !!source.showAcuityBadge : true;
-  return {enabled, order, showAcuityBadge};
+  const showAcuityRail=Object.prototype.hasOwnProperty.call(source,'showAcuityRail') ? !!source.showAcuityRail : false;
+  return {enabled, order, showAcuityBadge, showAcuityRail};
 }
 function defaultPatientListDisplaySettings(){
-  return normalisePatientListDisplaySettings({enabled:{issues:true,bloods:true,admitDate:true,obs:true}, order:DEFAULT_PATIENT_LIST_SECTION_ORDER.slice(), showAcuityBadge:true});
+  return normalisePatientListDisplaySettings({enabled:{issues:true,bloods:true,admitDate:true,obs:true}, order:DEFAULT_PATIENT_LIST_SECTION_ORDER.slice(), showAcuityBadge:true, showAcuityRail:false});
 }
 function loadPatientListDisplaySettings(){
   try{
@@ -7196,6 +7204,8 @@ function getPatientListCardMarkup(patient, id, options={}){
   const displaySettings = options && options.displaySettings ? options.displaySettings : getPatientListDisplaySettings();
   const preview = !!(options && options.preview);
   const visitSelected = !preview && !!p.visitSelected;
+  const showAcuityRail = !!(displaySettings && displaySettings.showAcuityRail);
+  const acuityClassName = showAcuityRail ? ` patient-card-acuity-rail acuity-${escapeHtml(p && p.acuityClass || 'green')}` : '';
   const shellClass = `swipe-shell${preview ? ' patient-list-display-preview-shell' : ''}`;
   const swipeBackground = preview ? '' : `
       <div class="swipe-background">
@@ -7223,7 +7233,7 @@ function getPatientListCardMarkup(patient, id, options={}){
   return `
       <div class="${shellClass}" data-patient-id="${patientId}">
         ${swipeBackground}
-        <div class="card swipe-foreground${visitSelected ? ' visit-selected' : ''}" data-patient-foreground="${patientId}">
+        <div class="card swipe-foreground${visitSelected ? ' visit-selected' : ''}${acuityClassName}" data-patient-foreground="${patientId}">
           <div class="patient-card-inner">
             <button class="patient-btn patient-main" data-patient="${patientId}">
               <div class="patient-main-copy">
@@ -10618,7 +10628,7 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
 const APP_BUILD_FILENAME='hospital_at_home_v12_36_585_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_585_source.zip';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_586_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11713,9 +11723,11 @@ function renderPatientListDisplaySettingsUI(){
   const wrap=$('patientListDisplayRows');
   const permanent=$('patientListDisplayPermanent');
   const acuityToggle=$('patientListShowAcuityToggle');
+  const acuityRailToggle=$('patientListShowAcuityRailToggle');
   if(permanent) permanent.textContent='Permanent: Name • Age • Referral';
   const settings=getPatientListDisplaySettings();
   if(acuityToggle) acuityToggle.checked=settings.showAcuityBadge!==false;
+  if(acuityRailToggle) acuityRailToggle.checked=!!settings.showAcuityRail;
   if(!wrap) return;
   wrap.innerHTML=settings.order.map(key=>{
     const meta=PATIENT_LIST_SECTION_DEFS[key]||{title:key,subtitle:''};
@@ -11826,7 +11838,8 @@ function endPatientListDisplayDrag(e, commit=true){
 function initPatientListDisplaySettingsUI(){
   const wrap=$('patientListDisplayRows');
   const acuityToggle=$('patientListShowAcuityToggle');
-  if((!wrap && !acuityToggle) || (wrap && wrap.dataset.bound==='1')) return;
+  const acuityRailToggle=$('patientListShowAcuityRailToggle');
+  if((!wrap && !acuityToggle && !acuityRailToggle) || (wrap && wrap.dataset.bound==='1')) return;
   if(wrap) wrap.dataset.bound='1';
   renderPatientListDisplaySettingsUI();
   if(acuityToggle && acuityToggle.dataset.bound!=='1'){
@@ -11835,6 +11848,17 @@ function initPatientListDisplaySettingsUI(){
       updatePatientListDisplaySettings(prev=>({
         ...prev,
         showAcuityBadge:!!acuityToggle.checked
+      }), true);
+      renderPatientList();
+      renderPatientListDisplaySettingsUI();
+    });
+  }
+  if(acuityRailToggle && acuityRailToggle.dataset.bound!=='1'){
+    acuityRailToggle.dataset.bound='1';
+    acuityRailToggle.addEventListener('change', ()=>{
+      updatePatientListDisplaySettings(prev=>({
+        ...prev,
+        showAcuityRail:!!acuityRailToggle.checked
       }), true);
       renderPatientList();
       renderPatientListDisplaySettingsUI();
@@ -18150,7 +18174,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_585_release.html; source=hospital_at_home_v12_36_585_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_586_release.html; source=hospital_at_home_v12_36_586_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
