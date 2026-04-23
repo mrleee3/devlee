@@ -2503,6 +2503,14 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail[data-detail-mode="review"] #patientBoardSummaryCard{display:none!important}
 @media (max-width:390px){.header-actions{gap:6px}.header-mode-switch{height:34px;padding:2px}.header-mode-btn{min-width:48px;height:28px;padding:0 10px;font-size:12.5px}.header-lock{min-width:40px;width:40px;height:34px}}
 
+/* ── Contextual tab bar (v12.36.599) ───────────────────────────────
+   Global nav on patient list / tasks / options; patient nav on detail.
+   Swap is keyed off body.detail-view-active (already managed in security.js). */
+.nav.nav-patient{display:none}
+body.detail-view-active .nav.nav-global{display:none}
+body.detail-view-active .nav.nav-patient{display:flex}
+.nav.nav-patient.hidden{display:none!important}
+
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -2711,7 +2719,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 </div>
-<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2" aria-hidden="true"></div><div class="header-patient-flags hidden" id="headerPatientFlags" aria-hidden="true"></div></div><div class="header-actions"><div class="header-mode-switch hidden" id="headerModeSwitch" role="tablist" aria-label="Patient detail mode"><button aria-label="Board mode" aria-selected="true" class="header-mode-btn active" id="headerModeBoardBtn" role="tab" title="Board" type="button"><span class="header-mode-label">Board</span></button><button aria-label="Review mode" aria-selected="false" class="header-mode-btn" id="headerModeReviewBtn" role="tab" title="Review" type="button"><span class="header-mode-label">Review</span></button></div><button aria-label="Add task for current patient" class="header-lock header-task-btn hidden" id="headerTaskBtn" title="Add task"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 20V4"></path><path d="M7 5h10l-2 3 2 3H7z"></path></svg><span class="header-task-count hidden" id="headerTaskCountBadge">0</span></button></div></div></header>
+<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2" aria-hidden="true"></div><div class="header-patient-flags hidden" id="headerPatientFlags" aria-hidden="true"></div></div></div></header>
 <section class="container" id="patients">
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
@@ -2924,7 +2932,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_598_release.html</div><div>Source: hospital_at_home_v12_36_598_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_599_release.html</div><div>Source: hospital_at_home_v12_36_599_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3201,7 +3209,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <button class="reorder-reset-btn" id="reorderResetBtn" type="button">Reset</button>
 <button class="reorder-done-btn" id="reorderDoneBtn" type="button">Done</button>
 </div>
-<nav class="nav">
+<nav class="nav nav-global" id="navGlobal">
   <button id="navPatients" aria-label="Patients" type="button">
     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <circle cx="12" cy="8" r="3.5"></circle>
@@ -3227,6 +3235,39 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
       <path d="M19.4 15a1.6 1.6 0 0 0 .32 1.76l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.6 1.6 0 0 0-1.76-.32 1.6 1.6 0 0 0-.97 1.47V21a2 2 0 0 1-4 0v-.09A1.6 1.6 0 0 0 9.2 19.4a1.6 1.6 0 0 0-1.76.32l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.6 1.6 0 0 0 .32-1.76 1.6 1.6 0 0 0-1.47-.97H3a2 2 0 0 1 0-4h.09A1.6 1.6 0 0 0 4.6 9.2a1.6 1.6 0 0 0-.32-1.76l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.6 1.6 0 0 0 1.76.32h.01A1.6 1.6 0 0 0 9.8 3.5V3a2 2 0 0 1 4 0v.09a1.6 1.6 0 0 0 .97 1.47 1.6 1.6 0 0 0 1.76-.32l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.6 1.6 0 0 0-.32 1.76v.01c.26.6.84 1 1.47 1H21a2 2 0 0 1 0 4h-.09a1.6 1.6 0 0 0-1.51.97z"></path>
     </svg>
     <span class="nav-label">Options</span>
+  </button>
+</nav>
+<nav class="nav nav-patient hidden" id="navPatient" aria-hidden="true">
+  <button id="navPatientSummary" aria-label="Summary" type="button">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="4" y="4" width="16" height="16" rx="2.5"></rect>
+      <path d="M8 9h8"></path>
+      <path d="M8 13h6"></path>
+      <path d="M8 17h4"></path>
+    </svg>
+    <span class="nav-label">Summary</span>
+  </button>
+  <button id="navPatientReview" aria-label="Review" type="button">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M5 3v5a5 5 0 0 0 5 5"></path>
+      <path d="M15 3v5a5 5 0 0 1-5 5"></path>
+      <path d="M10 13v2a5 5 0 0 0 5 5h0a4 4 0 0 0 4-4v-2"></path>
+      <circle cx="19" cy="12" r="2"></circle>
+      <circle cx="5" cy="3" r="0.9" fill="currentColor"></circle>
+      <circle cx="15" cy="3" r="0.9" fill="currentColor"></circle>
+    </svg>
+    <span class="nav-label">Review</span>
+  </button>
+  <button id="navPatientTasks" aria-label="Tasks for this patient" type="button">
+    <span class="nav-icon-wrap">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="5" y="5" width="14" height="15" rx="2"></rect>
+        <path d="M9 3h6a1 1 0 0 1 1 1v3H8V4a1 1 0 0 1 1-1z"></path>
+        <path d="M9 13l2 2 4-4"></path>
+      </svg>
+      <span class="nav-tasks-badge hidden" id="navPatientTasksBadge" aria-hidden="true"></span>
+    </span>
+    <span class="nav-label">Tasks</span>
   </button>
 </nav>
 <div class="context-menu-backdrop hidden" id="patientContextBackdrop"></div>
@@ -7141,8 +7182,13 @@ function setPatientHeaderModeVisibility(visible){
 function syncPatientHeaderModeButtons(){
   const boardBtn = $("headerModeBoardBtn");
   const reviewBtn = $("headerModeReviewBtn");
-  if(boardBtn){ boardBtn.classList.toggle('active', patientDetailMode !== 'review'); boardBtn.setAttribute('aria-selected', patientDetailMode !== 'review' ? 'true' : 'false'); }
-  if(reviewBtn){ reviewBtn.classList.toggle('active', patientDetailMode === 'review'); reviewBtn.setAttribute('aria-selected', patientDetailMode === 'review' ? 'true' : 'false'); }
+  const navSummaryBtn = $("navPatientSummary");
+  const navReviewBtn = $("navPatientReview");
+  const isReview = patientDetailMode === 'review';
+  if(boardBtn){ boardBtn.classList.toggle('active', !isReview); boardBtn.setAttribute('aria-selected', !isReview ? 'true' : 'false'); }
+  if(reviewBtn){ reviewBtn.classList.toggle('active', isReview); reviewBtn.setAttribute('aria-selected', isReview ? 'true' : 'false'); }
+  if(navSummaryBtn){ navSummaryBtn.classList.toggle('active', !isReview); navSummaryBtn.setAttribute('aria-selected', !isReview ? 'true' : 'false'); }
+  if(navReviewBtn){ navReviewBtn.classList.toggle('active', isReview); navReviewBtn.setAttribute('aria-selected', isReview ? 'true' : 'false'); }
 }
 
 function setBloodsSummaryTitleText(label){
@@ -10949,8 +10995,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_598_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_598_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_599_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_599_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11468,30 +11514,32 @@ function getPatientTaskBadgeMarkup(patientId){
   return `<div class="patient-task-badge${counts.urgent ? ' now' : ''}" title="${escapeHtml(title)}">${escapeHtml(label)}</div>`;
 }
 function updateHeaderTaskButton(){
-  const btn = $('headerTaskBtn');
-  const countBadge = $('headerTaskCountBadge');
-  if(!btn) return;
+  /* Header task button was removed in v12.36.599 when the contextual tab bar
+     took over patient-specific task access. Function name kept so existing
+     call sites don't need changing; it now drives the patient-nav Tasks badge. */
+  const legacyBtn = $('headerTaskBtn');
+  if(legacyBtn) legacyBtn.classList.add('hidden');
+  const navBtn = $('navPatientTasks');
+  const navBadge = $('navPatientTasksBadge');
+  if(!navBtn) return;
   const detailVisible = !!($('patientDetail') && !$('patientDetail').classList.contains('hidden') && currentPatient && patients && patients[currentPatient]);
-  btn.classList.toggle('hidden', !detailVisible);
   if(!detailVisible){
-    if(countBadge){
-      countBadge.textContent = '0';
-      countBadge.classList.add('hidden');
-      countBadge.classList.remove('urgent');
+    if(navBadge){
+      navBadge.textContent = '';
+      navBadge.classList.add('hidden');
     }
-    btn.setAttribute('aria-hidden', 'true');
+    navBtn.removeAttribute('aria-label');
+    navBtn.setAttribute('aria-label','Tasks for this patient');
     return;
   }
-  btn.removeAttribute('aria-hidden');
   const counts = getPatientTaskCounts(currentPatient);
   const openCount = counts.open || 0;
-  const label = openCount ? `Add task for current patient • ${openCount} open` : 'Add task for current patient';
-  btn.setAttribute('aria-label', label);
-  btn.title = label;
-  if(countBadge){
-    countBadge.textContent = String(openCount);
-    countBadge.classList.toggle('hidden', !openCount);
-    countBadge.classList.toggle('urgent', !!counts.urgent);
+  const label = openCount ? `Tasks for this patient, ${openCount} open${counts.urgent ? `, ${counts.urgent} urgent` : ''}` : 'Tasks for this patient';
+  navBtn.setAttribute('aria-label', label);
+  navBtn.title = openCount ? `${openCount} open${counts.urgent ? ` • ${counts.urgent} urgent` : ''}` : 'Tasks for this patient';
+  if(navBadge){
+    navBadge.textContent = formatTaskBadgeCount(openCount);
+    navBadge.classList.toggle('hidden', !openCount);
   }
 }
 function refreshTaskDependentUi(opts={}){
@@ -11902,6 +11950,27 @@ function initTasksUI(){
   if(headerTaskBtn && headerTaskBtn.dataset.bound !== '1'){
     headerTaskBtn.dataset.bound = '1';
     headerTaskBtn.onclick = ()=>{ if(currentPatient && patients && patients[currentPatient]) openTaskOverlayForPatient(currentPatient); };
+  }
+  const navPatientSummaryBtn = $('navPatientSummary');
+  if(navPatientSummaryBtn && navPatientSummaryBtn.dataset.bound !== '1'){
+    navPatientSummaryBtn.dataset.bound = '1';
+    navPatientSummaryBtn.onclick = ()=>{
+      if(typeof shouldSuppressPostUnlockInteraction === 'function' && shouldSuppressPostUnlockInteraction()) return;
+      if(typeof setPatientDetailMode === 'function') setPatientDetailMode('board');
+    };
+  }
+  const navPatientReviewBtn = $('navPatientReview');
+  if(navPatientReviewBtn && navPatientReviewBtn.dataset.bound !== '1'){
+    navPatientReviewBtn.dataset.bound = '1';
+    navPatientReviewBtn.onclick = ()=>{
+      if(typeof shouldSuppressPostUnlockInteraction === 'function' && shouldSuppressPostUnlockInteraction()) return;
+      if(typeof setPatientDetailMode === 'function') setPatientDetailMode('review', {scrollTop:false});
+    };
+  }
+  const navPatientTasksBtn = $('navPatientTasks');
+  if(navPatientTasksBtn && navPatientTasksBtn.dataset.bound !== '1'){
+    navPatientTasksBtn.dataset.bound = '1';
+    navPatientTasksBtn.onclick = ()=>{ if(currentPatient && patients && patients[currentPatient]) openTaskOverlayForPatient(currentPatient); };
   }
   const closeBtn = $('taskOverlayCloseBtn');
   if(closeBtn && closeBtn.dataset.bound !== '1'){
@@ -18804,7 +18873,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_598_release.html; source=hospital_at_home_v12_36_598_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_599_release.html; source=hospital_at_home_v12_36_599_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
