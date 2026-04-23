@@ -366,9 +366,9 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 /* Contextual tab bar: global while on list/tasks/options, patient-scoped while inside a patient */
 body.detail-view-active .nav-global{display:none!important}
 body:not(.detail-view-active) .nav-patient{display:none!important}
-/* Inline right-edge container for the DNAR chip in the patient header */
+/* Inline right-edge container for the DNACPR chip in the patient header */
 .header-row > .header-patient-flags{margin-top:0;flex-shrink:0;align-self:center}
-.header-row > .header-patient-flags .patient-status-chip{box-shadow:0 1px 2px rgba(15,23,42,.14)}
+.header-row > .header-patient-flags .patient-status-chip{box-shadow:0 1px 2px rgba(15,23,42,.14);font-weight:800;letter-spacing:.01em}
 #patientDetail{padding-bottom:40px;}
 #patientDetail.detail-overlay-active{padding-bottom:40px;}
 .nav button{position:relative;background:none;border:none;box-shadow:none;padding:6px 10px 2px;min-width:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:13px;font-weight:700;color:#374151;line-height:1.15}.nav button:active{transform:none}.nav-icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:30px;height:28px;flex:0 0 auto;overflow:visible;isolation:isolate}.nav-icon{position:relative;z-index:1;width:24px;height:24px;display:block;stroke:currentColor;fill:none;flex:0 0 auto}.nav-icon *{vector-effect:non-scaling-stroke}.nav-tasks-badge{position:absolute;top:-4px;right:-12px;z-index:3;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#ff3b30;color:#fff;font-size:11px;font-weight:800;line-height:18px;text-align:center;box-shadow:0 0 0 2px rgba(255,255,255,.97);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;pointer-events:none;transform:translateZ(0);-webkit-transform:translateZ(0)}.nav-tasks-badge::before{content:"";position:absolute;inset:-2px;border-radius:inherit;background:#fff;z-index:-1}.nav-label{display:block;font-size:13px;line-height:1.15}.nav .active{color:var(--blue)}
@@ -2930,7 +2930,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_605_release.html</div><div>Source: hospital_at_home_v12_36_605_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_606_release.html</div><div>Source: hospital_at_home_v12_36_606_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -7165,10 +7165,15 @@ function renderHeaderPatientContext(patient){
     metaEl.classList.add('hidden');
   }
   if(flagsEl){
-    // Use the same pill style as the patient list (patient-status-chip.dnacpr)
-    const flagMarkup = typeof getPatientBoardFlagMarkup === 'function' ? getPatientBoardFlagMarkup(patient) : '';
-    flagsEl.innerHTML = flagMarkup;
-    flagsEl.classList.toggle('hidden', !flagMarkup);
+    // Use the SAME chip as the patient list (getPatientEscalationChip) so label
+    // and styling are identical. We only render the DNACPR variant here —
+    // ACP / UCP chips are list-level triage cues and not shown in the header.
+    const chip = typeof getPatientEscalationChip === 'function' ? getPatientEscalationChip(patient) : null;
+    const markup = (chip && chip.className === 'dnacpr')
+      ? `<div class="patient-status-chip ${escapeHtml(chip.className)}" title="${escapeHtml(chip.title)}">${escapeHtml(chip.label)}</div>`
+      : '';
+    flagsEl.innerHTML = markup;
+    flagsEl.classList.toggle('hidden', !markup);
   }
   if(typeof syncSharedHeaderHeight==='function') syncSharedHeaderHeight();
 }
@@ -11030,8 +11035,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_605_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_605_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_606_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_606_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -18921,7 +18926,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_605_release.html; source=hospital_at_home_v12_36_605_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_606_release.html; source=hospital_at_home_v12_36_606_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
