@@ -363,6 +363,9 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 .news-score{font-size:36px;line-height:1;margin-bottom:6px}.news-low{background:var(--green)} .news-medium{background:var(--amber)} .news-high{background:var(--red)}
 .result-box{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;min-height:160px;margin-bottom:8px;touch-action:pan-y}
 .nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:flex-end;padding:7px 8px calc(3px + env(safe-area-inset-bottom));z-index:30;transition:transform .18s ease,opacity .18s ease} body.keyboard-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none} body.keyboard-open.dictation-active .nav{transform:none;opacity:1;pointer-events:auto}
+/* Contextual tab bar: global while on list/tasks/options, patient-scoped while inside a patient */
+body.detail-view-active .nav-global{display:none!important}
+body:not(.detail-view-active) .nav-patient{display:none!important}
 #patientDetail{padding-bottom:40px;}
 #patientDetail.detail-overlay-active{padding-bottom:40px;}
 .nav button{position:relative;background:none;border:none;box-shadow:none;padding:6px 10px 2px;min-width:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:13px;font-weight:700;color:#374151;line-height:1.15}.nav button:active{transform:none}.nav-icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:30px;height:28px;flex:0 0 auto;overflow:visible;isolation:isolate}.nav-icon{position:relative;z-index:1;width:24px;height:24px;display:block;stroke:currentColor;fill:none;flex:0 0 auto}.nav-icon *{vector-effect:non-scaling-stroke}.nav-tasks-badge{position:absolute;top:-4px;right:-12px;z-index:3;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#ff3b30;color:#fff;font-size:11px;font-weight:800;line-height:18px;text-align:center;box-shadow:0 0 0 2px rgba(255,255,255,.97);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;pointer-events:none;transform:translateZ(0);-webkit-transform:translateZ(0)}.nav-tasks-badge::before{content:"";position:absolute;inset:-2px;border-radius:inherit;background:#fff;z-index:-1}.nav-label{display:block;font-size:13px;line-height:1.15}.nav .active{color:var(--blue)}
@@ -2503,14 +2506,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail[data-detail-mode="review"] #patientBoardSummaryCard{display:none!important}
 @media (max-width:390px){.header-actions{gap:6px}.header-mode-switch{height:34px;padding:2px}.header-mode-btn{min-width:48px;height:28px;padding:0 10px;font-size:12.5px}.header-lock{min-width:40px;width:40px;height:34px}}
 
-/* ── Contextual tab bar (v12.36.599) ───────────────────────────────
-   Global nav on patient list / tasks / options; patient nav on detail.
-   Swap is keyed off body.detail-view-active (already managed in security.js). */
-.nav.nav-patient{display:none}
-body.detail-view-active .nav.nav-global{display:none}
-body.detail-view-active .nav.nav-patient{display:flex}
-.nav.nav-patient.hidden{display:none!important}
-
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -2932,7 +2927,7 @@ body.detail-view-active .nav.nav-patient{display:flex}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_599_release.html</div><div>Source: hospital_at_home_v12_36_599_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_600_release.html</div><div>Source: hospital_at_home_v12_36_600_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3209,7 +3204,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <button class="reorder-reset-btn" id="reorderResetBtn" type="button">Reset</button>
 <button class="reorder-done-btn" id="reorderDoneBtn" type="button">Done</button>
 </div>
-<nav class="nav nav-global" id="navGlobal">
+<nav class="nav nav-global">
   <button id="navPatients" aria-label="Patients" type="button">
     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <circle cx="12" cy="8" r="3.5"></circle>
@@ -3237,7 +3232,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
     <span class="nav-label">Options</span>
   </button>
 </nav>
-<nav class="nav nav-patient hidden" id="navPatient" aria-hidden="true">
+<nav class="nav nav-patient" id="navPatient">
   <button id="navPatientSummary" aria-label="Summary" type="button">
     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <rect x="4" y="4" width="16" height="16" rx="2.5"></rect>
@@ -3253,8 +3248,8 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
       <path d="M15 3v5a5 5 0 0 1-5 5"></path>
       <path d="M10 13v2a5 5 0 0 0 5 5h0a4 4 0 0 0 4-4v-2"></path>
       <circle cx="19" cy="12" r="2"></circle>
-      <circle cx="5" cy="3" r="0.9" fill="currentColor"></circle>
-      <circle cx="15" cy="3" r="0.9" fill="currentColor"></circle>
+      <circle cx="5" cy="3" r="0.9" fill="currentColor" stroke="none"></circle>
+      <circle cx="15" cy="3" r="0.9" fill="currentColor" stroke="none"></circle>
     </svg>
     <span class="nav-label">Review</span>
   </button>
@@ -7174,21 +7169,25 @@ function renderHeaderPatientContext(patient){
 }
 
 function setPatientHeaderModeVisibility(visible){
+  // Header mode switch has moved to the patient-context bottom nav, which is
+  // shown/hidden automatically via body.detail-view-active. This function is
+  // kept as a no-op for back-compat with old callers.
   const switchEl = $("headerModeSwitch");
-  if(!switchEl) return;
-  switchEl.classList.toggle('hidden', !visible);
+  if(switchEl) switchEl.classList.toggle('hidden', !visible);
 }
 
 function syncPatientHeaderModeButtons(){
+  const isReview = patientDetailMode === 'review';
+  // Legacy header buttons (may be absent after header cleanup)
   const boardBtn = $("headerModeBoardBtn");
   const reviewBtn = $("headerModeReviewBtn");
-  const navSummaryBtn = $("navPatientSummary");
-  const navReviewBtn = $("navPatientReview");
-  const isReview = patientDetailMode === 'review';
   if(boardBtn){ boardBtn.classList.toggle('active', !isReview); boardBtn.setAttribute('aria-selected', !isReview ? 'true' : 'false'); }
   if(reviewBtn){ reviewBtn.classList.toggle('active', isReview); reviewBtn.setAttribute('aria-selected', isReview ? 'true' : 'false'); }
-  if(navSummaryBtn){ navSummaryBtn.classList.toggle('active', !isReview); navSummaryBtn.setAttribute('aria-selected', !isReview ? 'true' : 'false'); }
-  if(navReviewBtn){ navReviewBtn.classList.toggle('active', isReview); navReviewBtn.setAttribute('aria-selected', isReview ? 'true' : 'false'); }
+  // Patient-context bottom nav buttons
+  const navSummaryBtn = $("navPatientSummary");
+  const navReviewBtn = $("navPatientReview");
+  if(navSummaryBtn){ navSummaryBtn.classList.toggle('active', !isReview); navSummaryBtn.setAttribute('aria-current', !isReview ? 'page' : 'false'); }
+  if(navReviewBtn){ navReviewBtn.classList.toggle('active', isReview); navReviewBtn.setAttribute('aria-current', isReview ? 'page' : 'false'); }
 }
 
 function setBloodsSummaryTitleText(label){
@@ -9333,6 +9332,7 @@ function openPatient(id, opts={}) {
   calculateNews();
   if(typeof renderPatientBoardCard==='function') renderPatientBoardCard();
   if(typeof updateHeaderTaskButton==='function') updateHeaderTaskButton();
+  if(typeof updateNavPatientTasksBadge==='function') updateNavPatientTasksBadge();
   if(typeof renderBloodsSummaryCard==='function'){
     requestAnimationFrame(()=>{ try{ renderBloodsSummaryCard(); }catch(e){} });
   }
@@ -10883,6 +10883,7 @@ function updateHeaderForPatient(){
     if(typeof renderHeaderPatientContext==='function') renderHeaderPatientContext(p);
     if(typeof setPatientHeaderModeVisibility==='function') setPatientHeaderModeVisibility(true);
     if(typeof syncPatientHeaderModeButtons==='function') syncPatientHeaderModeButtons();
+    if(typeof updateNavPatientTasksBadge==='function') updateNavPatientTasksBadge();
     if(typeof syncSharedHeaderHeight==='function') syncSharedHeaderHeight();
   }catch(_e){}
 }
@@ -10949,6 +10950,12 @@ function syncSharedHeaderHeight(){
     }
   });
 }
+function syncNavContextForDetailView(active){
+  const globalNav=document.querySelector('.nav-global');
+  const patientNav=document.querySelector('.nav-patient');
+  if(globalNav) globalNav.style.display = active ? 'none' : '';
+  if(patientNav) patientNav.style.display = active ? '' : 'none';
+}
 function setPatientDetailStackActive(active){
   const patients=$("patients");
   const detail=$("patientDetail");
@@ -10959,6 +10966,7 @@ function setPatientDetailStackActive(active){
     detail.classList.add("detail-overlay-active");
     document.body.classList.add("detail-view-active");
     document.documentElement.classList.add("detail-view-active");
+    syncNavContextForDetailView(true);
   } else {
     patients.classList.remove("detail-underlay-active");
     detail.classList.remove("detail-overlay-active");
@@ -10970,6 +10978,7 @@ function setPatientDetailStackActive(active){
     detail.style.transform="";
     detail.style.boxShadow="";
     resetPatientDetailHeaderShift();
+    syncNavContextForDetailView(false);
   }
 }
 function animatePatientDetailSwipe(dx=0, dragging=false){
@@ -10995,8 +11004,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_599_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_599_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_600_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_600_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11167,6 +11176,10 @@ function goBackToPatientList(opts){
   const detail=$("patientDetail");
   const patients=$("patients");
   const reduced=typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Swap to global nav immediately so it's visible during the back slide.
+  // body.detail-view-active is still set until showSection is called below,
+  // so we flip the nav displays directly here.
+  if(typeof syncNavContextForDetailView==='function') syncNavContextForDetailView(false);
   try{
     const headerTaskBtn=$("headerTaskBtn");
     const headerTaskCountBadge=$("headerTaskCountBadge");
@@ -11514,38 +11527,37 @@ function getPatientTaskBadgeMarkup(patientId){
   return `<div class="patient-task-badge${counts.urgent ? ' now' : ''}" title="${escapeHtml(title)}">${escapeHtml(label)}</div>`;
 }
 function updateHeaderTaskButton(){
-  /* Header task button was removed in v12.36.599 when the contextual tab bar
-     took over patient-specific task access. Function name kept so existing
-     call sites don't need changing; it now drives the patient-nav Tasks badge. */
-  const legacyBtn = $('headerTaskBtn');
-  if(legacyBtn) legacyBtn.classList.add('hidden');
-  const navBtn = $('navPatientTasks');
-  const navBadge = $('navPatientTasksBadge');
-  if(!navBtn) return;
+  const btn = $('headerTaskBtn');
+  const countBadge = $('headerTaskCountBadge');
+  if(!btn) return;
   const detailVisible = !!($('patientDetail') && !$('patientDetail').classList.contains('hidden') && currentPatient && patients && patients[currentPatient]);
+  btn.classList.toggle('hidden', !detailVisible);
   if(!detailVisible){
-    if(navBadge){
-      navBadge.textContent = '';
-      navBadge.classList.add('hidden');
+    if(countBadge){
+      countBadge.textContent = '0';
+      countBadge.classList.add('hidden');
+      countBadge.classList.remove('urgent');
     }
-    navBtn.removeAttribute('aria-label');
-    navBtn.setAttribute('aria-label','Tasks for this patient');
+    btn.setAttribute('aria-hidden', 'true');
     return;
   }
+  btn.removeAttribute('aria-hidden');
   const counts = getPatientTaskCounts(currentPatient);
   const openCount = counts.open || 0;
-  const label = openCount ? `Tasks for this patient, ${openCount} open${counts.urgent ? `, ${counts.urgent} urgent` : ''}` : 'Tasks for this patient';
-  navBtn.setAttribute('aria-label', label);
-  navBtn.title = openCount ? `${openCount} open${counts.urgent ? ` • ${counts.urgent} urgent` : ''}` : 'Tasks for this patient';
-  if(navBadge){
-    navBadge.textContent = formatTaskBadgeCount(openCount);
-    navBadge.classList.toggle('hidden', !openCount);
+  const label = openCount ? `Add task for current patient • ${openCount} open` : 'Add task for current patient';
+  btn.setAttribute('aria-label', label);
+  btn.title = label;
+  if(countBadge){
+    countBadge.textContent = String(openCount);
+    countBadge.classList.toggle('hidden', !openCount);
+    countBadge.classList.toggle('urgent', !!counts.urgent);
   }
 }
 function refreshTaskDependentUi(opts={}){
   if(typeof renderPatientList==='function') renderPatientList();
   if(typeof updateHeaderTaskButton==='function') updateHeaderTaskButton();
   if(typeof updateNavTasksBadge==='function') updateNavTasksBadge();
+  if(typeof updateNavPatientTasksBadge==='function') updateNavPatientTasksBadge();
   if(typeof renderPatientBoardCard==='function' && $('patientDetail') && !$('patientDetail').classList.contains('hidden')) renderPatientBoardCard();
   if(opts.renderTasks !== false && $('tasks') && !$('tasks').classList.contains('hidden')) renderTasksPage();
 }
@@ -11579,6 +11591,25 @@ function updateNavTasksBadge(){
   const openCount = counts.open || 0;
   const label = openCount ? `${openCount} open tasks` : 'No open tasks';
   btn.setAttribute('aria-label', `Tasks${openCount ? `, ${label}` : ''}`);
+  btn.title = label;
+  badge.textContent = formatTaskBadgeCount(openCount);
+  badge.classList.toggle('hidden', !openCount);
+}
+function updateNavPatientTasksBadge(){
+  const badge = $('navPatientTasksBadge');
+  const btn = $('navPatientTasks');
+  if(!badge || !btn) return;
+  if(!currentPatient || !patients || !patients[currentPatient]){
+    badge.textContent = '';
+    badge.classList.add('hidden');
+    btn.setAttribute('aria-label', 'Tasks for this patient');
+    btn.title = 'Tasks';
+    return;
+  }
+  const counts = getPatientTaskCounts(currentPatient);
+  const openCount = counts.open || 0;
+  const label = openCount ? `${openCount} open task${openCount===1?'':'s'} for this patient` : 'No open tasks for this patient';
+  btn.setAttribute('aria-label', label);
   btn.title = label;
   badge.textContent = formatTaskBadgeCount(openCount);
   badge.classList.toggle('hidden', !openCount);
@@ -11950,27 +11981,6 @@ function initTasksUI(){
   if(headerTaskBtn && headerTaskBtn.dataset.bound !== '1'){
     headerTaskBtn.dataset.bound = '1';
     headerTaskBtn.onclick = ()=>{ if(currentPatient && patients && patients[currentPatient]) openTaskOverlayForPatient(currentPatient); };
-  }
-  const navPatientSummaryBtn = $('navPatientSummary');
-  if(navPatientSummaryBtn && navPatientSummaryBtn.dataset.bound !== '1'){
-    navPatientSummaryBtn.dataset.bound = '1';
-    navPatientSummaryBtn.onclick = ()=>{
-      if(typeof shouldSuppressPostUnlockInteraction === 'function' && shouldSuppressPostUnlockInteraction()) return;
-      if(typeof setPatientDetailMode === 'function') setPatientDetailMode('board');
-    };
-  }
-  const navPatientReviewBtn = $('navPatientReview');
-  if(navPatientReviewBtn && navPatientReviewBtn.dataset.bound !== '1'){
-    navPatientReviewBtn.dataset.bound = '1';
-    navPatientReviewBtn.onclick = ()=>{
-      if(typeof shouldSuppressPostUnlockInteraction === 'function' && shouldSuppressPostUnlockInteraction()) return;
-      if(typeof setPatientDetailMode === 'function') setPatientDetailMode('review', {scrollTop:false});
-    };
-  }
-  const navPatientTasksBtn = $('navPatientTasks');
-  if(navPatientTasksBtn && navPatientTasksBtn.dataset.bound !== '1'){
-    navPatientTasksBtn.dataset.bound = '1';
-    navPatientTasksBtn.onclick = ()=>{ if(currentPatient && patients && patients[currentPatient]) openTaskOverlayForPatient(currentPatient); };
   }
   const closeBtn = $('taskOverlayCloseBtn');
   if(closeBtn && closeBtn.dataset.bound !== '1'){
@@ -13601,6 +13611,18 @@ document.addEventListener("DOMContentLoaded",function(){
   if($("headerModeReviewBtn") && $("headerModeReviewBtn").dataset.bound!=="1"){
     $("headerModeReviewBtn").dataset.bound="1";
     $("headerModeReviewBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; if(typeof setPatientDetailMode==='function') setPatientDetailMode('review', {scrollTop:false}); };
+  }
+  if($("navPatientSummary") && $("navPatientSummary").dataset.bound!=="1"){
+    $("navPatientSummary").dataset.bound="1";
+    $("navPatientSummary").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; if(typeof setPatientDetailMode==='function') setPatientDetailMode('board'); };
+  }
+  if($("navPatientReview") && $("navPatientReview").dataset.bound!=="1"){
+    $("navPatientReview").dataset.bound="1";
+    $("navPatientReview").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; if(typeof setPatientDetailMode==='function') setPatientDetailMode('review', {scrollTop:false}); };
+  }
+  if($("navPatientTasks") && $("navPatientTasks").dataset.bound!=="1"){
+    $("navPatientTasks").dataset.bound="1";
+    $("navPatientTasks").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; if(currentPatient && patients && patients[currentPatient] && typeof openTaskOverlayForPatient==='function') openTaskOverlayForPatient(currentPatient); };
   }
   if(!document.body.dataset.patientModeFocusBound){
     document.body.dataset.patientModeFocusBound="1";
@@ -18873,7 +18895,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_599_release.html; source=hospital_at_home_v12_36_599_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_600_release.html; source=hospital_at_home_v12_36_600_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
