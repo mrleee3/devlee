@@ -366,6 +366,9 @@ textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-colum
 /* Contextual tab bar: global while on list/tasks/options, patient-scoped while inside a patient */
 body.detail-view-active .nav-global{display:none!important}
 body:not(.detail-view-active) .nav-patient{display:none!important}
+/* Inline right-edge container for the DNAR chip in the patient header */
+.header-row > .header-patient-flags{margin-top:0;flex-shrink:0;align-self:center}
+.header-row > .header-patient-flags .patient-status-chip{box-shadow:0 1px 2px rgba(15,23,42,.14)}
 #patientDetail{padding-bottom:40px;}
 #patientDetail.detail-overlay-active{padding-bottom:40px;}
 .nav button{position:relative;background:none;border:none;box-shadow:none;padding:6px 10px 2px;min-width:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:13px;font-weight:700;color:#374151;line-height:1.15}.nav button:active{transform:none}.nav-icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:30px;height:28px;flex:0 0 auto;overflow:visible;isolation:isolate}.nav-icon{position:relative;z-index:1;width:24px;height:24px;display:block;stroke:currentColor;fill:none;flex:0 0 auto}.nav-icon *{vector-effect:non-scaling-stroke}.nav-tasks-badge{position:absolute;top:-4px;right:-12px;z-index:3;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#ff3b30;color:#fff;font-size:11px;font-weight:800;line-height:18px;text-align:center;box-shadow:0 0 0 2px rgba(255,255,255,.97);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;pointer-events:none;transform:translateZ(0);-webkit-transform:translateZ(0)}.nav-tasks-badge::before{content:"";position:absolute;inset:-2px;border-radius:inherit;background:#fff;z-index:-1}.nav-label{display:block;font-size:13px;line-height:1.15}.nav .active{color:var(--blue)}
@@ -2714,7 +2717,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 </div>
 </div>
-<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2" aria-hidden="true"></div><div class="header-patient-flags hidden" id="headerPatientFlags" aria-hidden="true"></div></div></div></header>
+<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2" aria-hidden="true"></div></div><div class="header-patient-flags hidden" id="headerPatientFlags" aria-hidden="true"></div></div></header>
 <section class="container" id="patients">
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
@@ -2927,7 +2930,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_600_release.html</div><div>Source: hospital_at_home_v12_36_600_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_602_release.html</div><div>Source: hospital_at_home_v12_36_602_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -7162,8 +7165,10 @@ function renderHeaderPatientContext(patient){
     metaEl.classList.add('hidden');
   }
   if(flagsEl){
-    flagsEl.innerHTML = '';
-    flagsEl.classList.add('hidden');
+    // Use the same pill style as the patient list (patient-status-chip.dnacpr)
+    const flagMarkup = typeof getPatientBoardFlagMarkup === 'function' ? getPatientBoardFlagMarkup(patient) : '';
+    flagsEl.innerHTML = flagMarkup;
+    flagsEl.classList.toggle('hidden', !flagMarkup);
   }
   if(typeof syncSharedHeaderHeight==='function') syncSharedHeaderHeight();
 }
@@ -7213,8 +7218,24 @@ function syncPatientBoardBloodsPlacement(){
     bloodsCard.classList.add('board-embedded');
     setBloodsSummaryTitleText('Bloods');
   } else {
-    const anchor = detail.querySelector('.patient-reorder-card[data-card-key="obs"]');
-    if(anchor && bloodsCard.parentElement !== detail) detail.insertBefore(bloodsCard, anchor);
+    // Return bloods to the patient detail flow in the position defined by
+    // the user's saved patientCardOrder, not always before the obs card.
+    if(bloodsCard.parentElement !== detail){
+      const order = (typeof patientCardOrder !== 'undefined' && Array.isArray(patientCardOrder))
+        ? patientCardOrder
+        : (typeof DEFAULT_PATIENT_CARD_ORDER !== 'undefined' ? DEFAULT_PATIENT_CARD_ORDER : []);
+      const bloodsIdx = order.indexOf('bloodsSummary');
+      // Find the next card key from the saved order that exists in the DOM; insert before it.
+      let anchor = null;
+      if(bloodsIdx !== -1){
+        for(let i=bloodsIdx+1; i<order.length; i++){
+          const candidate = detail.querySelector('.patient-reorder-card[data-card-key="'+order[i]+'"]');
+          if(candidate){ anchor = candidate; break; }
+        }
+      }
+      if(anchor){ detail.insertBefore(bloodsCard, anchor); }
+      else { detail.appendChild(bloodsCard); }
+    }
     bloodsCard.classList.remove('board-embedded');
     setBloodsSummaryTitleText('Recent bloods');
   }
@@ -7952,9 +7973,10 @@ function renderPatientBoardCard(){
   const metaParts=[referralLabel(patient.referralSource), patient.doa ? `Adm ${patient.doa}` : '', losDays!==null ? `LOS ${losDays}d` : ''].filter(Boolean);
   if(meta) meta.textContent=metaParts.join(' • ');
   if(flags){
-    const flagMarkup=getPatientBoardFlagMarkup(patient);
-    flags.innerHTML=flagMarkup;
-    flags.classList.toggle('hidden', !flagMarkup);
+    // DNAR chip now rendered in the patient header (always visible while scrolled).
+    // Leave this container empty/hidden to avoid duplication.
+    flags.innerHTML='';
+    flags.classList.add('hidden');
   }
   if(hero) hero.textContent=heroText;
   const contextParts=[];
@@ -9319,6 +9341,10 @@ function openPatient(id, opts={}) {
   setFieldValues(p.form || {});
   detailLoadedForCurrentPatient = true;
   const openMode = opts && opts.mode === 'review' ? 'review' : 'board';
+  // Re-apply the user's saved card order BEFORE setPatientDetailMode (which
+  // moves the bloods card around based on mode) so bloods placement uses the
+  // correct anchor.
+  if(typeof applyPatientCardOrder==='function') applyPatientCardOrder();
   if(typeof setPatientDetailMode==='function') setPatientDetailMode(openMode, {instant:true, scrollTop:true});
   if(typeof setPatientHeaderModeVisibility==='function') setPatientHeaderModeVisibility(true);
   if(typeof syncPatientHeaderModeButtons==='function') syncPatientHeaderModeButtons();
@@ -11004,8 +11030,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_600_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_600_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_602_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_602_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -18895,7 +18921,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_600_release.html; source=hospital_at_home_v12_36_600_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_602_release.html; source=hospital_at_home_v12_36_602_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
