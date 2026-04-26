@@ -2949,7 +2949,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_619_release.html</div><div>Source: hospital_at_home_v12_36_619_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_620_release.html</div><div>Source: hospital_at_home_v12_36_620_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -11150,8 +11150,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_619_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_619_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_620_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_620_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -19042,7 +19042,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_619_release.html; source=hospital_at_home_v12_36_619_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_620_release.html; source=hospital_at_home_v12_36_620_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
@@ -20053,11 +20053,9 @@ window.HAH.modules.conditions = true;
       transition:background .14s ease,border-color .14s ease;
     }
     .condition-chip:active{transform:scale(.97)}
-    .condition-chip.is-high-yield{border-color:rgba(10,132,255,.28)}
-    .condition-chip.is-high-yield::before{
-      content:"";display:inline-block;width:6px;height:6px;border-radius:999px;
-      background:#0a84ff;margin-right:2px;
-    }
+    /* High-yield class is still applied in markup for future use (paired with a
+       completeness signal). Currently no visual, per v620 — dots without a
+       legend confused users in v619. */
     .condition-chip.is-present{
       background:#ecfdf5;border-color:rgba(16,163,74,.32);color:#166534;
     }
@@ -20072,6 +20070,46 @@ window.HAH.modules.conditions = true;
       -webkit-tap-highlight-color:transparent;
     }
     .condition-chip-info:active{background:#eef2ff}
+
+    .condition-chip-fill{
+      display:flex;align-items:center;flex-wrap:wrap;gap:6px;
+      width:100%;box-sizing:border-box;
+      padding:12px 14px;margin:2px 0;
+      background:#eff6ff;border:1px solid rgba(10,132,255,.32);
+      border-radius:14px;
+      font-size:13px;color:#0c447c;line-height:1.7;
+    }
+    .condition-chip-fill > span{font-weight:600}
+    .condition-fill-input{
+      width:42px;height:30px;
+      text-align:center;
+      border:1px solid rgba(10,132,255,.5);border-radius:8px;
+      background:#fff;
+      font-size:14px;font-weight:700;color:#0a84ff;
+      padding:0;
+      -webkit-appearance:none;appearance:none;
+      font-family:inherit;
+    }
+    .condition-fill-input:focus{
+      outline:none;border-color:#0a84ff;
+      box-shadow:0 0 0 3px rgba(10,132,255,.18);
+    }
+    .condition-fill-actions{
+      display:flex;gap:8px;margin-left:auto;padding-top:4px;
+    }
+    .condition-fill-actions button{
+      height:30px;border-radius:999px;
+      font-size:12px;font-weight:800;line-height:1;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .condition-fill-cancel{
+      padding:0 12px;background:transparent;color:#1d4ed8;
+      border:1px solid rgba(10,132,255,.32);
+    }
+    .condition-fill-commit{
+      padding:0 14px;background:#0a84ff;color:#fff;border:none;
+    }
+    .condition-fill-actions button:active{transform:scale(.97)}
 
     .condition-pitfall{
       width:100%;margin:6px 0 0;
@@ -20145,19 +20183,50 @@ window.HAH.modules.conditions = true;
   }
 
   // ──────────────────────────────────────────────────────────────────────
-  // Insertion (the only mutating action on tap)
+  // Placeholder parsing — splits insertText on \bN\b. Returns parts (text
+  // segments either side of each N) and count (number of N's). For an item
+  // with no N's, count is 0 and parts has length 1. Used by the inline
+  // expand-to-fill flow.
   // ──────────────────────────────────────────────────────────────────────
-  function insertItem(item){
+  function parsePlaceholders(insertText){
+    const text = String(insertText || '');
+    const parts = text.split(/\bN\b/);
+    return { parts, count: parts.length - 1 };
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Insertion / removal (the mutating actions)
+  // insertItem accepts an optional customText override so the fill flow can
+  // commit a substituted line while the registry's template stays intact.
+  // ──────────────────────────────────────────────────────────────────────
+  function insertItem(item, customText){
     const target = document.getElementById(item.target);
     if (!target) return false;
-    if (lineAlreadyPresent(target, item.insertText)) return false;
+    const textToInsert = customText != null ? customText : item.insertText;
+    if (lineAlreadyPresent(target, textToInsert)) return false;
     const lines = getFieldLines(target);
-    lines.push(item.insertText);
+    lines.push(textToInsert);
     target.value = lines.join('\n');
     // Trigger native input handlers so any listening dictation/word-count code reacts.
     try{ target.dispatchEvent(new Event('input', {bubbles:true})); }catch(_e){}
     if (typeof saveCurrentPatientForm === 'function') saveCurrentPatientForm();
     if (typeof saveData === 'function') saveData('Added: ' + item.label);
+    if (typeof generateClinicalOutput === 'function') generateClinicalOutput();
+    return true;
+  }
+
+  function removeItem(item){
+    const target = document.getElementById(item.target);
+    if (!target) return false;
+    const targetSkel = skeleton(item.insertText);
+    if (!targetSkel) return false;
+    const lines = getFieldLines(target);
+    const filtered = lines.filter(line => skeleton(line) !== targetSkel);
+    if (filtered.length === lines.length) return false; // wasn't present
+    target.value = filtered.join('\n');
+    try{ target.dispatchEvent(new Event('input', {bubbles:true})); }catch(_e){}
+    if (typeof saveCurrentPatientForm === 'function') saveCurrentPatientForm();
+    if (typeof saveData === 'function') saveData('Removed: ' + item.label);
     if (typeof generateClinicalOutput === 'function') generateClinicalOutput();
     return true;
   }
@@ -20299,6 +20368,117 @@ window.HAH.modules.conditions = true;
     return null;
   }
 
+  function cssEsc(value){
+    return (typeof CSS !== 'undefined' && CSS.escape) ? CSS.escape(value) : String(value).replace(/"/g,'\\"');
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Fill form: inline expansion of a chip with N placeholders.
+  // The chip is replaced in-place by a wider row containing the literal
+  // template prose interleaved with small numeric inputs, plus Cancel /
+  // Insert buttons. Empty inputs commit as the literal 'N' so the resulting
+  // line is honest about which values still need filling, and the skeleton
+  // dedup continues to recognise the line as belonging to this chip.
+  // ──────────────────────────────────────────────────────────────────────
+  function renderFillForm(item){
+    const {parts, count} = parsePlaceholders(item.insertText);
+    let html = `<div class="condition-chip-fill" data-item-id="${safeEscape(item.id)}">`;
+    for (let i = 0; i < parts.length; i++){
+      if (parts[i]) html += `<span>${safeEscape(parts[i])}</span>`;
+      if (i < count){
+        html += `<input class="condition-fill-input" type="text" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-fill-idx="${i}" aria-label="Value ${i+1}">`;
+      }
+    }
+    html += `<div class="condition-fill-actions">
+      <button class="condition-fill-cancel" data-action="cancel-fill" data-item-id="${safeEscape(item.id)}">Cancel</button>
+      <button class="condition-fill-commit" data-action="commit-fill" data-item-id="${safeEscape(item.id)}">Insert ✓</button>
+    </div>`;
+    html += `</div>`;
+    return html;
+  }
+
+  function expandToFill(itemId){
+    const host = document.getElementById('conditionPanelHost');
+    if (!host) return;
+    // Only one fill open at a time.
+    collapseAllFills();
+    const item = findItem(itemId);
+    if (!item) return;
+    const chip = host.querySelector(`.condition-chip[data-item-id="${cssEsc(itemId)}"]`);
+    if (!chip) return;
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = renderFillForm(item).trim();
+    const fillEl = wrapper.firstElementChild;
+    if (!fillEl || !chip.parentNode) return;
+    chip.parentNode.replaceChild(fillEl, chip);
+    bindHandlers(host);
+    // Wire keyboard advance + auto-commit on last-input Enter.
+    const inputs = Array.from(fillEl.querySelectorAll('.condition-fill-input'));
+    inputs.forEach((input, idx) => {
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter'){
+          e.preventDefault();
+          const next = inputs[idx+1];
+          if (next){ try{ next.focus(); next.select(); }catch(_e){} }
+          else commitFill(itemId);
+        }
+      });
+    });
+    // Auto-focus the first input.
+    if (inputs[0]){
+      requestAnimationFrame(() => { try{ inputs[0].focus(); }catch(_e){} });
+    }
+  }
+
+  function collapseFill(itemId){
+    const host = document.getElementById('conditionPanelHost');
+    if (!host) return;
+    const fillEl = host.querySelector(`.condition-chip-fill[data-item-id="${cssEsc(itemId)}"]`);
+    if (!fillEl) return;
+    const item = findItem(itemId);
+    if (!item || !fillEl.parentNode) return;
+    const wrapper = document.createElement('div');
+    // renderItemChip checks isItemPresent against the actual textarea, so the
+    // restored chip will correctly carry .is-present iff the line was inserted.
+    wrapper.innerHTML = renderItemChip(item).trim();
+    const chip = wrapper.firstElementChild;
+    if (!chip) return;
+    fillEl.parentNode.replaceChild(chip, fillEl);
+    bindHandlers(host);
+  }
+
+  function collapseAllFills(){
+    const host = document.getElementById('conditionPanelHost');
+    if (!host) return;
+    const open = Array.from(host.querySelectorAll('.condition-chip-fill'));
+    open.forEach(fill => {
+      const itemId = fill.dataset.itemId;
+      if (itemId) collapseFill(itemId);
+    });
+  }
+
+  function commitFill(itemId){
+    const host = document.getElementById('conditionPanelHost');
+    if (!host) return;
+    const fillEl = host.querySelector(`.condition-chip-fill[data-item-id="${cssEsc(itemId)}"]`);
+    if (!fillEl) return;
+    const item = findItem(itemId);
+    if (!item) return;
+    const inputs = Array.from(fillEl.querySelectorAll('.condition-fill-input'));
+    const values = inputs.map(inp => {
+      const v = String(inp.value || '').trim();
+      return v ? v : 'N'; // empty stays as N — honest, and skeleton dedup still matches.
+    });
+    const {parts} = parsePlaceholders(item.insertText);
+    let result = '';
+    for (let i = 0; i < parts.length; i++){
+      result += parts[i];
+      if (i < values.length) result += values[i];
+    }
+    insertItem(item, result);
+    collapseFill(itemId); // restored chip will pick up is-present from the textarea.
+  }
+
   // ──────────────────────────────────────────────────────────────────────
   // Lifecycle actions
   // ──────────────────────────────────────────────────────────────────────
@@ -20336,14 +20516,24 @@ window.HAH.modules.conditions = true;
         if (action === 'activate') return activateCondition(condId);
         if (action === 'dismiss') return dismissCondition(condId);
         if (action === 'deactivate') return deactivateCondition(condId);
+        if (action === 'cancel-fill') return collapseFill(itemId);
+        if (action === 'commit-fill') return commitFill(itemId);
         if (action === 'insert'){
           const item = findItem(itemId);
           if (!item) return;
-          // Per PROJECT_RULES §6, update presence in place — do not re-render the panel.
-          if (insertItem(item)){
-            const chip = el.closest('.condition-chip');
-            if (chip) chip.classList.add('is-present');
+          const chip = el.closest('.condition-chip');
+          // Toggle off if already present.
+          if (chip && chip.classList.contains('is-present')){
+            if (removeItem(item)) chip.classList.remove('is-present');
+            return;
           }
+          // If the item has placeholders, expand to fill rather than insert immediately.
+          if (parsePlaceholders(item.insertText).count > 0){
+            expandToFill(itemId);
+            return;
+          }
+          // Otherwise instant insert.
+          if (insertItem(item) && chip) chip.classList.add('is-present');
           return;
         }
         if (action === 'pitfall'){
@@ -20352,7 +20542,7 @@ window.HAH.modules.conditions = true;
           const chip = el.closest('.condition-chip');
           if (!chip) return;
           const row = chip.parentNode;
-          let tip = row.querySelector(`.condition-pitfall[data-for="${CSS.escape ? CSS.escape(itemId) : itemId}"]`);
+          let tip = row.querySelector(`.condition-pitfall[data-for="${cssEsc(itemId)}"]`);
           if (tip){ tip.remove(); return; }
           tip = document.createElement('div');
           tip.className = 'condition-pitfall';
