@@ -2949,7 +2949,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_618_release.html</div><div>Source: hospital_at_home_v12_36_618_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_619_release.html</div><div>Source: hospital_at_home_v12_36_619_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -9479,6 +9479,9 @@ function openPatient(id, opts={}) {
   if(typeof renderBloodsSummaryCard==='function'){
     requestAnimationFrame(()=>{ try{ renderBloodsSummaryCard(); }catch(e){} });
   }
+  if(typeof window.HAH_renderConditionPanel==='function'){
+    requestAnimationFrame(()=>{ try{ window.HAH_renderConditionPanel(); }catch(e){} });
+  }
 }
 
 function getScoreMode(){return $("crewsBtn").classList.contains("active") ? "CREWS" : ($("mewsBtn").classList.contains("active") ? "MEWS" : "");}
@@ -11147,8 +11150,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_618_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_618_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_619_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_619_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -19039,7 +19042,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_618_release.html; source=hospital_at_home_v12_36_618_source.zip -->
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_619_release.html; source=hospital_at_home_v12_36_619_source.zip -->
 <body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
@@ -19732,6 +19735,652 @@ window.HAH.modules.tts = true;
     clearDebugLog,
     getDebugLogText: () => (readLog().length ? readLog().join('\n') : 'No TTS events recorded yet.')
   };
+})();
+
+</script><script>
+// js/data/conditions.js
+//
+// Curated condition prompts for the H@H Companion.
+// Soft suggestions only — never block, never persist a completeness score
+// outside the current session.
+//
+// Per condition:
+//   id          — kebab-case identifier
+//   label       — full name shown to user
+//   shortLabel  — 2-4 char chip label (HF, COPD, AKI...)
+//   triggers    — { issues } regex array for soft activation suggestion
+//                  (PMH-only triggering was considered and rejected — past
+//                  diagnoses don't necessarily represent today's active problem)
+//   items       — array of clinical prompts grouped by domain
+//
+// Per item:
+//   id          — globally unique ('hf-e-jvp')
+//   domain      — 'history' | 'examination' | 'investigations' | 'plan' | 'acp' | 'discharge'
+//   target      — DOM id of the textarea this item should insert text into
+//   label       — short chip label (visible in the condition panel)
+//   insertText  — line inserted on tap (one item per line, no leading bullet)
+//   highYield   — true for must-not-miss items (drives the soft completeness signal)
+//   pitfall     — optional teaching note: WHY this item is here. Surfaced as a
+//                 tooltip/expandable in the panel, hidden by default for seniors.
+//
+// Items are inserted using the existing chip-insertion convention from
+// PROJECT_RULES §6: one item per line, no blank lines, deduplicated.
+
+(function(global){
+  global.HAH_CONDITIONS = global.HAH_CONDITIONS || {};
+
+  global.HAH_CONDITIONS['heart-failure'] = {
+    id: 'heart-failure',
+    label: 'Heart failure',
+    shortLabel: 'HF',
+
+    // Auto-suggestion fires on issues-field match only.
+    // PMH-based suggestion was considered and rejected — diagnoses already in
+    // PMH may not represent the active problem on this visit.
+    triggers: {
+      issues: [
+        /\bheart\s*failure\b/i,
+        /\bHF\b/,
+        /\bLVSD\b/,
+        /HFpEF/i,
+        /HFrEF/i,
+        /\bcardiomyopathy\b/i,
+        /decompensat\w*/i,
+        /pulmonary\s+oedema/i,
+        /\bAPO\b/,
+        /increas\w+\s+oedema/i,
+        /weight\s+gain/i,
+        /orthopnoe\w+/i,
+        /\bPND\b/
+      ]
+    },
+
+    items: [
+      // ───── HISTORY ─────
+      { id:'hf-h-orthopnoea', domain:'history', target:'currently',
+        label:'Orthopnoea',
+        insertText:'Orthopnoea — sleeps on N pillows (was N at baseline).',
+        highYield:true,
+        pitfall:'Anchor to a number of pillows AND change from baseline. "Mild orthopnoea" is uninformative.' },
+
+      { id:'hf-h-pnd', domain:'history', target:'currently',
+        label:'PND',
+        insertText:'PND — wakes breathless N times per week.',
+        highYield:true,
+        pitfall:'Ask as a separate question. Easy to fold into "orthopnoea" and miss the distinction.' },
+
+      { id:'hf-h-exercise-tolerance', domain:'history', target:'currently',
+        label:'Exercise tolerance',
+        insertText:'Exercise tolerance — can walk N metres / climb N stairs (was N).',
+        highYield:true,
+        pitfall:'Functional decline is often the most sensitive single marker of decompensation.' },
+
+      { id:'hf-h-weight-trend', domain:'history', target:'currently',
+        label:'Recent weight trend',
+        insertText:'Recent weight — N kg gained / lost over N weeks.',
+        highYield:true,
+        pitfall:'>2 kg in 3 days is a soft red flag for decompensation, even if the patient feels well.' },
+
+      { id:'hf-h-compliance', domain:'history', target:'currently',
+        label:'Diuretic compliance',
+        insertText:'Reports taking N of usual diuretic dose.',
+        highYield:true,
+        pitfall:'Often the unspoken cause of decompensation. Ask what dose they\'re actually taking, not what\'s on the repeat.' },
+
+      { id:'hf-h-fluid-intake', domain:'history', target:'currently',
+        label:'Fluid intake',
+        insertText:'Fluid intake — approx N L per day.' },
+
+      { id:'hf-h-trigger', domain:'history', target:'currently',
+        label:'Trigger for decompensation',
+        insertText:'Possible trigger — infection / non-adherence / dietary salt / new medication / arrhythmia.' },
+
+      // ───── EXAMINATION ─────
+      { id:'hf-e-jvp', domain:'examination', target:'examination',
+        label:'JVP',
+        insertText:'JVP — N cm above the sternal angle (sat at 45°).',
+        highYield:true,
+        pitfall:'Sit the patient at 45° and actually examine. "JVP not raised" without describing the position is uninformative.' },
+
+      { id:'hf-e-chest', domain:'examination', target:'examination',
+        label:'Chest — auscultate + percuss',
+        insertText:'Bibasal crackles to N. Stony dull / resonant to percussion.',
+        highYield:true,
+        pitfall:'Percuss as well as auscultate. Pleural effusions get missed if you only listen.' },
+
+      { id:'hf-e-sacral-oedema', domain:'examination', target:'examination',
+        label:'Sacral oedema',
+        insertText:'Sacral oedema — absent / present.',
+        highYield:true,
+        pitfall:'Lift the gown. Easy to miss in patients who are sitting or chair-bound.' },
+
+      { id:'hf-e-peripheral-oedema', domain:'examination', target:'examination',
+        label:'Peripheral oedema',
+        insertText:'Pitting oedema to ankles / mid-calf / knees / thighs.' },
+
+      { id:'hf-e-heart-sounds', domain:'examination', target:'examination',
+        label:'Heart sounds (S3, murmur)',
+        insertText:'HS — I + II + S3 / no added sounds. Murmur — described / none.',
+        pitfall:'S3 has high specificity for decompensation if you can hear it.' },
+
+      { id:'hf-e-weight-today', domain:'examination', target:'examination',
+        label:'Weight today',
+        insertText:'Weight today — N kg.',
+        highYield:true,
+        pitfall:'Daily weight is the cheapest, most useful HF investigation. Same scales each time.' },
+
+      // ───── INVESTIGATIONS ─────
+      { id:'hf-i-u-and-e', domain:'investigations', target:'plan',
+        label:'U&E paired with baseline',
+        insertText:'Repeat U&E today; compare to baseline.',
+        highYield:true },
+
+      { id:'hf-i-recent-echo', domain:'investigations', target:'plan',
+        label:'Most recent echo',
+        insertText:'Last echo — date / EF / valve disease / RV function.',
+        highYield:true,
+        pitfall:'HFrEF and HFpEF have different management. If EF is unknown, the plan may need to change.' },
+
+      { id:'hf-i-iron-studies', domain:'investigations', target:'plan',
+        label:'Iron studies',
+        insertText:'Ferritin / transferrin saturation.',
+        pitfall:'IV iron has class IA evidence in HF if iron-deficient, regardless of haemoglobin.' },
+
+      { id:'hf-i-bnp', domain:'investigations', target:'plan',
+        label:'BNP / NT-proBNP',
+        insertText:'BNP / NT-proBNP — if not recently done and would change management.' },
+
+      { id:'hf-i-tft', domain:'investigations', target:'plan',
+        label:'TFTs (if AF or new HF)',
+        insertText:'TFTs.' },
+
+      { id:'hf-i-ecg', domain:'investigations', target:'plan',
+        label:'ECG',
+        insertText:'ECG — rate / rhythm / ischaemic change.' },
+
+      // ───── PLAN ─────
+      { id:'hf-p-diuretic-escalation', domain:'plan', target:'plan',
+        label:'Diuretic escalation',
+        insertText:'Escalate diuretic — furosemide N mg PO/IV with paired U&E recheck in N days.',
+        highYield:true },
+
+      { id:'hf-p-daily-weights', domain:'plan', target:'plan',
+        label:'Daily weights',
+        insertText:'Daily weights — alert if >1 kg gain or >1 kg loss.',
+        highYield:true },
+
+      { id:'hf-p-continue-prognostic', domain:'plan', target:'plan',
+        label:'Continue prognostic medications',
+        insertText:'Continue ACEi / ARB / ARNI + beta-blocker + MRA + SGLT2i unless specifically contraindicated.',
+        highYield:true,
+        pitfall:'The reflex to stop the beta-blocker in decompensation is wrong unless there is genuine cardiogenic shock. Reduce, don\'t stop.' },
+
+      { id:'hf-p-sglt2i', domain:'plan', target:'plan',
+        label:'SGLT2i if not already on one',
+        insertText:'Consider SGLT2i (empagliflozin / dapagliflozin) — class IA evidence in HFrEF and HFpEF.',
+        pitfall:'Often missed because it sits between the cardiology and diabetes columns in the GP record.' },
+
+      { id:'hf-p-recheck-ue', domain:'plan', target:'plan',
+        label:'Recheck U&E after change',
+        insertText:'Recheck U&E 48–72h after any diuretic / RAAS change.',
+        highYield:true },
+
+      { id:'hf-p-cardiology-followup', domain:'plan', target:'plan',
+        label:'Cardiology / HF nurse follow-up',
+        insertText:'HF nurse / cardiology follow-up arranged.' },
+
+      { id:'hf-p-fluid-restriction', domain:'plan', target:'plan',
+        label:'Fluid restriction',
+        insertText:'Fluid restrict to N L per day.' },
+
+      // ───── ACP ─────
+      { id:'hf-acp-prognosis', domain:'acp', target:'acpNotes',
+        label:'Prognosis discussion',
+        insertText:'Prognosis discussed — patient and family aware that decompensated HF carries a higher 1-year mortality than many cancers.',
+        highYield:true,
+        pitfall:'Often deferred. Patients usually want the conversation; juniors usually don\'t lead it.' },
+
+      { id:'hf-acp-ceiling', domain:'acp', target:'acpNotes',
+        label:'Ceiling of care',
+        insertText:'Ceiling of care discussed and agreed.' },
+
+      { id:'hf-acp-dnacpr', domain:'acp', target:'acpNotes',
+        label:'DNACPR status',
+        insertText:'DNACPR — status confirmed / form seen.' },
+
+      // ───── DISCHARGE / SAFETY-NETTING ─────
+      { id:'hf-d-redflag-weight', domain:'discharge', target:'forDischargeSummary',
+        label:'Red flag — >2 kg gain in 3 days',
+        insertText:'Safety-net — call if >2 kg weight gain in 3 days, increasing breathlessness, increasing oedema, or syncope.' },
+
+      { id:'hf-d-medication-list', domain:'discharge', target:'forDischargeSummary',
+        label:'Reconciled discharge medications',
+        insertText:'Discharge medication list reconciled with current regimen.' }
+    ]
+  };
+})(typeof window !== 'undefined' ? window : this);
+
+</script><script>
+// js/19-conditions.js
+//
+// Condition mode integration.
+// Reads the registry from window.HAH_CONDITIONS (built by 18-conditions-data.js),
+// detects suggested conditions from form.issues on patient open, surfaces a
+// suggestion pill, and renders an activated panel of condition prompts grouped
+// by domain. Tapping a chip inserts the item's insertText into its target
+// textarea using the existing one-item-per-line / case-insensitive dedup
+// convention from PROJECT_RULES §6.
+//
+// State on patient (added lazily; tolerated as undefined by all readers):
+//   patient.activeConditions     — string[] of condition ids in active mode
+//   patient.dismissedConditions  — string[] of condition ids dismissed for this patient
+//
+// Public entry points (called from openPatient / saveData):
+//   window.HAH_renderConditionPanel()
+//   window.HAH_refreshConditionChipsPresence()  — light update on textarea changes
+
+window.HAH = window.HAH || { modules: {} };
+window.HAH.modules.conditions = true;
+
+(function(){
+  'use strict';
+
+  // ──────────────────────────────────────────────────────────────────────
+  // One-time CSS injection. Move into css/app.css when stable.
+  // Tokens follow PROJECT_RULES §2 (16/800/1.2 card headers, 12/600/1.35 helpers).
+  // ──────────────────────────────────────────────────────────────────────
+  const CSS = `
+    #conditionPanelHost{display:flex;flex-direction:column;gap:10px;margin:0 0 12px}
+    #conditionPanelHost.hidden{display:none!important}
+
+    .condition-suggest{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:14px;
+      background:#eff6ff;border:1px solid rgba(10,132,255,.18);
+      box-shadow:0 1px 3px rgba(15,23,42,.06);
+    }
+    .condition-suggest-text{flex:1;font-size:13px;font-weight:700;color:#1d4ed8}
+    .condition-suggest-actions{display:flex;gap:6px;flex-shrink:0}
+    .condition-suggest-actions button{
+      min-height:30px;padding:0 12px;border-radius:999px;
+      border:none;font-size:12px;font-weight:800;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .condition-suggest .condition-activate{background:#0a84ff;color:#fff}
+    .condition-suggest .condition-dismiss{background:transparent;color:#1d4ed8;border:1px solid rgba(10,132,255,.32)}
+    .condition-suggest button:active{transform:scale(.97)}
+
+    .condition-card{padding:14px}
+    .condition-card-header{
+      display:flex;align-items:center;gap:10px;margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .condition-card-header h3{
+      margin:0;
+      font-size:16px!important;font-weight:800!important;
+      line-height:1.2!important;color:#1c1c1e!important;
+      letter-spacing:0!important;
+    }
+    .condition-active-chips{display:flex;gap:6px;flex-wrap:wrap}
+    .condition-active-chip{
+      display:inline-flex;align-items:center;gap:4px;
+      min-height:24px;padding:0 10px;
+      border:1px solid rgba(10,132,255,.22);
+      border-radius:999px;background:#eff6ff;color:#1d4ed8;
+      font-size:11px;font-weight:800;line-height:1;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .condition-active-chip:active{transform:scale(.97)}
+    .condition-active-chip-x{font-size:13px;font-weight:700;opacity:.6}
+
+    .condition-domain{margin-top:12px}
+    .condition-domain:first-of-type{margin-top:6px}
+    .condition-domain-label{
+      font-size:12px!important;font-weight:600!important;
+      line-height:1.35!important;color:#475467!important;
+      margin-bottom:6px;
+    }
+    .condition-chip-row{display:flex;flex-wrap:wrap;gap:6px}
+
+    .condition-chip{
+      display:inline-flex;align-items:center;gap:6px;
+      min-height:32px;padding:0 12px;
+      border:1px solid rgba(15,23,42,.08);
+      border-radius:999px;background:#f8fafc;
+      color:#1c1c1e;
+      font-size:13px;font-weight:600;line-height:1;
+      -webkit-tap-highlight-color:transparent;
+      transition:background .14s ease,border-color .14s ease;
+    }
+    .condition-chip:active{transform:scale(.97)}
+    .condition-chip.is-high-yield{border-color:rgba(10,132,255,.28)}
+    .condition-chip.is-high-yield::before{
+      content:"";display:inline-block;width:6px;height:6px;border-radius:999px;
+      background:#0a84ff;margin-right:2px;
+    }
+    .condition-chip.is-present{
+      background:#ecfdf5;border-color:rgba(16,163,74,.32);color:#166534;
+    }
+    .condition-chip.is-present::after{content:"✓";font-weight:800;margin-left:2px}
+
+    .condition-chip-info{
+      width:18px;height:18px;border-radius:999px;
+      border:1px solid rgba(15,23,42,.18);background:#fff;
+      color:#475467;font-size:11px;font-weight:700;line-height:1;
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:0;flex-shrink:0;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .condition-chip-info:active{background:#eef2ff}
+
+    .condition-pitfall{
+      width:100%;margin:6px 0 0;
+      padding:8px 10px;border-radius:10px;
+      background:#fffbeb;border:1px solid rgba(245,158,11,.22);
+      color:#78350f;
+      font-size:12px;font-weight:500;line-height:1.4;
+    }
+  `;
+  function injectCss(){
+    if (document.getElementById('hah-conditions-style')) return;
+    const style = document.createElement('style');
+    style.id = 'hah-conditions-style';
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Helpers
+  // ──────────────────────────────────────────────────────────────────────
+  function getRegistry(){ return (typeof window.HAH_CONDITIONS === 'object' && window.HAH_CONDITIONS) || {}; }
+  function getPatient(){
+    if (typeof currentPatient === 'undefined' || currentPatient == null) return null;
+    if (typeof patients === 'undefined' || !patients[currentPatient]) return null;
+    return patients[currentPatient];
+  }
+  function ensureState(p){
+    if (!p) return null;
+    if (!Array.isArray(p.activeConditions)) p.activeConditions = [];
+    if (!Array.isArray(p.dismissedConditions)) p.dismissedConditions = [];
+    return p;
+  }
+  function safeEscape(s){
+    if (typeof window.escapeHtml === 'function') return window.escapeHtml(s);
+    return String(s||'').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+
+  // Skeleton-based dedup. Collapses placeholder Ns and digits so that a
+  // re-tapped chip whose insertText was already filled in doesn't duplicate.
+  function skeleton(text){
+    return String(text||'')
+      .toLowerCase()
+      .replace(/\bn\b/g, '*')
+      .replace(/\d+(\.\d+)?/g, '*')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  function getFieldLines(field){
+    return String(field.value||'').replace(/\r\n/g,'\n').split(/\n+/).map(s=>s.trim()).filter(Boolean);
+  }
+  function lineAlreadyPresent(field, candidate){
+    const target = skeleton(candidate);
+    if (!target) return false;
+    return getFieldLines(field).some(line => skeleton(line) === target);
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Detection
+  // ──────────────────────────────────────────────────────────────────────
+  function detectSuggested(p){
+    const issuesText = String((p.form && p.form.issues) || '');
+    const reg = getRegistry();
+    const out = [];
+    Object.keys(reg).forEach(id => {
+      if (p.activeConditions.indexOf(id) !== -1) return;
+      if (p.dismissedConditions.indexOf(id) !== -1) return;
+      const triggers = (reg[id].triggers && reg[id].triggers.issues) || [];
+      if (triggers.some(rx => rx.test(issuesText))) out.push(id);
+    });
+    return out;
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Insertion (the only mutating action on tap)
+  // ──────────────────────────────────────────────────────────────────────
+  function insertItem(item){
+    const target = document.getElementById(item.target);
+    if (!target) return false;
+    if (lineAlreadyPresent(target, item.insertText)) return false;
+    const lines = getFieldLines(target);
+    lines.push(item.insertText);
+    target.value = lines.join('\n');
+    // Trigger native input handlers so any listening dictation/word-count code reacts.
+    try{ target.dispatchEvent(new Event('input', {bubbles:true})); }catch(_e){}
+    if (typeof saveCurrentPatientForm === 'function') saveCurrentPatientForm();
+    if (typeof saveData === 'function') saveData('Added: ' + item.label);
+    if (typeof generateClinicalOutput === 'function') generateClinicalOutput();
+    return true;
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Rendering
+  // ──────────────────────────────────────────────────────────────────────
+  function ensureHost(){
+    let host = document.getElementById('conditionPanelHost');
+    if (host) return host;
+    const detailEl = document.getElementById('patientDetail');
+    if (!detailEl) return null;
+    const obs = detailEl.querySelector('[data-card-key="obs"]');
+    if (!obs || !obs.parentNode) return null;
+    host = document.createElement('div');
+    host.id = 'conditionPanelHost';
+    obs.parentNode.insertBefore(host, obs.nextSibling);
+    return host;
+  }
+
+  function renderConditionPanel(){
+    injectCss();
+    const p = ensureState(getPatient());
+    if (!p) return;
+    const host = ensureHost();
+    if (!host) return;
+
+    const suggested = detectSuggested(p);
+    const active = p.activeConditions.filter(id => getRegistry()[id]);
+
+    if (!suggested.length && !active.length){
+      host.innerHTML = '';
+      host.classList.add('hidden');
+      return;
+    }
+
+    host.classList.remove('hidden');
+    let html = '';
+
+    suggested.forEach(id => {
+      const c = getRegistry()[id];
+      html += `
+        <div class="condition-suggest" data-cond-id="${safeEscape(c.id)}">
+          <div class="condition-suggest-text">${safeEscape(c.label)} mode?</div>
+          <div class="condition-suggest-actions">
+            <button class="condition-activate" data-action="activate" data-cond-id="${safeEscape(c.id)}">Activate</button>
+            <button class="condition-dismiss" data-action="dismiss" data-cond-id="${safeEscape(c.id)}">Dismiss</button>
+          </div>
+        </div>`;
+    });
+
+    if (active.length){
+      html += renderActiveCard(active.map(id => getRegistry()[id]));
+    }
+
+    host.innerHTML = html;
+    bindHandlers(host);
+  }
+
+  const DOMAIN_ORDER = ['history','examination','investigations','plan','acp','discharge'];
+  const DOMAIN_LABELS = {
+    history:'History',
+    examination:'Examination',
+    investigations:'Investigations',
+    plan:'Plan',
+    acp:'ACP',
+    discharge:'Discharge / safety-net'
+  };
+
+  function renderActiveCard(conditions){
+    // Stack items across all active conditions, dedup by skeleton.
+    const seenSkel = new Set();
+    const itemsByDomain = {};
+    DOMAIN_ORDER.forEach(d => itemsByDomain[d] = []);
+
+    conditions.forEach(c => {
+      (c.items || []).forEach(item => {
+        if (!itemsByDomain[item.domain]) return; // unknown domain: ignore
+        const sk = skeleton(item.insertText);
+        if (seenSkel.has(sk)) return;
+        seenSkel.add(sk);
+        itemsByDomain[item.domain].push(item);
+      });
+    });
+
+    let html = `<div class="card patient-reorder-card condition-card" data-card-key="conditions">`;
+    html += `<div class="condition-card-header">
+      <h3>Condition prompts</h3>
+      <div class="condition-active-chips">
+        ${conditions.map(c => `
+          <button class="condition-active-chip" data-action="deactivate" data-cond-id="${safeEscape(c.id)}" aria-label="Deactivate ${safeEscape(c.label)} mode">
+            ${safeEscape(c.shortLabel || c.label)} <span class="condition-active-chip-x">×</span>
+          </button>`).join('')}
+      </div>
+    </div>`;
+
+    DOMAIN_ORDER.forEach(domain => {
+      const items = itemsByDomain[domain];
+      if (!items.length) return;
+      html += `<div class="condition-domain">
+        <div class="condition-domain-label patient-card-helper-text">${DOMAIN_LABELS[domain]}</div>
+        <div class="condition-chip-row">
+          ${items.map(renderItemChip).join('')}
+        </div>
+      </div>`;
+    });
+
+    html += `</div>`;
+    return html;
+  }
+
+  function isItemPresent(item){
+    const target = document.getElementById(item.target);
+    if (!target) return false;
+    return lineAlreadyPresent(target, item.insertText);
+  }
+
+  function renderItemChip(item){
+    const present = isItemPresent(item);
+    const cls = 'condition-chip'
+      + (item.highYield ? ' is-high-yield' : '')
+      + (present ? ' is-present' : '');
+    const info = item.pitfall
+      ? `<span class="condition-chip-info" data-action="pitfall" data-item-id="${safeEscape(item.id)}" role="button" tabindex="0" aria-label="Why this prompt">i</span>`
+      : '';
+    return `<button class="${cls}" data-action="insert" data-item-id="${safeEscape(item.id)}">
+      <span class="condition-chip-label">${safeEscape(item.label)}</span>${info}
+    </button>`;
+  }
+
+  function findItem(itemId){
+    const reg = getRegistry();
+    for (const cId of Object.keys(reg)){
+      const items = reg[cId].items || [];
+      for (let i=0;i<items.length;i++){
+        if (items[i].id === itemId) return items[i];
+      }
+    }
+    return null;
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Lifecycle actions
+  // ──────────────────────────────────────────────────────────────────────
+  function activateCondition(id){
+    const p = ensureState(getPatient()); if (!p) return;
+    if (p.activeConditions.indexOf(id) === -1) p.activeConditions.push(id);
+    if (typeof saveData === 'function') saveData('Activated condition mode');
+    renderConditionPanel();
+  }
+  function dismissCondition(id){
+    const p = ensureState(getPatient()); if (!p) return;
+    if (p.dismissedConditions.indexOf(id) === -1) p.dismissedConditions.push(id);
+    if (typeof saveData === 'function') saveData('Dismissed suggestion');
+    renderConditionPanel();
+  }
+  function deactivateCondition(id){
+    const p = ensureState(getPatient()); if (!p) return;
+    p.activeConditions = p.activeConditions.filter(x => x !== id);
+    // Suppress immediate re-suggestion until issues text changes meaningfully.
+    if (p.dismissedConditions.indexOf(id) === -1) p.dismissedConditions.push(id);
+    if (typeof saveData === 'function') saveData('Deactivated condition mode');
+    renderConditionPanel();
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Event binding (per-render, replaces any previous handlers in host)
+  // ──────────────────────────────────────────────────────────────────────
+  function bindHandlers(host){
+    host.querySelectorAll('[data-action]').forEach(el => {
+      el.onclick = e => {
+        e.stopPropagation();
+        const action = el.dataset.action;
+        const condId = el.dataset.condId;
+        const itemId = el.dataset.itemId;
+        if (action === 'activate') return activateCondition(condId);
+        if (action === 'dismiss') return dismissCondition(condId);
+        if (action === 'deactivate') return deactivateCondition(condId);
+        if (action === 'insert'){
+          const item = findItem(itemId);
+          if (!item) return;
+          // Per PROJECT_RULES §6, update presence in place — do not re-render the panel.
+          if (insertItem(item)){
+            const chip = el.closest('.condition-chip');
+            if (chip) chip.classList.add('is-present');
+          }
+          return;
+        }
+        if (action === 'pitfall'){
+          const item = findItem(itemId);
+          if (!item || !item.pitfall) return;
+          const chip = el.closest('.condition-chip');
+          if (!chip) return;
+          const row = chip.parentNode;
+          let tip = row.querySelector(`.condition-pitfall[data-for="${CSS.escape ? CSS.escape(itemId) : itemId}"]`);
+          if (tip){ tip.remove(); return; }
+          tip = document.createElement('div');
+          tip.className = 'condition-pitfall';
+          tip.dataset.for = itemId;
+          tip.textContent = item.pitfall;
+          row.insertBefore(tip, chip.nextSibling);
+        }
+      };
+    });
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Light refresh: only updates is-present classes without rebuilding HTML.
+  // Call from textarea input handlers if you want chips to reflect manual edits.
+  // ──────────────────────────────────────────────────────────────────────
+  function refreshConditionChipsPresence(){
+    const host = document.getElementById('conditionPanelHost');
+    if (!host) return;
+    host.querySelectorAll('.condition-chip[data-action="insert"]').forEach(chip => {
+      const item = findItem(chip.dataset.itemId);
+      if (!item) return;
+      chip.classList.toggle('is-present', isItemPresent(item));
+    });
+  }
+
+  // Public API
+  window.HAH_renderConditionPanel = renderConditionPanel;
+  window.HAH_refreshConditionChipsPresence = refreshConditionChipsPresence;
 })();
 
 </script></body>
