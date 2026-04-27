@@ -2598,6 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
+<!-- HAH build: release=hospital_at_home_v12_36_622_json_bridge_release.html; source=hospital_at_home_v12_36_622_json_bridge_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2615,7 +2616,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 </div>
 <div class="graph-auth-return-cover-title">Signing in to Microsoft</div>
 <div class="graph-auth-return-cover-subtitle">Please wait…</div>
-<div class="graph-auth-return-cover-company">OneDrive handover</div>
+<div class="graph-auth-return-cover-company">Shared JSON store</div>
 </div>
 </div>
 <div aria-hidden="true" id="appSplash">
@@ -2938,7 +2939,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="options-nav-list">
 <button class="options-nav-row" data-open-options-page="security" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Security</span><span class="options-nav-subtitle">PIN, Face ID / Touch ID, wrong-PIN sound</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="nhsmail" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">NHSmail address</span><span class="options-nav-subtitle">Used by Email to NHSmail in reviews</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
-<button class="options-nav-row" data-open-options-page="onedrive" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">OneDrive handover (beta)</span><span class="options-nav-subtitle">Workbook link, sign-in and import</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
+<button class="options-nav-row" data-open-options-page="onedrive" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Shared JSON store (beta)</span><span class="options-nav-subtitle">JSON folder, sign-in and load</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="aiscan" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">AI scan tools (beta)</span><span class="options-nav-subtitle">Groq for blister / IV / bloods, digitizer + Claude for ECG</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button><button class="options-nav-row" data-open-options-page="ecgdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">ECG Assist log</span><span class="options-nav-subtitle">Analysis history and debug info</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="deepgram" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">Deepgram dictation (beta)</span><span class="options-nav-subtitle">API key, formatting and dictation options</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
 <button class="options-nav-row" data-open-options-page="ttsdebug" type="button"><span class="options-nav-titlewrap"><span class="options-nav-title">TTS debug log</span><span class="options-nav-subtitle">Speech playback events and errors</span></span><span aria-hidden="true" class="options-nav-chevron">›</span></button>
@@ -2949,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_621_release.html</div><div>Source: hospital_at_home_v12_36_621_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_622_json_bridge_release.html</div><div>Source: hospital_at_home_v12_36_622_json_bridge_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -2997,22 +2998,24 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 
 <div class="options-page-panel hidden" data-options-page="onedrive">
 <div class="card options-subpage-card">
-<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>OneDrive handover (beta)</h3><div class="tiny muted">Workbook link, sign-in and import</div></div></div>
-<div class="options-section-body" id="optionsSectionOnedrive"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Connect to your OneDrive Excel handover workbook. Microsoft sign-in requires the app to be opened from a hosted web address, not a downloaded file.</div>
+<div class="options-subpage-head"><button class="options-subpage-back" data-close-options-page type="button">← Back</button><div class="options-subpage-titlewrap"><h3>Shared JSON store</h3><div class="tiny muted">JSON folder, sign-in and load</div></div></div>
+<div class="options-section-body" id="optionsSectionOnedrive"><div class="tiny muted" style="margin-top:4px;margin-bottom:10px">Connect to the shared OneDrive JSON store used by the desktop board. Microsoft sign-in requires the hosted web app, not a downloaded file.</div>
 <label>Microsoft application (client) ID</label>
 <input autocapitalize="off" autocorrect="off" id="graphClientIdInput" placeholder="Paste your Entra app client ID" spellcheck="false" type="text"/>
-<label>Direct workbook URL (optional)</label>
-<input autocapitalize="off" autocorrect="off" id="handoverWorkbookUrlInput" placeholder="Paste your OneDrive/Excel link here" spellcheck="false" type="url"/>
+<label>OneDrive JSON folder</label>
+<input autocapitalize="off" autocorrect="off" id="jsonFolderPathInput" placeholder="H@H Board Data" spellcheck="false" type="text"/>
 <div class="top-actions" style="margin-top:10px">
 <button class="primary fullwidth" id="saveGraphSettingsBtn">Save settings</button>
-<button class="fullwidth" id="openWorkbookBtn">Open handover sheet</button>
+<button class="fullwidth" id="openJsonFolderBtn">Open JSON folder</button>
 </div>
 <div class="top-actions" style="margin-top:10px">
 <button class="fullwidth" id="graphSignInBtn">Sign in to Microsoft</button>
 <button class="fullwidth hidden" id="graphSignOutBtn">Sign out of Microsoft</button>
 </div>
 <div class="top-actions" style="margin-top:10px">
-<button class="primary fullwidth" id="importHandoverBtn"><span>Import patients from handover</span><svg aria-hidden="true" class="refresh-icon" id="importHandoverSpinner" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></button>
+<button class="fullwidth" id="testJsonStoreBtn" type="button">Test JSON connection</button>
+<button class="primary fullwidth" id="importHandoverBtn"><span>Load patients from JSON</span><svg aria-hidden="true" class="refresh-icon" id="importHandoverSpinner" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></button>
+<button class="fullwidth" id="clearJsonCacheBtn" type="button">Clear JSON cache</button>
 </div>
 <div class="toggle-row" style="margin-top:14px">
 <input checked id="oneNoteAutoSyncToggle" style="width:auto;margin:0" type="checkbox"/>
@@ -3808,7 +3811,7 @@ function consumeGraphAuthReturnSnapshotShieldBypass(){
 }
 
 function defaultGraphSettings(){
-  return {clientId:"", workbookName:"", worksheetName:"List", tableName:"", workbookUrl:"", workbookId:"", oneNoteAutoSync:true};
+  return {clientId:"", folderPath:"H@H Board Data", oneNoteAutoSync:true};
 }
 function loadGraphSettings(){
   try{return {...defaultGraphSettings(), ...(JSON.parse(localStorage.getItem(GRAPH_SETTINGS_KEY)||"{}"))};}
@@ -3816,28 +3819,24 @@ function loadGraphSettings(){
 }
 function saveGraphSettings(showMsg=true){
   const previous = loadGraphSettings();
-  const workbookUrl = ($("handoverWorkbookUrlInput")?.value||"").trim();
+  const folderPath = ($("jsonFolderPathInput")?.value || previous.folderPath || "H@H Board Data").trim() || "H@H Board Data";
   const settings={
     clientId:($("graphClientIdInput")?.value||"").trim(),
-    workbookName:"",
-    worksheetName:"List",
-    tableName:"",
-    workbookUrl,
-    workbookId: (previous.workbookUrl===workbookUrl ? String(previous.workbookId||'').trim() : ""),
+    folderPath,
     oneNoteAutoSync: !!($("oneNoteAutoSyncToggle") ? $("oneNoteAutoSyncToggle").checked : previous.oneNoteAutoSync !== false)
   };
   localStorage.setItem(GRAPH_SETTINGS_KEY, JSON.stringify(settings));
   if(showMsg){
     setGraphSettingsLocked(true);
-    setGraphStatus("Settings saved.");
+    setGraphStatus("JSON settings saved.");
   }
   return settings;
 }
 function setGraphSettingsLocked(locked){
   const inp=$("graphClientIdInput");
-  const urlInp=$("handoverWorkbookUrlInput");
+  const folderInp=$("jsonFolderPathInput");
   const btn=$("saveGraphSettingsBtn");
-  [inp, urlInp].forEach(el=>{
+  [inp, folderInp].forEach(el=>{
     if(!el) return;
     el.readOnly=locked;
     el.style.background=locked?'#f3f4f6':'';
@@ -3851,7 +3850,7 @@ function setGraphSettingsLocked(locked){
 function fillGraphSettingsUI(){
   const s=loadGraphSettings();
   if($("graphClientIdInput")) $("graphClientIdInput").value=s.clientId||"";
-  if($("handoverWorkbookUrlInput")) $("handoverWorkbookUrlInput").value=s.workbookUrl||"";
+  if($("jsonFolderPathInput")) $("jsonFolderPathInput").value=s.folderPath||"H@H Board Data";
   if($("oneNoteAutoSyncToggle")) $("oneNoteAutoSyncToggle").checked = s.oneNoteAutoSync !== false;
   // Lock if client ID already set
   const hasSettings=!!(s.clientId);
@@ -4774,47 +4773,28 @@ function setGraphStatus(msg, isError=false){
   el.style.color=isError?"#a33434":"";
 }
 
-function normaliseImportValue(value){
-  return normalizeImportedTextBlock(value==null ? '' : String(value));
-}
-function getImportedPatientComparableSnapshot(patient){
-  const p = patient || {};
-  const src = p.importSource || {};
-  return JSON.stringify({
-    name: normaliseImportValue(p.name||''),
-    age: normaliseImportValue(p.age||''),
-    sex: normaliseImportValue(p.sex||''),
-    referralSource: normaliseImportValue(p.referralSource||''),
-    doa: normaliseImportValue(p.doa||''),
-    summary: normaliseImportValue(p.summary||''),
-    acuity: normaliseImportValue(p.acuity||''),
-    worksheet: normaliseImportValue(src.worksheet||''),
-    rowIndex: Number.isFinite(Number(src.rowIndex)) ? Number(src.rowIndex) : null,
-    issues: normaliseImportValue(p.form && p.form.issues || ''),
-    plan: normaliseImportValue(p.form && p.form.plan || ''),
-    importedIssues: normaliseImportValue(p.form && p.form._lastImportedIssues || ''),
-    importedPlan: normaliseImportValue(p.form && p.form._lastImportedPlan || ''),
-    remoteText: normaliseImportValue(p.syncState && p.syncState.remoteText || '')
-  });
-}
-function buildImportStatusMessage(importedCount, updatedCount){
+function buildImportStatusMessage(importedCount, updatedCount, activeCount, taskCount){
   const parts = [];
+  const active = Number(activeCount);
+  const taskTotal = Number(taskCount);
+  if(Number.isFinite(active)) parts.push(`${active} active JSON patient${active===1?'':'s'}`);
   if(importedCount > 0) parts.push(`${importedCount} imported`);
-  parts.push(updatedCount > 0 ? `${updatedCount} updated` : 'No new updates');
+  if(updatedCount > 0) parts.push(`${updatedCount} updated`);
+  if(Number.isFinite(taskTotal)) parts.push(`${taskTotal} task${taskTotal===1?'':'s'}`);
+  if(!parts.length) parts.push('JSON loaded');
   return parts.join(' • ');
 }
 function describeImportError(error){
   const raw = String((error && error.message) || error || '').trim();
   const lower = raw.toLowerCase();
-  if(!raw) return 'Import failed - Try again';
+  if(!raw) return 'JSON load failed - Try again';
   if(lower.includes('not signed in') || lower.includes('select_account') || lower.includes('interaction_required') || lower.includes('login required') || lower.includes('no microsoft account')) return 'Not signed in - sign in to Microsoft in Options';
   if(lower.includes('downloaded file') || lower.includes('hosted web address')) return 'Open the hosted app - not the downloaded file';
   if(lower.includes('client id')) return 'Add your Microsoft app client ID in Options';
-  if(lower.includes('workbook not found')) return 'Workbook not found - check filename or workbook link in Options';
-  if(lower.includes('access denied') || lower.includes('insufficient privileges') || lower.includes('forbidden') || lower.includes('(403)')) return 'No access to workbook - Check Microsoft permissions';
-  if(lower.includes('itemnotfound') || lower.includes('(404)')) return 'Workbook or sheet not found - Check workbook settings';
-  if(lower.includes('worksheet')) return 'Worksheet not found - Check the sheet name in Options';
-  if(lower.includes('script failed to load') || lower.includes('sign-in library')) return 'Microsoft sign-in failed to load - Refresh and try again';
+  if(lower.includes('access denied') || lower.includes('insufficient privileges') || lower.includes('forbidden') || lower.includes('(403)')) return 'No access to JSON folder - check Microsoft permissions';
+  if(lower.includes('itemnotfound') || lower.includes('not found') || lower.includes('(404)')) return 'JSON store not found - check the folder path in Options';
+  if(lower.includes('json') && lower.includes('parse')) return 'JSON file could not be read - check the shared data file';
+  if(lower.includes('script failed to load') || lower.includes('sign-in library')) return 'Microsoft sign-in failed to load - refresh and try again';
   return raw.replace(/\.\s+/g, ' - ');
 }
 function getCurrentPageUrl(){
@@ -5003,99 +4983,6 @@ async function graphJson(path, options={}){
 async function graphFetch(path){
   return graphJson(path);
 }
-async function createWorkbookSession(itemId, persistChanges=false){
-  const res = await graphJson(`/me/drive/items/${encodeURIComponent(itemId)}/workbook/createSession`, {
-    method:'POST',
-    body:{persistChanges: !!persistChanges}
-  });
-  return res && res.id ? res.id : '';
-}
-async function closeWorkbookSession(itemId, sessionId){
-  if(!itemId || !sessionId) return;
-  try{
-    await graphJson(`/me/drive/items/${encodeURIComponent(itemId)}/workbook/closeSession`, {
-      method:'POST',
-      headers:{'workbook-session-id': sessionId}
-    });
-  }catch(e){}
-}
-async function graphWorkbookJson(itemId, path, options={}){
-  const sessionId = options.sessionId || '';
-  const headers = {...(options.headers||{})};
-  if(sessionId) headers['workbook-session-id'] = sessionId;
-  return graphJson(`/me/drive/items/${encodeURIComponent(itemId)}/workbook${path}`, {...options, headers});
-}
-let _sheetJsPromise = null;
-function loadSheetJs(){
-  if(_sheetJsPromise) return _sheetJsPromise;
-  _sheetJsPromise = new Promise((resolve, reject)=>{
-    if(window.XLSX){ resolve(); return; }
-    const s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
-    s.onload = ()=>resolve();
-    s.onerror = ()=>{ _sheetJsPromise=null; reject(new Error('SheetJS failed to load')); };
-    document.head.appendChild(s);
-  });
-  return _sheetJsPromise;
-}
-async function graphReadWorksheetMatrix(itemId, worksheetName){
-  // Opening a persistChanges=true session and doing a lightweight read forces
-  // Excel Online to fully synchronise its collaborative autosave buffer to
-  // file storage before we close the session. Without the read the flush is
-  // queued but not awaited, leaving a ~30s lag.
-  try{
-    const flushSession = await createWorkbookSession(itemId, true);
-    try{
-      const ws = encodeURIComponent(String(worksheetName||'List').trim()||'List');
-      await graphWorkbookJson(itemId, `/worksheets/${ws}/range(address='A1')?$select=values`, {sessionId: flushSession});
-    }catch(e){ /* non-fatal */ }
-    await closeWorkbookSession(itemId, flushSession);
-  }catch(e){ /* non-fatal — proceed with download even if nudge fails */ }
-
-  // Download raw file bytes — always reflects the flushed file state.
-  await loadSheetJs();
-  const token = await getGraphAccessToken();
-  const res = await fetch(`https://graph.microsoft.com/v1.0/me/drive/items/${encodeURIComponent(itemId)}/content`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  if(!res.ok) throw new Error(`Failed to download workbook (${res.status})`);
-  const arrayBuffer = await res.arrayBuffer();
-  const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type:'array', cellDates:false, raw:false });
-  const targetName = String(worksheetName||'List').trim() || 'List';
-  // Find sheet: exact match first, then case-insensitive
-  const sheetName = workbook.SheetNames.find(n=>n===targetName)
-    || workbook.SheetNames.find(n=>n.toLowerCase()===targetName.toLowerCase())
-    || workbook.SheetNames[0];
-  if(!sheetName) return [];
-  const sheet = workbook.Sheets[sheetName];
-  if(!sheet) return [];
-  // Returns array-of-arrays, same shape the rest of the code expects
-  return XLSX.utils.sheet_to_json(sheet, { header:1, defval:'', raw:false });
-}
-async function graphUpdateWorksheetRange(itemId, worksheetName, address, values){
-  const safeAddress=String(address||'').replace(/'/g,"''");
-  const sessionId = await createWorkbookSession(itemId, true);
-  try{
-    const result = await graphWorkbookJson(itemId, `/worksheets/${encodeURIComponent(worksheetName)}/range(address='${safeAddress}')`, {method:'PATCH', body:{values}, sessionId});
-    return result;
-  } finally {
-    await closeWorkbookSession(itemId, sessionId);
-  }
-}
-function normalizeHeader(h){ return String(h||'').trim().toLowerCase(); }
-function pickValue(row, map, names){
-  for(const n of names){
-    if(Object.prototype.hasOwnProperty.call(map,n) && row[map[n]]!=null && String(row[map[n]]).trim()!=='') return String(row[map[n]]).trim();
-  }
-  return '';
-}
-function existingPatientNames(){
-  return new Set(Object.values(patients).map(p=>String(p.name||'').trim().toLowerCase()));
-}
-function getNextPatientId(){
-  const ids = Object.keys(patients).map(Number).filter(Number.isFinite);
-  return ids.length ? Math.max(...ids) + 1 : 1;
-}
 function formatImportedDoA(value){
   if(value==null || value==='') return '';
   if(typeof value==='number'){
@@ -5126,72 +5013,6 @@ function patientDoAToIso(value){
   if(isNaN(parsed.getTime())) return '';
   return `${parsed.getFullYear()}-${String(parsed.getMonth()+1).padStart(2,'0')}-${String(parsed.getDate()).padStart(2,'0')}`;
 }
-function parseRespPatientDetails(raw){
-  const lines = String(raw||'').split(/\r?\n/).map(v=>String(v||'').trim()).filter(Boolean);
-  const first = lines[0] || '';
-  if(!first) return null;
-  const compact = first.replace(/\s+/g,' ').trim();
-  let match = compact.match(/^(.*?)[,\s]+(\d{1,3})\s*([MF])$/i);
-  if(!match) match = compact.match(/^(.*?)(\d{1,3})\s*([MF])$/i);
-  const referralSource = lines[1] ? lines[1].trim() : '';
-  if(match){
-    return {
-      name: String(match[1]||'').trim().replace(/\s+/g,' '),
-      age: String(match[2]||'').trim(),
-      sex: String(match[3]||'').trim().toUpperCase(),
-      referralSource
-    };
-  }
-  return {name: compact, age:'', sex:'', referralSource};
-}
-function tidyImportedMultilineText(lines){
-  const copy = Array.isArray(lines) ? lines.slice() : [];
-  while(copy.length && !String(copy[0]||'').trim()) copy.shift();
-  while(copy.length && !String(copy[copy.length-1]||'').trim()) copy.pop();
-  return copy.join('\n').replace(/\n{3,}/g,'\n\n').trim();
-}
-function parseRespMdmNotes(raw){
-  const text = String(raw || '')
-    .replace(/\r\n/g,'\n')
-    .replace(/\r/g,'\n')
-    .trim();
-  if(!text) return { issues:'', bloods:'', plan:'', raw:'' };
-  const originalLines = text.split('\n').map(v=>String(v || '').replace(/\s+$/,''));
-  const lines = originalLines.filter((line, idx)=>!(idx===0 && /^mdm notes for emis\b/i.test(String(line || '').trim())));
-  const headingPatterns = {
-    issues: /^issues?\b\s*:?$/i,
-    bloods: /^(?:bloods?|blood results|lab results|results)\b\s*:?$/i,
-    plan: /^plan\b\s*:?$/i
-  };
-  const sections = Object.entries(headingPatterns)
-    .map(([key, rx])=>({ key, idx: lines.findIndex(line=>rx.test(String(line || '').trim())) }))
-    .filter(entry=>entry.idx >= 0)
-    .sort((a,b)=>a.idx-b.idx);
-  const pullSection = key => {
-    const current = sections.find(entry=>entry.key===key);
-    if(!current) return [];
-    const next = sections.find(entry=>entry.idx > current.idx);
-    return lines.slice(current.idx + 1, next ? next.idx : lines.length);
-  };
-  let issuesLines = pullSection('issues');
-  const bloodsLines = pullSection('bloods');
-  const planLines = pullSection('plan');
-  if(!issuesLines.length){
-    const firstSection = sections[0];
-    if(firstSection && firstSection.key !== 'issues' && firstSection.idx > 0){
-      issuesLines = lines.slice(0, firstSection.idx);
-    } else if(!sections.length){
-      issuesLines = lines;
-    }
-  }
-  return {
-    issues: tidyImportedMultilineText(issuesLines),
-    bloods: tidyImportedMultilineText(bloodsLines),
-    plan: tidyImportedMultilineText(planLines),
-    raw: text
-  };
-}
-
 const BLOODS_ANALYTES = [
   {key:'hb', label:'Hb', trendLabel:'Haemoglobin', unit:'g/L', labels:['haemoglobin','hemoglobin','hgb','hb'], limits:(sex)=>({low:/^m/i.test(String(sex||'')) ? 130 : 115, high:/^m/i.test(String(sex||'')) ? 180 : 165})},
   {key:'wcc', label:'WCC', trendLabel:'White cell count', unit:'×10⁹/L', labels:['white cell count','wcc'], limits:()=>({low:4, high:11})},
@@ -5613,31 +5434,7 @@ function extractWeightValueFromLine(text){
   }
   return '';
 }
-function extractImportedWeight(text){
-  const raw=String(text||'')
-    .replace(/\\r\\n/g,'\n')
-    .replace(/\\n/g,'\n')
-    .replace(/\r\n?/g,'\n');
-  if(!raw.trim()) return '';
-  const lineMatch=raw.match(/(?:^|\n)\s*weight\s*:\s*([^\n]*)/i);
-  if(lineMatch){
-    const direct=extractWeightValueFromLine(lineMatch[1]);
-    if(direct) return direct;
-    const startIndex=(lineMatch.index||0)+lineMatch[0].length;
-    const trailingLines=raw.slice(startIndex).split('\n').map(v=>String(v||'').trim()).filter(Boolean);
-    for(const line of trailingLines){
-      if(/^[A-Za-z][A-Za-z ]*:\s*$/.test(line)) break;
-      const fromLine=extractWeightValueFromLine(line);
-      if(fromLine) return fromLine;
-    }
-  }
-  const fallbackMatch=raw.match(/\bweight\b([\s\S]{0,120})/i);
-  if(fallbackMatch){
-    const fallback=extractWeightValueFromLine(fallbackMatch[1]);
-    if(fallback) return fallback;
-  }
-  return '';
-}
+
 function ensureWeightHistoryShape(patient){
   if(!patient || typeof patient!=='object') return;
   if(!Array.isArray(patient.weightHistory)) patient.weightHistory=[];
@@ -6035,19 +5832,17 @@ window.HAH.modules.sync = true;
 // ─── SYNC ────────────────────────────────────────────────────────────────────
 // Simple model: _lastImportedIssues / _lastImportedPlan / _lastImportedBloods track the baseline.
 // Pull: overwrite fields only if the user hasn't edited since last import.
-// Push: write current Issues and Plan values back to the spreadsheet when those fields change.
+// Pull/write through the shared OneDrive JSON store. Shared JSON is the active data source.
 
 function normText(v){
   return String(v ?? '').replace(/\r\n/g,'\n').replace(/\r/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
 }
 function isLinkedPatient(p){
-  return !!(p && p.importSource && p.importSource.kind === 'resp_handover' && Number.isFinite(Number(p.importSource.rowIndex)));
+  return !!(p && p.importSource && p.importSource.kind === 'shared_json' && p.importSource.jsonId);
 }
 function getPatientTarget(p){
   if(!isLinkedPatient(p)) return null;
-  const ws = String(p.importSource.worksheet || 'List').trim() || 'List';
-  const row = Number(p.importSource.rowIndex);
-  return { worksheet: ws, address: `D${row + 1}` };
+  return { jsonId: String(p.importSource.jsonId || ''), folderPath: String(p.importSource.folderPath || currentJsonFolderPath()).trim() || currentJsonFolderPath() };
 }
 function buildCellText(issues, plan){
   const parts = [];
@@ -6081,17 +5876,21 @@ async function executePush(patientId){
   const p = patients[patientId];
   if(!p || !isLinkedPatient(p)) return;
   const target = getPatientTarget(p);
-  if(!target) return;
+  if(!target || !target.jsonId) return;
   try{
-    const item = await findWorkbookItem();
-    await graphUpdateWorksheetRange(item.id, target.worksheet, target.address,
-      [[buildCellText(p.form.issues, p.form.plan)]]);
+    const doc = await loadJsonPatient(target.jsonId);
+    const saved = await patchJsonPatientFromMobile(doc, p);
     p.form._lastImportedIssues = normText(p.form.issues);
     p.form._lastImportedPlan   = normText(p.form.plan);
-    saveData();
-    if(currentPatient === patientId) setSaveStatus('Saved locally \u2022 Synced to OneDrive');
+    p.form._lastImportedBloods = normText(p.form.bloods);
+    p.jsonRecord = saved;
+    saveData('Saved locally • Synced to JSON');
+    if(currentPatient === patientId) setSaveStatus('Saved locally • Synced to JSON');
   }catch(e){
-    if(currentPatient === patientId) setSaveStatus('Saved locally \u2022 OneDrive sync failed');
+    if(currentPatient === patientId) setSaveStatus('Saved locally • JSON sync failed');
+    if(typeof setGraphStatus === 'function') setGraphStatus(`JSON sync failed - ${describeImportError(e)}`, true);
+  } finally {
+    delete _pushTimers[patientId];
   }
 }
 async function flushPendingPushes(){
@@ -6100,67 +5899,6 @@ async function flushPendingPushes(){
     delete _pushTimers[id];
     await executePush(id);
   }
-}
-function normalizeImportedMatchName(value){
-  return String(value||'').trim().replace(/\s+/g,' ').toLowerCase();
-}
-function normalizeImportWorksheetName(value){
-  const raw = String(value||'').trim().toLowerCase();
-  if(raw==='resp' || raw==='list') return 'list';
-  return raw;
-}
-function upgradeStoredPatients(){
-  Object.entries(patients||{}).forEach(([id, patient])=>{
-    if(!patient || typeof patient!=='object') return;
-    patient.form = patient.form || {};
-    const numericId = Number(id) || 0;
-    if(!patient.createdAt) patient.createdAt = numericId ? `legacy-${numericId}` : `legacy-${Date.now()}`;
-    ensureWeightHistoryShape(patient);
-    if(patient.form._lastImportedWeight == null) patient.form._lastImportedWeight = String(patient.form.weight||'').trim();
-    patient.form.toolScores = normaliseToolScores(patient.form.toolScores || null);
-    if(patient.form.bpLying == null) patient.form.bpLying = "";
-    if(patient.form.bpStanding1 == null) patient.form.bpStanding1 = "";
-    if(patient.form.bpStanding3 == null) patient.form.bpStanding3 = "";
-    if(patient.form.bpPosturalSymptoms == null) patient.form.bpPosturalSymptoms = "";
-    if(patient.form.bloods == null) patient.form.bloods = "";
-    if(typeof patient.form._medsCollapseTouched === 'undefined') patient.form.medsCollapsed = !!patient.form.medsGiven;
-    if(typeof patient.form._ivCollapseTouched === 'undefined') patient.form.ivCollapsed = !!patient.form.ivGiven;
-    if(isLinkedPatient(patient)){
-      if(patient.importedAt == null) patient.importedAt = patient.createdAt || (numericId ? `legacy-${numericId}` : `legacy-import`);
-      if(patient.form._lastImportedIssues == null) patient.form._lastImportedIssues = normText(patient.form.issues);
-      if(patient.form._lastImportedPlan   == null) patient.form._lastImportedPlan   = normText(patient.form.plan);
-      if(patient.form._lastImportedBloods == null) patient.form._lastImportedBloods = normText(patient.form.bloods);
-      if(patient.form.weight) recordWeightHistory(patient, patient.form.weight, patient.importedAt || patient.createdAt || new Date().toISOString(), 'legacy');
-    }
-    if(patient.syncState) delete patient.syncState;
-  });
-}
-// ─────────────────────────────────────────────────────────────────────────────
-function findExistingImportedPatientId(match){
-  if(!match || !match.kind) return null;
-  const targetWorksheet = normalizeImportWorksheetName(match.worksheet||'');
-  const targetRow = Number.isFinite(Number(match.rowIndex)) ? Number(match.rowIndex) : null;
-  const targetName = normalizeImportedMatchName(match.name || '');
-  const ids = Object.keys(patients || {});
-  for(const id of ids){
-    const patient = patients[id] || {};
-    const src = patient.importSource;
-    if(!src || String(src.kind||'') !== String(match.kind||'')) continue;
-    const srcWorksheet = normalizeImportWorksheetName(src.worksheet||'');
-    const srcRow = Number.isFinite(Number(src.rowIndex)) ? Number(src.rowIndex) : null;
-    if(targetWorksheet && srcWorksheet===targetWorksheet && targetRow!==null && srcRow===targetRow) return Number(id);
-  }
-  if(targetName){
-    for(const id of ids){
-      const patient = patients[id] || {};
-      const src = patient.importSource;
-      if(!src || String(src.kind||'') !== String(match.kind||'')) continue;
-      const srcWorksheet = normalizeImportWorksheetName(src.worksheet||'');
-      if(targetWorksheet && srcWorksheet && srcWorksheet!==targetWorksheet) continue;
-      if(normalizeImportedMatchName(patient.name)===targetName) return Number(id);
-    }
-  }
-  return null;
 }
 function applyImportedPatientUpdate(existingPatient, importedData){
   const p = existingPatient || {};
@@ -6177,13 +5915,24 @@ function applyImportedPatientUpdate(existingPatient, importedData){
   if(!p.createdAt) p.createdAt = new Date().toISOString();
   p.importedAt     = importedData.importedAt || p.importedAt || p.createdAt;
   p.importSource   = importedData.importSource && typeof importedData.importSource==='object' ? {
-    kind: importedData.importSource.kind || 'onedrive',
-    worksheet: importedData.importSource.worksheet || '',
-    rowIndex: Number.isFinite(Number(importedData.importSource.rowIndex)) ? Number(importedData.importSource.rowIndex) : null
+    kind: importedData.importSource.kind || 'shared_json',
+    jsonId: importedData.importSource.jsonId || '',
+    folderPath: importedData.importSource.folderPath || currentJsonFolderPath()
   } : p.importSource || null;
   p.form = p.form || {};
   ensureWeightHistoryShape(p);
   applyPull(p, importedData.issues, importedData.plan, importedData.bloods);
+  const jsonCopyFields = ['currently','pmh','socialHistory','examination','forDischargeSummary','dnacprStatus','dnacprFormSeen','tepStatus','ceilingOfCare','acpNotes'];
+  jsonCopyFields.forEach(key=>{
+    if(Object.prototype.hasOwnProperty.call(importedData, key)) p.form[key] = normText(importedData[key]);
+  });
+  if(Array.isArray(importedData.medEntries)) p.form.medEntries = importedData.medEntries;
+  if(Array.isArray(importedData.ivEntries)) p.form.ivEntries = importedData.ivEntries;
+  if(importedData.obs && typeof importedData.obs === 'object'){
+    ['rr','spo2','oxygen','oxygenFlow','temp','bp','hr','weight','bm'].forEach(key=>{
+      if(Object.prototype.hasOwnProperty.call(importedData.obs, key)) p.form[key] = String(importedData.obs[key] ?? '');
+    });
+  }
   syncImportedWeightField(p, importedData.weight);
   recordWeightHistory(p, importedData.weight, importedData.importedAt || p.importedAt || new Date().toISOString(), 'import');
   const changedFields = [];
@@ -6198,9 +5947,9 @@ function createImportedPatient(data){
   const doaText = data.doa || '';
   const listDetails = data.listDetails || '';
   const sourceMeta = data.importSource && typeof data.importSource==='object' ? {
-    kind: data.importSource.kind || 'onedrive',
-    worksheet: data.importSource.worksheet || '',
-    rowIndex: Number.isFinite(Number(data.importSource.rowIndex)) ? Number(data.importSource.rowIndex) : null
+    kind: data.importSource.kind || 'shared_json',
+    jsonId: data.importSource.jsonId || '',
+    folderPath: data.importSource.folderPath || currentJsonFolderPath()
   } : null;
   const patient = {
     name: data.name || 'Unnamed handover patient',
@@ -6216,8 +5965,8 @@ function createImportedPatient(data){
     importSource: sourceMeta,
     weightHistory: [],
     form: {
-      rr:'', spo2:'', oxygen:'0', oxygenFlow:'', scoreMode:'', temp:'', bp:'', hr:'',
-      weight:String(data.weight || '').trim(), bm:'', conscious:'0', confusion:'0',
+      rr:String((data.obs && data.obs.rr) || ''), spo2:String((data.obs && data.obs.spo2) || ''), oxygen:String((data.obs && data.obs.oxygen) || '0'), oxygenFlow:String((data.obs && data.obs.oxygenFlow) || ''), scoreMode:'', temp:String((data.obs && data.obs.temp) || ''), bp:String((data.obs && data.obs.bp) || ''), hr:String((data.obs && data.obs.hr) || ''),
+      weight:String(data.weight || (data.obs && data.obs.weight) || '').trim(), bm:String((data.obs && data.obs.bm) || ''), conscious:'0', confusion:'0',
       issues:              normText(data.issues),
       _lastImportedIssues: normText(data.issues),
       _lastImportedWeight: String(data.weight || '').trim(),
@@ -6227,248 +5976,65 @@ function createImportedPatient(data){
       pmh:                 normText(data.pmh),
       socialHistory:       normText(data.socialHistory),
       examination:         normText(data.examination),
-      medsGiven: false, medsCollapsed: true, _medsCollapseTouched: false, medsFocusedIndex: null, medEntries: [],
-      ivGiven: false, ivCollapsed: true, _ivCollapseTouched: false, ivVIP: '', ivEntries: [],
+      medsGiven: Array.isArray(data.medEntries) && data.medEntries.length > 0, medsCollapsed: true, _medsCollapseTouched: false, medsFocusedIndex: null, medEntries: Array.isArray(data.medEntries) ? data.medEntries : [],
+      ivGiven: Array.isArray(data.ivEntries) && data.ivEntries.length > 0, ivCollapsed: true, _ivCollapseTouched: false, ivVIP: '', ivEntries: Array.isArray(data.ivEntries) ? data.ivEntries : [],
       plan:              normText(data.plan),
       _lastImportedPlan: normText(data.plan),
-      forDischargeSummary: normText(data.forDischargeSummary)
+      forDischargeSummary: normText(data.forDischargeSummary),
+      dnacprStatus: String(data.dnacprStatus || ''),
+      dnacprFormSeen: String(data.dnacprFormSeen || ''),
+      tepStatus: String(data.tepStatus || ''),
+      ceilingOfCare: String(data.ceilingOfCare || ''),
+      acpNotes: String(data.acpNotes || '')
     }
   };
   recordWeightHistory(patient, data.weight, data.importedAt || new Date().toISOString(), 'import');
   return patient;
 }
-function importRespWorksheetMatrix(matrix, worksheetName){
-  if(!Array.isArray(matrix) || !matrix.length) return { imported:0, updated:0, updateDetails:[] };
-  const headerIndex = matrix.findIndex(row=>{
-    const a = normalizeHeader(row && row[0]);
-    const b = normalizeHeader(row && row[1]);
-    return a.includes('patient details') && b.includes('doa');
-  });
-  if(headerIndex < 0) return { imported:0, updated:0, updateDetails:[] };
-  const headerRow = Array.isArray(matrix[headerIndex]) ? matrix[headerIndex] : [];
-  const headerMap = {};
-  headerRow.forEach((value, idx)=>{ headerMap[normalizeHeader(value)] = idx; });
-  const bloodsColumnKey = ['bloods','blood results','lab results','results','labs'].find(name=>Object.prototype.hasOwnProperty.call(headerMap, name));
-  let imported = 0;
-  let updated = 0;
-  const updateDetails = [];
-  for(let i = headerIndex + 1; i < matrix.length; i++){
-    const row = Array.isArray(matrix[i]) ? matrix[i] : [];
-    const detailsCell = row[0];
-    const doaCell = row[1];
-    const mdmCell = row[3];
-    const importedAt = new Date().toISOString();
-    const parsed = parseRespPatientDetails(detailsCell);
-    if(!parsed || !parsed.name) continue;
-    const doaText = formatImportedDoA(doaCell);
-    const parsedNotes = parseRespMdmNotes(mdmCell);
-    const bloodsCell = bloodsColumnKey ? row[headerMap[bloodsColumnKey]] : "";
-    const importedData = {
-      name: parsed.name,
-      age: parsed.age,
-      sex: parsed.sex,
-      referralSource: parsed.referralSource || '',
-      summary: '',
-      doa: doaText,
-      listDetails: '',
-      importedAt,
-      weight: extractImportedWeight(mdmCell),
-      issues: parsedNotes.issues,
-      bloods: normText(bloodsCell || parsedNotes.bloods),
-      currently: '',
-      pmh: '',
-      socialHistory: '',
-      examination: '',
-      plan: parsedNotes.plan,
-      forDischargeSummary: '',
-      importSource: { kind:'resp_handover', worksheet:(String(worksheetName||'').trim() || 'List'), rowIndex:i }
-    };
-    const existingId = findExistingImportedPatientId({ kind:'resp_handover', worksheet:(String(worksheetName||'').trim() || 'List'), rowIndex:i, name:parsed.name });
-    if(existingId){
-      const updateResult = applyImportedPatientUpdate(patients[existingId], importedData);
-      if(updateResult && updateResult.changed){
-        updated++;
-        updateDetails.push({name:updateResult.patientName || importedData.name || 'Unnamed handover patient', summary:updateResult.summary || 'imported fields updated'});
-      }
-    } else {
-      patients[getNextPatientId()] = createImportedPatient(importedData);
-      imported++;
-    }
-  }
-  return { imported, updated, updateDetails };
-}
-function detectHeaderRow(matrix){
-  const limit = Math.min(matrix.length, 12);
-  for(let i=0;i<limit;i++){
-    const row = Array.isArray(matrix[i]) ? matrix[i] : [];
-    const normal = row.map(normalizeHeader).filter(Boolean);
-    if(!normal.length) continue;
-    const hasName = normal.some(h=>['name','patient','patient name','initials'].includes(h));
-    const hasAge = normal.some(h=>h==='age');
-    const hasSummary = normal.some(h=>['summary','diagnosis','problem','reason'].includes(h));
-    if((hasName && hasAge) || (hasName && hasSummary)) return i;
-  }
-  return matrix.length ? 0 : -1;
-}
-function importRowsToPatients(headers, rows){
-  const map={};
-  headers.forEach((h,i)=>{ map[normalizeHeader(h)] = i; });
-  let imported = 0;
-  const existing = existingPatientNames();
-  rows.forEach(r=>{
-    const vals = Array.isArray(r.values) && r.values.length ? r.values[0] : null;
-    if(!vals) return;
-    const name = pickValue(vals,map,['name','patient','patient name','initials']);
-    const age = pickValue(vals,map,['age']);
-    const summary = pickValue(vals,map,['summary','diagnosis','problem','reason']);
-    if(!name && !summary) return;
-    if(name && existing.has(name.trim().toLowerCase())) return;
-    const referralSource = pickValue(vals,map,['source','referral','referral source']);
-    const acuity = pickValue(vals,map,['acuity','status']);
-    const issues = pickValue(vals,map,['issues','active issues']);
-    const examination = pickValue(vals,map,['examination','exam']);
-    const plan = pickValue(vals,map,['plan','management plan']);
-    const bloods = pickValue(vals,map,['bloods','blood results','lab results','results','labs']);
-    const discharge = pickValue(vals,map,['discharge summary','for discharge summary','handover']);
-    const sex = pickValue(vals,map,['sex','gender']);
-    const weight = pickValue(vals,map,['weight','weight (kg)']);
-    const patient = createImportedPatient({
-      name: name || 'Unnamed handover patient',
-      age: age || '',
-      sex: /^(m|male)$/i.test(sex) ? 'M' : /^(f|female)$/i.test(sex) ? 'F' : '',
-      summary: summary || '',
-      referralSource,
-      acuity,
-      listDetails: 'Imported from OneDrive handover',
-      importedAt: new Date().toISOString(),
-      weight,
-      issues,
-      examination,
-      plan,
-      bloods,
-      forDischargeSummary: discharge
-    });
-    patients[getNextPatientId()] = patient;
-    imported++;
-  });
-  return imported;
-}
-function importMatrixToPatients(matrix, worksheetName){
-  if(!Array.isArray(matrix) || !matrix.length) return { imported:0, updated:0, updateDetails:[] };
-  const worksheetLower = String(worksheetName||'').trim().toLowerCase();
-  const firstTryStructuredHandover = worksheetLower==='list' || worksheetLower==='resp' || matrix.some((row, idx)=>idx < 6 && normalizeHeader(row && row[0]).includes('patient details'));
-  if(firstTryStructuredHandover){
-    const respCounts = importRespWorksheetMatrix(matrix, worksheetName);
-    if((respCounts.imported || 0) || (respCounts.updated || 0)) return respCounts;
-  }
-  const headerIndex = detectHeaderRow(matrix);
-  if(headerIndex < 0) return { imported:0, updated:0 };
-  const headers = Array.isArray(matrix[headerIndex]) ? matrix[headerIndex] : [];
-  const rows = matrix.slice(headerIndex + 1).map(v=>({values:[v]}));
-  return { imported: importRowsToPatients(headers, rows), updated: 0, updateDetails:[] };
-}
-function encodeSharingUrl(url){
-  return btoa(url).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-}
-async function listDriveChildren(path='root', maxItems=400){
-  const out=[];
-  let nextPath = path==='root'
-    ? `/me/drive/root/children?$top=200&$select=id,name,webUrl,file,folder,parentReference`
-    : `/me/drive/items/${encodeURIComponent(path)}/children?$top=200&$select=id,name,webUrl,file,folder,parentReference`;
-  while(nextPath && out.length < maxItems){
-    const res = await graphFetch(nextPath.replace('https://graph.microsoft.com/v1.0',''));
-    const items = res.value || [];
-    out.push(...items);
-    nextPath = res['@odata.nextLink'] || '';
-  }
-  return out.slice(0, maxItems);
-}
-async function findWorkbookByRecursiveScan(workbookName){
-  const target = String(workbookName||'').trim().toLowerCase();
-  if(!target) return null;
-  const seenFolders = new Set();
-  const queue = ['root'];
-  let scanned = 0;
-  while(queue.length && scanned < 1200){
-    const folderRef = queue.shift();
-    if(seenFolders.has(folderRef)) continue;
-    seenFolders.add(folderRef);
-    let children = [];
-    try{
-      children = await listDriveChildren(folderRef, 250);
-    }catch(e){
-      continue;
-    }
-    for(const item of children){
-      scanned += 1;
-      const name = String(item?.name||'').trim().toLowerCase();
-      if(item?.file && name === target) return item;
-      if(item?.folder && item?.id && !seenFolders.has(item.id)) queue.push(item.id);
-      if(scanned >= 1200) break;
-    }
-  }
-  return null;
-}
-async function findWorkbookItem(){
-  const s=loadGraphSettings();
-  const persistItem = (item)=>{
-    if(item && item.id){
-      try{
-        const next = {...s, workbookId: item.id};
-        localStorage.setItem(GRAPH_SETTINGS_KEY, JSON.stringify(next));
-      }catch(e){}
-    }
-    return item;
-  };
-  const targetName = String(s.workbookName||'').trim();
-  if(s.workbookId){
-    try{
-      const cached = await graphFetch(`/me/drive/items/${encodeURIComponent(s.workbookId)}?$select=id,name,webUrl,file`);
-      if(cached && cached.id) return persistItem(cached);
-    }catch(e){}
-  }
-  if(s.workbookUrl){
-    try{
-      const shareId = encodeSharingUrl(s.workbookUrl);
-      const shared = await graphFetch(`/shares/u!${shareId}/driveItem?$select=id,name,webUrl,file`);
-      if(shared && shared.id) return persistItem(shared);
-    }catch(e){}
-  }
-  if(!targetName){
-    throw new Error('Add a workbook filename or workbook URL in Options first.');
-  }
-  try{
-    const exactPath = await graphFetch(`/me/drive/root:/${encodeURIComponent(targetName)}?$select=id,name,webUrl,file`);
-    if(exactPath && exactPath.id) return persistItem(exactPath);
-  }catch(e){}
-  try{
-    const q=encodeURIComponent(targetName.replace(/'/g,' '));
-    const res=await graphFetch(`/me/drive/root/search(q='${q}')?$top=25&$select=id,name,webUrl,file,parentReference`);
-    const exact=(res.value||[]).find(v=>v?.file && String(v.name||'').trim().toLowerCase()===targetName.toLowerCase());
-    if(exact) return persistItem(exact);
-    const firstFile=(res.value||[]).find(v=>v?.file);
-    if(firstFile) return persistItem(firstFile);
-  }catch(e){}
-  try{
-    const stem = targetName.replace(/\.[^.]+$/, '');
-    if(stem && stem.toLowerCase() !== targetName.toLowerCase()){
-      const q2=encodeURIComponent(stem.replace(/'/g,' '));
-      const res2=await graphFetch(`/me/drive/root/search(q='${q2}')?$top=25&$select=id,name,webUrl,file,parentReference`);
-      const exact2=(res2.value||[]).find(v=>v?.file && String(v.name||'').trim().toLowerCase()===targetName.toLowerCase());
-      if(exact2) return persistItem(exact2);
-      const xlsx=(res2.value||[]).find(v=>v?.file && /\.xlsx$/i.test(String(v.name||'')));
-      if(xlsx) return persistItem(xlsx);
-    }
-  }catch(e){}
-  try{
-    const recent = await graphFetch(`/me/drive/recent?$top=50`);
-    const recentMatch = (recent.value||[]).find(v=>v?.file && String(v.name||'').trim().toLowerCase()===targetName.toLowerCase());
-    if(recentMatch) return persistItem(recentMatch);
-  }catch(e){}
-  const scannedMatch = await findWorkbookByRecursiveScan(targetName);
-  if(scannedMatch) return persistItem(scannedMatch);
-  throw new Error(`Workbook not found in the signed-in OneDrive: ${targetName}`);
-}
+// ─── Shared JSON store bridge ───────────────────────────────────────────────
+const JSON_DATA_DEFAULT_FOLDER = 'H@H Board Data';
+const JSON_PATIENT_CACHE_KEY = 'hah_mobile_json_patient_cache_v1';
+const JSON_TASK_CACHE_KEY = 'hah_mobile_json_task_cache_v1';
+const JSON_LAST_MAPPING_KEY = 'hah_mobile_json_patient_id_map_v1';
+const JSON_MOBILE_TIMELINE_PREFIX = 'mobile-clinical-current:';
+function normaliseJsonFolderPath(path){return String(path||JSON_DATA_DEFAULT_FOLDER).trim().replace(/^\/+|\/+$/g,'')||JSON_DATA_DEFAULT_FOLDER;}
+function currentJsonFolderPath(){const s=typeof loadGraphSettings==='function'?loadGraphSettings():{}; return normaliseJsonFolderPath(s.folderPath || JSON_DATA_DEFAULT_FOLDER);}
+function childJsonPath(parent, child){return `${normaliseJsonFolderPath(parent)}/${String(child||'').replace(/^\/+|\/+$/g,'')}`;}
+function encodeJsonPath(path){return normaliseJsonFolderPath(path).split('/').map(encodeURIComponent).join('/');}
+function nowIsoJson(){return new Date().toISOString();}
+function todayKeyJson(){return new Date().toISOString().slice(0,10);}
+function getJsonActor(){try{if(graphAccount&&graphAccount.username)return graphAccount.username;}catch(_){} return 'Mobile app';}
+function loadJsonIdMap(){try{const raw=localStorage.getItem(JSON_LAST_MAPPING_KEY); return raw?JSON.parse(raw):{};}catch(_){return {};}}
+function saveJsonIdMap(map){try{localStorage.setItem(JSON_LAST_MAPPING_KEY, JSON.stringify(map||{}));}catch(_){}}
+async function jsonDriveGet(path){return graphJson(`/me/drive/root:/${encodeJsonPath(path)}:/content`);}
+async function jsonDrivePut(path, data){const folder=String(path||'').split('/').slice(0,-1).join('/'); if(folder) await jsonEnsureFolder(folder); return graphJson(`/me/drive/root:/${encodeJsonPath(path)}:/content`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data,null,2)});}
+async function jsonPathMeta(path){return graphJson(`/me/drive/root:/${encodeJsonPath(path)}`);}
+async function jsonPathExists(path){try{await jsonPathMeta(path);return true;}catch(e){const m=String(e&&e.message||'').toLowerCase(); if(m.includes('not found')||m.includes('itemnotfound')||m.includes('(404)')) return false; throw e;}}
+async function jsonEnsureFolder(path){const parts=normaliseJsonFolderPath(path).split('/').filter(Boolean);let current='';for(const part of parts){const parent=current;current=current?`${current}/${part}`:part;if(await jsonPathExists(current))continue;const endpoint=parent?`/me/drive/root:/${encodeJsonPath(parent)}:/children`:'/me/drive/root/children';await graphJson(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:{name:part,folder:{},'@microsoft.graph.conflictBehavior':'fail'}});}}
+function jsonSchemaHeader(type){return {schema:'hah-board-json-store',schemaVersion:1,type,createdAt:nowIsoJson(),updatedAt:nowIsoJson()};}
+function makeJsonServiceSchema(){return Object.assign(jsonSchemaHeader('service'),{service:{name:'Hospital at Home',dataFolder:currentJsonFolderPath(),activePatientIds:[],patientOrder:[],archivedPatientIds:[]},patients:{activeIds:[],sortOrder:[],archivedIds:[]},presets:{pathways:[],clinicians:['LK','SS','GM','AA','JT'],boardViews:[]},meta:{lastMigrationAt:'',lastWriter:getJsonActor()}});}
+function makeJsonTasksSchema(){return Object.assign(jsonSchemaHeader('tasks'),{tasks:[],meta:{lastWriter:getJsonActor()}});}
+function makeJsonAuditSchema(){return Object.assign(jsonSchemaHeader('audit'),{events:[{id:`audit:${Date.now().toString(36)}`,at:nowIsoJson(),actor:getJsonActor(),type:'store-initialised',summary:'Shared JSON store initialised from mobile'}]});}
+async function initialiseJsonStore(){const root=currentJsonFolderPath();await jsonEnsureFolder(root);await jsonEnsureFolder(childJsonPath(root,'patients'));await jsonEnsureFolder(childJsonPath(root,'rounds'));await jsonEnsureFolder(childJsonPath(root,'audit'));if(!(await jsonPathExists(childJsonPath(root,'service.json'))))await jsonDrivePut(childJsonPath(root,'service.json'),makeJsonServiceSchema());if(!(await jsonPathExists(childJsonPath(root,'tasks.json'))))await jsonDrivePut(childJsonPath(root,'tasks.json'),makeJsonTasksSchema());if(!(await jsonPathExists(childJsonPath(root,`audit/${todayKeyJson()}.json`))))await jsonDrivePut(childJsonPath(root,`audit/${todayKeyJson()}.json`),makeJsonAuditSchema());setGraphStatus(`JSON store ready in ${root}.`);return true;}
+async function loadJsonService(){return jsonDriveGet(childJsonPath(currentJsonFolderPath(),'service.json'));}
+async function loadJsonPatient(jsonId){return jsonDriveGet(childJsonPath(currentJsonFolderPath(),`patients/${String(jsonId)}.json`));}
+async function saveJsonPatient(doc){const id=String(doc&&doc.id||'').trim();if(!id)throw new Error('Cannot save JSON patient without an id.');const next={...doc,updatedAt:nowIsoJson()};next.meta={...(next.meta||{}),updatedAt:nowIsoJson(),updatedBy:getJsonActor(),version:Number(next.meta&&next.meta.version||0)+1};return jsonDrivePut(childJsonPath(currentJsonFolderPath(),`patients/${id}.json`),next);}
+async function appendJsonAudit(event){const path=childJsonPath(currentJsonFolderPath(),`audit/${todayKeyJson()}.json`);let doc;try{doc=await jsonDriveGet(path);}catch(_){doc=makeJsonAuditSchema();}doc.events=Array.isArray(doc.events)?doc.events:[];doc.events.unshift({id:`audit:${Date.now().toString(36)}`,at:nowIsoJson(),actor:getJsonActor(),...(event||{})});doc.updatedAt=nowIsoJson();return jsonDrivePut(path,doc);}
+function getJsonActivePatientIds(serviceDoc){const s=serviceDoc&&serviceDoc.service?serviceDoc.service:{};const p=serviceDoc&&serviceDoc.patients?serviceDoc.patients:{};const ids=s.activePatientIds||p.activeIds||[];return Array.isArray(ids)?ids.map(String).filter(Boolean):[];}
+function getJsonArchivedPatientIds(serviceDoc){const s=serviceDoc&&serviceDoc.service?serviceDoc.service:{};const p=serviceDoc&&serviceDoc.patients?serviceDoc.patients:{};const ids=s.archivedPatientIds||p.archivedIds||[];return Array.isArray(ids)?ids.map(String).filter(Boolean):[];}
+function latestJsonTimelineEntry(patient){const entries=Array.isArray(patient&&patient.timeline)?patient.timeline.slice():[];entries.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));return entries[0]||null;}
+function compactJsonIssues(patient,note){const clinical=patient&&patient.clinical?patient.clinical:{};if(note&&note.issues)return note.issues;if(Array.isArray(clinical.persistentIssues))return clinical.persistentIssues.map(x=>typeof x==='string'?x:(x&&(x.title||x.text||x.label))||'').filter(Boolean).join('\n');return clinical.summary||'';}
+function mapJsonPatientToImportData(patient){const identity=patient.identity||{}, service=patient.service||{}, alerts=patient.alerts||{}, clinical=patient.clinical||{}, operational=patient.operational||{};const latest=latestJsonTimelineEntry(patient);const note=latest&&latest.note?latest.note:{};const acp=clinical.acp||{};const issues=compactJsonIssues(patient,note);const summary=clinical.summary||issues||service.pathway||'';const obs=clinical.obs&&typeof clinical.obs==='object'?clinical.obs:{};return {jsonId:String(patient.id||''),name:identity.name||patient.name||patient.id||'Unnamed JSON patient',age:identity.age||'',sex:identity.sex==='M'?'M':identity.sex==='F'?'F':'',referralSource:service.referredFrom||'',doa:service.admittedDate||'',summary,listDetails:[summary,alerts.dnar?'DNAR':'',alerts.acp?'ACP':'',operational.dischargeReadiness||''].filter(Boolean).join('\n'),acuity:String(operational.priority||'').toUpperCase()==='RED'?'RED':String(operational.priority||'').toUpperCase()==='AMBER'?'AMBER':'GREEN',issues,bloods:note.bloodsIx||clinical.bloodsSummary||'',examination:note.progress||clinical.examination||'',plan:note.plan||clinical.plan||'',forDischargeSummary:operational.dischargeReadiness||'',currently:clinical.currently||'',pmh:clinical.pmh||'',socialHistory:clinical.socialHistory||'',weight:obs.weight||clinical.weight||'',dnacprStatus:acp.dnacprStatus||(alerts.dnar?'yes':''),dnacprFormSeen:acp.dnacprFormSeen||'',tepStatus:acp.tepStatus||(alerts.acp?'present':''),ceilingOfCare:acp.ceilingOfCare||alerts.escalation||'',acpNotes:acp.notes||acp.acpNotes||'',medEntries:Array.isArray(clinical.medications)?clinical.medications:[],ivEntries:Array.isArray(clinical.ivTherapies)?clinical.ivTherapies:[],obs,importedAt:patient.updatedAt||(patient.meta&&patient.meta.updatedAt)||nowIsoJson(),importSource:{kind:'shared_json',jsonId:String(patient.id||''),folderPath:currentJsonFolderPath()},jsonRecord:patient};}
+function findLocalIdForJsonPatient(jsonId,name,usedIds){const jid=String(jsonId||'');const map=loadJsonIdMap();if(jid&&map[jid]&&patients[map[jid]]&&!usedIds.has(String(map[jid])))return Number(map[jid]);for(const id of Object.keys(patients||{})){const p=patients[id];if(p&&p.importSource&&p.importSource.kind==='shared_json'&&String(p.importSource.jsonId||'')===jid&&!usedIds.has(String(id)))return Number(id);}const ids=Object.keys(patients||{}).concat(Array.from(usedIds||[])).map(Number).filter(Number.isFinite);return ids.length?Math.max(...ids)+1:1;}
+function normaliseJsonTask(task,idMap){const status=String(task.status||'').toLowerCase(),priority=String(task.priority||'').toLowerCase(),patientJsonId=String(task.patientId||'');const pid=idMap&&idMap[patientJsonId]?Number(idMap[patientJsonId]):null;let due=(priority==='urgent'||priority==='high'||status==='urgent')?'now':'today';if(task.dueAt&&due!=='now'){const d=new Date(task.dueAt),t=new Date(todayKeyJson()+'T23:59:59');if(!Number.isNaN(d.getTime())&&d.getTime()>t.getTime())due='later';}return {id:String(task.id||`json-task-${Date.now().toString(36)}`),patientId:Number.isFinite(pid)?pid:null,text:String(task.title||task.text||'').trim(),due,urgent:due==='now',category:String(task.category||'').toLowerCase().includes('blood')?'bloods':String(task.category||'').toLowerCase().includes('discharge')?'discharge':'review',note:String(task.note||task.blocker||'').trim(),done:['done','completed','closed','actioned'].includes(status),createdAt:String(task.createdAt||task.updatedAt||nowIsoJson()),completedAt:['done','completed','closed','actioned'].includes(status)?String(task.completedAt||task.updatedAt||nowIsoJson()):'',importSource:{kind:'shared_json_task',jsonId:String(task.id||'')}};}
+function applyJsonDatasetToMobile(dataset){const rows=Array.isArray(dataset&&dataset.rows)?dataset.rows:[];const usedIds=new Set(), nextPatients={}, idMap={};let imported=0,updated=0;const updateDetails=[];rows.forEach(row=>{const data=mapJsonPatientToImportData(row);if(!data.jsonId)return;const localId=findLocalIdForJsonPatient(data.jsonId,data.name,usedIds);usedIds.add(String(localId));idMap[data.jsonId]=localId;if(patients[localId]){const result=applyImportedPatientUpdate(clone(patients[localId]),data);nextPatients[localId]=result.patient;if(result.changed){updated++;updateDetails.push({name:result.patientName||data.name,summary:result.summary});}}else{nextPatients[localId]=createImportedPatient(data);imported++;}});patients=nextPatients;saveJsonIdMap(idMap);const jsonTasks=Array.isArray(dataset&&dataset.tasks)?dataset.tasks:[];if(typeof normaliseTaskCollection==='function')tasks=normaliseTaskCollection(jsonTasks.map(task=>normaliseJsonTask(task,idMap)),false);const currentStillExists=currentPatient&&Object.prototype.hasOwnProperty.call(patients,String(currentPatient));currentPatient=currentStillExists?currentPatient:(Number(Object.keys(patients)[0]||0)||null);detailLoadedForCurrentPatient=false;return {imported,updated,updateDetails,activeCount:rows.length,taskCount:jsonTasks.length};}
+async function loadJsonTasksDoc(){try{const doc=await jsonDriveGet(childJsonPath(currentJsonFolderPath(),'tasks.json'));return doc&&Array.isArray(doc.tasks)?doc.tasks:[];}catch(_){return [];}}
+async function loadJsonPatientDataset(){let service;try{service=await loadJsonService();}catch(_){await initialiseJsonStore();service=await loadJsonService();}const ids=getJsonActivePatientIds(service), archivedIds=getJsonArchivedPatientIds(service);const rows=[], archivedRows=[];for(const id of ids){try{const patient=await loadJsonPatient(id);if(patient&&patient.id)rows.push(patient);}catch(e){console.warn('[H@H mobile JSON] Could not load patient',id,e);}}for(const id of archivedIds){try{const patient=await loadJsonPatient(id);if(patient&&patient.id)archivedRows.push(patient);}catch(e){console.warn('[H@H mobile JSON] Could not load archived patient',id,e);}}const tasks=await loadJsonTasksDoc();const cache={loadedAt:nowIsoJson(),source:'json',folderPath:currentJsonFolderPath(),service,rows,archivedRows,tasks,lastError:''};try{localStorage.setItem(JSON_PATIENT_CACHE_KEY,JSON.stringify(cache));localStorage.setItem(JSON_TASK_CACHE_KEY,JSON.stringify({loadedAt:cache.loadedAt,source:'json',tasks,lastError:''}));}catch(_){}return cache;}
+function patchMobileClinicalEntry(doc,p){const f=p.form||{};doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];const entryId=`${JSON_MOBILE_TIMELINE_PREFIX}${doc.id}`;const entry={id:entryId,type:'mobile_clinical_update',status:'completed',timestamp:nowIsoJson(),author:getJsonActor(),note:{issues:normText(f.issues||''),bloodsIx:normText(f.bloods||''),progress:normText(f.examination||f.currently||''),plan:normText(f.plan||'')},fields:{source:'mobile',dischargeSummary:normText(f.forDischargeSummary||''),acp:{dnacprStatus:String(f.dnacprStatus||''),dnacprFormSeen:String(f.dnacprFormSeen||''),tepStatus:String(f.tepStatus||''),ceilingOfCare:String(f.ceilingOfCare||''),notes:String(f.acpNotes||'')},obs:{rr:f.rr||'',spo2:f.spo2||'',oxygen:f.oxygen||'',oxygenFlow:f.oxygenFlow||'',temp:f.temp||'',bp:f.bp||'',hr:f.hr||'',weight:f.weight||'',bm:f.bm||''}}};const idx=doc.timeline.findIndex(row=>String(row&&row.id)===entryId);if(idx>=0)doc.timeline[idx]={...doc.timeline[idx],...entry,updatedAt:nowIsoJson()};else doc.timeline.unshift(entry);doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));return doc;}
+async function patchJsonPatientFromMobile(doc,p){const f=p.form||{};doc.identity={...(doc.identity||{}),name:p.name||'',age:p.age||'',sex:p.sex||''};doc.service={...(doc.service||{}),referredFrom:p.referralSource||'',admittedDate:p.doa||''};doc.alerts={...(doc.alerts||{}),dnar:String(f.dnacprStatus||'').toLowerCase()==='yes',acp:!!(String(f.tepStatus||'').trim()||String(f.ceilingOfCare||'').trim()||String(f.acpNotes||'').trim()),escalation:String(f.ceilingOfCare||'').trim()};doc.clinical={...(doc.clinical||{}),summary:normText(f.issues||p.summary||''),bloodsSummary:normText(f.bloods||''),currently:normText(f.currently||''),pmh:normText(f.pmh||''),socialHistory:normText(f.socialHistory||''),examination:normText(f.examination||''),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[],obs:{rr:f.rr||'',spo2:f.spo2||'',oxygen:f.oxygen||'',oxygenFlow:f.oxygenFlow||'',temp:f.temp||'',bp:f.bp||'',hr:f.hr||'',weight:f.weight||'',bm:f.bm||''},acp:{dnacprStatus:String(f.dnacprStatus||''),dnacprFormSeen:String(f.dnacprFormSeen||''),tepStatus:String(f.tepStatus||''),ceilingOfCare:String(f.ceilingOfCare||''),notes:String(f.acpNotes||'')}};doc.operational={...(doc.operational||{})};if(f.forDischargeSummary)doc.operational.dischargeReadiness=String(f.forDischargeSummary||'').trim();patchMobileClinicalEntry(doc,p);const saved=await saveJsonPatient(doc);try{await appendJsonAudit({type:'mobile-patient-updated',entityType:'patient',entityId:doc.id,summary:`Mobile update for ${p.name||doc.id}`});}catch(_){}return saved;}
+async function testJsonConnection(){try{saveGraphSettings(false);setGraphStatus('Testing shared JSON store…');await initialiseJsonStore();const service=await loadJsonService();setGraphStatus(`JSON store ready - ${getJsonActivePatientIds(service).length} active / ${getJsonArchivedPatientIds(service).length} archived patient record(s).`);}catch(e){setGraphStatus(describeImportError(e),true);}}
+function clearJsonPatientCache(){try{localStorage.removeItem(JSON_PATIENT_CACHE_KEY);localStorage.removeItem(JSON_TASK_CACHE_KEY);}catch(_){}setGraphStatus('JSON cache cleared. Local patients remain available until the next JSON load.');}
+
 function setImportButtonState(state){
   const optionsBtn=$('importHandoverBtn');
   clearTimeout(setImportButtonState._doneTimer);
@@ -6501,61 +6067,38 @@ async function importHandoverRows(){
       saveCurrentPatientForm();
       await flushPendingPushes();
     }
-    setGraphStatus('Connecting to OneDrive…');
-    setSaveStatus('Importing…');
+    setGraphStatus('Connecting to shared JSON store…');
+    setSaveStatus('Loading JSON patients…');
     const app = await ensureMsalApp();
     const accounts = app.getAllAccounts();
-    if(!graphAccount || !graphAccount.homeAccountId || !accounts.length){
-      throw new Error('Not signed in');
-    }
-    const item=await findWorkbookItem();
-    if(!item.id) throw new Error('Workbook was not found in your OneDrive. Check the filename or workbook link.');
-    const s=loadGraphSettings();
+    if(!graphAccount || !graphAccount.homeAccountId || !accounts.length) throw new Error('Not signed in');
     setUndoSnapshot();
-    let result = { imported:0, updated:0 };
-    if(s.tableName){
-      const headerRes=await graphFetch(`/me/drive/items/${item.id}/workbook/tables/${encodeURIComponent(s.tableName)}/headerRowRange`);
-      const headers=(headerRes.values&&headerRes.values[0])||[];
-      const rowRes=await graphFetch(`/me/drive/items/${item.id}/workbook/tables/${encodeURIComponent(s.tableName)}/rows?$top=200`);
-      result = { imported: importRowsToPatients(headers, rowRes.value||[]), updated: 0 };
-    } else {
-      const worksheetName = String(s.worksheetName || 'List').trim() || 'List';
-      const matrix = await graphReadWorksheetMatrix(item.id, worksheetName);
-      result = importMatrixToPatients(matrix, worksheetName);
-    }
-    const importedCount = Number(result && result.imported) || 0;
-    const updatedCount = Number(result && result.updated) || 0;
-    const updateDetails = Array.isArray(result && result.updateDetails) ? result.updateDetails : [];
-    const statusMessage = buildImportStatusMessage(importedCount, updatedCount);
-    addEventLog(`OneDrive import - ${statusMessage}`);
-    updateDetails.forEach(item=>{ addEventLog(`Updated ${item.name} - ${item.summary}`); });
+    const dataset = await loadJsonPatientDataset();
+    const result = applyJsonDatasetToMobile(dataset);
+    const statusMessage = buildImportStatusMessage(result.imported, result.updated, result.activeCount, result.taskCount);
+    addEventLog(`JSON load - ${statusMessage}`);
+    result.updateDetails.forEach(item=>addEventLog(`Updated ${item.name} - ${item.summary}`));
     saveData(statusMessage);
     renderPatientList();
+    if(typeof renderTasksPage==='function') renderTasksPage();
     renderEventLog();
     updateUndoButton();
     setGraphStatus(statusMessage);
     setSaveStatus(statusMessage);
-    // If the currently open patient was updated, refresh its textareas immediately
-    if(detailLoadedForCurrentPatient && currentPatient && patients[currentPatient]){
-      const f = patients[currentPatient].form || {};
-      $('issues').value = f.issues || '';
-      $('bloods').value = f.bloods || '';
-      $('plan').value   = f.plan   || '';
-      if(typeof renderBloodsSummaryCard==='function') renderBloodsSummaryCard();
-      generateClinicalOutput();
-    }
+    if(detailVisible && currentPatient && patients[currentPatient]) openPatient(currentPatient, {preserveMode:true, restoreScroll:true});
     setImportButtonState('done');
   }catch(e){
     const briefError = describeImportError(e);
-    addEventLog(`OneDrive import failed: ${briefError}`);
-    saveData(`Import failed - ${briefError}`);
+    addEventLog(`JSON load failed: ${briefError}`);
+    saveData(`JSON load failed - ${briefError}`);
     renderEventLog();
     setGraphStatus(briefError, true);
-    setSaveStatus(`Import failed - ${briefError}`);
+    setSaveStatus(`JSON load failed - ${briefError}`);
   } finally {
     if(!$('importHandoverBtn')?.classList.contains('done')) setImportButtonState('idle');
   }
 }
+
 
 const PULL_REFRESH_THRESHOLD = 78;
 const PULL_REFRESH_MAX = 124;
@@ -6697,12 +6240,14 @@ function initPatientPullToRefresh(){
   scroller.addEventListener('touchcancel', end, {passive:true});
 }
 
-function openWorkbookLink(){
-  const s=saveGraphSettings(false);
-  if(s.workbookUrl){ window.open(s.workbookUrl,'_blank','noopener'); return; }
-  if(s.workbookName){ setGraphStatus('Workbook URL not set. Add a direct OneDrive/Excel link to open it from the app.', true); return; }
-  setGraphStatus('Add a direct workbook URL first.', true);
+function openJsonFolderLink(){
+  saveGraphSettings(false);
+  jsonPathMeta(currentJsonFolderPath()).then(meta=>{
+    if(meta && meta.webUrl) window.open(meta.webUrl,'_blank','noopener');
+    else setGraphStatus(`JSON folder found: ${currentJsonFolderPath()}`);
+  }).catch(e=>setGraphStatus(describeImportError(e), true));
 }
+window.HAH.sharedJsonStore={testJsonConnection,initialiseJsonStore,loadJsonPatientDataset,applyJsonDatasetToMobile,importHandoverRows,clearJsonPatientCache,loadJsonService,loadJsonPatient,saveJsonPatient,appendJsonAudit};
 
 </script><script>
 function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,tasks:typeof tasks!=='undefined'?tasks:[],patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
@@ -9407,9 +8952,12 @@ function saveCurrentPatientForm() {
     p.listDetails = p.listDetails || '';
   }
   if(isLinkedPatient(p)){
-    const issuesChanged = normText(p.form.issues) !== normText(previousForm.issues);
-    const planChanged   = normText(p.form.plan)   !== normText(previousForm.plan);
-    if(issuesChanged || planChanged) queuePush(currentPatient);
+    const trackedFields = ['issues','plan','bloods','currently','pmh','socialHistory','examination','forDischargeSummary','dnacprStatus','dnacprFormSeen','tepStatus','ceilingOfCare','acpNotes'];
+    const textChanged = trackedFields.some(key => normText(p.form[key]) !== normText(previousForm[key]));
+    const medChanged = JSON.stringify(p.form.medEntries || []) !== JSON.stringify(previousForm.medEntries || []);
+    const ivChanged = JSON.stringify(p.form.ivEntries || []) !== JSON.stringify(previousForm.ivEntries || []);
+    const obsChanged = ['rr','spo2','oxygen','oxygenFlow','temp','bp','hr','weight','bm'].some(key => normText(p.form[key]) !== normText(previousForm[key]));
+    if(textChanged || medChanged || ivChanged || obsChanged) queuePush(currentPatient);
   }
   if($("patientDetail") && !$("patientDetail").classList.contains('hidden') && typeof renderHeaderPatientContext==='function'){
     renderHeaderPatientContext(p);
@@ -11150,8 +10698,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_621_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_621_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_622_json_bridge_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_622_json_bridge_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13979,10 +13527,12 @@ document.addEventListener("DOMContentLoaded",function(){
       saveGraphSettings(true);
     }
   };
-  $("openWorkbookBtn").onclick=openWorkbookLink;
+  $("openJsonFolderBtn").onclick=openJsonFolderLink;
   $("graphSignInBtn").onclick=signInMicrosoft;
   $("graphSignOutBtn").onclick=signOutMicrosoft;
   $("importHandoverBtn").onclick=importHandoverRows;
+  $("testJsonStoreBtn")?.addEventListener('click',()=>{ if(window.HAH&&window.HAH.sharedJsonStore&&window.HAH.sharedJsonStore.testJsonConnection) window.HAH.sharedJsonStore.testJsonConnection(); });
+  $("clearJsonCacheBtn")?.addEventListener('click',()=>{ if(window.HAH&&window.HAH.sharedJsonStore&&window.HAH.sharedJsonStore.clearJsonPatientCache) window.HAH.sharedJsonStore.clearJsonPatientCache(); });
   $("patientContextBackdrop").onclick=closePatientContextMenu;
   $("patientContextOpenBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; const id=patientContextMenuId; closePatientContextMenu(); if(id) openPatient(id); };
   $("patientContextEditBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; const id=patientContextMenuId; closePatientContextMenu(); if(id) openEditPatient(id); };
@@ -19042,8 +18592,7 @@ function buildOneNoteRootHtml(patient, noteText){
 function buildOneNotePageHtml(patient, noteText, createdIso){
   const title=escapeOneNoteHtml(`${patient.name} – ${formatOneNotePageDate(createdIso)}`);
   const created=escapeOneNoteHtml(createdIso);
-  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><!-- HAH build: release=hospital_at_home_v12_36_621_release.html; source=hospital_at_home_v12_36_621_source.zip -->
-<body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
+  return `<!DOCTYPE html><html><head><title>${title}</title><meta name="created" content="${created}" /></head><body>${buildOneNoteRootHtml(patient, noteText)}</body></html>`;
 }
 function buildOneNoteBodyFragment(patient, noteText){
   return buildOneNoteRootHtml(patient, noteText);
