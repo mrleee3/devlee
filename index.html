@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_624_json_sync_release.html; source=hospital_at_home_v12_36_624_json_sync_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_625_json_mapping_release.html; source=hospital_at_home_v12_36_625_json_mapping_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_624_json_sync_release.html</div><div>Source: hospital_at_home_v12_36_624_json_sync_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_625_json_mapping_release.html</div><div>Source: hospital_at_home_v12_36_625_json_mapping_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -5931,7 +5931,7 @@ function applyImportedPatientUpdate(existingPatient, importedData){
   if(Array.isArray(importedData.medEntries)) p.form.medEntries = importedData.medEntries;
   if(Array.isArray(importedData.ivEntries)) p.form.ivEntries = importedData.ivEntries;
   if(importedData.obs && typeof importedData.obs === 'object'){
-    ['rr','spo2','oxygen','oxygenFlow','temp','bp','hr','weight','bm'].forEach(key=>{
+    ['rr','spo2','oxygen','oxygenFlow','scoreMode','temp','bp','bpLying','bpStanding1','bpStanding3','bpPosturalSymptoms','hr','hrPulse','weight','bm','bmTiming','bmTimingTime','bmTarget','conscious','confusion'].forEach(key=>{
       if(Object.prototype.hasOwnProperty.call(importedData.obs, key)) p.form[key] = String(importedData.obs[key] ?? '');
     });
   }
@@ -5969,8 +5969,8 @@ function createImportedPatient(data){
     jsonBoardRound: data.boardRound || null,
     weightHistory: [],
     form: {
-      rr:String((data.obs && data.obs.rr) || ''), spo2:String((data.obs && data.obs.spo2) || ''), oxygen:String((data.obs && data.obs.oxygen) || '0'), oxygenFlow:String((data.obs && data.obs.oxygenFlow) || ''), scoreMode:'', temp:String((data.obs && data.obs.temp) || ''), bp:String((data.obs && data.obs.bp) || ''), hr:String((data.obs && data.obs.hr) || ''),
-      weight:String(data.weight || (data.obs && data.obs.weight) || '').trim(), bm:String((data.obs && data.obs.bm) || ''), conscious:'0', confusion:'0',
+      rr:String((data.obs && data.obs.rr) || ''), spo2:String((data.obs && data.obs.spo2) || ''), oxygen:String((data.obs && data.obs.oxygen) || '0'), oxygenFlow:String((data.obs && data.obs.oxygenFlow) || ''), scoreMode:String((data.obs && data.obs.scoreMode) || ''), temp:String((data.obs && data.obs.temp) || ''), bp:String((data.obs && data.obs.bp) || ''), bpLying:String((data.obs && data.obs.bpLying) || ''), bpStanding1:String((data.obs && data.obs.bpStanding1) || ''), bpStanding3:String((data.obs && data.obs.bpStanding3) || ''), bpPosturalSymptoms:String((data.obs && data.obs.bpPosturalSymptoms) || ''), hr:String((data.obs && data.obs.hr) || ''), hrPulse:String((data.obs && data.obs.hrPulse) || ''),
+      weight:String(data.weight || (data.obs && data.obs.weight) || '').trim(), bm:String((data.obs && data.obs.bm) || ''), bmTiming:String((data.obs && data.obs.bmTiming) || ''), bmTimingTime:String((data.obs && data.obs.bmTimingTime) || ''), bmTarget:String((data.obs && data.obs.bmTarget) || ''), conscious:String((data.obs && data.obs.conscious) || '0'), confusion:String((data.obs && data.obs.confusion) || '0'),
       issues:              normText(data.issues),
       _lastImportedIssues: normText(data.issues),
       _lastImportedWeight: String(data.weight || '').trim(),
@@ -6006,6 +6006,11 @@ function currentJsonFolderPath(){const s=typeof loadGraphSettings==='function'?l
 function childJsonPath(parent, child){return `${normaliseJsonFolderPath(parent)}/${String(child||'').replace(/^\/+|\/+$/g,'')}`;}
 function encodeJsonPath(path){return normaliseJsonFolderPath(path).split('/').map(encodeURIComponent).join('/');}
 function nowIsoJson(){return new Date().toISOString();}
+
+function normaliseJsonAcpBool(value){const raw=String(value ?? '').trim().toLowerCase();return (value===true||raw==='true'||raw==='yes'||raw==='1'||raw==='seen')?'yes':'';}
+function normaliseJsonUcpStatus(value){const raw=String(value ?? '').trim().toLowerCase();if(['present','yes','true','1'].includes(raw))return 'present';if(['absent','no','false','0'].includes(raw))return 'absent';if(['unknown','unsure','not_known'].includes(raw))return 'unknown';return raw||'';}
+function buildMobileObsFromForm(f){return {rr:f.rr||'',spo2:f.spo2||'',oxygen:f.oxygen||'',oxygenFlow:f.oxygenFlow||'',scoreMode:f.scoreMode||'',temp:f.temp||'',bp:f.bp||'',bpLying:f.bpLying||'',bpStanding1:f.bpStanding1||'',bpStanding3:f.bpStanding3||'',bpPosturalSymptoms:f.bpPosturalSymptoms||'',hr:f.hr||'',hrPulse:f.hrPulse||'',weight:f.weight||'',bm:f.bm||'',bmTiming:f.bmTiming||'',bmTimingTime:f.bmTimingTime||'',bmTarget:f.bmTarget||'',conscious:f.conscious||'',confusion:f.confusion||'',updatedAt:nowIsoJson()};}
+function normaliseJsonMedicationRows(rows){return Array.isArray(rows)?rows.map(row=>({...row})) : [];}
 function todayKeyJson(){return new Date().toISOString().slice(0,10);}
 function getJsonActor(){try{if(graphAccount&&graphAccount.username)return graphAccount.username;}catch(_){} return 'Mobile app';}
 function loadJsonIdMap(){try{const raw=localStorage.getItem(JSON_LAST_MAPPING_KEY); return raw?JSON.parse(raw):{};}catch(_){return {};}}
@@ -6033,14 +6038,48 @@ function latestJsonBoardRoundEntry(patient){return latestJsonTimelineEntry(patie
 function latestJsonTemplateEntry(patient){return latestJsonTimelineEntry(patient, entry=>isJsonBoardStyleEntry(entry));}
 function jsonNoteFromEntry(entry){const note=entry&&entry.note?entry.note:{};const fields=entry&&entry.fields?entry.fields:{};return {issues:String(fields.issueRaw||fields.issues||note.issues||'').trim(),bloodsIx:String(fields.bloodsIx||fields.bloods||note.bloodsIx||note.bloods||'').trim(),progress:String(fields.progress||fields.currently||note.progress||'').trim(),examination:String(fields.examination||note.examination||'').trim(),plan:String(fields.plan||note.plan||'').trim()};}
 function compactJsonIssues(patient,note){const clinical=patient&&patient.clinical?patient.clinical:{};if(note&&note.issues)return note.issues;if(Array.isArray(clinical.persistentIssues))return clinical.persistentIssues.map(x=>typeof x==='string'?x:(x&&(x.title||x.text||x.label))||'').filter(Boolean).join('\n');return clinical.summary||'';}
-function mapJsonPatientToImportData(patient){const identity=patient.identity||{}, service=patient.service||{}, alerts=patient.alerts||{}, clinical=patient.clinical||{}, operational=patient.operational||{};const boardEntry=latestJsonBoardRoundEntry(patient);const templateEntry=latestJsonTemplateEntry(patient)||latestJsonTimelineEntry(patient);const templateNote=jsonNoteFromEntry(templateEntry);const boardNote=jsonNoteFromEntry(boardEntry);const acp=clinical.acp||{};const issues=compactJsonIssues(patient,templateNote);const summary=clinical.summary||issues||service.pathway||'';const obs=clinical.obs&&typeof clinical.obs==='object'?clinical.obs:{};const boardRound=boardEntry?{id:String(boardEntry.id||''),type:normaliseJsonTimelineType(boardEntry.type),timestamp:String(boardEntry.timestamp||boardEntry.completedAt||boardEntry.updatedAt||''),author:String(boardEntry.author||boardEntry.updatedBy||''),note:boardNote}:null;return {jsonId:String(patient.id||''),name:identity.name||patient.name||patient.id||'Unnamed JSON patient',age:identity.age||'',sex:identity.sex==='M'?'M':identity.sex==='F'?'F':'',referralSource:service.referredFrom||'',doa:service.admittedDate||'',summary,listDetails:[summary,alerts.dnar?'DNAR':'',alerts.acp?'ACP':'',operational.dischargeReadiness||''].filter(Boolean).join('\n'),acuity:String(operational.priority||'').toUpperCase()==='RED'?'RED':String(operational.priority||'').toUpperCase()==='AMBER'?'AMBER':'GREEN',issues,bloods:templateNote.bloodsIx||clinical.bloodsSummary||'',currently:templateNote.progress||clinical.currently||'',examination:templateNote.examination||clinical.examination||'',plan:templateNote.plan||clinical.plan||'',forDischargeSummary:operational.dischargeReadiness||'',pmh:clinical.pmh||'',socialHistory:clinical.socialHistory||'',weight:obs.weight||clinical.weight||'',dnacprStatus:acp.dnacprStatus||(alerts.dnar?'yes':''),dnacprFormSeen:acp.dnacprFormSeen||'',tepStatus:acp.tepStatus||(alerts.acp?'present':''),ceilingOfCare:acp.ceilingOfCare||alerts.escalation||'',acpNotes:acp.notes||acp.acpNotes||'',medEntries:Array.isArray(clinical.medications)?clinical.medications:[],ivEntries:Array.isArray(clinical.ivTherapies)?clinical.ivTherapies:[],obs,boardRound,importedAt:(templateEntry&&(templateEntry.timestamp||templateEntry.updatedAt))||patient.updatedAt||(patient.meta&&patient.meta.updatedAt)||nowIsoJson(),importSource:{kind:'shared_json',jsonId:String(patient.id||''),folderPath:currentJsonFolderPath()},jsonRecord:patient};}
+function mapJsonPatientToImportData(patient){
+  const identity=patient.identity||{}, service=patient.service||{}, alerts=patient.alerts||{}, clinical=patient.clinical||{}, operational=patient.operational||{};
+  const boardEntry=latestJsonBoardRoundEntry(patient);
+  const templateEntry=latestJsonTemplateEntry(patient)||latestJsonTimelineEntry(patient);
+  const templateNote=jsonNoteFromEntry(templateEntry);
+  const boardNote=jsonNoteFromEntry(boardEntry);
+  const acp=clinical.acp||{};
+  const issues=compactJsonIssues(patient,templateNote);
+  const summary=clinical.summary||issues||service.pathway||'';
+  const obs=clinical.obs&&typeof clinical.obs==='object'?clinical.obs:{};
+  const meds=normaliseJsonMedicationRows(clinical.medications || (templateEntry&&templateEntry.fields&&templateEntry.fields.medications));
+  const ivs=normaliseJsonMedicationRows(clinical.ivTherapies || (templateEntry&&templateEntry.fields&&templateEntry.fields.ivTherapies));
+  const boardRound=boardEntry?{id:String(boardEntry.id||''),type:normaliseJsonTimelineType(boardEntry.type),timestamp:String(boardEntry.timestamp||boardEntry.completedAt||boardEntry.updatedAt||''),author:String(boardEntry.author||boardEntry.updatedBy||''),note:boardNote}:null;
+  const dnacprFormSeen=normaliseJsonAcpBool(acp.dnacprFormSeen);
+  const ucpStatus=normaliseJsonUcpStatus(acp.tepStatus || (alerts.acp?'present':''));
+  const ceilingOfCare=String(acp.ceilingOfCare||acp.tep||alerts.escalation||'').trim();
+  const acpNotes=String(acp.notes||acp.acpNotes||'').trim();
+  return {jsonId:String(patient.id||''),name:identity.name||patient.name||patient.id||'Unnamed JSON patient',age:identity.age||'',sex:identity.sex==='M'?'M':identity.sex==='F'?'F':'',referralSource:service.referredFrom||'',doa:service.admittedDate||'',summary,listDetails:[summary,alerts.dnar?'DNAR':'',alerts.acp?'ACP':'',operational.dischargeReadiness||''].filter(Boolean).join('\n'),acuity:String(operational.priority||'').toUpperCase()==='RED'?'RED':String(operational.priority||'').toUpperCase()==='AMBER'?'AMBER':'GREEN',issues,bloods:templateNote.bloodsIx||clinical.bloodsSummary||'',currently:templateNote.progress||clinical.currently||'',examination:templateNote.examination||clinical.examination||'',plan:templateNote.plan||clinical.plan||'',forDischargeSummary:operational.dischargeReadiness||'',pmh:clinical.pmh||'',socialHistory:clinical.socialHistory||'',weight:obs.weight||clinical.weight||'',dnacprStatus:acp.dnacprStatus||(alerts.dnar?'yes':''),dnacprFormSeen,tepStatus:ucpStatus,ceilingOfCare,acpNotes,medEntries:meds,ivEntries:ivs,obs,boardRound,importedAt:(templateEntry&&(templateEntry.timestamp||templateEntry.updatedAt))||patient.updatedAt||(patient.meta&&patient.meta.updatedAt)||nowIsoJson(),importSource:{kind:'shared_json',jsonId:String(patient.id||''),folderPath:currentJsonFolderPath()},jsonRecord:patient};
+}
 function findLocalIdForJsonPatient(jsonId,name,usedIds){const jid=String(jsonId||'');const map=loadJsonIdMap();if(jid&&map[jid]&&patients[map[jid]]&&!usedIds.has(String(map[jid])))return Number(map[jid]);for(const id of Object.keys(patients||{})){const p=patients[id];if(p&&p.importSource&&p.importSource.kind==='shared_json'&&String(p.importSource.jsonId||'')===jid&&!usedIds.has(String(id)))return Number(id);}const ids=Object.keys(patients||{}).concat(Array.from(usedIds||[])).map(Number).filter(Number.isFinite);return ids.length?Math.max(...ids)+1:1;}
 function normaliseJsonTask(task,idMap){const status=String(task.status||'').toLowerCase(),priority=String(task.priority||'').toLowerCase(),patientJsonId=String(task.patientId||'');const pid=idMap&&idMap[patientJsonId]?Number(idMap[patientJsonId]):null;let due=(priority==='urgent'||priority==='high'||status==='urgent')?'now':'today';if(task.dueAt&&due!=='now'){const d=new Date(task.dueAt),t=new Date(todayKeyJson()+'T23:59:59');if(!Number.isNaN(d.getTime())&&d.getTime()>t.getTime())due='later';}return {id:String(task.id||`json-task-${Date.now().toString(36)}`),patientId:Number.isFinite(pid)?pid:null,text:String(task.title||task.text||'').trim(),due,urgent:due==='now',category:String(task.category||'').toLowerCase().includes('blood')?'bloods':String(task.category||'').toLowerCase().includes('discharge')?'discharge':'review',note:String(task.note||task.blocker||'').trim(),done:['done','completed','closed','actioned'].includes(status),createdAt:String(task.createdAt||task.updatedAt||nowIsoJson()),completedAt:['done','completed','closed','actioned'].includes(status)?String(task.completedAt||task.updatedAt||nowIsoJson()):'',importSource:{kind:'shared_json_task',jsonId:String(task.id||'')}};}
 function applyJsonDatasetToMobile(dataset){const rows=Array.isArray(dataset&&dataset.rows)?dataset.rows:[];const usedIds=new Set(), nextPatients={}, idMap={};let imported=0,updated=0;const updateDetails=[];rows.forEach(row=>{const data=mapJsonPatientToImportData(row);if(!data.jsonId)return;const localId=findLocalIdForJsonPatient(data.jsonId,data.name,usedIds);usedIds.add(String(localId));idMap[data.jsonId]=localId;if(patients[localId]){const result=applyImportedPatientUpdate(clone(patients[localId]),data);nextPatients[localId]=result.patient;if(result.changed){updated++;updateDetails.push({name:result.patientName||data.name,summary:result.summary});}}else{nextPatients[localId]=createImportedPatient(data);imported++;}});patients=nextPatients;saveJsonIdMap(idMap);const jsonTasks=Array.isArray(dataset&&dataset.tasks)?dataset.tasks:[];if(typeof normaliseTaskCollection==='function')tasks=normaliseTaskCollection(jsonTasks.map(task=>normaliseJsonTask(task,idMap)),false);const currentStillExists=currentPatient&&Object.prototype.hasOwnProperty.call(patients,String(currentPatient));currentPatient=currentStillExists?currentPatient:(Number(Object.keys(patients)[0]||0)||null);detailLoadedForCurrentPatient=false;return {imported,updated,updateDetails,activeCount:rows.length,taskCount:jsonTasks.length};}
 async function loadJsonTasksDoc(){try{const doc=await jsonDriveGet(childJsonPath(currentJsonFolderPath(),'tasks.json'));return doc&&Array.isArray(doc.tasks)?doc.tasks:[];}catch(_){return [];}}
 async function loadJsonPatientDataset(){let service;try{service=await loadJsonService();}catch(_){await initialiseJsonStore();service=await loadJsonService();}const ids=getJsonActivePatientIds(service), archivedIds=getJsonArchivedPatientIds(service);const rows=[], archivedRows=[];for(const id of ids){try{const patient=await loadJsonPatient(id);if(patient&&patient.id)rows.push(patient);}catch(e){console.warn('[H@H mobile JSON] Could not load patient',id,e);}}for(const id of archivedIds){try{const patient=await loadJsonPatient(id);if(patient&&patient.id)archivedRows.push(patient);}catch(e){console.warn('[H@H mobile JSON] Could not load archived patient',id,e);}}const tasks=await loadJsonTasksDoc();const cache={loadedAt:nowIsoJson(),source:'json',folderPath:currentJsonFolderPath(),service,rows,archivedRows,tasks,lastError:''};try{localStorage.setItem(JSON_PATIENT_CACHE_KEY,JSON.stringify(cache));localStorage.setItem(JSON_TASK_CACHE_KEY,JSON.stringify({loadedAt:cache.loadedAt,source:'json',tasks,lastError:''}));}catch(_){}return cache;}
-function patchMobileClinicalEntry(doc,p){const f=p.form||{};doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];const entryId=`${JSON_MOBILE_TIMELINE_PREFIX}${doc.id}`;const note={issues:normText(f.issues||''),bloodsIx:normText(f.bloods||''),progress:normText(f.currently||''),examination:normText(f.examination||''),plan:normText(f.plan||'')};const entry={id:entryId,type:'mobile_clinical_review',status:'completed',timestamp:nowIsoJson(),author:getJsonActor(),note,fields:{source:'Mobile clinical review',issueRaw:note.issues,issues:note.issues,progress:note.progress,currently:note.progress,examination:note.examination,bloods:note.bloodsIx,bloodsIx:note.bloodsIx,plan:note.plan,dischargeSummary:normText(f.forDischargeSummary||''),acp:{dnacprStatus:String(f.dnacprStatus||''),dnacprFormSeen:String(f.dnacprFormSeen||''),tepStatus:String(f.tepStatus||''),ceilingOfCare:String(f.ceilingOfCare||''),notes:String(f.acpNotes||'')},obs:{rr:f.rr||'',spo2:f.spo2||'',oxygen:f.oxygen||'',oxygenFlow:f.oxygenFlow||'',temp:f.temp||'',bp:f.bp||'',hr:f.hr||'',weight:f.weight||'',bm:f.bm||''},medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[]}};const idx=doc.timeline.findIndex(row=>String(row&&row.id)===entryId);if(idx>=0)doc.timeline[idx]={...doc.timeline[idx],...entry,updatedAt:nowIsoJson()};else doc.timeline.unshift(entry);doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));return doc;}
-async function patchJsonPatientFromMobile(doc,p){const f=p.form||{};doc.identity={...(doc.identity||{}),name:p.name||'',age:p.age||'',sex:p.sex||''};doc.service={...(doc.service||{}),referredFrom:p.referralSource||'',admittedDate:p.doa||''};doc.alerts={...(doc.alerts||{}),dnar:String(f.dnacprStatus||'').toLowerCase()==='yes',acp:!!(String(f.tepStatus||'').trim()||String(f.ceilingOfCare||'').trim()||String(f.acpNotes||'').trim()),escalation:String(f.ceilingOfCare||'').trim()};doc.clinical={...(doc.clinical||{}),summary:normText(f.issues||p.summary||''),bloodsSummary:normText(f.bloods||''),currently:normText(f.currently||''),pmh:normText(f.pmh||''),socialHistory:normText(f.socialHistory||''),examination:normText(f.examination||''),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[],obs:{rr:f.rr||'',spo2:f.spo2||'',oxygen:f.oxygen||'',oxygenFlow:f.oxygenFlow||'',temp:f.temp||'',bp:f.bp||'',hr:f.hr||'',weight:f.weight||'',bm:f.bm||''},acp:{dnacprStatus:String(f.dnacprStatus||''),dnacprFormSeen:String(f.dnacprFormSeen||''),tepStatus:String(f.tepStatus||''),ceilingOfCare:String(f.ceilingOfCare||''),notes:String(f.acpNotes||'')}};doc.operational={...(doc.operational||{})};if(f.forDischargeSummary)doc.operational.dischargeReadiness=String(f.forDischargeSummary||'').trim();patchMobileClinicalEntry(doc,p);const saved=await saveJsonPatient(doc);try{await appendJsonAudit({type:'mobile-patient-updated',entityType:'patient',entityId:doc.id,summary:`Mobile update for ${p.name||doc.id}`});}catch(_){}return saved;}
+function patchMobileClinicalEntry(doc,p){
+  const f=p.form||{};doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];const entryId=`${JSON_MOBILE_TIMELINE_PREFIX}${doc.id}`;
+  const note={issues:normText(f.issues||''),bloodsIx:normText(f.bloods||''),progress:normText(f.currently||''),examination:normText(f.examination||''),plan:normText(f.plan||'')};
+  const obs=buildMobileObsFromForm(f);const acp={dnacprStatus:String(f.dnacprStatus||''),dnacprFormSeen:normaliseJsonAcpBool(f.dnacprFormSeen),tepStatus:normaliseJsonUcpStatus(f.tepStatus||''),ceilingOfCare:String(f.ceilingOfCare||''),tep:String(f.ceilingOfCare||''),notes:String(f.acpNotes||''),acpNotes:String(f.acpNotes||'')};
+  const entry={id:entryId,type:'mobile_clinical_review',status:'completed',timestamp:nowIsoJson(),author:getJsonActor(),note,fields:{source:'Mobile clinical review',issueRaw:note.issues,issues:note.issues,progress:note.progress,currently:note.progress,examination:note.examination,bloods:note.bloodsIx,bloodsIx:note.bloodsIx,plan:note.plan,pmh:normText(f.pmh||''),socialHistory:normText(f.socialHistory||''),dischargeSummary:normText(f.forDischargeSummary||''),acp,obs,medications:normaliseJsonMedicationRows(f.medEntries),ivTherapies:normaliseJsonMedicationRows(f.ivEntries)}};
+  const idx=doc.timeline.findIndex(row=>String(row&&row.id)===entryId);if(idx>=0)doc.timeline[idx]={...doc.timeline[idx],...entry,updatedAt:nowIsoJson()};else doc.timeline.unshift(entry);doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));return doc;
+}
+async function patchJsonPatientFromMobile(doc,p){
+  const f=p.form||{};const obs=buildMobileObsFromForm(f);const acp={dnacprStatus:String(f.dnacprStatus||''),dnacprFormSeen:normaliseJsonAcpBool(f.dnacprFormSeen),tepStatus:normaliseJsonUcpStatus(f.tepStatus||''),ceilingOfCare:String(f.ceilingOfCare||''),tep:String(f.ceilingOfCare||''),notes:String(f.acpNotes||''),acpNotes:String(f.acpNotes||'')};
+  const hasAcp=acp.tepStatus==='present'||!!String(acp.ceilingOfCare||'').trim()||!!String(acp.notes||'').trim();doc.identity={...(doc.identity||{}),name:p.name||'',age:p.age||'',sex:p.sex||''};doc.service={...(doc.service||{}),referredFrom:p.referralSource||'',admittedDate:p.doa||''};doc.alerts={...(doc.alerts||{}),dnar:String(f.dnacprStatus||'').toLowerCase()==='yes',acp:hasAcp,escalation:String(f.ceilingOfCare||'').trim()};
+  doc.clinical={...(doc.clinical||{}),summary:normText(f.issues||p.summary||''),bloodsSummary:normText(f.bloods||''),currently:normText(f.currently||''),pmh:normText(f.pmh||''),socialHistory:normText(f.socialHistory||''),examination:normText(f.examination||''),plan:normText(f.plan||''),medications:normaliseJsonMedicationRows(f.medEntries),ivTherapies:normaliseJsonMedicationRows(f.ivEntries),obs,acp};
+  doc.operational={...(doc.operational||{})};if(f.forDischargeSummary)doc.operational.dischargeReadiness=String(f.forDischargeSummary||'').trim();patchMobileClinicalEntry(doc,p);const saved=await saveJsonPatient(doc);try{await appendJsonAudit({type:'mobile-patient-updated',entityType:'patient',entityId:doc.id,summary:`Mobile update for ${p.name||doc.id}`});}catch(_){}return saved;
+}
+async function loadJsonTasksDocument(){try{return await jsonDriveGet(childJsonPath(currentJsonFolderPath(),'tasks.json'));}catch(_){return makeJsonTasksSchema();}}
+async function saveJsonTasksDocument(doc){const next=Object.assign(makeJsonTasksSchema(),doc||{});next.tasks=Array.isArray(next.tasks)?next.tasks:[];next.updatedAt=nowIsoJson();next.meta={...(next.meta||{}),lastWriter:getJsonActor()};return jsonDrivePut(childJsonPath(currentJsonFolderPath(),'tasks.json'),next);}
+function getJsonPatientIdForLocalTask(task){const pid=task&&task.patientId;const p=patients&&patients[pid];return p&&p.importSource&&p.importSource.kind==='shared_json'?String(p.importSource.jsonId||''):'';}
+async function syncMobileTaskToJson(task){try{if(!task)return null;const patientJsonId=getJsonPatientIdForLocalTask(task);const existingId=task.importSource&&task.importSource.kind==='shared_json_task'?String(task.importSource.jsonId||''):'';if(!patientJsonId&&!existingId)return null;const doc=await loadJsonTasksDocument();const rows=Array.isArray(doc.tasks)?doc.tasks.slice():[];const id=existingId||`mobile-task:${patientJsonId}:${Date.now().toString(36)}:${Math.random().toString(36).slice(2,6)}`;const idx=rows.findIndex(row=>String(row&&row.id)===id);const row={id,patientId:patientJsonId||String((idx>=0&&rows[idx].patientId)||''),title:String(task.text||'').trim(),note:String(task.note||'').trim(),category:String(task.category||'Clinical review').trim()||'Clinical review',owner:String(task.owner||'Mobile').trim()||'Mobile',priority:task.urgent||task.due==='now'?'Urgent':'Medium',status:task.done?'Completed':'Open',createdFrom:'Mobile',createdBy:(idx>=0&&rows[idx].createdBy)||getJsonActor(),createdAt:String(task.createdAt||((idx>=0&&rows[idx].createdAt)||nowIsoJson())),completedAt:task.done?String(task.completedAt||nowIsoJson()):'',updatedAt:nowIsoJson(),updatedBy:getJsonActor()};if(idx>=0)rows[idx]={...rows[idx],...row};else rows.unshift(row);doc.tasks=rows;await saveJsonTasksDocument(doc);task.importSource={kind:'shared_json_task',jsonId:id};return row;}catch(e){if(typeof setGraphStatus==='function')setGraphStatus(`Task JSON sync failed - ${describeImportError(e)}`,true);return null;}}
+async function deleteMobileTaskFromJson(task){try{const existingId=task&&task.importSource&&task.importSource.kind==='shared_json_task'?String(task.importSource.jsonId||''):'';if(!existingId)return;const doc=await loadJsonTasksDocument();doc.tasks=(Array.isArray(doc.tasks)?doc.tasks:[]).filter(row=>String(row&&row.id)!==existingId);await saveJsonTasksDocument(doc);}catch(e){if(typeof setGraphStatus==='function')setGraphStatus(`Task JSON delete failed - ${describeImportError(e)}`,true);}}
 async function testJsonConnection(){try{saveGraphSettings(false);setGraphStatus('Testing shared JSON store…');await initialiseJsonStore();const service=await loadJsonService();setGraphStatus(`JSON store ready - ${getJsonActivePatientIds(service).length} active / ${getJsonArchivedPatientIds(service).length} archived patient record(s).`);}catch(e){setGraphStatus(describeImportError(e),true);}}
 function clearJsonPatientCache(){try{localStorage.removeItem(JSON_PATIENT_CACHE_KEY);localStorage.removeItem(JSON_TASK_CACHE_KEY);}catch(_){}setGraphStatus('JSON cache cleared. Local patients remain available until the next JSON load.');}
 
@@ -8994,7 +9033,7 @@ function saveCurrentPatientForm() {
     const textChanged = trackedFields.some(key => normText(p.form[key]) !== normText(previousForm[key]));
     const medChanged = JSON.stringify(p.form.medEntries || []) !== JSON.stringify(previousForm.medEntries || []);
     const ivChanged = JSON.stringify(p.form.ivEntries || []) !== JSON.stringify(previousForm.ivEntries || []);
-    const obsChanged = ['rr','spo2','oxygen','oxygenFlow','temp','bp','hr','weight','bm'].some(key => normText(p.form[key]) !== normText(previousForm[key]));
+    const obsChanged = ['rr','spo2','oxygen','oxygenFlow','scoreMode','temp','bp','bpLying','bpStanding1','bpStanding3','bpPosturalSymptoms','hr','hrPulse','weight','bm','bmTiming','bmTimingTime','bmTarget','conscious','confusion'].some(key => normText(p.form[key]) !== normText(previousForm[key]));
     if(textChanged || medChanged || ivChanged || obsChanged) queuePush(currentPatient);
   }
   if($("patientDetail") && !$("patientDetail").classList.contains('hidden') && typeof renderHeaderPatientContext==='function'){
@@ -10736,8 +10775,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_624_json_sync_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_624_json_sync_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_625_json_mapping_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_625_json_mapping_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -11627,6 +11666,7 @@ function saveTaskFromOverlay(){
     task.due = payload.urgent ? 'now' : 'today';
     task.patientId = payload.patientId;
     saveData('Task updated');
+    if(typeof syncMobileTaskToJson==='function') syncMobileTaskToJson(task);
   } else {
     tasks.unshift(normaliseTask({
       id: makeTaskId(),
@@ -11640,6 +11680,7 @@ function saveTaskFromOverlay(){
       createdAt: new Date().toISOString()
     }));
     saveData('Task added');
+    if(typeof syncMobileTaskToJson==='function') syncMobileTaskToJson(tasks[0]);
   }
   fireTaskHaptic();
   refreshTaskDependentUi();
@@ -11650,6 +11691,7 @@ function deleteTask(taskId){
   if(!task) return;
   if(!confirm('Delete this task?')) return;
   setUndoSnapshot();
+  if(typeof deleteMobileTaskFromJson==='function') deleteMobileTaskFromJson(task);
   tasks = tasks.filter(item=>String(item.id)!==String(taskId));
   saveData('Task deleted');
   refreshTaskDependentUi();
@@ -11663,6 +11705,7 @@ function finishTaskToggle(taskId, markDone){
   task.completedAt = markDone ? new Date().toISOString() : '';
   fireTaskHaptic();
   saveData(markDone ? 'Task completed' : 'Task reopened');
+  if(typeof syncMobileTaskToJson==='function') syncMobileTaskToJson(task);
   refreshTaskDependentUi();
 }
 function animateTaskComplete(taskId, triggerEl){
