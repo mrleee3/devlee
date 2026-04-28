@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_626_json_cards_release.html; source=hospital_at_home_v12_36_626_json_cards_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_627_websocket_release.html; source=hospital_at_home_v12_36_627_websocket_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_626_json_cards_release.html</div><div>Source: hospital_at_home_v12_36_626_json_cards_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_627_websocket_release.html</div><div>Source: hospital_at_home_v12_36_627_websocket_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10739,8 +10739,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_626_json_cards_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_626_json_cards_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_627_websocket_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_627_websocket_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -20241,6 +20241,254 @@ window.HAH.modules.conditions = true;
   // Public API
   window.HAH_renderConditionPanel = renderConditionPanel;
   window.HAH_refreshConditionChipsPresence = refreshConditionChipsPresence;
+})();
+
+</script><script>
+// 20-websocket-sync.js
+// Real-time sync for HaH mobile.
+// Hooks into the shared JSON write path (saveJsonPatient) and broadcasts
+// change notifications to other connected clients via the Azure WebSocket
+// relay. On receive, triggers a re-pull from OneDrive using the existing
+// sync logic.
+//
+// OneDrive remains the source of truth — this module only carries deltas.
+
+(function () {
+  'use strict';
+
+  // ─── CONFIG ────────────────────────────────────────────────────────────────
+  const WS_URL = 'wss://hah-sync-mrleee3-hpaje8aca7dgd4fw.westeurope-01.azurewebsites.net/sync';
+  const RECONNECT_BASE_MS = 1000;
+  const RECONNECT_MAX_MS = 30000;
+  const REFRESH_DEBOUNCE_MS = 800;
+  const DEVICE_TAG = 'mobile';
+
+  // Allow disabling via localStorage if it ever misbehaves
+  try {
+    if (localStorage.getItem('hah_wssync_disabled') === '1') {
+      console.log('[WSSync] Disabled via localStorage flag');
+      return;
+    }
+  } catch (_) {}
+
+  // ─── WEBSOCKET CONNECTION ──────────────────────────────────────────────────
+  let socket = null;
+  let reconnectAttempt = 0;
+  let reconnectTimer = null;
+  let intentionalClose = false;
+  let clientId = null;
+  const listeners = new Set();
+  const sendQueue = [];
+
+  function connect() {
+    if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) return;
+    intentionalClose = false;
+    try {
+      socket = new WebSocket(WS_URL);
+    } catch (e) {
+      console.error('[WSSync] construct failed:', e);
+      scheduleReconnect();
+      return;
+    }
+    socket.addEventListener('open', () => {
+      console.log('[WSSync] connected');
+      reconnectAttempt = 0;
+      while (sendQueue.length && socket.readyState === WebSocket.OPEN) socket.send(sendQueue.shift());
+      window.dispatchEvent(new CustomEvent('wssync:connected'));
+    });
+    socket.addEventListener('message', (event) => {
+      let msg;
+      try { msg = JSON.parse(event.data); } catch (_) { return; }
+      if (msg.type === 'welcome') { clientId = msg.clientId; console.log('[WSSync] client id:', clientId); return; }
+      if (msg.type === 'ack') return;
+      if (msg.type === 'error') { console.warn('[WSSync] server error:', msg.message); return; }
+      listeners.forEach(fn => { try { fn(msg); } catch (e) { console.error('[WSSync] listener threw:', e); } });
+      window.dispatchEvent(new CustomEvent('wssync:message', { detail: msg }));
+    });
+    socket.addEventListener('close', () => {
+      window.dispatchEvent(new CustomEvent('wssync:disconnected'));
+      if (!intentionalClose) scheduleReconnect();
+    });
+    socket.addEventListener('error', () => { /* close will fire next */ });
+  }
+
+  function scheduleReconnect() {
+    if (reconnectTimer) return;
+    const delay = Math.min(RECONNECT_BASE_MS * Math.pow(2, reconnectAttempt), RECONNECT_MAX_MS);
+    reconnectAttempt++;
+    console.log(`[WSSync] reconnect in ${delay}ms (attempt ${reconnectAttempt})`);
+    reconnectTimer = setTimeout(() => { reconnectTimer = null; connect(); }, delay);
+  }
+
+  function send(type, payload) {
+    const msg = JSON.stringify({ type, payload, device: DEVICE_TAG, ts: Date.now() });
+    if (socket && socket.readyState === WebSocket.OPEN) socket.send(msg);
+    else { sendQueue.push(msg); if (!socket || socket.readyState === WebSocket.CLOSED) connect(); }
+  }
+
+  function on(handler) { listeners.add(handler); return () => listeners.delete(handler); }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && (!socket || socket.readyState !== WebSocket.OPEN)) {
+      console.log('[WSSync] visible again, reconnecting');
+      connect();
+    }
+  });
+  window.addEventListener('online', () => { if (!socket || socket.readyState !== WebSocket.OPEN) connect(); });
+
+  window.WSSync = {
+    connect, send, on,
+    isConnected: () => !!(socket && socket.readyState === WebSocket.OPEN),
+    getClientId: () => clientId,
+    disconnect: () => { intentionalClose = true; if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; } if (socket) socket.close(); }
+  };
+
+  // ─── INSTRUMENTATION ───────────────────────────────────────────────────────
+  // Mobile writes go through saveJsonPatient(doc). We wrap it on both the
+  // global (for calls from within 02-sync.js) and on window.HAH.sharedJsonStore
+  // (for any external callers). A nesting guard prevents double-broadcasting.
+  let nestingDepth = 0;
+
+  function makeWrapped(originalFn, label) {
+    const wrapped = async function () {
+      const args = Array.from(arguments);
+      nestingDepth++;
+      try {
+        const result = await originalFn.apply(this, args);
+        if (nestingDepth === 1) {
+          try {
+            const doc = args[0];
+            const id = doc && doc.id;
+            if (id) {
+              send('patient.changed', { patientId: String(id) });
+            }
+          } catch (e) { console.warn('[WSSync] hook error:', label, e); }
+        }
+        return result;
+      } finally {
+        nestingDepth--;
+      }
+    };
+    wrapped.__wssync = true;
+    return wrapped;
+  }
+
+  function instrument() {
+    // Mobile's saveJsonPatient is a top-level function declaration in 02-sync.js
+    // and is also exposed at window.HAH.sharedJsonStore.saveJsonPatient.
+    // In classic (non-module) scripts, top-level function declarations create
+    // both a global lexical binding and a window property pointing at the
+    // same slot, so reassigning window.saveJsonPatient updates both — calls
+    // from within 02-sync.js (e.g. patchJsonPatientFromMobile) will pick up
+    // the wrapped version.
+    if (typeof window.saveJsonPatient !== 'function') {
+      setTimeout(instrument, 200);
+      return;
+    }
+    if (window.saveJsonPatient.__wssync) return;
+
+    const original = window.saveJsonPatient;
+    const wrapped = makeWrapped(original, 'saveJsonPatient');
+    window.saveJsonPatient = wrapped;
+
+    // Also update the namespace export if present
+    try {
+      if (window.HAH && window.HAH.sharedJsonStore && window.HAH.sharedJsonStore.saveJsonPatient === original) {
+        window.HAH.sharedJsonStore.saveJsonPatient = wrapped;
+      }
+    } catch (_) {}
+
+    console.log('[WSSync] instrumented saveJsonPatient');
+  }
+
+  // ─── RECEIVER ──────────────────────────────────────────────────────────────
+  // Quiet refresh — same as importHandoverRows but without UI button feedback.
+  // Coalesce multiple incoming messages within REFRESH_DEBOUNCE_MS into one
+  // refresh.
+  let refreshTimer = null;
+  let pending = { patient: false, tasks: false };
+
+  function scheduleRefresh(flags) {
+    if (flags.patient) pending.patient = true;
+    if (flags.tasks) pending.tasks = true;
+    if (refreshTimer) return;
+    refreshTimer = setTimeout(doQuietRefresh, REFRESH_DEBOUNCE_MS);
+  }
+
+  async function doQuietRefresh() {
+    refreshTimer = null;
+    const flags = { ...pending };
+    pending = { patient: false, tasks: false };
+
+    // Only proceed if mobile sync is actually wired up and signed in
+    if (typeof loadJsonPatientDataset !== 'function' || typeof applyJsonDatasetToMobile !== 'function') return;
+    try {
+      // If a patient is currently open and being edited, save in-flight form
+      // and flush pending pushes BEFORE refreshing so we don't clobber edits.
+      const detail = document.getElementById && document.getElementById('patientDetail');
+      const detailVisible = detail && !detail.classList.contains('hidden');
+      if (detailVisible && typeof detailLoadedForCurrentPatient !== 'undefined' && detailLoadedForCurrentPatient) {
+        if (typeof saveCurrentPatientForm === 'function') saveCurrentPatientForm();
+        if (typeof flushPendingPushes === 'function') await flushPendingPushes();
+      }
+
+      const dataset = await loadJsonPatientDataset();
+      const result = applyJsonDatasetToMobile(dataset);
+
+      // Persist + re-render
+      if (typeof saveData === 'function') saveData('Synced via live update');
+      if (typeof renderPatientList === 'function') renderPatientList();
+      if (typeof renderTasksPage === 'function') renderTasksPage();
+      if (typeof renderEventLog === 'function') renderEventLog();
+      if (detailVisible && typeof currentPatient !== 'undefined' && currentPatient && patients[currentPatient]) {
+        if (typeof openPatient === 'function') openPatient(currentPatient, { preserveMode: true, restoreScroll: true });
+      }
+      if (typeof setGraphStatus === 'function') {
+        const total = (result && result.activeCount) || 0;
+        setGraphStatus(`Live sync · ${total} patient${total === 1 ? '' : 's'}`);
+      }
+      console.log('[WSSync] quiet refresh complete', result);
+    } catch (e) {
+      console.warn('[WSSync] refresh failed:', e);
+      if (typeof setGraphStatus === 'function') {
+        try { setGraphStatus('Live sync failed - retry on next change', true); } catch (_) {}
+      }
+    }
+  }
+
+  on((msg) => {
+    if (!msg || !msg.type) return;
+    switch (msg.type) {
+      case 'patient.changed':
+      case 'service.changed':
+      case 'round.changed':
+        scheduleRefresh({ patient: true });
+        break;
+      case 'tasks.changed':
+        scheduleRefresh({ patient: true });  // mobile reloads patients+tasks together
+        break;
+      default:
+        break;
+    }
+  });
+
+  // On reconnect after a disconnect, do a catchup refresh
+  window.addEventListener('wssync:connected', () => {
+    if (window.WSSync.__initialConnectDone) {
+      console.log('[WSSync] reconnected — running catchup refresh');
+      scheduleRefresh({ patient: true });
+    }
+    window.WSSync.__initialConnectDone = true;
+  });
+
+  // ─── BOOT ──────────────────────────────────────────────────────────────────
+  // Defer connect slightly so app boot/auth has a chance to initialise first.
+  // Instrumentation needs saveJsonPatient to exist (declared in 02-sync.js,
+  // which is loaded before us, so it should be ready immediately).
+  instrument();
+  setTimeout(connect, 500);
+
+  console.log('[WSSync] mobile module loaded');
 })();
 
 </script></body>
