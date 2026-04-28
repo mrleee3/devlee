@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_627_websocket_release.html; source=hospital_at_home_v12_36_627_websocket_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_629_websocket_release.html; source=hospital_at_home_v12_36_629_websocket_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_627_websocket_release.html</div><div>Source: hospital_at_home_v12_36_627_websocket_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_629_websocket_release.html</div><div>Source: hospital_at_home_v12_36_629_websocket_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10739,8 +10739,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_627_websocket_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_627_websocket_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_629_websocket_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_629_websocket_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -20260,7 +20260,7 @@ window.HAH.modules.conditions = true;
   const WS_URL = 'wss://hah-sync-mrleee3-hpaje8aca7dgd4fw.westeurope-01.azurewebsites.net/sync';
   const RECONNECT_BASE_MS = 1000;
   const RECONNECT_MAX_MS = 30000;
-  const REFRESH_DEBOUNCE_MS = 800;
+  const REFRESH_DEBOUNCE_MS = 200;
   const DEVICE_TAG = 'mobile';
 
   // Allow disabling via localStorage if it ever misbehaves
@@ -20402,29 +20402,44 @@ window.HAH.modules.conditions = true;
   }
 
   // ─── RECEIVER ──────────────────────────────────────────────────────────────
-  // Quiet refresh — same as importHandoverRows but without UI button feedback.
-  // Coalesce multiple incoming messages within REFRESH_DEBOUNCE_MS into one
-  // refresh.
-  let refreshTimer = null;
-  let pending = { patient: false, tasks: false };
+  // Granular refresh: instead of reloading the whole dataset on any change,
+  // we read only the specific files that changed (one patient JSON, or
+  // service.json, or tasks.json), in parallel. For a typical "patient added
+  // on desktop" event this drops the receive-side work from ~1.5-2s (full
+  // dataset reload) to ~300ms (one patient file + one service file in
+  // parallel).
+  //
+  // OneDrive remains the source of truth — we just fetch a smaller slice.
 
-  function scheduleRefresh(flags) {
-    if (flags.patient) pending.patient = true;
-    if (flags.tasks) pending.tasks = true;
+  let pendingPatientIds = new Set();
+  let pendingServiceRefresh = false;
+  let pendingTasksRefresh = false;
+  let refreshTimer = null;
+
+  function scheduleRefresh(opts) {
+    if (opts && opts.patientId) pendingPatientIds.add(String(opts.patientId));
+    if (opts && opts.service) pendingServiceRefresh = true;
+    if (opts && opts.tasks) pendingTasksRefresh = true;
     if (refreshTimer) return;
     refreshTimer = setTimeout(doQuietRefresh, REFRESH_DEBOUNCE_MS);
   }
 
   async function doQuietRefresh() {
     refreshTimer = null;
-    const flags = { ...pending };
-    pending = { patient: false, tasks: false };
+    const patientIds = Array.from(pendingPatientIds);
+    const wantService = pendingServiceRefresh;
+    const wantTasks = pendingTasksRefresh;
+    pendingPatientIds = new Set();
+    pendingServiceRefresh = false;
+    pendingTasksRefresh = false;
 
-    // Only proceed if mobile sync is actually wired up and signed in
-    if (typeof loadJsonPatientDataset !== 'function' || typeof applyJsonDatasetToMobile !== 'function') return;
+    // Bail out gracefully if mobile sync isn't wired up
+    if (typeof loadJsonPatient !== 'function' || typeof mapJsonPatientToImportData !== 'function') return;
+    if (typeof applyImportedPatientUpdate !== 'function' || typeof createImportedPatient !== 'function') return;
+    if (typeof findLocalIdForJsonPatient !== 'function' || typeof loadJsonIdMap !== 'function') return;
+
     try {
-      // If a patient is currently open and being edited, save in-flight form
-      // and flush pending pushes BEFORE refreshing so we don't clobber edits.
+      // Save in-flight edits before applying remote changes
       const detail = document.getElementById && document.getElementById('patientDetail');
       const detailVisible = detail && !detail.classList.contains('hidden');
       if (detailVisible && typeof detailLoadedForCurrentPatient !== 'undefined' && detailLoadedForCurrentPatient) {
@@ -20432,24 +20447,122 @@ window.HAH.modules.conditions = true;
         if (typeof flushPendingPushes === 'function') await flushPendingPushes();
       }
 
-      const dataset = await loadJsonPatientDataset();
-      const result = applyJsonDatasetToMobile(dataset);
+      // Parallel-load everything we need
+      const fetchTasks = [];
+      for (const jsonId of patientIds) {
+        fetchTasks.push(
+          loadJsonPatient(jsonId)
+            .then(doc => ({ kind: 'patient', jsonId, doc }))
+            .catch(err => ({ kind: 'patient', jsonId, error: err }))
+        );
+      }
+      if (wantService && typeof loadJsonService === 'function') {
+        fetchTasks.push(
+          loadJsonService()
+            .then(doc => ({ kind: 'service', doc }))
+            .catch(err => ({ kind: 'service', error: err }))
+        );
+      }
+      if (wantTasks && typeof loadJsonTasksDoc === 'function') {
+        fetchTasks.push(
+          loadJsonTasksDoc()
+            .then(rows => ({ kind: 'tasks', rows }))
+            .catch(err => ({ kind: 'tasks', error: err }))
+        );
+      }
+      const results = await Promise.all(fetchTasks);
 
-      // Persist + re-render
-      if (typeof saveData === 'function') saveData('Synced via live update');
-      if (typeof renderPatientList === 'function') renderPatientList();
-      if (typeof renderTasksPage === 'function') renderTasksPage();
-      if (typeof renderEventLog === 'function') renderEventLog();
-      if (detailVisible && typeof currentPatient !== 'undefined' && currentPatient && patients[currentPatient]) {
-        if (typeof openPatient === 'function') openPatient(currentPatient, { preserveMode: true, restoreScroll: true });
+      const idMap = loadJsonIdMap() || {};
+      let anyChanged = false;
+      let updatedCount = 0;
+      let createdCount = 0;
+      let removedCount = 0;
+
+      // 1) Apply patient-level updates (existing → merge, unknown → create)
+      for (const r of results) {
+        if (r.kind !== 'patient' || r.error || !r.doc) continue;
+        const importData = mapJsonPatientToImportData(r.doc);
+        const jsonId = String(r.jsonId);
+        let localId = idMap[jsonId];
+        if (localId && patients[localId]) {
+          const result = applyImportedPatientUpdate(patients[localId], importData);
+          if (result && result.patient) patients[localId] = result.patient;
+          if (result && result.changed) { updatedCount++; anyChanged = true; }
+        } else {
+          const usedIds = new Set(Object.keys(patients || {}).map(String));
+          localId = findLocalIdForJsonPatient(jsonId, importData.name, usedIds);
+          patients[localId] = createImportedPatient(importData);
+          idMap[jsonId] = localId;
+          createdCount++;
+          anyChanged = true;
+        }
+      }
+
+      // 2) Apply service-level reconciliation (archive, restore, deletion)
+      const serviceResult = results.find(r => r.kind === 'service');
+      if (serviceResult && !serviceResult.error && serviceResult.doc &&
+          typeof getJsonActivePatientIds === 'function') {
+        const remoteActive = new Set(getJsonActivePatientIds(serviceResult.doc));
+        // Drop any local patients no longer in the remote active list.
+        // (We just loaded any newly-active ones in step 1.)
+        for (const localId of Object.keys(patients || {})) {
+          const p = patients[localId];
+          if (!p || !p.importSource || p.importSource.kind !== 'shared_json') continue;
+          const jsonId = String(p.importSource.jsonId || '');
+          if (!jsonId) continue;
+          if (!remoteActive.has(jsonId)) {
+            delete patients[localId];
+            delete idMap[jsonId];
+            removedCount++;
+            anyChanged = true;
+          }
+        }
+        // If the currently-open patient just got removed, reset the selection
+        if (typeof currentPatient !== 'undefined' && currentPatient && !patients[currentPatient]) {
+          const firstId = Number(Object.keys(patients)[0] || 0) || null;
+          try { currentPatient = firstId; } catch (_) {}
+        }
+      }
+
+      // 3) Apply task-level update
+      const tasksResult = results.find(r => r.kind === 'tasks');
+      if (tasksResult && !tasksResult.error && Array.isArray(tasksResult.rows) &&
+          typeof normaliseTaskCollection === 'function' && typeof normaliseJsonTask === 'function') {
+        try {
+          const next = normaliseTaskCollection(
+            tasksResult.rows.map(t => normaliseJsonTask(t, idMap)),
+            false
+          );
+          // tasks is a top-level let-binding in another classic script —
+          // unqualified assignment reaches the same global lexical slot.
+          tasks = next;
+          anyChanged = true;
+        } catch (e) { console.warn('[WSSync] tasks apply failed:', e); }
+      }
+
+      // 4) Persist + re-render
+      try {
+        if (typeof saveJsonIdMap === 'function') saveJsonIdMap(idMap);
+      } catch (_) {}
+      if (anyChanged) {
+        if (typeof saveData === 'function') saveData('Synced via live update');
+        if (typeof renderPatientList === 'function') renderPatientList();
+        if (typeof renderTasksPage === 'function') renderTasksPage();
+        if (typeof renderEventLog === 'function') renderEventLog();
+        if (detailVisible && typeof currentPatient !== 'undefined' && currentPatient && patients[currentPatient]) {
+          if (typeof openPatient === 'function') openPatient(currentPatient, { preserveMode: true, restoreScroll: true });
+        }
       }
       if (typeof setGraphStatus === 'function') {
-        const total = (result && result.activeCount) || 0;
-        setGraphStatus(`Live sync · ${total} patient${total === 1 ? '' : 's'}`);
+        const parts = [];
+        if (createdCount) parts.push(`${createdCount} added`);
+        if (updatedCount) parts.push(`${updatedCount} updated`);
+        if (removedCount) parts.push(`${removedCount} removed`);
+        setGraphStatus(parts.length ? `Live sync · ${parts.join(', ')}` : 'Live sync · up to date');
       }
-      console.log('[WSSync] quiet refresh complete', result);
+      console.log('[WSSync] granular refresh complete', { created: createdCount, updated: updatedCount, removed: removedCount });
     } catch (e) {
-      console.warn('[WSSync] refresh failed:', e);
+      console.warn('[WSSync] granular refresh failed:', e);
       if (typeof setGraphStatus === 'function') {
         try { setGraphStatus('Live sync failed - retry on next change', true); } catch (_) {}
       }
@@ -20460,23 +20573,36 @@ window.HAH.modules.conditions = true;
     if (!msg || !msg.type) return;
     switch (msg.type) {
       case 'patient.changed':
+        scheduleRefresh({ patientId: msg.payload && msg.payload.patientId });
+        break;
       case 'service.changed':
-      case 'round.changed':
-        scheduleRefresh({ patient: true });
+        scheduleRefresh({ service: true });
         break;
       case 'tasks.changed':
-        scheduleRefresh({ patient: true });  // mobile reloads patients+tasks together
+        scheduleRefresh({ tasks: true });
+        break;
+      case 'round.changed':
+        // Mobile doesn't display rounds directly — ignore
         break;
       default:
         break;
     }
   });
 
-  // On reconnect after a disconnect, do a catchup refresh
+  // On reconnect after a disconnect, do a catchup via service reload.
+  // Loading the service.json tells us the current active list; any patients
+  // we don't yet have will be loaded individually in the granular pass.
   window.addEventListener('wssync:connected', () => {
     if (window.WSSync.__initialConnectDone) {
       console.log('[WSSync] reconnected — running catchup refresh');
-      scheduleRefresh({ patient: true });
+      // Use the existing full-dataset reload for catchup to be safe — we may
+      // have missed many events while offline. This is the one place where
+      // a full refresh is justified.
+      if (typeof importHandoverRows === 'function') {
+        try { importHandoverRows(); } catch (_) {}
+      } else {
+        scheduleRefresh({ service: true, tasks: true });
+      }
     }
     window.WSSync.__initialConnectDone = true;
   });
