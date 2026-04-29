@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_639_websocket_release.html; source=hospital_at_home_v12_36_639_websocket_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_640_websocket_release.html; source=hospital_at_home_v12_36_640_websocket_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_639_websocket_release.html</div><div>Source: hospital_at_home_v12_36_639_websocket_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_640_websocket_release.html</div><div>Source: hospital_at_home_v12_36_640_websocket_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3032,6 +3032,24 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <label for="liveSyncDebugToggle" style="margin:0;font-size:14px;font-weight:600">Show live sync debug panel</label>
 </div>
 <div class="tiny muted" style="margin-top:4px">Floating panel showing connection state and event log. Drag to move, tap to expand, long-press to clear.</div>
+<div class="toggle-row" style="margin-top:14px">
+<input checked id="syncActivityLogToggle" style="width:auto;margin:0" type="checkbox"/>
+<label for="syncActivityLogToggle" style="margin:0;font-size:14px;font-weight:600">Record sync activity log</label>
+</div>
+<div class="tiny muted" style="margin-top:4px">Keeps a running record of what's been synced and when. Useful for diagnosing issues.</div>
+<div id="syncActivityLogPanel" style="margin-top:10px;border:1px solid var(--border, rgba(0,0,0,0.1));border-radius:8px;overflow:hidden">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(0,0,0,0.03)">
+<div style="font-size:13px;font-weight:600">Recent sync activity</div>
+<div style="display:flex;gap:6px">
+<button class="btn-secondary" data-sync-log-filter="all" style="font-size:11px;padding:4px 8px" type="button">All</button>
+<button class="btn-secondary" data-sync-log-filter="outbound" style="font-size:11px;padding:4px 8px" type="button">Out</button>
+<button class="btn-secondary" data-sync-log-filter="inbound" style="font-size:11px;padding:4px 8px" type="button">In</button>
+<button class="btn-secondary" data-sync-log-filter="errors" style="font-size:11px;padding:4px 8px" type="button">Errors</button>
+<button class="btn-secondary" id="syncActivityLogClear" style="font-size:11px;padding:4px 8px" type="button">Clear</button>
+</div>
+</div>
+<div id="syncActivityLogList" style="max-height:280px;overflow-y:auto;padding:0"></div>
+</div>
 <div class="tiny muted" id="graphStatus" style="margin-top:8px"></div></div>
 </div>
 </div>
@@ -5887,6 +5905,16 @@ async function executePush(patientId){
   if(!p || !isLinkedPatient(p)) return;
   const target = getPatientTarget(p);
   if(!target || !target.jsonId) return;
+  // Determine which sections actually changed since the last successful push,
+  // for use in the activity log summary.
+  const f = p.form || {};
+  const changedSections = [];
+  if (normText(f.issues) !== normText(f._lastImportedIssues)) changedSections.push('issues');
+  if (normText(f.plan) !== normText(f._lastImportedPlan)) changedSections.push('plan');
+  if (normText(f.bloods) !== normText(f._lastImportedBloods)) changedSections.push('bloods');
+  // Heuristic for other tracked content — we don't track these against
+  // _lastImported, so include them only if there's any non-empty value.
+  const sectionLabel = changedSections.length ? changedSections.join(', ') : 'updated fields';
   try{
     const doc = await loadJsonPatient(target.jsonId);
     const saved = await patchJsonPatientFromMobile(doc, p);
@@ -5896,9 +5924,11 @@ async function executePush(patientId){
     p.jsonRecord = saved;
     saveData('Saved locally • Synced to JSON');
     if(currentPatient === patientId) setSaveStatus('Saved locally • Synced to JSON');
+    try { if (window.SyncLog) window.SyncLog.add('outbound', 'patient.update', `Updated ${p.name||'patient'} (${sectionLabel})`, 'ok'); } catch(_){}
   }catch(e){
     if(currentPatient === patientId) setSaveStatus('Saved locally • JSON sync failed');
     if(typeof setGraphStatus === 'function') setGraphStatus(`JSON sync failed - ${describeImportError(e)}`, true);
+    try { if (window.SyncLog) window.SyncLog.add('outbound', 'patient.update', `Failed to update ${p.name||'patient'}`, 'error', describeImportError(e)); } catch(_){}
   } finally {
     delete _pushTimers[patientId];
   }
@@ -6143,6 +6173,7 @@ async function pushNewPatientToJson(localId){
     const map=loadJsonIdMap();map[String(created.id)]=Number(localId);saveJsonIdMap(map);
     saveData('Patient saved to JSON');
     if(typeof setGraphStatus==='function')setGraphStatus('New patient saved to JSON store.');
+    try { if (window.SyncLog) window.SyncLog.add('outbound', 'patient.create', `Created patient ${p.name||created.id}`, 'ok'); } catch(_){}
     // If user has any clinical content already entered, push it now via the
     // normal patch pipeline so issues/plan/bloods make it across too.
     try{queuePush(localId,400);}catch(_){}
@@ -6152,6 +6183,7 @@ async function pushNewPatientToJson(localId){
     // Mark for retry on next refresh / sign-in
     p._pendingJsonCreate=true;
     saveData('Patient added (JSON sync pending)');
+    try { if (window.SyncLog) window.SyncLog.add('outbound', 'patient.create', `Failed to create ${p.name||'patient'} on JSON store`, 'error', describeImportError(e)); } catch(_){}
     throw e;
   }
 }
@@ -10862,8 +10894,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_639_websocket_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_639_websocket_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_640_websocket_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_640_websocket_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -20547,6 +20579,7 @@ window.HAH.modules.conditions = true;
       reconnectAttempt = 0;
       while (sendQueue.length && socket.readyState === WebSocket.OPEN) socket.send(sendQueue.shift());
       window.dispatchEvent(new CustomEvent('wssync:connected'));
+      try { if (window.SyncLog) window.SyncLog.add('system', 'ws.connect', 'WebSocket connected', 'ok'); } catch (_) {}
     });
     socket.addEventListener('message', (event) => {
       let msg;
@@ -20559,6 +20592,7 @@ window.HAH.modules.conditions = true;
     });
     socket.addEventListener('close', () => {
       window.dispatchEvent(new CustomEvent('wssync:disconnected'));
+      try { if (window.SyncLog) window.SyncLog.add('system', 'ws.disconnect', 'WebSocket disconnected', 'pending'); } catch (_) {}
       if (!intentionalClose) scheduleReconnect();
     });
     socket.addEventListener('error', () => { /* close fires next */ });
@@ -20710,12 +20744,25 @@ window.HAH.modules.conditions = true;
         }
         lastRefreshAt = Date.now();
         console.log('[WSSync] refresh complete (' + reason + ')', result);
+        try {
+          if (window.SyncLog) {
+            const total = (result && result.activeCount) || 0;
+            const newCount = (result && result.imported) || 0;
+            const updCount = (result && result.updated) || 0;
+            const bits = [];
+            if (newCount) bits.push(`${newCount} new`);
+            if (updCount) bits.push(`${updCount} updated`);
+            const detail = bits.length ? bits.join(', ') : `${total} patient${total === 1 ? '' : 's'}`;
+            window.SyncLog.add('inbound', 'refresh', `Pulled from OneDrive (${detail})`, 'ok', `trigger: ${reason}`);
+          }
+        } catch (_) {}
         return result;
       } catch (e) {
         console.warn('[WSSync] refresh failed (' + reason + '):', e);
         if (typeof setGraphStatus === 'function') {
           try { setGraphStatus('Live sync failed - retry on next change', true); } catch (_) {}
         }
+        try { if (window.SyncLog) window.SyncLog.add('inbound', 'refresh', 'OneDrive refresh failed', 'error', `trigger: ${reason}`); } catch (_) {}
         return null;
       } finally {
         refreshInFlight = null;
@@ -20756,6 +20803,24 @@ window.HAH.modules.conditions = true;
       case 'service.changed':
       case 'round.changed':
       case 'tasks.changed':
+        try {
+          if (window.SyncLog) {
+            // Try to enrich with the patient name if we already know about them
+            let label = msg.type;
+            const jsonId = msg.payload && msg.payload.patientId;
+            if (jsonId && typeof patients === 'object' && patients) {
+              for (const localId of Object.keys(patients)) {
+                const pp = patients[localId];
+                if (pp && pp.importSource && String(pp.importSource.jsonId || '') === String(jsonId)) {
+                  label = `${msg.type} (${pp.name || jsonId})`;
+                  break;
+                }
+              }
+            }
+            const from = msg._from ? ` from ${msg._from}` : '';
+            window.SyncLog.add('inbound', 'ws.message', `Notified: ${label}${from}`, 'ok');
+          }
+        } catch (_) {}
         triggerDebouncedRefresh('ws:' + msg.type);
         break;
       default:
@@ -21102,6 +21167,230 @@ window.HAH.modules.conditions = true;
   } else {
     init();
   }
+})();
+
+</script><script>
+// 22-sync-activity-log.js
+// Persistent activity log for sync events (OneDrive pushes, WebSocket
+// messages, refreshes, errors). Lives in localStorage so it survives reloads.
+// Renders into the Options page when that page is open.
+//
+// Public API on window.SyncLog:
+//   .add(direction, kind, summary, status, details) → push an entry
+//   .render(filter)                                  → re-render the list
+//   .clear()                                         → wipe the log
+//   .isEnabled() / .setEnabled(bool)                 → master switch
+//
+// direction: 'outbound' | 'inbound' | 'system'
+// kind: short tag e.g. 'patient.update', 'patient.create', 'ws.message',
+//       'refresh', 'ws.connect', 'ws.disconnect'
+// status: 'ok' | 'error' | 'pending'
+//
+// Storage keys:
+//   hah_sync_log         — JSON array of entries
+//   hah_sync_log_enabled — '0' to disable, anything else = enabled (default)
+
+(function () {
+  'use strict';
+
+  const STORAGE_KEY = 'hah_sync_log';
+  const ENABLED_KEY = 'hah_sync_log_enabled';
+  const MAX_ENTRIES = 500;
+  const FLUSH_THROTTLE_MS = 2000;
+
+  let entries = [];
+  let currentFilter = 'all';
+  let flushTimer = null;
+  let dirty = false;
+
+  // ─── Persistence ──────────────────────────────────────────────────────────
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      entries = Array.isArray(parsed) ? parsed : [];
+      // Cap on load in case stored data exceeds limit
+      if (entries.length > MAX_ENTRIES) entries = entries.slice(-MAX_ENTRIES);
+    } catch (_) { entries = []; }
+  }
+
+  function flush() {
+    if (!dirty) return;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch (_) {}
+    dirty = false;
+  }
+
+  function scheduleFlush() {
+    dirty = true;
+    if (flushTimer) return;
+    flushTimer = setTimeout(() => { flushTimer = null; flush(); }, FLUSH_THROTTLE_MS);
+  }
+
+  // Flush on app unload to avoid losing tail entries
+  window.addEventListener('pagehide', flush);
+  window.addEventListener('beforeunload', flush);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) flush(); });
+
+  // ─── Master switch ────────────────────────────────────────────────────────
+  function isEnabled() {
+    try { return localStorage.getItem(ENABLED_KEY) !== '0'; } catch (_) { return true; }
+  }
+  function setEnabled(on) {
+    try {
+      if (on) localStorage.removeItem(ENABLED_KEY);
+      else localStorage.setItem(ENABLED_KEY, '0');
+    } catch (_) {}
+    render();
+  }
+
+  // ─── Add entry ────────────────────────────────────────────────────────────
+  function add(direction, kind, summary, status, details) {
+    if (!isEnabled()) return;
+    const entry = {
+      ts: Date.now(),
+      direction: direction || 'system',
+      kind: kind || 'event',
+      summary: String(summary || ''),
+      status: status || 'ok',
+      details: details || null
+    };
+    entries.push(entry);
+    if (entries.length > MAX_ENTRIES) entries = entries.slice(-MAX_ENTRIES);
+    scheduleFlush();
+    // Live update if the panel is currently visible
+    if (document.getElementById('syncActivityLogList')) render();
+  }
+
+  // ─── Rendering ────────────────────────────────────────────────────────────
+  function fmtTime(ts) {
+    const d = new Date(ts);
+    const now = new Date();
+    const sameDay = d.toDateString() === now.toDateString();
+    const time = d.toTimeString().slice(0, 8);
+    return sameDay ? time : `${d.getDate()}/${d.getMonth() + 1} ${time}`;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  }
+
+  function arrowFor(direction) {
+    if (direction === 'outbound') return '↑';
+    if (direction === 'inbound') return '↓';
+    return '·';
+  }
+
+  function colourFor(entry) {
+    if (entry.status === 'error') return '#dc2626';
+    if (entry.status === 'pending') return '#f59e0b';
+    if (entry.direction === 'outbound') return '#0369a1';
+    if (entry.direction === 'inbound') return '#15803d';
+    return '#525252';
+  }
+
+  function passesFilter(entry, filter) {
+    if (filter === 'all') return true;
+    if (filter === 'outbound') return entry.direction === 'outbound';
+    if (filter === 'inbound') return entry.direction === 'inbound';
+    if (filter === 'errors') return entry.status === 'error';
+    return true;
+  }
+
+  function render() {
+    const list = document.getElementById('syncActivityLogList');
+    if (!list) return;
+    if (!isEnabled()) {
+      list.innerHTML = '<div style="padding:12px;font-size:12px;color:#6b7280">Activity logging disabled.</div>';
+      return;
+    }
+    const filtered = entries.slice().reverse().filter(e => passesFilter(e, currentFilter));
+    if (!filtered.length) {
+      list.innerHTML = '<div style="padding:12px;font-size:12px;color:#6b7280">No activity recorded yet.</div>';
+      return;
+    }
+    list.innerHTML = filtered.map(e => {
+      const colour = colourFor(e);
+      const arrow = arrowFor(e.direction);
+      const detailsBit = e.details
+        ? `<div style="font-size:11px;color:#6b7280;margin-top:2px">${escapeHtml(typeof e.details === 'string' ? e.details : JSON.stringify(e.details))}</div>`
+        : '';
+      const statusBadge = e.status === 'error'
+        ? '<span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:10px;margin-left:6px">error</span>'
+        : e.status === 'pending'
+        ? '<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:1px 6px;border-radius:10px;margin-left:6px">pending</span>'
+        : '';
+      return `<div style="padding:8px 12px;border-bottom:1px solid rgba(0,0,0,0.05);font-size:12px">
+        <div style="display:flex;align-items:baseline;gap:6px">
+          <span style="color:${colour};font-weight:600;width:14px;flex:0 0 14px;text-align:center">${arrow}</span>
+          <span style="color:#6b7280;font-variant-numeric:tabular-nums;flex:0 0 auto">${fmtTime(e.ts)}</span>
+          <span style="flex:1;min-width:0;word-break:break-word">${escapeHtml(e.summary)}</span>
+          ${statusBadge}
+        </div>
+        ${detailsBit}
+      </div>`;
+    }).join('');
+  }
+
+  function clear() {
+    entries = [];
+    flush();
+    render();
+  }
+
+  // ─── Options page wiring ──────────────────────────────────────────────────
+  function bindControls() {
+    const toggle = document.getElementById('syncActivityLogToggle');
+    if (toggle && !toggle.__synclog_bound) {
+      try { toggle.checked = isEnabled(); } catch (_) {}
+      toggle.addEventListener('change', () => setEnabled(toggle.checked));
+      toggle.__synclog_bound = true;
+    }
+    const clearBtn = document.getElementById('syncActivityLogClear');
+    if (clearBtn && !clearBtn.__synclog_bound) {
+      clearBtn.addEventListener('click', () => {
+        if (window.confirm('Clear all sync activity log entries?')) clear();
+      });
+      clearBtn.__synclog_bound = true;
+    }
+    document.querySelectorAll('[data-sync-log-filter]').forEach(btn => {
+      if (btn.__synclog_bound) return;
+      btn.addEventListener('click', () => {
+        currentFilter = btn.getAttribute('data-sync-log-filter') || 'all';
+        // Visual selected state
+        document.querySelectorAll('[data-sync-log-filter]').forEach(b => {
+          b.style.fontWeight = b === btn ? '700' : '400';
+        });
+        render();
+      });
+      btn.__synclog_bound = true;
+    });
+    // Initial render
+    render();
+  }
+
+  // Bind on DOMContentLoaded and whenever the OneDrive options page opens
+  function attachOptionsNavListener() {
+    const nav = document.querySelector('[data-open-options-page="onedrive"]');
+    if (nav && !nav.__synclog_nav_bound) {
+      nav.addEventListener('click', () => setTimeout(bindControls, 50));
+      nav.__synclog_nav_bound = true;
+    }
+  }
+
+  function init() {
+    load();
+    bindControls();
+    attachOptionsNavListener();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+
+  // ─── Public API ───────────────────────────────────────────────────────────
+  window.SyncLog = {
+    add, render, clear,
+    isEnabled, setEnabled,
+    getEntries: () => entries.slice()
+  };
 })();
 
 </script></body>
