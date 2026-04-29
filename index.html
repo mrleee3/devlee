@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_627_websocket_release.html; source=hospital_at_home_v12_36_627_websocket_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_632_websocket_release.html; source=hospital_at_home_v12_36_632_websocket_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_627_websocket_release.html</div><div>Source: hospital_at_home_v12_36_627_websocket_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_632_websocket_release.html</div><div>Source: hospital_at_home_v12_36_632_websocket_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10739,8 +10739,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_627_websocket_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_627_websocket_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_632_websocket_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_632_websocket_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -20402,9 +20402,15 @@ window.HAH.modules.conditions = true;
   }
 
   // ─── RECEIVER ──────────────────────────────────────────────────────────────
-  // Quiet refresh — same as importHandoverRows but without UI button feedback.
+  // Full-dataset refresh — same flow as the manual "Import Handover" button
+  // but without UI button feedback. Reuses the existing battle-tested
+  // loadJsonPatientDataset + applyJsonDatasetToMobile pipeline so we know
+  // the merge logic is correct.
+  //
   // Coalesce multiple incoming messages within REFRESH_DEBOUNCE_MS into one
-  // refresh.
+  // refresh, so rapid bursts of edits on the other device don't cause
+  // rapid-fire reloads here.
+
   let refreshTimer = null;
   let pending = { patient: false, tasks: false };
 
@@ -20420,11 +20426,9 @@ window.HAH.modules.conditions = true;
     const flags = { ...pending };
     pending = { patient: false, tasks: false };
 
-    // Only proceed if mobile sync is actually wired up and signed in
     if (typeof loadJsonPatientDataset !== 'function' || typeof applyJsonDatasetToMobile !== 'function') return;
     try {
-      // If a patient is currently open and being edited, save in-flight form
-      // and flush pending pushes BEFORE refreshing so we don't clobber edits.
+      // Save in-flight edits before applying remote changes
       const detail = document.getElementById && document.getElementById('patientDetail');
       const detailVisible = detail && !detail.classList.contains('hidden');
       if (detailVisible && typeof detailLoadedForCurrentPatient !== 'undefined' && detailLoadedForCurrentPatient) {
@@ -20472,13 +20476,19 @@ window.HAH.modules.conditions = true;
     }
   });
 
-  // On reconnect after a disconnect, do a catchup refresh
+  // On every WebSocket connect — including the very first one when the app
+  // opens — automatically pull the latest dataset from OneDrive. This means
+  // the user always sees fresh data ~1-2s after opening the app, without
+  // having to press the manual import button. Subsequent reconnects (after
+  // iOS suspends the connection while backgrounded, network changes, etc.)
+  // also trigger a catchup so we never sit on stale data.
+  //
+  // If the user isn't signed in to Graph yet, importHandoverRows throws and
+  // the error is swallowed — no harm done, refresh will happen on the next
+  // connect after they sign in.
   window.addEventListener('wssync:connected', () => {
-    if (window.WSSync.__initialConnectDone) {
-      console.log('[WSSync] reconnected — running catchup refresh');
-      scheduleRefresh({ patient: true });
-    }
-    window.WSSync.__initialConnectDone = true;
+    console.log('[WSSync] connected — running refresh');
+    scheduleRefresh({ patient: true });
   });
 
   // ─── BOOT ──────────────────────────────────────────────────────────────────
