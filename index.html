@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_641_websocket_release.html; source=hospital_at_home_v12_36_641_websocket_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_642_websocket_release.html; source=hospital_at_home_v12_36_642_websocket_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2742,7 +2742,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
 <div class="section-header" style="margin-bottom:12px;">
-<div><h3 style="margin-bottom:2px">Patients</h3><div class="tiny muted patient-helper-line" id="patientStatusHelper" style="margin-top:10px;"><span class="patient-helper-default" id="patientRefreshText">Pull to refresh list</span><span class="patient-helper-status hidden" id="patientInlineStatus"><span aria-live="polite" class="patient-helper-copy" id="saveStatus"></span><button class="patient-helper-undo hidden" id="undoBtn" type="button">Undo</button></span></div></div>
+<div><h3 style="margin-bottom:2px;display:flex;align-items:center;gap:6px"><span>Patients</span><span aria-label="Live sync status" id="wsStatusDot" role="button" style="display:none;width:9px;height:9px;border-radius:50%;background:#9ca3af;flex:0 0 auto;cursor:pointer;margin-bottom:2px;transition:background-color .25s ease,box-shadow .25s ease" tabindex="0" title="Live sync status"></span></h3><div class="tiny muted patient-helper-line" id="patientStatusHelper" style="margin-top:10px;"><span class="patient-helper-default" id="patientRefreshText">Pull to refresh list</span><span class="patient-helper-status hidden" id="patientInlineStatus"><span aria-live="polite" class="patient-helper-copy" id="saveStatus"></span><button class="patient-helper-undo hidden" id="undoBtn" type="button">Undo</button></span></div></div>
 <div class="top-actions" style="margin:0">
 <div class="sort-wrap">
 <button aria-expanded="false" aria-haspopup="menu" aria-label="Sort patients" class="refresh-btn sort-btn" id="sortPatientsBtn" title="Sort patients">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_641_websocket_release.html</div><div>Source: hospital_at_home_v12_36_641_websocket_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_642_websocket_release.html</div><div>Source: hospital_at_home_v12_36_642_websocket_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10891,8 +10891,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_641_websocket_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_641_websocket_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_642_websocket_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_642_websocket_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -20521,6 +20521,19 @@ window.HAH.modules.conditions = true;
   } else {
     bindToggles();
   }
+  // Hide the status dot entirely if live sync is off. Runs regardless of
+  // the early-return below — if WS is disabled, the dot needs to disappear
+  // (we don't want a perpetual amber "connecting" indicator when nothing's
+  // ever going to connect).
+  function hideStatusDotIfDisabled() {
+    let disabled = false;
+    try { disabled = localStorage.getItem('hah_wssync_disabled') === '1'; } catch (_) {}
+    if (!disabled) return;
+    const dot = document.getElementById('wsStatusDot');
+    if (dot) dot.style.display = 'none';
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', hideStatusDotIfDisabled);
+  else hideStatusDotIfDisabled();
   // Re-sync toggle visual state when the user opens the OneDrive options page.
   // We listen on the specific options-nav button rather than a global click
   // handler — a global click-listener races with the user's tap on the
@@ -20851,6 +20864,67 @@ window.HAH.modules.conditions = true;
     if (retries > 0) setTimeout(() => bootRefresh(retries - 1), 100);
   }
   bootRefresh(20);
+
+  // ─── STATUS DOT ───────────────────────────────────────────────────────────
+  // A tiny coloured dot next to the "Patients" header reflecting the live-sync
+  // connection state. Always visible (regardless of debug panel), provides
+  // an at-a-glance check that sync is healthy.
+  //   green  = connected
+  //   amber  = connecting / reconnecting
+  //   grey   = disconnected and waiting
+  //   hidden = live sync is disabled in Options
+  function setStatusDot(state) {
+    const dot = document.getElementById('wsStatusDot');
+    if (!dot) return;
+    const colours = { connected: '#10b981', connecting: '#f59e0b', disconnected: '#9ca3af' };
+    const titles = {
+      connected: 'Live sync connected',
+      connecting: 'Live sync connecting…',
+      disconnected: 'Live sync disconnected'
+    };
+    dot.style.display = 'inline-block';
+    dot.style.background = colours[state] || colours.disconnected;
+    dot.style.boxShadow = state === 'connected' ? '0 0 0 2px rgba(16,185,129,0.18)' : 'none';
+    dot.title = titles[state] || 'Live sync';
+    dot.setAttribute('aria-label', titles[state] || 'Live sync');
+  }
+  function refreshStatusDot() {
+    const dot = document.getElementById('wsStatusDot');
+    if (!dot) return;
+    // Hide entirely if user has turned live sync off
+    let disabled = false;
+    try { disabled = localStorage.getItem('hah_wssync_disabled') === '1'; } catch (_) {}
+    if (disabled) { dot.style.display = 'none'; return; }
+    if (window.WSSync && window.WSSync.isConnected && window.WSSync.isConnected()) setStatusDot('connected');
+    else setStatusDot('connecting');
+  }
+  window.addEventListener('wssync:connected', () => setStatusDot('connected'));
+  window.addEventListener('wssync:disconnected', () => setStatusDot('disconnected'));
+  // On click, briefly show the most recent status text via the existing
+  // patient helper line — gives a visible cue without needing a tooltip
+  // (mobile doesn't show title attribute hovers).
+  function attachDotClick() {
+    const dot = document.getElementById('wsStatusDot');
+    if (!dot || dot.__wssync_click_bound) return;
+    dot.addEventListener('click', () => {
+      const wasConnected = window.WSSync && window.WSSync.isConnected && window.WSSync.isConnected();
+      if (typeof setSaveStatus === 'function') {
+        setSaveStatus(wasConnected ? 'Live sync connected' : 'Live sync disconnected — retrying');
+      }
+      // Force an immediate reconnection attempt if disconnected
+      if (!wasConnected && window.WSSync && window.WSSync.connect) {
+        try { window.WSSync.connect(); } catch (_) {}
+      }
+    });
+    dot.__wssync_click_bound = true;
+  }
+  // Initialise dot once DOM is ready
+  function initDot() {
+    refreshStatusDot();
+    attachDotClick();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initDot);
+  else initDot();
 
   console.log('[WSSync] mobile module loaded');
 })();
