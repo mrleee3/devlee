@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_635_websocket_release.html; source=hospital_at_home_v12_36_635_websocket_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_636_websocket_release.html; source=hospital_at_home_v12_36_636_websocket_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_635_websocket_release.html</div><div>Source: hospital_at_home_v12_36_635_websocket_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_636_websocket_release.html</div><div>Source: hospital_at_home_v12_36_636_websocket_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10749,8 +10749,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_635_websocket_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_635_websocket_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_636_websocket_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_636_websocket_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -20277,6 +20277,66 @@ window.HAH.modules.conditions = true;
   const FORCED_REFRESH_INTERVAL_MS = 5000; // ignore bursts within this window for boot/foreground refreshes
   const DEVICE_TAG = 'mobile';
 
+  // ─── OPTIONS-PANEL TOGGLES (always bound, regardless of WS enabled state) ──
+  // We bind the toggles before the early-return for `hah_wssync_disabled`
+  // so the user can always re-enable live sync from Options. If we bound
+  // them inside the IIFE body below, they'd disappear when live sync was
+  // turned off, leaving no way to turn it back on without reaching for
+  // localStorage manually.
+  function bindToggles() {
+    const liveT = document.getElementById('liveSyncToggle');
+    const dbgT  = document.getElementById('liveSyncDebugToggle');
+    if (liveT) {
+      // Always read fresh state from localStorage, ignoring the static
+      // HTML default — otherwise the checkbox can lie about reality.
+      try { liveT.checked = localStorage.getItem('hah_wssync_disabled') !== '1'; } catch (_) {}
+      if (!liveT.__wssync_bound) {
+        liveT.addEventListener('change', () => {
+          try {
+            if (liveT.checked) localStorage.removeItem('hah_wssync_disabled');
+            else localStorage.setItem('hah_wssync_disabled', '1');
+          } catch (_) {}
+          if (typeof setGraphStatus === 'function') {
+            setGraphStatus(liveT.checked
+              ? 'Live sync ON — reload the app to apply'
+              : 'Live sync OFF — reload the app to apply');
+          }
+        });
+        liveT.__wssync_bound = true;
+      }
+    }
+    if (dbgT) {
+      try { dbgT.checked = localStorage.getItem('hah_wssync_debug') === '1'; } catch (_) {}
+      if (!dbgT.__wssync_bound) {
+        dbgT.addEventListener('change', () => {
+          if (window.WSSyncDebug) {
+            if (dbgT.checked) window.WSSyncDebug.show();
+            else window.WSSyncDebug.hide();
+          } else {
+            // Fallback if panel module isn't loaded yet — set the flag and
+            // it'll auto-show when the panel does load
+            try {
+              if (dbgT.checked) localStorage.setItem('hah_wssync_debug', '1');
+              else localStorage.removeItem('hah_wssync_debug');
+            } catch (_) {}
+          }
+        });
+        dbgT.__wssync_bound = true;
+      }
+    }
+  }
+  // Bind on load AND every time the user navigates to options (cheap, idempotent)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindToggles);
+  } else {
+    bindToggles();
+  }
+  // Also re-bind whenever the user clicks anywhere — covers the case where
+  // options page is opened later. The __wssync_bound flag prevents
+  // double-binding the change event.
+  document.addEventListener('click', () => { try { bindToggles(); } catch (_) {} }, { capture: true, passive: true });
+
+  // ─── EARLY RETURN if user has turned live sync off ────────────────────────
   try {
     if (localStorage.getItem('hah_wssync_disabled') === '1') {
       console.log('[WSSync] Disabled via localStorage flag');
@@ -20527,44 +20587,6 @@ window.HAH.modules.conditions = true;
     if (retries > 0) setTimeout(() => bootRefresh(retries - 1), 100);
   }
   bootRefresh(20);
-
-  // ─── OPTIONS-PANEL TOGGLES ────────────────────────────────────────────────
-  // Wire up the two toggles in Options → Shared JSON store:
-  //   - "Live sync (WebSocket)" → flips hah_wssync_disabled
-  //   - "Show live sync debug panel" → flips hah_wssync_debug, calls
-  //     WSSyncDebug.show()/hide()
-  function bindToggles() {
-    const liveT = document.getElementById('liveSyncToggle');
-    const dbgT  = document.getElementById('liveSyncDebugToggle');
-    if (liveT) {
-      try { liveT.checked = localStorage.getItem('hah_wssync_disabled') !== '1'; } catch (_) {}
-      liveT.addEventListener('change', () => {
-        try {
-          if (liveT.checked) localStorage.removeItem('hah_wssync_disabled');
-          else localStorage.setItem('hah_wssync_disabled', '1');
-        } catch (_) {}
-        if (typeof setGraphStatus === 'function') {
-          setGraphStatus(liveT.checked
-            ? 'Live sync ON — reload the app to apply'
-            : 'Live sync OFF — reload the app to apply');
-        }
-      });
-    }
-    if (dbgT) {
-      try { dbgT.checked = localStorage.getItem('hah_wssync_debug') === '1'; } catch (_) {}
-      dbgT.addEventListener('change', () => {
-        if (window.WSSyncDebug) {
-          if (dbgT.checked) window.WSSyncDebug.show();
-          else window.WSSyncDebug.hide();
-        }
-      });
-    }
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bindToggles);
-  } else {
-    bindToggles();
-  }
 
   console.log('[WSSync] mobile module loaded');
 })();
