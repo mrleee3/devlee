@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_632_websocket_release.html; source=hospital_at_home_v12_36_632_websocket_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_635_websocket_release.html; source=hospital_at_home_v12_36_635_websocket_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_632_websocket_release.html</div><div>Source: hospital_at_home_v12_36_632_websocket_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_635_websocket_release.html</div><div>Source: hospital_at_home_v12_36_635_websocket_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3022,6 +3022,16 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <label for="oneNoteAutoSyncToggle" style="margin:0;font-size:14px;font-weight:600">Auto-sync linked notes to OneNote</label>
 </div>
 <div class="tiny muted" style="margin-top:4px">Creates pages in the default notebook section H@H Demo Notes and updates them a few seconds after typing stops.</div>
+<div class="toggle-row" style="margin-top:14px">
+<input checked id="liveSyncToggle" style="width:auto;margin:0" type="checkbox"/>
+<label for="liveSyncToggle" style="margin:0;font-size:14px;font-weight:600">Live sync (WebSocket)</label>
+</div>
+<div class="tiny muted" style="margin-top:4px">Push and pull updates between devices in real time. Reload the app for changes to take effect.</div>
+<div class="toggle-row" style="margin-top:14px">
+<input id="liveSyncDebugToggle" style="width:auto;margin:0" type="checkbox"/>
+<label for="liveSyncDebugToggle" style="margin:0;font-size:14px;font-weight:600">Show live sync debug panel</label>
+</div>
+<div class="tiny muted" style="margin-top:4px">Floating panel showing connection state and event log. Drag to move, tap to expand, long-press to clear.</div>
 <div class="tiny muted" id="graphStatus" style="margin-top:8px"></div></div>
 </div>
 </div>
@@ -6038,7 +6048,7 @@ function findLocalIdForJsonPatient(jsonId,name,usedIds){const jid=String(jsonId|
 function normaliseJsonTask(task,idMap){const status=String(task.status||'').toLowerCase(),priority=String(task.priority||'').toLowerCase(),patientJsonId=String(task.patientId||'');const pid=idMap&&idMap[patientJsonId]?Number(idMap[patientJsonId]):null;let due=(priority==='urgent'||priority==='high'||status==='urgent')?'now':'today';if(task.dueAt&&due!=='now'){const d=new Date(task.dueAt),t=new Date(todayKeyJson()+'T23:59:59');if(!Number.isNaN(d.getTime())&&d.getTime()>t.getTime())due='later';}return {id:String(task.id||`json-task-${Date.now().toString(36)}`),patientId:Number.isFinite(pid)?pid:null,text:String(task.title||task.text||'').trim(),due,urgent:due==='now',category:String(task.category||'').toLowerCase().includes('blood')?'bloods':String(task.category||'').toLowerCase().includes('discharge')?'discharge':'review',note:String(task.note||task.blocker||'').trim(),done:['done','completed','closed','actioned'].includes(status),createdAt:String(task.createdAt||task.updatedAt||nowIsoJson()),completedAt:['done','completed','closed','actioned'].includes(status)?String(task.completedAt||task.updatedAt||nowIsoJson()):'',importSource:{kind:'shared_json_task',jsonId:String(task.id||'')}};}
 function applyJsonDatasetToMobile(dataset){const rows=Array.isArray(dataset&&dataset.rows)?dataset.rows:[];const usedIds=new Set(), nextPatients={}, idMap={};let imported=0,updated=0;const updateDetails=[];rows.forEach(row=>{const data=mapJsonPatientToImportData(row);if(!data.jsonId)return;const localId=findLocalIdForJsonPatient(data.jsonId,data.name,usedIds);usedIds.add(String(localId));idMap[data.jsonId]=localId;if(patients[localId]){const result=applyImportedPatientUpdate(clone(patients[localId]),data);nextPatients[localId]=result.patient;if(result.changed){updated++;updateDetails.push({name:result.patientName||data.name,summary:result.summary});}}else{nextPatients[localId]=createImportedPatient(data);imported++;}});patients=nextPatients;saveJsonIdMap(idMap);const jsonTasks=Array.isArray(dataset&&dataset.tasks)?dataset.tasks:[];if(typeof normaliseTaskCollection==='function')tasks=normaliseTaskCollection(jsonTasks.map(task=>normaliseJsonTask(task,idMap)),false);const currentStillExists=currentPatient&&Object.prototype.hasOwnProperty.call(patients,String(currentPatient));currentPatient=currentStillExists?currentPatient:(Number(Object.keys(patients)[0]||0)||null);detailLoadedForCurrentPatient=false;return {imported,updated,updateDetails,activeCount:rows.length,taskCount:jsonTasks.length};}
 async function loadJsonTasksDoc(){try{const doc=await jsonDriveGet(childJsonPath(currentJsonFolderPath(),'tasks.json'));return doc&&Array.isArray(doc.tasks)?doc.tasks:[];}catch(_){return [];}}
-async function loadJsonPatientDataset(){let service;try{service=await loadJsonService();}catch(_){await initialiseJsonStore();service=await loadJsonService();}const ids=getJsonActivePatientIds(service), archivedIds=getJsonArchivedPatientIds(service);const rows=[], archivedRows=[];for(const id of ids){try{const patient=await loadJsonPatient(id);if(patient&&patient.id)rows.push(patient);}catch(e){console.warn('[H@H mobile JSON] Could not load patient',id,e);}}for(const id of archivedIds){try{const patient=await loadJsonPatient(id);if(patient&&patient.id)archivedRows.push(patient);}catch(e){console.warn('[H@H mobile JSON] Could not load archived patient',id,e);}}const tasks=await loadJsonTasksDoc();const cache={loadedAt:nowIsoJson(),source:'json',folderPath:currentJsonFolderPath(),service,rows,archivedRows,tasks,lastError:''};try{localStorage.setItem(JSON_PATIENT_CACHE_KEY,JSON.stringify(cache));localStorage.setItem(JSON_TASK_CACHE_KEY,JSON.stringify({loadedAt:cache.loadedAt,source:'json',tasks,lastError:''}));}catch(_){}return cache;}
+async function loadJsonPatientDataset(){let service;try{service=await loadJsonService();}catch(_){await initialiseJsonStore();service=await loadJsonService();}const ids=getJsonActivePatientIds(service), archivedIds=getJsonArchivedPatientIds(service);async function safeLoadPatient(id,label){try{const patient=await loadJsonPatient(id);return (patient&&patient.id)?patient:null;}catch(e){console.warn('[H@H mobile JSON] Could not load '+label,id,e);return null;}}const [activeResults,archivedResults,tasks]=await Promise.all([Promise.all(ids.map(id=>safeLoadPatient(id,'patient'))),Promise.all(archivedIds.map(id=>safeLoadPatient(id,'archived patient'))),loadJsonTasksDoc()]);const rows=activeResults.filter(p=>p);const archivedRows=archivedResults.filter(p=>p);const cache={loadedAt:nowIsoJson(),source:'json',folderPath:currentJsonFolderPath(),service,rows,archivedRows,tasks,lastError:''};try{localStorage.setItem(JSON_PATIENT_CACHE_KEY,JSON.stringify(cache));localStorage.setItem(JSON_TASK_CACHE_KEY,JSON.stringify({loadedAt:cache.loadedAt,source:'json',tasks,lastError:''}));}catch(_){}return cache;}
 function jsonBool(value){const text=String(value==null?'':value).trim().toLowerCase();return text==='1'||text==='true'||text==='yes'||text==='seen';}
 function mobileAcpFromForm(f){return {dnacprStatus:String(f.dnacprStatus||''),dnacprFormSeen:jsonBool(f.dnacprFormSeen),tepStatus:String(f.tepStatus||''),ceilingOfCare:String(f.ceilingOfCare||''),notes:String(f.acpNotes||'')};}
 function mobileObsFromForm(f){return {rr:f.rr||'',spo2:f.spo2||'',oxygen:f.oxygen||'',oxygenFlow:f.oxygenFlow||'',temp:f.temp||'',bp:f.bp||'',hr:f.hr||'',weight:f.weight||'',bm:f.bm||''};}
@@ -10739,8 +10749,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_632_websocket_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_632_websocket_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_635_websocket_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_635_websocket_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -20246,24 +20256,27 @@ window.HAH.modules.conditions = true;
 </script><script>
 // 20-websocket-sync.js
 // Real-time sync for HaH mobile.
-// Hooks into the shared JSON write path (saveJsonPatient) and broadcasts
-// change notifications to other connected clients via the Azure WebSocket
-// relay. On receive, triggers a re-pull from OneDrive using the existing
-// sync logic.
 //
-// OneDrive remains the source of truth — this module only carries deltas.
+// Two independent paths share one refresh function:
+//   1. Boot/foreground/network — kicks an immediate refresh from OneDrive.
+//      Does NOT depend on WebSocket being connected. This is what makes
+//      open-app sync fast and reliable.
+//   2. WebSocket — receives "X changed" notifications from other devices
+//      mid-session and triggers a debounced refresh.
+//
+// OneDrive remains the source of truth.
 
 (function () {
   'use strict';
 
   // ─── CONFIG ────────────────────────────────────────────────────────────────
   const WS_URL = 'wss://hah-sync-mrleee3-hpaje8aca7dgd4fw.westeurope-01.azurewebsites.net/sync';
-  const RECONNECT_BASE_MS = 1000;
-  const RECONNECT_MAX_MS = 30000;
-  const REFRESH_DEBOUNCE_MS = 800;
+  const RECONNECT_BASE_MS = 500;
+  const RECONNECT_MAX_MS = 15000;
+  const WS_DEBOUNCE_MS = 600;            // only for mid-session WS-driven bursts
+  const FORCED_REFRESH_INTERVAL_MS = 5000; // ignore bursts within this window for boot/foreground refreshes
   const DEVICE_TAG = 'mobile';
 
-  // Allow disabling via localStorage if it ever misbehaves
   try {
     if (localStorage.getItem('hah_wssync_disabled') === '1') {
       console.log('[WSSync] Disabled via localStorage flag');
@@ -20309,7 +20322,7 @@ window.HAH.modules.conditions = true;
       window.dispatchEvent(new CustomEvent('wssync:disconnected'));
       if (!intentionalClose) scheduleReconnect();
     });
-    socket.addEventListener('error', () => { /* close will fire next */ });
+    socket.addEventListener('error', () => { /* close fires next */ });
   }
 
   function scheduleReconnect() {
@@ -20328,13 +20341,26 @@ window.HAH.modules.conditions = true;
 
   function on(handler) { listeners.add(handler); return () => listeners.delete(handler); }
 
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && (!socket || socket.readyState !== WebSocket.OPEN)) {
-      console.log('[WSSync] visible again, reconnecting');
+  // Aggressive iOS wake-up — listen for every event that signals
+  // "the user is looking at the app again" and reconnect immediately.
+  function maybeWake(reason) {
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      console.log(`[WSSync] wake (${reason}) — reconnecting`);
+      // Cancel any pending backoff and connect right away
+      if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
+      reconnectAttempt = 0;
       connect();
     }
+    // Always trigger an immediate refresh on wake, even if WS is fine —
+    // we may have missed broadcasts during the suspension window.
+    triggerImmediateRefresh(reason);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') maybeWake('visibilitychange');
   });
-  window.addEventListener('online', () => { if (!socket || socket.readyState !== WebSocket.OPEN) connect(); });
+  window.addEventListener('pageshow', () => maybeWake('pageshow'));
+  window.addEventListener('focus', () => maybeWake('focus'));
+  window.addEventListener('online', () => maybeWake('online'));
 
   window.WSSync = {
     connect, send, on,
@@ -20343,10 +20369,7 @@ window.HAH.modules.conditions = true;
     disconnect: () => { intentionalClose = true; if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; } if (socket) socket.close(); }
   };
 
-  // ─── INSTRUMENTATION ───────────────────────────────────────────────────────
-  // Mobile writes go through saveJsonPatient(doc). We wrap it on both the
-  // global (for calls from within 02-sync.js) and on window.HAH.sharedJsonStore
-  // (for any external callers). A nesting guard prevents double-broadcasting.
+  // ─── INSTRUMENTATION (broadcast on writes) ─────────────────────────────────
   let nestingDepth = 0;
 
   function makeWrapped(originalFn, label) {
@@ -20359,9 +20382,7 @@ window.HAH.modules.conditions = true;
           try {
             const doc = args[0];
             const id = doc && doc.id;
-            if (id) {
-              send('patient.changed', { patientId: String(id) });
-            }
+            if (id) send('patient.changed', { patientId: String(id) });
           } catch (e) { console.warn('[WSSync] hook error:', label, e); }
         }
         return result;
@@ -20374,131 +20395,489 @@ window.HAH.modules.conditions = true;
   }
 
   function instrument() {
-    // Mobile's saveJsonPatient is a top-level function declaration in 02-sync.js
-    // and is also exposed at window.HAH.sharedJsonStore.saveJsonPatient.
-    // In classic (non-module) scripts, top-level function declarations create
-    // both a global lexical binding and a window property pointing at the
-    // same slot, so reassigning window.saveJsonPatient updates both — calls
-    // from within 02-sync.js (e.g. patchJsonPatientFromMobile) will pick up
-    // the wrapped version.
     if (typeof window.saveJsonPatient !== 'function') {
       setTimeout(instrument, 200);
       return;
     }
     if (window.saveJsonPatient.__wssync) return;
-
     const original = window.saveJsonPatient;
     const wrapped = makeWrapped(original, 'saveJsonPatient');
     window.saveJsonPatient = wrapped;
-
-    // Also update the namespace export if present
     try {
       if (window.HAH && window.HAH.sharedJsonStore && window.HAH.sharedJsonStore.saveJsonPatient === original) {
         window.HAH.sharedJsonStore.saveJsonPatient = wrapped;
       }
     } catch (_) {}
-
     console.log('[WSSync] instrumented saveJsonPatient');
   }
 
-  // ─── RECEIVER ──────────────────────────────────────────────────────────────
-  // Full-dataset refresh — same flow as the manual "Import Handover" button
-  // but without UI button feedback. Reuses the existing battle-tested
-  // loadJsonPatientDataset + applyJsonDatasetToMobile pipeline so we know
-  // the merge logic is correct.
-  //
-  // Coalesce multiple incoming messages within REFRESH_DEBOUNCE_MS into one
-  // refresh, so rapid bursts of edits on the other device don't cause
-  // rapid-fire reloads here.
+  // ─── REFRESH — shared core ─────────────────────────────────────────────────
+  // The core refresh function: full-dataset reload via the existing
+  // import pipeline. Single source of truth used by all triggers.
+  let refreshInFlight = null;
+  let lastRefreshAt = 0;
 
-  let refreshTimer = null;
-  let pending = { patient: false, tasks: false };
+  async function runRefreshNow(reason) {
+    // Coalesce: if a refresh is already in flight, return the same promise
+    if (refreshInFlight) return refreshInFlight;
+    if (typeof loadJsonPatientDataset !== 'function' || typeof applyJsonDatasetToMobile !== 'function') return null;
 
-  function scheduleRefresh(flags) {
-    if (flags.patient) pending.patient = true;
-    if (flags.tasks) pending.tasks = true;
-    if (refreshTimer) return;
-    refreshTimer = setTimeout(doQuietRefresh, REFRESH_DEBOUNCE_MS);
+    refreshInFlight = (async () => {
+      try {
+        // Save in-flight edits before applying remote changes
+        const detail = document.getElementById && document.getElementById('patientDetail');
+        const detailVisible = detail && !detail.classList.contains('hidden');
+        if (detailVisible && typeof detailLoadedForCurrentPatient !== 'undefined' && detailLoadedForCurrentPatient) {
+          if (typeof saveCurrentPatientForm === 'function') saveCurrentPatientForm();
+          if (typeof flushPendingPushes === 'function') await flushPendingPushes();
+        }
+
+        const dataset = await loadJsonPatientDataset();
+        const result = applyJsonDatasetToMobile(dataset);
+
+        if (typeof saveData === 'function') saveData('Synced via live update');
+        if (typeof renderPatientList === 'function') renderPatientList();
+        if (typeof renderTasksPage === 'function') renderTasksPage();
+        if (typeof renderEventLog === 'function') renderEventLog();
+        if (detailVisible && typeof currentPatient !== 'undefined' && currentPatient && patients[currentPatient]) {
+          if (typeof openPatient === 'function') openPatient(currentPatient, { preserveMode: true, restoreScroll: true });
+        }
+        if (typeof setGraphStatus === 'function') {
+          const total = (result && result.activeCount) || 0;
+          setGraphStatus(`Live sync · ${total} patient${total === 1 ? '' : 's'}`);
+        }
+        lastRefreshAt = Date.now();
+        console.log('[WSSync] refresh complete (' + reason + ')', result);
+        return result;
+      } catch (e) {
+        console.warn('[WSSync] refresh failed (' + reason + '):', e);
+        if (typeof setGraphStatus === 'function') {
+          try { setGraphStatus('Live sync failed - retry on next change', true); } catch (_) {}
+        }
+        return null;
+      } finally {
+        refreshInFlight = null;
+      }
+    })();
+    return refreshInFlight;
   }
 
-  async function doQuietRefresh() {
-    refreshTimer = null;
-    const flags = { ...pending };
-    pending = { patient: false, tasks: false };
+  // ─── REFRESH TRIGGERS ──────────────────────────────────────────────────────
 
-    if (typeof loadJsonPatientDataset !== 'function' || typeof applyJsonDatasetToMobile !== 'function') return;
-    try {
-      // Save in-flight edits before applying remote changes
-      const detail = document.getElementById && document.getElementById('patientDetail');
-      const detailVisible = detail && !detail.classList.contains('hidden');
-      if (detailVisible && typeof detailLoadedForCurrentPatient !== 'undefined' && detailLoadedForCurrentPatient) {
-        if (typeof saveCurrentPatientForm === 'function') saveCurrentPatientForm();
-        if (typeof flushPendingPushes === 'function') await flushPendingPushes();
-      }
-
-      const dataset = await loadJsonPatientDataset();
-      const result = applyJsonDatasetToMobile(dataset);
-
-      // Persist + re-render
-      if (typeof saveData === 'function') saveData('Synced via live update');
-      if (typeof renderPatientList === 'function') renderPatientList();
-      if (typeof renderTasksPage === 'function') renderTasksPage();
-      if (typeof renderEventLog === 'function') renderEventLog();
-      if (detailVisible && typeof currentPatient !== 'undefined' && currentPatient && patients[currentPatient]) {
-        if (typeof openPatient === 'function') openPatient(currentPatient, { preserveMode: true, restoreScroll: true });
-      }
-      if (typeof setGraphStatus === 'function') {
-        const total = (result && result.activeCount) || 0;
-        setGraphStatus(`Live sync · ${total} patient${total === 1 ? '' : 's'}`);
-      }
-      console.log('[WSSync] quiet refresh complete', result);
-    } catch (e) {
-      console.warn('[WSSync] refresh failed:', e);
-      if (typeof setGraphStatus === 'function') {
-        try { setGraphStatus('Live sync failed - retry on next change', true); } catch (_) {}
-      }
+  // Immediate refresh: for boot, foreground, network changes. No debounce.
+  // Ignores bursts within FORCED_REFRESH_INTERVAL_MS to avoid hammering
+  // OneDrive when iOS fires multiple wake events in quick succession.
+  function triggerImmediateRefresh(reason) {
+    const sinceLast = Date.now() - lastRefreshAt;
+    if (sinceLast < FORCED_REFRESH_INTERVAL_MS && !refreshInFlight) {
+      console.log(`[WSSync] skip refresh (${reason}) — last was ${sinceLast}ms ago`);
+      return;
     }
+    runRefreshNow(reason);
   }
 
+  // Debounced refresh: for mid-session WebSocket events. Coalesces bursts.
+  let debouncedTimer = null;
+  function triggerDebouncedRefresh(reason) {
+    if (debouncedTimer) return;
+    debouncedTimer = setTimeout(() => {
+      debouncedTimer = null;
+      runRefreshNow(reason);
+    }, WS_DEBOUNCE_MS);
+  }
+
+  // ─── WS RECEIVER ───────────────────────────────────────────────────────────
   on((msg) => {
     if (!msg || !msg.type) return;
     switch (msg.type) {
       case 'patient.changed':
       case 'service.changed':
       case 'round.changed':
-        scheduleRefresh({ patient: true });
-        break;
       case 'tasks.changed':
-        scheduleRefresh({ patient: true });  // mobile reloads patients+tasks together
+        triggerDebouncedRefresh('ws:' + msg.type);
         break;
       default:
         break;
     }
   });
 
-  // On every WebSocket connect — including the very first one when the app
-  // opens — automatically pull the latest dataset from OneDrive. This means
-  // the user always sees fresh data ~1-2s after opening the app, without
-  // having to press the manual import button. Subsequent reconnects (after
-  // iOS suspends the connection while backgrounded, network changes, etc.)
-  // also trigger a catchup so we never sit on stale data.
-  //
-  // If the user isn't signed in to Graph yet, importHandoverRows throws and
-  // the error is swallowed — no harm done, refresh will happen on the next
-  // connect after they sign in.
-  window.addEventListener('wssync:connected', () => {
-    console.log('[WSSync] connected — running refresh');
-    scheduleRefresh({ patient: true });
-  });
-
   // ─── BOOT ──────────────────────────────────────────────────────────────────
-  // Defer connect slightly so app boot/auth has a chance to initialise first.
-  // Instrumentation needs saveJsonPatient to exist (declared in 02-sync.js,
-  // which is loaded before us, so it should be ready immediately).
+  // Three things kick off, all independent:
+  //   1. Wrap saveJsonPatient as soon as it's defined
+  //   2. Open WebSocket (no setTimeout — connect immediately)
+  //   3. Trigger an immediate OneDrive refresh in parallel
+  //
+  // This means the user's data refreshes as fast as OneDrive can return
+  // it — independent of whether the WebSocket has connected yet.
+
   instrument();
-  setTimeout(connect, 500);
+  connect();
+
+  // Kick the first refresh as soon as the page is idle enough that mobile
+  // sync is wired up. We keep retrying briefly until loadJsonPatientDataset
+  // is defined (it lives in 02-sync.js, loaded earlier in the script
+  // order, so it's normally ready immediately).
+  function bootRefresh(retries) {
+    if (typeof loadJsonPatientDataset === 'function') {
+      // Force the first refresh past the FORCED_REFRESH_INTERVAL_MS gate
+      lastRefreshAt = 0;
+      runRefreshNow('boot');
+      return;
+    }
+    if (retries > 0) setTimeout(() => bootRefresh(retries - 1), 100);
+  }
+  bootRefresh(20);
+
+  // ─── OPTIONS-PANEL TOGGLES ────────────────────────────────────────────────
+  // Wire up the two toggles in Options → Shared JSON store:
+  //   - "Live sync (WebSocket)" → flips hah_wssync_disabled
+  //   - "Show live sync debug panel" → flips hah_wssync_debug, calls
+  //     WSSyncDebug.show()/hide()
+  function bindToggles() {
+    const liveT = document.getElementById('liveSyncToggle');
+    const dbgT  = document.getElementById('liveSyncDebugToggle');
+    if (liveT) {
+      try { liveT.checked = localStorage.getItem('hah_wssync_disabled') !== '1'; } catch (_) {}
+      liveT.addEventListener('change', () => {
+        try {
+          if (liveT.checked) localStorage.removeItem('hah_wssync_disabled');
+          else localStorage.setItem('hah_wssync_disabled', '1');
+        } catch (_) {}
+        if (typeof setGraphStatus === 'function') {
+          setGraphStatus(liveT.checked
+            ? 'Live sync ON — reload the app to apply'
+            : 'Live sync OFF — reload the app to apply');
+        }
+      });
+    }
+    if (dbgT) {
+      try { dbgT.checked = localStorage.getItem('hah_wssync_debug') === '1'; } catch (_) {}
+      dbgT.addEventListener('change', () => {
+        if (window.WSSyncDebug) {
+          if (dbgT.checked) window.WSSyncDebug.show();
+          else window.WSSyncDebug.hide();
+        }
+      });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindToggles);
+  } else {
+    bindToggles();
+  }
 
   console.log('[WSSync] mobile module loaded');
+})();
+
+</script><script>
+// 21-wssync-debug-panel.js  (mobile)
+// 31-wssync-debug-panel.js  (desktop — same code, different filename)
+//
+// Small floating debug panel for the WebSocket sync layer.
+// Shows live connection status and a rolling log of events.
+// Tap to expand/collapse. Long-press to clear log.
+//
+// Hidden by default. To show:
+//   localStorage.setItem('hah_wssync_debug', '1');
+// or call: WSSyncDebug.show()
+//
+// To hide:
+//   localStorage.removeItem('hah_wssync_debug');
+// or call: WSSyncDebug.hide()
+
+(function () {
+  'use strict';
+
+  const MAX_LOG_ENTRIES = 30;
+  const SHOW_KEY = 'hah_wssync_debug';
+
+  let isVisible = false;
+  let isExpanded = false;
+  let logEntries = [];
+  let panelEl = null;
+  let summaryEl = null;
+  let listEl = null;
+  let lastConnectAt = 0;
+
+  function isShowEnabled() {
+    try { return localStorage.getItem(SHOW_KEY) === '1'; } catch (_) { return false; }
+  }
+
+  function fmtTime(ts) {
+    const d = new Date(ts);
+    return d.toTimeString().slice(0, 8);
+  }
+
+  function fmtElapsed(ms) {
+    if (ms < 1000) return ms + 'ms';
+    if (ms < 60000) return (ms / 1000).toFixed(1) + 's';
+    if (ms < 3600000) return Math.round(ms / 60000) + 'm';
+    return Math.round(ms / 3600000) + 'h';
+  }
+
+  function getStateLabel() {
+    const ws = window.WSSync;
+    if (!ws) return 'no module';
+    if (ws.isConnected && ws.isConnected()) return 'connected';
+    return 'disconnected';
+  }
+
+  function getStateColor() {
+    return getStateLabel() === 'connected' ? '#10b981' : '#ef4444';
+  }
+
+  function ensurePanel() {
+    if (panelEl) return panelEl;
+    panelEl = document.createElement('div');
+    panelEl.id = 'wssyncDebugPanel';
+
+    // Restore last position if we have one, otherwise default to bottom-left
+    let pos = null;
+    try { pos = JSON.parse(localStorage.getItem('hah_wssync_debug_pos') || 'null'); } catch (_) {}
+
+    const baseStyle = [
+      'position:fixed',
+      'z-index:99999',
+      'font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif',
+      'font-size:11px',
+      'line-height:1.3',
+      'background:rgba(17,24,39,0.92)',
+      'color:#f3f4f6',
+      'border-radius:8px',
+      'box-shadow:0 4px 14px rgba(0,0,0,0.4)',
+      'backdrop-filter:saturate(140%) blur(8px)',
+      '-webkit-backdrop-filter:saturate(140%) blur(8px)',
+      'border:1px solid rgba(255,255,255,0.08)',
+      'overflow:hidden',
+      'max-width:calc(100vw - 16px)',
+      'user-select:none',
+      '-webkit-user-select:none',
+      'touch-action:none'
+    ].join(';');
+
+    panelEl.style.cssText = baseStyle;
+    if (pos && Number.isFinite(pos.x) && Number.isFinite(pos.y)) {
+      panelEl.style.left = pos.x + 'px';
+      panelEl.style.top = pos.y + 'px';
+    } else {
+      panelEl.style.left = '8px';
+      panelEl.style.bottom = 'calc(8px + env(safe-area-inset-bottom, 0px))';
+    }
+
+    summaryEl = document.createElement('div');
+    summaryEl.style.cssText = 'padding:6px 10px;display:flex;align-items:center;gap:6px;white-space:nowrap;cursor:grab';
+    panelEl.appendChild(summaryEl);
+
+    listEl = document.createElement('div');
+    listEl.style.cssText = 'padding:0 10px 8px;border-top:1px solid rgba(255,255,255,0.08);max-height:240px;overflow:auto;display:none;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px';
+    panelEl.appendChild(listEl);
+
+    // ─── Drag + tap + long-press all on the summary bar ─────────────────────
+    let pressTimer = null;
+    let dragging = false;
+    let didDrag = false;
+    let startX = 0, startY = 0;
+    let originLeft = 0, originTop = 0;
+    const DRAG_THRESHOLD_PX = 6;
+    const LONG_PRESS_MS = 800;
+
+    function clampToViewport(x, y, w, h) {
+      const maxX = Math.max(0, window.innerWidth - w);
+      const maxY = Math.max(0, window.innerHeight - h);
+      return { x: Math.max(0, Math.min(x, maxX)), y: Math.max(0, Math.min(y, maxY)) };
+    }
+
+    summaryEl.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      summaryEl.setPointerCapture && summaryEl.setPointerCapture(e.pointerId);
+      dragging = true;
+      didDrag = false;
+      startX = e.clientX;
+      startY = e.clientY;
+      const rect = panelEl.getBoundingClientRect();
+      originLeft = rect.left;
+      originTop = rect.top;
+      // Switch to top/left positioning so we can move freely
+      panelEl.style.bottom = 'auto';
+      panelEl.style.right = 'auto';
+      panelEl.style.left = originLeft + 'px';
+      panelEl.style.top = originTop + 'px';
+      summaryEl.style.cursor = 'grabbing';
+      pressTimer = setTimeout(() => {
+        if (!didDrag) {
+          logEntries = [];
+          addLog('debug', 'log cleared');
+          renderList();
+        }
+        pressTimer = null;
+      }, LONG_PRESS_MS);
+    });
+
+    summaryEl.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!didDrag && Math.hypot(dx, dy) > DRAG_THRESHOLD_PX) {
+        didDrag = true;
+        if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+      }
+      if (didDrag) {
+        const rect = panelEl.getBoundingClientRect();
+        const next = clampToViewport(originLeft + dx, originTop + dy, rect.width, rect.height);
+        panelEl.style.left = next.x + 'px';
+        panelEl.style.top = next.y + 'px';
+      }
+    });
+
+    function endPointer(e) {
+      if (!dragging) return;
+      try { summaryEl.releasePointerCapture && summaryEl.releasePointerCapture(e.pointerId); } catch (_) {}
+      dragging = false;
+      summaryEl.style.cursor = 'grab';
+      if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+      if (didDrag) {
+        // Save new position
+        const rect = panelEl.getBoundingClientRect();
+        try { localStorage.setItem('hah_wssync_debug_pos', JSON.stringify({ x: rect.left, y: rect.top })); } catch (_) {}
+      } else {
+        // No drag → treat as tap
+        toggleExpanded();
+      }
+    }
+    summaryEl.addEventListener('pointerup', endPointer);
+    summaryEl.addEventListener('pointercancel', endPointer);
+
+    // Keep panel in viewport if window resizes / device rotates
+    window.addEventListener('resize', () => {
+      const rect = panelEl.getBoundingClientRect();
+      const next = clampToViewport(rect.left, rect.top, rect.width, rect.height);
+      if (next.x !== rect.left || next.y !== rect.top) {
+        panelEl.style.left = next.x + 'px';
+        panelEl.style.top = next.y + 'px';
+      }
+    });
+
+    document.body.appendChild(panelEl);
+    return panelEl;
+  }
+
+  function toggleExpanded() {
+    isExpanded = !isExpanded;
+    if (listEl) listEl.style.display = isExpanded ? 'block' : 'none';
+    renderSummary();
+  }
+
+  function renderSummary() {
+    if (!summaryEl) return;
+    const state = getStateLabel();
+    const dot = `<span style="width:8px;height:8px;border-radius:50%;background:${getStateColor()};display:inline-block;flex:0 0 auto"></span>`;
+    const since = lastConnectAt ? ` · ${fmtElapsed(Date.now() - lastConnectAt)}` : '';
+    const last = logEntries.length ? ` · ${logEntries[logEntries.length - 1].label}` : '';
+    const arrow = `<span style="opacity:.6;margin-left:4px">${isExpanded ? '▾' : '▸'}</span>`;
+    summaryEl.innerHTML = `${dot}<span>WS ${state}${since}${last}</span>${arrow}`;
+  }
+
+  function renderList() {
+    if (!listEl) return;
+    if (!logEntries.length) {
+      listEl.innerHTML = '<div style="opacity:.5;padding:8px 0">No events yet.</div>';
+      return;
+    }
+    const rows = logEntries.slice().reverse().map(e => {
+      const colour = e.level === 'error' ? '#fca5a5' : e.level === 'warn' ? '#fcd34d' : e.level === 'event' ? '#86efac' : '#d1d5db';
+      return `<div style="padding:3px 0;color:${colour};border-bottom:1px dashed rgba(255,255,255,.05)"><span style="opacity:.6">${fmtTime(e.ts)}</span> ${escapeHtml(e.label)}</div>`;
+    }).join('');
+    listEl.innerHTML = rows;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  }
+
+  function addLog(level, label) {
+    logEntries.push({ ts: Date.now(), level, label });
+    while (logEntries.length > MAX_LOG_ENTRIES) logEntries.shift();
+    if (isVisible) {
+      renderSummary();
+      if (isExpanded) renderList();
+    }
+  }
+
+  function show() {
+    isVisible = true;
+    ensurePanel();
+    panelEl.style.display = 'block';
+    renderSummary();
+    renderList();
+  }
+
+  function hide() {
+    isVisible = false;
+    if (panelEl) panelEl.style.display = 'none';
+  }
+
+  // ─── Wire up to WSSync events ──────────────────────────────────────────────
+  function attach() {
+    window.addEventListener('wssync:connected', () => {
+      lastConnectAt = Date.now();
+      addLog('event', 'WS connected');
+    });
+    window.addEventListener('wssync:disconnected', () => {
+      addLog('warn', 'WS disconnected');
+    });
+    window.addEventListener('wssync:message', (e) => {
+      const m = e && e.detail;
+      if (!m) return;
+      if (m.type === 'patient.changed') addLog('event', `← ${m._from || '?'} ${m.type} ${m.payload && m.payload.patientId ? '(' + String(m.payload.patientId).slice(0, 12) + ')' : ''}`);
+      else addLog('event', `← ${m._from || '?'} ${m.type}`);
+    });
+
+    // Hook console for refresh outcomes — match the existing log strings the
+    // sync module emits, so we don't have to touch that module to wire signals.
+    const origLog = console.log.bind(console);
+    const origWarn = console.warn.bind(console);
+    console.log = function () {
+      try {
+        const first = arguments[0];
+        if (typeof first === 'string' && first.indexOf('[WSSync]') === 0) {
+          addLog('info', first.replace('[WSSync] ', ''));
+        }
+      } catch (_) {}
+      return origLog.apply(console, arguments);
+    };
+    console.warn = function () {
+      try {
+        const first = arguments[0];
+        if (typeof first === 'string' && first.indexOf('[WSSync]') === 0) {
+          addLog('warn', first.replace('[WSSync] ', ''));
+        }
+      } catch (_) {}
+      return origWarn.apply(console, arguments);
+    };
+
+    // Re-render summary periodically to keep "connected · 12s" fresh
+    setInterval(() => { if (isVisible) renderSummary(); }, 1000);
+  }
+
+  // ─── Public API ────────────────────────────────────────────────────────────
+  window.WSSyncDebug = {
+    show: () => { try { localStorage.setItem(SHOW_KEY, '1'); } catch (_) {} show(); },
+    hide: () => { try { localStorage.removeItem(SHOW_KEY); } catch (_) {} hide(); },
+    toggle: () => { isVisible ? window.WSSyncDebug.hide() : window.WSSyncDebug.show(); },
+    log: (label) => addLog('info', label),
+    isVisible: () => isVisible
+  };
+
+  // Auto-show if flag is set
+  function init() {
+    attach();
+    if (isShowEnabled()) show();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 
 </script></body>
