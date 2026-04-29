@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_637_websocket_release.html; source=hospital_at_home_v12_36_637_websocket_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_638_websocket_release.html; source=hospital_at_home_v12_36_638_websocket_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_637_websocket_release.html</div><div>Source: hospital_at_home_v12_36_637_websocket_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_638_websocket_release.html</div><div>Source: hospital_at_home_v12_36_638_websocket_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -6054,6 +6054,110 @@ function mobileAcpFromForm(f){return {dnacprStatus:String(f.dnacprStatus||''),dn
 function mobileObsFromForm(f){return {rr:f.rr||'',spo2:f.spo2||'',oxygen:f.oxygen||'',oxygenFlow:f.oxygenFlow||'',temp:f.temp||'',bp:f.bp||'',hr:f.hr||'',weight:f.weight||'',bm:f.bm||''};}
 function patchMobileClinicalEntry(doc,p){const f=p.form||{};doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];const entryId=`${JSON_MOBILE_TIMELINE_PREFIX}${doc.id}`;const note={issues:normText(f.issues||''),bloodsIx:normText(f.bloods||''),progress:normText(f.currently||''),examination:normText(f.examination||''),plan:normText(f.plan||'')};const entry={id:entryId,type:'mobile_clinical_review',status:'completed',timestamp:nowIsoJson(),author:getJsonActor(),note,fields:{source:'Mobile clinical review',issueRaw:note.issues,issues:note.issues,progress:note.progress,currently:note.progress,examination:note.examination,bloods:note.bloodsIx,bloodsIx:note.bloodsIx,plan:note.plan,dischargeSummary:normText(f.forDischargeSummary||''),acp:mobileAcpFromForm(f),obs:mobileObsFromForm(f),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[]}};const idx=doc.timeline.findIndex(row=>String(row&&row.id)===entryId);if(idx>=0)doc.timeline[idx]={...doc.timeline[idx],...entry,updatedAt:nowIsoJson()};else doc.timeline.unshift(entry);doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));return doc;}
 async function patchJsonPatientFromMobile(doc,p){const f=p.form||{};doc.identity={...(doc.identity||{}),name:p.name||'',age:p.age||'',sex:p.sex||''};doc.service={...(doc.service||{}),referredFrom:p.referralSource||'',admittedDate:p.doa||''};doc.alerts={...(doc.alerts||{}),dnar:String(f.dnacprStatus||'').toLowerCase()==='yes',acp:!!(String(f.tepStatus||'').trim()||String(f.ceilingOfCare||'').trim()||String(f.acpNotes||'').trim()),escalation:String(f.ceilingOfCare||'').trim()};doc.clinical={...(doc.clinical||{}),summary:normText(f.issues||p.summary||''),bloodsSummary:normText(f.bloods||''),currently:normText(f.currently||''),pmh:normText(f.pmh||''),socialHistory:normText(f.socialHistory||''),examination:normText(f.examination||''),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[],obs:mobileObsFromForm(f),acp:mobileAcpFromForm(f)};doc.operational={...(doc.operational||{})};if(f.forDischargeSummary)doc.operational.dischargeReadiness=String(f.forDischargeSummary||'').trim();patchMobileClinicalEntry(doc,p);const saved=await saveJsonPatient(doc);try{await appendJsonAudit({type:'mobile-patient-updated',entityType:'patient',entityId:doc.id,summary:`Mobile update for ${p.name||doc.id}`});}catch(_){}return saved;}
+
+// ─── Mobile-side patient creation (writes to OneDrive) ────────────────────
+// Mirrors desktop's createPatientRecord. Generates a JSON id, builds a full
+// patient schema, writes patient.json, updates service.json's active list,
+// and appends an audit entry. Returns the saved patient doc.
+function jsonSlugifyName(name){
+  const slug=String(name||'patient').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,36);
+  return slug||'patient';
+}
+function makeJsonPatientSchema(id,seed){
+  const s=seed||{};
+  return Object.assign(jsonSchemaHeader('patient'),{
+    id:id,
+    identity:{name:s.name||'',age:s.age||'',sex:s.sex||'',identifiers:{}},
+    service:{referredFrom:s.referredFrom||'',admittedDate:s.admittedDate||'',pathway:s.pathway||'',location:s.location||''},
+    alerts:{dnar:!!s.dnar,acp:!!s.acp,escalation:s.escalation||''},
+    clinical:{summary:s.summary||'',persistentIssues:[],medicationFocus:'',bloodsSummary:'',acp:{},obs:{},medications:[],ivTherapies:[]},
+    operational:{boardStatus:'Not discussed',dischargeReadiness:'',blockers:[],priority:''},
+    timeline:[],
+    drafts:{boardround:{},microMdm:{},respMdm:{},other:{}},
+    meta:{updatedAt:nowIsoJson(),updatedBy:getJsonActor(),version:1}
+  });
+}
+function setJsonActivePatientIds(serviceDoc,ids){
+  const next=Object.assign({},serviceDoc||makeJsonServiceSchema());
+  next.service=Object.assign({},next.service||{});
+  next.service.activePatientIds=ids.slice();
+  next.service.patientOrder=ids.slice();
+  next.patients=Object.assign({},next.patients||{});
+  next.patients.activeIds=ids.slice();
+  next.patients.sortOrder=ids.slice();
+  next.updatedAt=nowIsoJson();
+  next.meta=Object.assign({},next.meta||{},{lastWriter:getJsonActor()});
+  return next;
+}
+function setJsonArchivedPatientIds(serviceDoc,ids){
+  const next=Object.assign({},serviceDoc||makeJsonServiceSchema());
+  next.service=Object.assign({},next.service||{});
+  next.service.archivedPatientIds=ids.slice();
+  next.patients=Object.assign({},next.patients||{});
+  next.patients.archivedIds=ids.slice();
+  next.updatedAt=nowIsoJson();
+  next.meta=Object.assign({},next.meta||{},{lastWriter:getJsonActor()});
+  return next;
+}
+async function createJsonPatient(fields){
+  const f={
+    name:String((fields&&fields.name)||'').trim(),
+    age:String((fields&&fields.age)||'').trim(),
+    sex:String((fields&&fields.sex)||'').trim(),
+    referredFrom:String((fields&&(fields.referredFrom||fields.referralSource))||'').trim(),
+    admittedDate:String((fields&&(fields.admittedDate||fields.doa))||'').trim(),
+    summary:String((fields&&fields.summary)||'').trim()
+  };
+  if(!f.name)throw new Error('Patient name is required.');
+  let serviceDoc;
+  try{serviceDoc=await loadJsonService();}
+  catch(_){await initialiseJsonStore();serviceDoc=await loadJsonService();}
+  const id=`patient-${Date.now().toString(36)}-${jsonSlugifyName(f.name)}`;
+  const patient=makeJsonPatientSchema(id,f);
+  await saveJsonPatient(patient);
+  const active=Array.from(new Set(getJsonActivePatientIds(serviceDoc).concat([id])));
+  const archived=getJsonArchivedPatientIds(serviceDoc).filter(x=>String(x)!==String(id));
+  serviceDoc=setJsonActivePatientIds(serviceDoc,active);
+  serviceDoc=setJsonArchivedPatientIds(serviceDoc,archived);
+  await jsonDrivePut(childJsonPath(currentJsonFolderPath(),'service.json'),serviceDoc);
+  try{await appendJsonAudit({type:'patient-created',entityType:'patient',entityId:id,summary:`Mobile created patient record for ${f.name}`});}catch(_){}
+  return patient;
+}
+
+// Wrapper used by addPatient() in 04-medications.js: takes a freshly-created
+// local patient (from the local UI), pushes it to OneDrive as a new JSON
+// patient, and links the local record to the new jsonId so future edits use
+// the existing patchJsonPatientFromMobile push pipeline.
+async function pushNewPatientToJson(localId){
+  const p=patients[localId];
+  if(!p)return null;
+  if(p.importSource&&p.importSource.kind==='shared_json'&&p.importSource.jsonId)return null; // already linked
+  try{
+    if(typeof setGraphStatus==='function')setGraphStatus('Saving new patient to JSON store…');
+    const created=await createJsonPatient({name:p.name,age:p.age,sex:p.sex,referredFrom:p.referralSource,admittedDate:p.doa,summary:p.summary});
+    // Link local → JSON
+    p.importSource={kind:'shared_json',jsonId:String(created.id),folderPath:currentJsonFolderPath()};
+    p.jsonRecord=created;
+    p.importedAt=nowIsoJson();
+    // Update id-map so future imports find this local record
+    const map=loadJsonIdMap();map[String(created.id)]=Number(localId);saveJsonIdMap(map);
+    saveData('Patient saved to JSON');
+    if(typeof setGraphStatus==='function')setGraphStatus('New patient saved to JSON store.');
+    // If user has any clinical content already entered, push it now via the
+    // normal patch pipeline so issues/plan/bloods make it across too.
+    try{queuePush(localId,400);}catch(_){}
+    return created;
+  }catch(e){
+    if(typeof setGraphStatus==='function')setGraphStatus(`JSON create failed - ${describeImportError(e)}`,true);
+    // Mark for retry on next refresh / sign-in
+    p._pendingJsonCreate=true;
+    saveData('Patient added (JSON sync pending)');
+    throw e;
+  }
+}
+window.HAH = window.HAH || {};
+window.HAH.createJsonPatient = createJsonPatient;
+window.HAH.pushNewPatientToJson = pushNewPatientToJson;
 async function testJsonConnection(){try{saveGraphSettings(false);setGraphStatus('Testing shared JSON store…');await initialiseJsonStore();const service=await loadJsonService();setGraphStatus(`JSON store ready - ${getJsonActivePatientIds(service).length} active / ${getJsonArchivedPatientIds(service).length} archived patient record(s).`);}catch(e){setGraphStatus(describeImportError(e),true);}}
 function clearJsonPatientCache(){try{localStorage.removeItem(JSON_PATIENT_CACHE_KEY);localStorage.removeItem(JSON_TASK_CACHE_KEY);}catch(_){}setGraphStatus('JSON cache cleared. Local patients remain available until the next JSON load.');}
 
@@ -9676,6 +9780,15 @@ function addPatient() {
   renderEventLog();
   toggleAddPatient(false);
   updateUndoButton();
+  // Push to OneDrive JSON store. Only attempted when the user is signed in
+  // and the JSON store is configured — otherwise stays local-only (which is
+  // the legacy mobile behaviour for users without OneDrive sync).
+  try{
+    const hasGraph=typeof graphAccount!=='undefined'&&graphAccount&&graphAccount.username;
+    if(hasGraph&&typeof pushNewPatientToJson==='function'){
+      pushNewPatientToJson(newId).catch(()=>{/* status already shown by helper */});
+    }
+  }catch(_){}
 }
 
 function resetToDemo(){
@@ -10749,8 +10862,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_637_websocket_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_637_websocket_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_638_websocket_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_638_websocket_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -20509,6 +20622,29 @@ window.HAH.modules.conditions = true;
           if (typeof saveCurrentPatientForm === 'function') saveCurrentPatientForm();
           if (typeof flushPendingPushes === 'function') await flushPendingPushes();
         }
+
+        // Retry pending JSON creates BEFORE the OneDrive pull/apply.
+        // If a patient was added on mobile while offline (or before the
+        // user signed in to Graph), it carries _pendingJsonCreate and is
+        // not yet on OneDrive. The refresh below would clobber it. Push
+        // it first, then refresh — this also catches any failed creates
+        // from prior sessions.
+        try {
+          if (typeof patients === 'object' && patients && typeof pushNewPatientToJson === 'function') {
+            const pendingIds = Object.keys(patients).filter(id => {
+              const p = patients[id];
+              return p && p._pendingJsonCreate && (!p.importSource || !p.importSource.jsonId);
+            });
+            for (const id of pendingIds) {
+              try {
+                await pushNewPatientToJson(Number(id));
+                if (patients[id]) delete patients[id]._pendingJsonCreate;
+              } catch (e) {
+                console.warn('[WSSync] pending create retry failed for', id, e);
+              }
+            }
+          }
+        } catch (e) { console.warn('[WSSync] pending-create pass failed:', e); }
 
         const dataset = await loadJsonPatientDataset();
         const result = applyJsonDatasetToMobile(dataset);
