@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_642_websocket_release.html; source=hospital_at_home_v12_36_642_websocket_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_643_resume_swipe_fix_release.html; source=hospital_at_home_v12_36_643_resume_swipe_fix_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_642_websocket_release.html</div><div>Source: hospital_at_home_v12_36_642_websocket_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_643_resume_swipe_fix_release.html</div><div>Source: hospital_at_home_v12_36_643_resume_swipe_fix_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -9164,11 +9164,13 @@ function openPatient(id, opts={}) {
   $("patients").classList.remove("hidden");
   $("patientDetail").classList.remove("hidden");
   const patientDetailEl=$("patientDetail");
-  if(patientDetailEl){
+  if(patientDetailEl && !wasSamePatientAlreadyOpen){
     patientDetailEl.scrollTop=0;
     requestAnimationFrame(()=>{ patientDetailEl.scrollTop=0; });
   }
-  try{ window.scrollTo(0,0); }catch(e){}
+  if(!wasSamePatientAlreadyOpen){
+    try{ window.scrollTo(0,0); }catch(e){}
+  }
   setFieldValues(p.form || {});
   detailLoadedForCurrentPatient = true;
   let openMode;
@@ -9202,7 +9204,15 @@ function openPatient(id, opts={}) {
   setActive("navPatients");
   setPatientDetailStackActive(true);
   animatePatientDetailSwipe(0,true);
-  animatePatientDetailOpen(); // slide panel + header in from right
+  if(wasSamePatientAlreadyOpen){
+    // Re-rendering the same patient already on screen (e.g. WSSync refresh
+    // on iOS app resume). Skip the slide-in animation and just refresh the
+    // header content in place — otherwise the panel visibly swipes out and
+    // back in on every foreground event.
+    if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
+  } else {
+    animatePatientDetailOpen(); // slide panel + header in from right
+  }
   saveData();
   calculateNews();
   if(typeof renderPatientBoardCard==='function') renderPatientBoardCard();
@@ -10891,8 +10901,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_642_websocket_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_642_websocket_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_643_resume_swipe_fix_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_643_resume_swipe_fix_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -20626,7 +20636,17 @@ window.HAH.modules.conditions = true;
 
   // Aggressive iOS wake-up — listen for every event that signals
   // "the user is looking at the app again" and reconnect immediately.
+  // iOS fires visibilitychange + pageshow + focus in close succession on
+  // app resume; collapse those into a single wake to avoid duplicate
+  // refreshes (and duplicate detail re-opens).
+  let lastWakeAt = 0;
   function maybeWake(reason) {
+    const now = Date.now();
+    if (now - lastWakeAt < 250) {
+      console.log(`[WSSync] skip wake (${reason}) — coalesced with prior wake`);
+      return;
+    }
+    lastWakeAt = now;
     if (!socket || socket.readyState !== WebSocket.OPEN) {
       console.log(`[WSSync] wake (${reason}) — reconnecting`);
       // Cancel any pending backoff and connect right away
@@ -20739,6 +20759,16 @@ window.HAH.modules.conditions = true;
         } catch (e) { console.warn('[WSSync] pending-create pass failed:', e); }
 
         const dataset = await loadJsonPatientDataset();
+
+        // Snapshot the open patient's form BEFORE applying so we can detect
+        // whether the merge actually changed anything for this patient.
+        // If nothing changed, we skip the re-render entirely — otherwise
+        // every iOS app resume re-opens the patient even when there's no
+        // new data, causing a visible swipe-out / swipe-back-in.
+        const openPatientFormBefore = (detailVisible && currentPatient && patients[currentPatient])
+          ? JSON.stringify(patients[currentPatient].form || {})
+          : null;
+
         const result = applyJsonDatasetToMobile(dataset);
 
         if (typeof saveData === 'function') saveData('Synced via live update');
@@ -20746,7 +20776,16 @@ window.HAH.modules.conditions = true;
         if (typeof renderTasksPage === 'function') renderTasksPage();
         if (typeof renderEventLog === 'function') renderEventLog();
         if (detailVisible && typeof currentPatient !== 'undefined' && currentPatient && patients[currentPatient]) {
-          if (typeof openPatient === 'function') openPatient(currentPatient, { preserveMode: true, restoreScroll: true });
+          const openPatientFormAfter = JSON.stringify(patients[currentPatient].form || {});
+          const openPatientChanged = openPatientFormBefore !== openPatientFormAfter;
+          if (openPatientChanged && typeof openPatient === 'function') {
+            // The open patient's data changed remotely — re-render the detail.
+            // openPatient now skips the slide-in animation when the same
+            // patient is already on screen, so this is a quiet update.
+            openPatient(currentPatient, { preserveMode: true, restoreScroll: true });
+          }
+          // If openPatientChanged is false, nothing to do — the detail
+          // already shows the latest data and we leave it alone.
         }
         if (typeof setGraphStatus === 'function') {
           const total = (result && result.activeCount) || 0;
