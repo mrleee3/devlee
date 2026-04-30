@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_647_section_bar_safe_release.html; source=hospital_at_home_v12_36_647_section_bar_safe_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_647_section_bar_v3_release.html; source=hospital_at_home_v12_36_647_section_bar_v3_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_647_section_bar_safe_release.html</div><div>Source: hospital_at_home_v12_36_647_section_bar_safe_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_647_section_bar_v3_release.html</div><div>Source: hospital_at_home_v12_36_647_section_bar_v3_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10904,8 +10904,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_647_section_bar_safe_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_647_section_bar_safe_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_647_section_bar_v3_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_647_section_bar_v3_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -21510,17 +21510,20 @@ window.HAH.modules.conditions = true;
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.sectionJumpBar = true;
 
-// Section jump bar — sticky tab strip that sits at the top of the patient
-// detail in Review mode. Hidden in Summary mode via CSS scoped to
-// [data-detail-mode="review"]. Built dynamically (mounted from JS, not in
-// index.html) following the conditions-panel pattern.
+// Section jump bar — sticky tab strip inside #patientDetail, visible only in
+// Review mode. Mounts as the first child of patientDetail and uses
+// position:sticky;top:0 to pin to the top of the scroll port. The native
+// patientDetail padding-top (14px) is overridden to 0 in review mode so the
+// bar sits flush with the patient header; gap below the bar comes from the
+// bar's own margin-bottom.
 //
-// Tab order is derived from patientCardOrder so dragging cards reorders the
-// bar for free. Active state is driven by a scroll-spy on #patientDetail.
-// Tap → smooth scroll to that card. Underline animates between tabs.
+// Tab order follows patientCardOrder. Active state via scroll-spy. Tap →
+// instant scrollTo (smooth scrolling is unreliable on iOS PWA's
+// -webkit-overflow-scrolling: touch containers — the existing app uses the
+// same try/catch + auto pattern in setPatientDetailMode).
 //
 // Public entry:
-//   window.HAH_renderSectionJumpBar()  — call from openPatient and on mode change
+//   window.HAH_renderSectionJumpBar()  — call from openPatient
 
 (function(){
   'use strict';
@@ -21535,23 +21538,31 @@ window.HAH.modules.sectionJumpBar = true;
     output: 'Output'
   };
 
+  // Vertical padding inside each tab. 11px + ~16px line + 11px ≈ 38px tap
+  // height. Card surfaces above and below catch missed taps.
+  const TAB_VPAD = 11;
+
   const CSS = `
     #sectionJumpBar{
       position:sticky;
       position:-webkit-sticky;
       top:0;
-      z-index:18;
+      z-index:8;
       background:#fff;
       border-bottom:0.5px solid rgba(15,23,42,0.10);
-      margin-top:-14px;
-      margin-left:-14px;
-      margin-right:-14px;
-      margin-bottom:10px;
+      margin:0 -14px 16px;
       display:none;
-      box-shadow:0 1px 0 rgba(15,23,42,0.04);
     }
     #patientDetail[data-detail-mode="review"] #sectionJumpBar{display:block}
     #patientDetail.reorder-mode #sectionJumpBar{display:none!important}
+
+    /* In review mode, patientDetail loses its top padding so the bar sits
+       flush with the patient header. The bar's own margin-bottom replaces
+       the lost spacing below it. */
+    #patientDetail.detail-overlay-active[data-detail-mode="review"]{
+      padding-top:0!important;
+    }
+
     #sectionJumpTabs{
       display:flex;
       overflow-x:auto;
@@ -21559,36 +21570,33 @@ window.HAH.modules.sectionJumpBar = true;
       scrollbar-width:none;
       -webkit-overflow-scrolling:touch;
       position:relative;
-      padding:0 8px;
-      min-height:48px;
-      align-items:stretch;
+      padding:0 6px;
     }
     #sectionJumpTabs::-webkit-scrollbar{display:none}
+
     .section-jump-tab{
-      min-height:48px;
-      padding:0 15px;
+      padding:${TAB_VPAD}px 14px;
       font-size:13px;
-      font-weight:500;
+      font-weight:400;
       color:#6b7280;
       white-space:nowrap;
       flex-shrink:0;
       cursor:pointer;
       background:transparent;
       border:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
       letter-spacing:-0.01em;
       -webkit-tap-highlight-color:transparent;
       user-select:none;
       -webkit-user-select:none;
       transition:color 180ms ease;
+      touch-action:manipulation;
     }
     .section-jump-tab.is-active{
       color:#111827;
-      font-weight:600;
+      font-weight:500;
     }
     .section-jump-tab:active{opacity:0.55}
+
     .section-jump-underline{
       position:absolute;
       bottom:0;
@@ -21640,45 +21648,16 @@ window.HAH.modules.sectionJumpBar = true;
       tabsEl.appendChild(underline);
       bar.appendChild(tabsEl);
     }
-    // Always re-anchor as the first child of patientDetail. The reorder logic
-    // never touches the bar (it filters to .patient-reorder-card only) but
-    // defensive in case other modules prepend siblings.
     if(bar.parentNode !== detail || bar !== detail.firstChild){
       detail.insertBefore(bar, detail.firstChild);
     }
     return bar;
   }
 
-  // Pull the bar up and out by patientDetail's actual computed padding so it
-  // sits flush with the patient header (top edge) and screen edges (sides).
-  // Padding-top differs between detail-overlay-active (14px) and the base
-  // .container rule (88px + 14px) — we read whichever is currently applied.
-  function positionBar(){
-    const detail = document.getElementById('patientDetail');
-    const bar = document.getElementById('sectionJumpBar');
-    if(!detail || !bar) return;
-
-    // Pull the strip through the detail padding so it is flush to the blue
-    // patient header and full-bleed to the screen edges. Read the live padding
-    // for future layouts, but force the known overlay values while active so
-    // an early render cannot leave the grey gutter shown in the screenshot.
-    const cs = getComputedStyle(detail);
-    let padTop = parseFloat(cs.paddingTop) || 14;
-    let padLeft = parseFloat(cs.paddingLeft) || 14;
-    let padRight = parseFloat(cs.paddingRight) || 14;
-    if(detail.classList.contains('detail-overlay-active')){
-      padTop = 14; padLeft = 14; padRight = 14;
-    }
-    bar.style.marginTop = '-' + padTop + 'px';
-    bar.style.marginLeft = '-' + padLeft + 'px';
-    bar.style.marginRight = '-' + padRight + 'px';
-  }
-
   function buildTabs(){
     const tabs = document.getElementById('sectionJumpTabs');
     const underline = document.getElementById('sectionJumpUnderline');
     if(!tabs) return;
-    // Wipe existing tab buttons but keep the underline element in place
     Array.from(tabs.children).forEach(child => {
       if(child !== underline) child.remove();
     });
@@ -21687,7 +21666,6 @@ window.HAH.modules.sectionJumpBar = true;
     if(!detail) return;
     order.forEach(key => {
       if(!SECTION_LABELS[key]) return;
-      // Skip cards that aren't actually present in the DOM (defensive)
       const card = detail.querySelector('.patient-reorder-card[data-card-key="' + key + '"]');
       if(!card) return;
       const tab = document.createElement('button');
@@ -21695,7 +21673,10 @@ window.HAH.modules.sectionJumpBar = true;
       tab.className = 'section-jump-tab';
       tab.dataset.cardKey = key;
       tab.textContent = SECTION_LABELS[key];
-      tab.addEventListener('click', function(){ jumpToCard(key); });
+      tab.addEventListener('click', function(ev){
+        ev.preventDefault();
+        jumpToCard(key);
+      });
       tabs.insertBefore(tab, underline);
     });
   }
@@ -21704,14 +21685,11 @@ window.HAH.modules.sectionJumpBar = true;
     const detail = document.getElementById('patientDetail');
     if(!detail) return null;
     const cards = Array.from(detail.querySelectorAll('.patient-reorder-card'))
-      .filter(c => c.offsetParent !== null); // skip display:none cards
+      .filter(c => c.offsetParent !== null);
     if(!cards.length) return null;
     const bar = document.getElementById('sectionJumpBar');
-    const barHeight = bar ? bar.offsetHeight : 0;
-    const detailRect = detail.getBoundingClientRect();
-    // Probe just below the bar — the card whose top is at-or-above this line
-    // and whose bottom is below it is the "current" section.
-    const probeY = detailRect.top + barHeight + 4;
+    const barRect = bar ? bar.getBoundingClientRect() : null;
+    const probeY = barRect ? barRect.bottom + 4 : 60;
     let activeKey = null;
     for(const card of cards){
       const rect = card.getBoundingClientRect();
@@ -21749,7 +21727,6 @@ window.HAH.modules.sectionJumpBar = true;
     underline.style.transform = 'translateX(' + activeTab.offsetLeft + 'px)';
     underline.style.width = activeTab.offsetWidth + 'px';
     if(instant){
-      // Force reflow then re-enable transition so subsequent changes animate
       void underline.offsetWidth;
       underline.style.transition = '';
     }
@@ -21762,9 +21739,17 @@ window.HAH.modules.sectionJumpBar = true;
     const tabRect = activeTab.getBoundingClientRect();
     const margin = 24;
     if(tabRect.left < tabsRect.left + margin){
-      tabs.scrollBy({left: tabRect.left - tabsRect.left - margin, behavior: 'smooth'});
+      try{
+        tabs.scrollBy({left: tabRect.left - tabsRect.left - margin, behavior: 'smooth'});
+      }catch(_e){
+        tabs.scrollLeft += (tabRect.left - tabsRect.left - margin);
+      }
     } else if(tabRect.right > tabsRect.right - margin){
-      tabs.scrollBy({left: tabRect.right - tabsRect.right + margin, behavior: 'smooth'});
+      try{
+        tabs.scrollBy({left: tabRect.right - tabsRect.right + margin, behavior: 'smooth'});
+      }catch(_e){
+        tabs.scrollLeft += (tabRect.right - tabsRect.right + margin);
+      }
     }
   }
 
@@ -21780,16 +21765,18 @@ window.HAH.modules.sectionJumpBar = true;
     const card = detail.querySelector('.patient-reorder-card[data-card-key="' + key + '"]');
     if(!card) return;
     const bar = document.getElementById('sectionJumpBar');
-    const barHeight = bar ? bar.offsetHeight : 0;
-    const detailRect = detail.getBoundingClientRect();
-    const cardRect = card.getBoundingClientRect();
-    // Use viewport geometry instead of offsetTop: negative margins, sticky
-    // positioning and card reordering otherwise make some sections land short.
-    const targetTop = Math.max(0, detail.scrollTop + (cardRect.top - detailRect.top) - barHeight - 10);
-    try{ detail.scrollTo({top: targetTop, behavior: 'smooth'}); }
-    catch(_e){ detail.scrollTop = targetTop; }
-    // Pre-set active immediately so the underline animates straight to its
-    // target rather than waiting for scroll-spy to land.
+    const barHeight = bar ? bar.offsetHeight : 44;
+    const targetTop = Math.max(0, card.offsetTop - barHeight - 8);
+    // Use auto (instant) scroll. Smooth scrolling on iOS PWA's
+    // -webkit-overflow-scrolling:touch containers gets cancelled by touch
+    // interactions, which is why some tabs appeared to do nothing in v644.
+    // The existing app uses this same try/auto + scrollTop fallback pattern
+    // for openPatient mode switches.
+    try{
+      detail.scrollTo({top: targetTop, behavior: 'auto'});
+    }catch(_e){
+      detail.scrollTop = targetTop;
+    }
     setActiveTab(key, false);
   }
 
@@ -21810,7 +21797,6 @@ window.HAH.modules.sectionJumpBar = true;
     scrollSpyBound = true;
   }
 
-  // Wrap finishPatientCardDrag so the bar rebuilds when user reorders cards.
   let reorderHookBound = false;
   function bindReorderHook(){
     if(reorderHookBound) return;
@@ -21832,10 +21818,6 @@ window.HAH.modules.sectionJumpBar = true;
     reorderHookBound = true;
   }
 
-  // Wrap setPatientDetailMode so the underline reposition runs after layout
-  // settles. The bar itself shows/hides via CSS on data-detail-mode, but the
-  // first reveal needs an underline recalc since offsetLeft/Width are 0
-  // while display:none.
   let modeHookBound = false;
   function bindModeHook(){
     if(modeHookBound) return;
@@ -21845,10 +21827,7 @@ window.HAH.modules.sectionJumpBar = true;
     const wrapped = function(){
       const r = original.apply(this, arguments);
       try{
-        requestAnimationFrame(() => {
-          positionBar();
-          updateActiveTab(true);
-        });
+        requestAnimationFrame(() => { updateActiveTab(true); });
       }catch(_e){}
       return r;
     };
@@ -21866,8 +21845,6 @@ window.HAH.modules.sectionJumpBar = true;
       rafPending = true;
       requestAnimationFrame(() => {
         rafPending = false;
-        positionBar();
-        // Re-place the underline after a width change
         updateActiveTab(true);
       });
     });
@@ -21878,18 +21855,12 @@ window.HAH.modules.sectionJumpBar = true;
     injectCss();
     const bar = ensureBar();
     if(!bar) return;
-    positionBar();
     buildTabs();
     bindScrollSpy();
     bindReorderHook();
     bindModeHook();
     bindResizeHook();
-    requestAnimationFrame(() => {
-      positionBar();
-      updateActiveTab(true);
-      requestAnimationFrame(() => { positionBar(); updateActiveTab(true); });
-      setTimeout(() => { positionBar(); updateActiveTab(true); }, 180);
-    });
+    requestAnimationFrame(() => { updateActiveTab(true); });
   }
 
   window.HAH_renderSectionJumpBar = renderSectionJumpBar;
