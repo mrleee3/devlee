@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_643_resume_swipe_fix_release.html; source=hospital_at_home_v12_36_643_resume_swipe_fix_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_644_section_jump_bar_release.html; source=hospital_at_home_v12_36_644_section_jump_bar_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_643_resume_swipe_fix_release.html</div><div>Source: hospital_at_home_v12_36_643_resume_swipe_fix_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_644_section_jump_bar_release.html</div><div>Source: hospital_at_home_v12_36_644_section_jump_bar_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -9224,6 +9224,9 @@ function openPatient(id, opts={}) {
   if(typeof window.HAH_renderConditionPanel==='function'){
     requestAnimationFrame(()=>{ try{ window.HAH_renderConditionPanel(); }catch(e){} });
   }
+  if(typeof window.HAH_renderSectionJumpBar==='function'){
+    requestAnimationFrame(()=>{ try{ window.HAH_renderSectionJumpBar(); }catch(e){} });
+  }
 }
 
 function getScoreMode(){return $("crewsBtn").classList.contains("active") ? "CREWS" : ($("mewsBtn").classList.contains("active") ? "MEWS" : "");}
@@ -10901,8 +10904,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_643_resume_swipe_fix_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_643_resume_swipe_fix_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_644_section_jump_bar_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_644_section_jump_bar_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -21501,6 +21504,328 @@ window.HAH.modules.conditions = true;
     isEnabled, setEnabled,
     getEntries: () => entries.slice()
   };
+})();
+
+</script><script>
+window.HAH = window.HAH || { modules: {} };
+window.HAH.modules.sectionJumpBar = true;
+
+// Section jump bar — sticky tab strip that sits at the top of the patient
+// detail in Review mode. Hidden in Summary mode via CSS scoped to
+// [data-detail-mode="review"]. Built dynamically (mounted from JS, not in
+// index.html) following the conditions-panel pattern.
+//
+// Tab order is derived from patientCardOrder so dragging cards reorders the
+// bar for free. Active state is driven by a scroll-spy on #patientDetail.
+// Tap → smooth scroll to that card. Underline animates between tabs.
+//
+// Public entry:
+//   window.HAH_renderSectionJumpBar()  — call from openPatient and on mode change
+
+(function(){
+  'use strict';
+
+  const SECTION_LABELS = {
+    obs: 'Obs',
+    bloodsSummary: 'Bloods',
+    clinical: 'Clinical',
+    meds: 'Meds',
+    acp: 'ACP',
+    iv: 'IV',
+    output: 'Output'
+  };
+
+  const CSS = `
+    #sectionJumpBar{
+      position:sticky;
+      position:-webkit-sticky;
+      top:0;
+      z-index:8;
+      background:#fff;
+      border-bottom:0.5px solid rgba(15,23,42,0.10);
+      margin:-14px -14px 12px;
+      display:none;
+    }
+    #patientDetail[data-detail-mode="review"] #sectionJumpBar{display:block}
+    #patientDetail.reorder-mode #sectionJumpBar{display:none!important}
+    #sectionJumpTabs{
+      display:flex;
+      overflow-x:auto;
+      overflow-y:hidden;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+      position:relative;
+      padding:0 6px;
+    }
+    #sectionJumpTabs::-webkit-scrollbar{display:none}
+    .section-jump-tab{
+      padding:13px 14px;
+      font-size:13px;
+      font-weight:400;
+      color:#9ca3af;
+      white-space:nowrap;
+      flex-shrink:0;
+      cursor:pointer;
+      background:transparent;
+      border:none;
+      letter-spacing:-0.01em;
+      -webkit-tap-highlight-color:transparent;
+      user-select:none;
+      -webkit-user-select:none;
+      transition:color 180ms ease;
+    }
+    .section-jump-tab.is-active{
+      color:#111827;
+      font-weight:500;
+    }
+    .section-jump-tab:active{opacity:0.55}
+    .section-jump-underline{
+      position:absolute;
+      bottom:0;
+      left:0;
+      height:3px;
+      width:0;
+      background:#0a84ff;
+      border-radius:1.5px 1.5px 0 0;
+      transform:translateX(0);
+      transition:transform 280ms cubic-bezier(.25,.46,.45,.94),
+                 width 280ms cubic-bezier(.25,.46,.45,.94);
+      pointer-events:none;
+      will-change:transform,width;
+    }
+  `;
+
+  let cssInjected = false;
+  function injectCss(){
+    if(cssInjected) return;
+    cssInjected = true;
+    const style = document.createElement('style');
+    style.setAttribute('data-section-jump-bar','');
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+
+  function getOrder(){
+    if(typeof patientCardOrder !== 'undefined' && Array.isArray(patientCardOrder) && patientCardOrder.length){
+      return patientCardOrder.slice();
+    }
+    if(typeof DEFAULT_PATIENT_CARD_ORDER !== 'undefined' && Array.isArray(DEFAULT_PATIENT_CARD_ORDER)){
+      return DEFAULT_PATIENT_CARD_ORDER.slice();
+    }
+    return [];
+  }
+
+  function ensureBar(){
+    const detail = document.getElementById('patientDetail');
+    if(!detail) return null;
+    let bar = document.getElementById('sectionJumpBar');
+    if(!bar){
+      bar = document.createElement('div');
+      bar.id = 'sectionJumpBar';
+      const tabsEl = document.createElement('div');
+      tabsEl.id = 'sectionJumpTabs';
+      const underline = document.createElement('div');
+      underline.className = 'section-jump-underline';
+      underline.id = 'sectionJumpUnderline';
+      tabsEl.appendChild(underline);
+      bar.appendChild(tabsEl);
+    }
+    // Always re-anchor as the first child of patientDetail. The reorder logic
+    // never touches the bar (it filters to .patient-reorder-card only) but
+    // defensive in case other modules prepend siblings.
+    if(bar.parentNode !== detail || bar !== detail.firstChild){
+      detail.insertBefore(bar, detail.firstChild);
+    }
+    return bar;
+  }
+
+  function buildTabs(){
+    const tabs = document.getElementById('sectionJumpTabs');
+    const underline = document.getElementById('sectionJumpUnderline');
+    if(!tabs) return;
+    // Wipe existing tab buttons but keep the underline element in place
+    Array.from(tabs.children).forEach(child => {
+      if(child !== underline) child.remove();
+    });
+    const order = getOrder();
+    const detail = document.getElementById('patientDetail');
+    if(!detail) return;
+    order.forEach(key => {
+      if(!SECTION_LABELS[key]) return;
+      // Skip cards that aren't actually present in the DOM (defensive)
+      const card = detail.querySelector('.patient-reorder-card[data-card-key="' + key + '"]');
+      if(!card) return;
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'section-jump-tab';
+      tab.dataset.cardKey = key;
+      tab.textContent = SECTION_LABELS[key];
+      tab.addEventListener('click', function(){ jumpToCard(key); });
+      tabs.insertBefore(tab, underline);
+    });
+  }
+
+  function getActiveCardKey(){
+    const detail = document.getElementById('patientDetail');
+    if(!detail) return null;
+    const cards = Array.from(detail.querySelectorAll('.patient-reorder-card'))
+      .filter(c => c.offsetParent !== null); // skip display:none cards
+    if(!cards.length) return null;
+    const bar = document.getElementById('sectionJumpBar');
+    const barHeight = bar ? bar.offsetHeight : 0;
+    const detailRect = detail.getBoundingClientRect();
+    // Probe just below the bar — the card whose top is at-or-above this line
+    // and whose bottom is below it is the "current" section.
+    const probeY = detailRect.top + barHeight + 4;
+    let activeKey = null;
+    for(const card of cards){
+      const rect = card.getBoundingClientRect();
+      if(rect.top <= probeY){
+        activeKey = card.dataset.cardKey;
+      } else {
+        break;
+      }
+    }
+    return activeKey || cards[0].dataset.cardKey;
+  }
+
+  function setActiveTab(key, instant){
+    const tabs = document.getElementById('sectionJumpTabs');
+    if(!tabs) return;
+    const tabEls = tabs.querySelectorAll('.section-jump-tab');
+    let activeTab = null;
+    tabEls.forEach(t => {
+      const isOn = t.dataset.cardKey === key;
+      t.classList.toggle('is-active', isOn);
+      if(isOn) activeTab = t;
+    });
+    updateUnderline(activeTab, instant);
+    ensureActiveTabVisible(activeTab);
+  }
+
+  function updateUnderline(activeTab, instant){
+    const underline = document.getElementById('sectionJumpUnderline');
+    if(!underline) return;
+    if(!activeTab){
+      underline.style.width = '0';
+      return;
+    }
+    if(instant){ underline.style.transition = 'none'; }
+    underline.style.transform = 'translateX(' + activeTab.offsetLeft + 'px)';
+    underline.style.width = activeTab.offsetWidth + 'px';
+    if(instant){
+      // Force reflow then re-enable transition so subsequent changes animate
+      void underline.offsetWidth;
+      underline.style.transition = '';
+    }
+  }
+
+  function ensureActiveTabVisible(activeTab){
+    const tabs = document.getElementById('sectionJumpTabs');
+    if(!tabs || !activeTab) return;
+    const tabsRect = tabs.getBoundingClientRect();
+    const tabRect = activeTab.getBoundingClientRect();
+    const margin = 24;
+    if(tabRect.left < tabsRect.left + margin){
+      tabs.scrollBy({left: tabRect.left - tabsRect.left - margin, behavior: 'smooth'});
+    } else if(tabRect.right > tabsRect.right - margin){
+      tabs.scrollBy({left: tabRect.right - tabsRect.right + margin, behavior: 'smooth'});
+    }
+  }
+
+  function updateActiveTab(instant){
+    const key = getActiveCardKey();
+    if(!key) return;
+    setActiveTab(key, instant);
+  }
+
+  function jumpToCard(key){
+    const detail = document.getElementById('patientDetail');
+    if(!detail) return;
+    const card = detail.querySelector('.patient-reorder-card[data-card-key="' + key + '"]');
+    if(!card) return;
+    const bar = document.getElementById('sectionJumpBar');
+    const barHeight = bar ? bar.offsetHeight : 0;
+    const targetTop = Math.max(0, card.offsetTop - barHeight - 8);
+    detail.scrollTo({top: targetTop, behavior: 'smooth'});
+    // Pre-set active immediately so the underline animates straight to its
+    // target rather than waiting for scroll-spy to land.
+    setActiveTab(key, false);
+  }
+
+  let scrollSpyBound = false;
+  function bindScrollSpy(){
+    if(scrollSpyBound) return;
+    const detail = document.getElementById('patientDetail');
+    if(!detail) return;
+    let rafPending = false;
+    detail.addEventListener('scroll', () => {
+      if(rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => {
+        rafPending = false;
+        updateActiveTab(false);
+      });
+    }, {passive: true});
+    scrollSpyBound = true;
+  }
+
+  // Wrap finishPatientCardDrag so the bar rebuilds when user reorders cards.
+  let reorderHookBound = false;
+  function bindReorderHook(){
+    if(reorderHookBound) return;
+    if(typeof window.finishPatientCardDrag !== 'function') return;
+    const original = window.finishPatientCardDrag;
+    if(original.__sjbWrapped) return;
+    const wrapped = function(){
+      const r = original.apply(this, arguments);
+      try{
+        requestAnimationFrame(() => {
+          buildTabs();
+          updateActiveTab(true);
+        });
+      }catch(_e){}
+      return r;
+    };
+    wrapped.__sjbWrapped = true;
+    window.finishPatientCardDrag = wrapped;
+    reorderHookBound = true;
+  }
+
+  // Wrap setPatientDetailMode so the underline reposition runs after layout
+  // settles. The bar itself shows/hides via CSS on data-detail-mode, but the
+  // first reveal needs an underline recalc since offsetLeft/Width are 0
+  // while display:none.
+  let modeHookBound = false;
+  function bindModeHook(){
+    if(modeHookBound) return;
+    if(typeof window.setPatientDetailMode !== 'function') return;
+    const original = window.setPatientDetailMode;
+    if(original.__sjbWrapped) return;
+    const wrapped = function(){
+      const r = original.apply(this, arguments);
+      try{
+        requestAnimationFrame(() => { updateActiveTab(true); });
+      }catch(_e){}
+      return r;
+    };
+    wrapped.__sjbWrapped = true;
+    window.setPatientDetailMode = wrapped;
+    modeHookBound = true;
+  }
+
+  function renderSectionJumpBar(){
+    injectCss();
+    const bar = ensureBar();
+    if(!bar) return;
+    buildTabs();
+    bindScrollSpy();
+    bindReorderHook();
+    bindModeHook();
+    requestAnimationFrame(() => { updateActiveTab(true); });
+  }
+
+  window.HAH_renderSectionJumpBar = renderSectionJumpBar;
 })();
 
 </script></body>
