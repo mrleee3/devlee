@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_645_section_bar_polish_release.html; source=hospital_at_home_v12_36_645_section_bar_polish_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_646_section_bar_flush_release.html; source=hospital_at_home_v12_36_646_section_bar_flush_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_645_section_bar_polish_release.html</div><div>Source: hospital_at_home_v12_36_645_section_bar_polish_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_646_section_bar_flush_release.html</div><div>Source: hospital_at_home_v12_36_646_section_bar_flush_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -4558,7 +4558,7 @@ function normaliseIvText(value){return String(value||'').trim().replace(/\s+/g,'
 function normaliseIvVolumeToken(value){ const raw=String(value||'').trim(); if(!raw) return ''; const m=raw.match(/(\d+(?:\.\d+)?)\s*(ml|mL|ML|l|L)\b/); if(!m) return ''; const num=m[1].replace(/\.0+$/,''); const unit=/^l$/i.test(m[2]) ? 'L' : 'ml'; return `${num}${unit}`; }
 function isLikelyIvFluidMedication(text){ return /\b(saline|normal saline|sodium chloride|glucose|dextrose|hartmann(?:'|’)s|hartmanns|compound sodium lactate|ringer(?:'|’)s|ringers|plasma[- ]?lyte|sterofundin|gelofusine|albumin|water for injection)\b/i.test(String(text||'')); }
 function isLikelyIvStrengthText(text){ const raw=String(text||'').trim(); if(!raw) return false; if(/%/.test(raw)) return true; return /\b\d+(?:\.\d+)?\s*(?:mg|g|mcg|micrograms?|mmol|mEq|units?)\s*\/\s*\d+(?:\.\d+)?\s*(?:ml|mL|l|L)\b/i.test(raw); }
-function escapeForIvRegex(value){ return String(value||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+function escapeForIvRegex(value){ return String(value||'').replace(/[.*+?^${}()|[\]\\]/g,'\\<script src="js/00-core.js"></script>'); }
 function preferIvVolumeDose(result){ const merged=normaliseIvScanResult(result); const originalDose=normaliseIvText(result && result.dose); const haystack=[merged.medication, merged.notes, originalDose].filter(Boolean).join(' '); if(!isLikelyIvFluidMedication(haystack)) return merged; const volume=normaliseIvVolumeToken(merged.medication)||normaliseIvVolumeToken(merged.notes)||normaliseIvVolumeToken(originalDose); if(!volume) return merged; if(!merged.dose || isLikelyIvStrengthText(merged.dose) || /%/.test(merged.dose)){ merged.dose=volume; if(isLikelyIvStrengthText(originalDose) && !(new RegExp(escapeForIvRegex(originalDose),'i')).test(merged.notes||'')){ merged.notes=merged.notes ? `${originalDose} · ${merged.notes}` : originalDose; } } return merged; }
 function normaliseIvExpiry(value){ let raw=String(value||'').trim(); if(!raw) return ''; raw=raw.replace(/^(exp|expiry|expires|use by|useby)\s*[:\-]?\s*/i,'').trim(); let m=raw.match(/^(\d{2})(\d{2})(\d{2})$/); if(m) return `${m[3]}/${m[2]}/${m[1]}`; m=raw.match(/^(\d{4})-(\d{2})-(\d{2})$/); if(m) return `${m[3]}/${m[2]}/${m[1].slice(-2)}`; m=raw.match(/^(\d{2})[\/-](\d{2})[\/-](\d{2,4})$/); if(m) return `${m[1]}/${m[2]}/${String(m[3]).slice(-2)}`; m=raw.match(/^(\d{2})[\/-](\d{2})$/); if(m) return `${m[1]}/${m[2]}`; return raw.replace(/\s+/g,' ');}
 function parseGs1BarcodePayload(raw){ const source=String(raw||'').trim(); if(!source) return null; let gtin='', expiry='', serial='', batch=''; if(/\(\d{2}\)/.test(source)){ const matchAi=ai=>{ const m=source.match(new RegExp(`\\(${ai}\\)([^\\(\u001d]+)`,'i')); return m?m[1]:''; }; gtin=matchAi('01').replace(/\D/g,'').slice(0,14); expiry=matchAi('17'); batch=matchAi('10'); serial=matchAi('21'); } else { const clean=source.replace(//g,''); let i=0; while(i<clean.length){ if(clean.charCodeAt(i)===29){ i+=1; continue; } const ai2=clean.slice(i,i+2); if(ai2==='01'){ gtin=clean.slice(i+2,i+16).replace(/\D/g,'').slice(0,14); i+=16; continue; } if(ai2==='17'){ expiry=clean.slice(i+2,i+8); i+=8; continue; } if(ai2==='10' || ai2==='21'){ i+=2; let start=i; while(i<clean.length && clean.charCodeAt(i)!==29){ i+=1; } const value=clean.slice(start,i).trim(); if(ai2==='10' && !batch) batch=value; if(ai2==='21' && !serial) serial=value; continue; } i+=1; } if(!gtin){ const m=clean.match(/01(\d{14})/); if(m) gtin=m[1]; } if(!expiry){ const m=clean.match(/17(\d{6})/); if(m) expiry=m[1]; } } const output={raw:source,productCode:gtin,expiry:normaliseIvExpiry(expiry),serial:normaliseIvText(serial),batch:normaliseIvText(batch)}; return output; }
@@ -5065,7 +5065,7 @@ const BLOODS_ANALYTES = [
   {key:'tsh', label:'TSH', trendLabel:'TSH', unit:'mIU/L', labels:['tsh'], limits:()=>({low:0.4, high:4.0})},
   {key:'cortisol', label:'Cortisol', trendLabel:'Cortisol', unit:'nmol/L', labels:['cortisol'], limits:()=>({low:null, high:null})}
 ];
-function escapeRegex(text){ return String(text||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+function escapeRegex(text){ return String(text||'').replace(/[.*+?^${}()|[\]\\]/g,'\\<script src="js/00-core.js"></script>'); }
 function normaliseBloodsText(raw){
   return String(raw||'')
     .replace(/\u00a0/g,' ')
@@ -10904,8 +10904,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_645_section_bar_polish_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_645_section_bar_polish_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_646_section_bar_flush_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_646_section_bar_flush_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -15399,7 +15399,7 @@ Use the following schema:
     return suffix ? 'ECG scan failed ('+status+'): ' + suffix : 'ECG scan failed ('+status+').';
   }
 
-  function escapeRegex(value){ return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function escapeRegex(value){ return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\<script src="js/11-ecg-assist.js"></script>'); }
   function stripMarkdownText(value){
     return String(value || '')
       .replace(/```[\s\S]*?```/g, ' ')
@@ -17310,7 +17310,7 @@ window.HAH.modules.deepgramDictation = true;
 
 
   function escapeRegExp(text){
-    return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\<script src="js/12-deepgram-dictation.js"></script>');
   }
 
   function buildLoosePhraseRegex(phrase){
@@ -18092,7 +18092,7 @@ window.HAH.modules.deepgramDictation = true;
       .trim();
   }
   function escapeRegexFragment(text){
-    return String(text||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    return String(text||'').replace(/[.*+?^${}()|[\]\\]/g,'\\<script src="js/13-renal-alerts.js"></script>');
   }
   function medicationMatchesAlias(entry, aliases){
     const haystack = [entry?.name, entry?.details].map(normaliseMedicationText).filter(Boolean).join(' ');
@@ -21540,11 +21540,15 @@ window.HAH.modules.sectionJumpBar = true;
       position:sticky;
       position:-webkit-sticky;
       top:0;
-      z-index:8;
+      z-index:18;
       background:#fff;
       border-bottom:0.5px solid rgba(15,23,42,0.10);
-      margin-bottom:18px;
+      margin-top:-14px;
+      margin-left:-14px;
+      margin-right:-14px;
+      margin-bottom:10px;
       display:none;
+      box-shadow:0 1px 0 rgba(15,23,42,0.04);
     }
     #patientDetail[data-detail-mode="review"] #sectionJumpBar{display:block}
     #patientDetail.reorder-mode #sectionJumpBar{display:none!important}
@@ -21555,19 +21559,25 @@ window.HAH.modules.sectionJumpBar = true;
       scrollbar-width:none;
       -webkit-overflow-scrolling:touch;
       position:relative;
-      padding:0 6px;
+      padding:0 8px;
+      min-height:48px;
+      align-items:stretch;
     }
     #sectionJumpTabs::-webkit-scrollbar{display:none}
     .section-jump-tab{
-      padding:13px 14px;
+      min-height:48px;
+      padding:0 15px;
       font-size:13px;
-      font-weight:400;
+      font-weight:500;
       color:#6b7280;
       white-space:nowrap;
       flex-shrink:0;
       cursor:pointer;
       background:transparent;
       border:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
       letter-spacing:-0.01em;
       -webkit-tap-highlight-color:transparent;
       user-select:none;
@@ -21576,7 +21586,7 @@ window.HAH.modules.sectionJumpBar = true;
     }
     .section-jump-tab.is-active{
       color:#111827;
-      font-weight:500;
+      font-weight:600;
     }
     .section-jump-tab:active{opacity:0.55}
     .section-jump-underline{
@@ -21647,10 +21657,18 @@ window.HAH.modules.sectionJumpBar = true;
     const detail = document.getElementById('patientDetail');
     const bar = document.getElementById('sectionJumpBar');
     if(!detail || !bar) return;
+
+    // Pull the strip through the detail padding so it is flush to the blue
+    // patient header and full-bleed to the screen edges. Read the live padding
+    // for future layouts, but force the known overlay values while active so
+    // an early render cannot leave the grey gutter shown in the screenshot.
     const cs = getComputedStyle(detail);
-    const padTop = parseFloat(cs.paddingTop) || 0;
-    const padLeft = parseFloat(cs.paddingLeft) || 0;
-    const padRight = parseFloat(cs.paddingRight) || 0;
+    let padTop = parseFloat(cs.paddingTop) || 14;
+    let padLeft = parseFloat(cs.paddingLeft) || 14;
+    let padRight = parseFloat(cs.paddingRight) || 14;
+    if(detail.classList.contains('detail-overlay-active')){
+      padTop = 14; padLeft = 14; padRight = 14;
+    }
     bar.style.marginTop = '-' + padTop + 'px';
     bar.style.marginLeft = '-' + padLeft + 'px';
     bar.style.marginRight = '-' + padRight + 'px';
@@ -21763,8 +21781,13 @@ window.HAH.modules.sectionJumpBar = true;
     if(!card) return;
     const bar = document.getElementById('sectionJumpBar');
     const barHeight = bar ? bar.offsetHeight : 0;
-    const targetTop = Math.max(0, card.offsetTop - barHeight - 8);
-    detail.scrollTo({top: targetTop, behavior: 'smooth'});
+    const detailRect = detail.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    // Use viewport geometry instead of offsetTop: negative margins, sticky
+    // positioning and card reordering otherwise make some sections land short.
+    const targetTop = Math.max(0, detail.scrollTop + (cardRect.top - detailRect.top) - barHeight - 10);
+    try{ detail.scrollTo({top: targetTop, behavior: 'smooth'}); }
+    catch(_e){ detail.scrollTop = targetTop; }
     // Pre-set active immediately so the underline animates straight to its
     // target rather than waiting for scroll-spy to land.
     setActiveTab(key, false);
@@ -21861,7 +21884,12 @@ window.HAH.modules.sectionJumpBar = true;
     bindReorderHook();
     bindModeHook();
     bindResizeHook();
-    requestAnimationFrame(() => { updateActiveTab(true); });
+    requestAnimationFrame(() => {
+      positionBar();
+      updateActiveTab(true);
+      requestAnimationFrame(() => { positionBar(); updateActiveTab(true); });
+      setTimeout(() => { positionBar(); updateActiveTab(true); }, 180);
+    });
   }
 
   window.HAH_renderSectionJumpBar = renderSectionJumpBar;
