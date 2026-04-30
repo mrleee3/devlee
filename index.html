@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_649_section_bar_smooth_release.html; source=hospital_at_home_v12_36_649_section_bar_smooth_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_650_section_bar_swipe_sync_release.html; source=hospital_at_home_v12_36_650_section_bar_swipe_sync_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_649_section_bar_smooth_release.html</div><div>Source: hospital_at_home_v12_36_649_section_bar_smooth_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_650_section_bar_swipe_sync_release.html</div><div>Source: hospital_at_home_v12_36_650_section_bar_swipe_sync_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10904,8 +10904,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_649_section_bar_smooth_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_649_section_bar_smooth_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_650_section_bar_swipe_sync_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_650_section_bar_swipe_sync_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -21555,13 +21555,23 @@ window.HAH.modules.sectionJumpBar = true;
       z-index:7;
       background:#fff;
       border-bottom:0.5px solid rgba(15,23,42,0.10);
-      display:none;
+      opacity:0;
+      pointer-events:none;
+      transform:translate3d(var(--hah-header-shift,0px),0,0);
+      transition:
+        opacity 220ms ease,
+        transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);
+      backface-visibility:hidden;
+      -webkit-backface-visibility:hidden;
+      will-change:transform,opacity;
     }
     body.detail-view-active.section-jump-bar-visible #sectionJumpBar{
-      display:block;
+      opacity:1;
+      pointer-events:auto;
     }
     body.reorder-active #sectionJumpBar{
-      display:none!important;
+      opacity:0!important;
+      pointer-events:none!important;
     }
 
     /* Reserve space at the top of the scrollable patient detail equal to
@@ -21670,8 +21680,6 @@ window.HAH.modules.sectionJumpBar = true;
   function measureBarHeight(){
     const bar = document.getElementById('sectionJumpBar');
     if(!bar) return;
-    // Bar is display:none until shown; offsetHeight is 0 in that case.
-    // Only update the variable if we got a real measurement.
     const h = bar.offsetHeight;
     if(h > 0){
       document.documentElement.style.setProperty('--sjb-height', h + 'px');
