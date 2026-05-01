@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_654_note_toolbar_flush_release.html; source=hospital_at_home_v12_36_654_note_toolbar_flush_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_656_note_toolbar_robust_release.html; source=hospital_at_home_v12_36_656_note_toolbar_robust_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_654_note_toolbar_flush_release.html</div><div>Source: hospital_at_home_v12_36_654_note_toolbar_flush_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_656_note_toolbar_robust_release.html</div><div>Source: hospital_at_home_v12_36_656_note_toolbar_robust_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10904,8 +10904,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_654_note_toolbar_flush_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_654_note_toolbar_flush_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_656_note_toolbar_robust_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_656_note_toolbar_robust_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13157,10 +13157,38 @@ document.addEventListener("DOMContentLoaded",function(){
     document.body.classList.toggle("keyboard-open", !!isOpen);
     updateKeyboardInset();
   }
-  const noteToolbarEligibleIds=new Set(['issues','plan','forDischargeSummary']);
+  const noteToolbarEligibleIds=new Set(['issues','plan','forDischargeSummary','currently']);
   const noteToolbarState={target:null,lastSelectionStart:0,lastSelectionEnd:0,lastEdit:null};
+  let noteToolbarHideTimer=null;
   function isNoteToolbarTarget(el){
     return !!(el && el.tagName==='TEXTAREA' && noteToolbarEligibleIds.has(el.id));
+  }
+  // Debounced visibility evaluator. iOS occasionally blurs a textarea
+  // mid-layout-shift (e.g. when expandClinicalReviewTextarea changes the
+  // textarea height) and refocuses it once layout settles. The previous
+  // simple show-on-focusin / hide-on-focusout logic raced with that gap:
+  // the hide timer would fire while activeElement was body, hide the
+  // toolbar, and the refocus sometimes never arrived — leaving the toolbar
+  // permanently hidden until the user tapped elsewhere and back. This
+  // evaluator schedules a 220 ms hide window that any subsequent focus
+  // event cancels, so transient blurs no longer drop the toolbar.
+  function evaluateNoteToolbar(){
+    const active=document.activeElement;
+    if(isNoteToolbarTarget(active)){
+      if(noteToolbarHideTimer){ clearTimeout(noteToolbarHideTimer); noteToolbarHideTimer=null; }
+      showNoteToolbarForTarget(active);
+      return;
+    }
+    if(noteToolbarHideTimer) return;
+    noteToolbarHideTimer=setTimeout(()=>{
+      noteToolbarHideTimer=null;
+      const active2=document.activeElement;
+      if(isNoteToolbarTarget(active2)){
+        showNoteToolbarForTarget(active2);
+        return;
+      }
+      hideNoteToolbar();
+    }, 220);
   }
   function getVisibleNoteToolbarHeight(){
     const bar=$('noteToolbar');
@@ -13179,6 +13207,24 @@ document.addEventListener("DOMContentLoaded",function(){
     noteToolbarState.target=target;
     if(typeof target.selectionStart==='number') noteToolbarState.lastSelectionStart=target.selectionStart;
     if(typeof target.selectionEnd==='number') noteToolbarState.lastSelectionEnd=target.selectionEnd;
+    // Defensive recovery: if the user is interacting with an eligible
+    // textarea but the toolbar is hidden, show it. The primary show path
+    // (focusin) is unreliable on iOS PWA — the event sometimes doesn't
+    // fire, particularly during keyboard slide-in, app resume, or when
+    // iOS's own form accessory bar grabs focus events. By recovering here
+    // (this function runs on input/keyup/click/selectionchange via the
+    // listeners further down), the bar reappears as soon as the user
+    // interacts with an eligible field.
+    //
+    // Inlined rather than calling showNoteToolbarForTarget to avoid an
+    // infinite loop: showNoteToolbarForTarget calls syncNoteToolbarSelection.
+    const bar=$('noteToolbar');
+    if(bar && bar.classList.contains('hidden')){
+      bar.classList.remove('hidden');
+      bar.setAttribute('aria-hidden','false');
+      document.body.classList.add('note-toolbar-visible');
+      updateNoteToolbarUndoState();
+    }
   }
   function showNoteToolbarForTarget(target){
     const bar=$('noteToolbar');
@@ -13388,6 +13434,7 @@ document.addEventListener("DOMContentLoaded",function(){
     window.visualViewport.addEventListener("resize", ()=>{
       syncSharedHeaderHeight();
       updateKeyboardInset();
+      evaluateNoteToolbar();
       const active=document.activeElement;
       if(active && $("addPatientCard") && $("addPatientCard").contains(active)) syncAddPatientViewportPosition(true);
       if(active && $("patientDetail") && $("patientDetail").contains(active)) syncPatientDetailViewportPosition(false);
@@ -13402,8 +13449,7 @@ document.addEventListener("DOMContentLoaded",function(){
   document.addEventListener('focusin', e => {
     if (!e.target.matches('input, textarea, select')) return;
     setKeyboardOpenState(true);
-    if(isNoteToolbarTarget(e.target)) showNoteToolbarForTarget(e.target);
-    else hideNoteToolbar();
+    evaluateNoteToolbar();
     if($("addPatientCard") && $("addPatientCard").contains(e.target)){
       const force=e.target.id!=="newReferralOther";
       syncAddPatientViewportPosition(force);
@@ -13430,8 +13476,7 @@ document.addEventListener("DOMContentLoaded",function(){
       if(!isClinicalReviewTextarea(active)) collapseAllClinicalReviewTextareas();
       setKeyboardOpenState(!!(active && active.matches && active.matches('input, textarea, select')));
       updateKeyboardInset();
-      if(isNoteToolbarTarget(active)) showNoteToolbarForTarget(active);
-      else hideNoteToolbar();
+      evaluateNoteToolbar();
     }, 50);
   });
   document.addEventListener('selectionchange', ()=>{
