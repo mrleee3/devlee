@@ -357,7 +357,7 @@ button{border:none;border-radius:12px;padding:12px 14px;font-size:15px;font-weig
 input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #d1d5db;background:#fff;font-size:16px;margin-top:6px}
 label{display:block;margin-top:2px}
 textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.note-toolbar{position:fixed;left:0;right:0;bottom:calc(var(--keyboard-extra-bottom,0px));z-index:10088;padding:0 0 env(safe-area-inset-bottom);pointer-events:none}.note-toolbar.hidden{display:none!important}.note-toolbar-inner{min-height:50px;border-top:0.5px solid rgba(15,23,42,.18);background:#d1d4dc;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:0;pointer-events:auto}.note-toolbar-group{display:flex;align-items:center;gap:6px;min-width:0}.note-toolbar-group--end{margin-left:auto}.note-toolbar-btn{min-width:38px;height:36px;padding:0 10px;margin:0;border-radius:8px;border:0.5px solid rgba(15,23,42,.12);background:#fcfcfd;color:#111827;font-size:14px;font-weight:600;line-height:1;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;flex:0 0 auto;box-shadow:0 1px 0 rgba(15,23,42,.05)}.note-toolbar-btn.wide{min-width:52px}.note-toolbar-btn.done{background:#0a84ff;border-color:rgba(10,132,255,.35);color:#fff;font-weight:600;box-shadow:0 1px 0 rgba(10,132,255,.25)}.note-toolbar-btn:disabled{opacity:.42}.note-toolbar-btn:active{transform:scale(.98)}body.note-toolbar-visible #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom,0px) + 104px)}@media (max-width:390px){.note-toolbar{padding-left:0;padding-right:0}.note-toolbar-inner{gap:6px;padding:7px 8px}.note-toolbar-group{gap:4px}.note-toolbar-btn{min-width:34px;padding:0 8px;font-size:13px}.note-toolbar-btn.wide{min-width:48px}}
+.note-toolbar{position:fixed;left:0;right:0;bottom:0;z-index:10088;padding:0;pointer-events:none}.note-toolbar.hidden{display:none!important}.note-toolbar-inner{min-height:46px;border-top:0.5px solid rgba(15,23,42,.22);background:#ccced3;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;border-radius:0;pointer-events:auto}.note-toolbar-group{display:flex;align-items:center;gap:6px;min-width:0}.note-toolbar-group--end{margin-left:auto}.note-toolbar-btn{min-width:38px;height:34px;padding:0 10px;margin:0;border-radius:6px;border:0;background:#fcfcfd;color:#111827;font-size:14px;font-weight:500;line-height:1;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;flex:0 0 auto;box-shadow:0 1px 0 rgba(15,23,42,.18)}.note-toolbar-btn.wide{min-width:52px}.note-toolbar-btn.done{background:#0a84ff;color:#fff;font-weight:600;box-shadow:0 1px 0 rgba(0,0,0,.20)}.note-toolbar-btn:disabled{opacity:.42}.note-toolbar-btn:active{transform:translateY(1px);box-shadow:0 0 0 rgba(15,23,42,.18)}body.note-toolbar-visible #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom,0px) + 104px)}@media (max-width:390px){.note-toolbar-inner{gap:6px;padding:6px 8px}.note-toolbar-group{gap:4px}.note-toolbar-btn{min-width:34px;padding:0 8px;font-size:13px}.note-toolbar-btn.wide{min-width:48px}}
 #patientDetail textarea.clinical-review-textarea-expanded{resize:none;overflow:auto}
 .news-box{text-align:center;padding:16px;border-radius:16px;color:#fff;font-weight:700;margin-bottom:8px}
 .news-score{font-size:36px;line-height:1;margin-bottom:6px}.news-low{background:var(--green)} .news-medium{background:var(--amber)} .news-high{background:var(--red)}
@@ -2598,7 +2598,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_653_note_toolbar_fix_release.html; source=hospital_at_home_v12_36_653_note_toolbar_fix_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_654_note_toolbar_flush_release.html; source=hospital_at_home_v12_36_654_note_toolbar_flush_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2950,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_653_note_toolbar_fix_release.html</div><div>Source: hospital_at_home_v12_36_653_note_toolbar_fix_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_654_note_toolbar_flush_release.html</div><div>Source: hospital_at_home_v12_36_654_note_toolbar_flush_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10904,8 +10904,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_653_note_toolbar_fix_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_653_note_toolbar_fix_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_654_note_toolbar_flush_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_654_note_toolbar_flush_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13143,20 +13143,15 @@ document.addEventListener("DOMContentLoaded",function(){
     });
   }
   function updateKeyboardInset(){
-    const vv=window.visualViewport;
-    let inset=0;
-    if(vv && document.body.classList.contains("keyboard-open")){
-      const layoutHeight=Math.max(window.innerHeight || 0, document.documentElement ? document.documentElement.clientHeight || 0 : 0);
-      inset=Math.max(0, Math.round(layoutHeight - (vv.height + vv.offsetTop)));
-      // If the calculated inset is small, that's iOS PWA standalone telling
-      // us window.innerHeight has already shrunk to the visual viewport —
-      // i.e. position:fixed elements are ALREADY positioned above the
-      // keyboard automatically. Adding an offset on top would double-shift
-      // the toolbar (the bug that left it floating mid-screen with a gap
-      // above the keyboard). Use 0 in this case so the toolbar sits flush.
-      if(inset < 120) inset=0;
-    }
-    document.documentElement.style.setProperty("--keyboard-extra-bottom", `${inset}px`);
+    // On iOS PWA standalone (the supported deployment), position:fixed
+    // elements are automatically positioned within the visual viewport when
+    // the keyboard is open — i.e. above the keyboard and any iOS-rendered
+    // accessory bars. Adding any extra offset would push our custom toolbar
+    // ABOVE iOS's form accessory bar with a visible gap, which is the bug
+    // we kept hitting. Keep the variable at 0 so toolbar CSS can use it
+    // without conditionals; the patient-detail padding rule below still
+    // relies on it for spacing above the toolbar.
+    document.documentElement.style.setProperty("--keyboard-extra-bottom", "0px");
   }
   function setKeyboardOpenState(isOpen){
     document.body.classList.toggle("keyboard-open", !!isOpen);
