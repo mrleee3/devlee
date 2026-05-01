@@ -12,6 +12,7 @@
 <meta content="#0a84ff" name="theme-color"/>
 <meta content="#0a84ff" name="background-color"/>
 <title>H@H</title>
+<script>window.HAH_TOOLBAR_DEBUG_ON=true;</script>
 <script>
 (function(){
   try{
@@ -2598,7 +2599,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_656_note_toolbar_robust_release.html; source=hospital_at_home_v12_36_656_note_toolbar_robust_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_657_toolbar_debug_release.html; source=hospital_at_home_v12_36_657_toolbar_debug_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2950,7 +2951,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_656_note_toolbar_robust_release.html</div><div>Source: hospital_at_home_v12_36_656_note_toolbar_robust_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_657_toolbar_debug_release.html</div><div>Source: hospital_at_home_v12_36_657_toolbar_debug_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10904,8 +10905,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_656_note_toolbar_robust_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_656_note_toolbar_robust_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_657_toolbar_debug_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_657_toolbar_debug_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -21994,6 +21995,243 @@ window.HAH.modules.sectionJumpBar = true;
   }
 
   window.HAH_renderSectionJumpBar = renderSectionJumpBar;
+})();
+
+</script><script>
+window.HAH = window.HAH || { modules: {} };
+window.HAH.modules.toolbarDebug = true;
+
+// Temporary debug overlay for diagnosing the note toolbar positioning bug.
+// Mounts a small fixed panel in the top-right corner that logs:
+//   - Focus events on input/textarea/select
+//   - Body class changes (keyboard-open, note-toolbar-visible)
+//   - visualViewport resize events (with height + offsetTop)
+//   - Toolbar element's actual rendered bottom position vs the visual
+//     viewport bottom (positive = above viewport bottom = correct,
+//     negative = below = covered by keyboard)
+//
+// The panel can be tapped to copy its log to the clipboard, double-tapped
+// to clear, and long-pressed to hide.
+//
+// Public:
+//   window.HAH_TOOLBAR_DEBUG_ON  — set true to enable on next reload, or
+//   call HAH.toolbarDebug.show() / .hide()
+
+(function(){
+  'use strict';
+
+  const ENABLED_KEY = 'hah-toolbar-debug-enabled';
+
+  let panel = null;
+  let logEl = null;
+  let entries = [];
+  const MAX_ENTRIES = 30;
+
+  function isEnabled(){
+    try{
+      return window.HAH_TOOLBAR_DEBUG_ON === true ||
+             localStorage.getItem(ENABLED_KEY) === '1';
+    }catch(_){ return false; }
+  }
+
+  function setEnabled(on){
+    try{
+      if(on) localStorage.setItem(ENABLED_KEY, '1');
+      else localStorage.removeItem(ENABLED_KEY);
+    }catch(_){}
+  }
+
+  function ensurePanel(){
+    if(panel) return panel;
+    panel = document.createElement('div');
+    panel.id = 'hahToolbarDebug';
+    panel.style.cssText = [
+      'position:fixed',
+      'top:env(safe-area-inset-top, 0px)',
+      'right:8px',
+      'width:230px',
+      'max-height:60vh',
+      'z-index:99999',
+      'background:rgba(0,0,0,0.82)',
+      'color:#9efb9e',
+      'font:10px/1.25 ui-monospace,Menlo,Consolas,monospace',
+      'padding:6px 8px',
+      'border-radius:8px',
+      'pointer-events:auto',
+      'overflow:hidden',
+      'border:1px solid rgba(158,251,158,0.25)'
+    ].join(';');
+    const head = document.createElement('div');
+    head.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;color:#fff;font-weight:600;';
+    head.innerHTML = '<span>TOOLBAR DEBUG</span><span id="hahDbgClear" style="color:#ff8;cursor:pointer;padding:2px 6px;">CLR</span>';
+    panel.appendChild(head);
+    logEl = document.createElement('div');
+    logEl.style.cssText = 'overflow-y:auto;max-height:calc(60vh - 24px);white-space:pre-wrap;word-break:break-all;';
+    panel.appendChild(logEl);
+    document.body.appendChild(panel);
+
+    // Tap CLR to clear
+    head.querySelector('#hahDbgClear').addEventListener('click', e => {
+      e.stopPropagation();
+      entries = [];
+      render();
+    });
+
+    // Tap panel body to copy
+    logEl.addEventListener('click', () => {
+      const text = entries.map(e => e.line).join('\n');
+      try{
+        navigator.clipboard.writeText(text).then(() => {
+          flashHead('COPIED');
+        });
+      }catch(_){
+        flashHead('COPY FAIL');
+      }
+    });
+
+    // Long-press header to hide
+    let pressTimer = null;
+    head.addEventListener('pointerdown', () => {
+      pressTimer = setTimeout(() => { hide(); setEnabled(false); }, 700);
+    });
+    head.addEventListener('pointerup', () => { if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } });
+    head.addEventListener('pointercancel', () => { if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } });
+    return panel;
+  }
+
+  function flashHead(text){
+    if(!panel) return;
+    const head = panel.firstChild;
+    if(!head) return;
+    const original = head.firstChild.textContent;
+    head.firstChild.textContent = text;
+    setTimeout(() => { head.firstChild.textContent = original; }, 800);
+  }
+
+  function render(){
+    if(!logEl) return;
+    logEl.textContent = entries.map(e => e.line).join('\n');
+    // Auto-scroll to bottom for newest
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  let firstTs = 0;
+  function ts(){
+    const now = Date.now();
+    if(!firstTs) firstTs = now;
+    const ms = now - firstTs;
+    return (ms/1000).toFixed(2).padStart(6,' ');
+  }
+
+  function log(label, detail){
+    const line = `${ts()} ${label}${detail ? ' '+detail : ''}`;
+    entries.push({line, t: Date.now()});
+    if(entries.length > MAX_ENTRIES) entries.shift();
+    render();
+  }
+
+  function describeTarget(el){
+    if(!el) return '?';
+    const tag = (el.tagName||'').toLowerCase();
+    if(tag === 'body' || tag === 'html') return tag;
+    return tag + (el.id ? '#'+el.id : '');
+  }
+
+  function snapshotToolbar(){
+    const bar = document.getElementById('noteToolbar');
+    if(!bar) return 'no-bar';
+    const hidden = bar.classList.contains('hidden');
+    if(hidden) return 'hidden';
+    const inner = bar.querySelector('.note-toolbar-inner') || bar;
+    const rect = inner.getBoundingClientRect();
+    const vv = window.visualViewport;
+    const vvBottom = vv ? (vv.offsetTop + vv.height) : window.innerHeight;
+    const toolbarBottom = rect.bottom;
+    const delta = Math.round(vvBottom - toolbarBottom);
+    return `bar.bot=${Math.round(toolbarBottom)} vv.bot=${Math.round(vvBottom)} Δ=${delta} h=${Math.round(rect.height)}`;
+  }
+
+  function hide(){
+    if(panel) panel.style.display = 'none';
+  }
+
+  function show(){
+    if(panel) panel.style.display = 'block';
+  }
+
+  function init(){
+    if(!isEnabled()) return;
+    ensurePanel();
+    log('init', `vv=${!!window.visualViewport} ua=${navigator.userAgent.slice(0,40)}`);
+
+    document.addEventListener('focusin', e => {
+      log('focusin', describeTarget(e.target) + ' | ' + snapshotToolbar());
+    }, true);
+    document.addEventListener('focusout', e => {
+      log('focusout', describeTarget(e.target));
+    }, true);
+
+    if(window.visualViewport){
+      window.visualViewport.addEventListener('resize', () => {
+        const vv = window.visualViewport;
+        log('vv.resize', `h=${Math.round(vv.height)} ot=${Math.round(vv.offsetTop)} | ${snapshotToolbar()}`);
+      });
+      window.visualViewport.addEventListener('scroll', () => {
+        const vv = window.visualViewport;
+        log('vv.scroll', `h=${Math.round(vv.height)} ot=${Math.round(vv.offsetTop)}`);
+      });
+    }
+
+    // Watch body class changes — these tell us when keyboard-open and
+    // note-toolbar-visible flip, which drive layout
+    const bodyClassObserver = new MutationObserver(muts => {
+      muts.forEach(m => {
+        if(m.attributeName === 'class'){
+          const cl = document.body.className;
+          const kb = cl.includes('keyboard-open');
+          const tb = cl.includes('note-toolbar-visible');
+          log('body.cls', `kb=${kb?1:0} tb=${tb?1:0}`);
+        }
+      });
+    });
+    bodyClassObserver.observe(document.body, {attributes:true, attributeFilter:['class']});
+
+    // Watch the toolbar element's class changes — visibility flips
+    const bar = document.getElementById('noteToolbar');
+    if(bar){
+      const barObserver = new MutationObserver(muts => {
+        muts.forEach(m => {
+          if(m.attributeName === 'class'){
+            log('bar.cls', `hidden=${bar.classList.contains('hidden')?1:0} | ${snapshotToolbar()}`);
+          }
+        });
+      });
+      barObserver.observe(bar, {attributes:true, attributeFilter:['class']});
+    }
+
+    // Periodic snapshot in case nothing fires
+    setInterval(() => {
+      const active = document.activeElement;
+      if(active && active.matches && active.matches('textarea')){
+        log('tick', describeTarget(active) + ' | ' + snapshotToolbar());
+      }
+    }, 2000);
+  }
+
+  // Public API
+  window.HAH.toolbarDebug = {
+    on(){ setEnabled(true); ensurePanel(); show(); init(); },
+    off(){ setEnabled(false); hide(); },
+    show(){ ensurePanel(); show(); },
+    hide(){ hide(); }
+  };
+
+  // Auto-init if the flag is set
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 
 </script></body>
