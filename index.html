@@ -358,7 +358,7 @@ button{border:none;border-radius:12px;padding:12px 14px;font-size:15px;font-weig
 input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #d1d5db;background:#fff;font-size:16px;margin-top:6px}
 label{display:block;margin-top:2px}
 textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.note-toolbar{position:fixed;left:0;right:0;bottom:var(--keyboard-extra-bottom,0px);z-index:10088;padding:0;pointer-events:none}.note-toolbar.hidden{display:none!important}.note-toolbar-inner{min-height:46px;border-top:0.5px solid rgba(15,23,42,.22);background:#ccced3;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;border-radius:0;pointer-events:auto}.note-toolbar-group{display:flex;align-items:center;gap:6px;min-width:0}.note-toolbar-group--end{margin-left:auto}.note-toolbar-btn{min-width:38px;height:34px;padding:0 10px;margin:0;border-radius:6px;border:0;background:#fcfcfd;color:#111827;font-size:14px;font-weight:500;line-height:1;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;flex:0 0 auto;box-shadow:0 1px 0 rgba(15,23,42,.18)}.note-toolbar-btn.wide{min-width:52px}.note-toolbar-btn.done{background:#0a84ff;color:#fff;font-weight:600;box-shadow:0 1px 0 rgba(0,0,0,.20)}.note-toolbar-btn:disabled{opacity:.42}.note-toolbar-btn:active{transform:translateY(1px);box-shadow:0 0 0 rgba(15,23,42,.18)}body.note-toolbar-visible #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom,0px) + 104px)}@media (max-width:390px){.note-toolbar-inner{gap:6px;padding:6px 8px}.note-toolbar-group{gap:4px}.note-toolbar-btn{min-width:34px;padding:0 8px;font-size:13px}.note-toolbar-btn.wide{min-width:48px}}
+.note-toolbar{position:fixed;left:0;right:0;bottom:0;z-index:10088;padding:0;pointer-events:none;will-change:transform}.note-toolbar.hidden{display:none!important}.note-toolbar-inner{min-height:46px;border-top:0.5px solid rgba(15,23,42,.22);background:#ccced3;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;border-radius:0;pointer-events:auto}.note-toolbar-group{display:flex;align-items:center;gap:6px;min-width:0}.note-toolbar-group--end{margin-left:auto}.note-toolbar-btn{min-width:38px;height:34px;padding:0 10px;margin:0;border-radius:6px;border:0;background:#fcfcfd;color:#111827;font-size:14px;font-weight:500;line-height:1;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;flex:0 0 auto;box-shadow:0 1px 0 rgba(15,23,42,.18)}.note-toolbar-btn.wide{min-width:52px}.note-toolbar-btn.done{background:#0a84ff;color:#fff;font-weight:600;box-shadow:0 1px 0 rgba(0,0,0,.20)}.note-toolbar-btn:disabled{opacity:.42}.note-toolbar-btn:active{transform:translateY(1px);box-shadow:0 0 0 rgba(15,23,42,.18)}body.note-toolbar-visible #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom,0px) + 104px)}@media (max-width:390px){.note-toolbar-inner{gap:6px;padding:6px 8px}.note-toolbar-group{gap:4px}.note-toolbar-btn{min-width:34px;padding:0 8px;font-size:13px}.note-toolbar-btn.wide{min-width:48px}}
 #patientDetail textarea.clinical-review-textarea-expanded{resize:none;overflow:auto}
 .news-box{text-align:center;padding:16px;border-radius:16px;color:#fff;font-weight:700;margin-bottom:8px}
 .news-score{font-size:36px;line-height:1;margin-bottom:6px}.news-low{background:var(--green)} .news-medium{background:var(--amber)} .news-high{background:var(--red)}
@@ -2599,7 +2599,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_660_toolbar_vv_scroll_release.html; source=hospital_at_home_v12_36_660_toolbar_vv_scroll_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_662_discharge_split_release.html; source=hospital_at_home_v12_36_662_discharge_split_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2951,7 +2951,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_660_toolbar_vv_scroll_release.html</div><div>Source: hospital_at_home_v12_36_660_toolbar_vv_scroll_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_662_discharge_split_release.html</div><div>Source: hospital_at_home_v12_36_662_discharge_split_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -6057,6 +6057,26 @@ async function jsonPathMeta(path){return graphJson(`/me/drive/root:/${encodeJson
 async function jsonPathExists(path){try{await jsonPathMeta(path);return true;}catch(e){const m=String(e&&e.message||'').toLowerCase(); if(m.includes('not found')||m.includes('itemnotfound')||m.includes('(404)')) return false; throw e;}}
 async function jsonEnsureFolder(path){const parts=normaliseJsonFolderPath(path).split('/').filter(Boolean);let current='';for(const part of parts){const parent=current;current=current?`${current}/${part}`:part;if(await jsonPathExists(current))continue;const endpoint=parent?`/me/drive/root:/${encodeJsonPath(parent)}:/children`:'/me/drive/root/children';await graphJson(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:{name:part,folder:{},'@microsoft.graph.conflictBehavior':'fail'}});}}
 function jsonSchemaHeader(type){return {schema:'hah-board-json-store',schemaVersion:1,type,createdAt:nowIsoJson(),updatedAt:nowIsoJson()};}
+// Canonical discharge readiness enum (matches desktop's deriveDischargeReadiness).
+// Values that don't match this set are treated as free-text "notes" and migrated
+// to operational.dischargeNotes on next read+write.
+const JSON_DISCHARGE_READINESS_ENUM=['Ready','Possible today','Likely tomorrow','Not ready'];
+function isJsonDischargeReadinessEnum(value){return JSON_DISCHARGE_READINESS_ENUM.indexOf(String(value||'').trim())>=0;}
+// Returns {readiness, notes} for an operational block, splitting any legacy
+// free-text value out of dischargeReadiness into dischargeNotes. Pure: does not
+// mutate. Used at read-time and as part of write-time migration.
+function splitJsonDischargeFields(operational){
+  const op=operational&&typeof operational==='object'?operational:{};
+  const rawReadiness=String(op.dischargeReadiness||'').trim();
+  const rawNotes=String(op.dischargeNotes||'').trim();
+  if(isJsonDischargeReadinessEnum(rawReadiness)){
+    return {readiness:rawReadiness, notes:rawNotes};
+  }
+  // Legacy: free text was being stored in dischargeReadiness. Treat as notes.
+  // If there's also a separate notes field already, prefer that and discard the
+  // ambiguous readiness value.
+  return {readiness:'', notes:rawNotes||rawReadiness};
+}
 function makeJsonServiceSchema(){return Object.assign(jsonSchemaHeader('service'),{service:{name:'Hospital at Home',dataFolder:currentJsonFolderPath(),activePatientIds:[],patientOrder:[],archivedPatientIds:[]},patients:{activeIds:[],sortOrder:[],archivedIds:[]},presets:{pathways:[],clinicians:['LK','SS','GM','AA','JT'],boardViews:[]},meta:{lastMigrationAt:'',lastWriter:getJsonActor()}});}
 function makeJsonTasksSchema(){return Object.assign(jsonSchemaHeader('tasks'),{tasks:[],meta:{lastWriter:getJsonActor()}});}
 function makeJsonAuditSchema(){return Object.assign(jsonSchemaHeader('audit'),{events:[{id:`audit:${Date.now().toString(36)}`,at:nowIsoJson(),actor:getJsonActor(),type:'store-initialised',summary:'Shared JSON store initialised from mobile'}]});}
@@ -6074,7 +6094,7 @@ function latestJsonBoardRoundEntry(patient){return latestJsonTimelineEntry(patie
 function latestJsonTemplateEntry(patient){return latestJsonTimelineEntry(patient, entry=>isJsonBoardStyleEntry(entry));}
 function jsonNoteFromEntry(entry){const note=entry&&entry.note?entry.note:{};const fields=entry&&entry.fields?entry.fields:{};return {issues:String(fields.issueRaw||fields.issues||note.issues||'').trim(),bloodsIx:String(fields.bloodsIx||fields.bloods||note.bloodsIx||note.bloods||'').trim(),progress:String(fields.progress||fields.currently||note.progress||'').trim(),examination:String(fields.examination||note.examination||'').trim(),plan:String(fields.plan||note.plan||'').trim()};}
 function compactJsonIssues(patient,note){const clinical=patient&&patient.clinical?patient.clinical:{};if(note&&note.issues)return note.issues;if(Array.isArray(clinical.persistentIssues))return clinical.persistentIssues.map(x=>typeof x==='string'?x:(x&&(x.title||x.text||x.label))||'').filter(Boolean).join('\n');return clinical.summary||'';}
-function mapJsonPatientToImportData(patient){const identity=patient.identity||{}, service=patient.service||{}, alerts=patient.alerts||{}, clinical=patient.clinical||{}, operational=patient.operational||{};const boardEntry=latestJsonBoardRoundEntry(patient);const templateEntry=latestJsonTemplateEntry(patient)||latestJsonTimelineEntry(patient);const templateNote=jsonNoteFromEntry(templateEntry);const boardNote=jsonNoteFromEntry(boardEntry);const acp=clinical.acp||{};const issues=compactJsonIssues(patient,templateNote);const summary=clinical.summary||issues||service.pathway||'';const obs=clinical.obs&&typeof clinical.obs==='object'?clinical.obs:{};const boardRound=boardEntry?{id:String(boardEntry.id||''),type:normaliseJsonTimelineType(boardEntry.type),timestamp:String(boardEntry.timestamp||boardEntry.completedAt||boardEntry.updatedAt||''),author:String(boardEntry.author||boardEntry.updatedBy||''),note:boardNote}:null;return {jsonId:String(patient.id||''),name:identity.name||patient.name||patient.id||'Unnamed JSON patient',age:identity.age||'',sex:identity.sex==='M'?'M':identity.sex==='F'?'F':'',referralSource:service.referredFrom||'',doa:service.admittedDate||'',summary,listDetails:[summary,alerts.dnar?'DNAR':'',alerts.acp?'ACP':'',operational.dischargeReadiness||''].filter(Boolean).join('\n'),acuity:String(operational.priority||'').toUpperCase()==='RED'?'RED':String(operational.priority||'').toUpperCase()==='AMBER'?'AMBER':'GREEN',issues,bloods:templateNote.bloodsIx||clinical.bloodsSummary||'',currently:templateNote.progress||clinical.currently||'',examination:templateNote.examination||clinical.examination||'',plan:templateNote.plan||clinical.plan||'',forDischargeSummary:operational.dischargeReadiness||'',pmh:clinical.pmh||'',socialHistory:clinical.socialHistory||'',weight:obs.weight||clinical.weight||'',dnacprStatus:acp.dnacprStatus||(alerts.dnar?'yes':''),dnacprFormSeen:acp.dnacprFormSeen||'',tepStatus:acp.tepStatus||(alerts.acp?'present':''),ceilingOfCare:acp.ceilingOfCare||alerts.escalation||'',acpNotes:acp.notes||acp.acpNotes||'',medEntries:Array.isArray(clinical.medications)?clinical.medications:[],ivEntries:Array.isArray(clinical.ivTherapies)?clinical.ivTherapies:[],obs,boardRound,importedAt:(templateEntry&&(templateEntry.timestamp||templateEntry.updatedAt))||patient.updatedAt||(patient.meta&&patient.meta.updatedAt)||nowIsoJson(),importSource:{kind:'shared_json',jsonId:String(patient.id||''),folderPath:currentJsonFolderPath()},jsonRecord:patient};}
+function mapJsonPatientToImportData(patient){const identity=patient.identity||{}, service=patient.service||{}, alerts=patient.alerts||{}, clinical=patient.clinical||{}, operational=patient.operational||{};const boardEntry=latestJsonBoardRoundEntry(patient);const templateEntry=latestJsonTemplateEntry(patient)||latestJsonTimelineEntry(patient);const templateNote=jsonNoteFromEntry(templateEntry);const boardNote=jsonNoteFromEntry(boardEntry);const acp=clinical.acp||{};const issues=compactJsonIssues(patient,templateNote);const summary=clinical.summary||issues||service.pathway||'';const obs=clinical.obs&&typeof clinical.obs==='object'?clinical.obs:{};const dischargeFields=splitJsonDischargeFields(operational);const boardRound=boardEntry?{id:String(boardEntry.id||''),type:normaliseJsonTimelineType(boardEntry.type),timestamp:String(boardEntry.timestamp||boardEntry.completedAt||boardEntry.updatedAt||''),author:String(boardEntry.author||boardEntry.updatedBy||''),note:boardNote}:null;return {jsonId:String(patient.id||''),name:identity.name||patient.name||patient.id||'Unnamed JSON patient',age:identity.age||'',sex:identity.sex==='M'?'M':identity.sex==='F'?'F':'',referralSource:service.referredFrom||'',doa:service.admittedDate||'',summary,listDetails:[summary,alerts.dnar?'DNAR':'',alerts.acp?'ACP':'',dischargeFields.readiness||''].filter(Boolean).join('\n'),acuity:String(operational.priority||'').toUpperCase()==='RED'?'RED':String(operational.priority||'').toUpperCase()==='AMBER'?'AMBER':'GREEN',issues,bloods:templateNote.bloodsIx||clinical.bloodsSummary||'',currently:templateNote.progress||clinical.currently||'',examination:templateNote.examination||clinical.examination||'',plan:templateNote.plan||clinical.plan||'',forDischargeSummary:dischargeFields.notes,dischargeReadiness:dischargeFields.readiness,pmh:clinical.pmh||'',socialHistory:clinical.socialHistory||'',weight:obs.weight||clinical.weight||'',dnacprStatus:acp.dnacprStatus||(alerts.dnar?'yes':''),dnacprFormSeen:acp.dnacprFormSeen||'',tepStatus:acp.tepStatus||(alerts.acp?'present':''),ceilingOfCare:acp.ceilingOfCare||alerts.escalation||'',acpNotes:acp.notes||acp.acpNotes||'',medEntries:Array.isArray(clinical.medications)?clinical.medications:[],ivEntries:Array.isArray(clinical.ivTherapies)?clinical.ivTherapies:[],obs,boardRound,importedAt:(templateEntry&&(templateEntry.timestamp||templateEntry.updatedAt))||patient.updatedAt||(patient.meta&&patient.meta.updatedAt)||nowIsoJson(),importSource:{kind:'shared_json',jsonId:String(patient.id||''),folderPath:currentJsonFolderPath()},jsonRecord:patient};}
 function findLocalIdForJsonPatient(jsonId,name,usedIds){const jid=String(jsonId||'');const map=loadJsonIdMap();if(jid&&map[jid]&&patients[map[jid]]&&!usedIds.has(String(map[jid])))return Number(map[jid]);for(const id of Object.keys(patients||{})){const p=patients[id];if(p&&p.importSource&&p.importSource.kind==='shared_json'&&String(p.importSource.jsonId||'')===jid&&!usedIds.has(String(id)))return Number(id);}const ids=Object.keys(patients||{}).concat(Array.from(usedIds||[])).map(Number).filter(Number.isFinite);return ids.length?Math.max(...ids)+1:1;}
 function normaliseJsonTask(task,idMap){const status=String(task.status||'').toLowerCase(),priority=String(task.priority||'').toLowerCase(),patientJsonId=String(task.patientId||'');const pid=idMap&&idMap[patientJsonId]?Number(idMap[patientJsonId]):null;let due=(priority==='urgent'||priority==='high'||status==='urgent')?'now':'today';if(task.dueAt&&due!=='now'){const d=new Date(task.dueAt),t=new Date(todayKeyJson()+'T23:59:59');if(!Number.isNaN(d.getTime())&&d.getTime()>t.getTime())due='later';}return {id:String(task.id||`json-task-${Date.now().toString(36)}`),patientId:Number.isFinite(pid)?pid:null,text:String(task.title||task.text||'').trim(),due,urgent:due==='now',category:String(task.category||'').toLowerCase().includes('blood')?'bloods':String(task.category||'').toLowerCase().includes('discharge')?'discharge':'review',note:String(task.note||task.blocker||'').trim(),done:['done','completed','closed','actioned'].includes(status),createdAt:String(task.createdAt||task.updatedAt||nowIsoJson()),completedAt:['done','completed','closed','actioned'].includes(status)?String(task.completedAt||task.updatedAt||nowIsoJson()):'',importSource:{kind:'shared_json_task',jsonId:String(task.id||'')}};}
 function applyJsonDatasetToMobile(dataset){const rows=Array.isArray(dataset&&dataset.rows)?dataset.rows:[];const usedIds=new Set(), nextPatients={}, idMap={};let imported=0,updated=0;const updateDetails=[];rows.forEach(row=>{const data=mapJsonPatientToImportData(row);if(!data.jsonId)return;const localId=findLocalIdForJsonPatient(data.jsonId,data.name,usedIds);usedIds.add(String(localId));idMap[data.jsonId]=localId;if(patients[localId]){const result=applyImportedPatientUpdate(clone(patients[localId]),data);nextPatients[localId]=result.patient;if(result.changed){updated++;updateDetails.push({name:result.patientName||data.name,summary:result.summary});}}else{nextPatients[localId]=createImportedPatient(data);imported++;}});patients=nextPatients;saveJsonIdMap(idMap);const jsonTasks=Array.isArray(dataset&&dataset.tasks)?dataset.tasks:[];if(typeof normaliseTaskCollection==='function')tasks=normaliseTaskCollection(jsonTasks.map(task=>normaliseJsonTask(task,idMap)),false);const currentStillExists=currentPatient&&Object.prototype.hasOwnProperty.call(patients,String(currentPatient));currentPatient=currentStillExists?currentPatient:(Number(Object.keys(patients)[0]||0)||null);detailLoadedForCurrentPatient=false;return {imported,updated,updateDetails,activeCount:rows.length,taskCount:jsonTasks.length};}
@@ -6083,8 +6103,15 @@ async function loadJsonPatientDataset(){let service;try{service=await loadJsonSe
 function jsonBool(value){const text=String(value==null?'':value).trim().toLowerCase();return text==='1'||text==='true'||text==='yes'||text==='seen';}
 function mobileAcpFromForm(f){return {dnacprStatus:String(f.dnacprStatus||''),dnacprFormSeen:jsonBool(f.dnacprFormSeen),tepStatus:String(f.tepStatus||''),ceilingOfCare:String(f.ceilingOfCare||''),notes:String(f.acpNotes||'')};}
 function mobileObsFromForm(f){return {rr:f.rr||'',spo2:f.spo2||'',oxygen:f.oxygen||'',oxygenFlow:f.oxygenFlow||'',temp:f.temp||'',bp:f.bp||'',hr:f.hr||'',weight:f.weight||'',bm:f.bm||''};}
-function patchMobileClinicalEntry(doc,p){const f=p.form||{};doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];const entryId=`${JSON_MOBILE_TIMELINE_PREFIX}${doc.id}`;const note={issues:normText(f.issues||''),bloodsIx:normText(f.bloods||''),progress:normText(f.currently||''),examination:normText(f.examination||''),plan:normText(f.plan||'')};const entry={id:entryId,type:'mobile_clinical_review',status:'completed',timestamp:nowIsoJson(),author:getJsonActor(),note,fields:{source:'Mobile clinical review',issueRaw:note.issues,issues:note.issues,progress:note.progress,currently:note.progress,examination:note.examination,bloods:note.bloodsIx,bloodsIx:note.bloodsIx,plan:note.plan,dischargeSummary:normText(f.forDischargeSummary||''),acp:mobileAcpFromForm(f),obs:mobileObsFromForm(f),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[]}};const idx=doc.timeline.findIndex(row=>String(row&&row.id)===entryId);if(idx>=0)doc.timeline[idx]={...doc.timeline[idx],...entry,updatedAt:nowIsoJson()};else doc.timeline.unshift(entry);doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));return doc;}
-async function patchJsonPatientFromMobile(doc,p){const f=p.form||{};doc.identity={...(doc.identity||{}),name:p.name||'',age:p.age||'',sex:p.sex||''};doc.service={...(doc.service||{}),referredFrom:p.referralSource||'',admittedDate:p.doa||''};doc.alerts={...(doc.alerts||{}),dnar:String(f.dnacprStatus||'').toLowerCase()==='yes',acp:!!(String(f.tepStatus||'').trim()||String(f.ceilingOfCare||'').trim()||String(f.acpNotes||'').trim()),escalation:String(f.ceilingOfCare||'').trim()};doc.clinical={...(doc.clinical||{}),summary:normText(f.issues||p.summary||''),bloodsSummary:normText(f.bloods||''),currently:normText(f.currently||''),pmh:normText(f.pmh||''),socialHistory:normText(f.socialHistory||''),examination:normText(f.examination||''),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[],obs:mobileObsFromForm(f),acp:mobileAcpFromForm(f)};doc.operational={...(doc.operational||{})};if(f.forDischargeSummary)doc.operational.dischargeReadiness=String(f.forDischargeSummary||'').trim();patchMobileClinicalEntry(doc,p);const saved=await saveJsonPatient(doc);try{await appendJsonAudit({type:'mobile-patient-updated',entityType:'patient',entityId:doc.id,summary:`Mobile update for ${p.name||doc.id}`});}catch(_){}return saved;}
+function patchMobileClinicalEntry(doc,p){const f=p.form||{};doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];const entryId=`${JSON_MOBILE_TIMELINE_PREFIX}${doc.id}`;const note={issues:normText(f.issues||''),bloodsIx:normText(f.bloods||''),progress:normText(f.currently||''),examination:normText(f.examination||''),plan:normText(f.plan||'')};const entry={id:entryId,type:'mobile_clinical_review',status:'completed',timestamp:nowIsoJson(),author:getJsonActor(),note,fields:{source:'Mobile clinical review',issueRaw:note.issues,issues:note.issues,progress:note.progress,currently:note.progress,examination:note.examination,bloods:note.bloodsIx,bloodsIx:note.bloodsIx,plan:note.plan,dischargeNotes:normText(f.forDischargeSummary||''),acp:mobileAcpFromForm(f),obs:mobileObsFromForm(f),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[]}};const idx=doc.timeline.findIndex(row=>String(row&&row.id)===entryId);if(idx>=0)doc.timeline[idx]={...doc.timeline[idx],...entry,updatedAt:nowIsoJson()};else doc.timeline.unshift(entry);doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));return doc;}
+async function patchJsonPatientFromMobile(doc,p){const f=p.form||{};doc.identity={...(doc.identity||{}),name:p.name||'',age:p.age||'',sex:p.sex||''};doc.service={...(doc.service||{}),referredFrom:p.referralSource||'',admittedDate:p.doa||''};doc.alerts={...(doc.alerts||{}),dnar:String(f.dnacprStatus||'').toLowerCase()==='yes',acp:!!(String(f.tepStatus||'').trim()||String(f.ceilingOfCare||'').trim()||String(f.acpNotes||'').trim()),escalation:String(f.ceilingOfCare||'').trim()};doc.clinical={...(doc.clinical||{}),summary:normText(f.issues||p.summary||''),bloodsSummary:normText(f.bloods||''),currently:normText(f.currently||''),pmh:normText(f.pmh||''),socialHistory:normText(f.socialHistory||''),examination:normText(f.examination||''),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[],obs:mobileObsFromForm(f),acp:mobileAcpFromForm(f)};
+// Discharge fields: split free-text mobile input into dischargeNotes, preserve
+// or migrate any pre-existing dischargeReadiness enum from desktop. If the
+// existing dischargeReadiness held legacy free text (not in the canonical enum),
+// splitJsonDischargeFields demotes it to notes here on next mobile save.
+const existingDischarge=splitJsonDischargeFields(doc.operational);
+doc.operational={...(doc.operational||{}),dischargeReadiness:existingDischarge.readiness,dischargeNotes:normText(f.forDischargeSummary||'')};
+patchMobileClinicalEntry(doc,p);const saved=await saveJsonPatient(doc);try{await appendJsonAudit({type:'mobile-patient-updated',entityType:'patient',entityId:doc.id,summary:`Mobile update for ${p.name||doc.id}`});}catch(_){}return saved;}
 
 // ─── Mobile-side patient creation (writes to OneDrive) ────────────────────
 // Mirrors desktop's createPatientRecord. Generates a JSON id, builds a full
@@ -10905,8 +10932,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_660_toolbar_vv_scroll_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_660_toolbar_vv_scroll_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_662_discharge_split_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_662_discharge_split_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13144,24 +13171,35 @@ document.addEventListener("DOMContentLoaded",function(){
     });
   }
   function updateKeyboardInset(){
-    // iOS positions position:fixed elements relative to the LAYOUT viewport,
-    // not the visual viewport. So bottom:0 puts an element at the bottom of
-    // the page, which is hidden under the keyboard when one is open. We
-    // need to compute the keyboard height ourselves and pass it through to
-    // the toolbar's CSS.
+    // iOS Safari PWA positions position:fixed elements against the LAYOUT
+    // viewport (full page height), not the visual viewport. When the
+    // keyboard opens, iOS additionally shifts the layout viewport DOWN by
+    // visualViewport.offsetTop to keep the focused field visible. So a
+    // bottom:0 fixed element ends up under both the keyboard AND any layout
+    // shift offset.
     //
-    // Layout viewport = window.innerHeight (constant while keyboard opens).
-    // Visual viewport = visualViewport.height + offsetTop = bottom y of the
-    //   un-occluded area.
-    // Keyboard height = layout - (vv.height + vv.offsetTop).
+    // The fix (per bram.us 2021 / well-established WebKit pattern): keep
+    // the toolbar at bottom:0 in CSS, but apply a translateY transform that
+    // pulls it up by (keyboardHeight + offsetTop). This both lifts above
+    // the keyboard and counteracts the layout-viewport shift.
+    //
+    // Computed: gap = innerHeight - vv.height - vv.offsetTop
+    //   - When keyboard closed:  gap = 0         (no transform)
+    //   - When keyboard open:    gap = keyboard height
+    //   - When also shifted:     covers the shift too
     const vv = window.visualViewport;
-    let inset = 0;
+    let translate = 0;
     if(vv){
       const layoutHeight = window.innerHeight || document.documentElement.clientHeight || 0;
-      const vvBottom = (vv.height || 0) + (vv.offsetTop || 0);
-      inset = Math.max(0, Math.round(layoutHeight - vvBottom));
+      translate = Math.max(0, Math.round(layoutHeight - vv.height - vv.offsetTop));
     }
-    document.documentElement.style.setProperty("--keyboard-extra-bottom", `${inset}px`);
+    // Continue to publish the inset variable for any code that consumed it,
+    // but the toolbar itself uses transform now (see app.css).
+    document.documentElement.style.setProperty("--keyboard-extra-bottom", `${translate}px`);
+    const bar = document.getElementById("noteToolbar");
+    if(bar){
+      bar.style.transform = translate > 0 ? `translateY(-${translate}px)` : '';
+    }
   }
   function setKeyboardOpenState(isOpen){
     document.body.classList.toggle("keyboard-open", !!isOpen);
