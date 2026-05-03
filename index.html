@@ -2599,7 +2599,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_662_discharge_split_release.html; source=hospital_at_home_v12_36_662_discharge_split_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_663_discharge_rename_release.html; source=hospital_at_home_v12_36_663_discharge_rename_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2951,7 +2951,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_662_discharge_split_release.html</div><div>Source: hospital_at_home_v12_36_662_discharge_split_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_663_discharge_rename_release.html</div><div>Source: hospital_at_home_v12_36_663_discharge_rename_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -6059,16 +6059,19 @@ async function jsonEnsureFolder(path){const parts=normaliseJsonFolderPath(path).
 function jsonSchemaHeader(type){return {schema:'hah-board-json-store',schemaVersion:1,type,createdAt:nowIsoJson(),updatedAt:nowIsoJson()};}
 // Canonical discharge readiness enum (matches desktop's deriveDischargeReadiness).
 // Values that don't match this set are treated as free-text "notes" and migrated
-// to operational.dischargeNotes on next read+write.
+// to operational.forDischargeSummary on next read+write.
 const JSON_DISCHARGE_READINESS_ENUM=['Ready','Possible today','Likely tomorrow','Not ready'];
 function isJsonDischargeReadinessEnum(value){return JSON_DISCHARGE_READINESS_ENUM.indexOf(String(value||'').trim())>=0;}
 // Returns {readiness, notes} for an operational block, splitting any legacy
-// free-text value out of dischargeReadiness into dischargeNotes. Pure: does not
+// free-text value out of dischargeReadiness into forDischargeSummary. Pure: does not
 // mutate. Used at read-time and as part of write-time migration.
 function splitJsonDischargeFields(operational){
   const op=operational&&typeof operational==='object'?operational:{};
   const rawReadiness=String(op.dischargeReadiness||'').trim();
-  const rawNotes=String(op.dischargeNotes||'').trim();
+  // Free text lives at operational.forDischargeSummary (canonical name).
+  // Brief v662 build used operational.dischargeNotes — fall through to it
+  // so any patient saved during that window migrates on next read+write.
+  const rawNotes=String(op.forDischargeSummary||op.dischargeNotes||'').trim();
   if(isJsonDischargeReadinessEnum(rawReadiness)){
     return {readiness:rawReadiness, notes:rawNotes};
   }
@@ -6103,14 +6106,14 @@ async function loadJsonPatientDataset(){let service;try{service=await loadJsonSe
 function jsonBool(value){const text=String(value==null?'':value).trim().toLowerCase();return text==='1'||text==='true'||text==='yes'||text==='seen';}
 function mobileAcpFromForm(f){return {dnacprStatus:String(f.dnacprStatus||''),dnacprFormSeen:jsonBool(f.dnacprFormSeen),tepStatus:String(f.tepStatus||''),ceilingOfCare:String(f.ceilingOfCare||''),notes:String(f.acpNotes||'')};}
 function mobileObsFromForm(f){return {rr:f.rr||'',spo2:f.spo2||'',oxygen:f.oxygen||'',oxygenFlow:f.oxygenFlow||'',temp:f.temp||'',bp:f.bp||'',hr:f.hr||'',weight:f.weight||'',bm:f.bm||''};}
-function patchMobileClinicalEntry(doc,p){const f=p.form||{};doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];const entryId=`${JSON_MOBILE_TIMELINE_PREFIX}${doc.id}`;const note={issues:normText(f.issues||''),bloodsIx:normText(f.bloods||''),progress:normText(f.currently||''),examination:normText(f.examination||''),plan:normText(f.plan||'')};const entry={id:entryId,type:'mobile_clinical_review',status:'completed',timestamp:nowIsoJson(),author:getJsonActor(),note,fields:{source:'Mobile clinical review',issueRaw:note.issues,issues:note.issues,progress:note.progress,currently:note.progress,examination:note.examination,bloods:note.bloodsIx,bloodsIx:note.bloodsIx,plan:note.plan,dischargeNotes:normText(f.forDischargeSummary||''),acp:mobileAcpFromForm(f),obs:mobileObsFromForm(f),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[]}};const idx=doc.timeline.findIndex(row=>String(row&&row.id)===entryId);if(idx>=0)doc.timeline[idx]={...doc.timeline[idx],...entry,updatedAt:nowIsoJson()};else doc.timeline.unshift(entry);doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));return doc;}
+function patchMobileClinicalEntry(doc,p){const f=p.form||{};doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];const entryId=`${JSON_MOBILE_TIMELINE_PREFIX}${doc.id}`;const note={issues:normText(f.issues||''),bloodsIx:normText(f.bloods||''),progress:normText(f.currently||''),examination:normText(f.examination||''),plan:normText(f.plan||'')};const entry={id:entryId,type:'mobile_clinical_review',status:'completed',timestamp:nowIsoJson(),author:getJsonActor(),note,fields:{source:'Mobile clinical review',issueRaw:note.issues,issues:note.issues,progress:note.progress,currently:note.progress,examination:note.examination,bloods:note.bloodsIx,bloodsIx:note.bloodsIx,plan:note.plan,forDischargeSummary:normText(f.forDischargeSummary||''),acp:mobileAcpFromForm(f),obs:mobileObsFromForm(f),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[]}};const idx=doc.timeline.findIndex(row=>String(row&&row.id)===entryId);if(idx>=0)doc.timeline[idx]={...doc.timeline[idx],...entry,updatedAt:nowIsoJson()};else doc.timeline.unshift(entry);doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));return doc;}
 async function patchJsonPatientFromMobile(doc,p){const f=p.form||{};doc.identity={...(doc.identity||{}),name:p.name||'',age:p.age||'',sex:p.sex||''};doc.service={...(doc.service||{}),referredFrom:p.referralSource||'',admittedDate:p.doa||''};doc.alerts={...(doc.alerts||{}),dnar:String(f.dnacprStatus||'').toLowerCase()==='yes',acp:!!(String(f.tepStatus||'').trim()||String(f.ceilingOfCare||'').trim()||String(f.acpNotes||'').trim()),escalation:String(f.ceilingOfCare||'').trim()};doc.clinical={...(doc.clinical||{}),summary:normText(f.issues||p.summary||''),bloodsSummary:normText(f.bloods||''),currently:normText(f.currently||''),pmh:normText(f.pmh||''),socialHistory:normText(f.socialHistory||''),examination:normText(f.examination||''),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[],obs:mobileObsFromForm(f),acp:mobileAcpFromForm(f)};
-// Discharge fields: split free-text mobile input into dischargeNotes, preserve
+// Discharge fields: split free-text mobile input into forDischargeSummary, preserve
 // or migrate any pre-existing dischargeReadiness enum from desktop. If the
 // existing dischargeReadiness held legacy free text (not in the canonical enum),
 // splitJsonDischargeFields demotes it to notes here on next mobile save.
 const existingDischarge=splitJsonDischargeFields(doc.operational);
-doc.operational={...(doc.operational||{}),dischargeReadiness:existingDischarge.readiness,dischargeNotes:normText(f.forDischargeSummary||'')};
+doc.operational={...(doc.operational||{}),dischargeReadiness:existingDischarge.readiness,forDischargeSummary:normText(f.forDischargeSummary||'')};
 patchMobileClinicalEntry(doc,p);const saved=await saveJsonPatient(doc);try{await appendJsonAudit({type:'mobile-patient-updated',entityType:'patient',entityId:doc.id,summary:`Mobile update for ${p.name||doc.id}`});}catch(_){}return saved;}
 
 // ─── Mobile-side patient creation (writes to OneDrive) ────────────────────
@@ -10932,8 +10935,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_662_discharge_split_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_662_discharge_split_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_663_discharge_rename_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_663_discharge_rename_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
