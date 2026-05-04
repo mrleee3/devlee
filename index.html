@@ -2734,32 +2734,52 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
  * .hah-encounter-info-sep rule. */
 .hah-encounter-info-row{display:flex;align-items:center;flex-wrap:nowrap;justify-content:space-between;column-gap:0;padding:8px 14px;background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:14px;font-size:12px;color:var(--text);overflow:hidden;box-sizing:border-box}
 
-/* v12.36.686: vertical alignment fix.
- * iOS Safari renders text inside <input type="time"> and <input type="date">
- * slightly below the input box's geometric centre, regardless of
- * line-height. Setting padding-bottom larger than padding-top with
- * box-sizing:border-box shifts the text upward within the input,
- * matching the icon buttons' geometric-centre alignment. */
+/* v12.36.687: ACTUAL vertical-alignment fix.
+ * Previous attempts (line-height, padding-bottom) were applied to the
+ * outer <input> but iOS Safari renders date/time inputs through internal
+ * shadow-DOM pseudo-elements (::-webkit-datetime-edit and friends) that
+ * don't inherit those properties. The text was always going to render at
+ * the pseudo's baseline regardless of what I set on the parent.
+ *
+ * Real fix has two parts:
+ * (1) Make the input itself a flex container so the internal pseudo
+ *     gets centered by flex — this works because iOS does respect
+ *     `display:inline-flex` on the outer element.
+ * (2) Reset the pseudo-element's internal padding/margin to 0, since
+ *     iOS adds its own breathing room there. */
 
 /* Category select. */
-.hah-encounter-category-select{flex:0 0 auto;width:100px;height:28px;line-height:28px;padding:0 22px 2px 9px;border-radius:9px;border:1px solid rgba(10,132,255,.16);background:#e8f1ff;color:#0a84ff;font-size:12px;font-weight:700;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%230a84ff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 7px center;cursor:pointer;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;box-sizing:border-box;vertical-align:middle}
+.hah-encounter-category-select{flex:0 0 auto;width:100px;height:28px;padding:0 22px 0 9px;border-radius:9px;border:1px solid rgba(10,132,255,.16);background:#e8f1ff;color:#0a84ff;font-size:12px;font-weight:700;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%230a84ff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 7px center;cursor:pointer;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:flex-start}
 .hah-encounter-category-select:focus{outline:2px solid rgba(10,132,255,.30);outline-offset:1px}
 
-/* Date input. */
-.hah-encounter-date{flex:0 0 auto;width:96px;height:28px;line-height:28px;padding:0 6px 2px 6px;border-radius:9px;border:1px solid rgba(15,23,42,.10);background:#fff;color:var(--text);font:inherit;font-size:12px;-webkit-appearance:none;appearance:none;text-align:center;box-sizing:border-box;vertical-align:middle}
+/* Date input — inline-flex so pseudo-element centers, plus pseudo
+ * overrides for iOS Safari's internal padding. */
+.hah-encounter-date{flex:0 0 auto;width:96px;height:28px;padding:0 6px;border-radius:9px;border:1px solid rgba(15,23,42,.10);background:#fff;color:var(--text);font:inherit;font-size:12px;-webkit-appearance:none;appearance:none;text-align:center;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
 .hah-encounter-date:focus{outline:2px solid rgba(10,132,255,.30);outline-offset:1px;border-color:rgba(10,132,255,.40)}
 
-/* Time input. */
-.hah-encounter-time{flex:0 0 auto;width:54px;height:28px;line-height:28px;padding:0 4px 2px 4px;border-radius:9px;border:1px solid rgba(15,23,42,.10);background:#fff;color:var(--text);font:inherit;font-size:12px;-webkit-appearance:none;appearance:none;text-align:center;box-sizing:border-box;vertical-align:middle}
+/* Time input — same treatment. */
+.hah-encounter-time{flex:0 0 auto;width:54px;height:28px;padding:0 4px;border-radius:9px;border:1px solid rgba(15,23,42,.10);background:#fff;color:var(--text);font:inherit;font-size:12px;-webkit-appearance:none;appearance:none;text-align:center;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
 .hah-encounter-time:focus{outline:2px solid rgba(10,132,255,.30);outline-offset:1px;border-color:rgba(10,132,255,.40)}
+
+/* iOS Safari pseudo-element overrides. These reset the internal padding
+ * that pushes datetime text toward the baseline. Combined with the
+ * inline-flex on the parent, the text now renders at geometric centre. */
+.hah-encounter-date::-webkit-datetime-edit,
+.hah-encounter-time::-webkit-datetime-edit{padding:0;margin:0;display:inline-flex;align-items:center;height:auto;line-height:1}
+.hah-encounter-date::-webkit-datetime-edit-fields-wrapper,
+.hah-encounter-time::-webkit-datetime-edit-fields-wrapper{padding:0;margin:0;display:inline-flex;align-items:center}
+.hah-encounter-date::-webkit-datetime-edit-text,
+.hah-encounter-time::-webkit-datetime-edit-text{padding:0;margin:0}
+.hah-encounter-date::-webkit-date-and-time-value,
+.hah-encounter-time::-webkit-date-and-time-value{margin:0;padding:0}
 
 /* Empty-state styling for unset time inputs. */
 .hah-encounter-time:invalid{color:rgba(15,23,42,.36)}
 
-/* Time block. Icon BEFORE the input (v12.36.684). */
+/* Time block. Icon BEFORE the input. */
 .hah-encounter-time-wrap{display:inline-flex;align-items:center;gap:3px;flex:0 0 auto}
-/* Icon button — same 28px height as inputs so the row is uniform. */
-.hah-encounter-time-now{flex:0 0 auto;width:28px;height:28px;padding:0;border-radius:7px;border:1px solid rgba(10,132,255,.16);background:#e8f1ff;color:#0a84ff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s ease,color .15s ease,transform .12s ease;box-sizing:border-box;vertical-align:middle}
+/* Icon button. */
+.hah-encounter-time-now{flex:0 0 auto;width:28px;height:28px;padding:0;border-radius:7px;border:1px solid rgba(10,132,255,.16);background:#e8f1ff;color:#0a84ff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s ease,color .15s ease,transform .12s ease;box-sizing:border-box}
 .hah-encounter-time-now:active{background:rgba(10,132,255,0.22);transform:scale(.94)}
 .hah-encounter-time-now svg{width:12px;height:12px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
@@ -2861,7 +2881,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_686_encounter_card_two_fixes_release.html; source=hospital_at_home_v12_36_686_encounter_card_two_fixes_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_687_encounter_card_align_pseudos_release.html; source=hospital_at_home_v12_36_687_encounter_card_align_pseudos_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3215,7 +3235,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_686_encounter_card_two_fixes_release.html</div><div>Source: hospital_at_home_v12_36_686_encounter_card_two_fixes_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_687_encounter_card_align_pseudos_release.html</div><div>Source: hospital_at_home_v12_36_687_encounter_card_align_pseudos_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -12344,8 +12364,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_686_encounter_card_two_fixes_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_686_encounter_card_two_fixes_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_687_encounter_card_align_pseudos_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_687_encounter_card_align_pseudos_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
