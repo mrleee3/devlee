@@ -2614,6 +2614,31 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 .hah-toast-spinner{display:inline-block;width:13px;height:13px;border-radius:50%;border:1.6px solid rgba(255,255,255,0.35);border-top-color:#fff;animation:hahToastSpin .7s linear infinite;flex:0 0 auto}
 @keyframes hahToastSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
+/* v12.36.678: Clear review button — inline in the clinical review card,
+ * below the For Discharge Summary textarea. Subtle, destructive-but-not-
+ * shouty styling. Right-aligned within the row so it sits at the
+ * end of the card and reads as 'finish-up action' rather than a
+ * primary affordance. */
+.clinical-review-clear-row{display:flex;justify-content:flex-end;margin-top:6px}
+.clinical-review-clear-btn{display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 12px;border-radius:10px;border:1px solid rgba(220,38,38,0.18);background:rgba(220,38,38,0.04);color:#dc2626;font-size:12.5px;font-weight:600;line-height:1;-webkit-tap-highlight-color:transparent;cursor:pointer;transition:transform .12s ease,background .18s ease}
+.clinical-review-clear-btn:active{transform:scale(.97);background:rgba(220,38,38,0.10)}
+.clinical-review-clear-btn:disabled{opacity:.45;cursor:default}
+
+/* Save Review icon dirty-state badge. Mirrors the OneNote sync badge
+ * pattern but blue (matches the icon's default tint). Visible when the
+ * draft has unsaved content; hidden after a commit clears the form.
+ * Does NOT pulse — committing happens fast enough that a steady dot
+ * is all the feedback needed. */
+.clinical-action-btn .save-review-dirty-badge{display:none}
+.clinical-action-btn.is-dirty .save-review-dirty-badge{display:inline}
+
+/* Just-committed flash — brief green tint on the save button
+ * immediately after a successful commit. Implemented as a one-shot
+ * via .is-just-committed class added by the click handler and removed
+ * after ~2s. Different from .is-success (which is a persistent state
+ * for OneNote linked patients) — this is a transient confirmation. */
+.clinical-action-btn.is-just-committed{background:rgba(22,163,74,0.10);border-color:rgba(22,163,74,0.22);color:#15803d}
+
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -2684,7 +2709,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_677_sync_footer_link_check_fix_release.html; source=hospital_at_home_v12_36_677_sync_footer_link_check_fix_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_678_mobile_draft_commit_release.html; source=hospital_at_home_v12_36_678_mobile_draft_commit_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3038,7 +3063,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_677_sync_footer_link_check_fix_release.html</div><div>Source: hospital_at_home_v12_36_677_sync_footer_link_check_fix_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_678_mobile_draft_commit_release.html</div><div>Source: hospital_at_home_v12_36_678_mobile_draft_commit_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3313,7 +3338,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><div class="obs-split-field" id="bpFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bp" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBpEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bpLying" type="hidden"/><input id="bpStanding1" type="hidden"/><input id="bpStanding3" type="hidden"/><input id="bpPosturalSymptoms" type="hidden"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Set clinical context above, then scan, upload or paste an ECG image for a structured AI draft review.</div><div class="ecg-assist-card ecg-context-card"><div class="ecg-assist-card-title" style="font-size:15px">Clinical context</div><div class="exam-findings-chip-row" id="ecgContextPresets"><button class="exam-findings-chip active" data-preset="" type="button">Unspecified</button><button class="exam-findings-chip" data-preset="Chest pain / possible ACS — look carefully for STEMI equivalents including posterior pattern, de Winter morphology, and Wellens signs" type="button">Chest pain</button><button class="exam-findings-chip" data-preset="Palpitations / arrhythmia query — focus on rhythm, PR interval, QTc, delta waves, and accessory pathway features" type="button">Palpitations</button><button class="exam-findings-chip" data-preset="Bradycardia / conduction concern — classify degree of block, assess escape rhythm, and note whether rate is appropriate for the clinical situation" type="button">Bradycardia</button><button class="exam-findings-chip" data-preset="Hyperkalaemia — actively grade the hyperkalaemic ECG progression (peaked T → PR prolongation → P-wave loss → wide QRS → sine wave) and state where on this spectrum the tracing sits" type="button">Hyperkalaemia</button><button class="exam-findings-chip" data-preset="Syncope / collapse — look carefully for QTc prolongation, Brugada pattern, epsilon waves, and high-degree AV block" type="button">Syncope</button><button class="exam-findings-chip" data-preset="Breathlessness / possible PE — look for sinus tachycardia, S1Q3T3, right heart strain pattern, and new RBBB" type="button">SOB</button><button class="exam-findings-chip" data-preset="Tachycardia — classify as sinus vs non-sinus; look for P-wave morphology, regularity, QRS width, delta waves, and assess for any underlying cause" type="button">Tachycardia</button></div></div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Lead review</div><div class="ecg-assist-lead-grid" id="ecgAssistLeadGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
 <div class="card patient-reorder-card" data-card-key="bloodsSummary" data-collapsible="false" id="bloodsSummaryCard"><h3 class="bloods-summary-title" data-collapsible="false" id="bloodsSummaryTitle">Recent bloods <span class="bloods-summary-inline-hint patient-card-helper-text" id="bloodsSummaryHint"></span></h3><div class="bloods-panel" id="bloodsPanel"><div class="bloods-panel-head hidden"><div class="bloods-panel-meta patient-card-helper-text" id="bloodsPanelMeta"></div></div><div class="bloods-grid hidden" id="bloodsGrid"></div><div class="bloods-table-wrap hidden" id="bloodsTableWrap"><table class="bloods-table" id="bloodsTable"><thead id="bloodsTableHead"></thead><tbody id="bloodsTableBody"></tbody></table></div><div class="bloods-empty" id="bloodsEmpty">No bloods entered.</div></div></div>
-<div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><div class="field-label-row"><label for="issues">Issues</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="issues" type="button">Dictate</button></div><textarea id="issues"></textarea><div class="field-label-row"><label for="bloods">Bloods</label><div class="field-label-actions"><button class="clinical-tools-btn" id="scanBloodsBtn" type="button">Scan</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="bloods" type="button">Dictate</button></div></div><textarea autocapitalize="off" autocorrect="off" id="bloods" spellcheck="false"></textarea><div class="field-label-row"><label for="currently">Currently</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="currently" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="currently"></textarea><div class="field-label-row"><label for="pmh">PMH</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openPmhPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="pmh" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="pmh"></textarea><div class="field-label-row"><label for="socialHistory">Social History</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openSocialHistoryPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="socialHistory" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="socialHistory"></textarea><div class="field-label-row"><label for="examination">Examination</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="examination" type="button">Dictate</button></div></div><textarea id="examination"></textarea><div class="field-label-row"><label for="plan">Plan</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="plan" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="plan"></textarea><div class="field-label-row"><label for="forDischargeSummary">For discharge summary</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="forDischargeSummary" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea></div>
+<div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><div class="field-label-row"><label for="issues">Issues</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="issues" type="button">Dictate</button></div><textarea id="issues"></textarea><div class="field-label-row"><label for="bloods">Bloods</label><div class="field-label-actions"><button class="clinical-tools-btn" id="scanBloodsBtn" type="button">Scan</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="bloods" type="button">Dictate</button></div></div><textarea autocapitalize="off" autocorrect="off" id="bloods" spellcheck="false"></textarea><div class="field-label-row"><label for="currently">Currently</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="currently" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="currently"></textarea><div class="field-label-row"><label for="pmh">PMH</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openPmhPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="pmh" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="pmh"></textarea><div class="field-label-row"><label for="socialHistory">Social History</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openSocialHistoryPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="socialHistory" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="socialHistory"></textarea><div class="field-label-row"><label for="examination">Examination</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="examination" type="button">Dictate</button></div></div><textarea id="examination"></textarea><div class="field-label-row"><label for="plan">Plan</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="plan" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="plan"></textarea><div class="field-label-row"><label for="forDischargeSummary">For discharge summary</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="forDischargeSummary" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea><div class="clinical-review-clear-row"><button class="clinical-review-clear-btn" id="clearClinicalReviewBtn" type="button">Clear review</button></div></div>
 <div class="card patient-reorder-card" data-card-key="meds">
 <div class="toggle-row meds-header-row">
 <input hidden="" id="medsGiven" type="checkbox"/>
@@ -3338,7 +3363,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 <div class="hidden" id="ivCollapsedSummary"></div>
 </div>
-<div class="card patient-reorder-card" data-card-key="output"><h3>Copy-ready clinical text</h3><div class="result-box" id="clinicalOutput">Enter obs and plan to generate a note.</div><div class="clinical-actions-row"><button aria-label="Copy note" class="clinical-action-btn" id="copyBtn" title="Copy note" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><button aria-label="Email to NHSmail" class="clinical-action-btn" id="emailBtn" title="Email to NHSmail" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></button><button aria-label="Send to OneNote" class="clinical-action-btn" id="oneNoteBtn" title="Send to OneNote" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 6h4"></path><path d="M2 10h4"></path><path d="M2 14h4"></path><path d="M2 18h4"></path><rect height="20" rx="2" width="16" x="4" y="2"></rect><path d="M16 2v20"></path><circle class="onenote-sync-badge" cx="19" cy="19" r="3" fill="currentColor" stroke="#fff" stroke-width="1.5"></circle></svg></button><button aria-label="Add timestamp" class="clinical-action-btn" id="timestampBtn" title="Add timestamp" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button><button aria-label="Save draft (coming soon)" class="clinical-action-btn is-placeholder" disabled id="saveDraftBtn" title="Save as draft — coming soon" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button></div><div aria-live="polite" class="clinical-sync-footer" id="clinicalSyncFooter"></div><div class="hidden" id="oneNoteSyncStatus"></div></div>
+<div class="card patient-reorder-card" data-card-key="output"><h3>Copy-ready clinical text</h3><div class="result-box" id="clinicalOutput">Enter obs and plan to generate a note.</div><div class="clinical-actions-row"><button aria-label="Copy note" class="clinical-action-btn" id="copyBtn" title="Copy note" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><button aria-label="Email to NHSmail" class="clinical-action-btn" id="emailBtn" title="Email to NHSmail" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></button><button aria-label="Send to OneNote" class="clinical-action-btn" id="oneNoteBtn" title="Send to OneNote" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 6h4"></path><path d="M2 10h4"></path><path d="M2 14h4"></path><path d="M2 18h4"></path><rect height="20" rx="2" width="16" x="4" y="2"></rect><path d="M16 2v20"></path><circle class="onenote-sync-badge" cx="19" cy="19" r="3" fill="currentColor" stroke="#fff" stroke-width="1.5"></circle></svg></button><button aria-label="Add timestamp" class="clinical-action-btn" id="timestampBtn" title="Add timestamp" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button><button aria-label="Save review" class="clinical-action-btn" id="saveReviewBtn" title="Save review" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline><circle class="save-review-dirty-badge" cx="19" cy="19" r="3" fill="currentColor" stroke="#fff" stroke-width="1.5"></circle></svg></button></div><div aria-live="polite" class="clinical-sync-footer" id="clinicalSyncFooter"></div><div class="hidden" id="oneNoteSyncStatus"></div></div>
 </section>
 <div class="reorder-insert-line" id="reorderInsertLine"></div>
 <div aria-hidden="true" class="reorder-fixed-controls" id="reorderControls">
@@ -6166,7 +6191,41 @@ const JSON_DATA_DEFAULT_FOLDER = 'H@H Board Data';
 const JSON_PATIENT_CACHE_KEY = 'hah_mobile_json_patient_cache_v1';
 const JSON_TASK_CACHE_KEY = 'hah_mobile_json_task_cache_v1';
 const JSON_LAST_MAPPING_KEY = 'hah_mobile_json_patient_id_map_v1';
+// v12.36.678: legacy prefix retained for read-back of pre-draft-commit
+// rolling entries on existing patients. New commits use a per-event id
+// (see commitMobileClinicalReviewEntry).
 const JSON_MOBILE_TIMELINE_PREFIX = 'mobile-clinical-current:';
+const JSON_MOBILE_COMMITTED_PREFIX = 'mobile-clinical:';
+// v12.36.678: localStorage key for mobile clinical-review drafts. Per
+// patient. Drafts are device-local and don't propagate to JSON or
+// desktop until the user explicitly commits via Save Review. Matches
+// desktop's localStorage draft pattern (DRAFT_PREFIX in 26-desktop-patient.js).
+const HAH_MOBILE_DRAFT_PREFIX = 'hah_mobile_draft_v1:';
+const MOBILE_DRAFT_FIELDS = ['issues','currently','examination','plan','forDischargeSummary'];
+function mobileDraftKey(patientId){return HAH_MOBILE_DRAFT_PREFIX + String(patientId||'');}
+function saveMobileDraft(patientId, fields){
+  try{
+    if(!patientId) return;
+    const payload = {fields:fields||{}, at:Date.now()};
+    localStorage.setItem(mobileDraftKey(patientId), JSON.stringify(payload));
+  }catch(_){}
+}
+function loadMobileDraft(patientId){
+  try{
+    const raw = localStorage.getItem(mobileDraftKey(patientId));
+    if(!raw) return null;
+    const parsed = JSON.parse(raw);
+    if(!parsed || typeof parsed!=='object') return null;
+    return parsed;
+  }catch(_){ return null; }
+}
+function clearMobileDraft(patientId){
+  try{ localStorage.removeItem(mobileDraftKey(patientId)); }catch(_){}
+}
+function hasMobileDraftContent(fields){
+  if(!fields) return false;
+  return MOBILE_DRAFT_FIELDS.some(k => normText(fields[k]||'').length > 0);
+}
 function normaliseJsonFolderPath(path){return String(path||JSON_DATA_DEFAULT_FOLDER).trim().replace(/^\/+|\/+$/g,'')||JSON_DATA_DEFAULT_FOLDER;}
 function currentJsonFolderPath(){const s=typeof loadGraphSettings==='function'?loadGraphSettings():{}; return normaliseJsonFolderPath(s.folderPath || JSON_DATA_DEFAULT_FOLDER);}
 function childJsonPath(parent, child){return `${normaliseJsonFolderPath(parent)}/${String(child||'').replace(/^\/+|\/+$/g,'')}`;}
@@ -6294,18 +6353,120 @@ async function loadJsonPatientDataset(){let service;try{service=await loadJsonSe
 function jsonBool(value){const text=String(value==null?'':value).trim().toLowerCase();return text==='1'||text==='true'||text==='yes'||text==='seen';}
 function mobileAcpFromForm(f){return {dnacprStatus:String(f.dnacprStatus||''),dnacprFormSeen:jsonBool(f.dnacprFormSeen),tepStatus:String(f.tepStatus||''),ceilingOfCare:String(f.ceilingOfCare||''),notes:String(f.acpNotes||'')};}
 function mobileObsFromForm(f){return {rr:f.rr||'',spo2:f.spo2||'',oxygen:f.oxygen||'',oxygenFlow:f.oxygenFlow||'',temp:f.temp||'',bp:f.bp||'',hr:f.hr||'',weight:f.weight||'',bm:f.bm||''};}
-function patchMobileClinicalEntry(doc,p){const f=p.form||{};doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];const entryId=`${JSON_MOBILE_TIMELINE_PREFIX}${doc.id}`;const note={issues:normText(f.issues||''),bloodsIx:normText(f.bloods||''),progress:normText(f.currently||''),examination:normText(f.examination||''),plan:normText(f.plan||'')};const entry={id:entryId,type:'mobile_clinical_review',status:'completed',timestamp:nowIsoJson(),author:getJsonActor(),note,fields:{source:'Mobile clinical review',issueRaw:note.issues,issues:note.issues,progress:note.progress,currently:note.progress,examination:note.examination,bloods:note.bloodsIx,bloodsIx:note.bloodsIx,plan:note.plan,forDischargeSummary:normText(f.forDischargeSummary||''),acp:mobileAcpFromForm(f),obs:mobileObsFromForm(f),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[]}};const idx=doc.timeline.findIndex(row=>String(row&&row.id)===entryId);if(idx>=0)doc.timeline[idx]={...doc.timeline[idx],...entry,updatedAt:nowIsoJson()};else doc.timeline.unshift(entry);doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));return doc;}
-async function patchJsonPatientFromMobile(doc,p){const f=p.form||{};doc.identity={...(doc.identity||{}),name:p.name||'',age:p.age||'',sex:p.sex||''};doc.service={...(doc.service||{}),referredFrom:p.referralSource||'',admittedDate:p.doa||''};doc.alerts={...(doc.alerts||{}),dnar:String(f.dnacprStatus||'').toLowerCase()==='yes',acp:!!(String(f.tepStatus||'').trim()||String(f.ceilingOfCare||'').trim()||String(f.acpNotes||'').trim()),escalation:String(f.ceilingOfCare||'').trim()};doc.clinical={...(doc.clinical||{}),summary:normText(f.issues||p.summary||''),bloodsSummary:normText(f.bloods||''),currently:normText(f.currently||''),pmh:normText(f.pmh||''),socialHistory:normText(f.socialHistory||''),examination:normText(f.examination||''),medications:Array.isArray(f.medEntries)?f.medEntries:[],ivTherapies:Array.isArray(f.ivEntries)?f.ivEntries:[],obs:mobileObsFromForm(f),acp:mobileAcpFromForm(f)};
-// Discharge fields: split any legacy free-text out of dischargeReadiness into
-// forDischargeSummary (notes), then save just the notes. The readiness value
-// itself is no longer stored — as of v12.36.668 it's derived from the timeline
-// at read time. We stop writing operational.dischargeReadiness from mobile so
-// the field doesn't carry stale values that aren't consulted anyway.
-const existingDischarge=splitJsonDischargeFields(doc.operational);
-doc.operational={...(doc.operational||{}),forDischargeSummary:normText(f.forDischargeSummary||'')};
-if(existingDischarge.notes&&!doc.operational.forDischargeSummary){doc.operational.forDischargeSummary=existingDischarge.notes;}
-delete doc.operational.dischargeReadiness;
-patchMobileClinicalEntry(doc,p);const saved=await saveJsonPatient(doc);try{await appendJsonAudit({type:'mobile-patient-updated',entityType:'patient',entityId:doc.id,summary:`Mobile update for ${p.name||doc.id}`});}catch(_){}return saved;}
+// v12.36.678: routine pushes from mobile no longer write draft fields
+// (issues/currently/examination/plan/forDischargeSummary) to JSON. Those
+// fields are now part of the explicit Save Review commit boundary; until
+// commit, they stay device-local in the draft localStorage. The fields
+// here that ARE still written on every push are *patient state* — obs,
+// meds, IV, ACP, identity, alerts, PMH, social history, bloods.
+//
+// Important: doc.clinical.{summary,currently,examination,bloodsSummary}
+// and doc.operational.forDischargeSummary are PRESERVED from the existing
+// doc, not overwritten with current form values. They reflect the last
+// committed clinical review, not the current draft. commitMobileClinicalReviewEntry()
+// is the only writer that updates them.
+async function patchJsonPatientFromMobile(doc,p){
+  const f=p.form||{};
+  doc.identity={...(doc.identity||{}),name:p.name||'',age:p.age||'',sex:p.sex||''};
+  doc.service={...(doc.service||{}),referredFrom:p.referralSource||'',admittedDate:p.doa||''};
+  doc.alerts={...(doc.alerts||{}),dnar:String(f.dnacprStatus||'').toLowerCase()==='yes',acp:!!(String(f.tepStatus||'').trim()||String(f.ceilingOfCare||'').trim()||String(f.acpNotes||'').trim()),escalation:String(f.ceilingOfCare||'').trim()};
+  // Clinical: write patient-state (pmh, socialHistory, bloodsSummary, meds, IV, obs, acp).
+  // Preserve summary/currently/examination from existing doc — those are
+  // last-committed-review content, not current draft.
+  const existingClinical = doc.clinical || {};
+  doc.clinical={
+    ...existingClinical,
+    summary: existingClinical.summary || normText(p.summary||''),
+    bloodsSummary: normText(f.bloods||''),
+    pmh: normText(f.pmh||''),
+    socialHistory: normText(f.socialHistory||''),
+    medications: Array.isArray(f.medEntries) ? f.medEntries : [],
+    ivTherapies: Array.isArray(f.ivEntries) ? f.ivEntries : [],
+    obs: mobileObsFromForm(f),
+    acp: mobileAcpFromForm(f)
+    // currently / examination preserved from existingClinical implicitly via spread
+  };
+  // Operational: forDischargeSummary preserved from existing — last-committed value
+  const existingDischarge=splitJsonDischargeFields(doc.operational);
+  doc.operational={...(doc.operational||{})};
+  if(!doc.operational.forDischargeSummary && existingDischarge.notes){
+    doc.operational.forDischargeSummary=existingDischarge.notes;
+  }
+  delete doc.operational.dischargeReadiness;
+  // Note: patchMobileClinicalEntry was removed in v12.36.678. Routine
+  // pushes no longer touch the timeline. Discrete commits go through
+  // commitMobileClinicalReviewEntry which is called from the Save Review
+  // button handler in 03-ui-actions.js.
+  const saved=await saveJsonPatient(doc);
+  try{await appendJsonAudit({type:'mobile-patient-updated',entityType:'patient',entityId:doc.id,summary:`Mobile update for ${p.name||doc.id}`});}catch(_){}
+  return saved;
+}
+
+// v12.36.678: explicit commit of a mobile clinical review. Called only
+// from the Save Review button — never from routine field autosave.
+// Creates a discrete timeline entry with a per-event id (timestamp +
+// random suffix) so each commit is preserved as its own encounter.
+// Also updates the patient-level clinical fields (summary/currently/
+// examination/bloodsSummary/forDischargeSummary) so desktop sees the
+// committed content in the patient sidebar.
+async function commitMobileClinicalReviewEntry(p, draftFields){
+  if(!p) throw new Error('commitMobileClinicalReviewEntry: no patient');
+  const target=getPatientTarget(p);
+  if(!target||!target.jsonId) throw new Error('Patient is not linked to JSON.');
+  const doc=await loadJsonPatient(target.jsonId);
+  const f=draftFields||{};
+  const note={
+    issues:normText(f.issues||''),
+    bloodsIx:normText((p.form && p.form.bloods)||''),
+    progress:normText(f.currently||''),
+    examination:normText(f.examination||''),
+    plan:normText(f.plan||'')
+  };
+  const ts=nowIsoJson();
+  // Per-event id: ms-since-epoch + 4-char random. Stable enough to
+  // dedupe if the same commit is somehow attempted twice in <1ms.
+  const idSuffix=`${Date.now()}:${Math.random().toString(36).slice(2,6)}`;
+  const entry={
+    id:`${JSON_MOBILE_COMMITTED_PREFIX}${idSuffix}`,
+    type:'mobile_clinical_review',
+    status:'completed',
+    timestamp:ts,
+    author:getJsonActor(),
+    note,
+    fields:{
+      source:'Mobile clinical review',
+      issueRaw:note.issues,
+      issues:note.issues,
+      progress:note.progress,
+      currently:note.progress,
+      examination:note.examination,
+      bloods:note.bloodsIx,
+      bloodsIx:note.bloodsIx,
+      plan:note.plan,
+      forDischargeSummary:normText(f.forDischargeSummary||''),
+      acp:mobileAcpFromForm(p.form||{}),
+      obs:mobileObsFromForm(p.form||{}),
+      medications:Array.isArray(p.form&&p.form.medEntries)?p.form.medEntries:[],
+      ivTherapies:Array.isArray(p.form&&p.form.ivEntries)?p.form.ivEntries:[]
+    }
+  };
+  doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];
+  doc.timeline.unshift(entry);
+  doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));
+  // Update patient-level mirror fields so desktop sidebar reflects this
+  // committed review's content (not whatever previous draft was lingering).
+  doc.clinical={...(doc.clinical||{}),
+    summary:note.issues || (doc.clinical && doc.clinical.summary) || '',
+    currently:note.progress,
+    examination:note.examination,
+    bloodsSummary:note.bloodsIx
+  };
+  doc.operational={...(doc.operational||{}), forDischargeSummary:normText(f.forDischargeSummary||'')};
+  delete doc.operational.dischargeReadiness;
+  const saved=await saveJsonPatient(doc);
+  try{await appendJsonAudit({type:'mobile-review-committed',entityType:'patient',entityId:doc.id,summary:`Mobile review committed for ${p.name||doc.id}`});}catch(_){}
+  return saved;
+}
 
 // ─── Mobile-side patient creation (writes to OneDrive) ────────────────────
 // Mirrors desktop's createPatientRecord. Generates a JSON id, builds a full
@@ -6838,6 +6999,120 @@ function updateClinicalSyncFooter(){
     parts.push('<span class="is-error">OneNote sync failed</span>');
   }
   el.innerHTML = parts.join(' · ');
+}
+
+// v12.36.678: dirty-state indicator for the Save Review button.
+// Visible when the localStorage draft has any content for the current
+// patient — meaning there's a draft that hasn't been committed yet.
+// Hidden when the form is empty (post-commit, post-clear, or never typed).
+function updateMobileDraftIndicator(){
+  const btn=(typeof $==='function')?$('saveReviewBtn'):null;
+  if(!btn) return;
+  if(!currentPatient){ btn.classList.remove('is-dirty'); return; }
+  let hasDraft=false;
+  try{
+    const draft=(typeof loadMobileDraft==='function')?loadMobileDraft(currentPatient):null;
+    if(draft && draft.fields && typeof hasMobileDraftContent==='function'){
+      hasDraft=hasMobileDraftContent(draft.fields);
+    }
+  }catch(_){}
+  btn.classList.toggle('is-dirty', hasDraft);
+  const titleText = hasDraft ? 'Save review (draft in progress)' : 'Save review';
+  btn.setAttribute('title', titleText);
+  btn.setAttribute('aria-label', titleText);
+}
+
+// v12.36.678: commit the current clinical-narrative draft as a discrete
+// mobile_clinical_review timeline entry. Called from the Save Review
+// button handler. On success: clears the form fields, clears the
+// localStorage draft, flashes the icon green, and shows a confirmation
+// toast. On failure: leaves the draft intact and shows an error toast
+// (clinician can retry, or come back to it later).
+async function saveMobileReview(){
+  if(!currentPatient || !patients[currentPatient]){ return; }
+  const p=patients[currentPatient];
+  if(!isLinkedPatient(p)){
+    if(typeof showHahToast==='function') showHahToast('Patient is not linked to JSON', {variant:'error', duration:2400});
+    return;
+  }
+  if(p._mobileReviewSaving) return;
+  // Snapshot the current form values for the five draft fields. We
+  // don't trust just the localStorage draft — the user may have typed
+  // something in the last 1.4s that hasn't been debounced-saved yet.
+  const draftFields={};
+  MOBILE_DRAFT_FIELDS.forEach(key => {
+    const el=$(key);
+    draftFields[key] = el ? String(el.value||'').trim() : '';
+  });
+  if(!hasMobileDraftContent(draftFields)){
+    if(typeof showHahToast==='function') showHahToast('Nothing to save — review is empty', {duration:2000});
+    return;
+  }
+  const btn=$('saveReviewBtn');
+  p._mobileReviewSaving=true;
+  if(btn){ btn.disabled=true; btn.classList.add('is-pending'); }
+  if(typeof showHahToast==='function') showHahToast('Saving review…', {persist:true, showSpinner:true});
+  try{
+    await commitMobileClinicalReviewEntry(p, draftFields);
+    // Clear the localStorage draft for this patient
+    if(typeof clearMobileDraft==='function') clearMobileDraft(currentPatient);
+    // Clear the form fields (the five draft fields only — patient
+    // state stays). Do this BEFORE saveCurrentPatientForm so that the
+    // saved p.form reflects the cleared state.
+    MOBILE_DRAFT_FIELDS.forEach(key => {
+      const el=$(key);
+      if(el) el.value='';
+      if(p.form) p.form[key]='';
+    });
+    // Persist the cleared form state to localStorage and re-render
+    if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
+    if(typeof saveData==='function') saveData('Review saved');
+    if(typeof generateClinicalOutput==='function') generateClinicalOutput();
+    if(btn){
+      btn.classList.add('is-just-committed');
+      setTimeout(()=>{ if(btn) btn.classList.remove('is-just-committed'); }, 2000);
+    }
+    if(typeof showHahToast==='function') showHahToast('Review saved', {variant:'success', duration:1800});
+  }catch(err){
+    const msg=String((err && err.message) || 'Save failed');
+    if(typeof showHahToast==='function') showHahToast('Save failed — '+msg, {variant:'error', duration:3000});
+  } finally {
+    p._mobileReviewSaving=false;
+    if(btn){ btn.disabled=false; btn.classList.remove('is-pending'); }
+    if(typeof updateMobileDraftIndicator==='function') updateMobileDraftIndicator();
+  }
+}
+
+// v12.36.678: clear the in-progress clinical review without committing.
+// Wipes the five draft fields plus the localStorage draft. Patient
+// state (obs, meds, IV, ACP, PMH, social history, bloods, timestamp)
+// is untouched. Confirmation prompt because it's destructive and
+// there's no undo.
+function clearMobileReview(){
+  if(!currentPatient || !patients[currentPatient]) return;
+  const p=patients[currentPatient];
+  // Read current field contents to decide whether confirmation is needed
+  const draftFields={};
+  MOBILE_DRAFT_FIELDS.forEach(key => {
+    const el=$(key);
+    draftFields[key]=el ? String(el.value||'').trim() : '';
+  });
+  if(!hasMobileDraftContent(draftFields)){
+    // Already empty — no-op, no confirmation needed
+    return;
+  }
+  if(!confirm('Clear the in-progress clinical review? Issues, currently, examination, plan, and discharge summary text will be wiped. Obs and meds will be kept.')) return;
+  MOBILE_DRAFT_FIELDS.forEach(key => {
+    const el=$(key);
+    if(el) el.value='';
+    if(p.form) p.form[key]='';
+  });
+  if(typeof clearMobileDraft==='function') clearMobileDraft(currentPatient);
+  if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
+  if(typeof saveData==='function') saveData('Review cleared');
+  if(typeof generateClinicalOutput==='function') generateClinicalOutput();
+  if(typeof updateMobileDraftIndicator==='function') updateMobileDraftIndicator();
+  if(typeof showHahToast==='function') showHahToast('Review cleared', {duration:1600});
 }
 function addEventLog(text){
   eventLogEntries.unshift({time:nowShort(), text:text});
@@ -7990,7 +8265,34 @@ function setFieldValues(f){
   $("hr").value=f.hr||""; if($("hrPulse")) $("hrPulse").value=f.hrPulse||""; if(window.syncHrTriggerDisplay) window.syncHrTriggerDisplay();
   $("weight").value=f.weight||""; $("bm").value=f.bm||""; if($("bmTiming")) $("bmTiming").value=f.bmTiming||""; if($("bmTimingTime")) $("bmTimingTime").value=f.bmTimingTime||""; if($("bmTarget")) $("bmTarget").value=f.bmTarget||""; if(window.syncBmTriggerDisplay) window.syncBmTriggerDisplay();
   $("conscious").value=f.conscious||"0"; $("confusion").value=f.confusion||"0";
-  $("issues").value=f.issues||""; if($("bloods")) $("bloods").value=f.bloods||""; if($("currently")) $("currently").value=f.currently||""; if($("pmh")) $("pmh").value=f.pmh||""; if($("socialHistory")) $("socialHistory").value=f.socialHistory||""; $("examination").value=f.examination||""; $("plan").value=f.plan||""; $("forDischargeSummary").value=f.forDischargeSummary||"";
+  // v12.36.678: form values for the five clinical-narrative fields are
+  // populated from JSON (last committed review) but overlaid with any
+  // localStorage draft on top. The draft overlay represents in-progress
+  // text not yet committed. p.form.<field> retains the same shape as
+  // before (both before and after this edit it holds whatever's
+  // currently typed) — the overlay just changes where that initial
+  // value comes from on patient open.
+  let draftOverlay = null;
+  try{
+    const savedDraft = (typeof loadMobileDraft === 'function') ? loadMobileDraft(currentPatient) : null;
+    if(savedDraft && savedDraft.fields) draftOverlay = savedDraft.fields;
+  }catch(_){}
+  const draftValue = (key) => {
+    if(draftOverlay && Object.prototype.hasOwnProperty.call(draftOverlay, key) && String(draftOverlay[key]||'').length > 0) return String(draftOverlay[key]);
+    return f[key]||'';
+  };
+  $("issues").value=draftValue('issues'); if($("bloods")) $("bloods").value=f.bloods||""; if($("currently")) $("currently").value=draftValue('currently'); if($("pmh")) $("pmh").value=f.pmh||""; if($("socialHistory")) $("socialHistory").value=f.socialHistory||""; $("examination").value=draftValue('examination'); $("plan").value=draftValue('plan'); $("forDischargeSummary").value=draftValue('forDischargeSummary');
+  // Also stamp p.form with the overlaid values so subsequent
+  // saveCurrentPatientForm reads see the draft as the current value,
+  // not the JSON value (otherwise diff detection would erroneously
+  // see "user just typed [draft]" on the first form open after relaunch).
+  if(patients[currentPatient] && patients[currentPatient].form && draftOverlay){
+    MOBILE_DRAFT_FIELDS.forEach(key => {
+      if(Object.prototype.hasOwnProperty.call(draftOverlay, key) && String(draftOverlay[key]||'').length > 0){
+        patients[currentPatient].form[key] = String(draftOverlay[key]);
+      }
+    });
+  }
   if($("dnacprStatus")) $("dnacprStatus").value=f.dnacprStatus||""; if($("dnacprFormSeen")) $("dnacprFormSeen").value=f.dnacprFormSeen||""; if($("tepStatus")) $("tepStatus").value=f.tepStatus||""; if($("ceilingOfCare")) $("ceilingOfCare").value=f.ceilingOfCare||""; if($("acpNotes")) $("acpNotes").value=f.acpNotes||""; renderEscalationChoices();
   if(patients[currentPatient] && patients[currentPatient].form){ const pf=patients[currentPatient].form; if(typeof pf.acpCollapsed==='undefined') pf.acpCollapsed = typeof f.acpCollapsed === 'undefined' ? true : !!f.acpCollapsed; }
   setAcpCollapsed(typeof f.acpCollapsed === 'undefined' ? true : !!f.acpCollapsed);
@@ -9545,12 +9847,24 @@ function saveCurrentPatientForm() {
     p.listDetails = p.listDetails || '';
   }
   if(isLinkedPatient(p)){
-    const trackedFields = ['issues','plan','bloods','currently','pmh','socialHistory','examination','forDischargeSummary','dnacprStatus','dnacprFormSeen','tepStatus','ceilingOfCare','acpNotes'];
-    const textChanged = trackedFields.some(key => normText(p.form[key]) !== normText(previousForm[key]));
+    // v12.36.678: split tracked fields. Patient-state changes still
+    // trigger an immediate JSON push; clinical-narrative changes are
+    // draft-only and saved to localStorage instead. Drafts don't
+    // propagate to JSON or other devices until the user explicitly
+    // taps Save Review (commitMobileClinicalReviewEntry).
+    const stateFields = ['pmh','socialHistory','bloods','dnacprStatus','dnacprFormSeen','tepStatus','ceilingOfCare','acpNotes'];
+    const stateChanged = stateFields.some(key => normText(p.form[key]) !== normText(previousForm[key]));
     const medChanged = JSON.stringify(p.form.medEntries || []) !== JSON.stringify(previousForm.medEntries || []);
     const ivChanged = JSON.stringify(p.form.ivEntries || []) !== JSON.stringify(previousForm.ivEntries || []);
     const obsChanged = ['rr','spo2','oxygen','oxygenFlow','temp','bp','hr','weight','bm'].some(key => normText(p.form[key]) !== normText(previousForm[key]));
-    if(textChanged || medChanged || ivChanged || obsChanged) queuePush(currentPatient);
+    const draftChanged = MOBILE_DRAFT_FIELDS.some(key => normText(p.form[key]) !== normText(previousForm[key]));
+    if(draftChanged){
+      const draftFields = {};
+      MOBILE_DRAFT_FIELDS.forEach(key => { draftFields[key] = String(p.form[key]||''); });
+      saveMobileDraft(currentPatient, draftFields);
+      if(typeof updateMobileDraftIndicator==='function') updateMobileDraftIndicator();
+    }
+    if(stateChanged || medChanged || ivChanged || obsChanged) queuePush(currentPatient);
   }
   if($("patientDetail") && !$("patientDetail").classList.contains('hidden') && typeof renderHeaderPatientContext==='function'){
     renderHeaderPatientContext(p);
@@ -10073,6 +10387,10 @@ ${$("forDischargeSummary").value.trim()}`);
   // footer's relative-time strings whenever the output is regenerated.
   if (typeof updateOneNoteUiForCurrentPatient === 'function') updateOneNoteUiForCurrentPatient();
   if (typeof updateClinicalSyncFooter === 'function') updateClinicalSyncFooter();
+  // v12.36.678: refresh the Save Review dirty-state badge whenever the
+  // output is regenerated. Covers the patient-open path where the form
+  // is freshly populated from JSON+draft.
+  if (typeof updateMobileDraftIndicator === 'function') updateMobileDraftIndicator();
 }
 
 
@@ -11349,8 +11667,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_677_sync_footer_link_check_fix_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_677_sync_footer_link_check_fix_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_678_mobile_draft_commit_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_678_mobile_draft_commit_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -14109,6 +14427,10 @@ document.addEventListener("DOMContentLoaded",function(){
     }, true);
   }
   $("copyBtn").onclick=copyClinicalText; $("emailBtn").onclick=emailToNHSmail; if($("oneNoteBtn")) $("oneNoteBtn").onclick=sendToOneNote; if($("openOneNoteBtn")) $("openOneNoteBtn").onclick=openCurrentPatientOneNotePage; $("timestampBtn").onclick=addTimestamp;
+  // v12.36.678: live Save Review button (replaces the v674 placeholder)
+  // and inline Clear button in the clinical review composer.
+  if($("saveReviewBtn")) $("saveReviewBtn").onclick=saveMobileReview;
+  if($("clearClinicalReviewBtn")) $("clearClinicalReviewBtn").onclick=clearMobileReview;
   $("openWeightHistoryBtn").onclick=openWeightHistoryModal;
   $("weightHistoryCloseBtn").onclick=closeWeightHistoryModal;
   $("weightHistoryBackdrop").onclick=closeWeightHistoryModal;
