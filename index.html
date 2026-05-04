@@ -2639,6 +2639,73 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
  * for OneNote linked patients) — this is a transient confirmation. */
 .clinical-action-btn.is-just-committed{background:rgba(22,163,74,0.10);border-color:rgba(22,163,74,0.22);color:#15803d}
 
+/* v12.36.681: edit-existing entry support.
+ *
+ * Banner above the Clinical review card when an existing entry is being
+ * edited (either from the patient log via Edit, or after Save when the
+ * composer locks onto the just-committed entry). Quiet amber tint so it
+ * reads as informational, not warning. Cancel × on the right.
+ */
+.clinical-review-edit-banner{display:flex;align-items:center;gap:10px;padding:9px 14px;margin-bottom:10px;border-radius:14px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.20);color:#854d0e;font-size:12.5px;font-weight:600;line-height:1.35}
+.clinical-review-edit-banner-label{flex:1;min-width:0}
+.clinical-review-edit-banner-cancel{flex:0 0 auto;width:26px;height:26px;border-radius:8px;border:none;background:transparent;color:#854d0e;font-size:18px;line-height:1;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;-webkit-tap-highlight-color:transparent}
+.clinical-review-edit-banner-cancel:active{background:rgba(245,158,11,0.18)}
+
+/* Locked composer state — applied to #patientDetail when
+ * p._composerLocked. The five clinical-narrative textareas become
+ * read-only-looking (slightly darker bg, dimmed colour, no cursor on
+ * tap). Dictation/Tools/Findings buttons fade. Clear button repurposes
+ * to "Start new review". */
+#patientDetail.composer-locked #issues,
+#patientDetail.composer-locked #currently,
+#patientDetail.composer-locked #examination,
+#patientDetail.composer-locked #plan,
+#patientDetail.composer-locked #forDischargeSummary{
+  background:rgba(15,23,42,0.04);
+  color:rgba(15,23,42,0.62);
+  pointer-events:none;
+  user-select:none;
+}
+#patientDetail.composer-locked .clinical-review-actions .clinical-tools-btn,
+#patientDetail.composer-locked .field-label-row .clinical-tools-btn{
+  opacity:.5;
+  pointer-events:none;
+}
+
+/* Save Review button — dual-glyph swap. Default state shows the save
+ * icon (.save-review-glyph-save); when parent has .is-locked, hide save
+ * and show the pencil edit icon (.save-review-glyph-edit). The dirty
+ * badge is hidden in locked state (no draft is in progress when locked,
+ * and showing a dirty dot under the pencil would be confusing). */
+.clinical-action-btn .save-review-glyph-edit{display:none}
+.clinical-action-btn.is-locked .save-review-glyph-save{display:none}
+.clinical-action-btn.is-locked .save-review-glyph-edit{display:inline}
+.clinical-action-btn.is-locked .save-review-dirty-badge{display:none}
+/* When locked, the icon is the persistent green-with-pencil "linked,
+ * tap to edit" state — same colour family as OneNote linked, so the
+ * visual semantics are consistent across the row. */
+.clinical-action-btn.is-locked{background:rgba(22,163,74,0.10);border-color:rgba(22,163,74,0.22);color:#15803d}
+.clinical-action-btn.is-locked:active{background:rgba(22,163,74,0.16)}
+
+/* Edit button on patient log entries. Inline with the meta row, on the
+ * right. Subtle by default — should read as "available action" not
+ * "primary call to action". */
+.patient-log-entry-edit{flex:0 0 auto;margin-left:auto;display:inline-flex;align-items:center;justify-content:center;width:28px;height:24px;padding:0;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--sub);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s ease,border-color .15s ease,color .15s ease}
+.patient-log-entry-edit:active{background:rgba(10,132,255,0.10);border-color:rgba(10,132,255,0.22);color:#0a84ff}
+.patient-log-entry-edit svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* When an entry is the one currently being edited from the log,
+ * promote its edit button to a green "currently editing" state so the
+ * user can scroll back up to the log and see which entry their
+ * composer is bound to. */
+.patient-log-entry.is-being-edited .patient-log-entry-edit{background:rgba(22,163,74,0.10);border-color:rgba(22,163,74,0.22);color:#15803d}
+.patient-log-entry.is-being-edited{box-shadow:inset 0 0 0 2px rgba(22,163,74,0.22)}
+
+/* The .patient-log-entry-bar needs to lay out so the edit button can
+ * sit on the right via margin-left:auto. Existing rule sets the bar
+ * to flex with gap; we just ensure no rule restricts the author span
+ * from yielding flex space. The bar already wraps; the edit button's
+ * margin-left:auto pushes it to the trailing edge. */
+
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -2709,7 +2776,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_680_savejsonpatient_returns_doc_release.html; source=hospital_at_home_v12_36_680_savejsonpatient_returns_doc_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_681_mobile_review_edit_existing_release.html; source=hospital_at_home_v12_36_681_mobile_review_edit_existing_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3063,7 +3130,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_680_savejsonpatient_returns_doc_release.html</div><div>Source: hospital_at_home_v12_36_680_savejsonpatient_returns_doc_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_681_mobile_review_edit_existing_release.html</div><div>Source: hospital_at_home_v12_36_681_mobile_review_edit_existing_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3338,7 +3405,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><div class="obs-split-field" id="bpFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bp" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBpEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bpLying" type="hidden"/><input id="bpStanding1" type="hidden"/><input id="bpStanding3" type="hidden"/><input id="bpPosturalSymptoms" type="hidden"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Set clinical context above, then scan, upload or paste an ECG image for a structured AI draft review.</div><div class="ecg-assist-card ecg-context-card"><div class="ecg-assist-card-title" style="font-size:15px">Clinical context</div><div class="exam-findings-chip-row" id="ecgContextPresets"><button class="exam-findings-chip active" data-preset="" type="button">Unspecified</button><button class="exam-findings-chip" data-preset="Chest pain / possible ACS — look carefully for STEMI equivalents including posterior pattern, de Winter morphology, and Wellens signs" type="button">Chest pain</button><button class="exam-findings-chip" data-preset="Palpitations / arrhythmia query — focus on rhythm, PR interval, QTc, delta waves, and accessory pathway features" type="button">Palpitations</button><button class="exam-findings-chip" data-preset="Bradycardia / conduction concern — classify degree of block, assess escape rhythm, and note whether rate is appropriate for the clinical situation" type="button">Bradycardia</button><button class="exam-findings-chip" data-preset="Hyperkalaemia — actively grade the hyperkalaemic ECG progression (peaked T → PR prolongation → P-wave loss → wide QRS → sine wave) and state where on this spectrum the tracing sits" type="button">Hyperkalaemia</button><button class="exam-findings-chip" data-preset="Syncope / collapse — look carefully for QTc prolongation, Brugada pattern, epsilon waves, and high-degree AV block" type="button">Syncope</button><button class="exam-findings-chip" data-preset="Breathlessness / possible PE — look for sinus tachycardia, S1Q3T3, right heart strain pattern, and new RBBB" type="button">SOB</button><button class="exam-findings-chip" data-preset="Tachycardia — classify as sinus vs non-sinus; look for P-wave morphology, regularity, QRS width, delta waves, and assess for any underlying cause" type="button">Tachycardia</button></div></div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Lead review</div><div class="ecg-assist-lead-grid" id="ecgAssistLeadGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
 <div class="card patient-reorder-card" data-card-key="bloodsSummary" data-collapsible="false" id="bloodsSummaryCard"><h3 class="bloods-summary-title" data-collapsible="false" id="bloodsSummaryTitle">Recent bloods <span class="bloods-summary-inline-hint patient-card-helper-text" id="bloodsSummaryHint"></span></h3><div class="bloods-panel" id="bloodsPanel"><div class="bloods-panel-head hidden"><div class="bloods-panel-meta patient-card-helper-text" id="bloodsPanelMeta"></div></div><div class="bloods-grid hidden" id="bloodsGrid"></div><div class="bloods-table-wrap hidden" id="bloodsTableWrap"><table class="bloods-table" id="bloodsTable"><thead id="bloodsTableHead"></thead><tbody id="bloodsTableBody"></tbody></table></div><div class="bloods-empty" id="bloodsEmpty">No bloods entered.</div></div></div>
-<div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><div class="field-label-row"><label for="issues">Issues</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="issues" type="button">Dictate</button></div><textarea id="issues"></textarea><div class="field-label-row"><label for="bloods">Bloods</label><div class="field-label-actions"><button class="clinical-tools-btn" id="scanBloodsBtn" type="button">Scan</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="bloods" type="button">Dictate</button></div></div><textarea autocapitalize="off" autocorrect="off" id="bloods" spellcheck="false"></textarea><div class="field-label-row"><label for="currently">Currently</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="currently" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="currently"></textarea><div class="field-label-row"><label for="pmh">PMH</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openPmhPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="pmh" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="pmh"></textarea><div class="field-label-row"><label for="socialHistory">Social History</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openSocialHistoryPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="socialHistory" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="socialHistory"></textarea><div class="field-label-row"><label for="examination">Examination</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="examination" type="button">Dictate</button></div></div><textarea id="examination"></textarea><div class="field-label-row"><label for="plan">Plan</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="plan" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="plan"></textarea><div class="field-label-row"><label for="forDischargeSummary">For discharge summary</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="forDischargeSummary" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea><div class="clinical-review-clear-row"><button class="clinical-review-clear-btn" id="clearClinicalReviewBtn" type="button">Clear review</button></div></div>
+<div class="clinical-review-edit-banner hidden" id="clinicalReviewEditBanner" role="status"><span class="clinical-review-edit-banner-label" id="clinicalReviewEditBannerLabel"></span><button aria-label="Cancel edit" class="clinical-review-edit-banner-cancel" id="clinicalReviewEditCancelBtn" title="Cancel edit" type="button">×</button></div><div class="card patient-reorder-card" data-card-key="clinical"><div class="clinical-review-header"><h3>Clinical review</h3><div class="clinical-review-actions"><button class="clinical-tools-btn" id="openScoreToolsBtn" type="button">Tools</button><button class="clinical-tools-btn" id="openEcgAssistBtn" type="button">ECG</button></div></div><div class="field-label-row"><label for="issues">Issues</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="issues" type="button">Dictate</button></div><textarea id="issues"></textarea><div class="field-label-row"><label for="bloods">Bloods</label><div class="field-label-actions"><button class="clinical-tools-btn" id="scanBloodsBtn" type="button">Scan</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="bloods" type="button">Dictate</button></div></div><textarea autocapitalize="off" autocorrect="off" id="bloods" spellcheck="false"></textarea><div class="field-label-row"><label for="currently">Currently</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="currently" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="currently"></textarea><div class="field-label-row"><label for="pmh">PMH</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openPmhPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="pmh" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="pmh"></textarea><div class="field-label-row"><label for="socialHistory">Social History</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openSocialHistoryPresetsBtn" type="button">Presets</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="socialHistory" type="button">Dictate</button></div></div><textarea autocapitalize="sentences" id="socialHistory"></textarea><div class="field-label-row"><label for="examination">Examination</label><div class="field-label-actions"><button class="clinical-tools-btn exam-findings-btn" id="openExamFindingsBtn" type="button">Findings</button><button class="clinical-tools-btn dictation-btn" data-dictation-target="examination" type="button">Dictate</button></div></div><textarea id="examination"></textarea><div class="field-label-row"><label for="plan">Plan</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="plan" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="plan"></textarea><div class="field-label-row"><label for="forDischargeSummary">For discharge summary</label><button class="clinical-tools-btn dictation-btn" data-dictation-target="forDischargeSummary" type="button">Dictate</button></div><textarea autocapitalize="sentences" id="forDischargeSummary"></textarea><div class="clinical-review-clear-row"><button class="clinical-review-clear-btn" id="clearClinicalReviewBtn" type="button">Clear review</button></div></div>
 <div class="card patient-reorder-card" data-card-key="meds">
 <div class="toggle-row meds-header-row">
 <input hidden="" id="medsGiven" type="checkbox"/>
@@ -3363,7 +3430,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 <div class="hidden" id="ivCollapsedSummary"></div>
 </div>
-<div class="card patient-reorder-card" data-card-key="output"><h3>Copy-ready clinical text</h3><div class="result-box" id="clinicalOutput">Enter obs and plan to generate a note.</div><div class="clinical-actions-row"><button aria-label="Copy note" class="clinical-action-btn" id="copyBtn" title="Copy note" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><button aria-label="Email to NHSmail" class="clinical-action-btn" id="emailBtn" title="Email to NHSmail" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></button><button aria-label="Send to OneNote" class="clinical-action-btn" id="oneNoteBtn" title="Send to OneNote" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 6h4"></path><path d="M2 10h4"></path><path d="M2 14h4"></path><path d="M2 18h4"></path><rect height="20" rx="2" width="16" x="4" y="2"></rect><path d="M16 2v20"></path><circle class="onenote-sync-badge" cx="19" cy="19" r="3" fill="currentColor" stroke="#fff" stroke-width="1.5"></circle></svg></button><button aria-label="Add timestamp" class="clinical-action-btn" id="timestampBtn" title="Add timestamp" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button><button aria-label="Save review" class="clinical-action-btn" id="saveReviewBtn" title="Save review" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline><circle class="save-review-dirty-badge" cx="19" cy="19" r="3" fill="currentColor" stroke="#fff" stroke-width="1.5"></circle></svg></button></div><div aria-live="polite" class="clinical-sync-footer" id="clinicalSyncFooter"></div><div class="hidden" id="oneNoteSyncStatus"></div></div>
+<div class="card patient-reorder-card" data-card-key="output"><h3>Copy-ready clinical text</h3><div class="result-box" id="clinicalOutput">Enter obs and plan to generate a note.</div><div class="clinical-actions-row"><button aria-label="Copy note" class="clinical-action-btn" id="copyBtn" title="Copy note" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><button aria-label="Email to NHSmail" class="clinical-action-btn" id="emailBtn" title="Email to NHSmail" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></button><button aria-label="Send to OneNote" class="clinical-action-btn" id="oneNoteBtn" title="Send to OneNote" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 6h4"></path><path d="M2 10h4"></path><path d="M2 14h4"></path><path d="M2 18h4"></path><rect height="20" rx="2" width="16" x="4" y="2"></rect><path d="M16 2v20"></path><circle class="onenote-sync-badge" cx="19" cy="19" r="3" fill="currentColor" stroke="#fff" stroke-width="1.5"></circle></svg></button><button aria-label="Add timestamp" class="clinical-action-btn" id="timestampBtn" title="Add timestamp" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button><button aria-label="Save review" class="clinical-action-btn" id="saveReviewBtn" title="Save review" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><g class="save-review-glyph-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></g><g class="save-review-glyph-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></g><circle class="save-review-dirty-badge" cx="19" cy="19" r="3" fill="currentColor" stroke="#fff" stroke-width="1.5"></circle></svg></button></div><div aria-live="polite" class="clinical-sync-footer" id="clinicalSyncFooter"></div><div class="hidden" id="oneNoteSyncStatus"></div></div>
 </section>
 <div class="reorder-insert-line" id="reorderInsertLine"></div>
 <div aria-hidden="true" class="reorder-fixed-controls" id="reorderControls">
@@ -6425,7 +6492,15 @@ async function patchJsonPatientFromMobile(doc,p){
 // Also updates the patient-level clinical fields (summary/currently/
 // examination/bloodsSummary/forDischargeSummary) so desktop sees the
 // committed content in the patient sidebar.
-async function commitMobileClinicalReviewEntry(p, draftFields){
+// v12.36.681: signature gained an optional editingEntryId. When set and
+// the entry exists in the timeline, performs an in-place update —
+// preserves id/timestamp/author so the encounter's identity is stable;
+// bumps updatedAt to reflect the edit. If the id is set but the entry
+// no longer exists (e.g. another device deleted it), falls back to
+// create-new with a fresh id, mirroring desktop's editing semantics
+// (line 1928-1933 of 26-desktop-patient.js — dangling editId reverts
+// to creation).
+async function commitMobileClinicalReviewEntry(p, draftFields, editingEntryId){
   if(!p) throw new Error('commitMobileClinicalReviewEntry: no patient');
   const target=getPatientTarget(p);
   if(!target||!target.jsonId) throw new Error('Patient is not linked to JSON.');
@@ -6438,39 +6513,79 @@ async function commitMobileClinicalReviewEntry(p, draftFields){
     examination:normText(f.examination||''),
     plan:normText(f.plan||'')
   };
-  const ts=nowIsoJson();
-  // Per-event id: ms-since-epoch + 4-char random. Stable enough to
-  // dedupe if the same commit is somehow attempted twice in <1ms.
-  const idSuffix=`${Date.now()}:${Math.random().toString(36).slice(2,6)}`;
-  const entry={
-    id:`${JSON_MOBILE_COMMITTED_PREFIX}${idSuffix}`,
-    type:'mobile_clinical_review',
-    status:'completed',
-    timestamp:ts,
-    author:getJsonActor(),
-    note,
-    fields:{
-      source:'Mobile clinical review',
-      issueRaw:note.issues,
-      issues:note.issues,
-      progress:note.progress,
-      currently:note.progress,
-      examination:note.examination,
-      bloods:note.bloodsIx,
-      bloodsIx:note.bloodsIx,
-      plan:note.plan,
-      forDischargeSummary:normText(f.forDischargeSummary||''),
-      acp:mobileAcpFromForm(p.form||{}),
-      obs:mobileObsFromForm(p.form||{}),
-      medications:Array.isArray(p.form&&p.form.medEntries)?p.form.medEntries:[],
-      ivTherapies:Array.isArray(p.form&&p.form.ivEntries)?p.form.ivEntries:[]
-    }
-  };
   doc.timeline=Array.isArray(doc.timeline)?doc.timeline.slice():[];
-  doc.timeline.unshift(entry);
+  // Try in-place update if we have an editingEntryId
+  let updatedEntry=null;
+  let savedId=null;
+  if(editingEntryId){
+    const idx=doc.timeline.findIndex(row=>String(row&&row.id)===String(editingEntryId));
+    if(idx>=0){
+      const existing=doc.timeline[idx];
+      updatedEntry={
+        ...existing,
+        // Preserve id, type, status, original timestamp, original author
+        // — the encounter's identity stays stable across edits.
+        note,
+        fields:{
+          ...(existing.fields||{}),
+          source:'Mobile clinical review',
+          issueRaw:note.issues,
+          issues:note.issues,
+          progress:note.progress,
+          currently:note.progress,
+          examination:note.examination,
+          bloods:note.bloodsIx,
+          bloodsIx:note.bloodsIx,
+          plan:note.plan,
+          forDischargeSummary:normText(f.forDischargeSummary||''),
+          acp:mobileAcpFromForm(p.form||{}),
+          obs:mobileObsFromForm(p.form||{}),
+          medications:Array.isArray(p.form&&p.form.medEntries)?p.form.medEntries:[],
+          ivTherapies:Array.isArray(p.form&&p.form.ivEntries)?p.form.ivEntries:[]
+        },
+        updatedAt:nowIsoJson()
+      };
+      doc.timeline[idx]=updatedEntry;
+      savedId=String(existing.id);
+    }
+    // If idx<0 the entry has been deleted on another device since we
+    // started editing — fall through to create-new path.
+  }
+  if(!savedId){
+    const idSuffix=`${Date.now()}:${Math.random().toString(36).slice(2,6)}`;
+    const newEntry={
+      id:`${JSON_MOBILE_COMMITTED_PREFIX}${idSuffix}`,
+      type:'mobile_clinical_review',
+      status:'completed',
+      timestamp:nowIsoJson(),
+      author:getJsonActor(),
+      note,
+      fields:{
+        source:'Mobile clinical review',
+        issueRaw:note.issues,
+        issues:note.issues,
+        progress:note.progress,
+        currently:note.progress,
+        examination:note.examination,
+        bloods:note.bloodsIx,
+        bloodsIx:note.bloodsIx,
+        plan:note.plan,
+        forDischargeSummary:normText(f.forDischargeSummary||''),
+        acp:mobileAcpFromForm(p.form||{}),
+        obs:mobileObsFromForm(p.form||{}),
+        medications:Array.isArray(p.form&&p.form.medEntries)?p.form.medEntries:[],
+        ivTherapies:Array.isArray(p.form&&p.form.ivEntries)?p.form.ivEntries:[]
+      }
+    };
+    doc.timeline.unshift(newEntry);
+    savedId=newEntry.id;
+    updatedEntry=newEntry;
+  }
   doc.timeline.sort((a,b)=>Date.parse(b.timestamp||b.updatedAt||0)-Date.parse(a.timestamp||a.updatedAt||0));
-  // Update patient-level mirror fields so desktop sidebar reflects this
-  // committed review's content (not whatever previous draft was lingering).
+  // Update patient-level mirror fields. These reflect the LATEST edit
+  // regardless of whether it was a new entry or an in-place update —
+  // desktop always wants to see the freshest committed content, not
+  // necessarily the chronologically latest entry.
   doc.clinical={...(doc.clinical||{}),
     summary:note.issues || (doc.clinical && doc.clinical.summary) || '',
     currently:note.progress,
@@ -6480,26 +6595,21 @@ async function commitMobileClinicalReviewEntry(p, draftFields){
   doc.operational={...(doc.operational||{}), forDischargeSummary:normText(f.forDischargeSummary||'')};
   delete doc.operational.dischargeReadiness;
   const saved=await saveJsonPatient(doc);
-  // v12.36.679: post-save housekeeping. Same shape as executePush's success
-  // path. Without these, the sync footer stays at "awaiting JSON sync" and
-  // the SyncLog has no record of the commit, even though the JSON write
-  // actually succeeded.
+  // Post-save housekeeping (mirrors executePush success path)
   p.jsonRecord = saved;
   const nowIso = new Date().toISOString();
   p._lastJsonSyncedAt = nowIso;
   p._lastSavedAt = nowIso;
   p._jsonSyncFailed = false;
-  // Mark the form's _lastImported* trackers so that any subsequent
-  // executePush from routine field-edits doesn't think the freshly-
-  // committed content is stale and try to re-push it.
   if(p.form){
     p.form._lastImportedIssues = normText(p.form.issues);
     p.form._lastImportedPlan   = normText(p.form.plan);
     p.form._lastImportedBloods = normText(p.form.bloods);
   }
-  try { if (window.SyncLog) window.SyncLog.add('outbound', 'patient.update', `Committed mobile review for ${p.name||doc.id}`, 'ok'); } catch(_){}
-  try{await appendJsonAudit({type:'mobile-review-committed',entityType:'patient',entityId:doc.id,summary:`Mobile review committed for ${p.name||doc.id}`});}catch(_){}
-  return saved;
+  const verb=editingEntryId && savedId===String(editingEntryId) ? 'Updated' : 'Committed';
+  try { if (window.SyncLog) window.SyncLog.add('outbound', 'patient.update', `${verb} mobile review for ${p.name||doc.id}`, 'ok'); } catch(_){}
+  try{await appendJsonAudit({type:editingEntryId?'mobile-review-edited':'mobile-review-committed',entityType:'patient',entityId:doc.id,summary:`${verb} mobile review for ${p.name||doc.id}`});}catch(_){}
+  return {saved, savedId};
 }
 
 // ─── Mobile-side patient creation (writes to OneDrive) ────────────────────
@@ -7058,13 +7168,24 @@ function updateMobileDraftIndicator(){
 
 // v12.36.678: commit the current clinical-narrative draft as a discrete
 // mobile_clinical_review timeline entry. Called from the Save Review
-// button handler. On success: clears the form fields, clears the
-// localStorage draft, flashes the icon green, and shows a confirmation
-// toast. On failure: leaves the draft intact and shows an error toast
-// (clinician can retry, or come back to it later).
+// button handler.
+// v12.36.681: rewritten for edit-existing-entry support. Three changes:
+// (1) honours p._editingEntryId so commits to a previously-saved entry
+//     update in place rather than create a new entry;
+// (2) on success, leaves the form populated AND locks the composer
+//     (matches desktop's locked-after-Done behaviour);
+// (3) when locked, tapping the Save Review button calls
+//     unlockComposerForEdit() rather than this function.
 async function saveMobileReview(){
   if(!currentPatient || !patients[currentPatient]){ return; }
   const p=patients[currentPatient];
+  // If composer is locked, the button is now an "Edit" button — unlock
+  // and return. Don't save (locked = nothing to save, the just-committed
+  // content is already in JSON).
+  if(p._composerLocked){
+    unlockComposerForEdit();
+    return;
+  }
   if(!isLinkedPatient(p)){
     if(typeof showHahToast==='function') showHahToast('Patient is not linked to JSON', {variant:'error', duration:2400});
     return;
@@ -7083,46 +7204,44 @@ async function saveMobileReview(){
     return;
   }
   const btn=$('saveReviewBtn');
+  const editingEntryId=p._editingEntryId || null;
   p._mobileReviewSaving=true;
   if(btn){ btn.disabled=true; btn.classList.add('is-pending'); }
-  if(typeof showHahToast==='function') showHahToast('Saving review…', {persist:true, showSpinner:true});
+  const savingLabel = editingEntryId ? 'Updating review…' : 'Saving review…';
+  if(typeof showHahToast==='function') showHahToast(savingLabel, {persist:true, showSpinner:true});
   try{
-    await commitMobileClinicalReviewEntry(p, draftFields);
-    // Clear the localStorage draft for this patient
+    const result=await commitMobileClinicalReviewEntry(p, draftFields, editingEntryId);
+    const savedId = (result && result.savedId) || null;
+    // Clear the localStorage draft for this patient — committed content
+    // is now in JSON, drafts represent uncommitted changes only.
     if(typeof clearMobileDraft==='function') clearMobileDraft(currentPatient);
-    // Clear the form fields (the five draft fields only — patient
-    // state stays). Do this BEFORE saveCurrentPatientForm so that the
-    // saved p.form reflects the cleared state.
-    MOBILE_DRAFT_FIELDS.forEach(key => {
-      const el=$(key);
-      if(el) el.value='';
-      if(p.form) p.form[key]='';
-    });
-    // Persist the cleared form state to localStorage and re-render
+    // v12.36.681: leave the form populated. Lock the composer onto the
+    // just-saved entry so the user sees what they committed and can
+    // tap Edit to amend. This matches desktop's Done→locked behaviour.
+    p._editingEntryId = savedId;
+    p._composerLocked = true;
+    // Persist the form's last-saved values (matching what's now in JSON)
+    if(p.form){
+      MOBILE_DRAFT_FIELDS.forEach(key => { p.form[key] = draftFields[key]; });
+    }
     if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
-    if(typeof saveData==='function') saveData('Review saved');
+    if(typeof saveData==='function') saveData(editingEntryId ? 'Review updated' : 'Review saved');
     if(typeof generateClinicalOutput==='function') generateClinicalOutput();
-    // v12.36.679: refresh the Summary patient log card so the new
-    // committed entry shows up immediately. Without this it only
-    // appears after relaunching (the dataset reload-on-resume is
-    // what made it show up before — not what we wanted).
+    // v12.36.679: refresh the Summary patient log card so the entry
+    // shows up immediately (and is-being-edited highlight reflects state).
     if(typeof renderPatientBoardCard==='function') renderPatientBoardCard();
-    // Refresh the sync footer so it correctly shows "Synced to JSON
-    // just now" rather than the stale "awaiting JSON sync" from before
-    // the commit.
     if(typeof updateClinicalSyncFooter==='function') updateClinicalSyncFooter();
-    // Update setSaveStatus so the top-of-app status pill reflects
-    // the JSON sync (matches what executePush does).
     if(typeof setSaveStatus==='function') setSaveStatus('Saved locally • Synced to JSON');
+    // Apply locked styling to composer + update Save→Edit icon glyph
+    if(typeof applyComposerLockState==='function') applyComposerLockState();
     if(btn){
       btn.classList.add('is-just-committed');
       setTimeout(()=>{ if(btn) btn.classList.remove('is-just-committed'); }, 2000);
     }
-    if(typeof showHahToast==='function') showHahToast('Review saved', {variant:'success', duration:1800});
+    const successLabel = editingEntryId ? 'Review updated' : 'Review saved';
+    if(typeof showHahToast==='function') showHahToast(successLabel, {variant:'success', duration:1800});
   }catch(err){
     const msg=String((err && err.message) || 'Save failed');
-    // v12.36.679: stamp the failure flag so the sync footer reflects
-    // that something went wrong, then refresh it.
     p._jsonSyncFailed = true;
     if(typeof updateClinicalSyncFooter==='function') updateClinicalSyncFooter();
     try { if (window.SyncLog) window.SyncLog.add('outbound', 'patient.update', `Failed to commit mobile review for ${p.name||currentPatient}`, 'error', msg); } catch(_){}
@@ -7134,14 +7253,231 @@ async function saveMobileReview(){
   }
 }
 
+// v12.36.681: unlock the composer for editing the currently-bound entry.
+// Called when (a) user taps the Save→Edit-glyph icon while locked, or
+// (b) editEntryFromLog routes through here after pre-filling fields.
+// Doesn't change the populated content, doesn't change p._editingEntryId
+// — just toggles the locked flag and re-applies the visual state.
+function unlockComposerForEdit(){
+  if(!currentPatient || !patients[currentPatient]) return;
+  const p=patients[currentPatient];
+  p._composerLocked = false;
+  if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
+  if(typeof saveData==='function') saveData();
+  if(typeof applyComposerLockState==='function') applyComposerLockState();
+  if(typeof updateMobileDraftIndicator==='function') updateMobileDraftIndicator();
+  // Focus the issues field so the user can start typing immediately
+  const el=$('issues');
+  if(el && typeof el.focus==='function'){
+    setTimeout(()=>{ try { el.focus(); } catch(_){} }, 0);
+  }
+}
+
+// v12.36.681: clear form, drop the editing/locked state, return to
+// fresh-creation mode. Called from the Clear button when in locked
+// state ("Start new review"). No JSON write — the previously-committed
+// entry stays as-is in the timeline.
+function startNewReview(){
+  if(!currentPatient || !patients[currentPatient]) return;
+  const p=patients[currentPatient];
+  // Wipe form fields + draft + lock state + edit binding
+  MOBILE_DRAFT_FIELDS.forEach(key => {
+    const el=$(key);
+    if(el) el.value='';
+    if(p.form) p.form[key]='';
+  });
+  if(typeof clearMobileDraft==='function') clearMobileDraft(currentPatient);
+  p._editingEntryId = null;
+  p._composerLocked = false;
+  if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
+  if(typeof saveData==='function') saveData();
+  if(typeof generateClinicalOutput==='function') generateClinicalOutput();
+  if(typeof renderPatientBoardCard==='function') renderPatientBoardCard();
+  if(typeof applyComposerLockState==='function') applyComposerLockState();
+  if(typeof updateMobileDraftIndicator==='function') updateMobileDraftIndicator();
+  // Focus the issues field for immediate typing
+  const el=$('issues');
+  if(el && typeof el.focus==='function'){
+    setTimeout(()=>{ try { el.focus(); } catch(_){} }, 0);
+  }
+}
+
+// v12.36.681: route the patient log's Edit button to this function.
+// Pre-fills the composer with the entry's content, sets editingEntryId,
+// unlocks. Switches to the Review tab. If there's an in-progress draft
+// for new content (no editingEntryId yet, but draft content present),
+// prompts before discarding it — matches desktop's draft-collision
+// behaviour and the user's confirmed preference.
+function editEntryFromLog(entryId){
+  if(!entryId || !currentPatient || !patients[currentPatient]) return;
+  const p=patients[currentPatient];
+  // Find entry in timeline
+  const timeline = (p.jsonRecord && Array.isArray(p.jsonRecord.timeline)) ? p.jsonRecord.timeline : [];
+  const entry = timeline.find(row => String(row && row.id) === String(entryId));
+  if(!entry){
+    if(typeof showHahToast==='function') showHahToast('Entry not found — may have been deleted', {variant:'error', duration:2400});
+    return;
+  }
+  // If we're switching FROM unlocked composer with an in-progress fresh
+  // draft (no editingEntryId, locked false, but draft content typed),
+  // confirm before discarding.
+  const currentlyEditingDifferent = !!(p._editingEntryId && String(p._editingEntryId) !== String(entryId));
+  let hasUncommittedFreshDraft = false;
+  if(!p._composerLocked && !p._editingEntryId){
+    const currentValues={};
+    MOBILE_DRAFT_FIELDS.forEach(key => {
+      const el=$(key);
+      currentValues[key] = el ? String(el.value||'').trim() : '';
+    });
+    hasUncommittedFreshDraft = hasMobileDraftContent(currentValues);
+  }
+  if(hasUncommittedFreshDraft){
+    if(!confirm("You have an unsaved review in progress. Editing this entry will discard it. Continue?")) return;
+  }
+  // Switching between two existing entries (one already editing, now
+  // editing another) doesn't need a prompt — they're just navigating.
+  if(currentlyEditingDifferent){
+    // Silently switch
+  }
+  // Pre-fill form fields from the entry's note + fields
+  const note = entry.note || {};
+  const f = entry.fields || {};
+  const issuesText = String(f.issueRaw || f.issues || note.issues || '');
+  const currentlyText = String(f.currently || f.progress || note.progress || '');
+  const examinationText = String(f.examination || note.examination || '');
+  const planText = String(f.plan || note.plan || '');
+  const fdsText = String(f.forDischargeSummary || '');
+  if($('issues')) $('issues').value = issuesText;
+  if($('currently')) $('currently').value = currentlyText;
+  if($('examination')) $('examination').value = examinationText;
+  if($('plan')) $('plan').value = planText;
+  if($('forDischargeSummary')) $('forDischargeSummary').value = fdsText;
+  if(p.form){
+    p.form.issues = issuesText;
+    p.form.currently = currentlyText;
+    p.form.examination = examinationText;
+    p.form.plan = planText;
+    p.form.forDischargeSummary = fdsText;
+  }
+  // Drop any prior localStorage draft (we're committed to editing this entry now)
+  if(typeof clearMobileDraft==='function') clearMobileDraft(currentPatient);
+  p._editingEntryId = String(entryId);
+  p._composerLocked = false;
+  if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
+  if(typeof saveData==='function') saveData();
+  if(typeof generateClinicalOutput==='function') generateClinicalOutput();
+  if(typeof renderPatientBoardCard==='function') renderPatientBoardCard();
+  if(typeof applyComposerLockState==='function') applyComposerLockState();
+  // Switch to Review tab
+  if(typeof setPatientDetailMode==='function'){
+    setPatientDetailMode('review');
+  }
+}
+
+// v12.36.681: drop the editing binding without committing. Called from
+// the editing banner's × cancel button. Discards in-progress edits to
+// the existing entry (the entry itself stays in JSON unchanged), clears
+// form, returns composer to fresh-creation mode. Confirms because it's
+// destructive.
+function cancelEditFromLog(){
+  if(!currentPatient || !patients[currentPatient]) return;
+  const p=patients[currentPatient];
+  if(!p._editingEntryId) return;
+  if(!confirm('Cancel editing this review? Your changes since opening Edit will be discarded. The original entry will be kept as it was.')) return;
+  // Wipe form, drop edit binding
+  MOBILE_DRAFT_FIELDS.forEach(key => {
+    const el=$(key);
+    if(el) el.value='';
+    if(p.form) p.form[key]='';
+  });
+  if(typeof clearMobileDraft==='function') clearMobileDraft(currentPatient);
+  p._editingEntryId = null;
+  p._composerLocked = false;
+  if(typeof saveCurrentPatientForm==='function') saveCurrentPatientForm();
+  if(typeof saveData==='function') saveData();
+  if(typeof generateClinicalOutput==='function') generateClinicalOutput();
+  if(typeof renderPatientBoardCard==='function') renderPatientBoardCard();
+  if(typeof applyComposerLockState==='function') applyComposerLockState();
+  if(typeof showHahToast==='function') showHahToast('Edit cancelled', {duration:1600});
+}
+
+// v12.36.681: apply the composer-locked CSS state across the patient
+// detail. Toggles the .composer-locked class on #patientDetail (which
+// drives the textarea styling and tools-button fade), updates the
+// saveReviewBtn class, label, and title, updates the Clear button
+// label, and shows/hides the editing banner. Called from any function
+// that mutates p._composerLocked or p._editingEntryId.
+function applyComposerLockState(){
+  const detail = $('patientDetail');
+  const saveBtn = $('saveReviewBtn');
+  const clearBtn = $('clearClinicalReviewBtn');
+  const banner = $('clinicalReviewEditBanner');
+  const bannerLabel = $('clinicalReviewEditBannerLabel');
+  if(!detail || !currentPatient || !patients[currentPatient]){
+    if(detail) detail.classList.remove('composer-locked');
+    if(saveBtn){ saveBtn.classList.remove('is-locked'); saveBtn.setAttribute('title','Save review'); saveBtn.setAttribute('aria-label','Save review'); }
+    if(clearBtn){ clearBtn.textContent = 'Clear review'; }
+    if(banner) banner.classList.add('hidden');
+    return;
+  }
+  const p = patients[currentPatient];
+  const isLocked = !!p._composerLocked;
+  const editingId = p._editingEntryId || null;
+  detail.classList.toggle('composer-locked', isLocked);
+  if(saveBtn){
+    saveBtn.classList.toggle('is-locked', isLocked);
+    if(isLocked){
+      saveBtn.setAttribute('title', 'Edit review — tap to amend');
+      saveBtn.setAttribute('aria-label', 'Edit review');
+    } else if(editingId){
+      saveBtn.setAttribute('title', 'Update review');
+      saveBtn.setAttribute('aria-label', 'Update review');
+    } else {
+      saveBtn.setAttribute('title', 'Save review');
+      saveBtn.setAttribute('aria-label', 'Save review');
+    }
+  }
+  if(clearBtn){
+    clearBtn.textContent = isLocked ? 'Start new review' : 'Clear review';
+  }
+  // Editing banner — visible only when actively editing an existing
+  // entry AND the composer is unlocked (i.e. user is mid-edit). Once
+  // committed, locked state takes over visually and the banner is
+  // redundant.
+  if(banner && bannerLabel){
+    if(editingId && !isLocked){
+      // Find entry to show its date
+      const timeline = (p.jsonRecord && Array.isArray(p.jsonRecord.timeline)) ? p.jsonRecord.timeline : [];
+      const entry = timeline.find(row => String(row && row.id) === String(editingId));
+      const dateLabel = entry ? formatPatientLogEntryDate(entry.timestamp) : '';
+      bannerLabel.textContent = dateLabel ? `Editing entry from ${dateLabel}` : 'Editing existing review';
+      banner.classList.remove('hidden');
+    } else {
+      banner.classList.add('hidden');
+    }
+  }
+}
+
 // v12.36.678: clear the in-progress clinical review without committing.
 // Wipes the five draft fields plus the localStorage draft. Patient
 // state (obs, meds, IV, ACP, PMH, social history, bloods, timestamp)
 // is untouched. Confirmation prompt because it's destructive and
 // there's no undo.
+// v12.36.681: when composer is locked, this function instead performs
+// "Start new review" — exits the locked state with cleared fields. The
+// Clear button in the HTML wires to this function in both states; the
+// label flips between "Clear review" and "Start new review" depending
+// on context (handled in applyComposerLockState).
 function clearMobileReview(){
   if(!currentPatient || !patients[currentPatient]) return;
   const p=patients[currentPatient];
+  // In locked state, route to startNewReview without confirmation
+  // (the just-committed content is safe in JSON; clearing the form
+  // is non-destructive at this point).
+  if(p._composerLocked){
+    startNewReview();
+    return;
+  }
   // Read current field contents to decide whether confirmation is needed
   const draftFields={};
   MOBILE_DRAFT_FIELDS.forEach(key => {
@@ -7149,7 +7485,18 @@ function clearMobileReview(){
     draftFields[key]=el ? String(el.value||'').trim() : '';
   });
   if(!hasMobileDraftContent(draftFields)){
-    // Already empty — no-op, no confirmation needed
+    // Already empty — no-op, no confirmation needed.
+    // But if currently editing an existing entry with empty fields,
+    // route to cancel.
+    if(p._editingEntryId){
+      cancelEditFromLog();
+    }
+    return;
+  }
+  // If editing an existing entry, this is a "discard edits" action.
+  // Route to cancelEditFromLog which has its own confirmation phrasing.
+  if(p._editingEntryId){
+    cancelEditFromLog();
     return;
   }
   if(!confirm('Clear the in-progress clinical review? Issues, currently, examination, plan, and discharge summary text will be wiped. Obs and meds will be kept.')) return;
@@ -8482,6 +8829,15 @@ function renderPatientLogEntry(entry, isLatest){
   metaParts.push(`<span class="patient-log-entry-type">${escapeHtml(typeLabel)}</span>`);
   if(entry.author) metaParts.push(`<span class="patient-log-entry-author">${escapeHtml(entry.author)}</span>`);
   const metaHtml=metaParts.join('<span class="patient-log-entry-sep" aria-hidden="true">·</span>');
+  // v12.36.681: edit button on each mobile_clinical_review entry.
+  // Desktop board_round entries are not editable from mobile (read-only
+  // — desktop is the authoring surface for those). is-being-edited
+  // class flags the entry currently bound to p._editingEntryId, giving
+  // a visual anchor between the log and the composer.
+  const editingIdForCurrent = (currentPatient && patients[currentPatient]) ? String(patients[currentPatient]._editingEntryId || '') : '';
+  const isBeingEdited = isMobile && entry.id && editingIdForCurrent === String(entry.id);
+  if(isBeingEdited) cls.push('is-being-edited');
+  const editBtnHtml = isMobile ? `<button type="button" class="patient-log-entry-edit" data-log-action="edit-entry" data-entry-id="${escapeHtml(String(entry.id||''))}" title="Edit this review" aria-label="Edit this review"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>` : '';
   // v12.36.671: empty-entry placeholder. When an entry has no content in any
   // rendered field (a mobile clinical review saved with everything blank, an
   // accidental tap, etc.), don't render the full "Issues — / Currently — /
@@ -8490,12 +8846,12 @@ function renderPatientLogEntry(entry, isLatest){
   if(!hasContent){
     cls.push('is-empty');
     return `<div class="${cls.join(' ')}">
-        <div class="patient-log-entry-bar">${metaHtml}</div>
+        <div class="patient-log-entry-bar">${metaHtml}${editBtnHtml}</div>
         <div class="patient-log-entry-empty-body">No clinical detail recorded for this entry.</div>
       </div>`;
   }
   return `<div class="${cls.join(' ')}">
-      <div class="patient-log-entry-bar">${metaHtml}</div>
+      <div class="patient-log-entry-bar">${metaHtml}${editBtnHtml}</div>
       <div class="patient-log-entry-body">${sections.join('')}</div>
     </div>`;
 }
@@ -8531,6 +8887,17 @@ function renderPatientLogCard(){
   card.innerHTML=`${headerHtml}<div class="patient-log-entries">${latestHtml}</div>${earlierHtml}`;
   const toggleBtn=card.querySelector('[data-action="patient-log-toggle-older"]');
   if(toggleBtn) toggleBtn.addEventListener('click', togglePatientLogOlder);
+  // v12.36.681: wire each entry's Edit button. Uses data-entry-id to
+  // route the tap to editEntryFromLog. Also stops propagation so the
+  // tap doesn't bubble into other entry-level click handlers.
+  card.querySelectorAll('[data-log-action="edit-entry"]').forEach(btn => {
+    btn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      const id = btn.getAttribute('data-entry-id');
+      if(id && typeof editEntryFromLog === 'function') editEntryFromLog(id);
+    });
+  });
 }
 
 function togglePatientLogOlder(){
@@ -9909,7 +10276,7 @@ function saveCurrentPatientForm() {
     const ivChanged = JSON.stringify(p.form.ivEntries || []) !== JSON.stringify(previousForm.ivEntries || []);
     const obsChanged = ['rr','spo2','oxygen','oxygenFlow','temp','bp','hr','weight','bm'].some(key => normText(p.form[key]) !== normText(previousForm[key]));
     const draftChanged = MOBILE_DRAFT_FIELDS.some(key => normText(p.form[key]) !== normText(previousForm[key]));
-    if(draftChanged){
+    if(draftChanged && !p._composerLocked){
       const draftFields = {};
       MOBILE_DRAFT_FIELDS.forEach(key => { draftFields[key] = String(p.form[key]||''); });
       saveMobileDraft(currentPatient, draftFields);
@@ -10442,6 +10809,11 @@ ${$("forDischargeSummary").value.trim()}`);
   // output is regenerated. Covers the patient-open path where the form
   // is freshly populated from JSON+draft.
   if (typeof updateMobileDraftIndicator === 'function') updateMobileDraftIndicator();
+  // v12.36.681: apply composer lock state — toggles textarea read-only
+  // styling, swaps Save↔Edit icon, sets editing banner visibility.
+  // Per-patient state restored each time the form rebuilds for a
+  // different patient.
+  if (typeof applyComposerLockState === 'function') applyComposerLockState();
 }
 
 
@@ -11718,8 +12090,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_680_savejsonpatient_returns_doc_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_680_savejsonpatient_returns_doc_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_681_mobile_review_edit_existing_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_681_mobile_review_edit_existing_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -14482,6 +14854,9 @@ document.addEventListener("DOMContentLoaded",function(){
   // and inline Clear button in the clinical review composer.
   if($("saveReviewBtn")) $("saveReviewBtn").onclick=saveMobileReview;
   if($("clearClinicalReviewBtn")) $("clearClinicalReviewBtn").onclick=clearMobileReview;
+  // v12.36.681: editing banner cancel button — wired here so all
+  // composer-state UI hooks live alongside the related buttons.
+  if($("clinicalReviewEditCancelBtn")) $("clinicalReviewEditCancelBtn").onclick=cancelEditFromLog;
   $("openWeightHistoryBtn").onclick=openWeightHistoryModal;
   $("weightHistoryCloseBtn").onclick=closeWeightHistoryModal;
   $("weightHistoryBackdrop").onclick=closeWeightHistoryModal;
