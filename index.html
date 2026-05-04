@@ -2563,18 +2563,35 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 /* v12.36.674: clinical text card — icon-row actions + unified sync footer.
  * v12.36.675: icon colour now matches .plus-btn (Scan / Add icons used
  * elsewhere on the patient page) — #0a84ff on #e8f1ff, dropping the
- * darker #0a3d91 that read as a different visual family. */
+ * darker #0a3d91 that read as a different visual family.
+ * v12.36.676: OneNote icon redesigned (lucide notebook) and gained an
+ * inline SVG status badge to signify the active sync relationship.
+ * Dirty-state detection removed — once linked, OneNote autosyncs, so
+ * the icon stays green regardless of edits. */
 .clinical-actions-row{display:flex;align-items:stretch;justify-content:space-between;gap:8px;margin-top:12px;padding:0}
 .clinical-action-btn{flex:1 1 0;min-width:0;height:48px;padding:0;margin:0;border-radius:14px;border:1px solid rgba(10,132,255,.16);background:#e8f1ff;color:#0a84ff;display:inline-flex;align-items:center;justify-content:center;font:inherit;-webkit-tap-highlight-color:transparent;cursor:pointer;transition:transform .12s ease,background .18s ease,border-color .18s ease,color .18s ease;box-shadow:none}
 .clinical-action-btn:active{transform:scale(.96);background:#d5e6ff}
 .clinical-action-btn svg{width:20px;height:20px;display:block;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .clinical-action-btn.is-success{background:rgba(22,163,74,0.10);border-color:rgba(22,163,74,0.22);color:#15803d}
 .clinical-action-btn.is-success:active{background:rgba(22,163,74,0.16)}
-.clinical-action-btn.is-pending{background:#e8f1ff;border-color:rgba(10,132,255,.32);color:#0a84ff;opacity:.74}
+.clinical-action-btn.is-pending{opacity:.85;cursor:default}
 .clinical-action-btn.is-placeholder{background:rgba(15,23,42,0.04);border:1px dashed rgba(15,23,42,0.18);color:#94a3b8}
 .clinical-action-btn.is-placeholder:active{transform:none;background:rgba(15,23,42,0.04)}
 .clinical-action-btn:disabled{cursor:default}
 .clinical-action-btn:disabled:not(.is-pending):not(.is-placeholder){opacity:.55}
+/* OneNote sync badge — a small filled circle in the bottom-right corner
+ * of the notebook icon. Hidden by default; shown when the patient is
+ * linked to a OneNote page (.is-success); pulses while a force-sync is
+ * in flight (.is-pending). The badge inherits color from the button so
+ * it goes green when linked, blue while initial-sending. */
+.clinical-action-btn .onenote-sync-badge{display:none}
+.clinical-action-btn.is-success .onenote-sync-badge,
+.clinical-action-btn.is-pending .onenote-sync-badge{display:inline}
+.clinical-action-btn.is-pending .onenote-sync-badge{animation:oneNoteSyncPulse 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes oneNoteSyncPulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.45;transform:scale(1.4)}
+}
 
 /* Unified sync footer — small text strip below the icon row. Shows
  * "Saved locally Xm ago · Synced to JSON Ym ago · OneNote Zm ago".
@@ -2667,7 +2684,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_675_clinical_actions_polish_release.html; source=hospital_at_home_v12_36_675_clinical_actions_polish_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_676_clinical_actions_polish_2_release.html; source=hospital_at_home_v12_36_676_clinical_actions_polish_2_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3021,7 +3038,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_675_clinical_actions_polish_release.html</div><div>Source: hospital_at_home_v12_36_675_clinical_actions_polish_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_676_clinical_actions_polish_2_release.html</div><div>Source: hospital_at_home_v12_36_676_clinical_actions_polish_2_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3321,7 +3338,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 <div class="hidden" id="ivCollapsedSummary"></div>
 </div>
-<div class="card patient-reorder-card" data-card-key="output"><h3>Copy-ready clinical text</h3><div class="result-box" id="clinicalOutput">Enter obs and plan to generate a note.</div><div class="clinical-actions-row"><button aria-label="Copy note" class="clinical-action-btn" id="copyBtn" title="Copy note" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><button aria-label="Email to NHSmail" class="clinical-action-btn" id="emailBtn" title="Email to NHSmail" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></button><button aria-label="Send to OneNote" class="clinical-action-btn" id="oneNoteBtn" title="Send to OneNote" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="18" rx="1.5" width="14" x="3" y="3"></rect><line x1="17" x2="20" y1="7" y2="7"></line><line x1="17" x2="20" y1="12" y2="12"></line><line x1="17" x2="20" y1="17" y2="17"></line></svg></button><button aria-label="Add timestamp" class="clinical-action-btn" id="timestampBtn" title="Add timestamp" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button><button aria-label="Save draft (coming soon)" class="clinical-action-btn is-placeholder" disabled id="saveDraftBtn" title="Save as draft — coming soon" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button></div><div aria-live="polite" class="clinical-sync-footer" id="clinicalSyncFooter"></div><div class="hidden" id="oneNoteSyncStatus"></div></div>
+<div class="card patient-reorder-card" data-card-key="output"><h3>Copy-ready clinical text</h3><div class="result-box" id="clinicalOutput">Enter obs and plan to generate a note.</div><div class="clinical-actions-row"><button aria-label="Copy note" class="clinical-action-btn" id="copyBtn" title="Copy note" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><button aria-label="Email to NHSmail" class="clinical-action-btn" id="emailBtn" title="Email to NHSmail" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></button><button aria-label="Send to OneNote" class="clinical-action-btn" id="oneNoteBtn" title="Send to OneNote" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 6h4"></path><path d="M2 10h4"></path><path d="M2 14h4"></path><path d="M2 18h4"></path><rect height="20" rx="2" width="16" x="4" y="2"></rect><path d="M16 2v20"></path><circle class="onenote-sync-badge" cx="19" cy="19" r="3" fill="currentColor" stroke="#fff" stroke-width="1.5"></circle></svg></button><button aria-label="Add timestamp" class="clinical-action-btn" id="timestampBtn" title="Add timestamp" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button><button aria-label="Save draft (coming soon)" class="clinical-action-btn is-placeholder" disabled id="saveDraftBtn" title="Save as draft — coming soon" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button></div><div aria-live="polite" class="clinical-sync-footer" id="clinicalSyncFooter"></div><div class="hidden" id="oneNoteSyncStatus"></div></div>
 </section>
 <div class="reorder-insert-line" id="reorderInsertLine"></div>
 <div aria-hidden="true" class="reorder-fixed-controls" id="reorderControls">
@@ -6754,19 +6771,29 @@ function hideHahToast(){
   if(_hahToastTimer){ clearTimeout(_hahToastTimer); _hahToastTimer = null; }
 }
 // v12.36.674: relative-time formatter for the clinical sync footer.
-// Returns 'just now' / 'Xm ago' / 'Xh ago' / 'Xd ago' / 'DD Mon' for older.
-// Used only for UI display — no persistence semantics.
+// v12.36.676: 5-minute cutoff format — 'just now' for very recent, then
+// shows actual time from 5 mins onwards. Reads more honestly than
+// '34m ago' which forces the user to do arithmetic; for anything past
+// the immediate-feedback window, the actual clock time is more useful.
 function formatRelativeTime(iso){
   if(!iso) return '';
   const t = Date.parse(iso);
   if(!Number.isFinite(t)) return '';
   const diff = Date.now() - t;
-  if(diff < 0 || diff < 30000) return 'just now';
-  if(diff < 60000) return '<1m ago';
-  if(diff < 3600000) return Math.floor(diff/60000)+'m ago';
-  if(diff < 86400000) return Math.floor(diff/3600000)+'h ago';
-  if(diff < 7*86400000) return Math.floor(diff/86400000)+'d ago';
-  try { return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short'}); }
+  // First 5 minutes: "just now" (covers the immediate post-save window
+  // where a relative phrasing reads more naturally than a clock time)
+  if(diff < 0 || diff < 5 * 60 * 1000) return 'just now';
+  const date = new Date(t);
+  const now = new Date();
+  const isSameDay = date.toDateString() === now.toDateString();
+  const yesterday = new Date(now); yesterday.setDate(yesterday.getDate() - 1);
+  const isYesterday = date.toDateString() === yesterday.toDateString();
+  let timeStr = '';
+  try { timeStr = date.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'}); }
+  catch(_){ timeStr = ''; }
+  if(isSameDay) return timeStr ? 'at ' + timeStr : '';
+  if(isYesterday) return timeStr ? 'yesterday at ' + timeStr : 'yesterday';
+  try { return 'on ' + date.toLocaleDateString('en-GB', {day:'numeric', month:'short'}); }
   catch(_){ return ''; }
 }
 // v12.36.674: unified sync state footer for the Copy-ready clinical text
@@ -11310,8 +11337,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_675_clinical_actions_polish_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_675_clinical_actions_polish_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_676_clinical_actions_polish_2_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_676_clinical_actions_polish_2_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -19262,31 +19289,23 @@ function updateOneNoteUiForCurrentPatient(){
   const p=currentPatient && patients ? patients[currentPatient] : null;
   const link=p && p.oneNote ? p.oneNote : null;
   // v12.36.674: button is now an icon, so state is communicated via class
-  // toggling rather than textContent. is-success = OneNote-linked. The
-  // title attribute carries the disambiguating wording for accessibility
-  // and for desktop tooltip-on-hover.
-  // v12.36.675: dirty-state detection — green only when synced AND the
-  // current note text matches what was last sent (link.lastSyncedText).
-  // If the user has edited the form since the last sync, the icon
-  // reverts to default-blue to signal 'out of date'. is-pending is
-  // applied while a send is in flight (driven by p._oneNoteSending).
+  // toggling rather than textContent.
+  // v12.36.676: simplified state model — once linked to a OneNote page,
+  // autosync handles ongoing changes, so the icon stays green (.is-success)
+  // regardless of whether edits have happened since the last sync. The
+  // dirty-state detection from v675 was misleading because it implied the
+  // user needed to manually re-sync; in reality the background autosync
+  // covers that. The .is-pending state (with pulsing sync badge) shows
+  // when a force-sync is actively in flight.
   if(btn){
     const linked = !!(link && link.pageId);
     const sending = !!(p && p._oneNoteSending);
-    let synced = false;
-    if(linked && !sending){
-      const currentNote = (typeof getCurrentClinicalNoteText==='function')
-        ? getCurrentClinicalNoteText()
-        : (($('clinicalOutput') && $('clinicalOutput').textContent) || '');
-      synced = (typeof link.lastSyncedText === 'string') && link.lastSyncedText === currentNote;
-    }
-    btn.classList.toggle('is-success', synced);
+    btn.classList.toggle('is-success', linked);
     btn.classList.toggle('is-pending', sending);
     btn.disabled = sending;
     let titleText = 'Send to OneNote';
-    if(sending) titleText = 'Sending to OneNote…';
-    else if(linked && synced) titleText = 'OneNote up to date — tap to resend';
-    else if(linked && !synced) titleText = 'OneNote out of date — tap to update';
+    if(sending) titleText = 'Syncing to OneNote…';
+    else if(linked) titleText = 'OneNote linked — tap to force sync';
     btn.setAttribute('title', titleText);
     btn.setAttribute('aria-label', titleText);
   }
@@ -19309,6 +19328,13 @@ function updateOneNoteUiForCurrentPatient(){
   if(typeof updateClinicalSyncFooter==='function') updateClinicalSyncFooter();
 }
 function formatOneNoteSyncTime(iso){
+  // v12.36.676: delegate to formatRelativeTime so OneNote and JSON sync
+  // status share the same time format (5-minute cutoff, then actual time).
+  // Falls back to a simple toLocaleString if formatRelativeTime hasn't
+  // loaded yet (script-order edge case).
+  if(typeof formatRelativeTime === 'function'){
+    return formatRelativeTime(iso) || 'recently';
+  }
   try{
     const d=new Date(iso);
     if(Number.isNaN(d.getTime())) return 'recently';
