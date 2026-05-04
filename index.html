@@ -2709,7 +2709,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_679_mobile_commit_post_save_fix_release.html; source=hospital_at_home_v12_36_679_mobile_commit_post_save_fix_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_680_savejsonpatient_returns_doc_release.html; source=hospital_at_home_v12_36_680_savejsonpatient_returns_doc_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3063,7 +3063,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_679_mobile_commit_post_save_fix_release.html</div><div>Source: hospital_at_home_v12_36_679_mobile_commit_post_save_fix_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_680_savejsonpatient_returns_doc_release.html</div><div>Source: hospital_at_home_v12_36_680_savejsonpatient_returns_doc_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -6270,7 +6270,23 @@ function makeJsonAuditSchema(){return Object.assign(jsonSchemaHeader('audit'),{e
 async function initialiseJsonStore(){const root=currentJsonFolderPath();await jsonEnsureFolder(root);await jsonEnsureFolder(childJsonPath(root,'patients'));await jsonEnsureFolder(childJsonPath(root,'rounds'));await jsonEnsureFolder(childJsonPath(root,'audit'));if(!(await jsonPathExists(childJsonPath(root,'service.json'))))await jsonDrivePut(childJsonPath(root,'service.json'),makeJsonServiceSchema());if(!(await jsonPathExists(childJsonPath(root,'tasks.json'))))await jsonDrivePut(childJsonPath(root,'tasks.json'),makeJsonTasksSchema());if(!(await jsonPathExists(childJsonPath(root,`audit/${todayKeyJson()}.json`))))await jsonDrivePut(childJsonPath(root,`audit/${todayKeyJson()}.json`),makeJsonAuditSchema());setGraphStatus(`JSON store ready in ${root}.`);return true;}
 async function loadJsonService(){return jsonDriveGet(childJsonPath(currentJsonFolderPath(),'service.json'));}
 async function loadJsonPatient(jsonId){return jsonDriveGet(childJsonPath(currentJsonFolderPath(),`patients/${String(jsonId)}.json`));}
-async function saveJsonPatient(doc){const id=String(doc&&doc.id||'').trim();if(!id)throw new Error('Cannot save JSON patient without an id.');const next={...doc,updatedAt:nowIsoJson()};next.meta={...(next.meta||{}),updatedAt:nowIsoJson(),updatedBy:getJsonActor(),version:Number(next.meta&&next.meta.version||0)+1};return jsonDrivePut(childJsonPath(currentJsonFolderPath(),`patients/${id}.json`),next);}
+async function saveJsonPatient(doc){
+  const id=String(doc&&doc.id||'').trim();
+  if(!id)throw new Error('Cannot save JSON patient without an id.');
+  const next={...doc,updatedAt:nowIsoJson()};
+  next.meta={...(next.meta||{}),updatedAt:nowIsoJson(),updatedBy:getJsonActor(),version:Number(next.meta&&next.meta.version||0)+1};
+  // v12.36.680 — return the locally-built `next` doc, not the Graph
+  // response. PUT /me/drive/root:/path:/content returns DriveItem
+  // *metadata* (id, name, eTag, size, …), NOT the file content. Callers
+  // assign the return value to p.jsonRecord, which they then read for
+  // timeline / clinical fields. Returning the metadata wiped p.jsonRecord
+  // with a useless object — the consequence was invisible while only
+  // form fields were being read (those come from p.form), but became
+  // visible in v12.36.678 once the patient log started reading
+  // p.jsonRecord.timeline post-commit. Latent since the JSON migration.
+  await jsonDrivePut(childJsonPath(currentJsonFolderPath(),`patients/${id}.json`),next);
+  return next;
+}
 async function appendJsonAudit(event){const path=childJsonPath(currentJsonFolderPath(),`audit/${todayKeyJson()}.json`);let doc;try{doc=await jsonDriveGet(path);}catch(_){doc=makeJsonAuditSchema();}doc.events=Array.isArray(doc.events)?doc.events:[];doc.events.unshift({id:`audit:${Date.now().toString(36)}`,at:nowIsoJson(),actor:getJsonActor(),...(event||{})});doc.updatedAt=nowIsoJson();return jsonDrivePut(path,doc);}
 function getJsonActivePatientIds(serviceDoc){const s=serviceDoc&&serviceDoc.service?serviceDoc.service:{};const p=serviceDoc&&serviceDoc.patients?serviceDoc.patients:{};const ids=s.activePatientIds||p.activeIds||[];return Array.isArray(ids)?ids.map(String).filter(Boolean):[];}
 function getJsonArchivedPatientIds(serviceDoc){const s=serviceDoc&&serviceDoc.service?serviceDoc.service:{};const p=serviceDoc&&serviceDoc.patients?serviceDoc.patients:{};const ids=s.archivedPatientIds||p.archivedIds||[];return Array.isArray(ids)?ids.map(String).filter(Boolean):[];}
@@ -11702,8 +11718,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_679_mobile_commit_post_save_fix_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_679_mobile_commit_post_save_fix_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_680_savejsonpatient_returns_doc_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_680_savejsonpatient_returns_doc_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
