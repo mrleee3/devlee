@@ -2684,7 +2684,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_676_clinical_actions_polish_2_release.html; source=hospital_at_home_v12_36_676_clinical_actions_polish_2_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_677_sync_footer_link_check_fix_release.html; source=hospital_at_home_v12_36_677_sync_footer_link_check_fix_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3038,7 +3038,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_676_clinical_actions_polish_2_release.html</div><div>Source: hospital_at_home_v12_36_676_clinical_actions_polish_2_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_677_sync_footer_link_check_fix_release.html</div><div>Source: hospital_at_home_v12_36_677_sync_footer_link_check_fix_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -6808,14 +6808,26 @@ function updateClinicalSyncFooter(){
   if(!currentPatient || !patients[currentPatient]){ el.innerHTML=''; return; }
   const p = patients[currentPatient];
   const parts = [];
-  // Local + JSON sync state. If patient is linked to JSON, show JSON sync
-  // state (success time or error). If not linked, show local-save time.
-  const isLinked = !!(p.target && p.target.jsonId);
-  if(p._jsonSyncFailed){
+  // v12.36.677: use the canonical isLinkedPatient() helper from 02-sync.js
+  // rather than checking p.target.jsonId — patients store their JSON link
+  // on p.importSource.{kind,jsonId}, not on p.target. Previous check
+  // returned false for every patient, so the footer always fell through
+  // to the local-save branch.
+  const isLinked = (typeof isLinkedPatient === 'function') ? isLinkedPatient(p) : false;
+  if(isLinked && p._jsonSyncFailed){
     parts.push('<span class="is-error">JSON sync failed</span>');
   } else if(isLinked && p._lastJsonSyncedAt){
     parts.push('Synced to JSON ' + formatRelativeTime(p._lastJsonSyncedAt));
+  } else if(isLinked){
+    // Linked but not yet synced this session — show the local save
+    // until the first push lands. Adds a subtle '· not yet synced'
+    // hint so the user knows this is a transient state.
+    if(p._lastSavedAt){
+      parts.push('Saved locally ' + formatRelativeTime(p._lastSavedAt) + ' · awaiting JSON sync');
+    }
   } else if(p._lastSavedAt){
+    // Unlinked patient (local-only) — saved-locally is the correct
+    // terminal state.
     parts.push('Saved locally ' + formatRelativeTime(p._lastSavedAt));
   }
   // OneNote sync state — only when linked
@@ -11337,8 +11349,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_676_clinical_actions_polish_2_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_676_clinical_actions_polish_2_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_677_sync_footer_link_check_fix_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_677_sync_footer_link_check_fix_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
