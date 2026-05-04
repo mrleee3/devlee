@@ -2485,7 +2485,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 .patient-log-entries{display:flex;flex-direction:column}
 .patient-log-entry{padding:14px 14px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:14px}
 .patient-log-entry:last-child{border-bottom:none}
-.patient-log-entry.is-latest{background:#fff;box-shadow:inset 3px 0 0 #0a84ff}
+.patient-log-entry.is-latest{background:#fff}
 .patient-log-entry:not(.is-latest){background:rgba(15,23,42,0.012)}
 .patient-log-entry-bar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:11.5px;line-height:1.35;color:var(--sub);font-weight:600}
 .patient-log-entry-date{white-space:nowrap}
@@ -2497,10 +2497,11 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 .patient-log-entry-body{display:flex;flex-direction:column;gap:14px}
 .patient-log-field{display:flex;flex-direction:column;gap:3px}
 .patient-log-field-label{font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:0;text-transform:none}
-.patient-log-edd-row{display:flex;margin-top:6px}
-.patient-log-edd-chip{display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:999px;background:rgba(10,132,255,0.08);color:#0a3d91;border:1px solid rgba(10,132,255,0.18);font-size:11.5px;font-weight:700;letter-spacing:.01em;white-space:nowrap}
-.patient-log-edd-chip.is-ready{background:rgba(22,163,74,0.10);color:#15803d;border-color:rgba(22,163,74,0.22)}
-.patient-log-entry:not(.is-latest) .patient-log-edd-chip{opacity:.7}
+.patient-log-edd-line{margin-top:6px;font-size:12px;font-weight:600;color:var(--sub);line-height:1.4}
+.patient-log-edd-line .patient-log-edd-value{color:#0a84ff;font-weight:700}
+.patient-log-edd-line.is-ready .patient-log-edd-value{color:#15803d}
+.patient-log-entry:not(.is-latest) .patient-log-edd-line{opacity:.7}
+.patient-log-entry-empty-body{padding-top:2px;font-size:12.5px;color:var(--sub);font-style:italic;line-height:1.4}
 .patient-log-field-body{font-size:13px;line-height:1.5;color:var(--text);white-space:pre-wrap;word-break:break-word}
 .patient-log-entry:not(.is-latest) .patient-log-field-body,
 .patient-log-entry:not(.is-latest) .patient-log-issues-text{color:var(--sub)}
@@ -2630,7 +2631,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_670_patient_log_polish_release.html; source=hospital_at_home_v12_36_670_patient_log_polish_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_671_patient_log_refine_release.html; source=hospital_at_home_v12_36_671_patient_log_refine_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2984,7 +2985,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_670_patient_log_polish_release.html</div><div>Source: hospital_at_home_v12_36_670_patient_log_polish_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_671_patient_log_refine_release.html</div><div>Source: hospital_at_home_v12_36_671_patient_log_refine_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -7933,12 +7934,13 @@ function renderPatientLogEntry(entry, isLatest){
   const examination=String(f.examination||note.examination||'').trim();
   const plan=String(f.plan||note.plan||'').trim();
   const edd=formatLogEntryEdd(f.dischargeDate, f.dischargeReady);
-  // EDD now renders as a chip below the plan body (v12.36.670). Previously
-  // appended inline as 'EDD: Today' plain text and got lost in the plan list.
+  // EDD as a small label-value line below the plan body (v12.36.671 — was
+  // a chip in v670; chip was too prominent for what's essentially metadata).
+  // 'Ready for discharge' drops the 'EDD:' prefix and goes green; everything
+  // else is 'EDD: <date>' with the value in subtle blue.
   const eddIsReady=edd==='Ready for discharge';
-  const eddChipText=edd ? (eddIsReady ? edd : 'EDD: '+edd) : '';
-  const eddChipHtml=eddChipText
-    ? `<div class="patient-log-edd-row"><span class="patient-log-edd-chip${eddIsReady?' is-ready':''}">${escapeHtml(eddChipText)}</span></div>`
+  const eddLineHtml=edd
+    ? `<div class="patient-log-edd-line${eddIsReady?' is-ready':''}">${eddIsReady?'':'EDD: '}<span class="patient-log-edd-value">${escapeHtml(edd)}</span></div>`
     : '';
   const forDischargeSummary=String(f.forDischargeSummary||'').trim();
   const dateLabel=formatPatientLogEntryDate(entry.timestamp);
@@ -7952,7 +7954,7 @@ function renderPatientLogEntry(entry, isLatest){
     `<div class="patient-log-field"><div class="patient-log-field-label">${isMobile?'Currently':'Progress'}</div>${renderLogEntryFieldBody(currently)}</div>`
   ];
   if(isMobile && examination) sections.push(`<div class="patient-log-field"><div class="patient-log-field-label">Examination</div>${renderLogEntryFieldBody(examination)}</div>`);
-  sections.push(`<div class="patient-log-field"><div class="patient-log-field-label">Plan</div>${renderLogEntryFieldBody(plan)}${eddChipHtml}</div>`);
+  sections.push(`<div class="patient-log-field"><div class="patient-log-field-label">Plan</div>${renderLogEntryFieldBody(plan)}${eddLineHtml}</div>`);
   if(forDischargeSummary) sections.push(`<div class="patient-log-field"><div class="patient-log-field-label">For discharge summary</div>${renderLogEntryFieldBody(forDischargeSummary)}</div>`);
   // v12.36.670: meta line rendered as quiet inline text, separated by ·,
   // rather than three competing pill chips. Date / type / author are all
@@ -7962,6 +7964,18 @@ function renderPatientLogEntry(entry, isLatest){
   metaParts.push(`<span class="patient-log-entry-type">${escapeHtml(typeLabel)}</span>`);
   if(entry.author) metaParts.push(`<span class="patient-log-entry-author">${escapeHtml(entry.author)}</span>`);
   const metaHtml=metaParts.join('<span class="patient-log-entry-sep" aria-hidden="true">·</span>');
+  // v12.36.671: empty-entry placeholder. When an entry has no content in any
+  // rendered field (a mobile clinical review saved with everything blank, an
+  // accidental tap, etc.), don't render the full "Issues — / Currently — /
+  // Plan —" labelled template — that reads as broken. One quiet line instead.
+  const hasContent=!!(issues||currently||examination||plan||forDischargeSummary||edd);
+  if(!hasContent){
+    cls.push('is-empty');
+    return `<div class="${cls.join(' ')}">
+        <div class="patient-log-entry-bar">${metaHtml}</div>
+        <div class="patient-log-entry-empty-body">No clinical detail recorded for this entry.</div>
+      </div>`;
+  }
   return `<div class="${cls.join(' ')}">
       <div class="patient-log-entry-bar">${metaHtml}</div>
       <div class="patient-log-entry-body">${sections.join('')}</div>
@@ -11134,8 +11148,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_670_patient_log_polish_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_670_patient_log_polish_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_671_patient_log_refine_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_671_patient_log_refine_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
