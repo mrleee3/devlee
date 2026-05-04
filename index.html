@@ -375,8 +375,8 @@ body:not(.detail-view-active) .nav-patient{display:none!important}
    gets its own layer + isolated stacking context so colour is rasterised the
    same way as the identical chip in the patient list. Fill identical to list. */
 .header-row > .header-patient-flags .patient-status-chip.dnacpr{background:#fbf2f8;color:#8a2c6b;border-color:#e7c7da;font-weight:800;letter-spacing:.01em;box-shadow:none;transform:none;isolation:auto;will-change:auto}
-#patientDetail{padding-bottom:40px;}
-#patientDetail.detail-overlay-active{padding-bottom:40px;}
+#patientDetail{padding-bottom:96px;}
+#patientDetail.detail-overlay-active{padding-bottom:96px;}
 .nav button{position:relative;background:none;border:none;box-shadow:none;padding:6px 10px 2px;min-width:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:13px;font-weight:700;color:#374151;line-height:1.15}.nav button:active{transform:none}.nav-icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:30px;height:28px;flex:0 0 auto;overflow:visible;isolation:isolate}.nav-icon{position:relative;z-index:1;width:24px;height:24px;display:block;stroke:currentColor;fill:none;flex:0 0 auto}.nav-icon *{vector-effect:non-scaling-stroke}.nav-tasks-badge{position:absolute;top:-4px;right:-12px;z-index:3;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#ff3b30;color:#fff;font-size:11px;font-weight:800;line-height:18px;text-align:center;box-shadow:0 0 0 2px rgba(255,255,255,.97);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;pointer-events:none;transform:translateZ(0);-webkit-transform:translateZ(0)}.nav-tasks-badge::before{content:"";position:absolute;inset:-2px;border-radius:inherit;background:#fff;z-index:-1}.nav-label{display:block;font-size:13px;line-height:1.15}.nav .active{color:var(--blue)}
 .copy-note{color:var(--sub);font-size:12px;margin-top:8px}.plus-btn{display:inline-flex;align-items:center;justify-content:center;background:#e8f1ff;color:#0a84ff;font-size:22px;line-height:1;padding:8px 14px;border-radius:14px;border:1px solid rgba(10,132,255,.16)}
 .patient-actions{display:flex;align-items:flex-start;justify-content:flex-end;gap:8px;flex:0 0 auto;flex-shrink:0;min-width:112px}.patient-actions-placeholder{visibility:hidden;pointer-events:none}.patient-main{flex:1;min-width:0}.patient-main-copy,.patient-card-titleline,.patient-card-titleline *{-webkit-text-size-adjust:100%;text-size-adjust:100%}.patient-card-titleline{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;min-width:0}.swipe-foreground.patient-card-acuity-rail{position:relative;overflow:hidden}.swipe-foreground.patient-card-acuity-rail::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:transparent;border-radius:16px 0 0 16px;pointer-events:none}.swipe-foreground.patient-card-acuity-rail.acuity-green::before{background:var(--green)}.swipe-foreground.patient-card-acuity-rail.acuity-amber::before{background:var(--amber)}.swipe-foreground.patient-card-acuity-rail.acuity-red::before{background:var(--red)}.swipe-foreground.patient-card-acuity-rail.acuity-grey::before{background:#94a3b8}.fullwidth{width:100%;margin-top:10px}
@@ -2560,6 +2560,31 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
   #patientBoardBloodsSlot > #bloodsSummaryCard .bloods-panel{padding:12px}
 }
 
+/* v12.36.674: clinical text card — icon-row actions + unified sync footer.
+ * Replaces the previous Copy / Email / OneNote / OpenOneNote text buttons
+ * plus the full-width Add timestamp button with a single icon row.
+ * 'Save draft' is a placeholder for the future draft+commit composer
+ * model (parity with desktop). 'Open in OneNote' was removed entirely
+ * since it only resolves on desktop. */
+.clinical-actions-row{display:flex;align-items:stretch;justify-content:space-between;gap:8px;margin-top:12px;padding:0}
+.clinical-action-btn{flex:1 1 0;min-width:0;height:48px;padding:0;margin:0;border-radius:14px;border:1px solid rgba(10,132,255,0.18);background:rgba(10,132,255,0.06);color:#0a3d91;display:inline-flex;align-items:center;justify-content:center;font:inherit;-webkit-tap-highlight-color:transparent;cursor:pointer;transition:transform .12s ease,background .18s ease,border-color .18s ease,color .18s ease;box-shadow:none}
+.clinical-action-btn:active{transform:scale(.96);background:rgba(10,132,255,0.12)}
+.clinical-action-btn svg{width:20px;height:20px;display:block;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.clinical-action-btn.is-success{background:rgba(22,163,74,0.10);border-color:rgba(22,163,74,0.22);color:#15803d}
+.clinical-action-btn.is-success:active{background:rgba(22,163,74,0.16)}
+.clinical-action-btn.is-placeholder{background:rgba(15,23,42,0.04);border:1px dashed rgba(15,23,42,0.18);color:#94a3b8}
+.clinical-action-btn.is-placeholder:active{transform:none;background:rgba(15,23,42,0.04)}
+.clinical-action-btn:disabled{cursor:default}
+
+/* Unified sync footer — small text strip below the icon row. Shows
+ * "Saved locally Xm ago · Synced to JSON Ym ago · OneNote Zm ago".
+ * Sync state derived from p._lastSavedAt, p._lastJsonSyncedAt, and
+ * p.oneNote.lastSyncedAt. Self-empty:none so it disappears when there's
+ * nothing to show (fresh patient detail with no saves yet). */
+.clinical-sync-footer{margin-top:10px;font-size:11.5px;line-height:1.4;color:var(--sub);text-align:center;font-weight:500;min-height:14px}
+.clinical-sync-footer:empty{display:none}
+.clinical-sync-footer .is-error{color:#b42318;font-weight:600}
+
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -2630,7 +2655,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_673_bloods_violet_edd_inline_release.html; source=hospital_at_home_v12_36_673_bloods_violet_edd_inline_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_674_clinical_actions_icons_release.html; source=hospital_at_home_v12_36_674_clinical_actions_icons_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2984,7 +3009,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_673_bloods_violet_edd_inline_release.html</div><div>Source: hospital_at_home_v12_36_673_bloods_violet_edd_inline_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_674_clinical_actions_icons_release.html</div><div>Source: hospital_at_home_v12_36_674_clinical_actions_icons_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3284,7 +3309,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 <div class="hidden" id="ivCollapsedSummary"></div>
 </div>
-<div class="card patient-reorder-card" data-card-key="output"><h3>Copy-ready clinical text</h3><div class="result-box" id="clinicalOutput">Enter obs and plan to generate a note.</div><div class="button-row"><button class="primary" id="copyBtn">Copy note</button><button class="primary" id="emailBtn">Email to NHSmail</button></div><div class="button-row" style="margin-top:10px"><button class="primary" id="oneNoteBtn">Send to OneNote</button><button id="openOneNoteBtn">Open in OneNote</button></div><div class="tiny muted" id="oneNoteSyncStatus" style="margin-top:8px"></div><button class="fullwidth" id="timestampBtn">Add timestamp</button></div>
+<div class="card patient-reorder-card" data-card-key="output"><h3>Copy-ready clinical text</h3><div class="result-box" id="clinicalOutput">Enter obs and plan to generate a note.</div><div class="clinical-actions-row"><button aria-label="Copy note" class="clinical-action-btn" id="copyBtn" title="Copy note" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button><button aria-label="Email to NHSmail" class="clinical-action-btn" id="emailBtn" title="Email to NHSmail" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></button><button aria-label="Send to OneNote" class="clinical-action-btn" id="oneNoteBtn" title="Send to OneNote" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></button><button aria-label="Add timestamp" class="clinical-action-btn" id="timestampBtn" title="Add timestamp" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></button><button aria-label="Save draft (coming soon)" class="clinical-action-btn is-placeholder" disabled id="saveDraftBtn" title="Save as draft — coming soon" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button></div><div aria-live="polite" class="clinical-sync-footer" id="clinicalSyncFooter"></div><div class="hidden" id="oneNoteSyncStatus"></div></div>
 </section>
 <div class="reorder-insert-line" id="reorderInsertLine"></div>
 <div aria-hidden="true" class="reorder-fixed-controls" id="reorderControls">
@@ -5977,11 +6002,19 @@ async function executePush(patientId){
     p.form._lastImportedPlan   = normText(p.form.plan);
     p.form._lastImportedBloods = normText(p.form.bloods);
     p.jsonRecord = saved;
+    // v12.36.674: stamp success time + clear any previous failure flag
+    // so the clinical sync footer can show "Synced to JSON Xm ago".
+    p._lastJsonSyncedAt = new Date().toISOString();
+    p._jsonSyncFailed = false;
     saveData('Saved locally • Synced to JSON');
     if(currentPatient === patientId) setSaveStatus('Saved locally • Synced to JSON');
+    if(currentPatient === patientId && typeof updateClinicalSyncFooter === 'function') updateClinicalSyncFooter();
     try { if (window.SyncLog) window.SyncLog.add('outbound', 'patient.update', `Updated ${p.name||'patient'} (${sectionLabel})`, 'ok'); } catch(_){}
   }catch(e){
+    // v12.36.674: stamp failure flag for the clinical sync footer
+    p._jsonSyncFailed = true;
     if(currentPatient === patientId) setSaveStatus('Saved locally • JSON sync failed');
+    if(currentPatient === patientId && typeof updateClinicalSyncFooter === 'function') updateClinicalSyncFooter();
     if(typeof setGraphStatus === 'function') setGraphStatus(`JSON sync failed - ${describeImportError(e)}`, true);
     try { if (window.SyncLog) window.SyncLog.add('outbound', 'patient.update', `Failed to update ${p.name||'patient'}`, 'error', describeImportError(e)); } catch(_){}
   } finally {
@@ -6565,7 +6598,7 @@ function openJsonFolderLink(){
 window.HAH.sharedJsonStore={testJsonConnection,initialiseJsonStore,loadJsonPatientDataset,applyJsonDatasetToMobile,importHandoverRows,clearJsonPatientCache,loadJsonService,loadJsonPatient,saveJsonPatient,appendJsonAudit};
 
 </script><script>
-function saveData(t="Saved locally"){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,tasks:typeof tasks!=='undefined'?tasks:[],patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
+function saveData(t="Saved locally"){try{if(currentPatient && patients[currentPatient]) patients[currentPatient]._lastSavedAt = new Date().toISOString();localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,tasks:typeof tasks!=='undefined'?tasks:[],patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'}); if(typeof updateClinicalSyncFooter==='function') updateClinicalSyncFooter();}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
 
 const HAH_UI_STATE_KEY='hah_v12_36_ui_state';
 let hahUiStateCache=null;
@@ -6672,6 +6705,53 @@ function ageSex(age, sex){return `${age||""}${sex||""}`.trim()}
 function surnameForSubject(name){const parts=String(name||"").trim().split(/\s+/); return parts.length?`${parts[0]} ${parts[parts.length-1]}`:"Patient"}
 
 function nowShort(){return new Date().toLocaleString([], {day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}
+// v12.36.674: relative-time formatter for the clinical sync footer.
+// Returns 'just now' / 'Xm ago' / 'Xh ago' / 'Xd ago' / 'DD Mon' for older.
+// Used only for UI display — no persistence semantics.
+function formatRelativeTime(iso){
+  if(!iso) return '';
+  const t = Date.parse(iso);
+  if(!Number.isFinite(t)) return '';
+  const diff = Date.now() - t;
+  if(diff < 0 || diff < 30000) return 'just now';
+  if(diff < 60000) return '<1m ago';
+  if(diff < 3600000) return Math.floor(diff/60000)+'m ago';
+  if(diff < 86400000) return Math.floor(diff/3600000)+'h ago';
+  if(diff < 7*86400000) return Math.floor(diff/86400000)+'d ago';
+  try { return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short'}); }
+  catch(_){ return ''; }
+}
+// v12.36.674: unified sync state footer for the Copy-ready clinical text
+// card. Replaces the previous oneNoteSyncStatus div with a combined
+// readout pulling from local-save, JSON-sync, and OneNote-sync state.
+// Re-rendered on saveData(), executePush() success/fail, and
+// updateOneNoteUiForCurrentPatient(). Self-empties when there's no
+// state to show (fresh patient detail with nothing saved yet).
+function updateClinicalSyncFooter(){
+  const el = (typeof $==='function') ? $('clinicalSyncFooter') : null;
+  if(!el) return;
+  if(!currentPatient || !patients[currentPatient]){ el.innerHTML=''; return; }
+  const p = patients[currentPatient];
+  const parts = [];
+  // Local + JSON sync state. If patient is linked to JSON, show JSON sync
+  // state (success time or error). If not linked, show local-save time.
+  const isLinked = !!(p.target && p.target.jsonId);
+  if(p._jsonSyncFailed){
+    parts.push('<span class="is-error">JSON sync failed</span>');
+  } else if(isLinked && p._lastJsonSyncedAt){
+    parts.push('Synced to JSON ' + formatRelativeTime(p._lastJsonSyncedAt));
+  } else if(p._lastSavedAt){
+    parts.push('Saved locally ' + formatRelativeTime(p._lastSavedAt));
+  }
+  // OneNote sync state — only when linked
+  const link = p.oneNote;
+  if(link && link.lastSyncedAt){
+    parts.push('OneNote ' + formatRelativeTime(link.lastSyncedAt));
+  } else if(link && link.error){
+    parts.push('<span class="is-error">OneNote sync failed</span>');
+  }
+  el.innerHTML = parts.join(' · ');
+}
 function addEventLog(text){
   eventLogEntries.unshift({time:nowShort(), text:text});
   eventLogEntries = eventLogEntries.slice(0,20);
@@ -9497,7 +9577,19 @@ function scoreMEWS_Pulse(v){v=Number(v); if(!v) return 0; if(v<=62) return 2; if
 function scoreMEWS_SBP(v){v=Number(v); if(!v) return 0; if(v<=93) return 2; if(v<=100) return 1; if(v<=135) return 0; if(v<=144) return 1; return 2}
 function scoreMEWS_DBP(v){v=Number(v); if(!v) return 0; if(v<=56) return 2; if(v<=61) return 1; if(v<=88) return 0; if(v<=96) return 1; return 2}
 
-function updateTimestampButton(){const p=patients[currentPatient]; if(p&&p.timestamp){$("timestampBtn").textContent="Timestamp added"; $("timestampBtn").disabled=true; $("timestampBtn").style.opacity="0.6"} else {$("timestampBtn").textContent="Add timestamp"; $("timestampBtn").disabled=false; $("timestampBtn").style.opacity="1"}}
+function updateTimestampButton(){
+  // v12.36.674: timestamp button is now an icon. State communicated via
+  // is-success class (matches the OneNote-linked treatment) plus the
+  // disabled attribute. Title text changes to reflect state.
+  const btn=$("timestampBtn");
+  if(!btn) return;
+  const p=patients[currentPatient];
+  const has=!!(p&&p.timestamp);
+  btn.classList.toggle('is-success', has);
+  btn.disabled=has;
+  btn.setAttribute('title', has ? 'Timestamp added' : 'Add timestamp');
+  btn.setAttribute('aria-label', has ? 'Timestamp added' : 'Add timestamp');
+}
 function addTimestamp(){if(!patients[currentPatient]||patients[currentPatient].timestamp) return; patients[currentPatient].timestamp=nowString(); updateTimestampButton(); saveCurrentPatientForm(); saveData("Timestamp added"); generateClinicalOutput()}
 
 
@@ -11146,8 +11238,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_673_bloods_violet_edd_inline_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_673_bloods_violet_edd_inline_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_674_clinical_actions_icons_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_674_clinical_actions_icons_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13906,6 +13998,55 @@ document.addEventListener("DOMContentLoaded",function(){
     }, true);
   }
   $("copyBtn").onclick=copyClinicalText; $("emailBtn").onclick=emailToNHSmail; if($("oneNoteBtn")) $("oneNoteBtn").onclick=sendToOneNote; if($("openOneNoteBtn")) $("openOneNoteBtn").onclick=openCurrentPatientOneNotePage; $("timestampBtn").onclick=addTimestamp;
+  // v12.36.674 — Save draft button placeholder. Real draft/commit workflow
+  // (mirroring desktop composer) is queued as a separate piece of work; for
+  // now the icon visually anticipates the feature so users notice it's coming.
+  if($("saveDraftBtn")) $("saveDraftBtn").onclick=function(){
+    try{
+      alert("Save as draft is coming soon — a draft workflow that mirrors the desktop composer's draft/commit model.");
+    }catch(_){}
+  };
+  // v12.36.674 — JSON sync footer state + renderer.
+  // Tracks the result of the most recent saveJsonPatient call (wrapped in
+  // 20-websocket-sync.js) and renders a tiny status line inside the output
+  // card. Lets the user see at a glance whether their last edit actually
+  // landed in the shared store. Lives in module scope so it survives across
+  // patient detail open/close.
+  (function(){
+    let lastState = 'idle';        // 'idle' | 'saving' | 'ok' | 'error'
+    let lastSavedAt = null;        // Date instance of most recent successful save
+    let lastError = null;          // string from last failed save (or null)
+    function fmtSavedTime(d){
+      if(!d) return '';
+      try{ return d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}); }
+      catch(_){ return ''; }
+    }
+    function renderClinicalSyncFooter(){
+      const el = document.getElementById('clinicalSyncFooter');
+      if(!el) return;
+      let html = '';
+      if(lastState === 'saving'){
+        html = 'Saving…';
+      } else if(lastState === 'ok' && lastSavedAt){
+        html = 'Saved ' + fmtSavedTime(lastSavedAt) + ' · synced to shared store';
+      } else if(lastState === 'error'){
+        const ts = lastSavedAt ? ' · last successful save ' + fmtSavedTime(lastSavedAt) : '';
+        html = '<span class="is-error">Save failed</span>' + ts;
+      } else {
+        html = '';
+      }
+      el.innerHTML = html;
+    }
+    window.setHahJsonSyncStatus = function(state, info){
+      lastState = state;
+      if(state === 'ok'){ lastSavedAt = new Date(); lastError = null; }
+      if(state === 'error'){ lastError = (info && info.error) || 'unknown'; }
+      renderClinicalSyncFooter();
+    };
+    // Expose so the patient detail open / mode-switch paths can refresh
+    // the footer (e.g. after the DOM is re-rendered by mode toggling).
+    window.refreshClinicalSyncFooter = renderClinicalSyncFooter;
+  })();
   $("openWeightHistoryBtn").onclick=openWeightHistoryModal;
   $("weightHistoryCloseBtn").onclick=closeWeightHistoryModal;
   $("weightHistoryBackdrop").onclick=closeWeightHistoryModal;
@@ -19095,28 +19236,36 @@ function setOneNoteStatus(message,isError=false){
 }
 function updateOneNoteUiForCurrentPatient(){
   const btn=$("oneNoteBtn");
-  const openBtn=$("openOneNoteBtn");
   const p=currentPatient && patients ? patients[currentPatient] : null;
   const link=p && p.oneNote ? p.oneNote : null;
+  // v12.36.674: button is now an icon, so state is communicated via class
+  // toggling rather than textContent. is-success = OneNote-linked. The
+  // title attribute carries the disambiguating wording for accessibility
+  // and for desktop tooltip-on-hover.
   if(btn){
-    btn.textContent=link && link.pageId ? 'OneNote linked' : 'Send to OneNote';
+    const linked = !!(link && link.pageId);
+    btn.classList.toggle('is-success', linked);
+    const titleText = linked ? 'OneNote linked — tap to update page' : 'Send to OneNote';
+    btn.setAttribute('title', titleText);
+    btn.setAttribute('aria-label', titleText);
   }
-  if(openBtn){
-    openBtn.disabled=!(link && link.webUrl);
-    openBtn.style.opacity=(link && link.webUrl)?'1':'0.55';
-  }
-  if(!p){ setOneNoteStatus(''); return; }
+  // The 'openOneNoteBtn' element was removed entirely in v12.36.674
+  // (desktop-only feature with no fallback on iOS PWA). The hidden
+  // 'oneNoteSyncStatus' element still exists as a no-op DOM hook so
+  // setOneNoteStatus() doesn't need to be touched here, but its text
+  // is no longer visible to the user — the unified clinicalSyncFooter
+  // is now the single source of truth for sync state.
+  if(!p){ setOneNoteStatus(''); if(typeof updateClinicalSyncFooter==='function') updateClinicalSyncFooter(); return; }
   if(link && link.error){
     setOneNoteStatus(link.error,true);
-    return;
-  }
-  if(link && link.pageId){
+  } else if(link && link.pageId){
     const last=link.lastSyncedAt ? `Last synced ${formatOneNoteSyncTime(link.lastSyncedAt)}` : 'Linked to OneNote';
     const autosync=isOneNoteAutoSyncEnabled() ? ' • autosync on' : ' • autosync off';
     setOneNoteStatus(last + autosync,false);
-    return;
+  } else {
+    setOneNoteStatus('Creates a page in H@H Demo Notes and then keeps it updated.',false);
   }
-  setOneNoteStatus('Creates a page in H@H Demo Notes and then keeps it updated.',false);
+  if(typeof updateClinicalSyncFooter==='function') updateClinicalSyncFooter();
 }
 function formatOneNoteSyncTime(iso){
   try{
@@ -21000,8 +21149,14 @@ window.HAH.modules.conditions = true;
     const wrapped = async function () {
       const args = Array.from(arguments);
       nestingDepth++;
+      // v12.36.674 — broadcast sync state for the clinical sync footer.
+      // setHahJsonSyncStatus is a small renderer attached on startup
+      // (07-startup.js); calls are guarded by typeof so this still works
+      // even if the renderer hasn't loaded yet.
+      try { if (typeof window.setHahJsonSyncStatus === 'function') window.setHahJsonSyncStatus('saving'); } catch (_) {}
       try {
         const result = await originalFn.apply(this, args);
+        try { if (typeof window.setHahJsonSyncStatus === 'function') window.setHahJsonSyncStatus('ok'); } catch (_) {}
         if (nestingDepth === 1) {
           try {
             const doc = args[0];
@@ -21010,6 +21165,9 @@ window.HAH.modules.conditions = true;
           } catch (e) { console.warn('[WSSync] hook error:', label, e); }
         }
         return result;
+      } catch (err) {
+        try { if (typeof window.setHahJsonSyncStatus === 'function') window.setHahJsonSyncStatus('error', { error: err && err.message || String(err) }); } catch (_) {}
+        throw err;
       } finally {
         nestingDepth--;
       }
