@@ -2497,10 +2497,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 .patient-log-entry-body{display:flex;flex-direction:column;gap:14px}
 .patient-log-field{display:flex;flex-direction:column;gap:3px}
 .patient-log-field-label{font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:0;text-transform:none}
-.patient-log-edd-line{margin-top:6px;font-size:12px;font-weight:600;color:var(--sub);line-height:1.4}
-.patient-log-edd-line .patient-log-edd-value{color:#0a84ff;font-weight:700}
-.patient-log-edd-line.is-ready .patient-log-edd-value{color:#15803d}
-.patient-log-entry:not(.is-latest) .patient-log-edd-line{opacity:.7}
 .patient-log-entry-empty-body{padding-top:2px;font-size:12.5px;color:var(--sub);font-style:italic;line-height:1.4}
 .patient-log-field-body{font-size:13px;line-height:1.5;color:var(--text);white-space:pre-wrap;word-break:break-word}
 .patient-log-entry:not(.is-latest) .patient-log-field-body,
@@ -2532,7 +2528,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientBoardBloodsSlot{display:flex;flex-direction:column;gap:0;margin-top:0;padding-top:0;position:static}
 #patientBoardBloodsSlot:empty{display:none!important}
 #patientBoardBloodsSlot > #bloodsSummaryCard{padding:0;border:1px solid rgba(15,23,42,.08);border-radius:18px;background:#fff;box-shadow:none;margin:0;margin-bottom:12px;overflow:hidden}
-#patientBoardBloodsSlot > #bloodsSummaryCard .bloods-summary-title{margin:0;padding:12px 14px;font-size:16px;font-weight:800;letter-spacing:0;color:var(--text);line-height:1.25;background:rgba(10,132,255,0.06);border-bottom:1px solid rgba(10,132,255,0.18);display:flex;align-items:center;gap:8px}
+#patientBoardBloodsSlot > #bloodsSummaryCard .bloods-summary-title{display:block;width:100%;box-sizing:border-box;margin:0;padding:12px 14px;font-size:16px;font-weight:800;letter-spacing:0;color:var(--text);line-height:1.25;background:rgba(139,92,246,0.07);border-bottom:1px solid rgba(139,92,246,0.20);cursor:default;user-select:auto;-webkit-user-select:auto}
 #patientBoardBloodsSlot > #bloodsSummaryCard .bloods-summary-inline-hint{display:none!important}
 #patientBoardBloodsSlot > #bloodsSummaryCard .bloods-panel{display:flex;flex-direction:column;gap:10px;padding:14px}
 #patientBoardBloodsSlot > #bloodsSummaryCard .bloods-panel-head{margin:0}
@@ -2634,7 +2630,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_672_card_headers_unified_release.html; source=hospital_at_home_v12_36_672_card_headers_unified_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_673_bloods_violet_edd_inline_release.html; source=hospital_at_home_v12_36_673_bloods_violet_edd_inline_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -2988,7 +2984,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_672_card_headers_unified_release.html</div><div>Source: hospital_at_home_v12_36_672_card_headers_unified_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_673_bloods_violet_edd_inline_release.html</div><div>Source: hospital_at_home_v12_36_673_bloods_violet_edd_inline_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -7937,14 +7933,12 @@ function renderPatientLogEntry(entry, isLatest){
   const examination=String(f.examination||note.examination||'').trim();
   const plan=String(f.plan||note.plan||'').trim();
   const edd=formatLogEntryEdd(f.dischargeDate, f.dischargeReady);
-  // EDD as a small label-value line below the plan body (v12.36.671 — was
-  // a chip in v670; chip was too prominent for what's essentially metadata).
-  // 'Ready for discharge' drops the 'EDD:' prefix and goes green; everything
-  // else is 'EDD: <date>' with the value in subtle blue.
-  const eddIsReady=edd==='Ready for discharge';
-  const eddLineHtml=edd
-    ? `<div class="patient-log-edd-line${eddIsReady?' is-ready':''}">${eddIsReady?'':'EDD: '}<span class="patient-log-edd-value">${escapeHtml(edd)}</span></div>`
-    : '';
+  // EDD now renders as its own .patient-log-field between Plan and For
+  // Discharge Summary (v12.36.673), with the same label / body styling as
+  // every other field — no special weight, no coloured value, no margin
+  // workaround. Spacing between Plan body and EDD is now provided by the
+  // parent .patient-log-entry-body's gap:14px, matching the rhythm between
+  // every other pair of fields.
   const forDischargeSummary=String(f.forDischargeSummary||'').trim();
   const dateLabel=formatPatientLogEntryDate(entry.timestamp);
   const isToday=isLogEntryToday(entry.timestamp);
@@ -7957,7 +7951,8 @@ function renderPatientLogEntry(entry, isLatest){
     `<div class="patient-log-field"><div class="patient-log-field-label">${isMobile?'Currently':'Progress'}</div>${renderLogEntryFieldBody(currently)}</div>`
   ];
   if(isMobile && examination) sections.push(`<div class="patient-log-field"><div class="patient-log-field-label">Examination</div>${renderLogEntryFieldBody(examination)}</div>`);
-  sections.push(`<div class="patient-log-field"><div class="patient-log-field-label">Plan</div>${renderLogEntryFieldBody(plan)}${eddLineHtml}</div>`);
+  sections.push(`<div class="patient-log-field"><div class="patient-log-field-label">Plan</div>${renderLogEntryFieldBody(plan)}</div>`);
+  if(edd) sections.push(`<div class="patient-log-field"><div class="patient-log-field-label">EDD</div>${renderLogEntryFieldBody(edd)}</div>`);
   if(forDischargeSummary) sections.push(`<div class="patient-log-field"><div class="patient-log-field-label">For discharge summary</div>${renderLogEntryFieldBody(forDischargeSummary)}</div>`);
   // v12.36.670: meta line rendered as quiet inline text, separated by ·,
   // rather than three competing pill chips. Date / type / author are all
@@ -11151,8 +11146,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_672_card_headers_unified_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_672_card_headers_unified_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_673_bloods_violet_edd_inline_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_673_bloods_violet_edd_inline_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
