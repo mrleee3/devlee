@@ -2734,51 +2734,43 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
  * .hah-encounter-info-sep rule. */
 .hah-encounter-info-row{display:flex;align-items:center;flex-wrap:nowrap;justify-content:space-between;column-gap:0;padding:8px 14px;background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:14px;font-size:12px;color:var(--text);overflow:hidden;box-sizing:border-box}
 
-/* v12.36.687: ACTUAL vertical-alignment fix.
- * Previous attempts (line-height, padding-bottom) were applied to the
- * outer <input> but iOS Safari renders date/time inputs through internal
- * shadow-DOM pseudo-elements (::-webkit-datetime-edit and friends) that
- * don't inherit those properties. The text was always going to render at
- * the pseudo's baseline regardless of what I set on the parent.
- *
- * Real fix has two parts:
- * (1) Make the input itself a flex container so the internal pseudo
- *     gets centered by flex — this works because iOS does respect
- *     `display:inline-flex` on the outer element.
- * (2) Reset the pseudo-element's internal padding/margin to 0, since
- *     iOS adds its own breathing room there. */
+/* v12.36.688: custom chip pattern, no more wrestling with iOS native
+ * input rendering. Each control is now a visible chip (button) with an
+ * absolutely-positioned native input/select on top with opacity:0.
+ * Taps go through to the native control which opens the iOS picker.
+ * On change, JS updates the visible chip's text content. The hidden
+ * inputs remain the source of truth for values, so all the existing
+ * form-populate / save / edit JS keeps working unchanged. */
 
-/* Category select. */
-.hah-encounter-category-select{flex:0 0 auto;width:100px;height:28px;padding:0 22px 0 9px;border-radius:9px;border:1px solid rgba(10,132,255,.16);background:#e8f1ff;color:#0a84ff;font-size:12px;font-weight:700;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%230a84ff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 7px center;cursor:pointer;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:flex-start}
-.hah-encounter-category-select:focus{outline:2px solid rgba(10,132,255,.30);outline-offset:1px}
+/* Wrap holds the visible chip and the hidden native picker on top. */
+.hah-encounter-chip-wrap{position:relative;display:inline-flex;flex:0 0 auto}
 
-/* Date input — inline-flex so pseudo-element centers, plus pseudo
- * overrides for iOS Safari's internal padding. */
-.hah-encounter-date{flex:0 0 auto;width:96px;height:28px;padding:0 6px;border-radius:9px;border:1px solid rgba(15,23,42,.10);background:#fff;color:var(--text);font:inherit;font-size:12px;-webkit-appearance:none;appearance:none;text-align:center;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
-.hah-encounter-date:focus{outline:2px solid rgba(10,132,255,.30);outline-offset:1px;border-color:rgba(10,132,255,.40)}
+/* Visible chip — the only thing the user sees. Styled button, fully
+ * controlled CSS, no shadow-DOM rendering quirks. */
+.hah-encounter-chip{height:28px;padding:0 9px;border-radius:9px;border:1px solid rgba(15,23,42,.10);background:#fff;color:var(--text);font-size:12px;font-weight:500;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;box-sizing:border-box;white-space:nowrap;line-height:1;transition:background .15s ease,border-color .15s ease}
+.hah-encounter-chip.is-empty{color:rgba(15,23,42,.42)}
 
-/* Time input — same treatment. */
-.hah-encounter-time{flex:0 0 auto;width:54px;height:28px;padding:0 4px;border-radius:9px;border:1px solid rgba(15,23,42,.10);background:#fff;color:var(--text);font:inherit;font-size:12px;-webkit-appearance:none;appearance:none;text-align:center;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
-.hah-encounter-time:focus{outline:2px solid rgba(10,132,255,.30);outline-offset:1px;border-color:rgba(10,132,255,.40)}
+/* Category chip — light blue pill matching the previous design. The
+ * dropdown chevron is a bg-image on the right. */
+.hah-encounter-chip.is-category{width:100px;background:#e8f1ff;color:#0a84ff;border-color:rgba(10,132,255,.16);font-weight:700;padding:0 22px 0 9px;text-align:left;justify-content:flex-start;text-overflow:ellipsis;overflow:hidden;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%230a84ff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 7px center}
+.hah-encounter-chip.is-date{width:96px}
+.hah-encounter-chip.is-time{width:54px}
 
-/* iOS Safari pseudo-element overrides. These reset the internal padding
- * that pushes datetime text toward the baseline. Combined with the
- * inline-flex on the parent, the text now renders at geometric centre. */
-.hah-encounter-date::-webkit-datetime-edit,
-.hah-encounter-time::-webkit-datetime-edit{padding:0;margin:0;display:inline-flex;align-items:center;height:auto;line-height:1}
-.hah-encounter-date::-webkit-datetime-edit-fields-wrapper,
-.hah-encounter-time::-webkit-datetime-edit-fields-wrapper{padding:0;margin:0;display:inline-flex;align-items:center}
-.hah-encounter-date::-webkit-datetime-edit-text,
-.hah-encounter-time::-webkit-datetime-edit-text{padding:0;margin:0}
-.hah-encounter-date::-webkit-date-and-time-value,
-.hah-encounter-time::-webkit-date-and-time-value{margin:0;padding:0}
+/* Hidden native picker — sits on top of the chip, opacity:0. Receives
+ * the tap and triggers the iOS native picker. font-size:16px prevents
+ * iOS Safari zoom-on-focus (zoom kicks in below 16px input font). */
+.hah-encounter-chip-wrap > input.hah-hidden-picker,
+.hah-encounter-chip-wrap > select.hah-hidden-picker{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;padding:0;margin:0;cursor:pointer;-webkit-appearance:none;appearance:none;background:transparent;color:transparent;font-size:16px}
 
-/* Empty-state styling for unset time inputs. */
-.hah-encounter-time:invalid{color:rgba(15,23,42,.36)}
+/* Focus state on chip when its hidden picker is focused. iOS doesn't
+ * fire focus events reliably for native pickers, but :focus-within
+ * on the wrap covers desktop / accessible-tap scenarios. */
+.hah-encounter-chip-wrap:focus-within .hah-encounter-chip{outline:2px solid rgba(10,132,255,.30);outline-offset:1px;border-color:rgba(10,132,255,.40)}
 
-/* Time block. Icon BEFORE the input. */
+/* Time block. Icon BEFORE the chip-wrap. */
 .hah-encounter-time-wrap{display:inline-flex;align-items:center;gap:3px;flex:0 0 auto}
-/* Icon button. */
+
+/* "Set to now" icon button — same 28px height as chips. */
 .hah-encounter-time-now{flex:0 0 auto;width:28px;height:28px;padding:0;border-radius:7px;border:1px solid rgba(10,132,255,.16);background:#e8f1ff;color:#0a84ff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s ease,color .15s ease,transform .12s ease;box-sizing:border-box}
 .hah-encounter-time-now:active{background:rgba(10,132,255,0.22);transform:scale(.94)}
 .hah-encounter-time-now svg{width:12px;height:12px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -2881,7 +2873,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_687_encounter_card_align_pseudos_release.html; source=hospital_at_home_v12_36_687_encounter_card_align_pseudos_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_688_encounter_card_custom_chips_release.html; source=hospital_at_home_v12_36_688_encounter_card_custom_chips_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3235,7 +3227,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_687_encounter_card_align_pseudos_release.html</div><div>Source: hospital_at_home_v12_36_687_encounter_card_align_pseudos_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_688_encounter_card_custom_chips_release.html</div><div>Source: hospital_at_home_v12_36_688_encounter_card_custom_chips_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3506,7 +3498,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </section>
 <section class="container hidden" id="patientDetail" data-detail-mode="board">
 <div class="card patient-log-card" id="patientLogCard"></div><div id="patientBoardBloodsSlot"></div><div class="card patient-tasks-card hidden" id="patientTasksCard"></div>
-<div class="hah-encounter-info-card" id="encounterInfoCard"><div class="hah-encounter-info-row"><select aria-label="Encounter type" class="hah-encounter-category-select" id="encounterCategory"><option value="home_visit">Home visit</option><option value="phone_call">Phone call</option><option value="other">Other</option></select><input aria-label="Encounter date" class="hah-encounter-date" id="encounterDate" type="date" /><div class="hah-encounter-time-wrap" id="encounterTimeInWrap"><button aria-label="Set arrival time to now" class="hah-encounter-time-now" data-target="encounterTimeIn" id="encounterTimeInNowBtn" title="Just arrived" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" x2="3" y1="12" y2="12"></line></svg></button><input aria-label="Time in" class="hah-encounter-time" id="encounterTimeIn" placeholder="--:--" type="time" /></div><span class="hah-encounter-time-arrow" id="encounterTimeArrow" aria-hidden="true">→</span><div class="hah-encounter-time-wrap" id="encounterTimeOutWrap"><button aria-label="Set departure time to now" class="hah-encounter-time-now" data-target="encounterTimeOut" id="encounterTimeOutNowBtn" title="Just left" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg></button><input aria-label="Time out" class="hah-encounter-time" id="encounterTimeOut" placeholder="--:--" type="time" /></div></div></div><div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div><button aria-label="Read score aloud" class="news-tts-btn" id="newsTtsBtn" title="Read score aloud" type="button"><svg aria-hidden="true" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" viewBox="0 0 24 24" width="14"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>Read score</button></div>
+<div class="hah-encounter-info-card" id="encounterInfoCard"><div class="hah-encounter-info-row"><div class="hah-encounter-chip-wrap"><button class="hah-encounter-chip is-category" id="encounterCategoryChip" type="button">Home visit</button><select aria-label="Encounter type" class="hah-hidden-picker" id="encounterCategory"><option value="home_visit">Home visit</option><option value="phone_call">Phone call</option><option value="other">Other</option></select></div><div class="hah-encounter-chip-wrap"><button class="hah-encounter-chip is-date" id="encounterDateChip" type="button">Pick date</button><input aria-label="Encounter date" class="hah-hidden-picker" id="encounterDate" type="date" /></div><div class="hah-encounter-time-wrap" id="encounterTimeInWrap"><button aria-label="Set arrival time to now" class="hah-encounter-time-now" data-target="encounterTimeIn" id="encounterTimeInNowBtn" title="Just arrived" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" x2="3" y1="12" y2="12"></line></svg></button><div class="hah-encounter-chip-wrap"><button class="hah-encounter-chip is-time" id="encounterTimeInChip" type="button">--:--</button><input aria-label="Time in" class="hah-hidden-picker" id="encounterTimeIn" type="time" /></div></div><span class="hah-encounter-time-arrow" id="encounterTimeArrow" aria-hidden="true">→</span><div class="hah-encounter-time-wrap" id="encounterTimeOutWrap"><button aria-label="Set departure time to now" class="hah-encounter-time-now" data-target="encounterTimeOut" id="encounterTimeOutNowBtn" title="Just left" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg></button><div class="hah-encounter-chip-wrap"><button class="hah-encounter-chip is-time" id="encounterTimeOutChip" type="button">--:--</button><input aria-label="Time out" class="hah-hidden-picker" id="encounterTimeOut" type="time" /></div></div></div></div><div class="card patient-reorder-card" data-card-key="obs"><h3>Observations / NEWS2</h3><div class="news-box news-low" id="newsBanner"><div class="news-score" id="newsScore">0</div><div id="newsText">Low clinical risk</div><button aria-label="Read score aloud" class="news-tts-btn" id="newsTtsBtn" title="Read score aloud" type="button"><svg aria-hidden="true" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" viewBox="0 0 24 24" width="14"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>Read score</button></div>
 <div class="scoremode-row"><button class="scoremode-btn" id="crewsBtn" type="button">CREWS (scale 2)</button><button class="scoremode-btn" id="mewsBtn" type="button">MEWS (maternity)</button></div><div class="grid"><div><label>Respiratory rate</label><input id="rr" type="number"/></div><div><label>SpO₂ %</label><input id="spo2" type="number"/></div><div><label>On oxygen?</label><select id="oxygen"><option value="0">No</option><option value="2">Yes</option></select><div class="hidden" id="oxygenFlowSection"><div class="oxygen-flow-row"><button class="flow-btn" data-flow="0.5L" type="button">0.5</button><button class="flow-btn" data-flow="1.5L" type="button">1.5</button><button class="flow-btn" data-flow="2L" type="button">2</button><button class="flow-btn" data-flow="other" type="button">Other</button></div><input class="hidden" id="oxygenFlowOther" placeholder="Enter oxygen flow e.g. 3L" type="text"/></div></div><div><label>Temperature °C</label><input id="temp" step="0.1" type="number"/></div><div><label>Blood pressure</label><div class="obs-split-field" id="bpFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bp" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBpEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bpLying" type="hidden"/><input id="bpStanding1" type="hidden"/><input id="bpStanding3" type="hidden"/><input id="bpPosturalSymptoms" type="hidden"/></div><div><label>Heart rate</label><div class="obs-split-field" id="hrFieldShell"><input id="hr" type="number"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openHrEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="hrPulse" type="hidden"/></div><div><button aria-haspopup="dialog" class="linklike weight-link-label" id="openWeightHistoryBtn" type="button">Weight (kg)</button><input id="weight" step="0.1" type="number"/></div><div><label>BM</label><div class="obs-split-field" id="bmFieldShell"><input autocapitalize="off" autocorrect="off" enterkeyhint="done" id="bm" inputmode="decimal" spellcheck="false" type="text"/><button aria-haspopup="dialog" class="obs-split-trigger" id="openBmEditorBtn" type="button"><span aria-hidden="true" class="obs-picker-arrow">›</span></button></div><input id="bmTiming" type="hidden"/><input id="bmTimingTime" type="hidden"/><input id="bmTarget" type="hidden"/></div><div><label>Consciousness</label><select id="conscious"><option value="0">Alert</option><option value="3">Voice / Pain / Unresponsive</option></select></div><div><label>New confusion?</label><select id="confusion"><option value="0">No</option><option value="3">Yes</option></select></div></div></div>
 <div aria-hidden="true" class="ecg-assist-overlay hidden" id="ecgAssistOverlay"><div class="ecg-assist-backdrop" id="ecgAssistBackdrop"></div><div aria-labelledby="ecgAssistTitle" aria-modal="true" class="card ecg-assist-modal" id="ecgAssistModal" role="dialog"><div class="ecg-assist-head"><h3 id="ecgAssistTitle">ECG Assist</h3><button aria-label="Close ECG Assist" class="ecg-assist-close" id="ecgAssistCloseBtn" type="button">×</button></div><div class="ecg-assist-tabs"><button class="ecg-assist-tab active" data-ecg-mode="scan" type="button">Scan</button><button class="ecg-assist-tab" data-ecg-mode="upload" type="button">Upload</button><button class="ecg-assist-tab" data-ecg-mode="paste" type="button">Paste</button></div><div class="ecg-assist-body"><div class="ecg-assist-intro">Set clinical context above, then scan, upload or paste an ECG image for a structured AI draft review.</div><div class="ecg-assist-card ecg-context-card"><div class="ecg-assist-card-title" style="font-size:15px">Clinical context</div><div class="exam-findings-chip-row" id="ecgContextPresets"><button class="exam-findings-chip active" data-preset="" type="button">Unspecified</button><button class="exam-findings-chip" data-preset="Chest pain / possible ACS — look carefully for STEMI equivalents including posterior pattern, de Winter morphology, and Wellens signs" type="button">Chest pain</button><button class="exam-findings-chip" data-preset="Palpitations / arrhythmia query — focus on rhythm, PR interval, QTc, delta waves, and accessory pathway features" type="button">Palpitations</button><button class="exam-findings-chip" data-preset="Bradycardia / conduction concern — classify degree of block, assess escape rhythm, and note whether rate is appropriate for the clinical situation" type="button">Bradycardia</button><button class="exam-findings-chip" data-preset="Hyperkalaemia — actively grade the hyperkalaemic ECG progression (peaked T → PR prolongation → P-wave loss → wide QRS → sine wave) and state where on this spectrum the tracing sits" type="button">Hyperkalaemia</button><button class="exam-findings-chip" data-preset="Syncope / collapse — look carefully for QTc prolongation, Brugada pattern, epsilon waves, and high-degree AV block" type="button">Syncope</button><button class="exam-findings-chip" data-preset="Breathlessness / possible PE — look for sinus tachycardia, S1Q3T3, right heart strain pattern, and new RBBB" type="button">SOB</button><button class="exam-findings-chip" data-preset="Tachycardia — classify as sinus vs non-sinus; look for P-wave morphology, regularity, QRS width, delta waves, and assess for any underlying cause" type="button">Tachycardia</button></div></div><div class="ecg-assist-mode-panel" data-ecg-panel="scan"><div class="ecg-assist-mode-copy">Use the camera to scan a 12-lead ECG or rhythm strip.</div><button class="primary fullwidth" id="chooseEcgScanBtn" type="button">Scan ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="upload"><div class="ecg-assist-mode-copy">Choose a saved ECG image or screenshot.</div><button class="primary fullwidth" id="chooseEcgUploadBtn" type="button">Upload / choose ECG</button></div><div class="ecg-assist-mode-panel hidden" data-ecg-panel="paste"><div class="ecg-assist-mode-copy">Paste an ECG screenshot here or try the clipboard button below.</div><div class="ecg-assist-paste-target" id="ecgAssistPasteTarget" tabindex="0">Tap here, then paste an ECG image screenshot.</div><button class="fullwidth" id="readClipboardEcgBtn" type="button">Paste from clipboard</button></div><input accept="image/*" capture="environment" class="hidden" id="ecgAssistScanInput" type="file"/><input accept="image/*" class="hidden" id="ecgAssistUploadInput" type="file"/><img alt="Selected ECG preview" class="ecg-assist-preview hidden" id="ecgAssistPreview"/><div class="ecg-assist-status" id="ecgAssistStatus">Take, choose or paste an ECG image to begin.</div><div class="ecg-assist-results hidden" id="ecgAssistResults"><div class="ecg-assist-flag hidden" id="ecgAssistFlag"></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Key parameters</div><div class="ecg-assist-grid" id="ecgAssistStructuredGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Lead review</div><div class="ecg-assist-lead-grid" id="ecgAssistLeadGrid"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Impression</div><div class="ecg-assist-copy-block" id="ecgAssistImpression"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Why this interpretation</div><div class="ecg-assist-list" id="ecgAssistWhy"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Image limits / caveats</div><div class="ecg-assist-copy-block" id="ecgAssistLimitations"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Do not miss</div><div class="ecg-assist-list" id="ecgAssistDifferentials"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Suggested action</div><div class="ecg-assist-copy-block" id="ecgAssistAction"></div></div><div class="ecg-assist-card"><div class="ecg-assist-card-title">Copy-ready ECG text</div><textarea id="ecgAssistCopyText" placeholder="ECG summary will appear here"></textarea></div></div></div><div class="ecg-assist-footer"><button id="ecgAssistClearBtn" type="button">Clear</button><button id="ecgAssistCopyBtn" type="button">Copy text</button><button class="primary" id="ecgAssistInsertBtn" type="button">Use in examination</button></div></div></div>
 <div class="card patient-reorder-card" data-card-key="bloodsSummary" data-collapsible="false" id="bloodsSummaryCard"><h3 class="bloods-summary-title" data-collapsible="false" id="bloodsSummaryTitle">Recent bloods <span class="bloods-summary-inline-hint patient-card-helper-text" id="bloodsSummaryHint"></span></h3><div class="bloods-panel" id="bloodsPanel"><div class="bloods-panel-head hidden"><div class="bloods-panel-meta patient-card-helper-text" id="bloodsPanelMeta"></div></div><div class="bloods-grid hidden" id="bloodsGrid"></div><div class="bloods-table-wrap hidden" id="bloodsTableWrap"><table class="bloods-table" id="bloodsTable"><thead id="bloodsTableHead"></thead><tbody id="bloodsTableBody"></tbody></table></div><div class="bloods-empty" id="bloodsEmpty">No bloods entered.</div></div></div>
@@ -7545,6 +7537,8 @@ function editEntryFromLog(entryId){
   if($('encounterTimeIn')) $('encounterTimeIn').value = entryTimeInStr;
   if($('encounterTimeOut')) $('encounterTimeOut').value = entryTimeOutStr;
   if($('encounterInfoCard')) $('encounterInfoCard').setAttribute('data-encounter-category', entryCategory);
+  // v12.36.688: re-render visible chips from the populated hidden inputs.
+  if(typeof renderEncounterChips === 'function') renderEncounterChips();
   if(p.form){
     p.form.issues = issuesText;
     p.form.currently = currentlyText;
@@ -8294,6 +8288,73 @@ function setAcpCollapsed(_collapsed){
   updateAcpCardUI();
 }
 
+// v12.36.688: encounter info card uses chip + hidden-picker pattern.
+// renderEncounterChips reads the underlying input/select values and
+// updates the visible chip text. Called whenever the values change
+// (form-populate, change events, set-to-now buttons).
+function renderEncounterChips(){
+  // Category — show the option label corresponding to the select's
+  // current value. data-encounter-category on the card drives the
+  // CSS show/hide of the time-out wrap and arrow for non-home-visit.
+  const cat = $('encounterCategory');
+  const catChip = $('encounterCategoryChip');
+  const catLabels = {home_visit:'Home visit', phone_call:'Phone call', other:'Other'};
+  if(cat && catChip){
+    const catVal = cat.value || 'home_visit';
+    catChip.textContent = catLabels[catVal] || 'Home visit';
+    const card = $('encounterInfoCard');
+    if(card) card.setAttribute('data-encounter-category', catVal);
+  }
+  // Date — format YYYY-MM-DD into "4 May 2026". Empty: "Pick date"
+  // with is-empty class for muted styling.
+  const date = $('encounterDate');
+  const dateChip = $('encounterDateChip');
+  if(date && dateChip){
+    if(date.value){
+      try{
+        const [y,m,d] = String(date.value).split('-').map(Number);
+        const dt = new Date(y, m-1, d);
+        if(Number.isNaN(dt.getTime())){
+          dateChip.textContent = String(date.value);
+        } else {
+          dateChip.textContent = dt.toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'});
+        }
+        dateChip.classList.remove('is-empty');
+      } catch(_){
+        dateChip.textContent = String(date.value);
+        dateChip.classList.remove('is-empty');
+      }
+    } else {
+      dateChip.textContent = 'Pick date';
+      dateChip.classList.add('is-empty');
+    }
+  }
+  // Time-in — already HH:MM format from native input. Empty: "--:--"
+  const timeIn = $('encounterTimeIn');
+  const timeInChip = $('encounterTimeInChip');
+  if(timeIn && timeInChip){
+    if(timeIn.value){
+      timeInChip.textContent = String(timeIn.value);
+      timeInChip.classList.remove('is-empty');
+    } else {
+      timeInChip.textContent = '--:--';
+      timeInChip.classList.add('is-empty');
+    }
+  }
+  // Time-out — same treatment.
+  const timeOut = $('encounterTimeOut');
+  const timeOutChip = $('encounterTimeOutChip');
+  if(timeOut && timeOutChip){
+    if(timeOut.value){
+      timeOutChip.textContent = String(timeOut.value);
+      timeOutChip.classList.remove('is-empty');
+    } else {
+      timeOutChip.textContent = '--:--';
+      timeOutChip.classList.add('is-empty');
+    }
+  }
+}
+
 function updateAcpQuickAddButton(){
   const btn = $("acpQuickAddBtn");
   if(!btn) return;
@@ -8894,6 +8955,9 @@ function setFieldValues(f){
   // Reflect category on the card via data attribute so CSS can hide
   // time-out wrap + arrow when not home_visit.
   if($("encounterInfoCard")) $("encounterInfoCard").setAttribute('data-encounter-category', encounterCategoryValue);
+  // v12.36.688: re-render the visible chips from the (now populated)
+  // hidden inputs. The chips are pure display — values live in inputs.
+  if(typeof renderEncounterChips === 'function') renderEncounterChips();
   // Also stamp p.form with the overlaid values so subsequent
   // saveCurrentPatientForm reads see the draft as the current value,
   // not the JSON value (otherwise diff detection would erroneously
@@ -12364,8 +12428,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_687_encounter_card_align_pseudos_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_687_encounter_card_align_pseudos_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_688_encounter_card_custom_chips_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_688_encounter_card_custom_chips_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -15135,19 +15199,22 @@ document.addEventListener("DOMContentLoaded",function(){
   // (a) Category select: on change, update the data attribute so CSS
   //     hides/shows the time-out wrap and arrow, then save form so
   //     the change persists to the localStorage draft.
+  // v12.36.688: chip+hidden-picker pattern — also re-render chips on change.
   if($("encounterCategory")){
     $("encounterCategory").addEventListener('change', () => {
       const card = $('encounterInfoCard');
       const val = $('encounterCategory').value || 'home_visit';
       if(card) card.setAttribute('data-encounter-category', val);
+      if(typeof renderEncounterChips === 'function') renderEncounterChips();
       if(typeof saveCurrentPatientForm === 'function') saveCurrentPatientForm();
     });
   }
-  // (b) Date and time inputs: persist to draft on change.
+  // (b) Date and time inputs: persist to draft on change, refresh chips.
   ['encounterDate','encounterTimeIn','encounterTimeOut'].forEach(id => {
     const el = $(id);
     if(el){
       el.addEventListener('change', () => {
+        if(typeof renderEncounterChips === 'function') renderEncounterChips();
         if(typeof saveCurrentPatientForm === 'function') saveCurrentPatientForm();
       });
     }
