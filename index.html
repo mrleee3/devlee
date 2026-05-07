@@ -2873,7 +2873,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_690_clinical_text_encounter_header_release.html; source=hospital_at_home_v12_36_690_clinical_text_encounter_header_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_691_auto_reopen_last_patient_release.html; source=hospital_at_home_v12_36_691_auto_reopen_last_patient_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3227,7 +3227,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_690_clinical_text_encounter_header_release.html</div><div>Source: hospital_at_home_v12_36_690_clinical_text_encounter_header_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_691_auto_reopen_last_patient_release.html</div><div>Source: hospital_at_home_v12_36_691_auto_reopen_last_patient_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -9587,6 +9587,45 @@ function deleteMedEntryByElement(div){
 window.syncIVEntryButtonState=syncIVEntryButtonState;
 
 </script><script>
+// v12.36.691: last-patient-activity tracking for auto-reopen on app
+// startup. Persists {id, ts} to localStorage on every patient open or
+// per-patient save. Cleared on explicit back-to-list navigation. On
+// startup, if ts is within HAH_AUTO_REOPEN_WINDOW_MS AND the patient
+// still exists, reopen them; otherwise land on the patient list as
+// before.
+const HAH_LAST_PATIENT_ACTIVITY_KEY = 'hah_last_patient_activity_v1';
+const HAH_AUTO_REOPEN_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+function stampLastPatientActivity(patientId){
+  if(!patientId) return;
+  try{
+    const payload = {id: String(patientId), ts: Date.now()};
+    localStorage.setItem(HAH_LAST_PATIENT_ACTIVITY_KEY, JSON.stringify(payload));
+  }catch(_){}
+}
+function clearLastPatientActivity(){
+  try{ localStorage.removeItem(HAH_LAST_PATIENT_ACTIVITY_KEY); }catch(_){}
+}
+function shouldAutoReopenLastPatient(){
+  // Returns patient ID if eligible for auto-reopen, else null. Eligibility:
+  // (a) localStorage record present and well-formed
+  // (b) timestamp within HAH_AUTO_REOPEN_WINDOW_MS of now
+  // (c) the patient still exists in the in-memory patients map
+  // (d) currentPatient is set to the same ID (paranoid sanity check —
+  //     the persisted patients blob carries currentPatient too, so they
+  //     should agree, but if they don't we trust the explicit activity
+  //     record over the legacy currentPatient value)
+  try{
+    const raw = localStorage.getItem(HAH_LAST_PATIENT_ACTIVITY_KEY);
+    if(!raw) return null;
+    const payload = JSON.parse(raw);
+    if(!payload || !payload.id || !Number.isFinite(payload.ts)) return null;
+    const ageMs = Date.now() - payload.ts;
+    if(ageMs < 0 || ageMs > HAH_AUTO_REOPEN_WINDOW_MS) return null;
+    if(!patients || !patients[payload.id]) return null;
+    return String(payload.id);
+  }catch(_){ return null; }
+}
+
 function addMedEntry(){
   const form=patients[currentPatient] && patients[currentPatient].form ? patients[currentPatient].form : null;
   const hasVisibleEntries=!!document.querySelector("#medsContainer .med-entry");
@@ -10522,6 +10561,10 @@ function obsParts(){const parts=[]; const add=(label,val,suffix="")=>{if(String(
 function getIVSentenceList(){if(!$("ivGiven").checked) return []; return getIVEntries().filter(e=>e.medication||e.dose||e.serialExpiry||e.details).map(e=>{const details=(e.details||"").trim(); const core=`IV ${e.medication||"-"} ${e.dose||"-"} (${e.serialExpiry||"-"}) administered without incident`; return details ? `${core} — ${details}` : core;})}
 function saveCurrentPatientForm() {
   if (!detailLoadedForCurrentPatient || !patients[currentPatient]) return;
+  // v12.36.691: stamp activity so the 15-min auto-reopen window slides
+  // forward on every form save (typing notes, taking obs, etc.). Without
+  // this, an extended session would let the window lapse.
+  if(typeof stampLastPatientActivity === 'function') stampLastPatientActivity(currentPatient);
   const p = patients[currentPatient];
   const previousForm = p.form || {};
   const nowIso = new Date().toISOString();
@@ -10628,6 +10671,9 @@ function saveCurrentPatientForm() {
 }
 function openPatient(id, opts={}) {
   if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) return;
+  // v12.36.691: stamp the activity timestamp for auto-reopen logic.
+  // Covers all open paths (tap from list, programmatic open, etc.).
+  if(typeof stampLastPatientActivity === 'function') stampLastPatientActivity(id);
   if(typeof rememberSectionScroll==='function') rememberSectionScroll('patients', true);
   if (detailLoadedForCurrentPatient && typeof rememberCurrentPatientUiState==='function') rememberCurrentPatientUiState(true);
   if (detailLoadedForCurrentPatient) saveCurrentPatientForm();
@@ -12467,8 +12513,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_690_clinical_text_encounter_header_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_690_clinical_text_encounter_header_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_691_auto_reopen_last_patient_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_691_auto_reopen_last_patient_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -12632,6 +12678,11 @@ function resetPatientDetailSwipe(){
 function goBackToPatientList(opts){
   if(detailLoadedForCurrentPatient && typeof rememberCurrentPatientUiState==='function') rememberCurrentPatientUiState(true);
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
+  // v12.36.691: clear auto-reopen activity record. Explicit back-navigation
+  // expresses intent to leave the patient — if user quits and returns
+  // shortly after, they should land on the list, not get pulled back to
+  // the patient they just left.
+  if(typeof clearLastPatientActivity === 'function') clearLastPatientActivity();
   if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
   detailSwipeCompleting=false;
   detailEdgeSwipeState=null;
@@ -15188,7 +15239,7 @@ document.addEventListener("DOMContentLoaded",function(){
   $("ivToggleText").onclick=toggleIVCollapse;
   $("ivEditCloseBtn").onclick=closeIVEditOverlay;
   $("ivEditBackdrop").onclick=closeIVEditOverlay;
-  $("navPatients").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient && typeof rememberCurrentPatientUiState==='function') rememberCurrentPatientUiState(true); if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("patients")};
+  $("navPatients").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient && typeof rememberCurrentPatientUiState==='function') rememberCurrentPatientUiState(true); if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); if(typeof clearLastPatientActivity === 'function') clearLastPatientActivity(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("patients")};
   $("navTasks").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient && typeof rememberCurrentPatientUiState==='function') rememberCurrentPatientUiState(true); if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); if(typeof renderTasksPage==='function') renderTasksPage(); showSection("tasks")};
   $("navHandover").onclick=()=>{if(shouldSuppressPostUnlockInteraction()) return; if(detailLoadedForCurrentPatient && typeof rememberCurrentPatientUiState==='function') rememberCurrentPatientUiState(true); if(detailLoadedForCurrentPatient) saveCurrentPatientForm(); detailLoadedForCurrentPatient=false; saveData(); renderPatientList(); showSection("handover")};
   $("backBtn").onclick=()=>{ if(shouldSuppressPostUnlockInteraction()) return; goBackToPatientList(); };
@@ -15487,7 +15538,26 @@ document.addEventListener("DOMContentLoaded",function(){
   $("patientContextTasksBtn").onclick=()=>{ const id=patientContextMenuId; closePatientContextMenu(); if(id && typeof openTaskOverlayForPatient==='function') openTaskOverlayForPatient(id); };
   $("patientContextDeleteBtn").onclick=()=>{ const id=patientContextMenuId; closePatientContextMenu(); if(id) deletePatient(id); };
   document.addEventListener("keydown",e=>{ if(e.key==="Escape") closePatientContextMenu(); });
-  if(!applyGraphPostAuthUiRestore()) showSection("patients");
+  if(!applyGraphPostAuthUiRestore()){
+    // v12.36.691: auto-reopen the most-recently-active patient if we're
+    // within the 15-minute window AND the patient still exists. This
+    // covers the common case of switching apps or having iOS suspend
+    // the tab during an active session — when you come back, you're
+    // back where you were. Outside the window OR after explicit
+    // back-navigation, lands on the patient list as before.
+    let autoReopened = false;
+    try{
+      const reopenId = (typeof shouldAutoReopenLastPatient === 'function') ? shouldAutoReopenLastPatient() : null;
+      if(reopenId){
+        // openPatient internally calls showSection-equivalent logic
+        // (hideAll + reveal patientDetail) and restores the saved
+        // detail-mode (Summary/Review/Tasks) via getPatientUiState.
+        openPatient(reopenId);
+        autoReopened = true;
+      }
+    }catch(_){}
+    if(!autoReopened) showSection("patients");
+  }
   if(pendingGraphPostAuthRestore && pendingGraphPostAuthRestore.skipSplash){
     setTimeout(()=>{ hideGraphAuthReturnCover(); }, 160);
   }
