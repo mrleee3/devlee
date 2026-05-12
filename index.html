@@ -2804,73 +2804,42 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 .patient-log-entry-edited-at{color:var(--sub);font-style:italic;font-weight:500}
 
 /* ============================================================
- * v12.36.693 — Patient list row layout
+ * v12.36.694 — Tightened patient cards (replaces v693 row layout)
  *
- * The patient list switches from independent cards to a single rounded
- * container with hairline-divided rows (iOS Mail / Settings pattern).
- * This block overrides the earlier `.swipe-shell` / `.card` / acuity-rail
- * rules WHEN they are inside `#patientList` and there are patients to show.
- * The `:has()` guard means the empty-state card retains its old standalone
- * styling — only the populated list gets the row treatment.
+ * v693 went full Mail-style rows. In real use the trail column looked
+ * sparse and the rows lost the per-patient "object" feel that helps
+ * clinically. Walking back to cards but with reduced chrome:
  *
- * Swipe-to-Visit / swipe-to-Task interactions survive unchanged: each row
- * is still its own `.swipe-shell` with overflow:hidden, so the translate-
- * to-reveal behaviour works exactly as before.
+ *   - Card padding tightened (14px → 10px)
+ *   - Inter-card margin tightened (12px → 8px)
+ *   - Body text lines slightly smaller (issues / obs lines)
+ *   - LOS chip preserved in trail (v693 introduced this, it stays)
  *
- * The LOS chip in the trail column is wired up in getPatientListActionMarkup
- * (03-ui-actions.js).
+ * No structural change to markup. Pure CSS adjustment scoped under
+ * #patientList so the Options preview card and the rest of the app
+ * are unaffected.
+ *
+ * Net effect: a tighter card that recovers most of v693's density
+ * win (~4 patients per first-paint vs v693's ~6 vs v692's ~2.5) while
+ * keeping the card metaphor.
  * ============================================================ */
 
-#patientList:has(.swipe-shell){
-  background:var(--card);
-  border-radius:16px;
-  box-shadow:0 1px 3px rgba(0,0,0,.06);
-  overflow:hidden;
-}
-
+/* Tighter inter-card gap */
 #patientList .swipe-shell{
-  border-radius:0;
-  margin-bottom:0;
-}
-#patientList .swipe-shell + .swipe-shell{
-  border-top:1px solid rgba(15,23,42,.06);
+  margin-bottom:8px;
 }
 
+/* Tighter padding inside each card */
 #patientList .swipe-shell .card{
-  border-radius:0;
-  box-shadow:none;
-  margin-bottom:0;
-  padding:10px 14px 11px 14px;
-  background:var(--card);
-}
-#patientList .swipe-shell .card.visit-selected,
-#patientList .card.swipe-foreground.visit-selected{
-  box-shadow:inset 0 2px 0 rgba(10,132,255,.92),
-             inset -2px 0 0 rgba(10,132,255,.92),
-             inset 0 -2px 0 rgba(10,132,255,.92);
+  padding:10px 12px 11px 12px;
 }
 
-/* Acuity rail loses its rounded corners — the parent container clips
- * the first and last rows naturally via overflow:hidden. */
-#patientList .swipe-foreground.patient-card-acuity-rail::before{
-  border-radius:0;
-}
-
-/* Tightened inner layout for rows */
+/* Slightly tighter inner gap between main and trail */
 #patientList .patient-card-inner{
-  align-items:center;
   gap:10px;
 }
-#patientList .patient-main{
-  padding-left:6px; /* breathing room from the 4px acuity rail */
-}
-#patientList .patient-card-titleline{
-  gap:6px;
-}
-#patientList .patient-card-helper-text{
-  font-size:12px !important;
-  font-weight:600 !important;
-}
+
+/* Compact body text lines */
 #patientList .patient-main-copy .small{
   font-size:12.5px;
   line-height:1.3;
@@ -2882,19 +2851,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
   margin-top:1px;
 }
 
-/* Trail column: tighter than the cards version, badges stack neatly */
-#patientList .patient-actions{
-  min-width:0;
-  max-width:108px;
-  gap:5px;
-  align-items:flex-end;
-}
-#patientList .patient-acuity-stack{
-  gap:5px;
-  align-items:flex-end;
-}
-
-/* LOS chip — new in v12.36.693 */
+/* LOS chip — added v12.36.693, kept in v694 */
 .patient-list-los-chip{
   display:inline-flex;align-items:center;justify-content:center;
   min-height:22px;padding:0 9px;
@@ -2906,31 +2863,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 }
 .patient-list-los-chip.warn{
   background:#fef3f2;color:#b42318;border-color:rgba(220,38,38,.14);
-}
-
-/* Tapped/pressing visual feedback — subtle blue tint via the existing
- * .swipe-shell.pressing rule, but in rows we want a slightly different
- * background since the foreground sits on the container instead of standing
- * alone. Keep the existing inset shadow but lighten the bg tint. */
-#patientList .swipe-shell.pressing .swipe-foreground{
-  background:rgba(10,132,255,.06);
-  box-shadow:none;
-}
-
-/* Settings preview shell (the small "this is what your list will look like"
- * preview in Options → Patient list) shows a single isolated shell. Don't
- * apply the row treatment there — let it look like a self-contained card
- * for preview clarity. */
-.patient-list-display-preview-panel .swipe-shell{
-  border-radius:16px;
-  border-top:none;
-}
-.patient-list-display-preview-panel .swipe-shell .card{
-  border-radius:16px;
-  padding:14px;
-}
-.patient-list-display-preview-panel .swipe-foreground.patient-card-acuity-rail::before{
-  border-radius:16px 0 0 16px;
 }
 
 </style>
@@ -3003,7 +2935,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_693_patient_list_rows_release.html; source=hospital_at_home_v12_36_693_patient_list_rows_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_694_tightened_cards_release.html; source=hospital_at_home_v12_36_694_tightened_cards_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3357,7 +3289,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_693_patient_list_rows_release.html</div><div>Source: hospital_at_home_v12_36_693_patient_list_rows_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_694_tightened_cards_release.html</div><div>Source: hospital_at_home_v12_36_694_tightened_cards_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -8354,6 +8286,17 @@ function getPatientLosDays(patient){
 
 function getPatientListLosChipMarkup(patient){
   const days = getPatientLosDays(patient);
+  // v12.36.694: one-shot diagnostic — fires once per app load if any
+  // patient has a non-empty doa that fails to parse. This is to track
+  // down why the chip didn't render for some users in v693. The flag is
+  // a window-level latch so it doesn't spam the console on re-renders.
+  if(days === null && patient && patient.doa && !window._hahLosWarnedOnce){
+    window._hahLosWarnedOnce = true;
+    try{
+      console.warn('[H@H v694] LOS chip suppressed: doa value did not parse.',
+        {name: patient.name, doa: patient.doa, type: typeof patient.doa});
+    }catch(_){}
+  }
   if(days === null) return '';
   const warnClass = days > HAH_LOS_WARN_THRESHOLD_DAYS ? ' warn' : '';
   const label = days === 0 ? 'Today' : `${days}d`;
@@ -12749,8 +12692,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_693_patient_list_rows_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_693_patient_list_rows_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_694_tightened_cards_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_694_tightened_cards_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
