@@ -2459,14 +2459,80 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 /* ── Patient page slide (Step 1) ──────────────────────────────── */
 /* Header bar shifts with the panel using a CSS variable */
 #appHeader{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform}
-/* Panel open: prep = snap to 100% right, anim = slide to 0 */
-#patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-4px 0 20px rgba(15,23,42,.09)}
-#patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94),box-shadow 360ms ease;will-change:transform}
+
+/* v12.36.695: permanent layer promotion while detail view is active.
+ * Previously `will-change:transform` only applied during `hah-detail-open-anim`
+ * (and during gesture swipes). The layer creation itself can cost a frame on
+ * the first paint, which contributed to the "jump at the beginning" — the
+ * first animation frame would composite on CPU before the layer was promoted.
+ * Promoting permanently while detail-view-active means the first frame is
+ * already on a GPU layer. */
+body.detail-view-active #patientDetail,
+body.detail-view-active #patients{
+  will-change:transform;
+  transform:translateZ(0);
+}
+
+/* Panel open: prep = snap to 100% right, anim = slide to 0.
+ * v12.36.695: box-shadow held CONSTANT at the deeper value through both
+ * states — previously animated `box-shadow` which forces paint per frame
+ * and can't be GPU-composited. Now only transform animates. */
+#patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13)}
+#patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94);will-change:transform}
 /* Patient list parallax: prep = 0, anim = slide to -28% */
 #patients.hah-detail-underlay-open-prep{transform:translate3d(0,0,0)}
 #patients.hah-detail-underlay-open-anim{transform:translate3d(-28%,0,0);transition:transform 360ms cubic-bezier(.25,.46,.45,.94);will-change:transform}
 @media(prefers-reduced-motion:reduce){
   #patientDetail.hah-detail-open-anim,#patients.hah-detail-underlay-open-anim{transition:none!important}
+}
+
+/* v12.36.695: View Transitions API (iOS Safari 18.2+, Chrome 111+).
+ *
+ * When `document.startViewTransition` is available, the open transition
+ * runs through the browser's native snapshot machinery instead of the
+ * class-flip CSS approach above. The browser snapshots before the work
+ * callback, runs the heavy main-thread work synchronously inside, then
+ * snapshots after and animates between the two static images on the
+ * compositor. This completely hides main-thread blocking — the user sees
+ * a smooth animation regardless of how long setFieldValues etc. takes.
+ *
+ * Naming strategy: patientDetail and patients get view-transition-names
+ * only while the open transition is in flight (added/removed by JS via
+ * the .hah-vt-open-active class on body). This prevents the names from
+ * applying to UNRELATED state changes (e.g. WSSync re-renders, swipe-back
+ * close), which would trigger spurious view transitions. */
+body.hah-vt-open-active #patientDetail{view-transition-name:hah-patient-detail-panel}
+body.hah-vt-open-active #patients{view-transition-name:hah-patient-list-underlay}
+
+/* Panel: slide in from right. The "old" snapshot is the hidden state
+ * (nothing to fade out), so we suppress its animation. The "new"
+ * snapshot slides from translate(100%) → translate(0). */
+::view-transition-old(hah-patient-detail-panel){animation:none;opacity:0}
+::view-transition-new(hah-patient-detail-panel){
+  animation:hah-vt-panel-slide-in 360ms cubic-bezier(.25,.46,.45,.94) both;
+}
+@keyframes hah-vt-panel-slide-in{
+  from{transform:translate3d(100%,0,0);opacity:1}
+  to{transform:translate3d(0,0,0);opacity:1}
+}
+
+/* Patient list: parallax to -28% to match the fallback animation feel.
+ * Both old and new snapshots get the same animation so the underlay
+ * transitions cleanly. */
+::view-transition-old(hah-patient-list-underlay),
+::view-transition-new(hah-patient-list-underlay){
+  animation:hah-vt-list-parallax 360ms cubic-bezier(.25,.46,.45,.94) both;
+}
+@keyframes hah-vt-list-parallax{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-28%,0,0)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  ::view-transition-old(hah-patient-detail-panel),
+  ::view-transition-new(hah-patient-detail-panel),
+  ::view-transition-old(hah-patient-list-underlay),
+  ::view-transition-new(hah-patient-list-underlay){animation:none!important}
 }
 
 .news-tts-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;margin-top:10px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .12s,opacity .15s}.news-tts-btn:active{background:rgba(255,255,255,.28);transform:scale(.97)}.news-tts-btn svg{flex-shrink:0}.news-tts-btn.is-speaking,.news-tts-btn:disabled{background:rgba(255,255,255,.24);opacity:.9}.tts-hidden-audio{position:fixed;left:-9999px;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none}
@@ -2935,7 +3001,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_694_tightened_cards_release.html; source=hospital_at_home_v12_36_694_tightened_cards_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_695_open_transition_smoothing_release.html; source=hospital_at_home_v12_36_695_open_transition_smoothing_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3289,7 +3355,7 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_694_tightened_cards_release.html</div><div>Source: hospital_at_home_v12_36_694_tightened_cards_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_695_open_transition_smoothing_release.html</div><div>Source: hospital_at_home_v12_36_695_open_transition_smoothing_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -10848,6 +10914,31 @@ function saveCurrentPatientForm() {
     renderHeaderPatientContext(p);
   }
 }
+// v12.36.695: View Transitions API feature detection and escape hatch.
+// `window.HAH_DISABLE_VIEW_TRANSITIONS = true` in DevTools forces the
+// fallback class-flip animation path. Default is to use VT when available.
+function hahShouldUseViewTransitionsForOpen(){
+  try{
+    if(typeof document === 'undefined' || !document.startViewTransition) return false;
+    if(window.HAH_DISABLE_VIEW_TRANSITIONS === true) return false;
+    if(typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    return true;
+  }catch(_){ return false; }
+}
+
+// v12.36.695: openPatient is now split into three phases:
+//   1. Pre-work: validate, suppress checks, save outgoing patient form.
+//   2. Core work (sync): everything that must complete before the panel is
+//      shown — currentPatient, hideAll, classList.remove("hidden"),
+//      setFieldValues, setPatientDetailMode, etc. This phase runs INSIDE
+//      the View Transitions callback when available, so its main-thread
+//      cost is hidden by the snapshot animation.
+//   3. Post-work (deferred): saveData, render rAFs. Moved to setTimeout
+//      after the animation completes so they don't compete with the slide.
+//
+// The phasing means the user sees the slide animation start immediately
+// (or, on iOS 18.2+, sees the View Transitions snapshot animation which is
+// fully GPU-composited and immune to main-thread blocking).
 function openPatient(id, opts={}) {
   if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) return;
   // v12.36.691: stamp the activity timestamp for auto-reopen logic.
@@ -10861,6 +10952,70 @@ function openPatient(id, opts={}) {
   detailEdgeSwipeState = null;
   const detailElBeforeOpen = $("patientDetail");
   const wasSamePatientAlreadyOpen = currentPatient === id && detailElBeforeOpen && !detailElBeforeOpen.classList.contains('hidden');
+
+  // Capture pre-work context so the core callback is closure-free for VT.
+  const ctx = { id, opts: opts||{}, wasSamePatientAlreadyOpen };
+
+  const runCoreOpen = () => openPatientCore(ctx);
+  const runPostOpen = () => openPatientPostWork(ctx);
+
+  // Same-patient re-open: skip the slide animation entirely, just refresh
+  // content in place. WSSync refreshes on iOS app resume hit this path.
+  if(wasSamePatientAlreadyOpen){
+    runCoreOpen();
+    if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
+    runPostOpen();
+    return;
+  }
+
+  // View Transitions path: iOS 18.2+ / Chrome 111+. The browser snapshots
+  // before, runs runCoreOpen inside the callback, snapshots after, then
+  // animates between the snapshots on the compositor. Heavy main-thread
+  // work inside the callback is invisible to the user.
+  if(hahShouldUseViewTransitionsForOpen()){
+    document.body.classList.add('hah-vt-open-active');
+    let vt;
+    try{
+      vt = document.startViewTransition(() => {
+        // Inside this callback, do everything synchronously. View transitions
+        // expect the DOM to settle by the time the callback returns.
+        runCoreOpen();
+      });
+    }catch(err){
+      // Defensive: fall back to class-flip path if VT throws for any reason.
+      try{ console.warn('[H@H v695] View transition threw, falling back:', err); }catch(_){}
+      document.body.classList.remove('hah-vt-open-active');
+      runCoreOpen();
+      animatePatientDetailOpen();
+      // post-open scheduled below
+      setTimeout(runPostOpen, 400);
+      return;
+    }
+    // Clean up the VT class once the animation is done (success or skip).
+    vt.finished.finally(() => {
+      try{ document.body.classList.remove('hah-vt-open-active'); }catch(_){}
+    });
+    // Post-open work waits for the transition to settle so it doesn't
+    // contend with the compositor animation.
+    vt.finished.finally(runPostOpen);
+    return;
+  }
+
+  // Fallback path: class-flip CSS transition (pre-v695 behaviour, plus
+  // v695 polish — layer promotion via body.detail-view-active, constant
+  // box-shadow, deferred post-work).
+  runCoreOpen();
+  animatePatientDetailOpen();
+  setTimeout(runPostOpen, 400);
+}
+
+// v12.36.695: the synchronous core that mutates DOM/state to show the
+// patient detail panel. Runs either inside a View Transitions callback
+// or directly on the main thread (fallback). MUST be fast-enough not to
+// freeze the UI noticeably (current floor ~50-100ms on iOS; this is
+// where future deferral work would land if needed).
+function openPatientCore(ctx){
+  const { id, opts, wasSamePatientAlreadyOpen } = ctx;
   currentPatient = id;
   const p = patients[id];
   hideAll();
@@ -10908,29 +11063,30 @@ function openPatient(id, opts={}) {
   setActive("navPatients");
   setPatientDetailStackActive(true);
   animatePatientDetailSwipe(0,true);
-  if(wasSamePatientAlreadyOpen){
-    // Re-rendering the same patient already on screen (e.g. WSSync refresh
-    // on iOS app resume). Skip the slide-in animation and just refresh the
-    // header content in place — otherwise the panel visibly swipes out and
-    // back in on every foreground event.
-    if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
-  } else {
-    animatePatientDetailOpen(); // slide panel + header in from right
-  }
+  // v12.36.695: header content update used to live inside
+  // animatePatientDetailOpen's rAF. With View Transitions, the header content
+  // change must be part of the snapshot, so we update it here in the core.
+  // For the fallback path, animatePatientDetailOpen still does its own header
+  // shift dance — but since updateHeaderForPatient is idempotent, calling it
+  // here AND there is safe (the later call is a no-op for content; only the
+  // CSS variable shift matters).
+  if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
+}
+
+// v12.36.695: post-open work that does NOT need to be visible in the
+// initial snapshot. saveData hits localStorage; the three render calls
+// touch DOM but for off-screen / non-critical cards. Deferred to run
+// AFTER the open animation completes so they don't contend with the
+// compositor or starve animation frames.
+function openPatientPostWork(/* ctx */){
   saveData();
   calculateNews();
   if(typeof renderPatientBoardCard==='function') renderPatientBoardCard();
   if(typeof updateHeaderTaskButton==='function') updateHeaderTaskButton();
   if(typeof updateNavPatientTasksBadge==='function') updateNavPatientTasksBadge();
-  if(typeof renderBloodsSummaryCard==='function'){
-    requestAnimationFrame(()=>{ try{ renderBloodsSummaryCard(); }catch(e){} });
-  }
-  if(typeof window.HAH_renderConditionPanel==='function'){
-    requestAnimationFrame(()=>{ try{ window.HAH_renderConditionPanel(); }catch(e){} });
-  }
-  if(typeof window.HAH_renderSectionJumpBar==='function'){
-    requestAnimationFrame(()=>{ try{ window.HAH_renderSectionJumpBar(); }catch(e){} });
-  }
+  if(typeof renderBloodsSummaryCard==='function'){ try{ renderBloodsSummaryCard(); }catch(e){} }
+  if(typeof window.HAH_renderConditionPanel==='function'){ try{ window.HAH_renderConditionPanel(); }catch(e){} }
+  if(typeof window.HAH_renderSectionJumpBar==='function'){ try{ window.HAH_renderSectionJumpBar(); }catch(e){} }
 }
 
 function getScoreMode(){return $("crewsBtn").classList.contains("active") ? "CREWS" : ($("mewsBtn").classList.contains("active") ? "MEWS" : "");}
@@ -12692,8 +12848,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_694_tightened_cards_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_694_tightened_cards_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_695_open_transition_smoothing_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_695_open_transition_smoothing_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
