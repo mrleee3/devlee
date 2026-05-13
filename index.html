@@ -2460,15 +2460,21 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 /* Header bar shifts with the panel using a CSS variable */
 #appHeader{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform}
 
-/* v12.36.695: permanent layer promotion while detail view is active.
- * Previously `will-change:transform` only applied during `hah-detail-open-anim`
- * (and during gesture swipes). The layer creation itself can cost a frame on
- * the first paint. Promoting permanently while detail-view-active means the
- * first frame is already on a GPU layer. */
+/* v12.36.695/698: permanent layer promotion while detail view is active.
+ *
+ * v695 added `transform:translateZ(0)` here for layer promotion. v698
+ * removed it: this rule's specificity (0,1,1,1) beat the slide animation's
+ * `#patientDetail.hah-detail-open-prep` rule (0,1,1,0), so the prep
+ * `transform:translate3d(100%,0,0)` was silently overridden. The panel
+ * never went off-screen right → never slid → just appeared at position 0.
+ *
+ * `will-change:transform` alone is sufficient to promote to a GPU layer
+ * on every browser we care about. The explicit `translateZ(0)` was the
+ * old way of doing the same thing before will-change was supported.
+ * Dropping it preserves layer promotion AND lets the slide animation work. */
 body.detail-view-active #patientDetail,
 body.detail-view-active #patients{
   will-change:transform;
-  transform:translateZ(0);
 }
 
 /* Panel open: prep = snap to 100% right, anim = slide to 0.
@@ -2508,10 +2514,25 @@ body.detail-view-active #patients{
 
 /* Nav layering: both navs share the same fixed position. Use transform
  * to slide rather than display:none to swap. The display:none rules from
- * the v692-era contextual swap are removed below by stronger selectors. */
+ * the v692-era contextual swap are removed below by stronger selectors.
+ *
+ * v698 fix: transition is gated by `body.hah-nav-animating` rather than
+ * being always-on. This means:
+ *   - Open path: JS adds .hah-nav-animating in preflight, removes after
+ *     the slide window. Navs slide synchronously with header + panel.
+ *   - Close path (back button → showSection): JS does NOT add the class,
+ *     so navs snap instantly when body.detail-view-active is removed —
+ *     in sync with the panel snap-hide via hideAll(). No more
+ *     out-of-sync "tab bar slowly slides while everything else snaps."
+ *   - Swipe-back gesture: same as back button — navs snap at the end
+ *     when body class is removed. Inline transforms on detail/list
+ *     during the swipe gesture stay independent. */
 .nav.nav-global,
 .nav.nav-patient{
   transform:translate3d(0,0,0);
+}
+body.hah-nav-animating .nav.nav-global,
+body.hah-nav-animating .nav.nav-patient{
   transition:transform 360ms cubic-bezier(.25,.46,.45,.94);
   will-change:transform;
 }
@@ -3013,7 +3034,7 @@ body.detail-view-active .nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_697_cards_slide_with_panel_release.html; source=hospital_at_home_v12_36_697_cards_slide_with_panel_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_698_slide_sync_fixes_release.html; source=hospital_at_home_v12_36_698_slide_sync_fixes_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3367,7 +3388,7 @@ body.detail-view-active .nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_697_cards_slide_with_panel_release.html</div><div>Source: hospital_at_home_v12_36_697_cards_slide_with_panel_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_698_slide_sync_fixes_release.html</div><div>Source: hospital_at_home_v12_36_698_slide_sync_fixes_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -11031,6 +11052,13 @@ function runOpenPreflight(ctx){
   // visible — populated via setFieldValuesFast below. Slide carries
   // them along.
   detail.classList.add('hah-open-loading');
+  // v698: enable nav slide transition for this open. Removed at the end
+  // of the animation window so back-button close snaps instantly in sync
+  // with the panel snap-hide. See CSS comment on .hah-nav-animating.
+  document.body.classList.add('hah-nav-animating');
+  setTimeout(() => {
+    try{ document.body.classList.remove('hah-nav-animating'); }catch(_){}
+  }, 420);
   detail.classList.remove("hidden");
   detail.scrollTop=0;
   try{ window.scrollTo(0,0); }catch(e){}
@@ -12898,8 +12926,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_697_cards_slide_with_panel_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_697_cards_slide_with_panel_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_698_slide_sync_fixes_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_698_slide_sync_fixes_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
