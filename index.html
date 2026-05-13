@@ -3076,7 +3076,7 @@ body.detail-view-active .nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_701_back_nav_sync_release.html; source=hospital_at_home_v12_36_701_back_nav_sync_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_702_swipe_back_anchors_release.html; source=hospital_at_home_v12_36_702_swipe_back_anchors_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3436,7 +3436,7 @@ body.detail-view-active .nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_701_back_nav_sync_release.html</div><div>Source: hospital_at_home_v12_36_701_back_nav_sync_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_702_swipe_back_anchors_release.html</div><div>Source: hospital_at_home_v12_36_702_swipe_back_anchors_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -12926,12 +12926,18 @@ function animatePatientDetailOpen(){
       }
     }
     setPatientDetailHeaderShift(0, {dragging:true});
-    // v12.36.699: ghost cleanup. Remove classes + clear content so the
-    // next open transition starts from a clean state.
+    // v12.36.699: ghost cleanup. Remove classes so the next open
+    // transition starts from a clean state.
+    // v12.36.702: keep ghost.innerHTML populated. It still holds the
+    // list-mode header snapshot from open time, which we want to reuse
+    // for swipe-back gestures (the ghost slides in from left as the
+    // user swipes the panel away). Cleared/repopulated next time the
+    // open animation snapshots #appHeader.
     if(ghost){
       try{
         ghost.classList.remove('hah-header-ghost-active','hah-header-ghost-sliding');
-        ghost.innerHTML = '';
+        ghost.style.transform = '';
+        ghost.style.transition = '';
       }catch(_){}
     }
   }, 410);
@@ -13001,14 +13007,43 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
   detail.style.boxShadow=activeDx>0?"0 12px 32px rgba(15,23,42,.12)":"";
   // Header follows the panel in sync during swipe gesture
   setPatientDetailHeaderShift(activeDx, {dragging:dragging, duration:'.24s', easing:swipeEasing});
+  // v12.36.702: drive the ghost header + bottom navs inline during swipe.
+  //
+  // Without these, the user's swipe-back gesture reveals the list behind
+  // the panel — but the ghost header sits idle (showing nothing, leaving
+  // a blank blue strip above the list) and the bottom tab bar stays in
+  // patient mode the whole time. Both should anchor to the appearing
+  // content during the gesture.
+  //
+  //   ghost header: mirrors the list parallax (underlayShift). So as the
+  //     list parallaxes from -28% back to 0, the ghost header (with list
+  //     content from the previous open snapshot) parallaxes back too.
+  //   .nav-patient: mirrors the panel (translates right with the finger).
+  //   .nav-global: at `activeDx - width`, so it slides in from off-screen
+  //     left as the panel slides off right. Same velocity as the panel.
+  const ghost = document.getElementById('appHeaderGhost');
+  if(ghost){
+    ghost.style.transition=transition;
+    ghost.style.transform=`translate3d(${underlayShift}px,0,0)`;
+  }
+  const patientNav = document.querySelector('.nav-patient');
+  const globalNav = document.querySelector('.nav-global');
+  if(patientNav){
+    patientNav.style.transition=transition;
+    patientNav.style.transform=`translate3d(${activeDx}px,0,0)`;
+  }
+  if(globalNav){
+    globalNav.style.transition=transition;
+    globalNav.style.transform=`translate3d(${activeDx - width}px,0,0)`;
+  }
 }
 
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_701_back_nav_sync_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_701_back_nav_sync_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_702_swipe_back_anchors_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_702_swipe_back_anchors_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13167,6 +13202,25 @@ function resetPatientDetailSwipe(){
     patients.style.transition="";
     patients.style.transform="";
     resetPatientDetailHeaderShift();
+    // v12.36.702: clean up the swipe-back ghost + nav inline styles.
+    // CSS takes over once these are cleared (ghost goes back to invisible,
+    // navs return to their CSS-controlled open-state positions).
+    const ghost = document.getElementById('appHeaderGhost');
+    if(ghost){
+      ghost.classList.remove('hah-header-ghost-active');
+      ghost.style.transition = '';
+      ghost.style.transform = '';
+    }
+    const patientNav = document.querySelector('.nav-patient');
+    const globalNav = document.querySelector('.nav-global');
+    if(patientNav){
+      patientNav.style.transition = '';
+      patientNav.style.transform = '';
+    }
+    if(globalNav){
+      globalNav.style.transition = '';
+      globalNav.style.transform = '';
+    }
   },260);
 }
 function goBackToPatientList(opts){
@@ -13267,6 +13321,25 @@ function goBackToPatientList(opts){
   }
 
   // Instant path (after swipe-back gesture, or reduced-motion)
+  // v12.36.702: clear inline styles set during the swipe-back gesture
+  // (ghost header + bottom navs). CSS takes over for the final closed
+  // state once these are gone.
+  const ghost = document.getElementById('appHeaderGhost');
+  if(ghost){
+    ghost.classList.remove('hah-header-ghost-active');
+    ghost.style.transition = '';
+    ghost.style.transform = '';
+  }
+  const patientNav = document.querySelector('.nav-patient');
+  const globalNav = document.querySelector('.nav-global');
+  if(patientNav){
+    patientNav.style.transition = '';
+    patientNav.style.transform = '';
+  }
+  if(globalNav){
+    globalNav.style.transition = '';
+    globalNav.style.transform = '';
+  }
   resetPatientDetailSwipe();
   detailLoadedForCurrentPatient=false;
   saveData();
@@ -13302,6 +13375,21 @@ function initPatientDetailEdgeSwipe(){
     detailEdgeSwipeState={startX:t.clientX,startY:t.clientY,dragging:false,dx:0};
     syncSharedHeaderHeight();
     setPatientDetailStackActive(true);
+    // v12.36.702: prep the ghost header for swipe-back. Reveals the
+    // list-mode content sitting behind the patient panel so the user
+    // sees the list header parallaxing in as they swipe right. Without
+    // this, the area where the list header would be is just blank blue.
+    const ghost = document.getElementById('appHeaderGhost');
+    if(ghost){
+      // Defensive populate: if ghost has no content (e.g. user is in
+      // reduced-motion mode where the open animation short-circuits and
+      // never snapshots, or the open animation hasn't run yet because
+      // we got here some other way), fill with the known list-mode HTML.
+      if(!ghost.innerHTML.trim()){
+        ghost.innerHTML = '<button aria-label="Back" class="header-back hidden">←</button><div class="header-row"><div class="header-left"><div><span>Hospital at Home Companion (DEMO)</span></div><div class="subhead">LK Medica Software Solutions Inc.</div></div></div>';
+      }
+      ghost.classList.add('hah-header-ghost-active');
+    }
     animatePatientDetailSwipe(0,true);
   },{passive:true});
   detail.addEventListener("touchmove",(e)=>{
