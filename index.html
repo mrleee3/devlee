@@ -2484,55 +2484,67 @@ body.detail-view-active #patients{
   #patientDetail.hah-detail-open-anim,#patients.hah-detail-underlay-open-anim{transition:none!important}
 }
 
-/* v12.36.696: FB-style slide-first-populate-after.
+/* v12.36.697: Option C — all three slide together (Approach B from scoping).
  *
- * During the slide, all card content is hidden so the panel slides in
- * as a clean empty shell (header visible, body cards invisible). When
- * the slide completes, the JS swaps the class to .hah-open-revealing,
- * which triggers a 240ms fade-in animation on the cards. The heavy
- * data-population work runs WHILE cards are still hidden by .hah-open-
- * loading, so its main-thread cost is completely invisible to the user.
+ * Cards are populated DURING preflight (fast path) so they're visible
+ * throughout the slide. The .hah-open-loading class no longer hides
+ * cards — it now only marks "we're mid-open-transition" for any code
+ * that needs to know (e.g. to suppress autosave). Cards stay visible.
  *
- * Card selectors target every direct content card inside #patientDetail:
- *   .card                       (most cards — meds, IV, clinical review etc.)
- *   .patient-log-card           (summary mode timeline card)
- *   .hah-encounter-info-card    (encounter info card)
+ * The bottom tab bars (.nav-global and .nav-patient) used to swap via
+ * display:none. Now they slide horizontally with the panel:
+ *   - list path → both navs visible, .nav-patient sitting off-screen right
+ *   - opening → .nav-global slides off left, .nav-patient slides in right
+ *   - closing → reverse
  *
- * The header (#appHeader) is NOT inside #patientDetail and stays visible
- * throughout — that's what gives the FB-style "name appears, content fills
- * in" feel.
+ * The display:none swap from v692 era is replaced with positioning rules
+ * so both navs live in the same fixed footer slot, layered.
  *
- * Reduced-motion users get instant visibility (no fade-in) and content
- * is never hidden — they see the panel populate sync via the old code path. */
-#patientDetail.hah-open-loading .card,
-#patientDetail.hah-open-loading .patient-log-card,
-#patientDetail.hah-open-loading .hah-encounter-info-card{
-  opacity:0;
+ * Heavy work (medication entries, IV entries, bloods render, condition
+ * panel) still runs AFTER the slide completes — those cards may appear
+ * to fill in over ~100-200ms after the slide. That's the known cost of
+ * Approach B vs C (skeletons). If it's visibly bad in real use we'll add
+ * skeletons in v698. */
+
+/* Nav layering: both navs share the same fixed position. Use transform
+ * to slide rather than display:none to swap. The display:none rules from
+ * the v692-era contextual swap are removed below by stronger selectors. */
+.nav.nav-global,
+.nav.nav-patient{
+  transform:translate3d(0,0,0);
+  transition:transform 360ms cubic-bezier(.25,.46,.45,.94);
+  will-change:transform;
+}
+/* Initial state — only .nav-global is visible, .nav-patient sits off-screen right */
+body:not(.detail-view-active) .nav-patient{
+  display:flex !important; /* override the v692 display:none */
+  transform:translate3d(100%,0,0);
   pointer-events:none;
 }
-
-#patientDetail.hah-open-revealing .card,
-#patientDetail.hah-open-revealing .patient-log-card,
-#patientDetail.hah-open-revealing .hah-encounter-info-card{
-  animation:hah-card-fade-in 240ms ease-out both;
+/* Opened state — .nav-global slides off left, .nav-patient slides in to centre */
+body.detail-view-active .nav-global{
+  display:flex !important; /* override the v692 display:none */
+  transform:translate3d(-100%,0,0);
+  pointer-events:none;
 }
-@keyframes hah-card-fade-in{
-  from{opacity:0}
-  to{opacity:1}
+body.detail-view-active .nav-patient{
+  transform:translate3d(0,0,0);
+  pointer-events:auto;
 }
 
 @media(prefers-reduced-motion:reduce){
-  #patientDetail.hah-open-loading .card,
-  #patientDetail.hah-open-loading .patient-log-card,
-  #patientDetail.hah-open-loading .hah-encounter-info-card{
-    opacity:1;
-    pointer-events:auto;
-  }
-  #patientDetail.hah-open-revealing .card,
-  #patientDetail.hah-open-revealing .patient-log-card,
-  #patientDetail.hah-open-revealing .hah-encounter-info-card{
-    animation:none!important;
-  }
+  .nav.nav-global,.nav.nav-patient{transition:none!important}
+}
+
+/* v12.36.697: .hah-open-loading is retained as a marker class (some code
+ * may check for it) but no longer hides cards. Removing the opacity:0
+ * rule lets the populated fast-path content be visible during the slide.
+ * The .hah-open-revealing class and its keyframe are removed entirely —
+ * no fade-in needed because cards never went invisible. */
+#patientDetail.hah-open-loading .card,
+#patientDetail.hah-open-loading .patient-log-card,
+#patientDetail.hah-open-loading .hah-encounter-info-card{
+  /* intentionally no opacity rule — cards visible during slide */
 }
 
 .news-tts-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;margin-top:10px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .12s,opacity .15s}.news-tts-btn:active{background:rgba(255,255,255,.28);transform:scale(.97)}.news-tts-btn svg{flex-shrink:0}.news-tts-btn.is-speaking,.news-tts-btn:disabled{background:rgba(255,255,255,.24);opacity:.9}.tts-hidden-audio{position:fixed;left:-9999px;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none}
@@ -3001,7 +3013,7 @@ body.detail-view-active #patients{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_696_slide_first_populate_after_release.html; source=hospital_at_home_v12_36_696_slide_first_populate_after_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_697_cards_slide_with_panel_release.html; source=hospital_at_home_v12_36_697_cards_slide_with_panel_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3355,7 +3367,7 @@ body.detail-view-active #patients{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_696_slide_first_populate_after_release.html</div><div>Source: hospital_at_home_v12_36_696_slide_first_populate_after_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_697_cards_slide_with_panel_release.html</div><div>Source: hospital_at_home_v12_36_697_cards_slide_with_panel_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -9160,7 +9172,24 @@ function updateIVDeleteButton(){
 }
 
 function getOxygenFlowDisplay(){if($("oxygen").value!=="2") return ""; const val=$("oxygenFlowOther").classList.contains("hidden") ? ($("oxygenFlowSection").dataset.flow || "") : $("oxygenFlowOther").value.trim(); return val}
-function setFieldValues(f){
+// v12.36.697: setFieldValues split into fast and heavy paths.
+//
+// Fast path = all the cheap field population: input.value, textareas,
+// encounter chips, escalation choices, collapsed-state toggles. Negligible
+// main-thread cost. Runs in openPatient preflight before the slide so cards
+// look populated during the slide.
+//
+// Heavy path = createMedEntry per medication, createIVEntry per IV,
+// renderBloodsSummaryCard. These build DOM trees with autocomplete and
+// listeners attached, which scales with medication count (up to 200ms+
+// on heavy polypharmacy patients). Runs AFTER the slide completes so it
+// doesn't stutter the animation.
+//
+// The original setFieldValues(f) is preserved as a thin wrapper that calls
+// fast + heavy sequentially, for callers that need fully-synchronous
+// population (e.g. WSSync same-patient refresh, where no slide is happening
+// and the user expects the panel to fully reflect inbound updates).
+function setFieldValuesFast(f){
   $("rr").value=f.rr||""; $("spo2").value=f.spo2||""; $("oxygen").value=f.oxygen||"0"; setScoreModeButtons(f.scoreMode||""); $("temp").value=f.temp||""; $("bp").value=f.bp||"";
   if($("bpLying")) $("bpLying").value=f.bpLying||""; if($("bpStanding1")) $("bpStanding1").value=f.bpStanding1||""; if($("bpStanding3")) $("bpStanding3").value=f.bpStanding3||""; if($("bpPosturalSymptoms")) $("bpPosturalSymptoms").value=f.bpPosturalSymptoms||""; if(window.syncBpTriggerDisplay) window.syncBpTriggerDisplay();
   $("hr").value=f.hr||""; if($("hrPulse")) $("hrPulse").value=f.hrPulse||""; if(window.syncHrTriggerDisplay) window.syncHrTriggerDisplay();
@@ -9168,11 +9197,7 @@ function setFieldValues(f){
   $("conscious").value=f.conscious||"0"; $("confusion").value=f.confusion||"0";
   // v12.36.678: form values for the five clinical-narrative fields are
   // populated from JSON (last committed review) but overlaid with any
-  // localStorage draft on top. The draft overlay represents in-progress
-  // text not yet committed. p.form.<field> retains the same shape as
-  // before (both before and after this edit it holds whatever's
-  // currently typed) — the overlay just changes where that initial
-  // value comes from on patient open.
+  // localStorage draft on top.
   let draftOverlay = null;
   try{
     const savedDraft = (typeof loadMobileDraft === 'function') ? loadMobileDraft(currentPatient) : null;
@@ -9183,10 +9208,7 @@ function setFieldValues(f){
     return f[key]||'';
   };
   $("issues").value=draftValue('issues'); if($("bloods")) $("bloods").value=f.bloods||""; if($("currently")) $("currently").value=draftValue('currently'); if($("pmh")) $("pmh").value=f.pmh||""; if($("socialHistory")) $("socialHistory").value=f.socialHistory||""; $("examination").value=draftValue('examination'); $("plan").value=draftValue('plan'); $("forDischargeSummary").value=draftValue('forDischargeSummary');
-  // v12.36.682: encounter info fields. Read from draft overlay first
-  // (in-progress edits), then p.form (last-saved), then defaults
-  // (Home visit / today / blank times). The encounter info card
-  // expresses the encounter context for the next/in-progress commit.
+  // v12.36.682: encounter info fields.
   const today=new Date();
   const todayStr=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
   const encounterCategoryValue=(draftOverlay && draftOverlay.encounterCategory) || f.encounterCategory || 'home_visit';
@@ -9197,16 +9219,9 @@ function setFieldValues(f){
   if($("encounterDate")) $("encounterDate").value=encounterDateValue;
   if($("encounterTimeIn")) $("encounterTimeIn").value=encounterTimeInValue;
   if($("encounterTimeOut")) $("encounterTimeOut").value=encounterTimeOutValue;
-  // Reflect category on the card via data attribute so CSS can hide
-  // time-out wrap + arrow when not home_visit.
   if($("encounterInfoCard")) $("encounterInfoCard").setAttribute('data-encounter-category', encounterCategoryValue);
-  // v12.36.688: re-render the visible chips from the (now populated)
-  // hidden inputs. The chips are pure display — values live in inputs.
+  // v12.36.688: re-render the visible chips from the (now populated) hidden inputs.
   if(typeof renderEncounterChips === 'function') renderEncounterChips();
-  // Also stamp p.form with the overlaid values so subsequent
-  // saveCurrentPatientForm reads see the draft as the current value,
-  // not the JSON value (otherwise diff detection would erroneously
-  // see "user just typed [draft]" on the first form open after relaunch).
   if(patients[currentPatient] && patients[currentPatient].form && draftOverlay){
     MOBILE_DRAFT_FIELDS.forEach(key => {
       if(Object.prototype.hasOwnProperty.call(draftOverlay, key) && String(draftOverlay[key]||'').length > 0){
@@ -9214,9 +9229,6 @@ function setFieldValues(f){
       }
     });
   }
-  // Also stamp encounter values into p.form so they participate in the
-  // diff and re-render properly. This complements the MOBILE_DRAFT_FIELDS
-  // overlay above (which only writes when the draft has the key).
   if(patients[currentPatient] && patients[currentPatient].form){
     patients[currentPatient].form.encounterCategory = encounterCategoryValue;
     patients[currentPatient].form.encounterDate = encounterDateValue;
@@ -9226,11 +9238,39 @@ function setFieldValues(f){
   if($("dnacprStatus")) $("dnacprStatus").value=f.dnacprStatus||""; if($("dnacprFormSeen")) $("dnacprFormSeen").value=f.dnacprFormSeen||""; if($("tepStatus")) $("tepStatus").value=f.tepStatus||""; if($("ceilingOfCare")) $("ceilingOfCare").value=f.ceilingOfCare||""; if($("acpNotes")) $("acpNotes").value=f.acpNotes||""; renderEscalationChoices();
   if(patients[currentPatient] && patients[currentPatient].form){ const pf=patients[currentPatient].form; if(typeof pf.acpCollapsed==='undefined') pf.acpCollapsed = typeof f.acpCollapsed === 'undefined' ? true : !!f.acpCollapsed; }
   setAcpCollapsed(typeof f.acpCollapsed === 'undefined' ? true : !!f.acpCollapsed);
-  $("medsGiven").checked=!!f.medsGiven; $("medsContainer").innerHTML=""; const medEntries=(f.medEntries&&f.medEntries.length?f.medEntries:[{name:"",dose:"",frequency:"",details:""}]); medEntries.forEach(e=>{if(f.medsGiven) createMedEntry(e)});
-  $("ivGiven").checked=!!f.ivGiven; $("ivVIP").value=f.ivVIP||""; $("ivContainer").innerHTML=""; (f.ivEntries&&f.ivEntries.length?f.ivEntries:[{medication:"",dose:"",serialExpiry:"",details:""}]).forEach(e=>{if(f.ivGiven) createIVEntry(e)});
-  $("oxygenFlowSection").dataset.flow=f.oxygenFlow||""; $("oxygenFlowOther").value=""; $("oxygenFlowOther").classList.add("hidden"); updateOxygenFields(); if(patients[currentPatient] && patients[currentPatient].form && typeof patients[currentPatient].form.bloodsSummaryCollapsed==='undefined') patients[currentPatient].form.bloodsSummaryCollapsed=!!f.bloodsSummaryCollapsed; if(typeof renderBloodsSummaryCard==='function') renderBloodsSummaryCard(); if(typeof setBloodsSummaryCollapsed==='function') setBloodsSummaryCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.bloodsSummaryCollapsed:f.bloodsSummaryCollapsed), {persist:false});
+  // v12.36.697: meds/IV scaffolding stays in fast — clear container, set
+  // checkbox state, init collapsed-state form fields. The expensive part
+  // (createMedEntry / createIVEntry loops) moves to heavy. The meds/IV
+  // cards' header + Add button + collapsed-summary text are visible during
+  // slide; only the dynamic entries are deferred.
+  $("medsGiven").checked=!!f.medsGiven; $("medsContainer").innerHTML="";
+  $("ivGiven").checked=!!f.ivGiven; $("ivVIP").value=f.ivVIP||""; $("ivContainer").innerHTML="";
+  $("oxygenFlowSection").dataset.flow=f.oxygenFlow||""; $("oxygenFlowOther").value=""; $("oxygenFlowOther").classList.add("hidden"); updateOxygenFields();
+  if(patients[currentPatient] && patients[currentPatient].form && typeof patients[currentPatient].form.bloodsSummaryCollapsed==='undefined') patients[currentPatient].form.bloodsSummaryCollapsed=!!f.bloodsSummaryCollapsed;
   if(patients[currentPatient] && patients[currentPatient].form){ const pf=patients[currentPatient].form; pf.medsFocusedIndex=Number.isInteger(f.medsFocusedIndex)?f.medsFocusedIndex:null; if(typeof pf._medsCollapseTouched==='undefined') pf.medsCollapsed=!!f.medsGiven; if(typeof pf._ivCollapseTouched==='undefined') pf.ivCollapsed=!!f.ivGiven; }
-  setMedsCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.medsCollapsed:f.medsCollapsed)); updateMedsFields(); setIVCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.ivCollapsed:f.ivCollapsed)); updateIVFields(); if(typeof queueRenalMedicationReviewRender==='function') queueRenalMedicationReviewRender();
+  setMedsCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.medsCollapsed:f.medsCollapsed)); updateMedsFields(); setIVCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.ivCollapsed:f.ivCollapsed)); updateIVFields();
+}
+
+// v12.36.697: the heavy work. createMedEntry per med, createIVEntry per
+// IV, bloods card render. Runs after the slide completes in the new open
+// flow; called sync at the end of the wrapper setFieldValues for legacy
+// callers.
+function setFieldValuesHeavy(f){
+  const medEntries=(f.medEntries&&f.medEntries.length?f.medEntries:[{name:"",dose:"",frequency:"",details:""}]);
+  medEntries.forEach(e=>{if(f.medsGiven) createMedEntry(e)});
+  (f.ivEntries&&f.ivEntries.length?f.ivEntries:[{medication:"",dose:"",serialExpiry:"",details:""}]).forEach(e=>{if(f.ivGiven) createIVEntry(e)});
+  if(typeof renderBloodsSummaryCard==='function') renderBloodsSummaryCard();
+  if(typeof setBloodsSummaryCollapsed==='function') setBloodsSummaryCollapsed(!!(patients[currentPatient]&&patients[currentPatient].form?patients[currentPatient].form.bloodsSummaryCollapsed:f.bloodsSummaryCollapsed), {persist:false});
+  if(typeof queueRenalMedicationReviewRender==='function') queueRenalMedicationReviewRender();
+}
+
+// v12.36.697: thin wrapper preserving original setFieldValues(f) signature
+// for legacy callers (currently WSSync same-patient refresh path). Calls
+// fast then heavy sequentially — fully synchronous, identical behaviour
+// to pre-v697 setFieldValues.
+function setFieldValues(f){
+  setFieldValuesFast(f);
+  setFieldValuesHeavy(f);
 }
 function parsePatientDoaDate(value){
   const raw=String(value||'').trim();
@@ -10914,29 +10954,21 @@ function saveCurrentPatientForm() {
     renderHeaderPatientContext(p);
   }
 }
-// v12.36.696: FB-style open transition. Slide first, populate after.
+// v12.36.697: Option C / Approach B — cards visible during slide.
 //
-// The user-facing problem with v695: View Transitions API hid main-thread
-// blocking inside the callback, but the snapshot capture itself blocks,
-// and the heavy work has to complete before the "after" snapshot can be
-// taken. The latency-to-first-frame stayed roughly the same — just moved
-// from "before the slide" to "before the snapshot."
+// Architecture change from v696:
+//   v696: preflight (panel+header only) → slide → populate everything → fade in
+//   v697: preflight + setFieldValuesFast + applyOpenMode → slide → setFieldValuesHeavy
 //
-// The actual native iOS pattern (UIKit push, FB profile open, etc.) is:
-// 1. Tap → destination view created with minimal/empty content within
-//    one frame (~16ms).
-// 2. Slide animation starts immediately — animates the empty shell.
-// 3. Heavy data work happens AFTER (or during, async) the slide. By the
-//    time the user can interact with the destination, content is there.
+// The fast path (input.value, textareas, encounter chips, escalation,
+// collapsed states) runs SYNC in preflight, before the slide. Cards
+// are visible and populated when the slide starts. No fade-in animation.
 //
-// For H@H this means:
-// 1. runOpenPreflight (sync, <10ms): currentPatient = id; hide cards via
-//    .hah-open-loading class; update header (cheap); show panel.
-// 2. animatePatientDetailOpen (existing CSS slide, 360ms, GPU compositor).
-// 3. transitionend → runOpenPopulate: setFieldValues, setPatientDetailMode,
-//    etc. (the heavy work). Cards are still hidden so this is invisible.
-// 4. Swap .hah-open-loading → .hah-open-revealing — cards fade in 240ms.
-// 5. Post-work (saveData, render functions) runs after the reveal.
+// The heavy path (createMedEntry per medication, createIVEntry per IV,
+// renderBloodsSummaryCard) runs AFTER the slide. Meds card and IV card
+// have their headers + Add buttons visible during slide; dynamic entries
+// fill in over ~100-200ms after the slide for heavy polypharmacy
+// patients. If that's visibly bad, v698 adds skeleton placeholders.
 
 function openPatient(id, opts={}) {
   if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) return;
@@ -10995,8 +11027,9 @@ function runOpenPreflight(ctx){
   setPatientViewportMode(true);
   $("patients").classList.remove("hidden");
   const detail = $("patientDetail");
-  // Add loading class BEFORE removing hidden so cards never appear
-  // populated-then-hidden in any frame. CSS rules hide cards instantly.
+  // v697: .hah-open-loading retained as a marker class. Cards stay
+  // visible — populated via setFieldValuesFast below. Slide carries
+  // them along.
   detail.classList.add('hah-open-loading');
   detail.classList.remove("hidden");
   detail.scrollTop=0;
@@ -11004,9 +11037,16 @@ function runOpenPreflight(ctx){
   setActive("navPatients");
   setPatientDetailStackActive(true);
   animatePatientDetailSwipe(0,true);
-  // Header is cheap to update and gives the user immediate confirmation
-  // of which patient is opening. Worth keeping in the sync phase.
+  // Header content first — cheap, gives immediate "Frank · 85M" feedback.
   if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
+  // v697: FAST populate runs in preflight. Cards now visible+populated
+  // during the slide. Heavy populate (meds entries, IV entries, bloods)
+  // is deferred to runOpenPopulate after the slide.
+  const p = patients[ctx.id];
+  setFieldValuesFast(p.form || {});
+  detailLoadedForCurrentPatient = true;
+  const openMode = resolveOpenMode(ctx);
+  applyOpenMode(ctx, openMode);
 }
 
 // v12.36.696: schedule the populate phase to run after the slide
@@ -11031,24 +11071,22 @@ function schedulePopulateAfterSlide(ctx){
   setTimeout(fire, 500);
 }
 
-// v12.36.696: the heavy work. Runs after the slide completes, while
-// cards are still hidden by .hah-open-loading. When this returns the
-// class swaps to .hah-open-revealing — cards fade in 240ms.
+// v12.36.697: heavy populate runs after slide completes.
+// Cards have been visible+populated since preflight (via setFieldValuesFast).
+// This call populates the dynamic content that couldn't run before slide:
+// med entries, IV entries, bloods card render.
+//
+// Critical correctness: if the user navigated away or switched patients
+// during the 360ms slide, ctx.id may not be the active patient anymore.
+// Don't populate the wrong patient's heavy data into the panel.
 function runOpenPopulate(ctx){
   const { id } = ctx;
+  if(currentPatient !== id) return;
   const p = patients[id];
-  setFieldValues(p.form || {});
-  detailLoadedForCurrentPatient = true;
-  const openMode = resolveOpenMode(ctx);
-  applyOpenMode(ctx, openMode);
-  // Swap loading → revealing. CSS animation handles the fade-in.
-  // Cleanup of the revealing class happens after the animation completes.
+  if(!p) return;
+  setFieldValuesHeavy(p.form || {});
   const detail = $("patientDetail");
   detail.classList.remove('hah-open-loading');
-  detail.classList.add('hah-open-revealing');
-  setTimeout(() => { try{ detail.classList.remove('hah-open-revealing'); }catch(_){} }, 320);
-  // Post-work: render functions, saveData. No longer competing with the
-  // slide animation for main-thread time.
   runOpenPostWork();
 }
 
@@ -11094,7 +11132,9 @@ function runOpenPostWork(){
   if(typeof renderPatientBoardCard==='function') renderPatientBoardCard();
   if(typeof updateHeaderTaskButton==='function') updateHeaderTaskButton();
   if(typeof updateNavPatientTasksBadge==='function') updateNavPatientTasksBadge();
-  if(typeof renderBloodsSummaryCard==='function'){ try{ renderBloodsSummaryCard(); }catch(e){} }
+  // v697: renderBloodsSummaryCard moved into setFieldValuesHeavy (called
+  // from runOpenPopulate before this function). Removed from here to
+  // avoid double-render.
   if(typeof window.HAH_renderConditionPanel==='function'){ try{ window.HAH_renderConditionPanel(); }catch(e){} }
   if(typeof window.HAH_renderSectionJumpBar==='function'){ try{ window.HAH_renderSectionJumpBar(); }catch(e){} }
 }
@@ -12858,8 +12898,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_696_slide_first_populate_after_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_696_slide_first_populate_after_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_697_cards_slide_with_panel_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_697_cards_slide_with_panel_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
