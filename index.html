@@ -3076,7 +3076,7 @@ body.detail-view-active .nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_700_ghost_captures_old_header_release.html; source=hospital_at_home_v12_36_700_ghost_captures_old_header_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_701_back_nav_sync_release.html; source=hospital_at_home_v12_36_701_back_nav_sync_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3436,7 +3436,7 @@ body.detail-view-active .nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_700_ghost_captures_old_header_release.html</div><div>Source: hospital_at_home_v12_36_700_ghost_captures_old_header_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_701_back_nav_sync_release.html</div><div>Source: hospital_at_home_v12_36_701_back_nav_sync_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -13007,8 +13007,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_700_ghost_captures_old_header_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_700_ghost_captures_old_header_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_701_back_nav_sync_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_701_back_nav_sync_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13205,6 +13205,16 @@ function goBackToPatientList(opts){
   if(!skipAnimation && detail && patients && !reduced){
     // Animated back-slide — exact mirror of forward open animation
     const offset=getDetailUnderlayOffset();
+    // v12.36.701: trigger the nav slide IN SYNC with the panel/header
+    // animation. Without this, body.detail-view-active is only removed
+    // inside showSection() in done() at t=360ms — so navs only start
+    // their transition after the panel/header finished. Henry saw the
+    // list tab bar lagging behind the rest. Fix: add hah-nav-animating
+    // and remove detail-view-active at t=0 so all four animations
+    // (panel, header, nav, list) start in the same frame.
+    document.body.classList.add('hah-nav-animating');
+    document.body.classList.remove('detail-view-active');
+    document.documentElement.classList.remove('detail-view-active');
     // Snap patient list and header to their starting positions (both shifted left)
     patients.style.transition='none';
     patients.style.transform='translate3d('+offset+'px,0,0)';
@@ -13245,6 +13255,9 @@ function goBackToPatientList(opts){
       detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow='';
       patients.style.transition=''; patients.style.transform='';
       resetPatientDetailHeaderShift();
+      // v12.36.701: cleanup the marker class added at the start of the
+      // back animation. Mirrors the open path's setTimeout-based cleanup.
+      try{ document.body.classList.remove('hah-nav-animating'); }catch(_){}
       detailLoadedForCurrentPatient=false;
       saveData(); renderPatientList(); showSection("patients");
     };
