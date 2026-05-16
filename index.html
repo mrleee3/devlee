@@ -2456,158 +2456,120 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 .patient-helper-line{display:block;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.patient-helper-default{display:inline;min-width:0;overflow:hidden;text-overflow:ellipsis}.patient-helper-status{display:inline-flex;align-items:center;gap:8px;min-width:0;max-width:100%;vertical-align:top}.patient-helper-status.hidden{display:none!important}.patient-helper-copy{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:#667085}.patient-helper-copy.status-updated{opacity:.88}.patient-helper-status[data-tone="saved"] .patient-helper-copy,.patient-helper-status[data-tone="action"] .patient-helper-copy,.patient-helper-status[data-tone="sync"] .patient-helper-copy,.patient-helper-status[data-tone="undo"] .patient-helper-copy{color:#0a84ff}.patient-helper-status[data-tone="alert"] .patient-helper-copy{color:#b42318}.patient-helper-undo{flex:0 0 auto;padding:0;border:none;background:none;color:#0a84ff;font-size:12px;font-weight:800;line-height:1.1}.patient-helper-undo.hidden{display:none!important}.patient-helper-undo:active{transform:translateY(1px)}
 .patient-metrics-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 12px}.patient-metric-card{position:relative;overflow:hidden;min-height:78px;padding:12px 12px 11px;border-radius:18px;background:#f8fafc;border:1px solid rgba(148,163,184,.18);box-shadow:none;display:flex;flex-direction:column;justify-content:space-between;gap:8px;transition:background .18s ease,border-color .18s ease,color .18s ease}.patient-metric-value{font-size:31px;line-height:.92;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"ss01" 1;color:#0f172a}.patient-metric-label{font-size:11px;line-height:1.2;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#475467;white-space:nowrap}.patient-metric-card.is-good{background:#ecfdf3;border-color:#bbf7d0}.patient-metric-card.is-good .patient-metric-value{color:#166534}.patient-metric-card.is-good .patient-metric-label{color:#15803d}.patient-metric-card.is-bad{background:#fef2f2;border-color:#fecaca}.patient-metric-card.is-bad .patient-metric-value{color:#b42318}.patient-metric-card.is-bad .patient-metric-label{color:#b42318}.patient-metric-card.is-neutral{background:#f8fafc;border-color:rgba(148,163,184,.18)}.patient-metric-card.is-neutral .patient-metric-value{color:#0f172a}.patient-metric-card.is-neutral .patient-metric-label{color:#475467}@media (max-width:420px){.patient-helper-line{display:block}.patient-helper-copy{font-size:12.5px}.patient-helper-undo{font-size:11.5px}.patient-metrics-strip{gap:8px}.patient-metric-card{min-height:74px;padding:11px 10px 10px;border-radius:17px}.patient-metric-value{font-size:28px}.patient-metric-label{font-size:10.5px}}
 
-/* ── Patient page slide (Step 1) ──────────────────────────────── */
-/* Header bar shifts with the panel using a CSS variable */
-#appHeader{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translate3d(var(--hah-header-shift,0px),0,0) translateZ(0);transition:transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);will-change:transform}
+/* ============================================================================
+ * v12.36.705 — Single progress-driven page transition (UIKit model).
+ *
+ * Replaces the v695-v703 patch stack. ONE CSS custom property, --hah-tp
+ * (transition progress, 0..1), drives every animated element via calc().
+ * JS (HAHPageTransition / js/24) is the only writer of --hah-tp. There are
+ * no class-flip animations, no competing inline transforms, no body-class-
+ * keyed animation state. Because every element is calc(f(--hah-tp)), they
+ * are mathematically locked together and cannot desync.
+ *
+ *   --hah-tp = 0  → list shown, no patient (panel off-screen right)
+ *   --hah-tp = 1  → patient detail shown, list parallaxed -28%
+ *
+ * Discrete state (positioning, z-index, show/hide, nav display) still uses
+ * the detail-overlay-active / detail-underlay-active / detail-view-active
+ * classes — but those now ONLY gate discrete state, never animation. They
+ * flip once at transition start and once at settle.
+ * ========================================================================== */
 
-/* v12.36.695/698: permanent layer promotion while detail view is active.
- *
- * v695 added `transform:translateZ(0)` here for layer promotion. v698
- * removed it: this rule's specificity (0,1,1,1) beat the slide animation's
- * `#patientDetail.hah-detail-open-prep` rule (0,1,1,0), so the prep
- * `transform:translate3d(100%,0,0)` was silently overridden. The panel
- * never went off-screen right → never slid → just appeared at position 0.
- *
- * `will-change:transform` alone is sufficient to promote to a GPU layer
- * on every browser we care about. The explicit `translateZ(0)` was the
- * old way of doing the same thing before will-change was supported.
- * Dropping it preserves layer promotion AND lets the slide animation work. */
-body.detail-view-active #patientDetail,
-body.detail-view-active #patients{
+/* No transitions anywhere in this system — JS rAF drives --hah-tp frame by
+ * frame, so the transforms below must update instantaneously per frame. */
+
+/* Real app header: patient content slides in from the right.
+ * translateX = (1 - tp) * 100%   → tp0: +100% (off right), tp1: 0 */
+#appHeader{
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transform:translate3d(calc((1 - var(--hah-tp,0)) * 100%),0,0) translateZ(0);
   will-change:transform;
 }
 
-/* v12.36.699: ghost header element for the open animation.
- *
- * Sits underneath #appHeader in the stacking order (same fixed position,
- * just below z-index). Default state: invisible, untransformed. When the
- * open animation starts, JS:
- *   1. Copies #appHeader's innerHTML into #appHeaderGhost
- *   2. Adds .hah-header-ghost-active class (makes it visible)
- *   3. rAF → adds .hah-header-ghost-sliding (transition starts)
- *   4. ~410ms later → removes both classes, clears innerHTML
- *
- * The ghost parallaxes from translate3d(0,0,0) to translate3d(-28%,0,0)
- * over 360ms — same easing and duration as the patient list parallax.
- * Simultaneously, the real #appHeader does its existing snap-right-then-
- * slide-back animation with the NEW patient content. The user sees the
- * old list header slide away leftward while the new patient header slides
- * in from the right — iOS UIKit nav bar push pattern. */
+/* Ghost header: holds the LIST header content, parallaxes left.
+ * translateX = tp * -28%   → tp0: 0, tp1: -28%
+ * Always present, always visible. No content cloning, no lifecycle. The
+ * dual-layer (#appHeader patient content + #appHeaderGhost list content)
+ * cross-slide IS the iOS nav bar push. */
 #appHeaderGhost{
   position:fixed;left:0;right:0;top:0;
-  z-index:39; /* one below #appHeader (z-index:40) */
+  z-index:39; /* one below #appHeader */
   background:var(--blue);color:#fff;
   padding:calc(env(safe-area-inset-top) + 16px) 18px 16px;
   font-size:20px;font-weight:700;
   pointer-events:none;
-  visibility:hidden;
-  transform:translate3d(0,0,0);
+  transform:translate3d(calc(var(--hah-tp,0) * -28%),0,0);
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  will-change:transform;
+  /* Hidden only when fully on the list (tp≈0) so it never shows behind the
+     list header at rest. JS toggles .hah-ghost-armed during any transition
+     or gesture; CSS keeps it visible whenever tp>0. */
+  visibility:hidden;
 }
-#appHeaderGhost.hah-header-ghost-active{
-  visibility:visible;
-}
-#appHeaderGhost.hah-header-ghost-sliding{
-  transform:translate3d(-28%,0,0);
-  transition:transform 360ms cubic-bezier(.25,.46,.45,.94);
+body.hah-ghost-armed #appHeaderGhost{ visibility:visible; }
+
+/* Patient detail panel: slides in from the right.
+ * translateX = (1 - tp) * 100%   → tp0: +100%, tp1: 0
+ * Shadow opacity ramps with tp (compositor-friendly; no box-shadow anim). */
+#patientDetail.detail-overlay-active{
+  transform:translate3d(calc((1 - var(--hah-tp,0)) * 100%),0,0);
   will-change:transform;
 }
-@media(prefers-reduced-motion:reduce){
-  #appHeaderGhost.hah-header-ghost-sliding{
-    transition:none!important;
-    transform:translate3d(0,0,0);
-  }
+#patientDetail.detail-overlay-active::after{
+  content:"";
+  position:absolute;left:0;top:0;bottom:0;width:24px;
+  transform:translateX(-24px);
+  pointer-events:none;
+  box-shadow:-12px 0 32px rgba(15,23,42,.16);
+  opacity:var(--hah-tp-shadow,0);
 }
 
-/* Panel open: prep = snap to 100% right, anim = slide to 0.
- * v12.36.695: box-shadow held CONSTANT at the deeper value — previously
- * animated which forces paint per frame and can't be GPU-composited.
- * Only transform animates now. */
-#patientDetail.hah-detail-open-prep{transform:translate3d(100%,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13)}
-#patientDetail.hah-detail-open-anim{transform:translate3d(0,0,0);box-shadow:-10px 0 32px rgba(15,23,42,.13);transition:transform 360ms cubic-bezier(.25,.46,.45,.94);will-change:transform}
-/* Patient list parallax: prep = 0, anim = slide to -28% */
-#patients.hah-detail-underlay-open-prep{transform:translate3d(0,0,0)}
-#patients.hah-detail-underlay-open-anim{transform:translate3d(-28%,0,0);transition:transform 360ms cubic-bezier(.25,.46,.45,.94);will-change:transform}
-@media(prefers-reduced-motion:reduce){
-  #patientDetail.hah-detail-open-anim,#patients.hah-detail-underlay-open-anim{transition:none!important}
+/* Patient list underlay: parallaxes left.
+ * translateX = tp * -28%   → tp0: 0, tp1: -28% */
+#patients.detail-underlay-active{
+  transform:translate3d(calc(var(--hah-tp,0) * -28%),0,0);
+  will-change:transform;
 }
 
-/* v12.36.697: Option C — all three slide together (Approach B from scoping).
- *
- * Cards are populated DURING preflight (fast path) so they're visible
- * throughout the slide. The .hah-open-loading class no longer hides
- * cards — it now only marks "we're mid-open-transition" for any code
- * that needs to know (e.g. to suppress autosave). Cards stay visible.
- *
- * The bottom tab bars (.nav-global and .nav-patient) used to swap via
- * display:none. Now they slide horizontally with the panel:
- *   - list path → both navs visible, .nav-patient sitting off-screen right
- *   - opening → .nav-global slides off left, .nav-patient slides in right
- *   - closing → reverse
- *
- * The display:none swap from v692 era is replaced with positioning rules
- * so both navs live in the same fixed footer slot, layered.
- *
- * Heavy work (medication entries, IV entries, bloods render, condition
- * panel) still runs AFTER the slide completes — those cards may appear
- * to fill in over ~100-200ms after the slide. That's the known cost of
- * Approach B vs C (skeletons). If it's visibly bad in real use we'll add
- * skeletons in v698. */
-
-/* Nav layering: both navs share the same fixed position. Use transform
- * to slide rather than display:none to swap. The display:none rules from
- * the v692-era contextual swap are removed below by stronger selectors.
- *
- * v698 fix: transition is gated by `body.hah-nav-animating` rather than
- * being always-on. This means:
- *   - Open path: JS adds .hah-nav-animating in preflight, removes after
- *     the slide window. Navs slide synchronously with header + panel.
- *   - Close path (back button → showSection): JS does NOT add the class,
- *     so navs snap instantly when body.detail-view-active is removed —
- *     in sync with the panel snap-hide via hideAll(). No more
- *     out-of-sync "tab bar slowly slides while everything else snaps."
- *   - Swipe-back gesture: same as back button — navs snap at the end
- *     when body class is removed. Inline transforms on detail/list
- *     during the swipe gesture stay independent. */
+/* Bottom nav bars. Both share the footer slot; transform-driven by tp.
+ *   global  translateX = tp * -100%   → tp0: 0 (shown), tp1: -100% (off left)
+ *   patient translateX = (1 - tp) * 100% → tp0: +100% (off right), tp1: 0 */
 .nav.nav-global,
 .nav.nav-patient{
-  transform:translate3d(0,0,0);
-}
-body.hah-nav-animating .nav.nav-global,
-body.hah-nav-animating .nav.nav-patient{
-  transition:transform 360ms cubic-bezier(.25,.46,.45,.94);
   will-change:transform;
 }
-/* Initial state — only .nav-global is visible, .nav-patient sits off-screen right */
-body:not(.detail-view-active) .nav-patient{
-  display:flex !important; /* override the v692 display:none */
-  transform:translate3d(100%,0,0);
-  pointer-events:none;
-}
-/* Opened state — .nav-global slides off left, .nav-patient slides in to centre */
-body.detail-view-active .nav-global{
-  display:flex !important; /* override the v692 display:none */
-  transform:translate3d(-100%,0,0);
-  pointer-events:none;
-}
-body.detail-view-active .nav-patient{
-  transform:translate3d(0,0,0);
+body.hah-nav-stack .nav.nav-global{
+  display:flex !important;
+  transform:translate3d(calc(var(--hah-tp,0) * -100%),0,0);
   pointer-events:auto;
 }
+body.hah-nav-stack .nav.nav-patient{
+  display:flex !important;
+  transform:translate3d(calc((1 - var(--hah-tp,0)) * 100%),0,0);
+  pointer-events:auto;
+}
+/* At rest on the list (no hah-nav-stack): old display:none rules (lines
+   ~148-149) still apply — global shown, patient hidden. hah-nav-stack is
+   added by JS at transition start and removed at list-settle. */
+
+/* Section jump bar transform is owned entirely by the 23-section-jump-bar.js
+   module's injected stylesheet (it follows --hah-tp there). No rule here to
+   avoid a specificity fight over the same property. */
 
 @media(prefers-reduced-motion:reduce){
-  .nav.nav-global,.nav.nav-patient{transition:none!important}
+  /* JS uses duration 0 so tp jumps 0↔1 instantly; nothing to disable here.
+     Kept as a no-op anchor in case future rules add transitions. */
+  #appHeader,#appHeaderGhost,
+  #patientDetail.detail-overlay-active,
+  #patients.detail-underlay-active{ transition:none !important; }
 }
 
-/* v12.36.697: .hah-open-loading is retained as a marker class (some code
- * may check for it) but no longer hides cards. Removing the opacity:0
- * rule lets the populated fast-path content be visible during the slide.
- * The .hah-open-revealing class and its keyframe are removed entirely —
- * no fade-in needed because cards never went invisible. */
+/* v12.36.697: .hah-open-loading retained as an inert marker class only
+ * (autosave-suppression checks may read it). No visual effect. */
 #patientDetail.hah-open-loading .card,
 #patientDetail.hah-open-loading .patient-log-card,
 #patientDetail.hah-open-loading .hah-encounter-info-card{
-  /* intentionally no opacity rule — cards visible during slide */
+  /* intentionally empty */
 }
 
 .news-tts-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;margin-top:10px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .12s,opacity .15s}.news-tts-btn:active{background:rgba(255,255,255,.28);transform:scale(.97)}.news-tts-btn svg{flex-shrink:0}.news-tts-btn.is-speaking,.news-tts-btn:disabled{background:rgba(255,255,255,.24);opacity:.9}.tts-hidden-audio{position:fixed;left:-9999px;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none}
@@ -3076,7 +3038,7 @@ body.detail-view-active .nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_703_swipe_back_no_bounce_release.html; source=hospital_at_home_v12_36_703_swipe_back_no_bounce_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_705_unified_transition_release.html; source=hospital_at_home_v12_36_705_unified_transition_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3436,7 +3398,7 @@ body.detail-view-active .nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_703_swipe_back_no_bounce_release.html</div><div>Source: hospital_at_home_v12_36_703_swipe_back_no_bounce_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_705_unified_transition_release.html</div><div>Source: hospital_at_home_v12_36_705_unified_transition_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -11039,134 +11001,129 @@ function saveCurrentPatientForm() {
 // fill in over ~100-200ms after the slide for heavy polypharmacy
 // patients. If that's visibly bad, v698 adds skeleton placeholders.
 
+// v12.36.705: openPatient is now a thin wrapper over HAHPageTransition.
+// The controller owns the animation (single progress value, UIKit model).
+// This function just does the pre-transition bookkeeping and decides
+// between: same-patient-refresh (no animation) vs fresh open (animated).
+//
+// Discrete state hooks the controller calls back into:
+//   HAH_openPatientStart(id,opts)  — START: show panel, fast populate
+//   HAH_openPatientSettle(id)      — SETTLE: heavy populate, post-work
+//   HAH_closePatientSettle(id)     — SETTLE (close): teardown (in 06)
+
 function openPatient(id, opts={}) {
   if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) return;
   // v12.36.691: stamp the activity timestamp for auto-reopen logic.
-  // Covers all open paths (tap from list, programmatic open, etc.).
   if(typeof stampLastPatientActivity === 'function') stampLastPatientActivity(id);
   if(typeof rememberSectionScroll==='function') rememberSectionScroll('patients', true);
   if (detailLoadedForCurrentPatient && typeof rememberCurrentPatientUiState==='function') rememberCurrentPatientUiState(true);
   if (detailLoadedForCurrentPatient) saveCurrentPatientForm();
   detailSwipeCompleting=false;
-  resetPatientDetailSwipe();
   detailEdgeSwipeState = null;
   const detailElBeforeOpen = $("patientDetail");
   const wasSamePatientAlreadyOpen = currentPatient === id && detailElBeforeOpen && !detailElBeforeOpen.classList.contains('hidden');
 
   const ctx = { id, opts: opts||{}, wasSamePatientAlreadyOpen };
 
-  // Same-patient re-open: skip the slide animation AND the loading-shell
-  // dance. Just refresh content in place. WSSync foreground refreshes hit
-  // this path; it must not visibly flash.
+  // Same-patient re-open (WSSync foreground refresh): no animation. Force
+  // the controller to fully-open state and refresh content synchronously.
   if(wasSamePatientAlreadyOpen){
     runOpenInPlace(ctx);
+    if(window.HAHPageTransition) window.HAHPageTransition.forcePatientState(id);
     return;
   }
 
-  // FB-style three-phase open
-  runOpenPreflight(ctx);
-  animatePatientDetailOpen();
-  schedulePopulateAfterSlide(ctx);
+  // Fresh open — hand the whole animation to the controller. It calls
+  // HAH_openPatientStart synchronously (discrete START), animates progress
+  // 0→1, then calls HAH_openPatientSettle on arrival (discrete SETTLE).
+  // Stash ctx so the hooks can read opts/mode resolution.
+  window._hahOpenCtx = ctx;
+  if(window.HAHPageTransition){
+    window.HAHPageTransition.open(id, opts||{});
+  }else{
+    // Defensive fallback: controller missing (shouldn't happen). Do a
+    // synchronous open so the app is never stuck on the list.
+    HAH_openPatientStart(id, opts||{});
+    HAH_openPatientSettle(id);
+  }
 }
 
-// v12.36.696: same-patient refresh path. No animation, no loading shell.
-// Effectively the old openPatient body but without animation orchestration.
-function runOpenInPlace(ctx){
-  const { id, opts } = ctx;
+// Discrete START. Called synchronously by the controller before progress
+// begins moving. Panel made displayable + fast-populated so it slides in
+// already showing content (the v697 Option-C requirement). Ghost header
+// gets the LIST content so it can parallax away. Nav stack armed.
+function HAH_openPatientStart(id, opts){
+  const ctx = (window._hahOpenCtx && window._hahOpenCtx.id===id)
+    ? window._hahOpenCtx
+    : { id, opts: opts||{}, wasSamePatientAlreadyOpen:false };
   currentPatient = id;
   const p = patients[id];
-  setPatientViewportMode(true);
-  $("patients").classList.remove("hidden");
-  $("patientDetail").classList.remove("hidden");
-  setFieldValues(p.form || {});
-  detailLoadedForCurrentPatient = true;
-  const openMode = resolveOpenMode(ctx);
-  applyOpenMode(ctx, openMode);
-  if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
-  runOpenPostWork();
-}
-
-// v12.36.696: synchronous preflight. Goal: <10ms so the slide starts in
-// the next frame after tap. Only the cheapest, panel-visibility-critical
-// work belongs here.
-function runOpenPreflight(ctx){
-  const { id } = ctx;
-  currentPatient = id;
+  if(!p) return;
   hideAll();
   setPatientViewportMode(true);
   $("patients").classList.remove("hidden");
   const detail = $("patientDetail");
-  // v697: .hah-open-loading retained as a marker class. Cards stay
-  // visible — populated via setFieldValuesFast below. Slide carries
-  // them along.
-  detail.classList.add('hah-open-loading');
-  // v698: enable nav slide transition for this open. Removed at the end
-  // of the animation window so back-button close snaps instantly in sync
-  // with the panel snap-hide. See CSS comment on .hah-nav-animating.
-  document.body.classList.add('hah-nav-animating');
-  setTimeout(() => {
-    try{ document.body.classList.remove('hah-nav-animating'); }catch(_){}
-  }, 420);
+  detail.classList.add('hah-open-loading');   // inert marker (autosave guard)
   detail.classList.remove("hidden");
   detail.scrollTop=0;
   try{ window.scrollTo(0,0); }catch(e){}
   setActive("navPatients");
+  // Snapshot CURRENT (list) header into the ghost BEFORE we swap the real
+  // header to patient content. Permanent dual-layer: ghost always holds
+  // whatever the list header was; real header holds patient content.
+  try{
+    const appHeader=$("appHeader");
+    const ghost=$("appHeaderGhost");
+    if(appHeader && ghost){
+      ghost.innerHTML = appHeader.innerHTML;
+      ghost.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+    }
+  }catch(_){}
+  // Discrete state: positioning/z-index classes + nav stack. These flip
+  // ONCE here and once at settle — never mid-animation.
   setPatientDetailStackActive(true);
-  animatePatientDetailSwipe(0,true);
-  // v699: do NOT call updateHeaderForPatient here. The ghost snapshot in
-  // animatePatientDetailOpen needs to capture the OLD list header content
-  // for its parallax-left animation. updateHeaderForPatient is called
-  // inside animatePatientDetailOpen's rAF, AFTER the real header is
-  // snapped off-screen and AFTER the ghost has snapshotted — so the
-  // content swap happens invisibly.
-  // v697: FAST populate runs in preflight. Cards now visible+populated
-  // during the slide. Heavy populate (meds entries, IV entries, bloods)
-  // is deferred to runOpenPopulate after the slide.
-  const p = patients[ctx.id];
+  document.body.classList.add('hah-nav-stack');
+  document.body.classList.add('hah-ghost-armed');
+  // Now swap real header to patient content (ghost already has list copy).
+  if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
+  // FAST populate — cards visible+populated for the slide.
   setFieldValuesFast(p.form || {});
   detailLoadedForCurrentPatient = true;
   const openMode = resolveOpenMode(ctx);
   applyOpenMode(ctx, openMode);
 }
 
-// v12.36.696: schedule the populate phase to run after the slide
-// animation completes. Uses transitionend on transform, with a 500ms
-// safety-net setTimeout in case transitionend doesn't fire (interrupted
-// animation, page hidden tab, etc.).
-function schedulePopulateAfterSlide(ctx){
-  const detail = $("patientDetail");
-  let fired = false;
-  const fire = () => {
-    if(fired) return;
-    fired = true;
-    try{ detail.removeEventListener('transitionend', onTransitionEnd); }catch(_){}
-    runOpenPopulate(ctx);
-  };
-  const onTransitionEnd = (e) => {
-    if(e.target !== detail) return;
-    if(e.propertyName && e.propertyName !== 'transform') return;
-    fire();
-  };
-  try{ detail.addEventListener('transitionend', onTransitionEnd); }catch(_){}
-  setTimeout(fire, 500);
-}
-
-// v12.36.697: heavy populate runs after slide completes.
-// Cards have been visible+populated since preflight (via setFieldValuesFast).
-// This call populates the dynamic content that couldn't run before slide:
-// med entries, IV entries, bloods card render.
-//
-// Critical correctness: if the user navigated away or switched patients
-// during the 360ms slide, ctx.id may not be the active patient anymore.
-// Don't populate the wrong patient's heavy data into the panel.
-function runOpenPopulate(ctx){
-  const { id } = ctx;
+// Discrete SETTLE (open). Called by the controller when progress reaches 1.
+// Heavy populate (meds/IV/bloods) + post-work. Guarded against the user
+// having navigated away during the slide.
+function HAH_openPatientSettle(id){
   if(currentPatient !== id) return;
   const p = patients[id];
   if(!p) return;
   setFieldValuesHeavy(p.form || {});
   const detail = $("patientDetail");
-  detail.classList.remove('hah-open-loading');
+  if(detail) detail.classList.remove('hah-open-loading');
+  runOpenPostWork();
+}
+
+// v12.36.696/705: same-patient refresh path. No animation, no controller
+// transition. Full sync populate (WSSync expects panel to reflect inbound).
+function runOpenInPlace(ctx){
+  const { id } = ctx;
+  currentPatient = id;
+  const p = patients[id];
+  setPatientViewportMode(true);
+  $("patients").classList.remove("hidden");
+  $("patientDetail").classList.remove("hidden");
+  // Keep discrete state consistent for the already-open panel.
+  setPatientDetailStackActive(true);
+  document.body.classList.add('hah-nav-stack');
+  document.body.classList.add('hah-ghost-armed');
+  setFieldValues(p.form || {});
+  detailLoadedForCurrentPatient = true;
+  const openMode = resolveOpenMode(ctx);
+  applyOpenMode(ctx, openMode);
+  if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
   runOpenPostWork();
 }
 
@@ -12822,26 +12779,11 @@ let detailSwipeCompleting=false;
 let sharedHeaderMinHeight=0;
 function getDetailUnderlayOffset(){ return -Math.round((window.innerWidth||390)*0.28); }
 
-/* ── Header shift mechanism ──────────────────────────────────── */
-function setPatientDetailHeaderShift(dx, options){
-  const root=document.documentElement; if(!root) return;
-  const nextDx=Math.round(Number(dx)||0); // no clamp — supports negative (leftward)
-  const dragging=!!(options && options.dragging);
-  const duration=dragging ? '0ms' : String(options && options.duration ? options.duration : '240ms');
-  const easing=String(options && options.easing ? options.easing : 'cubic-bezier(.22,.9,.18,1)');
-  root.style.setProperty('--hah-header-shift', nextDx+'px');
-  root.style.setProperty('--hah-header-shift-duration', duration);
-  root.style.setProperty('--hah-header-shift-ease', easing);
-}
-function resetPatientDetailHeaderShift(){
-  const root=document.documentElement; if(!root) return;
-  root.style.setProperty('--hah-header-shift', '0px');
-  root.style.setProperty('--hah-header-shift-duration', '0ms');
-  root.style.setProperty('--hah-header-shift-ease', 'linear');
-}
-
-/* ── Patient panel open animation ───────────────────────────── */
-let detailOpenAnimTimer=null;
+/* v12.36.705: header-shift + class-flip + inline-swipe animation
+ * functions removed. The page transition is now owned entirely by
+ * HAHPageTransition (js/24-page-transition.js) via the single
+ * --hah-tp progress variable. setPatientDetailStackActive (below)
+ * remains for discrete state (positioning/z-index classes). */
 function updateHeaderForPatient(){
   // Updates header content — called once header is off-screen (safe to swap content invisibly)
   try{
@@ -12860,87 +12802,6 @@ function updateHeaderForPatient(){
     if(typeof updateNavPatientTasksBadge==='function') updateNavPatientTasksBadge();
     if(typeof syncSharedHeaderHeight==='function') syncSharedHeaderHeight();
   }catch(_e){}
-}
-function animatePatientDetailOpen(){
-  const detail=document.getElementById('patientDetail');
-  const patients=document.getElementById('patients');
-  if(!detail) return;
-  if(typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches){
-    // No animation — update header content immediately
-    updateHeaderForPatient();
-    return;
-  }
-  clearTimeout(detailOpenAnimTimer);
-  // Clear any stale inline styles from swipe gestures
-  try{ detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow=''; }catch(_e){}
-  try{ if(patients){ patients.style.transition=''; patients.style.transform=''; } }catch(_e){}
-  // v12.36.699: snapshot the current header content into the ghost layer
-  // BEFORE we update the real header to patient content. The ghost will
-  // parallax left during the slide, giving the user a visible "leaving"
-  // motion for the old list header — matching the patient list parallax.
-  const appHeader = document.getElementById('appHeader');
-  const ghost = document.getElementById('appHeaderGhost');
-  if(ghost && appHeader){
-    try{
-      ghost.innerHTML = appHeader.innerHTML;
-      // Strip IDs from cloned content to avoid duplicate-ID issues.
-      ghost.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-      ghost.classList.remove('hah-header-ghost-sliding');
-      ghost.classList.add('hah-header-ghost-active');
-      void ghost.offsetWidth; // commit initial state before transition
-    }catch(_){}
-  }
-  // Snap header to +windowWidth — old app title rides off-screen right invisibly
-  setPatientDetailHeaderShift(window.innerWidth||390, {dragging:true});
-  // Set up prep position via CSS classes
-  detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
-  if(patients) patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
-  detail.classList.add('hah-detail-open-prep');
-  if(patients) patients.classList.add('hah-detail-underlay-open-prep');
-  void detail.offsetWidth; // commit snap — header is now off-screen right with old content
-  requestAnimationFrame(function(){
-    // Header is off-screen: safe to update content before sliding in
-    updateHeaderForPatient();
-    // Start all three in the same frame: panel, list parallax, header
-    detail.classList.add('hah-detail-open-anim');
-    detail.classList.remove('hah-detail-open-prep');
-    if(patients){
-      patients.classList.add('hah-detail-underlay-open-anim');
-      patients.classList.remove('hah-detail-underlay-open-prep');
-    }
-    setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:'cubic-bezier(.25,.46,.45,.94)'});
-    // v12.36.699: start the ghost parallax in the same frame as the panel
-    // slide and list parallax. All three motions are visually linked.
-    if(ghost){
-      try{ ghost.classList.add('hah-header-ghost-sliding'); }catch(_){}
-    }
-  });
-  detailOpenAnimTimer=setTimeout(function(){
-    detail.classList.remove('hah-detail-open-prep','hah-detail-open-anim');
-    if(patients){
-      patients.classList.remove('hah-detail-underlay-open-prep','hah-detail-underlay-open-anim');
-      // Hold parallax for edge-swipe — only if still in detail view (race condition guard)
-      if(document.body.classList.contains('detail-view-active')){
-        const offset=getDetailUnderlayOffset();
-        try{ patients.style.transition='none'; patients.style.transform='translate3d('+offset+'px,0,0)'; }catch(_e){}
-      }
-    }
-    setPatientDetailHeaderShift(0, {dragging:true});
-    // v12.36.699: ghost cleanup. Remove classes so the next open
-    // transition starts from a clean state.
-    // v12.36.702: keep ghost.innerHTML populated. It still holds the
-    // list-mode header snapshot from open time, which we want to reuse
-    // for swipe-back gestures (the ghost slides in from left as the
-    // user swipes the panel away). Cleared/repopulated next time the
-    // open animation snapshots #appHeader.
-    if(ghost){
-      try{
-        ghost.classList.remove('hah-header-ghost-active','hah-header-ghost-sliding');
-        ghost.style.transform = '';
-        ghost.style.transition = '';
-      }catch(_){}
-    }
-  }, 410);
 }
 function patientDetailIsVisible(){
   const el=$("patientDetail");
@@ -12975,66 +12836,27 @@ function setPatientDetailStackActive(active){
     detail.classList.add("detail-overlay-active");
     document.body.classList.add("detail-view-active");
     document.documentElement.classList.add("detail-view-active");
-    syncNavContextForDetailView(true);
+    // v705: nav display is owned by the .hah-nav-stack system + the
+    // controller's progress var. Do NOT set inline display here — that
+    // would fight the transform-driven nav slide. The hah-nav-stack
+    // class (added in HAH_openPatientStart) makes both navs display:flex
+    // and positions them via --hah-tp.
   } else {
     patients.classList.remove("detail-underlay-active");
     detail.classList.remove("detail-overlay-active");
     document.body.classList.remove("detail-view-active");
     document.documentElement.classList.remove("detail-view-active");
+    // Clear any legacy inline styles that might linger from older builds
+    // or defensive paths. The controller uses CSS vars, not inline styles,
+    // so clearing these is safe and keeps the elements clean.
     patients.style.transition="";
     patients.style.transform="";
     detail.style.transition="";
     detail.style.transform="";
     detail.style.boxShadow="";
-    resetPatientDetailHeaderShift();
-    syncNavContextForDetailView(false);
-  }
-}
-function animatePatientDetailSwipe(dx=0, dragging=false){
-  const detail=$("patientDetail");
-  const patients=$("patients");
-  if(!detail || !patients) return;
-  const activeDx=Math.max(0, Math.round(dx||0));
-  const width=Math.max(window.innerWidth||390,320);
-  const progress=Math.max(0,Math.min(1,activeDx/width));
-  const underlayShift=Math.round(getDetailUnderlayOffset()*(1-progress));
-  const swipeEasing='cubic-bezier(.22,.9,.18,1)';
-  const transition=dragging?"none":"transform .24s "+swipeEasing;
-  detail.style.transition=transition;
-  patients.style.transition=transition;
-  detail.style.transform=`translate3d(${activeDx}px,0,0)`;
-  patients.style.transform=`translate3d(${underlayShift}px,0,0)`;
-  detail.style.boxShadow=activeDx>0?"0 12px 32px rgba(15,23,42,.12)":"";
-  // Header follows the panel in sync during swipe gesture
-  setPatientDetailHeaderShift(activeDx, {dragging:dragging, duration:'.24s', easing:swipeEasing});
-  // v12.36.702: drive the ghost header + bottom navs inline during swipe.
-  //
-  // Without these, the user's swipe-back gesture reveals the list behind
-  // the panel — but the ghost header sits idle (showing nothing, leaving
-  // a blank blue strip above the list) and the bottom tab bar stays in
-  // patient mode the whole time. Both should anchor to the appearing
-  // content during the gesture.
-  //
-  //   ghost header: mirrors the list parallax (underlayShift). So as the
-  //     list parallaxes from -28% back to 0, the ghost header (with list
-  //     content from the previous open snapshot) parallaxes back too.
-  //   .nav-patient: mirrors the panel (translates right with the finger).
-  //   .nav-global: at `activeDx - width`, so it slides in from off-screen
-  //     left as the panel slides off right. Same velocity as the panel.
-  const ghost = document.getElementById('appHeaderGhost');
-  if(ghost){
-    ghost.style.transition=transition;
-    ghost.style.transform=`translate3d(${underlayShift}px,0,0)`;
-  }
-  const patientNav = document.querySelector('.nav-patient');
-  const globalNav = document.querySelector('.nav-global');
-  if(patientNav){
-    patientNav.style.transition=transition;
-    patientNav.style.transform=`translate3d(${activeDx}px,0,0)`;
-  }
-  if(globalNav){
-    globalNav.style.transition=transition;
-    globalNav.style.transform=`translate3d(${activeDx - width}px,0,0)`;
+    // v705: nav display returns to the CSS default (the body
+    // display:none rules at app.css ~148-149) once hah-nav-stack is
+    // removed by HAH_closePatientSettle. Nothing to set here.
   }
 }
 
@@ -13042,8 +12864,8 @@ function animatePatientDetailSwipe(dx=0, dragging=false){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_703_swipe_back_no_bounce_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_703_swipe_back_no_bounce_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_705_unified_transition_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_705_unified_transition_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13190,202 +13012,89 @@ async function checkForAppUpdate(force=false){
   }catch(e){}
 }
 
-function resetPatientDetailSwipe(){
-  animatePatientDetailSwipe(0,false);
-  setTimeout(()=>{
-    const detail=$("patientDetail");
-    const patients=$("patients");
-    if(!detail || !patients) return;
-    detail.style.transition="";
-    detail.style.transform="";
-    detail.style.boxShadow="";
-    patients.style.transition="";
-    patients.style.transform="";
-    resetPatientDetailHeaderShift();
-    // v12.36.702: clean up the swipe-back ghost + nav inline styles.
-    // CSS takes over once these are cleared (ghost goes back to invisible,
-    // navs return to their CSS-controlled open-state positions).
-    const ghost = document.getElementById('appHeaderGhost');
-    if(ghost){
-      ghost.classList.remove('hah-header-ghost-active');
-      ghost.style.transition = '';
-      ghost.style.transform = '';
-    }
-    const patientNav = document.querySelector('.nav-patient');
-    const globalNav = document.querySelector('.nav-global');
-    if(patientNav){
-      patientNav.style.transition = '';
-      patientNav.style.transform = '';
-    }
-    if(globalNav){
-      globalNav.style.transition = '';
-      globalNav.style.transform = '';
-    }
-  },260);
+/* =============================================================================
+ * v12.36.705 — Close + swipe-back delegate to HAHPageTransition.
+ *
+ * goBackToPatientList / swipe handlers no longer animate anything
+ * themselves. They drive the controller's progress (the single source of
+ * truth) and let it call the discrete teardown hook (HAH_closePatientSettle)
+ * exactly once when progress reaches 0.
+ * ===========================================================================*/
+
+function HAH_closePatientSettle(closingId){
+  // Discrete SETTLE for close. Runs when controller progress hits 0.
+  // Hide panel, clear discrete state, re-render list, switch section.
+  try{ document.body.classList.remove('hah-nav-stack'); }catch(_){}
+  try{ document.body.classList.remove('hah-ghost-armed'); }catch(_){}
+  detailLoadedForCurrentPatient=false;
+  if(typeof setPatientDetailStackActive==='function') setPatientDetailStackActive(false);
+  try{ saveData(); }catch(_){}
+  try{ renderPatientList(); }catch(_){}
+  try{ showSection("patients"); }catch(_){}
 }
+
 function goBackToPatientList(opts){
   if(detailLoadedForCurrentPatient && typeof rememberCurrentPatientUiState==='function') rememberCurrentPatientUiState(true);
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
-  // v12.36.691: clear auto-reopen activity record. Explicit back-navigation
-  // expresses intent to leave the patient — if user quits and returns
-  // shortly after, they should land on the list, not get pulled back to
-  // the patient they just left.
+  // v12.36.691: clear auto-reopen activity record on explicit back-nav.
   if(typeof clearLastPatientActivity === 'function') clearLastPatientActivity();
   if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
   detailSwipeCompleting=false;
   detailEdgeSwipeState=null;
 
-  const skipAnimation=!!(opts && opts.skipAnimation);
-  const detail=$("patientDetail");
-  const patients=$("patients");
-  const reduced=typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Swap to global nav immediately so it's visible during the back slide.
-  // body.detail-view-active is still set until showSection is called below,
-  // so we flip the nav displays directly here.
-  if(typeof syncNavContextForDetailView==='function') syncNavContextForDetailView(false);
+  // Reset patient-header chrome that should not be visible on the list.
   try{
     const headerTaskBtn=$("headerTaskBtn");
     const headerTaskCountBadge=$("headerTaskCountBadge");
-    if(headerTaskBtn){
-      headerTaskBtn.classList.add('hidden');
-      headerTaskBtn.setAttribute('aria-hidden','true');
-    }
-    if(headerTaskCountBadge){
-      headerTaskCountBadge.classList.add('hidden');
-      headerTaskCountBadge.classList.remove('urgent');
-    }
+    if(headerTaskBtn){ headerTaskBtn.classList.add('hidden'); headerTaskBtn.setAttribute('aria-hidden','true'); }
+    if(headerTaskCountBadge){ headerTaskCountBadge.classList.add('hidden'); headerTaskCountBadge.classList.remove('urgent'); }
+    $("headerTitle").textContent='Hospital at Home Companion (DEMO)';
+    $("headerSub").textContent='LK Medica Software Solutions Inc.';
+    $("headerAge").classList.add('hidden'); $("headerAge").textContent='';
+    if($("headerPatientMeta2")){ $("headerPatientMeta2").classList.add('hidden'); $("headerPatientMeta2").textContent=''; }
+    if($("headerPatientFlags")){ $("headerPatientFlags").classList.add('hidden'); $("headerPatientFlags").innerHTML=''; }
+    if(typeof setPatientHeaderModeVisibility==='function') setPatientHeaderModeVisibility(false);
+    $("backBtn").classList.add('hidden');
+    $("appHeader").classList.remove('has-back');
   }catch(_e){}
 
-  if(!skipAnimation && detail && patients && !reduced){
-    // Animated back-slide — exact mirror of forward open animation
-    const offset=getDetailUnderlayOffset();
-    // v12.36.701: trigger the nav slide IN SYNC with the panel/header
-    // animation. Without this, body.detail-view-active is only removed
-    // inside showSection() in done() at t=360ms — so navs only start
-    // their transition after the panel/header finished. Henry saw the
-    // list tab bar lagging behind the rest. Fix: add hah-nav-animating
-    // and remove detail-view-active at t=0 so all four animations
-    // (panel, header, nav, list) start in the same frame.
-    document.body.classList.add('hah-nav-animating');
-    document.body.classList.remove('detail-view-active');
-    document.documentElement.classList.remove('detail-view-active');
-    // Snap patient list and header to their starting positions (both shifted left)
-    patients.style.transition='none';
-    patients.style.transform='translate3d('+offset+'px,0,0)';
-    try{
-      const headerTaskBtn=$("headerTaskBtn");
-      const headerTaskCountBadge=$("headerTaskCountBadge");
-      if(headerTaskBtn){
-        headerTaskBtn.classList.add('hidden');
-        headerTaskBtn.setAttribute('aria-hidden','true');
-      }
-      if(headerTaskCountBadge){
-        headerTaskCountBadge.classList.add('hidden');
-        headerTaskCountBadge.classList.remove('urgent');
-      }
-      // Update header content while title is invisible
-      $("headerTitle").textContent='Hospital at Home Companion (DEMO)';
-      $("headerSub").textContent='LK Medica Software Solutions Inc.';
-      $("headerAge").classList.add('hidden'); $("headerAge").textContent='';
-      $("headerPatientMeta2").classList.add('hidden'); $("headerPatientMeta2").textContent='';
-      if($("headerPatientFlags")){ $("headerPatientFlags").classList.add('hidden'); $("headerPatientFlags").innerHTML=''; }
-      if(typeof setPatientHeaderModeVisibility==='function') setPatientHeaderModeVisibility(false);
-      $("backBtn").classList.add('hidden');
-      $("appHeader").classList.remove('has-back');
-      setPatientDetailHeaderShift(offset, {dragging:true});
-    }catch(_e){}
-    void detail.offsetWidth; // single reflow commits all three snap positions
-    const easing='cubic-bezier(.25,.46,.45,.94)';
-    // Start all three animations in the same frame — mirrors the forward open
-    detail.style.transition='transform 360ms '+easing+',box-shadow 360ms ease';
-    patients.style.transition='transform 360ms '+easing;
-    setPatientDetailHeaderShift(0, {dragging:false, duration:'360ms', easing:easing});
-    detail.style.transform='translate3d(100%,0,0)';
-    detail.style.boxShadow='-4px 0 20px rgba(15,23,42,.09)';
-    patients.style.transform='translate3d(0,0,0)';
-    let done_called=false;
-    const done=()=>{
-      if(done_called) return; done_called=true;
-      detail.style.transition=''; detail.style.transform=''; detail.style.boxShadow='';
-      patients.style.transition=''; patients.style.transform='';
-      resetPatientDetailHeaderShift();
-      // v12.36.701: cleanup the marker class added at the start of the
-      // back animation. Mirrors the open path's setTimeout-based cleanup.
-      try{ document.body.classList.remove('hah-nav-animating'); }catch(_){}
-      detailLoadedForCurrentPatient=false;
-      saveData(); renderPatientList(); showSection("patients");
-    };
-    detail.addEventListener('transitionend', done, {once:true});
-    setTimeout(done, 420);
-    return;
+  // The controller animates progress 1→0 and calls HAH_closePatientSettle
+  // on arrival. skipAnimation (or reduced motion) uses duration 0.
+  if(window.HAHPageTransition){
+    if(opts && opts.skipAnimation){
+      // Already at progress 0 via a completed swipe gesture, OR an
+      // instant programmatic close. Snap + settle.
+      window.HAHPageTransition.close();
+    }else{
+      window.HAHPageTransition.close();
+    }
+  }else{
+    // Defensive: no controller. Synchronous teardown.
+    HAH_closePatientSettle(typeof currentPatient!=='undefined'?currentPatient:null);
   }
-
-  // Instant path (after swipe-back gesture, or reduced-motion)
-  // v12.36.703: synchronous cleanup. Previously called resetPatientDetailSwipe
-  // which animates inline transforms BACK to dx=0 (open state) over 240ms,
-  // then clears via setTimeout. On the swipe-complete path the navs were
-  // already at their closed-state inline positions (panel off right, global
-  // nav fully in), so reset-then-clear produced TWO visible snaps:
-  //   1. Inline cleared → CSS positions navs at open state (body class still
-  //      has detail-view-active until showSection runs)
-  //   2. resetPatientDetailSwipe animates inline back to dx=0
-  //   3. showSection removes body class; inline still overrides CSS for 260ms
-  //   4. setTimeout fires, inline cleared, CSS jumps navs to closed state
-  // Net: navs bounce horizontally before settling. Fix: do everything in one
-  // sync tick — remove body class, clear all inline styles, hand off to CSS.
-  // Browser paints once at the end of the tick, no intermediate states visible.
-  document.body.classList.remove('detail-view-active');
-  document.documentElement.classList.remove('detail-view-active');
-  const ghost703 = document.getElementById('appHeaderGhost');
-  if(ghost703){
-    ghost703.classList.remove('hah-header-ghost-active');
-    ghost703.style.transition = '';
-    ghost703.style.transform = '';
-  }
-  const patientNav703 = document.querySelector('.nav-patient');
-  const globalNav703 = document.querySelector('.nav-global');
-  if(patientNav703){
-    patientNav703.style.transition = '';
-    patientNav703.style.transform = '';
-  }
-  if(globalNav703){
-    globalNav703.style.transition = '';
-    globalNav703.style.transform = '';
-  }
-  const detail703 = $("patientDetail");
-  const patients703 = $("patients");
-  if(detail703){
-    detail703.style.transition = '';
-    detail703.style.transform = '';
-    detail703.style.boxShadow = '';
-  }
-  if(patients703){
-    patients703.style.transition = '';
-    patients703.style.transform = '';
-  }
-  resetPatientDetailHeaderShift();
-  detailLoadedForCurrentPatient=false;
-  saveData();
-  renderPatientList();
-  showSection("patients");
 }
+
 function completePatientDetailSwipeBack(){
   if(detailSwipeCompleting) return;
   detailSwipeCompleting=true;
   detailEdgeSwipeState=null;
-  animatePatientDetailSwipe(window.innerWidth||430,false);
-  const detail=$("patientDetail");
-  if(!detail){
-    detailSwipeCompleting=false;
+  // Hand off to the controller's release logic which animates progress to
+  // 0 and fires HAH_closePatientSettle. We pass fastSwipe so it commits.
+  if(window.HAHPageTransition){
+    window.HAHPageTransition.gestureEnd({ fastSwipe:true });
+  }else{
     goBackToPatientList({skipAnimation:true});
-    return;
   }
-  const finish=()=>{
-    detailSwipeCompleting=false;
-    goBackToPatientList({skipAnimation:true});
-  };
-  detail.addEventListener("transitionend", finish, {once:true});
+  detailSwipeCompleting=false;
 }
+
+// Kept as a thin alias: some callers (touchcancel, vertical-scroll abort)
+// call resetPatientDetailSwipe to mean "cancel the swipe, animate back to
+// fully open." The controller's gestureCancel does exactly that.
+function resetPatientDetailSwipe(){
+  if(window.HAHPageTransition) window.HAHPageTransition.gestureCancel();
+}
+
 function initPatientDetailEdgeSwipe(){
   const detail=$("patientDetail");
   if(!detail) return;
@@ -13397,23 +13106,7 @@ function initPatientDetailEdgeSwipe(){
     if(e.target.closest("input, textarea, select, button, .choice-btn, .flow-btn, .drug-btn, .dose-btn, .med-dose-btn, .med-frequency-btn, .med-prn-btn")) return;
     detailEdgeSwipeState={startX:t.clientX,startY:t.clientY,dragging:false,dx:0};
     syncSharedHeaderHeight();
-    setPatientDetailStackActive(true);
-    // v12.36.702: prep the ghost header for swipe-back. Reveals the
-    // list-mode content sitting behind the patient panel so the user
-    // sees the list header parallaxing in as they swipe right. Without
-    // this, the area where the list header would be is just blank blue.
-    const ghost = document.getElementById('appHeaderGhost');
-    if(ghost){
-      // Defensive populate: if ghost has no content (e.g. user is in
-      // reduced-motion mode where the open animation short-circuits and
-      // never snapshots, or the open animation hasn't run yet because
-      // we got here some other way), fill with the known list-mode HTML.
-      if(!ghost.innerHTML.trim()){
-        ghost.innerHTML = '<button aria-label="Back" class="header-back hidden">←</button><div class="header-row"><div class="header-left"><div><span>Hospital at Home Companion (DEMO)</span></div><div class="subhead">LK Medica Software Solutions Inc.</div></div></div>';
-      }
-      ghost.classList.add('hah-header-ghost-active');
-    }
-    animatePatientDetailSwipe(0,true);
+    if(window.HAHPageTransition) window.HAHPageTransition.gestureStart();
   },{passive:true});
   detail.addEventListener("touchmove",(e)=>{
     if(!detailEdgeSwipeState || !e.touches || e.touches.length!==1 || detailSwipeCompleting) return;
@@ -13423,7 +13116,7 @@ function initPatientDetailEdgeSwipe(){
     if(!detailEdgeSwipeState.dragging){
       if(Math.abs(dy)>14 && Math.abs(dy)>Math.abs(dx)){
         detailEdgeSwipeState=null;
-        resetPatientDetailSwipe();
+        if(window.HAHPageTransition) window.HAHPageTransition.gestureCancel();
         return;
       }
       if(dx<8) return;
@@ -13431,7 +13124,7 @@ function initPatientDetailEdgeSwipe(){
     }
     const activeDx=Math.max(0, Math.min(window.innerWidth||430, dx));
     detailEdgeSwipeState.dx=activeDx;
-    animatePatientDetailSwipe(activeDx,true);
+    if(window.HAHPageTransition) window.HAHPageTransition.gestureMove(activeDx);
     if(Math.abs(dx)>Math.abs(dy)) e.preventDefault();
   },{passive:false});
   const finishSwipe=()=>{
@@ -13439,12 +13132,24 @@ function initPatientDetailEdgeSwipe(){
     const threshold=Math.min(110,(window.innerWidth||430)*0.22);
     const shouldGoBack=!!detailEdgeSwipeState.dragging && detailEdgeSwipeState.dx>=threshold;
     detailEdgeSwipeState=null;
-    if(shouldGoBack) completePatientDetailSwipeBack();
-    else resetPatientDetailSwipe();
+    if(window.HAHPageTransition){
+      // Controller decides commit vs cancel from progress + threshold; we
+      // pass our threshold decision as fastSwipe to bias toward closing
+      // when the user clearly dragged past the line.
+      window.HAHPageTransition.gestureEnd({ fastSwipe: shouldGoBack });
+    }else if(shouldGoBack){
+      completePatientDetailSwipeBack();
+    }
   };
   detail.addEventListener("touchend",finishSwipe);
-  detail.addEventListener("touchcancel",()=>{ if(detailSwipeCompleting) return; detailEdgeSwipeState=null; resetPatientDetailSwipe(); });
-  window.addEventListener("resize",()=>{ syncSharedHeaderHeight(); if(patientDetailIsVisible() && !detailEdgeSwipeState && !detailSwipeCompleting) animatePatientDetailSwipe(0,true); });
+  detail.addEventListener("touchcancel",()=>{
+    if(detailSwipeCompleting) return;
+    detailEdgeSwipeState=null;
+    if(window.HAHPageTransition) window.HAHPageTransition.gestureCancel();
+  });
+  window.addEventListener("resize",()=>{
+    syncSharedHeaderHeight();
+  });
 }
 
 
@@ -23995,10 +23700,16 @@ window.HAH.modules.sectionJumpBar = true;
       border-bottom:0.5px solid rgba(15,23,42,0.10);
       opacity:0;
       pointer-events:none;
-      transform:translate3d(var(--hah-header-shift,0px),0,0);
-      transition:
-        opacity 220ms ease,
-        transform var(--hah-header-shift-duration,0ms) var(--hah-header-shift-ease,linear);
+      /* v12.36.705: follows the unified page-transition progress var.
+         The bar is logically attached to the patient header, so it
+         parallaxes the same way the header ghost does:
+         translateX = (1 - tp) * 100%  → tp1 (patient shown): 0
+                                          tp0 (list): off-screen right
+         No transition on transform — the rAF-driven --hah-tp updates it
+         per frame. Opacity keeps its own short fade so the bar doesn't
+         flash during the slide. */
+      transform:translate3d(calc((1 - var(--hah-tp,0)) * 100%),0,0);
+      transition:opacity 220ms ease;
       backface-visibility:hidden;
       -webkit-backface-visibility:hidden;
       will-change:transform,opacity;
