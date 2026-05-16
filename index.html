@@ -12864,6 +12864,31 @@ function setPatientDetailStackActive(active){
     detail.classList.remove("detail-overlay-active");
     document.body.classList.remove("detail-view-active");
     document.documentElement.classList.remove("detail-view-active");
+    // v705.2: this is the AUTHORITATIVE transition reset. showSection()
+    // calls setPatientDetailStackActive(false) on every section switch,
+    // so making this the single point that fully clears transition state
+    // guarantees the list is interactive whenever it's shown — regardless
+    // of how the transition got interrupted (failed open, error in a
+    // hook, legacy stuck state, tab switch mid-transition, etc.).
+    //
+    // Previously hah-nav-stack / hah-ghost-armed were only removed in
+    // HAH_closePatientSettle. If an open failed or the user navigated
+    // away via a tab instead of the back button, those classes stayed
+    // on the body. body.hah-nav-stack keeps #appHeader in slide mode and
+    // both navs in the transform-driven stack — and crucially the half-
+    // open state could leave #patients non-interactive. Clearing them
+    // here (the path every section switch goes through) is the fix.
+    document.body.classList.remove('hah-nav-stack');
+    document.body.classList.remove('hah-ghost-armed');
+    // Reset the controller to list state (progress 0, no in-flight
+    // animation, no patient). forceListState fires no hooks — it's a
+    // pure state/visual reset — so it's safe to call from here without
+    // re-entering goBackToPatientList.
+    try{
+      if(window.HAHPageTransition && typeof window.HAHPageTransition.forceListState==='function'){
+        window.HAHPageTransition.forceListState();
+      }
+    }catch(_){}
     // Clear any legacy inline styles that might linger from older builds
     // or defensive paths. The controller uses CSS vars, not inline styles,
     // so clearing these is safe and keeps the elements clean.
@@ -12872,9 +12897,10 @@ function setPatientDetailStackActive(active){
     detail.style.transition="";
     detail.style.transform="";
     detail.style.boxShadow="";
-    // v705: nav display returns to the CSS default (the body
-    // display:none rules at app.css ~148-149) once hah-nav-stack is
-    // removed by HAH_closePatientSettle. Nothing to set here.
+    // Belt-and-braces: ensure the list is interactive. If anything left
+    // an inline pointer-events on #patients, clear it. (CSS at-rest state
+    // already allows interaction; this just defends against stuck inline.)
+    try{ patients.style.pointerEvents=""; }catch(_){}
   }
 }
 
