@@ -2480,20 +2480,41 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
 
 /* Real app header: patient content slides in from the right.
  * translateX = (1 - tp) * 100%   → tp0: +100% (off right), tp1: 0 */
+/* Real app header. At REST on the list (no .hah-nav-stack) it is static,
+ * showing the list title at translateX(0) — exactly as before the rebuild.
+ * Only while a patient transition is active (body.hah-nav-stack, set by
+ * HAH_openPatientStart and cleared by HAH_closePatientSettle) does it
+ * become the sliding "incoming patient header": translateX = (1-tp)*100%
+ * (tp0 = off-screen right, tp1 = covering the ghost). The ghost beneath
+ * holds the list content and parallaxes, producing the iOS cross-slide.
+ *
+ * Gating on .hah-nav-stack is what prevents the v705.0 regression where
+ * #appHeader was shoved off-screen on the list because tp=0 → 100%. */
 #appHeader{
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transform:translateZ(0);
+  will-change:auto;
+}
+body.hah-nav-stack #appHeader{
   transform:translate3d(calc((1 - var(--hah-tp,0)) * 100%),0,0) translateZ(0);
   will-change:transform;
 }
 
-/* Ghost header: holds the LIST header content, parallaxes left.
- * translateX = tp * -28%   → tp0: 0, tp1: -28%
- * Always present, always visible. No content cloning, no lifecycle. The
- * dual-layer (#appHeader patient content + #appHeaderGhost list content)
- * cross-slide IS the iOS nav bar push. */
+/* Ghost header: holds the LIST title (snapshotted in the START hook).
+ * z-index 39 — one BELOW #appHeader's base z-index 40, so the incoming
+ * patient header (#appHeader) slides OVER the ghost. The ghost itself
+ * parallaxes left as tp rises (tp0: 0, tp1: -28%), the classic iOS
+ * "outgoing title drifts left under the incoming one" motion.
+ *
+ * Visible only while a transition/gesture is active (body.hah-ghost-armed,
+ * set in the START hook and during swipe, cleared at close settle). At
+ * rest on the list the ghost is hidden and #appHeader (static, list
+ * content) is the only header. At rest in the patient view tp=1 so the
+ * ghost is fully off to -28% and entirely covered by #appHeader anyway,
+ * but we keep it hidden when unarmed for safety. */
 #appHeaderGhost{
   position:fixed;left:0;right:0;top:0;
-  z-index:39; /* one below #appHeader */
+  z-index:39;
   background:var(--blue);color:#fff;
   padding:calc(env(safe-area-inset-top) + 16px) 18px 16px;
   font-size:20px;font-weight:700;
@@ -2501,9 +2522,6 @@ body.deepgram-commands-open .nav{transform:translateY(calc(100% + env(safe-area-
   transform:translate3d(calc(var(--hah-tp,0) * -28%),0,0);
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
   will-change:transform;
-  /* Hidden only when fully on the list (tp≈0) so it never shows behind the
-     list header at rest. JS toggles .hah-ghost-armed during any transition
-     or gesture; CSS keeps it visible whenever tp>0. */
   visibility:hidden;
 }
 body.hah-ghost-armed #appHeaderGhost{ visibility:visible; }
