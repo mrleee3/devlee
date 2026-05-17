@@ -8996,17 +8996,30 @@ function renderPatientList() {
 
   document.querySelectorAll('.patient-btn[data-patient]').forEach(btn => {
     btn.onclick = () => {
+      try{ window.__hahDbg && window.__hahDbg('TAP card data-patient='+btn.dataset.patient); }catch(_){}
       const shell = btn.closest('.swipe-shell');
       const fg = shell?.querySelector('.swipe-foreground');
       if (shell?.classList.contains('revealed')) {
+        try{ window.__hahDbg && window.__hahDbg('-> shell revealed, closing, NOT opening'); }catch(_){}
         closeSwipeShell(shell);
         return;
       }
       if (fg?.dataset.justSwiped === '1') {
+        try{ window.__hahDbg && window.__hahDbg('-> justSwiped guard hit, NOT opening'); }catch(_){}
         fg.dataset.justSwiped = '0';
         return;
       }
-      if(!shouldSuppressPostUnlockInteraction()) openPatient(Number(btn.dataset.patient));
+      try{
+        const sup = shouldSuppressPostUnlockInteraction();
+        window.__hahDbg && window.__hahDbg('-> suppressPostUnlock='+sup);
+        if(!sup){
+          window.__hahDbg && window.__hahDbg('-> calling openPatient('+btn.dataset.patient+')');
+          openPatient(Number(btn.dataset.patient));
+          window.__hahDbg && window.__hahDbg('-> openPatient returned OK. ctrl='+(typeof window.HAHPageTransition)+' tp='+(window.HAHPageTransition&&window.HAHPageTransition.getProgress&&window.HAHPageTransition.getProgress())+' detailHidden='+(document.getElementById('patientDetail')&&document.getElementById('patientDetail').classList.contains('hidden')));
+        }
+      }catch(err){
+        try{ window.__hahDbg && window.__hahDbg('!! EXCEPTION in open path: '+(err&&err.message)+' @ '+(err&&err.stack&&String(err.stack).split('\n')[1])); }catch(_){}
+      }
     };
   });
 
@@ -11030,7 +11043,8 @@ function saveCurrentPatientForm() {
 //   HAH_closePatientSettle(id)     — SETTLE (close): teardown (in 06)
 
 function openPatient(id, opts={}) {
-  if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) return;
+  try{ window.__hahDbg && window.__hahDbg('openPatient enter id='+id); }catch(_){}
+  if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) { try{ window.__hahDbg && window.__hahDbg('openPatient EARLY RETURN suppressPostUnlock'); }catch(_){} return; }
   // v12.36.691: stamp the activity timestamp for auto-reopen logic.
   if(typeof stampLastPatientActivity === 'function') stampLastPatientActivity(id);
   if(typeof rememberSectionScroll==='function') rememberSectionScroll('patients', true);
@@ -11040,6 +11054,7 @@ function openPatient(id, opts={}) {
   detailEdgeSwipeState = null;
   const detailElBeforeOpen = $("patientDetail");
   const wasSamePatientAlreadyOpen = currentPatient === id && detailElBeforeOpen && !detailElBeforeOpen.classList.contains('hidden');
+  try{ window.__hahDbg && window.__hahDbg('openPatient samePatient='+wasSamePatientAlreadyOpen+' ctrl='+(typeof window.HAHPageTransition)); }catch(_){}
 
   const ctx = { id, opts: opts||{}, wasSamePatientAlreadyOpen };
 
@@ -11057,10 +11072,13 @@ function openPatient(id, opts={}) {
   // Stash ctx so the hooks can read opts/mode resolution.
   window._hahOpenCtx = ctx;
   if(window.HAHPageTransition){
+    try{ window.__hahDbg && window.__hahDbg('-> HAHPageTransition.open()'); }catch(_){}
     window.HAHPageTransition.open(id, opts||{});
+    try{ window.__hahDbg && window.__hahDbg('-> controller.open() returned, tp='+window.HAHPageTransition.getProgress()); }catch(_){}
   }else{
     // Defensive fallback: controller missing (shouldn't happen). Do a
     // synchronous open so the app is never stuck on the list.
+    try{ window.__hahDbg && window.__hahDbg('-> NO CONTROLLER, fallback sync open'); }catch(_){}
     HAH_openPatientStart(id, opts||{});
     HAH_openPatientSettle(id);
   }
@@ -11071,24 +11089,23 @@ function openPatient(id, opts={}) {
 // already showing content (the v697 Option-C requirement). Ghost header
 // gets the LIST content so it can parallax away. Nav stack armed.
 function HAH_openPatientStart(id, opts){
+  var D=function(m){ try{ window.__hahDbg && window.__hahDbg('  START '+m); }catch(_){} };
+  D('enter id='+id);
   const ctx = (window._hahOpenCtx && window._hahOpenCtx.id===id)
     ? window._hahOpenCtx
     : { id, opts: opts||{}, wasSamePatientAlreadyOpen:false };
   currentPatient = id;
   const p = patients[id];
-  if(!p) return;
-  hideAll();
-  setPatientViewportMode(true);
+  if(!p){ D('NO PATIENT for id='+id+' ABORT'); return; }
+  D('hideAll'); hideAll();
+  D('setPatientViewportMode'); setPatientViewportMode(true);
   $("patients").classList.remove("hidden");
   const detail = $("patientDetail");
-  detail.classList.add('hah-open-loading');   // inert marker (autosave guard)
+  detail.classList.add('hah-open-loading');
   detail.classList.remove("hidden");
   detail.scrollTop=0;
   try{ window.scrollTo(0,0); }catch(e){}
-  setActive("navPatients");
-  // Snapshot CURRENT (list) header into the ghost BEFORE we swap the real
-  // header to patient content. Permanent dual-layer: ghost always holds
-  // whatever the list header was; real header holds patient content.
+  D('setActive'); setActive("navPatients");
   try{
     const appHeader=$("appHeader");
     const ghost=$("appHeaderGhost");
@@ -11097,18 +11114,15 @@ function HAH_openPatientStart(id, opts){
       ghost.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
     }
   }catch(_){}
-  // Discrete state: positioning/z-index classes + nav stack. These flip
-  // ONCE here and once at settle — never mid-animation.
-  setPatientDetailStackActive(true);
+  D('setPatientDetailStackActive(true)'); setPatientDetailStackActive(true);
   document.body.classList.add('hah-nav-stack');
   document.body.classList.add('hah-ghost-armed');
-  // Now swap real header to patient content (ghost already has list copy).
-  if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
-  // FAST populate — cards visible+populated for the slide.
-  setFieldValuesFast(p.form || {});
+  D('updateHeaderForPatient'); if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
+  D('setFieldValuesFast'); setFieldValuesFast(p.form || {});
   detailLoadedForCurrentPatient = true;
-  const openMode = resolveOpenMode(ctx);
-  applyOpenMode(ctx, openMode);
+  D('resolveOpenMode'); const openMode = resolveOpenMode(ctx);
+  D('applyOpenMode mode='+openMode); applyOpenMode(ctx, openMode);
+  D('done OK');
 }
 
 // Discrete SETTLE (open). Called by the controller when progress reaches 1.
@@ -24143,6 +24157,430 @@ window.HAH.modules.sectionJumpBar = true;
   }
 
   window.HAH_renderSectionJumpBar = renderSectionJumpBar;
+})();
+
+</script><script>
+window.HAH = window.HAH || { modules: {} };
+window.HAH.modules.pageTransition = true;
+
+/* =============================================================================
+ * HAHPageTransition — single progress-driven list↔patient transition.
+ *
+ * Replaces the v695–v703 patch stack (8 desyncing animation mechanisms,
+ * 48 touch points). Models UIKit's UIViewControllerTransitionCoordinator:
+ *
+ *   - One state value: progress ∈ [0,1]
+ *       0 = patient list fully shown, no patient
+ *       1 = patient detail fully shown, list parallaxed away
+ *   - Every animated element is a pure function of progress, written ONLY
+ *     by applyProgress(), ONLY via CSS custom properties on :root.
+ *   - Three interchangeable drivers feed the same progress:
+ *       1. animateTo(target, ms)      — tap-open / button-close (timing curve)
+ *       2. setProgressFromGesture(dx) — edge swipe (finger tracks progress)
+ *       3. releaseGesture(velocity)   — finger up → animateTo(0 or 1)
+ *   - Discrete state (show/hide panel, current patient, content population,
+ *     nav display) flips at exactly two moments: START and SETTLE. Never
+ *     mid-animation. This is the invariant whose violation caused every
+ *     v698–v704 bug.
+ *
+ * The v697 setFieldValues fast/heavy split is preserved and hung off the
+ * START (fast) and SETTLE (heavy) hooks. No data-correctness logic changes.
+ * ===========================================================================*/
+(function(){
+  'use strict';
+
+  var DURATION_MS = 360;
+  var SWIPE_CANCEL_MS = 240;          // snap-back when swipe released below threshold
+  var EASE = function(t){             // cubic-bezier(.25,.46,.45,.94) ≈ easeOutQuad-ish
+    // Closed-form approximation of the CSS curve used previously, good enough
+    // for a 360ms slide. Keeps interactive↔animated handoff in pure JS.
+    return 1 - Math.pow(1 - t, 1.85);
+  };
+
+  var state = {
+    progress: 0,            // current normalized progress
+    target: 0,              // where an in-flight animateTo is heading
+    rafId: 0,               // active rAF handle (0 = none)
+    animStartTs: 0,
+    animStartProgress: 0,
+    animDurationMs: 0,
+    interactive: false,     // true while a finger gesture owns progress
+    patientId: null,        // patient this transition is for
+    inFlight: false,        // a transition (anim or gesture) is happening
+    reducedMotion: false,
+    startHookDone: false,   // guards START hook (idempotent)
+    settleScheduled: false
+  };
+
+  function $(id){ return document.getElementById(id); }
+
+  function prefersReducedMotion(){
+    try{
+      return typeof matchMedia === 'function' &&
+             matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }catch(_){ return false; }
+  }
+
+  /* --- The single writer. Every animated element = f(progress). ---------- */
+  function applyProgress(p){
+    p = p < 0 ? 0 : (p > 1 ? 1 : p);
+    var root = document.documentElement;
+    if(!root) return;
+    // One variable. CSS derives every transform/opacity from it via calc().
+    // Writing a unitless number keeps the CSS calc() expressions simple and
+    // avoids per-property JS string building.
+    root.style.setProperty('--hah-tp', String(p));
+    // Drop shadow is opacity-driven (cheap, compositor-friendly) rather than
+    // animating box-shadow. Exposed as its own var so CSS can ramp it.
+    root.style.setProperty('--hah-tp-shadow', String(p));
+    state.progress = p;
+  }
+
+  /* --- Driver 1: timed animation (tap-open, button-close) ---------------- */
+  function cancelRaf(){
+    if(state.rafId){
+      try{ cancelAnimationFrame(state.rafId); }catch(_){}
+      state.rafId = 0;
+    }
+  }
+
+  function animateTo(target, durationMs, onArrive){
+    target = target < 0 ? 0 : (target > 1 ? 1 : target);
+    cancelRaf();
+    // Reduced motion (or explicit 0): jump straight there, still fire arrival.
+    if(state.reducedMotion || durationMs <= 0){
+      applyProgress(target);
+      state.target = target;
+      if(typeof onArrive === 'function') onArrive();
+      return;
+    }
+    state.target = target;
+    state.animStartTs = 0;
+    state.animStartProgress = state.progress;
+    state.animDurationMs = durationMs;
+    var step = function(ts){
+      if(!state.animStartTs) state.animStartTs = ts;
+      var elapsed = ts - state.animStartTs;
+      var lin = state.animDurationMs > 0 ? elapsed / state.animDurationMs : 1;
+      if(lin >= 1){
+        applyProgress(target);
+        state.rafId = 0;
+        if(typeof onArrive === 'function') onArrive();
+        return;
+      }
+      var eased = EASE(lin);
+      var val = state.animStartProgress + (target - state.animStartProgress) * eased;
+      applyProgress(val);
+      state.rafId = requestAnimationFrame(step);
+    };
+    state.rafId = requestAnimationFrame(step);
+  }
+
+  /* --- Driver 2: gesture tracking --------------------------------------- */
+  function setProgressFromGesture(dx){
+    // dx = horizontal finger travel from edge, >=0, in px. Closing gesture:
+    // dragging right shrinks progress from 1 toward 0.
+    var w = Math.max(window.innerWidth || 390, 320);
+    var frac = dx / w;
+    frac = frac < 0 ? 0 : (frac > 1 ? 1 : frac);
+    cancelRaf();
+    state.interactive = true;
+    applyProgress(1 - frac);
+  }
+
+  /* --- Driver 3: gesture release ---------------------------------------- */
+  function releaseGesture(opts){
+    opts = opts || {};
+    state.interactive = false;
+    var w = Math.max(window.innerWidth || 390, 320);
+    var threshold = Math.min(110, w * 0.22) / w;   // matches old 0.22 px ratio
+    var travelled = 1 - state.progress;            // how far toward close
+    var fast = !!opts.fastSwipe;                   // velocity flick
+    var shouldClose = fast || travelled >= threshold;
+    if(shouldClose){
+      // Duration scales with remaining distance so a near-complete swipe
+      // finishes quickly rather than always taking the full 240ms.
+      var remain = state.progress;                 // distance still to cover (→0)
+      var ms = Math.max(120, Math.round(SWIPE_CANCEL_MS * remain));
+      animateTo(0, ms, onSettleClose);
+    }else{
+      var remainOpen = 1 - state.progress;
+      var msOpen = Math.max(120, Math.round(SWIPE_CANCEL_MS * remainOpen));
+      animateTo(1, msOpen, null);                  // back to open: no teardown
+    }
+  }
+
+  /* --- Discrete state: START ------------------------------------------- *
+   * Runs once when a transition begins from the list side (progress 0 → up).
+   * Makes the panel displayable, sets current patient, fast-populates.
+   * --------------------------------------------------------------------- */
+  function runStartHook(id, opts){
+    if(state.startHookDone) return;
+    state.startHookDone = true;
+    state.patientId = id;
+    if(typeof window.HAH_openPatientStart === 'function'){
+      try{ window.HAH_openPatientStart(id, opts || {}); }catch(e){
+        try{ console.error('[HAHPageTransition] start hook error', e); }catch(_){}
+      }
+    }
+  }
+
+  /* --- Discrete state: SETTLE (open) ------------------------------------ *
+   * Runs when progress has reached 1. Heavy populate + post work.
+   * --------------------------------------------------------------------- */
+  function onSettleOpen(){
+    state.inFlight = false;
+    if(typeof window.HAH_openPatientSettle === 'function'){
+      try{ window.HAH_openPatientSettle(state.patientId); }catch(e){
+        try{ console.error('[HAHPageTransition] open settle error', e); }catch(_){}
+      }
+    }
+  }
+
+  /* --- Discrete state: SETTLE (close) ----------------------------------- *
+   * Runs when progress has reached 0. Hide panel, clear patient, teardown.
+   * --------------------------------------------------------------------- */
+  function onSettleClose(){
+    state.inFlight = false;
+    state.startHookDone = false;
+    var closingId = state.patientId;
+    state.patientId = null;
+    if(typeof window.HAH_closePatientSettle === 'function'){
+      try{ window.HAH_closePatientSettle(closingId); }catch(e){
+        try{ console.error('[HAHPageTransition] close settle error', e); }catch(_){}
+      }
+    }
+  }
+
+  /* --- Public API ------------------------------------------------------- */
+  var api = {
+    /* Tap a patient. id = patient key. opts forwarded to start hook. */
+    open: function(id, opts){
+      try{ window.__hahDbg && window.__hahDbg('  CTRL open() id='+id+' rm='+prefersReducedMotion()); }catch(_){}
+      state.reducedMotion = prefersReducedMotion();
+      cancelRaf();
+      state.inFlight = true;
+      state.startHookDone = false;
+      try{ runStartHook(id, opts); }catch(e){ try{ window.__hahDbg && window.__hahDbg('  CTRL runStartHook THREW '+(e&&e.message)); }catch(_){} }
+      if(state.progress > 0.999) state.progress = 0;
+      applyProgress(state.progress);
+      try{ void document.documentElement.offsetWidth; }catch(_){}
+      try{ window.__hahDbg && window.__hahDbg('  CTRL animateTo(1) from tp='+state.progress); }catch(_){}
+      animateTo(1, state.reducedMotion ? 0 : DURATION_MS, onSettleOpen);
+    },
+
+    /* Back button / programmatic close. Animated unless reduced motion. */
+    close: function(){
+      state.reducedMotion = prefersReducedMotion();
+      cancelRaf();
+      state.inFlight = true;
+      state.interactive = false;
+      animateTo(0, state.reducedMotion ? 0 : DURATION_MS, onSettleClose);
+    },
+
+    /* Edge-swipe lifecycle. */
+    gestureStart: function(){
+      state.reducedMotion = prefersReducedMotion();
+      state.inFlight = true;
+      state.interactive = true;
+      cancelRaf();
+      // progress is already 1 (we're in the patient view). Nothing to set;
+      // first gestureMove will move it.
+    },
+    gestureMove: function(dx){
+      setProgressFromGesture(dx);
+    },
+    gestureEnd: function(opts){
+      releaseGesture(opts || {});
+    },
+    gestureCancel: function(){
+      // Treat as "release below threshold" → animate back to fully open.
+      state.interactive = false;
+      var remainOpen = 1 - state.progress;
+      animateTo(1, Math.max(120, Math.round(SWIPE_CANCEL_MS * remainOpen)), null);
+    },
+
+    /* Introspection (used by callers / debug panel). */
+    getProgress: function(){ return state.progress; },
+    isInFlight: function(){ return state.inFlight; },
+    isInteractive: function(){ return state.interactive; },
+    getPatientId: function(){ return state.patientId; },
+
+    /* Hard reset to list state with no animation. Used by showSection and
+     * defensive teardown. Does NOT call hooks (caller owns discrete state). */
+    forceListState: function(){
+      cancelRaf();
+      state.interactive = false;
+      state.inFlight = false;
+      state.startHookDone = false;
+      state.patientId = null;
+      state.progress = 0;
+      state.target = 0;
+      applyProgress(0);
+    },
+
+    /* Hard set to fully-open state with no animation. Used by same-patient
+     * WSSync refresh path (panel already shown, no transition wanted). */
+    forcePatientState: function(id){
+      cancelRaf();
+      state.interactive = false;
+      state.inFlight = false;
+      state.startHookDone = true;
+      state.patientId = id;
+      state.progress = 1;
+      state.target = 1;
+      applyProgress(1);
+    }
+  };
+
+  // Initialise the CSS variable so first paint is correct even before any
+  // transition runs.
+  try{
+    document.documentElement.style.setProperty('--hah-tp', '0');
+    document.documentElement.style.setProperty('--hah-tp-shadow', '0');
+  }catch(_){}
+
+  window.HAHPageTransition = api;
+})();
+
+</script><script>
+window.HAH = window.HAH || { modules: {} };
+window.HAH.modules.debugOverlay = true;
+
+/* =============================================================================
+ * v12.36.705-dbg — On-device debug overlay.
+ *
+ * Temporary diagnostic. Renders a fixed, scrollable log panel at the bottom
+ * of the screen and captures: window.onerror, unhandledrejection, and
+ * explicit window.__hahDbg('msg') calls sprinkled in the open path.
+ *
+ * Tap the "H@H DEBUG" bar to collapse/expand. Tap "CLR" to clear.
+ * Remove this module (and the __hahDbg calls) once the bug is found.
+ * ===========================================================================*/
+(function(){
+  'use strict';
+
+  var MAX_LINES = 80;
+  var lines = [];
+  var panel, body, collapsed = false;
+
+  function ts(){
+    var d = new Date();
+    return ('0'+d.getMinutes()).slice(-2)+':'+('0'+d.getSeconds()).slice(-2)+'.'+('00'+d.getMilliseconds()).slice(-3);
+  }
+
+  function ensurePanel(){
+    if(panel) return;
+    panel = document.createElement('div');
+    panel.id = '__hahDebugPanel';
+    panel.style.cssText = [
+      'position:fixed','left:0','right:0','bottom:0','z-index:2147483647',
+      'font:11px/1.35 ui-monospace,Menlo,monospace','color:#0f0',
+      'background:rgba(0,0,0,.88)','border-top:2px solid #0f0',
+      'max-height:42vh','display:flex','flex-direction:column',
+      'pointer-events:auto','-webkit-user-select:text','user-select:text'
+    ].join(';');
+
+    var bar = document.createElement('div');
+    bar.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#003b00;color:#7CFC00;font-weight:700;flex:0 0 auto';
+    var title = document.createElement('span');
+    title.textContent = 'H@H DEBUG (tap to collapse)';
+    var btns = document.createElement('span');
+    var clr = document.createElement('button');
+    clr.textContent = 'CLR';
+    clr.style.cssText = 'margin-left:8px;background:#0f0;color:#000;border:0;border-radius:4px;padding:3px 8px;font-weight:800;font:11px ui-monospace,monospace';
+    clr.addEventListener('click', function(e){ e.stopPropagation(); lines.length=0; render(); });
+    var cp = document.createElement('button');
+    cp.textContent = 'COPY';
+    cp.style.cssText = 'margin-left:6px;background:#0f0;color:#000;border:0;border-radius:4px;padding:3px 8px;font-weight:800;font:11px ui-monospace,monospace';
+    cp.addEventListener('click', function(e){
+      e.stopPropagation();
+      try{
+        var txt = lines.join('\n');
+        if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt); cp.textContent='COPIED'; setTimeout(function(){cp.textContent='COPY';},1200); }
+      }catch(_){}
+    });
+    btns.appendChild(clr); btns.appendChild(cp);
+    bar.appendChild(title); bar.appendChild(btns);
+    bar.addEventListener('click', function(){ collapsed=!collapsed; body.style.display = collapsed?'none':'block'; });
+
+    body = document.createElement('div');
+    body.style.cssText = 'overflow:auto;padding:8px 10px;flex:1;white-space:pre-wrap;word-break:break-word;-webkit-overflow-scrolling:touch';
+
+    panel.appendChild(bar);
+    panel.appendChild(body);
+    (document.body||document.documentElement).appendChild(panel);
+  }
+
+  function render(){
+    if(!body) return;
+    body.textContent = lines.join('\n');
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function log(msg){
+    var line = ts()+'  '+msg;
+    lines.push(line);
+    if(lines.length>MAX_LINES) lines.shift();
+    if(!panel){
+      // Defer until DOM ready if called very early.
+      if(document.body) ensurePanel();
+      else { document.addEventListener('DOMContentLoaded', function(){ ensurePanel(); render(); }); return; }
+    }
+    render();
+  }
+
+  window.__hahDbg = log;
+
+  window.addEventListener('error', function(e){
+    log('!! window.onerror: '+(e && e.message)+' @ '+(e && e.filename ? String(e.filename).split('/').pop():'')+':'+(e&&e.lineno)+':'+(e&&e.colno));
+  });
+  window.addEventListener('unhandledrejection', function(e){
+    var r = e && e.reason;
+    log('!! unhandledrejection: '+(r && (r.message||r))+' '+(r && r.stack ? String(r.stack).split('\n')[1]||'' : ''));
+  });
+
+  // Mount as soon as possible.
+  if(document.body) { ensurePanel(); render(); }
+  else document.addEventListener('DOMContentLoaded', function(){ ensurePanel(); render(); });
+
+  log('debug overlay armed. build v12.36.705-dbg');
+  log('controller at boot: '+(typeof window.HAHPageTransition));
+
+  // Capture-phase global tap probe: logs the topmost element actually hit
+  // by every touch/click, plus whether a .patient-btn is in the path.
+  // This tells us if taps are reaching the cards at all, or being eaten
+  // by an overlay (and which element that overlay is).
+  function describe(el){
+    if(!el) return 'null';
+    var id = el.id ? '#'+el.id : '';
+    var cls = (el.className && typeof el.className==='string') ? '.'+el.className.trim().split(/\s+/).slice(0,3).join('.') : '';
+    return (el.tagName||'?').toLowerCase()+id+cls;
+  }
+  document.addEventListener('touchstart', function(ev){
+    try{
+      var t = ev.touches && ev.touches[0];
+      if(!t) return;
+      var top = document.elementFromPoint(t.clientX, t.clientY);
+      var path = [];
+      var n = top, depth=0;
+      var hasPatientBtn = false;
+      while(n && depth<8){
+        path.push(describe(n));
+        if(n.classList && (n.classList.contains('patient-btn') || (n.dataset && n.dataset.patient))) hasPatientBtn=true;
+        n = n.parentElement; depth++;
+      }
+      log('TOUCH @'+Math.round(t.clientX)+','+Math.round(t.clientY)+' top='+describe(top)+' patientBtnInPath='+hasPatientBtn);
+      log('  path: '+path.join(' < '));
+      // Report blocking state of the list + body classes
+      var ps = document.getElementById('patients');
+      if(ps){
+        var cs = getComputedStyle(ps);
+        log('  #patients pe='+cs.pointerEvents+' cls='+(ps.className||'(none)'));
+      }
+      log('  body cls='+(document.body.className||'(none)'));
+    }catch(e){ log('probe err '+(e&&e.message)); }
+  }, true);  // capture phase — sees the event before anything can stopPropagation
 })();
 
 </script></body>
