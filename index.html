@@ -19962,7 +19962,7 @@ window.HAH.modules.deepgramDictation = true;
       recorder.onerror = () => {
         if(typeof setDeepgramStatus === 'function') setDeepgramStatus('Microphone recording error.', true);
       };
-      recorder.start(250);
+      recorder.start(100);
       state.keepAliveTimer = window.setInterval(() => {
         try{
           if(dictationState && dictationState === state && state.ws === ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'KeepAlive' }));
@@ -19991,7 +19991,17 @@ window.HAH.modules.deepgramDictation = true;
     params.set('model', model);
     params.set('language', language);
     params.set('interim_results', 'true');
-    params.set('endpointing', '900');
+    // v706.x: endpointing 900→500. Controls only how long Deepgram waits
+    // in silence before finalizing an utterance — NOT transcription
+    // accuracy. 500ms (vs Deepgram's general 300 default) is chosen
+    // deliberately for clinical dictation: it still commits ~400ms
+    // sooner than before, but is defensive against mid-sentence thinking
+    // pauses ("the patient has... worsening renal function") being
+    // clipped into two separate finals. Finals are accumulated
+    // (joinTranscript), so even if a pause does split an utterance no
+    // text is lost — only a possible join seam, which joinTranscript
+    // already handles.
+    params.set('endpointing', '500');
     if(punctuate || dictation || smartFormat) params.set('punctuate', 'true');
     if(dictation) params.set('dictation', 'true');
     if(smartFormat) params.set('smart_format', 'true');
@@ -20020,6 +20030,14 @@ window.HAH.modules.deepgramDictation = true;
     if(payload.is_final){
       if(transcript) dictationState.committedText = joinTranscript(dictationState.committedText, transcript);
       dictationState.interimText = '';
+      // v706.x: if we've sent Finalize and are waiting to close, a final
+      // result is the signal the flush is done — resolve the stop wait
+      // immediately instead of blindly sleeping the old fixed 450ms.
+      if(dictationState.finalizeResolve){
+        const r = dictationState.finalizeResolve;
+        dictationState.finalizeResolve = null;
+        try{ r(); }catch(_e){}
+      }
     } else {
       dictationState.interimText = transcript;
     }
@@ -20046,7 +20064,21 @@ window.HAH.modules.deepgramDictation = true;
       if(activeState.ws && activeState.ws.readyState === WebSocket.OPEN) activeState.ws.send(JSON.stringify({ type: 'Finalize' }));
     }catch(_err){}
 
-    await delay(450);
+    // v706.x: was a blind `await delay(450)` — a fixed worst-case sleep on
+    // every stop regardless of how fast Deepgram actually flushed. Now we
+    // wait for the actual post-Finalize final result (set by
+    // handleDeepgramResults), racing a 600ms safety timeout so a dropped/
+    // missing final can never hang the stop. Typical case resolves in
+    // ~100-200ms instead of always 450ms.
+    await new Promise(resolve => {
+      let done = false;
+      const finish = () => { if(done) return; done = true; resolve(); };
+      activeState.finalizeResolve = finish;
+      setTimeout(() => {
+        if(activeState.finalizeResolve === finish) activeState.finalizeResolve = null;
+        finish();
+      }, 600);
+    });
 
     try{
       if(activeState.ws && activeState.ws.readyState === WebSocket.OPEN) activeState.ws.send(JSON.stringify({ type: 'CloseStream' }));
