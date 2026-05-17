@@ -24309,13 +24309,31 @@ window.HAH.modules.pageTransition = true;
     state.animStartTs = 0;
     state.animStartProgress = state.progress;
     state.animDurationMs = durationMs;
+    // v705-dbg: per-frame timing capture. Records the interval between
+    // consecutive rAF callbacks during the slide so we can see the REAL
+    // frame rate on-device (vs theorising). Reported on arrival.
+    var _frameTs = [];
+    var _lastTs = 0;
     var step = function(ts){
+      if(_lastTs) _frameTs.push(ts - _lastTs);
+      _lastTs = ts;
       if(!state.animStartTs) state.animStartTs = ts;
       var elapsed = ts - state.animStartTs;
       var lin = state.animDurationMs > 0 ? elapsed / state.animDurationMs : 1;
       if(lin >= 1){
         applyProgress(target);
         state.rafId = 0;
+        try{
+          if(window.__hahDbg && _frameTs.length){
+            var n=_frameTs.length;
+            var sum=0,max=0,over20=0,over32=0;
+            for(var i=0;i<n;i++){ var d=_frameTs[i]; sum+=d; if(d>max)max=d; if(d>20)over20++; if(d>32)over32++; }
+            var avg=sum/n;
+            var fps=1000/avg;
+            window.__hahDbg('FRAMES n='+n+' avg='+avg.toFixed(1)+'ms (~'+fps.toFixed(0)+'fps) max='+max.toFixed(0)+'ms >20ms='+over20+' >32ms='+over32);
+            window.__hahDbg('  intervals: '+_frameTs.map(function(x){return x.toFixed(0);}).join(','));
+          }
+        }catch(_){}
         if(typeof onArrive === 'function') onArrive();
         return;
       }
@@ -24328,6 +24346,7 @@ window.HAH.modules.pageTransition = true;
   }
 
   /* --- Driver 2: gesture tracking --------------------------------------- */
+  var _gTs = [], _gLast = 0;
   function setProgressFromGesture(dx){
     // dx = horizontal finger travel from edge, >=0, in px. Closing gesture:
     // dragging right shrinks progress from 1 toward 0.
@@ -24336,6 +24355,11 @@ window.HAH.modules.pageTransition = true;
     frac = frac < 0 ? 0 : (frac > 1 ? 1 : frac);
     cancelRaf();
     state.interactive = true;
+    // v705-dbg: capture gesture-driven frame intervals for comparison
+    // against the rAF animation path (Henry reports swipe feels smoother).
+    var now = (window.performance && performance.now) ? performance.now() : Date.now();
+    if(_gLast) _gTs.push(now - _gLast);
+    _gLast = now;
     applyProgress(1 - frac);
   }
 
@@ -24343,6 +24367,15 @@ window.HAH.modules.pageTransition = true;
   function releaseGesture(opts){
     opts = opts || {};
     state.interactive = false;
+    try{
+      if(window.__hahDbg && _gTs.length){
+        var n=_gTs.length,sum=0,max=0,o20=0;
+        for(var i=0;i<n;i++){var d=_gTs[i];sum+=d;if(d>max)max=d;if(d>20)o20++;}
+        var avg=sum/n;
+        window.__hahDbg('GESTURE FRAMES n='+n+' avg='+avg.toFixed(1)+'ms (~'+(1000/avg).toFixed(0)+'fps) max='+max.toFixed(0)+'ms >20ms='+o20);
+      }
+      _gTs=[]; _gLast=0;
+    }catch(_){}
     var w = Math.max(window.innerWidth || 390, 320);
     var threshold = Math.min(110, w * 0.22) / w;   // matches old 0.22 px ratio
     var travelled = 1 - state.progress;            // how far toward close
