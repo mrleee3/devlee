@@ -11135,22 +11135,31 @@ function HAH_openPatientStart(id, opts){
   document.body.classList.add('hah-ghost-armed');
   D('updateHeaderForPatient'); if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
   D('setFieldValuesFast'); setFieldValuesFast(p.form || {});
+  // v12.36.705: heavy populate (med/IV entries, bloods card) now runs HERE
+  // in START, before the slide, not in SETTLE after it. The v697 split
+  // deferred it because the old class-flip animation ran on the main
+  // thread and heavy DOM work mid-slide caused jank. The new controller
+  // drives the slide via --hah-tp on the compositor and START already
+  // runs synchronously before animateTo(), so doing the heavy work here
+  // just adds a few ms to time-to-first-frame instead of stuttering the
+  // slide. Net result: the patient page slides in FULLY RENDERED — no
+  // post-landing pop-in (the artifact Henry flagged).
+  D('setFieldValuesHeavy'); setFieldValuesHeavy(p.form || {});
   detailLoadedForCurrentPatient = true;
   D('resolveOpenMode'); const openMode = resolveOpenMode(ctx);
   D('applyOpenMode mode='+openMode); applyOpenMode(ctx, openMode);
+  try{ const _d=$("patientDetail"); if(_d) _d.classList.remove('hah-open-loading'); }catch(_){}
   D('done OK');
 }
 
 // Discrete SETTLE (open). Called by the controller when progress reaches 1.
-// Heavy populate (meds/IV/bloods) + post-work. Guarded against the user
-// having navigated away during the slide.
+// Heavy populate now happens in START (see note there), so SETTLE only
+// does post-work (non-visual: saveData, calculateNews, board card, badges,
+// condition panel, jump bar). Guarded against navigating away mid-slide.
 function HAH_openPatientSettle(id){
   if(currentPatient !== id) return;
   const p = patients[id];
   if(!p) return;
-  setFieldValuesHeavy(p.form || {});
-  const detail = $("patientDetail");
-  if(detail) detail.classList.remove('hah-open-loading');
   runOpenPostWork();
 }
 
