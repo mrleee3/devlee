@@ -2539,7 +2539,7 @@ body.hah-ghost-armed #appHeaderGhost{ visibility:visible; }
   transform:translateX(-24px);
   pointer-events:none;
   box-shadow:-12px 0 32px rgba(15,23,42,.16);
-  opacity:var(--hah-tp-shadow,0);
+  opacity:var(--hah-tp,0);
 }
 
 /* Patient list underlay: parallaxes left.
@@ -2567,10 +2567,24 @@ body.hah-ghost-armed #appHeaderGhost{ visibility:visible; }
  * the navs are pure f(--hah-tp) like everything else. Opacity transition
  * is kept (harmless here, still wanted elsewhere). The keyboard/overlay
  * slide-down still gets the smooth .18s ease because that path runs WITHOUT
- * body.hah-nav-stack, so this override does not apply there. */
+ * body.hah-nav-stack, so this override does not apply there.
+ *
+ * ALSO: the base .nav has backdrop-filter:blur(10px). A backdrop-filter
+ * must re-sample and re-blur everything behind the element on EVERY frame
+ * it moves — on iOS Safari this is one of the most expensive compositor
+ * ops there is. Two nav bars blurring while sliding through the whole
+ * 360ms is the dominant cost behind the "low frame rate but not
+ * stuttering" feel. Suspend the blur for the duration of the transition;
+ * the nav background is already rgba(255,255,255,.97) (~opaque), so
+ * dropping the blur WHILE MOVING is visually negligible. It's restored
+ * the instant hah-nav-stack is cleared (transition settle), so the
+ * frosted look returns at rest. */
 body.hah-nav-stack .nav.nav-global,
 body.hah-nav-stack .nav.nav-patient{
   transition:opacity .18s ease;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  background:rgba(255,255,255,.985);
 }
 body.hah-nav-stack .nav.nav-global{
   display:flex !important;
@@ -24261,11 +24275,10 @@ window.HAH.modules.pageTransition = true;
     if(!root) return;
     // One variable. CSS derives every transform/opacity from it via calc().
     // Writing a unitless number keeps the CSS calc() expressions simple and
-    // avoids per-property JS string building.
-    root.style.setProperty('--hah-tp', String(p));
-    // Drop shadow is opacity-driven (cheap, compositor-friendly) rather than
-    // animating box-shadow. Exposed as its own var so CSS can ramp it.
-    root.style.setProperty('--hah-tp-shadow', String(p));
+    // avoids per-property JS string building. v705: collapsed the old
+    // separate --hah-tp-shadow (always == --hah-tp) into this single write
+    // to halve per-frame style-property mutations.
+    root.style.setProperty('--hah-tp', p === 0 ? '0' : (p === 1 ? '1' : p.toFixed(4)));
     state.progress = p;
   }
 
@@ -24470,7 +24483,6 @@ window.HAH.modules.pageTransition = true;
   // transition runs.
   try{
     document.documentElement.style.setProperty('--hah-tp', '0');
-    document.documentElement.style.setProperty('--hah-tp-shadow', '0');
   }catch(_){}
 
   window.HAHPageTransition = api;
