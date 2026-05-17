@@ -19656,6 +19656,40 @@ window.HAH.modules.deepgramDictation = true;
     );
   }
 
+  // v706.x: spoken-punctuation safety net. With Deepgram `dictation` mode
+  // off (so it auto-infers punctuation from prosody — the behaviour Henry
+  // wants), an explicitly *spoken* "question mark" / "full stop" / "comma"
+  // would otherwise come through as words. This maps the common spoken
+  // forms to symbols. Deliberately conservative: only matches the word(s)
+  // as a standalone token (surrounded by space/punct/string-edge) so it
+  // never eats "question" in "the question is..." or ". stop the infusion"
+  // in clinical text. Runs on the RAW transcript before any other
+  // processing (and before STRUCTURED_COMMAND_REGEX) so the symbol is in
+  // place for everything downstream.
+  function applySpokenPunctuation(text){
+    let s = String(text || '');
+    if(!s) return s;
+    // Order matters: multi-word phrases before single words.
+    // NOTE: "period" and "colon" are deliberately NOT mapped — they are
+    // common clinical words ("a period of confusion", "sigmoid colon",
+    // "colonoscopy") and literal substitution would corrupt real notes.
+    // Sentence-ending full stops come from Deepgram's prosody inference
+    // (the whole point of disabling dictation mode); the explicit phrase
+    // "full stop" is unambiguous and safe to map. Likewise no bare
+    // "dash"/"hyphen" (clinically loaded; handled by list commands).
+    const map = [
+      [/\b(?:question\s*mark)\b\s*/gi, '? '],
+      [/\b(?:exclamation\s*(?:mark|point))\b\s*/gi, '! '],
+      [/\b(?:full\s*stop)\b\s*/gi, '. '],
+      [/\b(?:open\s*(?:bracket|paren(?:thesis)?))\b\s*/gi, ' ('],
+      [/\s*\b(?:close\s*(?:bracket|paren(?:thesis)?))\b/gi, ') '],
+      [/\s*\b(?:semi[\s-]*colon)\b\s*/gi, '; ']
+    ];
+    for(const [re, rep] of map) s = s.replace(re, rep);
+    s = s.replace(/\s+([?!.)])/g, '$1').replace(/[ \t]{2,}/g, ' ').replace(/^[ \t]+/, '');
+    return s;
+  }
+
   // First-pass normalisation is applied chunk-by-chunk so live preview stays readable.
   // Final composeInsertionText() then reapplies the clinical cleanup layer over the merged text
   // to catch phrase replacements that were split across interim/final chunks.
@@ -19665,7 +19699,7 @@ window.HAH.modules.deepgramDictation = true;
         ensureBulletDashSpacing(
           applySpeechFinalPunctuation(
             applyClinicalAbbreviationReplacements(
-              applyDictationListFormatting(text, options)
+              applyDictationListFormatting(applySpokenPunctuation(text), options)
                 .replace(/\r\n?/g, '\n')
                 .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
                 .replace(/\n{3,}/g, '\n\n')
@@ -20003,7 +20037,20 @@ window.HAH.modules.deepgramDictation = true;
     // already handles.
     params.set('endpointing', '500');
     if(punctuate || dictation || smartFormat) params.set('punctuate', 'true');
-    if(dictation) params.set('dictation', 'true');
+    // v706.x: intelligently-inferred punctuation (auto "?" on a spoken
+    // question, etc.) comes from `punctuate` + `smart_format`, which the
+    // model derives from prosody/sentence structure WITHOUT you speaking
+    // the marks. Deepgram's `dictation` parameter does the OPPOSITE: it
+    // is "I will say my punctuation aloud" mode — it converts spoken
+    // "period"/"question mark" tokens into symbols and leans away from
+    // automatic inference. That directly suppressed the behaviour Henry
+    // wants. We deliberately DO NOT send dictation=true any more. App-
+    // side structured commands ("new paragraph", "start issues", list
+    // commands) are unaffected — they're handled locally by
+    // STRUCTURED_COMMAND_REGEX, not by Deepgram's dictation mode. A small
+    // local spoken-punctuation safety net (applySpokenPunctuation) still
+    // maps an explicitly-spoken "question mark"/"full stop"/"comma" to a
+    // symbol for the occasional case the user does say it.
     if(smartFormat) params.set('smart_format', 'true');
     if(numerals) params.set('numerals', 'true');
     if(measurements) params.set('measurements', 'true');
