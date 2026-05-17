@@ -24622,11 +24622,37 @@ window.HAH.modules.keyboardToolbar = true;
   function computeInset(){
     var vv = window.visualViewport;
     if(!vv){ dbg('computeInset: NO visualViewport -> 0'); return 0; }
-    var layoutH = window.innerHeight ||
-      (document.documentElement && document.documentElement.clientHeight) || 0;
-    var inset = Math.round(layoutH - vv.height - (vv.offsetTop || 0));
-    dbg('computeInset: layoutH='+layoutH+' vv.h='+Math.round(vv.height)+' vv.offTop='+Math.round(vv.offsetTop||0)+' -> inset='+(inset>0?inset:0));
-    return inset > 0 ? inset : 0;
+    // v706.2: the previous formula (innerHeight - vv.height - vv.offsetTop)
+    // assumed the bram.us model where the LAYOUT viewport stays full-height
+    // and only the VISUAL viewport shrinks. Device logs disproved that:
+    // with the keyboard up this iOS reported innerHeight=605, vv.height=573,
+    // vv.offsetTop=422 — innerHeight itself shrank, so the formula went
+    // negative and clamped to 0 (toolbar never showed). Dump every raw
+    // measurement so the correct, model-independent formula is derived
+    // from facts, not assumed.
+    var docEl = document.documentElement;
+    var clientH = docEl ? docEl.clientHeight : 0;
+    var innerH = window.innerHeight || 0;
+    var screenH = (window.screen && window.screen.height) || 0;
+    var vvH = Math.round(vv.height);
+    var vvOT = Math.round(vv.offsetTop || 0);
+    var vvPT = Math.round(vv.pageTop || 0);
+    var vvBottomInLayout = vvOT + vvH;            // visual-vp bottom, layout coords
+    // Candidate insets under different viewport models:
+    var candA = Math.round(innerH - vvH - vvOT);  // old formula
+    var candB = Math.round(clientH - vvBottomInLayout); // layout(client) - vv bottom
+    var candC = Math.round(innerH - vvH);         // simple shrink model
+    dbg('computeInset RAW: innerH='+innerH+' clientH='+clientH+' screenH='+screenH+
+        ' vv.h='+vvH+' vv.offTop='+vvOT+' vv.pageTop='+vvPT+
+        ' | A(old)='+candA+' B(client-vvbot)='+candB+' C(inner-vvh)='+candC);
+    // Use candidate C as the working value for now (simple, never negative
+    // when keyboard shrinks innerHeight): the keyboard occupies the gap
+    // between the (shrunk) layout/inner height and the visual viewport
+    // height. Clamp >=0. The RAW line above lets us confirm which
+    // candidate is correct against the rendered rect.
+    var inset = candC > 0 ? candC : 0;
+    dbg('computeInset -> using C='+inset);
+    return inset;
   }
 
   var lastInset = -1;
@@ -24667,47 +24693,43 @@ window.HAH.modules.keyboardToolbar = true;
   // focus where the keyboard wasn't up yet (inset still 0).
   var pendingFirstShow = false;
   var pendingFallbackId = 0;
+  var forceReveal = false;   // set by the fallback so the next evaluate()
+                             // reveals regardless of inset (no re-defer loop)
 
   function evaluate(){
     var bar = $('noteToolbar');
     if(!bar){ dbg('evaluate: NO #noteToolbar in DOM'); return; }
     var active = document.activeElement;
     var target = currentEligibleTarget();
-    dbg('evaluate: active='+descEl(active)+' eligible='+(!!target)+' barHidden='+bar.classList.contains('hidden'));
+    dbg('evaluate: active='+descEl(active)+' eligible='+(!!target)+' barHidden='+bar.classList.contains('hidden')+' force='+forceReveal);
     if(target){
       var inset = publishInset();
       var isCurrentlyHidden = bar.classList.contains('hidden');
 
-      // v706.1 — THE FIX. Device logs proved: on focusin the keyboard is
-      // not up yet (vv unchanged, inset=0). iOS fires vv.resize ~85ms
-      // later with the real inset. If we show NOW at inset 0 the bar sits
-      // at bottom:0 and the keyboard slides up over it — the "wrong
-      // place / not there" the user sees. So: if the bar is currently
-      // hidden AND the inset is still 0 (keyboard not up), DEFER the
-      // visual reveal. The imminent vv.resize/scroll (which the same log
-      // proved DOES fire on this iOS, just late) calls evaluate() again
-      // with a real inset and we reveal then — already in the right
-      // place, one clean move, no bottom flash.
+      // v706.1/.2 — defer the FIRST reveal until the keyboard inset is
+      // real, so the bar never flashes at bottom:0 under the rising
+      // keyboard. The imminent vv.resize/scroll re-calls evaluate() with
+      // a real inset and we reveal then, already correctly placed.
       //
-      // Safety: if resize genuinely never fires (older iOS / edge case),
-      // a 350ms fallback reveals it anyway. Worst case = today's
-      // behaviour (bottom-ish), never worse. Visibility still does not
-      // *depend* on resize — only the first-frame position does.
-      if(isCurrentlyHidden && inset === 0){
+      // forceReveal (set by the fallback timer) bypasses the defer so a
+      // genuinely-never-arriving resize can't trap us in an infinite
+      // re-defer loop (the v706.1 bug this log exposed: fallback called
+      // evaluate(), which saw inset still 0 and re-deferred forever).
+      if(isCurrentlyHidden && inset === 0 && !forceReveal){
         if(!pendingFirstShow){
           pendingFirstShow = true;
-          dbg('  DEFER first show: focused but inset=0 (keyboard not up). Waiting for real inset.');
+          dbg('  DEFER first show: focused but inset=0 (keyboard not up).');
           if(pendingFallbackId) clearTimeout(pendingFallbackId);
           pendingFallbackId = setTimeout(function(){
             pendingFallbackId = 0;
-            if(pendingFirstShow && currentEligibleTarget()){
-              dbg('  FALLBACK reveal (resize never came within 350ms)');
+            if(currentEligibleTarget()){
+              dbg('  FALLBACK: revealing unconditionally (no real inset arrived)');
+              forceReveal = true;        // <-- next evaluate() will NOT re-defer
               pendingFirstShow = false;
               evaluate();
             }
           }, 350);
         }
-        // Keep selection state current even while deferring the reveal.
         if(window.__hahNoteToolbarState){
           window.__hahNoteToolbarState.target = target;
           if(typeof target.selectionStart === 'number')
@@ -24718,9 +24740,9 @@ window.HAH.modules.keyboardToolbar = true;
         return; // do NOT reveal yet
       }
 
-      // Either already visible (reposition only — cheap, the common
-      // refine path) or inset is real (first reveal, correct position).
+      // Revealing now (inset real, or already visible, or forced).
       pendingFirstShow = false;
+      forceReveal = false;   // consume the force flag
       if(pendingFallbackId){ clearTimeout(pendingFallbackId); pendingFallbackId = 0; }
 
       if(isCurrentlyHidden){
@@ -24744,6 +24766,7 @@ window.HAH.modules.keyboardToolbar = true;
       }catch(_){}
     }else{
       pendingFirstShow = false;
+      forceReveal = false;
       if(pendingFallbackId){ clearTimeout(pendingFallbackId); pendingFallbackId = 0; }
       if(!bar.classList.contains('hidden')){
         bar.classList.add('hidden');
