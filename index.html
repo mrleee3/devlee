@@ -24663,6 +24663,11 @@ window.HAH.modules.keyboardToolbar = true;
     undoBtn.disabled = !(st && st.lastEdit && st.lastEdit.target);
   }
 
+  // v706.1: tracks whether we're waiting for the first real inset after a
+  // focus where the keyboard wasn't up yet (inset still 0).
+  var pendingFirstShow = false;
+  var pendingFallbackId = 0;
+
   function evaluate(){
     var bar = $('noteToolbar');
     if(!bar){ dbg('evaluate: NO #noteToolbar in DOM'); return; }
@@ -24670,8 +24675,55 @@ window.HAH.modules.keyboardToolbar = true;
     var target = currentEligibleTarget();
     dbg('evaluate: active='+descEl(active)+' eligible='+(!!target)+' barHidden='+bar.classList.contains('hidden'));
     if(target){
-      publishInset();
-      if(bar.classList.contains('hidden')){
+      var inset = publishInset();
+      var isCurrentlyHidden = bar.classList.contains('hidden');
+
+      // v706.1 — THE FIX. Device logs proved: on focusin the keyboard is
+      // not up yet (vv unchanged, inset=0). iOS fires vv.resize ~85ms
+      // later with the real inset. If we show NOW at inset 0 the bar sits
+      // at bottom:0 and the keyboard slides up over it — the "wrong
+      // place / not there" the user sees. So: if the bar is currently
+      // hidden AND the inset is still 0 (keyboard not up), DEFER the
+      // visual reveal. The imminent vv.resize/scroll (which the same log
+      // proved DOES fire on this iOS, just late) calls evaluate() again
+      // with a real inset and we reveal then — already in the right
+      // place, one clean move, no bottom flash.
+      //
+      // Safety: if resize genuinely never fires (older iOS / edge case),
+      // a 350ms fallback reveals it anyway. Worst case = today's
+      // behaviour (bottom-ish), never worse. Visibility still does not
+      // *depend* on resize — only the first-frame position does.
+      if(isCurrentlyHidden && inset === 0){
+        if(!pendingFirstShow){
+          pendingFirstShow = true;
+          dbg('  DEFER first show: focused but inset=0 (keyboard not up). Waiting for real inset.');
+          if(pendingFallbackId) clearTimeout(pendingFallbackId);
+          pendingFallbackId = setTimeout(function(){
+            pendingFallbackId = 0;
+            if(pendingFirstShow && currentEligibleTarget()){
+              dbg('  FALLBACK reveal (resize never came within 350ms)');
+              pendingFirstShow = false;
+              evaluate();
+            }
+          }, 350);
+        }
+        // Keep selection state current even while deferring the reveal.
+        if(window.__hahNoteToolbarState){
+          window.__hahNoteToolbarState.target = target;
+          if(typeof target.selectionStart === 'number')
+            window.__hahNoteToolbarState.lastSelectionStart = target.selectionStart;
+          if(typeof target.selectionEnd === 'number')
+            window.__hahNoteToolbarState.lastSelectionEnd = target.selectionEnd;
+        }
+        return; // do NOT reveal yet
+      }
+
+      // Either already visible (reposition only — cheap, the common
+      // refine path) or inset is real (first reveal, correct position).
+      pendingFirstShow = false;
+      if(pendingFallbackId){ clearTimeout(pendingFallbackId); pendingFallbackId = 0; }
+
+      if(isCurrentlyHidden){
         bar.classList.remove('hidden');
         bar.setAttribute('aria-hidden','false');
       }
@@ -24684,7 +24736,6 @@ window.HAH.modules.keyboardToolbar = true;
           window.__hahNoteToolbarState.lastSelectionEnd = target.selectionEnd;
       }
       updateUndoState();
-      // Report the actual rendered position so we can see WHERE it is.
       try{
         var r = bar.getBoundingClientRect();
         var cs = getComputedStyle(bar);
@@ -24692,6 +24743,8 @@ window.HAH.modules.keyboardToolbar = true;
         dbg('  win.innerH='+window.innerHeight+' --kbeb='+getComputedStyle(document.documentElement).getPropertyValue('--keyboard-extra-bottom'));
       }catch(_){}
     }else{
+      pendingFirstShow = false;
+      if(pendingFallbackId){ clearTimeout(pendingFallbackId); pendingFallbackId = 0; }
       if(!bar.classList.contains('hidden')){
         bar.classList.add('hidden');
         bar.setAttribute('aria-hidden','true');
