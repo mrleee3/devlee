@@ -357,7 +357,7 @@ button{border:none;border-radius:12px;padding:12px 14px;font-size:15px;font-weig
 input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #d1d5db;background:#fff;font-size:16px;margin-top:6px}
 label{display:block;margin-top:2px}
 textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.note-toolbar{position:fixed;left:0;right:0;bottom:0;z-index:10088;padding:0;pointer-events:none;will-change:transform;transform:translateY(calc(-1 * var(--keyboard-extra-bottom,0px)))}.note-toolbar.hidden{display:none!important}.note-toolbar-inner{min-height:46px;border-top:0.5px solid rgba(15,23,42,.22);background:#ccced3;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;border-radius:0;pointer-events:auto}.note-toolbar-group{display:flex;align-items:center;gap:6px;min-width:0}.note-toolbar-group--end{margin-left:auto}.note-toolbar-btn{min-width:38px;height:34px;padding:0 10px;margin:0;border-radius:6px;border:0;background:#fcfcfd;color:#111827;font-size:14px;font-weight:500;line-height:1;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;flex:0 0 auto;box-shadow:0 1px 0 rgba(15,23,42,.18)}.note-toolbar-btn.wide{min-width:52px}.note-toolbar-btn.done{background:#0a84ff;color:#fff;font-weight:600;box-shadow:0 1px 0 rgba(0,0,0,.20)}.note-toolbar-btn:disabled{opacity:.42}.note-toolbar-btn:active{transform:translateY(1px);box-shadow:0 0 0 rgba(15,23,42,.18)}body.note-toolbar-visible #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom,0px) + 104px)}@media (max-width:390px){.note-toolbar-inner{gap:6px;padding:6px 8px}.note-toolbar-group{gap:4px}.note-toolbar-btn{min-width:34px;padding:0 8px;font-size:13px}.note-toolbar-btn.wide{min-width:48px}}
+.note-toolbar{position:fixed;left:0;right:0;bottom:0;z-index:10088;padding:0;pointer-events:none;will-change:transform;transform:translateY(calc(-1 * var(--keyboard-extra-bottom,0px)))}.note-toolbar.hidden{display:none!important}.note-toolbar-inner{min-height:48px;border-top:0.5px solid rgba(0,0,0,.10);background:rgba(245,245,247,.94);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);display:flex;align-items:center;justify-content:space-between;gap:4px;padding:6px 6px;border-radius:0;pointer-events:auto}.note-toolbar-group{display:flex;align-items:center;gap:2px;min-width:0}.note-toolbar-group--end{margin-left:auto}.note-toolbar-btn{min-width:40px;height:36px;padding:0 10px;margin:0;border-radius:8px;border:0;background:transparent;color:#0a84ff;font-size:15px;font-weight:400;line-height:1;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;flex:0 0 auto;box-shadow:none;-webkit-tap-highlight-color:transparent}.note-toolbar-btn.wide{min-width:48px;font-size:14px}.note-toolbar-btn.done{background:transparent;color:#0a84ff;font-weight:600}.note-toolbar-btn:disabled{opacity:.32}.note-toolbar-btn:active{background:rgba(10,132,255,.12);transform:none;box-shadow:none}body.note-toolbar-visible #patientDetail.detail-overlay-active{padding-bottom:calc(var(--keyboard-extra-bottom,0px) + 104px)}@media (max-width:390px){.note-toolbar-inner{gap:2px;padding:6px 5px}.note-toolbar-group{gap:1px}.note-toolbar-btn{min-width:38px;padding:0 8px;font-size:14px}.note-toolbar-btn.wide{min-width:46px;font-size:13px}}
 #patientDetail textarea.clinical-review-textarea-expanded{resize:none;overflow:auto}
 .news-box{text-align:center;padding:16px;border-radius:16px;color:#fff;font-weight:700;margin-bottom:8px}
 .news-score{font-size:36px;line-height:1;margin-bottom:6px}.news-low{background:var(--green)} .news-medium{background:var(--amber)} .news-high{background:var(--red)}
@@ -24537,30 +24537,34 @@ window.HAH.modules.keyboardToolbar = true;
 
 /* =============================================================================
  * HAHKeyboardToolbar — single source of truth for the keyboard inset and
- * the note toolbar (#noteToolbar) visibility/position.
+ * the note toolbar (#noteToolbar) visibility/position.  v12.36.706
  *
- * Replaces the pre-v706 tangle: 3 independent visualViewport inset
- * calculations (07-startup updateKeyboardInset, 07-startup scroll-into-view,
- * 04-medications add-patient overlay), a 220ms debounced hide timer, and an
- * inlined "defensive recovery" — all sitting on visualViewport's `resize`
- * event, which iOS Safari frequently does NOT fire when the keyboard
- * appears (verified: WebKit has never shipped the VirtualKeyboard API /
- * env(keyboard-inset-*), confirmed still absent in Safari 26.5).
+ * Replaces the pre-v706 tangle (3 independent visualViewport inset calcs,
+ * a 220ms debounced hide timer, an inlined "defensive recovery"), all
+ * sitting on visualViewport's `resize` event which iOS Safari fires late
+ * (or, on keyboard-appear, after focus). Verified: WebKit has never
+ * shipped the VirtualKeyboard API / env(keyboard-inset-*) — confirmed
+ * still absent in Safari 26.5.
  *
- * Model (mirrors the v705 transition controller's discipline):
- *   - ONE inset value, computed in ONE place, published as the existing
- *     CSS var --keyboard-extra-bottom (kept by name: 30 CSS consumers
- *     depend on it; renaming is pure risk for zero gain).
- *   - Visibility = PURE FUNCTION of "is an eligible textarea focused".
- *     Driven by focusin/focusout/selectionchange (which always fire).
- *     visualViewport.resize is a position-refinement ONLY — it never
- *     decides whether the toolbar shows. Visibility is correct even if
- *     `resize` never fires for that focus (the core iOS bug).
- *   - Position = derived from the one inset, applied via the existing
- *     CSS var; no per-call inline transform writes scattered around.
+ * INSET FORMULA: innerHeight - visualViewport.height. Derived from
+ * on-device measurement, NOT assumed. The old formula
+ * (innerHeight - vv.height - vv.offsetTop) was wrong on this iOS: with
+ * the keyboard up the device reported innerH=803, vv.h=573,
+ * vv.offsetTop=224 — subtracting offsetTop double-counted and clamped to
+ * ~0 (toolbar never positioned). innerH - vv.h = 230 matched the
+ * rendered geometry exactly. offsetTop is the iOS layout-shift, already
+ * reflected in the shrunk innerHeight — must NOT be subtracted again.
  *
- * Eligible fields (confirmed unchanged with Henry, v706):
- *   issues, plan, forDischargeSummary, currently
+ * Visibility = pure function of "is an eligible textarea focused", driven
+ * by focusin/focusout/selectionchange/input (always fire). The FIRST
+ * reveal is deferred until the inset is real (keyboard up) so the bar
+ * never flashes at bottom:0 under the rising keyboard; a 350ms fallback
+ * force-reveals if a real inset never arrives. visualViewport.resize/
+ * scroll are refinement only. Position derived from the one inset in CSS
+ * (.note-toolbar transform).
+ *
+ * Eligible fields (confirmed unchanged with Henry): issues, plan,
+ * forDischargeSummary, currently.
  * ===========================================================================*/
 (function(){
   'use strict';
@@ -24573,110 +24577,26 @@ window.HAH.modules.keyboardToolbar = true;
     return !!(el && el.tagName === 'TEXTAREA' && ELIGIBLE[el.id]);
   }
 
-  /* --- v706-dbg: on-screen debug log (self-contained, bundled with the
-   * controller so it cannot be silently excluded). Tap bar to collapse. */
-  var dbgLines = [], dbgBody = null, dbgPanel = null;
-  function dbgTs(){
-    var d = new Date();
-    return ('0'+d.getMinutes()).slice(-2)+':'+('0'+d.getSeconds()).slice(-2)+'.'+('00'+d.getMilliseconds()).slice(-3);
-  }
-  function dbgMount(){
-    if(dbgPanel || !document.body) return;
-    dbgPanel = document.createElement('div');
-    dbgPanel.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:2147483647;font:10px/1.3 ui-monospace,Menlo,monospace;color:#0ff;background:rgba(0,0,0,.9);border-top:2px solid #0ff;max-height:40vh;display:flex;flex-direction:column;pointer-events:auto';
-    var bar=document.createElement('div');
-    bar.style.cssText='display:flex;justify-content:space-between;padding:5px 9px;background:#013;color:#5ff;font-weight:700;flex:0 0 auto';
-    bar.innerHTML='<span>KB DEBUG (tap=collapse)</span>';
-    var cp=document.createElement('button');
-    cp.textContent='COPY';
-    cp.style.cssText='background:#0ff;color:#000;border:0;border-radius:4px;padding:2px 8px;font-weight:800;font:10px ui-monospace';
-    cp.addEventListener('click',function(e){e.stopPropagation();try{navigator.clipboard&&navigator.clipboard.writeText(dbgLines.join('\n'));cp.textContent='COPIED';setTimeout(function(){cp.textContent='COPY';},1000);}catch(_){}});
-    bar.appendChild(cp);
-    dbgBody=document.createElement('div');
-    dbgBody.style.cssText='overflow:auto;padding:7px 9px;flex:1;white-space:pre-wrap;word-break:break-word;-webkit-overflow-scrolling:touch';
-    var collapsed=false;
-    bar.addEventListener('click',function(){collapsed=!collapsed;dbgBody.style.display=collapsed?'none':'block';});
-    dbgPanel.appendChild(bar);dbgPanel.appendChild(dbgBody);
-    document.body.appendChild(dbgPanel);
-  }
-  function dbg(msg){
-    dbgLines.push(dbgTs()+'  '+msg);
-    if(dbgLines.length>120) dbgLines.shift();
-    if(!dbgPanel){ if(document.body) dbgMount(); else return; }
-    if(dbgBody){ dbgBody.textContent=dbgLines.join('\n'); dbgBody.scrollTop=dbgBody.scrollHeight; }
-  }
-  function descEl(el){
-    if(!el) return 'null';
-    return (el.tagName||'?').toLowerCase()+(el.id?'#'+el.id:'')+(el.className&&typeof el.className==='string'?'.'+el.className.trim().split(/\s+/)[0]:'');
-  }
-  window.addEventListener('error',function(e){ dbg('!! onerror: '+(e&&e.message)); });
-
-  /* --- The one inset calculation ---------------------------------------- *
-   * iOS Safari PWA positions position:fixed against the LAYOUT viewport
-   * and shifts it down by visualViewport.offsetTop to keep the focused
-   * field visible. The gap that the keyboard (plus any layout shift)
-   * occupies is:  innerHeight - vv.height - vv.offsetTop.
-   * Clamped to >= 0. This is the SINGLE definition; every consumer reads
-   * the published --keyboard-extra-bottom rather than recomputing.
-   * --------------------------------------------------------------------- */
   function computeInset(){
     var vv = window.visualViewport;
-    if(!vv){ dbg('computeInset: NO visualViewport -> 0'); return 0; }
-    // v706.2: the previous formula (innerHeight - vv.height - vv.offsetTop)
-    // assumed the bram.us model where the LAYOUT viewport stays full-height
-    // and only the VISUAL viewport shrinks. Device logs disproved that:
-    // with the keyboard up this iOS reported innerHeight=605, vv.height=573,
-    // vv.offsetTop=422 — innerHeight itself shrank, so the formula went
-    // negative and clamped to 0 (toolbar never showed). Dump every raw
-    // measurement so the correct, model-independent formula is derived
-    // from facts, not assumed.
-    var docEl = document.documentElement;
-    var clientH = docEl ? docEl.clientHeight : 0;
-    var innerH = window.innerHeight || 0;
-    var screenH = (window.screen && window.screen.height) || 0;
-    var vvH = Math.round(vv.height);
-    var vvOT = Math.round(vv.offsetTop || 0);
-    var vvPT = Math.round(vv.pageTop || 0);
-    var vvBottomInLayout = vvOT + vvH;            // visual-vp bottom, layout coords
-    // Candidate insets under different viewport models:
-    var candA = Math.round(innerH - vvH - vvOT);  // old formula
-    var candB = Math.round(clientH - vvBottomInLayout); // layout(client) - vv bottom
-    var candC = Math.round(innerH - vvH);         // simple shrink model
-    dbg('computeInset RAW: innerH='+innerH+' clientH='+clientH+' screenH='+screenH+
-        ' vv.h='+vvH+' vv.offTop='+vvOT+' vv.pageTop='+vvPT+
-        ' | A(old)='+candA+' B(client-vvbot)='+candB+' C(inner-vvh)='+candC);
-    // Use candidate C as the working value for now (simple, never negative
-    // when keyboard shrinks innerHeight): the keyboard occupies the gap
-    // between the (shrunk) layout/inner height and the visual viewport
-    // height. Clamp >=0. The RAW line above lets us confirm which
-    // candidate is correct against the rendered rect.
-    var inset = candC > 0 ? candC : 0;
-    dbg('computeInset -> using C='+inset);
-    return inset;
+    if(!vv) return 0;
+    var innerH = window.innerHeight ||
+      (document.documentElement && document.documentElement.clientHeight) || 0;
+    var inset = Math.round(innerH - vv.height);
+    return inset > 0 ? inset : 0;
   }
 
   var lastInset = -1;
   function publishInset(){
     var inset = computeInset();
-    if(inset === lastInset){ dbg('publishInset: unchanged ('+inset+')'); return inset; }
+    if(inset === lastInset) return inset;
     lastInset = inset;
     var root = document.documentElement;
-    if(root){
-      root.style.setProperty('--keyboard-extra-bottom', inset + 'px');
-    }
+    if(root) root.style.setProperty('--keyboard-extra-bottom', inset + 'px');
     document.body.classList.toggle('keyboard-open', inset > 0);
-    dbg('publishInset: SET --keyboard-extra-bottom='+inset+'px keyboard-open='+(inset>0));
     return inset;
   }
 
-  /* --- Visibility: pure function of focus -------------------------------- *
-   * No debounce, no recovery hack. The toolbar is shown iff an eligible
-   * textarea is the active element. evaluate() is idempotent — calling it
-   * repeatedly (on focusin, selectionchange, input, resize) just re-affirms
-   * the same state, so iOS's "blur then immediately refocus mid-layout"
-   * race is harmless: the refocus's evaluate() simply re-shows what was
-   * (briefly) about to hide. There is no destructive timer to lose to.
-   * --------------------------------------------------------------------- */
   function currentEligibleTarget(){
     var a = document.activeElement;
     return isEligible(a) ? a : null;
@@ -24689,81 +24609,62 @@ window.HAH.modules.keyboardToolbar = true;
     undoBtn.disabled = !(st && st.lastEdit && st.lastEdit.target);
   }
 
-  // v706.1: tracks whether we're waiting for the first real inset after a
-  // focus where the keyboard wasn't up yet (inset still 0).
+  function syncSelectionState(target){
+    var st = window.__hahNoteToolbarState;
+    if(!st) return;
+    st.target = target;
+    if(typeof target.selectionStart === 'number') st.lastSelectionStart = target.selectionStart;
+    if(typeof target.selectionEnd === 'number') st.lastSelectionEnd = target.selectionEnd;
+  }
+
   var pendingFirstShow = false;
   var pendingFallbackId = 0;
-  var forceReveal = false;   // set by the fallback so the next evaluate()
-                             // reveals regardless of inset (no re-defer loop)
+  var forceReveal = false;   // set by fallback so the next evaluate() does
+                             // NOT re-defer (prevents an infinite loop when
+                             // a real inset never arrives)
 
   function evaluate(){
     var bar = $('noteToolbar');
-    if(!bar){ dbg('evaluate: NO #noteToolbar in DOM'); return; }
-    var active = document.activeElement;
+    if(!bar) return;
     var target = currentEligibleTarget();
-    dbg('evaluate: active='+descEl(active)+' eligible='+(!!target)+' barHidden='+bar.classList.contains('hidden')+' force='+forceReveal);
     if(target){
       var inset = publishInset();
-      var isCurrentlyHidden = bar.classList.contains('hidden');
+      var hidden = bar.classList.contains('hidden');
 
-      // v706.1/.2 — defer the FIRST reveal until the keyboard inset is
-      // real, so the bar never flashes at bottom:0 under the rising
-      // keyboard. The imminent vv.resize/scroll re-calls evaluate() with
-      // a real inset and we reveal then, already correctly placed.
-      //
-      // forceReveal (set by the fallback timer) bypasses the defer so a
-      // genuinely-never-arriving resize can't trap us in an infinite
-      // re-defer loop (the v706.1 bug this log exposed: fallback called
-      // evaluate(), which saw inset still 0 and re-deferred forever).
-      if(isCurrentlyHidden && inset === 0 && !forceReveal){
+      // Defer the FIRST reveal until the keyboard inset is real, so the
+      // bar never flashes at bottom:0 under the rising keyboard. The
+      // imminent vv.resize/scroll re-calls evaluate() with a real inset
+      // and we reveal then, already correctly placed. forceReveal (set by
+      // the fallback) bypasses this so a never-arriving resize can't trap
+      // us in a re-defer loop.
+      if(hidden && inset === 0 && !forceReveal){
         if(!pendingFirstShow){
           pendingFirstShow = true;
-          dbg('  DEFER first show: focused but inset=0 (keyboard not up).');
           if(pendingFallbackId) clearTimeout(pendingFallbackId);
           pendingFallbackId = setTimeout(function(){
             pendingFallbackId = 0;
             if(currentEligibleTarget()){
-              dbg('  FALLBACK: revealing unconditionally (no real inset arrived)');
-              forceReveal = true;        // <-- next evaluate() will NOT re-defer
+              forceReveal = true;
               pendingFirstShow = false;
               evaluate();
             }
           }, 350);
         }
-        if(window.__hahNoteToolbarState){
-          window.__hahNoteToolbarState.target = target;
-          if(typeof target.selectionStart === 'number')
-            window.__hahNoteToolbarState.lastSelectionStart = target.selectionStart;
-          if(typeof target.selectionEnd === 'number')
-            window.__hahNoteToolbarState.lastSelectionEnd = target.selectionEnd;
-        }
-        return; // do NOT reveal yet
+        syncSelectionState(target);
+        return;
       }
 
-      // Revealing now (inset real, or already visible, or forced).
       pendingFirstShow = false;
-      forceReveal = false;   // consume the force flag
+      forceReveal = false;
       if(pendingFallbackId){ clearTimeout(pendingFallbackId); pendingFallbackId = 0; }
 
-      if(isCurrentlyHidden){
+      if(hidden){
         bar.classList.remove('hidden');
         bar.setAttribute('aria-hidden','false');
       }
       document.body.classList.add('note-toolbar-visible');
-      if(window.__hahNoteToolbarState){
-        window.__hahNoteToolbarState.target = target;
-        if(typeof target.selectionStart === 'number')
-          window.__hahNoteToolbarState.lastSelectionStart = target.selectionStart;
-        if(typeof target.selectionEnd === 'number')
-          window.__hahNoteToolbarState.lastSelectionEnd = target.selectionEnd;
-      }
+      syncSelectionState(target);
       updateUndoState();
-      try{
-        var r = bar.getBoundingClientRect();
-        var cs = getComputedStyle(bar);
-        dbg('  SHOW: rect top='+Math.round(r.top)+' bottom='+Math.round(r.bottom)+' h='+Math.round(r.height)+' tf='+cs.transform+' vis='+cs.visibility+' disp='+cs.display);
-        dbg('  win.innerH='+window.innerHeight+' --kbeb='+getComputedStyle(document.documentElement).getPropertyValue('--keyboard-extra-bottom'));
-      }catch(_){}
     }else{
       pendingFirstShow = false;
       forceReveal = false;
@@ -24773,83 +24674,57 @@ window.HAH.modules.keyboardToolbar = true;
         bar.setAttribute('aria-hidden','true');
       }
       document.body.classList.remove('note-toolbar-visible');
-      dbg('  HIDE (no eligible target focused)');
     }
   }
 
-  /* --- Public surface (consumed by 07-startup action handlers) ---------- */
-  var api = {
+  window.HAHKeyboardToolbar = {
     evaluate: evaluate,
     publishInset: publishInset,
     getInset: function(){ return lastInset < 0 ? 0 : lastInset; },
     isEligible: isEligible,
     currentTarget: currentEligibleTarget,
     updateUndoState: updateUndoState,
-    // Visible toolbar height for scroll-into-view math (one definition).
     getVisibleHeight: function(){
       var bar = $('noteToolbar');
       if(!bar || bar.classList.contains('hidden')) return 0;
       var inner = bar.querySelector('.note-toolbar-inner') || bar;
-      var r = inner.getBoundingClientRect();
-      return Math.max(0, Math.round(r.height || 0));
+      return Math.max(0, Math.round(inner.getBoundingClientRect().height || 0));
     }
   };
-  window.HAHKeyboardToolbar = api;
 
-  /* --- Wiring ----------------------------------------------------------- *
-   * AUTHORITATIVE triggers (always fire): focusin / focusout /
-   * selectionchange / input. visualViewport.resize + scroll are
-   * REFINEMENT ONLY — they re-publish the inset and re-affirm visibility,
-   * but visibility never depends on them having fired.
-   * --------------------------------------------------------------------- */
   function wire(){
-    dbg('wire(): controller active. vv='+(!!window.visualViewport)+' readyState='+document.readyState);
-
     document.addEventListener('focusin', function(e){
-      var t=e.target;
-      if(!t || !t.matches || !t.matches('input,textarea,select')){ return; }
-      dbg('EV focusin: '+descEl(t)+' eligible='+isEligible(t));
-      publishInset();
-      evaluate();
+      var t = e.target;
+      if(!t || !t.matches || !t.matches('input,textarea,select')) return;
+      publishInset(); evaluate();
     }, false);
 
     document.addEventListener('focusout', function(e){
-      var t=e.target;
+      var t = e.target;
       if(!t || !t.matches || !t.matches('input,textarea,select')) return;
-      dbg('EV focusout: '+descEl(t)+' -> defer evaluate');
       setTimeout(function(){ publishInset(); evaluate(); }, 0);
     }, false);
 
     document.addEventListener('selectionchange', function(){
-      var tg=currentEligibleTarget();
-      if(tg){ dbg('EV selectionchange (eligible focused)'); evaluate(); }
+      if(currentEligibleTarget()) evaluate();
     }, false);
 
     ['input','keyup','click'].forEach(function(evt){
       document.addEventListener(evt, function(e){
-        if(isEligible(e.target)){ dbg('EV '+evt+' on eligible '+descEl(e.target)); evaluate(); }
+        if(isEligible(e.target)) evaluate();
       }, true);
     });
 
     if(window.visualViewport){
-      var refine = function(ev){ dbg('EV vv.'+ev.type); publishInset(); evaluate(); };
+      var refine = function(){ publishInset(); evaluate(); };
       window.visualViewport.addEventListener('resize', refine);
       window.visualViewport.addEventListener('scroll', refine);
-    }else{
-      dbg('NO window.visualViewport — refine path unavailable');
     }
 
     document.addEventListener('visibilitychange', function(){
-      if(!document.hidden){ dbg('EV visibilitychange -> visible'); publishInset(); evaluate(); }
+      if(!document.hidden){ publishInset(); evaluate(); }
     });
 
-    // Also probe raw focus/blur (not just delegated focusin) to see if iOS
-    // is firing those but not focusin.
-    document.addEventListener('focus', function(e){
-      if(isEligible(e.target)) dbg('EV focus(capture) on eligible '+descEl(e.target));
-    }, true);
-
-    dbg('wire(): initial publishInset + evaluate');
     publishInset();
     evaluate();
   }
