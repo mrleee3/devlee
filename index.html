@@ -24236,8 +24236,13 @@ window.HAH.modules.pageTransition = true;
 (function(){
   'use strict';
 
-  var DURATION_MS = 360;
-  var SWIPE_CANCEL_MS = 240;          // snap-back when swipe released below threshold
+  // v12.36.705: durations cut ~30% from the original 360/240. A faster
+  // slide spends fewer frames in transit, so it reads as crisper even at
+  // the same frame rate — "slow + smooth" tends to feel like low fps
+  // because the eye has longer to register each step. Tunable here; this
+  // is the single place that controls open/close/swipe-snap speed.
+  var DURATION_MS = 250;              // was 360 (tap-open / button-close)
+  var SWIPE_CANCEL_MS = 170;          // was 240 (swipe snap-back / commit scaling)
   var EASE = function(t){             // cubic-bezier(.25,.46,.45,.94) ≈ easeOutQuad-ish
     // Closed-form approximation of the CSS curve used previously, good enough
     // for a 360ms slide. Keeps interactive↔animated handoff in pure JS.
