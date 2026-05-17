@@ -2556,6 +2556,22 @@ body.hah-ghost-armed #appHeaderGhost{ visibility:visible; }
 .nav.nav-patient{
   will-change:transform;
 }
+/* v12.36.705 — While the page transition owns the navs (body.hah-nav-stack),
+ * the controller drives their transform every frame via --hah-tp, exactly
+ * like the panel and header. The base .nav rule (app.css ~L145) carries
+ * `transition: transform .18s ease` for the keyboard / overlay slide-down.
+ * That transition, applied to the per-frame --hah-tp transform, makes each
+ * nav chase a moving target with a 180ms lag — the springy "snap" Henry
+ * saw, since the panel/header (no transition) glide while the navs rubber-
+ * band. Override to no transform-transition during the page transition so
+ * the navs are pure f(--hah-tp) like everything else. Opacity transition
+ * is kept (harmless here, still wanted elsewhere). The keyboard/overlay
+ * slide-down still gets the smooth .18s ease because that path runs WITHOUT
+ * body.hah-nav-stack, so this override does not apply there. */
+body.hah-nav-stack .nav.nav-global,
+body.hah-nav-stack .nav.nav-patient{
+  transition:opacity .18s ease;
+}
 body.hah-nav-stack .nav.nav-global{
   display:flex !important;
   transform:translate3d(calc(var(--hah-tp,0) * -100%),0,0);
