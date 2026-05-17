@@ -24573,6 +24573,44 @@ window.HAH.modules.keyboardToolbar = true;
     return !!(el && el.tagName === 'TEXTAREA' && ELIGIBLE[el.id]);
   }
 
+  /* --- v706-dbg: on-screen debug log (self-contained, bundled with the
+   * controller so it cannot be silently excluded). Tap bar to collapse. */
+  var dbgLines = [], dbgBody = null, dbgPanel = null;
+  function dbgTs(){
+    var d = new Date();
+    return ('0'+d.getMinutes()).slice(-2)+':'+('0'+d.getSeconds()).slice(-2)+'.'+('00'+d.getMilliseconds()).slice(-3);
+  }
+  function dbgMount(){
+    if(dbgPanel || !document.body) return;
+    dbgPanel = document.createElement('div');
+    dbgPanel.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:2147483647;font:10px/1.3 ui-monospace,Menlo,monospace;color:#0ff;background:rgba(0,0,0,.9);border-top:2px solid #0ff;max-height:40vh;display:flex;flex-direction:column;pointer-events:auto';
+    var bar=document.createElement('div');
+    bar.style.cssText='display:flex;justify-content:space-between;padding:5px 9px;background:#013;color:#5ff;font-weight:700;flex:0 0 auto';
+    bar.innerHTML='<span>KB DEBUG (tap=collapse)</span>';
+    var cp=document.createElement('button');
+    cp.textContent='COPY';
+    cp.style.cssText='background:#0ff;color:#000;border:0;border-radius:4px;padding:2px 8px;font-weight:800;font:10px ui-monospace';
+    cp.addEventListener('click',function(e){e.stopPropagation();try{navigator.clipboard&&navigator.clipboard.writeText(dbgLines.join('\n'));cp.textContent='COPIED';setTimeout(function(){cp.textContent='COPY';},1000);}catch(_){}});
+    bar.appendChild(cp);
+    dbgBody=document.createElement('div');
+    dbgBody.style.cssText='overflow:auto;padding:7px 9px;flex:1;white-space:pre-wrap;word-break:break-word;-webkit-overflow-scrolling:touch';
+    var collapsed=false;
+    bar.addEventListener('click',function(){collapsed=!collapsed;dbgBody.style.display=collapsed?'none':'block';});
+    dbgPanel.appendChild(bar);dbgPanel.appendChild(dbgBody);
+    document.body.appendChild(dbgPanel);
+  }
+  function dbg(msg){
+    dbgLines.push(dbgTs()+'  '+msg);
+    if(dbgLines.length>120) dbgLines.shift();
+    if(!dbgPanel){ if(document.body) dbgMount(); else return; }
+    if(dbgBody){ dbgBody.textContent=dbgLines.join('\n'); dbgBody.scrollTop=dbgBody.scrollHeight; }
+  }
+  function descEl(el){
+    if(!el) return 'null';
+    return (el.tagName||'?').toLowerCase()+(el.id?'#'+el.id:'')+(el.className&&typeof el.className==='string'?'.'+el.className.trim().split(/\s+/)[0]:'');
+  }
+  window.addEventListener('error',function(e){ dbg('!! onerror: '+(e&&e.message)); });
+
   /* --- The one inset calculation ---------------------------------------- *
    * iOS Safari PWA positions position:fixed against the LAYOUT viewport
    * and shifts it down by visualViewport.offsetTop to keep the focused
@@ -24583,23 +24621,25 @@ window.HAH.modules.keyboardToolbar = true;
    * --------------------------------------------------------------------- */
   function computeInset(){
     var vv = window.visualViewport;
-    if(!vv) return 0;
+    if(!vv){ dbg('computeInset: NO visualViewport -> 0'); return 0; }
     var layoutH = window.innerHeight ||
       (document.documentElement && document.documentElement.clientHeight) || 0;
     var inset = Math.round(layoutH - vv.height - (vv.offsetTop || 0));
+    dbg('computeInset: layoutH='+layoutH+' vv.h='+Math.round(vv.height)+' vv.offTop='+Math.round(vv.offsetTop||0)+' -> inset='+(inset>0?inset:0));
     return inset > 0 ? inset : 0;
   }
 
   var lastInset = -1;
   function publishInset(){
     var inset = computeInset();
-    if(inset === lastInset) return inset;   // avoid redundant style writes
+    if(inset === lastInset){ dbg('publishInset: unchanged ('+inset+')'); return inset; }
     lastInset = inset;
     var root = document.documentElement;
     if(root){
       root.style.setProperty('--keyboard-extra-bottom', inset + 'px');
     }
     document.body.classList.toggle('keyboard-open', inset > 0);
+    dbg('publishInset: SET --keyboard-extra-bottom='+inset+'px keyboard-open='+(inset>0));
     return inset;
   }
 
@@ -24625,19 +24665,17 @@ window.HAH.modules.keyboardToolbar = true;
 
   function evaluate(){
     var bar = $('noteToolbar');
-    if(!bar) return;
+    if(!bar){ dbg('evaluate: NO #noteToolbar in DOM'); return; }
+    var active = document.activeElement;
     var target = currentEligibleTarget();
+    dbg('evaluate: active='+descEl(active)+' eligible='+(!!target)+' barHidden='+bar.classList.contains('hidden'));
     if(target){
-      // Show. Recompute inset first so we never paint at bottom:0 (under
-      // the keyboard) before a (possibly never-arriving) resize event.
       publishInset();
       if(bar.classList.contains('hidden')){
         bar.classList.remove('hidden');
         bar.setAttribute('aria-hidden','false');
       }
       document.body.classList.add('note-toolbar-visible');
-      // Keep the shared selection state pointed at the live target so the
-      // toolbar's insert/undo actions operate on the right field.
       if(window.__hahNoteToolbarState){
         window.__hahNoteToolbarState.target = target;
         if(typeof target.selectionStart === 'number')
@@ -24646,14 +24684,20 @@ window.HAH.modules.keyboardToolbar = true;
           window.__hahNoteToolbarState.lastSelectionEnd = target.selectionEnd;
       }
       updateUndoState();
+      // Report the actual rendered position so we can see WHERE it is.
+      try{
+        var r = bar.getBoundingClientRect();
+        var cs = getComputedStyle(bar);
+        dbg('  SHOW: rect top='+Math.round(r.top)+' bottom='+Math.round(r.bottom)+' h='+Math.round(r.height)+' tf='+cs.transform+' vis='+cs.visibility+' disp='+cs.display);
+        dbg('  win.innerH='+window.innerHeight+' --kbeb='+getComputedStyle(document.documentElement).getPropertyValue('--keyboard-extra-bottom'));
+      }catch(_){}
     }else{
-      // Hide. Pure: no "is something refocusing?" guesswork — if focus
-      // returns to an eligible field, the next evaluate() re-shows it.
       if(!bar.classList.contains('hidden')){
         bar.classList.add('hidden');
         bar.setAttribute('aria-hidden','true');
       }
       document.body.classList.remove('note-toolbar-visible');
+      dbg('  HIDE (no eligible target focused)');
     }
   }
 
@@ -24683,48 +24727,53 @@ window.HAH.modules.keyboardToolbar = true;
    * but visibility never depends on them having fired.
    * --------------------------------------------------------------------- */
   function wire(){
+    dbg('wire(): controller active. vv='+(!!window.visualViewport)+' readyState='+document.readyState);
+
     document.addEventListener('focusin', function(e){
-      if(!e.target || !e.target.matches || !e.target.matches('input,textarea,select')) return;
+      var t=e.target;
+      if(!t || !t.matches || !t.matches('input,textarea,select')){ return; }
+      dbg('EV focusin: '+descEl(t)+' eligible='+isEligible(t));
       publishInset();
       evaluate();
     }, false);
 
     document.addEventListener('focusout', function(e){
-      if(!e.target || !e.target.matches || !e.target.matches('input,textarea,select')) return;
-      // Defer one tick so document.activeElement settles to the *next*
-      // focused element (or body) before we evaluate. Pure evaluate()
-      // means a fast field→field hop just re-shows; no flicker.
+      var t=e.target;
+      if(!t || !t.matches || !t.matches('input,textarea,select')) return;
+      dbg('EV focusout: '+descEl(t)+' -> defer evaluate');
       setTimeout(function(){ publishInset(); evaluate(); }, 0);
     }, false);
 
     document.addEventListener('selectionchange', function(){
-      if(currentEligibleTarget()) evaluate();
+      var tg=currentEligibleTarget();
+      if(tg){ dbg('EV selectionchange (eligible focused)'); evaluate(); }
     }, false);
 
-    // input/keyup/click on an eligible field: re-affirm (covers the iOS
-    // case where focusin never fired — interaction itself proves focus).
     ['input','keyup','click'].forEach(function(evt){
       document.addEventListener(evt, function(e){
-        if(isEligible(e.target)) evaluate();
+        if(isEligible(e.target)){ dbg('EV '+evt+' on eligible '+descEl(e.target)); evaluate(); }
       }, true);
     });
 
     if(window.visualViewport){
-      var refine = function(){ publishInset(); evaluate(); };
-      // Refinement only. If these never fire (iOS keyboard-appear bug),
-      // focusin already showed the toolbar and published a best-effort
-      // inset; these just sharpen it when/if the viewport settles.
+      var refine = function(ev){ dbg('EV vv.'+ev.type); publishInset(); evaluate(); };
       window.visualViewport.addEventListener('resize', refine);
       window.visualViewport.addEventListener('scroll', refine);
+    }else{
+      dbg('NO window.visualViewport — refine path unavailable');
     }
 
-    // Re-affirm on app resume (PWA returning from background): the
-    // keyboard/viewport state may have changed while hidden.
     document.addEventListener('visibilitychange', function(){
-      if(!document.hidden){ publishInset(); evaluate(); }
+      if(!document.hidden){ dbg('EV visibilitychange -> visible'); publishInset(); evaluate(); }
     });
 
-    // Initial state.
+    // Also probe raw focus/blur (not just delegated focusin) to see if iOS
+    // is firing those but not focusin.
+    document.addEventListener('focus', function(e){
+      if(isEligible(e.target)) dbg('EV focus(capture) on eligible '+descEl(e.target));
+    }, true);
+
+    dbg('wire(): initial publishInset + evaluate');
     publishInset();
     evaluate();
   }
