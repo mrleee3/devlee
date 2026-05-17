@@ -9026,30 +9026,17 @@ function renderPatientList() {
 
   document.querySelectorAll('.patient-btn[data-patient]').forEach(btn => {
     btn.onclick = () => {
-      try{ window.__hahDbg && window.__hahDbg('TAP card data-patient='+btn.dataset.patient); }catch(_){}
       const shell = btn.closest('.swipe-shell');
       const fg = shell?.querySelector('.swipe-foreground');
       if (shell?.classList.contains('revealed')) {
-        try{ window.__hahDbg && window.__hahDbg('-> shell revealed, closing, NOT opening'); }catch(_){}
         closeSwipeShell(shell);
         return;
       }
       if (fg?.dataset.justSwiped === '1') {
-        try{ window.__hahDbg && window.__hahDbg('-> justSwiped guard hit, NOT opening'); }catch(_){}
         fg.dataset.justSwiped = '0';
         return;
       }
-      try{
-        const sup = shouldSuppressPostUnlockInteraction();
-        window.__hahDbg && window.__hahDbg('-> suppressPostUnlock='+sup);
-        if(!sup){
-          window.__hahDbg && window.__hahDbg('-> calling openPatient('+btn.dataset.patient+')');
-          openPatient(Number(btn.dataset.patient));
-          window.__hahDbg && window.__hahDbg('-> openPatient returned OK. ctrl='+(typeof window.HAHPageTransition)+' tp='+(window.HAHPageTransition&&window.HAHPageTransition.getProgress&&window.HAHPageTransition.getProgress())+' detailHidden='+(document.getElementById('patientDetail')&&document.getElementById('patientDetail').classList.contains('hidden')));
-        }
-      }catch(err){
-        try{ window.__hahDbg && window.__hahDbg('!! EXCEPTION in open path: '+(err&&err.message)+' @ '+(err&&err.stack&&String(err.stack).split('\n')[1])); }catch(_){}
-      }
+      if(!shouldSuppressPostUnlockInteraction()) openPatient(Number(btn.dataset.patient));
     };
   });
 
@@ -11073,8 +11060,7 @@ function saveCurrentPatientForm() {
 //   HAH_closePatientSettle(id)     — SETTLE (close): teardown (in 06)
 
 function openPatient(id, opts={}) {
-  try{ window.__hahDbg && window.__hahDbg('openPatient enter id='+id); }catch(_){}
-  if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) { try{ window.__hahDbg && window.__hahDbg('openPatient EARLY RETURN suppressPostUnlock'); }catch(_){} return; }
+  if (shouldSuppressPostUnlockInteraction && shouldSuppressPostUnlockInteraction()) return;
   // v12.36.691: stamp the activity timestamp for auto-reopen logic.
   if(typeof stampLastPatientActivity === 'function') stampLastPatientActivity(id);
   if(typeof rememberSectionScroll==='function') rememberSectionScroll('patients', true);
@@ -11084,7 +11070,6 @@ function openPatient(id, opts={}) {
   detailEdgeSwipeState = null;
   const detailElBeforeOpen = $("patientDetail");
   const wasSamePatientAlreadyOpen = currentPatient === id && detailElBeforeOpen && !detailElBeforeOpen.classList.contains('hidden');
-  try{ window.__hahDbg && window.__hahDbg('openPatient samePatient='+wasSamePatientAlreadyOpen+' ctrl='+(typeof window.HAHPageTransition)); }catch(_){}
 
   const ctx = { id, opts: opts||{}, wasSamePatientAlreadyOpen };
 
@@ -11099,16 +11084,12 @@ function openPatient(id, opts={}) {
   // Fresh open — hand the whole animation to the controller. It calls
   // HAH_openPatientStart synchronously (discrete START), animates progress
   // 0→1, then calls HAH_openPatientSettle on arrival (discrete SETTLE).
-  // Stash ctx so the hooks can read opts/mode resolution.
   window._hahOpenCtx = ctx;
   if(window.HAHPageTransition){
-    try{ window.__hahDbg && window.__hahDbg('-> HAHPageTransition.open()'); }catch(_){}
     window.HAHPageTransition.open(id, opts||{});
-    try{ window.__hahDbg && window.__hahDbg('-> controller.open() returned, tp='+window.HAHPageTransition.getProgress()); }catch(_){}
   }else{
     // Defensive fallback: controller missing (shouldn't happen). Do a
     // synchronous open so the app is never stuck on the list.
-    try{ window.__hahDbg && window.__hahDbg('-> NO CONTROLLER, fallback sync open'); }catch(_){}
     HAH_openPatientStart(id, opts||{});
     HAH_openPatientSettle(id);
   }
@@ -11119,23 +11100,21 @@ function openPatient(id, opts={}) {
 // already showing content (the v697 Option-C requirement). Ghost header
 // gets the LIST content so it can parallax away. Nav stack armed.
 function HAH_openPatientStart(id, opts){
-  var D=function(m){ try{ window.__hahDbg && window.__hahDbg('  START '+m); }catch(_){} };
-  D('enter id='+id);
   const ctx = (window._hahOpenCtx && window._hahOpenCtx.id===id)
     ? window._hahOpenCtx
     : { id, opts: opts||{}, wasSamePatientAlreadyOpen:false };
   currentPatient = id;
   const p = patients[id];
-  if(!p){ D('NO PATIENT for id='+id+' ABORT'); return; }
-  D('hideAll'); hideAll();
-  D('setPatientViewportMode'); setPatientViewportMode(true);
+  if(!p){ return; }
+  hideAll();
+  setPatientViewportMode(true);
   $("patients").classList.remove("hidden");
   const detail = $("patientDetail");
   detail.classList.add('hah-open-loading');
   detail.classList.remove("hidden");
   detail.scrollTop=0;
   try{ window.scrollTo(0,0); }catch(e){}
-  D('setActive'); setActive("navPatients");
+  setActive("navPatients");
   try{
     const appHeader=$("appHeader");
     const ghost=$("appHeaderGhost");
@@ -11144,12 +11123,12 @@ function HAH_openPatientStart(id, opts){
       ghost.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
     }
   }catch(_){}
-  D('setPatientDetailStackActive(true)'); setPatientDetailStackActive(true);
+  setPatientDetailStackActive(true);
   document.body.classList.add('hah-nav-stack');
   document.body.classList.add('hah-ghost-armed');
-  D('updateHeaderForPatient'); if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
-  D('setFieldValuesFast'); setFieldValuesFast(p.form || {});
-  // v12.36.705: heavy populate (med/IV entries, bloods card) now runs HERE
+  if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
+  setFieldValuesFast(p.form || {});
+  // v12.36.705: heavy populate (med/IV entries, bloods card) runs HERE
   // in START, before the slide, not in SETTLE after it. The v697 split
   // deferred it because the old class-flip animation ran on the main
   // thread and heavy DOM work mid-slide caused jank. The new controller
@@ -11157,13 +11136,12 @@ function HAH_openPatientStart(id, opts){
   // runs synchronously before animateTo(), so doing the heavy work here
   // just adds a few ms to time-to-first-frame instead of stuttering the
   // slide. Net result: the patient page slides in FULLY RENDERED — no
-  // post-landing pop-in (the artifact Henry flagged).
-  D('setFieldValuesHeavy'); setFieldValuesHeavy(p.form || {});
+  // post-landing pop-in.
+  setFieldValuesHeavy(p.form || {});
   detailLoadedForCurrentPatient = true;
-  D('resolveOpenMode'); const openMode = resolveOpenMode(ctx);
-  D('applyOpenMode mode='+openMode); applyOpenMode(ctx, openMode);
+  const openMode = resolveOpenMode(ctx);
+  applyOpenMode(ctx, openMode);
   try{ const _d=$("patientDetail"); if(_d) _d.classList.remove('hah-open-loading'); }catch(_){}
-  D('done OK');
 }
 
 // Discrete SETTLE (open). Called by the controller when progress reaches 1.
@@ -24318,31 +24296,13 @@ window.HAH.modules.pageTransition = true;
     state.animStartTs = 0;
     state.animStartProgress = state.progress;
     state.animDurationMs = durationMs;
-    // v705-dbg: per-frame timing capture. Records the interval between
-    // consecutive rAF callbacks during the slide so we can see the REAL
-    // frame rate on-device (vs theorising). Reported on arrival.
-    var _frameTs = [];
-    var _lastTs = 0;
     var step = function(ts){
-      if(_lastTs) _frameTs.push(ts - _lastTs);
-      _lastTs = ts;
       if(!state.animStartTs) state.animStartTs = ts;
       var elapsed = ts - state.animStartTs;
       var lin = state.animDurationMs > 0 ? elapsed / state.animDurationMs : 1;
       if(lin >= 1){
         applyProgress(target);
         state.rafId = 0;
-        try{
-          if(window.__hahDbg && _frameTs.length){
-            var n=_frameTs.length;
-            var sum=0,max=0,over20=0,over32=0;
-            for(var i=0;i<n;i++){ var d=_frameTs[i]; sum+=d; if(d>max)max=d; if(d>20)over20++; if(d>32)over32++; }
-            var avg=sum/n;
-            var fps=1000/avg;
-            window.__hahDbg('FRAMES n='+n+' avg='+avg.toFixed(1)+'ms (~'+fps.toFixed(0)+'fps) max='+max.toFixed(0)+'ms >20ms='+over20+' >32ms='+over32);
-            window.__hahDbg('  intervals: '+_frameTs.map(function(x){return x.toFixed(0);}).join(','));
-          }
-        }catch(_){}
         if(typeof onArrive === 'function') onArrive();
         return;
       }
@@ -24355,7 +24315,6 @@ window.HAH.modules.pageTransition = true;
   }
 
   /* --- Driver 2: gesture tracking --------------------------------------- */
-  var _gTs = [], _gLast = 0;
   function setProgressFromGesture(dx){
     // dx = horizontal finger travel from edge, >=0, in px. Closing gesture:
     // dragging right shrinks progress from 1 toward 0.
@@ -24364,11 +24323,6 @@ window.HAH.modules.pageTransition = true;
     frac = frac < 0 ? 0 : (frac > 1 ? 1 : frac);
     cancelRaf();
     state.interactive = true;
-    // v705-dbg: capture gesture-driven frame intervals for comparison
-    // against the rAF animation path (Henry reports swipe feels smoother).
-    var now = (window.performance && performance.now) ? performance.now() : Date.now();
-    if(_gLast) _gTs.push(now - _gLast);
-    _gLast = now;
     applyProgress(1 - frac);
   }
 
@@ -24376,15 +24330,6 @@ window.HAH.modules.pageTransition = true;
   function releaseGesture(opts){
     opts = opts || {};
     state.interactive = false;
-    try{
-      if(window.__hahDbg && _gTs.length){
-        var n=_gTs.length,sum=0,max=0,o20=0;
-        for(var i=0;i<n;i++){var d=_gTs[i];sum+=d;if(d>max)max=d;if(d>20)o20++;}
-        var avg=sum/n;
-        window.__hahDbg('GESTURE FRAMES n='+n+' avg='+avg.toFixed(1)+'ms (~'+(1000/avg).toFixed(0)+'fps) max='+max.toFixed(0)+'ms >20ms='+o20);
-      }
-      _gTs=[]; _gLast=0;
-    }catch(_){}
     var w = Math.max(window.innerWidth || 390, 320);
     var threshold = Math.min(110, w * 0.22) / w;   // matches old 0.22 px ratio
     var travelled = 1 - state.progress;            // how far toward close
@@ -24484,16 +24429,14 @@ window.HAH.modules.pageTransition = true;
   var api = {
     /* Tap a patient. id = patient key. opts forwarded to start hook. */
     open: function(id, opts){
-      try{ window.__hahDbg && window.__hahDbg('  CTRL open() id='+id+' rm='+prefersReducedMotion()); }catch(_){}
       state.reducedMotion = prefersReducedMotion();
       cancelRaf();
       state.inFlight = true;
       state.startHookDone = false;
-      try{ runStartHook(id, opts); }catch(e){ try{ window.__hahDbg && window.__hahDbg('  CTRL runStartHook THREW '+(e&&e.message)); }catch(_){} }
+      try{ runStartHook(id, opts); }catch(e){ try{ console.error('[HAHPageTransition] start hook error', e); }catch(_){} }
       if(state.progress > 0.999) state.progress = 0;
       var from = state.progress;
       prewarm(from);
-      try{ window.__hahDbg && window.__hahDbg('  CTRL animateTo(1) from tp='+from); }catch(_){}
       // Start the real slide on the NEXT frame so layer creation (just
       // forced by prewarm) is fully settled — frame 1 is then ~16ms.
       if(state.reducedMotion){
@@ -24588,146 +24531,6 @@ window.HAH.modules.pageTransition = true;
   }catch(_){}
 
   window.HAHPageTransition = api;
-})();
-
-</script><script>
-window.HAH = window.HAH || { modules: {} };
-window.HAH.modules.debugOverlay = true;
-
-/* =============================================================================
- * v12.36.705-dbg — On-device debug overlay.
- *
- * Temporary diagnostic. Renders a fixed, scrollable log panel at the bottom
- * of the screen and captures: window.onerror, unhandledrejection, and
- * explicit window.__hahDbg('msg') calls sprinkled in the open path.
- *
- * Tap the "H@H DEBUG" bar to collapse/expand. Tap "CLR" to clear.
- * Remove this module (and the __hahDbg calls) once the bug is found.
- * ===========================================================================*/
-(function(){
-  'use strict';
-
-  var MAX_LINES = 80;
-  var lines = [];
-  var panel, body, collapsed = false;
-
-  function ts(){
-    var d = new Date();
-    return ('0'+d.getMinutes()).slice(-2)+':'+('0'+d.getSeconds()).slice(-2)+'.'+('00'+d.getMilliseconds()).slice(-3);
-  }
-
-  function ensurePanel(){
-    if(panel) return;
-    panel = document.createElement('div');
-    panel.id = '__hahDebugPanel';
-    panel.style.cssText = [
-      'position:fixed','left:0','right:0','bottom:0','z-index:2147483647',
-      'font:11px/1.35 ui-monospace,Menlo,monospace','color:#0f0',
-      'background:rgba(0,0,0,.88)','border-top:2px solid #0f0',
-      'max-height:42vh','display:flex','flex-direction:column',
-      'pointer-events:auto','-webkit-user-select:text','user-select:text'
-    ].join(';');
-
-    var bar = document.createElement('div');
-    bar.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#003b00;color:#7CFC00;font-weight:700;flex:0 0 auto';
-    var title = document.createElement('span');
-    title.textContent = 'H@H DEBUG (tap to collapse)';
-    var btns = document.createElement('span');
-    var clr = document.createElement('button');
-    clr.textContent = 'CLR';
-    clr.style.cssText = 'margin-left:8px;background:#0f0;color:#000;border:0;border-radius:4px;padding:3px 8px;font-weight:800;font:11px ui-monospace,monospace';
-    clr.addEventListener('click', function(e){ e.stopPropagation(); lines.length=0; render(); });
-    var cp = document.createElement('button');
-    cp.textContent = 'COPY';
-    cp.style.cssText = 'margin-left:6px;background:#0f0;color:#000;border:0;border-radius:4px;padding:3px 8px;font-weight:800;font:11px ui-monospace,monospace';
-    cp.addEventListener('click', function(e){
-      e.stopPropagation();
-      try{
-        var txt = lines.join('\n');
-        if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt); cp.textContent='COPIED'; setTimeout(function(){cp.textContent='COPY';},1200); }
-      }catch(_){}
-    });
-    btns.appendChild(clr); btns.appendChild(cp);
-    bar.appendChild(title); bar.appendChild(btns);
-    bar.addEventListener('click', function(){ collapsed=!collapsed; body.style.display = collapsed?'none':'block'; });
-
-    body = document.createElement('div');
-    body.style.cssText = 'overflow:auto;padding:8px 10px;flex:1;white-space:pre-wrap;word-break:break-word;-webkit-overflow-scrolling:touch';
-
-    panel.appendChild(bar);
-    panel.appendChild(body);
-    (document.body||document.documentElement).appendChild(panel);
-  }
-
-  function render(){
-    if(!body) return;
-    body.textContent = lines.join('\n');
-    body.scrollTop = body.scrollHeight;
-  }
-
-  function log(msg){
-    var line = ts()+'  '+msg;
-    lines.push(line);
-    if(lines.length>MAX_LINES) lines.shift();
-    if(!panel){
-      // Defer until DOM ready if called very early.
-      if(document.body) ensurePanel();
-      else { document.addEventListener('DOMContentLoaded', function(){ ensurePanel(); render(); }); return; }
-    }
-    render();
-  }
-
-  window.__hahDbg = log;
-
-  window.addEventListener('error', function(e){
-    log('!! window.onerror: '+(e && e.message)+' @ '+(e && e.filename ? String(e.filename).split('/').pop():'')+':'+(e&&e.lineno)+':'+(e&&e.colno));
-  });
-  window.addEventListener('unhandledrejection', function(e){
-    var r = e && e.reason;
-    log('!! unhandledrejection: '+(r && (r.message||r))+' '+(r && r.stack ? String(r.stack).split('\n')[1]||'' : ''));
-  });
-
-  // Mount as soon as possible.
-  if(document.body) { ensurePanel(); render(); }
-  else document.addEventListener('DOMContentLoaded', function(){ ensurePanel(); render(); });
-
-  log('debug overlay armed. build v12.36.705-dbg');
-  log('controller at boot: '+(typeof window.HAHPageTransition));
-
-  // Capture-phase global tap probe: logs the topmost element actually hit
-  // by every touch/click, plus whether a .patient-btn is in the path.
-  // This tells us if taps are reaching the cards at all, or being eaten
-  // by an overlay (and which element that overlay is).
-  function describe(el){
-    if(!el) return 'null';
-    var id = el.id ? '#'+el.id : '';
-    var cls = (el.className && typeof el.className==='string') ? '.'+el.className.trim().split(/\s+/).slice(0,3).join('.') : '';
-    return (el.tagName||'?').toLowerCase()+id+cls;
-  }
-  document.addEventListener('touchstart', function(ev){
-    try{
-      var t = ev.touches && ev.touches[0];
-      if(!t) return;
-      var top = document.elementFromPoint(t.clientX, t.clientY);
-      var path = [];
-      var n = top, depth=0;
-      var hasPatientBtn = false;
-      while(n && depth<8){
-        path.push(describe(n));
-        if(n.classList && (n.classList.contains('patient-btn') || (n.dataset && n.dataset.patient))) hasPatientBtn=true;
-        n = n.parentElement; depth++;
-      }
-      log('TOUCH @'+Math.round(t.clientX)+','+Math.round(t.clientY)+' top='+describe(top)+' patientBtnInPath='+hasPatientBtn);
-      log('  path: '+path.join(' < '));
-      // Report blocking state of the list + body classes
-      var ps = document.getElementById('patients');
-      if(ps){
-        var cs = getComputedStyle(ps);
-        log('  #patients pe='+cs.pointerEvents+' cls='+(ps.className||'(none)'));
-      }
-      log('  body cls='+(document.body.className||'(none)'));
-    }catch(e){ log('probe err '+(e&&e.message)); }
-  }, true);  // capture phase — sees the event before anything can stopPropagation
 })();
 
 </script></body>
