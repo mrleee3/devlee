@@ -3016,6 +3016,36 @@ body.hah-nav-stack .nav.nav-patient{
   background:#fef3f2;color:#b42318;border-color:rgba(220,38,38,.14);
 }
 
+/* v12.36.707 Phase 1 — Header avatar (signed-in user visibility).
+   Lives at the right of .header-row, kept hidden until the identity
+   module reports a signed-in account. Initials are the default render;
+   a Graph profile photo (if available) replaces them via the .has-photo
+   class. Tap opens .header-avatar-flyout, a floating panel below the
+   header. Styled to feel iOS-native rather than bolted on. */
+.header-avatar{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.18);color:#fff;font-size:13px;font-weight:700;letter-spacing:.01em;line-height:1;flex-shrink:0;align-self:center;padding:0;-webkit-tap-highlight-color:transparent;cursor:pointer;overflow:hidden;position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.header-avatar.hidden{display:none!important}
+.header-avatar:active{transform:scale(.96);background:rgba(255,255,255,.28)}
+.header-avatar-initials{display:inline-flex;align-items:center;justify-content:center;width:100%;height:100%;line-height:1;letter-spacing:.02em}
+.header-avatar.has-photo .header-avatar-initials{display:none}
+.header-avatar-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.header-avatar-photo:not(.hidden){display:block}
+.header-avatar-flyout{position:fixed;top:calc(var(--app-header-height,88px) + 6px);right:14px;z-index:130;width:min(280px,calc(100vw - 28px));pointer-events:auto;opacity:1;transition:opacity .18s ease, transform .18s ease;transform-origin:top right}
+.header-avatar-flyout.hidden{display:none!important}
+.header-avatar-flyout-card{background:rgba(255,255,255,.96);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(15,23,42,.08);border-radius:14px;box-shadow:0 16px 40px rgba(15,23,42,.18);padding:14px;color:#111}
+.header-avatar-flyout-row{display:flex;align-items:center;gap:12px}
+.header-avatar-flyout-pic{flex-shrink:0;width:44px;height:44px;border-radius:50%;background:#0a84ff;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;letter-spacing:.02em;overflow:hidden;position:relative}
+.header-avatar-flyout-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.header-avatar-flyout-text{flex:1;min-width:0}
+.header-avatar-flyout-name{font-size:15px;font-weight:700;color:#111;line-height:1.2;word-break:break-word}
+.header-avatar-flyout-role{margin-top:2px;font-size:12px;color:#6b7280;line-height:1.2;word-break:break-word}
+.header-avatar-flyout-role:empty{display:none}
+.header-avatar-flyout-email{margin-top:4px;font-size:12px;color:#6b7280;line-height:1.2;word-break:break-all}
+.header-avatar-flyout-email:empty{display:none}
+.header-avatar-flyout-status{margin-top:10px;padding-top:10px;border-top:0.5px solid rgba(15,23,42,.10);font-size:11px;color:#6b7280;line-height:1.3}
+.header-avatar-flyout-status:empty{display:none}
+.header-avatar-flyout-signout{display:block;width:100%;margin-top:12px;padding:10px;border-radius:10px;border:0;background:transparent;color:#dc2626;font-size:14px;font-weight:600;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.header-avatar-flyout-signout:active{background:rgba(220,38,38,.08)}
+
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -3086,7 +3116,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_706_keyboard_toolbar_release.html; source=hospital_at_home_v12_36_706_keyboard_toolbar_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_707_identity_phase1_release.html; source=hospital_at_home_v12_36_707_identity_phase1_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3225,13 +3255,14 @@ body.hah-nav-stack .nav.nav-patient{
 </div>
 </div>
 </div>
-<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2" aria-hidden="true"></div></div><div class="header-patient-flags hidden" id="headerPatientFlags" aria-hidden="true"></div></div></header>
+<header id="appHeader"><button aria-label="Back" class="header-back hidden" id="backBtn">←</button><div class="header-row"><div class="header-left"><div><span id="headerTitle">Hospital at Home Companion (DEMO)</span><span class="header-age hidden" id="headerAge"></span></div><div class="subhead" id="headerSub">LK Medica Software Solutions Inc.</div><div class="header-meta2 hidden" id="headerPatientMeta2" aria-hidden="true"></div></div><div class="header-patient-flags hidden" id="headerPatientFlags" aria-hidden="true"></div><button class="header-avatar hidden" id="headerAvatar" aria-label="Signed-in account" type="button"><span class="header-avatar-initials" id="headerAvatarInitials">?</span><img class="header-avatar-photo hidden" id="headerAvatarPhoto" alt=""/></button></div></header>
 <!-- v12.36.699: ghost header layer for the open animation. JS snapshots
      the visible header content into this element at the start of the open
      transition. The ghost parallaxes left (-28%) while the real header
      slides in from right with new patient content. Pattern matches iOS
      UIKit nav bar push: old title and new title cross during the slide. -->
 <header id="appHeaderGhost" aria-hidden="true"></header>
+<div class="header-avatar-flyout hidden" id="headerAvatarFlyout" role="dialog" aria-label="Signed-in account"><div class="header-avatar-flyout-card"><div class="header-avatar-flyout-row"><div class="header-avatar-flyout-pic" id="headerAvatarFlyoutPic"><span id="headerAvatarFlyoutInitials">?</span></div><div class="header-avatar-flyout-text"><div class="header-avatar-flyout-name" id="headerAvatarFlyoutName">Not signed in</div><div class="header-avatar-flyout-role" id="headerAvatarFlyoutRole"></div><div class="header-avatar-flyout-email" id="headerAvatarFlyoutEmail"></div></div></div><div class="header-avatar-flyout-status" id="headerAvatarFlyoutStatus"></div><button class="header-avatar-flyout-signout" id="headerAvatarFlyoutSignout" type="button">Sign out</button></div></div>
 <section class="container" id="patients">
 <div aria-hidden="true" id="pullRefreshIndicator"><div class="pull-refresh-glyph"><div class="pull-refresh-ring"></div><div class="pull-refresh-core"></div><svg aria-hidden="true" class="pull-refresh-icon" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path><path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path></svg></div></div>
 <div id="patientsPullContent">
@@ -3446,7 +3477,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_706_keyboard_toolbar_release.html</div><div>Source: hospital_at_home_v12_36_706_keyboard_toolbar_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_707_identity_phase1_release.html</div><div>Source: hospital_at_home_v12_36_707_identity_phase1_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -5400,10 +5431,39 @@ async function ensureMsalApp(){
     if(res && res.account){
       graphAccount=res.account;
       localStorage.setItem(GRAPH_ACCOUNT_KEY, JSON.stringify({username:res.account.username||'', homeAccountId:res.account.homeAccountId||''}));
-      // If we were mid-import when redirect was triggered, resume it
+      // v12.36.707 Phase 1: notify the mobile identity module that a Microsoft
+      // account has been resolved live. Best-effort — failures are silent
+      // (the identity module's `applyAccount` swallows Graph errors and
+      // falls back to the MSAL-derived display name). `accessToken` is
+      // supplied directly by handleRedirectPromise so we can enrich with
+      // Graph /me (displayName + jobTitle) without a second token call.
+      try{
+        if(window.HAHMobile && window.HAHMobile.identity){
+          window.HAHMobile.identity.applyAccount(res.account, res.accessToken || null).catch(()=>{});
+        }
+      }catch(_idErr){}
+      // If we were mid-import when redirect was triggered, resume it.
+      // v706.x: previously this fired importHandoverRows() on a blind
+      // 300ms timer and never navigated, so after the ~daily token-expiry
+      // redirect the user was dumped on the sync/options screen instead of
+      // the patient list. Now we await the resumed import and then restore
+      // the patient list. Navigation happens even if the import rejects —
+      // being stranded on the options screen is worse than a list with a
+      // sync error already surfaced by importHandoverRows' own UI; this is
+      // pure navigation and does not touch token or sync logic.
       if(localStorage.getItem('hah_pending_import')==='1'){
         localStorage.removeItem('hah_pending_import');
-        setTimeout(()=>importHandoverRows(), 300);
+        setTimeout(async ()=>{
+          try{
+            await importHandoverRows();
+          }catch(_e){
+            // importHandoverRows surfaces its own error state; swallow
+            // here so a sync failure can't block the navigation below.
+          }
+          try{
+            if(typeof showSection==='function') showSection('patients');
+          }catch(_e2){}
+        }, 300);
       }
     }
   }
@@ -5411,6 +5471,16 @@ async function ensureMsalApp(){
   if(accounts && accounts.length){
     const matched = graphAccount && graphAccount.homeAccountId ? accounts.find(a=>a.homeAccountId===graphAccount.homeAccountId) : null;
     graphAccount = matched || graphAccount || accounts[0];
+    // v12.36.707 Phase 1: silent-resume path. Account was already in
+    // MSAL's cache from a prior session — populate the identity module
+    // with what we have (no access token here, so display name comes
+    // from the MSAL account object's `.name`/`.username`). The first
+    // subsequent getGraphAccessToken() call enriches via Graph /me.
+    try{
+      if(window.HAHMobile && window.HAHMobile.identity && graphAccount && !window.HAHMobile.identity.isSignedIn()){
+        window.HAHMobile.identity.applyAccount(graphAccount, null).catch(()=>{});
+      }
+    }catch(_idErr){}
   }
   updateGraphUI();
   return msalApp;
@@ -5446,6 +5516,12 @@ async function signOutMicrosoft(){
     const acc=graphAccount;
     graphAccount=null;
     localStorage.removeItem(GRAPH_ACCOUNT_KEY);
+    // v12.36.707 Phase 1: clear the identity module's live state and
+    // the cached-identity localStorage entry. Audit attribution (when
+    // Phase 2 ships) becomes unavailable until next sign-in.
+    try{
+      if(window.HAHMobile && window.HAHMobile.identity) window.HAHMobile.identity.clear();
+    }catch(_idErr){}
     if(acc){
       await app.logoutRedirect({account:acc, postLogoutRedirectUri:getCurrentPageUrl()});
     } else {
@@ -5474,6 +5550,15 @@ async function getGraphAccessToken(){
   try{
     const accountObj = app.getAllAccounts().find(a=>a.homeAccountId===graphAccount.homeAccountId) || app.getAllAccounts()[0] || graphAccount;
     const token=await app.acquireTokenSilent({scopes:GRAPH_SCOPES, account:accountObj});
+    // v12.36.707 Phase 1: refresh identity with the fresh access token.
+    // First call from a silent-resume cold start typically lands here —
+    // this is the moment Graph /me can be reached for displayName +
+    // jobTitle. Fire-and-forget; sync proceeds whether or not it succeeds.
+    try{
+      if(window.HAHMobile && window.HAHMobile.identity && token && token.accessToken){
+        window.HAHMobile.identity.applyAccount(accountObj, token.accessToken).catch(()=>{});
+      }
+    }catch(_idErr){}
     return token.accessToken;
   }catch(e){
     // Silent failed — redirect for interactive token
@@ -12943,8 +13028,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_706_keyboard_toolbar_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_706_keyboard_toolbar_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_707_identity_phase1_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_707_identity_phase1_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -19629,6 +19714,21 @@ window.HAH.modules.deepgramDictation = true;
     return true;
   }
 
+  // v706.x: returns true if the text currently being punctuated sits on a
+  // bullet / numbered-list line. Clinical note convention is no terminal
+  // full stop on bullets, so applySpeechFinalPunctuation must skip the
+  // forced "." for these. We reconstruct "the current line so far" from
+  // contextText (everything already committed) + the new chunk, take the
+  // text after the last newline, and test for a list prefix:
+  //   "1. ", "12) ", "- ", "* ", "• "  (with optional leading space).
+  function isOnBulletLine(contextText, chunkText){
+    const combined = String(contextText || '') + String(chunkText || '');
+    // The current logical line is everything after the last hard newline.
+    const lastNl = combined.lastIndexOf('\n');
+    const line = (lastNl >= 0 ? combined.slice(lastNl + 1) : combined).replace(/^[ \t]+/, '');
+    return /^(?:\d{1,3}[.)]\s|[-*•–—]\s)/.test(line);
+  }
+
   function applySpeechFinalPunctuation(text, options = {}){
     const next = String(text || '');
     if(!next) return '';
@@ -19639,18 +19739,68 @@ window.HAH.modules.deepgramDictation = true;
     if(/[,:;\-–—\/]$/.test(trimmed)) return trimmed;
     if(/\b(?:and|or|with|of|to|for|in|on|at|from|via|plus|then|because|but|so)\s*$/i.test(trimmed)) return trimmed;
     if(!/[A-Za-z]{2,}/.test(trimmed)) return trimmed;
+    // v706.x: bullet/list lines don't take a terminal full stop in
+    // clinical note style — skip the forced ".". (Prose lines still get
+    // it; Deepgram's inline prosody punctuation within the bullet, e.g.
+    // a mid-bullet comma, is untouched — only the forced END-of-line
+    // full stop is suppressed.)
+    if(isOnBulletLine(options.contextText, trimmed)) return trimmed;
     return trimmed + '.';
+  }
+
+  // v706.x: strip a single terminal full stop from bullet / numbered-list
+  // lines in the MERGED text (clinical note convention). Runs in the final
+  // pass where whole-line structure is visible, so it also catches a "."
+  // that Deepgram's own prosody punctuation put at the end of a bullet
+  // utterance (not just the app's forced one). Guards:
+  //  - only lines whose content starts with a list prefix (1. / - / • …)
+  //  - never strip "?" or "!" (a bulleted question/emphasis is intentional)
+  //  - never strip after a known abbreviation (etc. e.g. i.e. i.v. o.d.
+  //    b.d. t.d.s. q.d.s. Dr. Mr. approx. etc.) or a decimal/initial,
+  //    i.e. only strip when the char before the final "." is a normal
+  //    word character AND the token isn't a 1–2 letter abbreviation.
+  function stripBulletTerminalFullStops(text){
+    // Protect a terminal token that is itself an abbreviation/decimal so we
+    // never strip the "." that is PART of it (clinically critical: t.d.s.,
+    // q.d.s., o.d., i.v., e.g., 2.5, U&E. is fine to strip but t.d.s. is
+    // not). Matches, at end of body:
+    //   - a dotted abbreviation chain: one-or-more (letter(s) ".") groups
+    //     e.g. "t.d.s.", "q.d.s.", "i.e.", "e.g.", "i.v.", "o.d."
+    //   - a known word abbreviation with trailing dot: etc. approx. Dr. …
+    //   - a number ending in a dot (decimal/enumeration artefact)
+    const KEEP_TERMINAL = new RegExp(
+      '(' +
+        '(?:[A-Za-z]\\.){2,}' +                       // t.d.s.  i.e.  e.g.
+        '|\\b(?:etc|approx|prn|stat|nocte|mane|od|bd|tds|qds|qid|tid|bid|po|iv|im|sc|sl|ng|dr|mr|mrs|ms|prof|fig|no|vs|incl|max|min|wk|hr|hrs|mg|ml|mcg|kg|cm|mmol|mol)\\.' + // word abbr.
+        '|\\d\\.' +                                   // decimal / number.
+      ')$', 'i');
+    return String(text || '').split('\n').map(line => {
+      const m = line.match(/^(\s*(?:\d{1,3}[.)]|[-*•–—])\s+)(.*)$/);
+      if(!m) return line;                       // not a bullet line
+      const prefix = m[1];
+      let body = m[2].replace(/[ \t]+$/,'');
+      if(!body) return line;
+      if(/[?!](["'”’\])}]*)$/.test(body)) return prefix + body;   // keep ? !
+      if(!/\.(["'”’\])}]*)$/.test(body)) return prefix + body;     // no trailing .
+      // Strip wrapping quotes/brackets view of the tail to test the token.
+      const bare = body.replace(/(["'”’\])}]*)$/,'');
+      if(KEEP_TERMINAL.test(bare)) return prefix + body;           // abbr/decimal — keep
+      body = body.replace(/\.(["'”’\])}]*)$/, '$1');               // strip one terminal .
+      return prefix + body;
+    }).join('\n');
   }
 
   function applyClinicalTextPostProcessing(text){
     return capitaliseGenericMedicationSentenceStarts(
       capitaliseNumberedBulletStarts(
         ensureBulletDashSpacing(
-          normaliseMedicationAndWeightUnits(applyClinicalAbbreviationReplacements(String(text || '')))
-            .replace(/[ \t\f\v]{2,}/g, ' ')
-            .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
-            .replace(/\n{3,}/g, '\n\n')
-            .replace(/[ \t\f\v]+$/g, '')
+          stripBulletTerminalFullStops(
+            normaliseMedicationAndWeightUnits(applyClinicalAbbreviationReplacements(String(text || '')))
+              .replace(/[ \t\f\v]{2,}/g, ' ')
+              .replace(/[ \t\f\v]*\n[ \t\f\v]*/g, '\n')
+              .replace(/\n{3,}/g, '\n\n')
+              .replace(/[ \t\f\v]+$/g, '')
+          )
         )
       )
     );
@@ -24812,6 +24962,471 @@ window.HAH.modules.keyboardToolbar = true;
     document.addEventListener('DOMContentLoaded', wire);
   }else{
     wire();
+  }
+})();
+
+</script><script>
+/* ─── H@H Companion — Mobile identity (v12.36.707 / Phase 1 of forced-sign-in)
+   Mobile companion to desktop's 22c-desktop-identity.js. Provides the
+   canonical Microsoft identity used for write attribution and the
+   in-app account avatar / flyout.
+
+   Public API (window.HAHMobile.identity):
+     applyAccount(account, accessToken)  Called after MSAL resolves an account.
+                                         Fetches Graph /me (displayName +
+                                         jobTitle when available) and Graph
+                                         /me/photo/$value when available.
+                                         Caches the result on the device.
+     getActor()                          → { oid, displayName }
+                                         (matches desktop's getActor()).
+     getCurrentUserIdentity()            → { oid, displayName, role,
+                                             verified: 'live' | 'cached',
+                                             ageMs }
+                                         Single accessor used by every audited
+                                         write (Phase 2+). 'cached' means the
+                                         live MSAL session is not currently
+                                         resolved — the cached last-verified
+                                         identity from this device is being
+                                         used instead (option-b offline path
+                                         per spec v4).
+     isSignedIn()                        → bool. True only when a live MSAL
+                                         account is currently resolved.
+     clear()                             Sign-out. Clears cached identity and
+                                         pushes empty state to subscribers.
+     computeInitials(name)               → 'LK', '?' fallback. Matches
+                                         desktop's algorithm.
+     subscribe(fn)                       Subscribe to identity-change events.
+                                         Returns an unsubscribe function.
+
+   Identity sources, in order of precedence (matches desktop):
+     1. MSAL account (homeAccountId / oid, username, name)
+     2. Microsoft Graph /me profile (displayName, mail, jobTitle)
+     3. Microsoft Graph /me/photo/$value (blob URL)
+     4. Cached last-verified identity (localStorage, key hah_cached_identity)
+
+   What this module does NOT do:
+     - Trigger MSAL sign-in itself. That stays in 00-core.js (ensureMsalApp,
+       loginRedirect, acquireTokenSilent/Redirect). This module is told
+       applyAccount(...) after MSAL succeeds.
+     - Write to the shared JSON store. The cached identity lives in
+       localStorage on this device only; sync state is unrelated.
+     - Wrap any audited surfaces. That is Phase 2 work, gated on the
+       coordinated cross-app release.
+
+   v12.36.707 Phase 1: this module exists and the header avatar consumes it.
+   getCurrentUserIdentity() is exported and ready for Phase 2 audit-write
+   sites to call but is not yet called by any audited write.
+────────────────────────────────────────────────────────────────────────── */
+
+window.HAHMobile = window.HAHMobile || {};
+
+(function () {
+  'use strict';
+
+  const GRAPH_ROOT = 'https://graph.microsoft.com/v1.0';
+  const CACHE_KEY = 'hah_cached_identity';
+  const FALLBACK_NAME = 'Mobile user';
+
+  // In-memory state — the live MSAL-backed identity. When `oid` is null
+  // there is no live session; getCurrentUserIdentity() will fall back to
+  // the localStorage cache.
+  let live = {
+    oid: null,
+    displayName: null,   // Stamped in writes. Sourced from Graph /me
+                         // (displayName) with MSAL .name as fallback,
+                         // 'Mobile user' as last-resort.
+    email: null,
+    role: null,          // Graph /me jobTitle when present. Otherwise null
+                         // (NOT defaulted — absence is honest in the audit).
+    photoBlobUrl: null,
+    verifiedAt: null     // ms timestamp of the most recent live resolve.
+  };
+
+  const subscribers = new Set();
+
+  // ── localStorage cache (option-b offline path) ─────────────────────
+
+  function readCache() {
+    try {
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || !parsed.oid) return null;
+      return parsed;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function writeCache() {
+    if (!live.oid) return;
+    try {
+      const cached = {
+        oid: live.oid,
+        displayName: live.displayName || null,
+        email: live.email || null,
+        role: live.role || null,
+        verifiedAt: live.verifiedAt || new Date().toISOString(),
+        buildVersion: (typeof APP_BUILD_FILENAME === 'string' ? APP_BUILD_FILENAME : null)
+      };
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+    } catch (_) {}
+  }
+
+  function clearCache() {
+    try { localStorage.removeItem(CACHE_KEY); } catch (_) {}
+  }
+
+  // ── Graph profile fetch ────────────────────────────────────────────
+
+  // Pulls displayName, mail, and jobTitle from Graph /me. jobTitle is
+  // optional; on personal/consumer accounts it is typically null and
+  // we leave `role` null (NOT a placeholder — absence is honest).
+  async function fetchProfileFromGraph(accessToken) {
+    if (!accessToken) return null;
+    try {
+      const res = await fetch(`${GRAPH_ROOT}/me?$select=displayName,mail,userPrincipalName,jobTitle,id`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      if (!res.ok) return null;
+      const json = await res.json();
+      return {
+        displayName: json.displayName || null,
+        email: json.mail || json.userPrincipalName || null,
+        role: (typeof json.jobTitle === 'string' && json.jobTitle.trim()) ? json.jobTitle.trim() : null
+      };
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // Profile photo is best-effort. /me/photo/$value returns JPEG bytes;
+  // 404 is the common case (no photo set). Any failure is silent.
+  async function fetchPhotoFromGraph(accessToken) {
+    if (!accessToken) return null;
+    try {
+      const res = await fetch(`${GRAPH_ROOT}/me/photo/$value`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      if (!res.ok) return null;
+      const blob = await res.blob();
+      return URL.createObjectURL(blob);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // ── Subscriber notification ────────────────────────────────────────
+
+  function notify() {
+    const snapshot = getCurrentUserIdentity();
+    subscribers.forEach((fn) => {
+      try { fn(snapshot); } catch (_) {}
+    });
+  }
+
+  // ── Public API ─────────────────────────────────────────────────────
+
+  /**
+   * Called by 00-core.js after MSAL resolves an account (handleRedirectPromise
+   * return OR acquireTokenSilent success). `account` is the MSAL account
+   * object; `accessToken` is a Graph token (typically the one MSAL just
+   * acquired for sync — re-used to enrich the identity).
+   */
+  async function applyAccount(account, accessToken) {
+    if (!account) {
+      clear();
+      return;
+    }
+
+    // OID is the canonical Microsoft identifier. MSAL exposes it via
+    // account.idTokenClaims.oid; fall back to homeAccountId prefix as a
+    // last resort if claims aren't present (shouldn't normally happen).
+    let oid = null;
+    if (account.idTokenClaims && account.idTokenClaims.oid) {
+      oid = account.idTokenClaims.oid;
+    } else if (account.localAccountId) {
+      oid = account.localAccountId;
+    } else if (account.homeAccountId) {
+      // homeAccountId looks like "<oid>.<tenantId>"; strip the tenant half.
+      oid = String(account.homeAccountId).split('.')[0] || null;
+    }
+
+    if (!oid) {
+      // Without an OID we cannot attribute writes reliably. Treat this
+      // like a failed sign-in rather than partial state.
+      clear();
+      return;
+    }
+
+    live.oid = oid;
+    live.displayName = (account.name && account.name.trim()) || account.username || null;
+    live.email = account.username || null;
+    live.role = null;
+    live.verifiedAt = new Date().toISOString();
+
+    // Best-effort Graph enrichment. Failures (no token, offline, 401) are
+    // silent — the MSAL-derived name above is sufficient as a fallback.
+    if (accessToken) {
+      const profile = await fetchProfileFromGraph(accessToken);
+      if (profile) {
+        if (profile.displayName) live.displayName = profile.displayName;
+        if (profile.email) live.email = profile.email;
+        if (profile.role) live.role = profile.role;
+      }
+      const photoUrl = await fetchPhotoFromGraph(accessToken);
+      if (photoUrl) {
+        if (live.photoBlobUrl) {
+          try { URL.revokeObjectURL(live.photoBlobUrl); } catch (_) {}
+        }
+        live.photoBlobUrl = photoUrl;
+      }
+    }
+
+    if (!live.displayName) live.displayName = FALLBACK_NAME;
+
+    writeCache();
+    notify();
+  }
+
+  /**
+   * Matches the desktop module's getActor() signature exactly:
+   * { oid, displayName }. Used by the cross-app contract for write
+   * attribution. Always returns an object; oid is null if not signed in.
+   */
+  function getActor() {
+    return {
+      oid: live.oid || null,
+      displayName: live.displayName || FALLBACK_NAME
+    };
+  }
+
+  /**
+   * Single accessor for every audited write (Phase 2+). Returns the live
+   * identity when MSAL is currently resolved; otherwise falls back to the
+   * cached last-verified identity from this device (option-b offline
+   * path).
+   *
+   * Returns null only if the device has never signed in — which is not
+   * a reachable state once forced sign-in (Phase 1) is in place.
+   *
+   *   { oid, displayName, role, verified: 'live' | 'cached', ageMs }
+   *
+   * `verified: 'cached'` is the field a governance reviewer reads to know
+   * whether attribution was hard-verified at write time or proxy-attributed
+   * via the device's last-known identity. The 30-min idle timeout (Phase 4)
+   * bounds how stale a 'cached' entry can be.
+   */
+  function getCurrentUserIdentity() {
+    if (live.oid) {
+      const verifiedAtMs = live.verifiedAt ? Date.parse(live.verifiedAt) : Date.now();
+      return {
+        oid: live.oid,
+        displayName: live.displayName || FALLBACK_NAME,
+        role: live.role || null,
+        verified: 'live',
+        ageMs: Math.max(0, Date.now() - verifiedAtMs)
+      };
+    }
+    const cached = readCache();
+    if (!cached || !cached.oid) return null;
+    const verifiedAtMs = cached.verifiedAt ? Date.parse(cached.verifiedAt) : Date.now();
+    return {
+      oid: cached.oid,
+      displayName: cached.displayName || FALLBACK_NAME,
+      role: cached.role || null,
+      verified: 'cached',
+      ageMs: Math.max(0, Date.now() - verifiedAtMs)
+    };
+  }
+
+  function isSignedIn() {
+    return !!live.oid;
+  }
+
+  function clear() {
+    if (live.photoBlobUrl) {
+      try { URL.revokeObjectURL(live.photoBlobUrl); } catch (_) {}
+    }
+    live = {
+      oid: null, displayName: null, email: null, role: null,
+      photoBlobUrl: null, verifiedAt: null
+    };
+    clearCache();
+    notify();
+  }
+
+  // "Lee Klungarvuth" → "LK". "Dr Lee Klungarvuth" → first + last initial.
+  // Single word → first two characters. No name → "?". Matches the desktop
+  // implementation byte-for-byte.
+  function computeInitials(name) {
+    const s = String(name || '').trim();
+    if (!s) return '?';
+    const parts = s.split(/\s+/);
+    if (parts.length === 1) return s.slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
+  function subscribe(fn) {
+    if (typeof fn !== 'function') return function () {};
+    subscribers.add(fn);
+    return function unsubscribe() { subscribers.delete(fn); };
+  }
+
+  // Live photo URL accessor for the avatar UI. Not part of the cross-app
+  // contract; mobile-only convenience.
+  function getPhotoBlobUrl() {
+    return live.photoBlobUrl || null;
+  }
+
+  window.HAHMobile.identity = {
+    applyAccount,
+    getActor,
+    getCurrentUserIdentity,
+    isSignedIn,
+    clear,
+    computeInitials,
+    subscribe,
+    getPhotoBlobUrl
+  };
+
+  // ── Header avatar mount (v12.36.707 Phase 1) ───────────────────────
+  //
+  // Renders the signed-in user's initials / photo into #headerAvatar,
+  // opens #headerAvatarFlyout on tap. Hidden when no identity is
+  // resolved (cold-start, signed-out, or sync hasn't run yet so the
+  // lazy MSAL flow hasn't fired). When v708 ships the splash sign-in
+  // wall, this stops being conditional — there will always be an
+  // identity by the time the app is interactive.
+
+  function $(id) { return document.getElementById(id); }
+
+  function formatAgeFromMs(ms) {
+    if (!Number.isFinite(ms) || ms < 0) return '';
+    const sec = Math.floor(ms / 1000);
+    if (sec < 60) return 'just now';
+    const mins = Math.floor(sec / 60);
+    if (mins < 60) return `${mins} min ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs} h ago`;
+    const days = Math.floor(hrs / 24);
+    return `${days} d ago`;
+  }
+
+  function renderAvatar() {
+    const btn = $('headerAvatar');
+    if (!btn) return;
+    const ident = getCurrentUserIdentity();
+    if (!ident) {
+      btn.classList.add('hidden');
+      return;
+    }
+    btn.classList.remove('hidden');
+    const initialsEl = $('headerAvatarInitials');
+    const photoEl = $('headerAvatarPhoto');
+    const initials = computeInitials(ident.displayName);
+    if (initialsEl) initialsEl.textContent = initials;
+    const photoUrl = getPhotoBlobUrl();
+    if (photoUrl && photoEl) {
+      photoEl.src = photoUrl;
+      photoEl.classList.remove('hidden');
+      btn.classList.add('has-photo');
+    } else if (photoEl) {
+      photoEl.classList.add('hidden');
+      btn.classList.remove('has-photo');
+    }
+  }
+
+  function renderFlyout() {
+    const flyout = $('headerAvatarFlyout');
+    if (!flyout) return;
+    const ident = getCurrentUserIdentity();
+    if (!ident) {
+      flyout.classList.add('hidden');
+      return;
+    }
+    const picInitials = $('headerAvatarFlyoutInitials');
+    if (picInitials) picInitials.textContent = computeInitials(ident.displayName);
+    const nameEl = $('headerAvatarFlyoutName');
+    if (nameEl) nameEl.textContent = ident.displayName || 'Mobile user';
+    const roleEl = $('headerAvatarFlyoutRole');
+    if (roleEl) roleEl.textContent = ident.role || '';
+    const emailEl = $('headerAvatarFlyoutEmail');
+    if (emailEl) emailEl.textContent = (live && live.email) || '';
+    const statusEl = $('headerAvatarFlyoutStatus');
+    if (statusEl) {
+      if (ident.verified === 'cached') {
+        statusEl.textContent = `Cached identity — last verified ${formatAgeFromMs(ident.ageMs)}.`;
+      } else {
+        statusEl.textContent = 'Verified — live session.';
+      }
+    }
+  }
+
+  function toggleFlyout(forceOpen) {
+    const flyout = $('headerAvatarFlyout');
+    if (!flyout) return;
+    const isOpen = !flyout.classList.contains('hidden');
+    const next = (typeof forceOpen === 'boolean') ? forceOpen : !isOpen;
+    if (next) {
+      renderFlyout();
+      flyout.classList.remove('hidden');
+    } else {
+      flyout.classList.add('hidden');
+    }
+  }
+
+  function onDocumentClickToCloseFlyout(ev) {
+    const flyout = $('headerAvatarFlyout');
+    const btn = $('headerAvatar');
+    if (!flyout || flyout.classList.contains('hidden')) return;
+    if (ev.target === btn || (btn && btn.contains(ev.target))) return;
+    if (flyout.contains(ev.target)) return;
+    toggleFlyout(false);
+  }
+
+  function bindAvatarUiOnce() {
+    if (window.__hahAvatarUiBound) return;
+    const btn = $('headerAvatar');
+    if (!btn) return;  // header not in DOM yet
+    window.__hahAvatarUiBound = true;
+    btn.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      toggleFlyout();
+    }, { passive: true });
+    const signoutBtn = $('headerAvatarFlyoutSignout');
+    if (signoutBtn) {
+      signoutBtn.addEventListener('click', function () {
+        toggleFlyout(false);
+        // signOutMicrosoft lives in 00-core.js; it will call our clear()
+        // via the wiring added in v12.36.707.
+        try {
+          if (typeof signOutMicrosoft === 'function') signOutMicrosoft();
+        } catch (_) {}
+      }, { passive: true });
+    }
+    document.addEventListener('click', onDocumentClickToCloseFlyout, { passive: true });
+    // Re-render on any identity change.
+    subscribe(function () {
+      renderAvatar();
+      // Only re-render the flyout if it's currently open (avoids
+      // unnecessary DOM churn).
+      const flyout = $('headerAvatarFlyout');
+      if (flyout && !flyout.classList.contains('hidden')) renderFlyout();
+    });
+  }
+
+  // Try to bind immediately if the DOM is already there (the script
+  // tag sits at the end of <body> so the header element is parsed by
+  // the time this runs); fall back to DOMContentLoaded for safety.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      bindAvatarUiOnce();
+      renderAvatar();
+    });
+  } else {
+    bindAvatarUiOnce();
+    renderAvatar();
   }
 })();
 
