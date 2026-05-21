@@ -3046,6 +3046,20 @@ body.hah-nav-stack .nav.nav-patient{
 .header-avatar-flyout-signout{display:block;width:100%;margin-top:12px;padding:10px;border-radius:10px;border:0;background:transparent;color:#dc2626;font-size:14px;font-weight:600;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .header-avatar-flyout-signout:active{background:rgba(220,38,38,.08)}
 
+/* v12.36.708 Phase 1B — Splash sign-in surface (Option A progressive states).
+   Appears below the brand stack when MSAL clock is expired (>12h since
+   last interactive Microsoft auth) or no account is signed in. Hidden
+   when MSAL is still within the 12h window. Aim is iOS-native: a single
+   prominent blue button + a small status line below for the
+   'Reconnecting...' interstitial state. */
+.app-splash-signin{margin-top:30px;display:flex;flex-direction:column;align-items:center;gap:14px;width:min(280px,80vw)}
+.app-splash-signin.hidden{display:none!important}
+.app-splash-signin-btn{appearance:none;-webkit-appearance:none;border:0;background:rgba(255,255,255,.92);color:#0a2540;font-size:16px;font-weight:600;padding:14px 22px;border-radius:12px;width:100%;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 8px 24px rgba(0,0,0,.18);letter-spacing:.01em;line-height:1.2}
+.app-splash-signin-btn:active{transform:scale(.98);background:rgba(255,255,255,.86)}
+.app-splash-signin-btn:disabled{opacity:.55;cursor:default}
+.app-splash-signin-status{font-size:13px;color:rgba(255,255,255,.85);text-align:center;min-height:1.2em;line-height:1.3;padding:0 8px}
+.app-splash-signin-status:empty{visibility:hidden}
+
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -3116,7 +3130,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_707_identity_phase1_release.html; source=hospital_at_home_v12_36_707_identity_phase1_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_708_signin_pin_release.html; source=hospital_at_home_v12_36_708_signin_pin_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3157,6 +3171,10 @@ body.hah-nav-stack .nav.nav-patient{
 <div aria-label="Clinical workflow, simplified." class="app-splash-tagline" id="appSplashTagline"><span class="app-splash-tagline-main">Clinical workflow</span><span class="app-splash-tagline-tail">simplified</span></div>
 </div>
 <div class="app-splash-company app-splash-animate">LK Medica Software Solutions</div>
+<div class="app-splash-signin hidden" id="appSplashSignin" aria-live="polite">
+<button class="app-splash-signin-btn" id="appSplashSigninBtn" type="button">Sign in with Microsoft</button>
+<div class="app-splash-signin-status" id="appSplashSigninStatus"></div>
+</div>
 </div>
 </div>
 <div class="hidden" id="lockScreen">
@@ -3477,7 +3495,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_707_identity_phase1_release.html</div><div>Source: hospital_at_home_v12_36_707_identity_phase1_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_708_signin_pin_release.html</div><div>Source: hospital_at_home_v12_36_708_signin_pin_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -5431,6 +5449,17 @@ async function ensureMsalApp(){
     if(res && res.account){
       graphAccount=res.account;
       localStorage.setItem(GRAPH_ACCOUNT_KEY, JSON.stringify({username:res.account.username||'', homeAccountId:res.account.homeAccountId||''}));
+      // v12.36.708 Phase 1A: an interactive MSAL redirect just completed
+      // successfully — reset the 12h MSAL re-auth clock. Only THIS path
+      // (handleRedirectPromise success, which means loginRedirect or
+      // acquireTokenRedirect returned with an authenticated account)
+      // resets the clock. Silent token refresh and select_account flows
+      // do NOT reset it.
+      try{
+        if(window.HAHMobile && window.HAHMobile.msalClock){
+          window.HAHMobile.msalClock.markMsalFullyVerified();
+        }
+      }catch(_clockErr){}
       // v12.36.707 Phase 1: notify the mobile identity module that a Microsoft
       // account has been resolved live. Best-effort — failures are silent
       // (the identity module's `applyAccount` swallows Graph errors and
@@ -5442,6 +5471,22 @@ async function ensureMsalApp(){
           window.HAHMobile.identity.applyAccount(res.account, res.accessToken || null).catch(()=>{});
         }
       }catch(_idErr){}
+      // v12.36.708 Phase 1D: first-time PIN/biometric setup. If the user
+      // has just successfully signed in to Microsoft for the first time
+      // on this device (no PIN set in localStorage), launch the existing
+      // PIN setup flow before app reveal. Subsequent launches skip this
+      // entirely — the user just unlocks with their existing PIN. Per
+      // v708 spec §6: this is the ONLY time we ask the user a security
+      // question. Reuses 05-security.js beginSetupFlow().
+      try{
+        if(typeof isPinSet === 'function' && !isPinSet() && typeof beginSetupFlow === 'function'){
+          // Defer slightly so the existing post-MSAL handlers (sync,
+          // import resume, etc) get a chance to run first. The setup
+          // flow shows the lock screen overlay; deferring avoids
+          // racing with whatever the redirect-return handler is doing.
+          setTimeout(()=>{ try{ beginSetupFlow(); }catch(_){} }, 400);
+        }
+      }catch(_pinErr){}
       // If we were mid-import when redirect was triggered, resume it.
       // v706.x: previously this fired importHandoverRows() on a blind
       // 300ms timer and never navigated, so after the ~daily token-expiry
@@ -5500,7 +5545,10 @@ async function signInMicrosoft(){
     setGraphPostAuthReturn();
     setGraphAuthReturnSnapshotShieldBypass(true);
     try{
-      await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'select_account'});
+      // v12.36.708 Phase 1A: prompt='login' (was 'select_account') so
+      // Microsoft actually verifies credentials each time rather than
+      // using a session cookie shortcut. Matches desktop v0.8.234.
+      await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'login'});
     }catch(e){
       setGraphAuthReturnSnapshotShieldBypass(false);
       throw e;
@@ -5522,6 +5570,11 @@ async function signOutMicrosoft(){
     try{
       if(window.HAHMobile && window.HAHMobile.identity) window.HAHMobile.identity.clear();
     }catch(_idErr){}
+    // v12.36.708 Phase 1A: clear the MSAL 12h re-auth clock so the next
+    // entry forces a full interactive sign-in.
+    try{
+      if(window.HAHMobile && window.HAHMobile.msalClock) window.HAHMobile.msalClock.clearMsalClock();
+    }catch(_clockErr){}
     if(acc){
       await app.logoutRedirect({account:acc, postLogoutRedirectUri:getCurrentPageUrl()});
     } else {
@@ -5540,7 +5593,14 @@ async function getGraphAccessToken(){
     setGraphPostAuthReturn();
     setGraphAuthReturnSnapshotShieldBypass(true);
     try{
-      await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'select_account'});
+      // v12.36.708 Phase 1A: prompt='login' (was 'select_account') so
+      // Microsoft actually verifies credentials each time. Matches
+      // desktop v0.8.234. The lazy sync-triggered fallback path now
+      // also goes through full credential verification — note that
+      // 1B's splash UX will normally pre-empt this by forcing MSAL
+      // sign-in at app entry, so this code path mainly fires on the
+      // edge case of an in-session token expiry without account.
+      await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'login'});
     }catch(e){
       setGraphAuthReturnSnapshotShieldBypass(false);
       throw e;
@@ -12255,6 +12315,58 @@ function isPinSet(){ return !!localStorage.getItem(PIN_KEY); }
 function isBiometricEnabled(){ return localStorage.getItem(BIOMETRIC_KEY) === '1'; }
 function isBiometricAvailable(){ return !!(window.PublicKeyCredential && window.location.hostname); }
 
+// v12.36.708 Phase 1C: strict failure handling. Tracks consecutive failed
+// PIN/biometric UNLOCK attempts (NOT change/remove — those are settings
+// operations where the user is already inside the app). After 5 failures,
+// wipe the cached identity, the MSAL clock, and force a full Microsoft
+// sign-in. Per Henry's Q4 answer.
+const PIN_FAIL_COUNT_KEY = 'hah_pin_fail_count';
+const MAX_PIN_FAIL_ATTEMPTS = 5;
+
+function getPinFailCount(){
+  try{
+    const raw = localStorage.getItem(PIN_FAIL_COUNT_KEY);
+    const n = parseInt(raw, 10);
+    return Number.isFinite(n) && n > 0 ? n : 0;
+  }catch(_){ return 0; }
+}
+function incrementPinFailCount(){
+  const next = getPinFailCount() + 1;
+  try{ localStorage.setItem(PIN_FAIL_COUNT_KEY, String(next)); }catch(_){}
+  return next;
+}
+function resetPinFailCount(){
+  try{ localStorage.removeItem(PIN_FAIL_COUNT_KEY); }catch(_){}
+}
+function pinFailAttemptsRemaining(){
+  return Math.max(0, MAX_PIN_FAIL_ATTEMPTS - getPinFailCount());
+}
+
+// Trigger the strict-failure escalation: wipe cached identity, clear the
+// MSAL re-auth clock, clear the failure counter, and signal that the next
+// app entry needs a full Microsoft sign-in. The actual MSAL redirect is
+// triggered by the splash UX flow (Phase 1B) on next launch — we do NOT
+// redirect here because the user is currently mid-PIN-entry and a sudden
+// redirect from inside the lock screen would be jarring. Instead we
+// surface a clear message and the user explicitly triggers re-auth.
+function escalateStrictFailure(){
+  try{ localStorage.removeItem('hah_cached_identity'); }catch(_){}
+  try{
+    if(window.HAHMobile && window.HAHMobile.identity) window.HAHMobile.identity.clear();
+  }catch(_idErr){}
+  try{
+    if(window.HAHMobile && window.HAHMobile.msalClock) window.HAHMobile.msalClock.clearMsalClock();
+  }catch(_clockErr){}
+  resetPinFailCount();
+  setPinError('Too many failed attempts. Please sign in with Microsoft to continue.');
+  // The lock screen stays visible; the splash UX (Phase 1B) detects the
+  // wiped state on next entry and routes through Microsoft sign-in.
+  // For now (1C-only state, before 1B ships), the lock UI shows the
+  // escalation message but stays in place — that's acceptable behaviour
+  // since 1C and 1B ship in the same release pair (v708) and never
+  // independently.
+}
+
 function isSplashScreenSkipped(){
   try{ return localStorage.getItem(SKIP_SPLASH_KEY) === '1'; }catch(e){ return false; }
 }
@@ -12520,10 +12632,23 @@ async function completePinEntry(entered, flow, nonce){
   if(flow === PIN_FLOW.UNLOCK){
     if(await verifyCurrentPin(entered)){
       if(nonce !== pinSession.nonce) return;
+      // v12.36.708 Phase 1C: successful UNLOCK clears the failure counter.
+      resetPinFailCount();
       finishUnlockSequence();
     } else {
       if(isNedryEnabled()) playIncorrectPinSound();
-      setPinError('Incorrect PIN. Try again.');
+      // v12.36.708 Phase 1C: increment failure counter; escalate at 5.
+      const next = incrementPinFailCount();
+      if(next >= MAX_PIN_FAIL_ATTEMPTS){
+        escalateStrictFailure();
+      } else {
+        const remaining = MAX_PIN_FAIL_ATTEMPTS - next;
+        if(remaining <= 2){
+          setPinError(`Incorrect PIN. ${remaining} attempt${remaining===1?'':'s'} remaining before Microsoft sign-in is required.`);
+        } else {
+          setPinError('Incorrect PIN. Try again.');
+        }
+      }
     }
     return;
   }
@@ -12680,12 +12805,33 @@ async function handleBiometricBtn(){
   }
   if(pinSession.flow !== PIN_FLOW.UNLOCK) return;
   pinSession.busy = true;
+  // v12.36.708 Phase 1C: biometric UNLOCK failures count toward the same
+  // 5-strike budget as PIN failures. Same governance signal — biometric
+  // refusing to authenticate is the same class of event as PIN failing.
+  // User can always fall back to typing the PIN.
+  function biometricFail(msg){
+    const next = incrementPinFailCount();
+    if(next >= MAX_PIN_FAIL_ATTEMPTS){
+      escalateStrictFailure();
+    } else {
+      const remaining = MAX_PIN_FAIL_ATTEMPTS - next;
+      if(remaining <= 2){
+        setPinError(`${msg} ${remaining} attempt${remaining===1?'':'s'} remaining before Microsoft sign-in is required.`);
+      } else {
+        setPinError(msg + ' Enter your PIN.');
+      }
+    }
+  }
   try{
     const ok = await authenticateBiometric();
-    if(ok) finishUnlockSequence();
-    else setPinError('Face ID failed. Enter your PIN.');
+    if(ok){
+      resetPinFailCount();
+      finishUnlockSequence();
+    } else {
+      biometricFail('Face ID failed.');
+    }
   }catch(e){
-    setPinError('Face ID failed. Enter your PIN.');
+    biometricFail('Face ID failed.');
   }
 }
 
@@ -13028,8 +13174,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_707_identity_phase1_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_707_identity_phase1_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_708_signin_pin_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_708_signin_pin_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -15167,6 +15313,55 @@ function initAppSplash(){
   iconButton.dataset.bound='1';
   iconButton.addEventListener('click', handleAppSplashIconTap, {passive:true});
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ splash.classList.add('splash-ready'); }); });
+  // v12.36.708 Phase 1B: splash sign-in surface (Option A progressive
+  // states). After the brand reveal, check the 12h MSAL clock:
+  //   - If expired (or never set), reveal the "Sign in with Microsoft"
+  //     button below the brand stack.
+  //   - If still within the 12h window, the splash dismisses normally
+  //     (either via icon tap or via the existing splash transition path).
+  // The button triggers signInMicrosoft() (defined in 00-core.js), which
+  // does a full interactive loginRedirect with prompt='login'. On return,
+  // handleRedirectPromise marks the MSAL clock fresh (Phase 1A) and the
+  // splash dismisses to the lock screen (if PIN set) or first-time setup
+  // (Phase 1D).
+  initAppSplashSigninSurface();
+}
+
+function initAppSplashSigninSurface(){
+  try{
+    const surface = document.getElementById('appSplashSignin');
+    const btn = document.getElementById('appSplashSigninBtn');
+    const status = document.getElementById('appSplashSigninStatus');
+    if(!surface || !btn) return;
+    // Only show the surface when MSAL is genuinely expired. If the
+    // mobile MSAL clock module isn't loaded yet (race during script
+    // boot), default-safe: don't show the button — the existing lazy
+    // sync-triggered loginRedirect will catch the case if needed.
+    const clock = (window.HAHMobile && window.HAHMobile.msalClock) || null;
+    if(!clock || !clock.shouldForceMsalReauth()) return;
+    // Cohabit with the brand reveal: defer the button surface until
+    // after the splash-ready class lands so it animates in alongside
+    // the brand stack rather than appearing pre-animation.
+    setTimeout(()=>{ surface.classList.remove('hidden'); }, 280);
+    if(btn.dataset.bound === '1') return;
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', async function(){
+      if(btn.disabled) return;
+      btn.disabled = true;
+      if(status) status.textContent = 'Reconnecting to OneDrive\u2026';
+      try{
+        if(typeof signInMicrosoft === 'function'){
+          // Page will redirect; execution does not return to this line.
+          await signInMicrosoft();
+        }
+      }catch(e){
+        // signInMicrosoft surfaces its own error via setGraphStatus; on
+        // failure surface here too so the user knows what's happening.
+        btn.disabled = false;
+        if(status) status.textContent = 'Sign-in failed. Tap to try again.';
+      }
+    }, {passive:true});
+  }catch(_e){}
 }
 
 document.addEventListener("DOMContentLoaded",function(){
@@ -25218,13 +25413,34 @@ window.HAHMobile = window.HAHMobile || {};
    * bounds how stale a 'cached' entry can be.
    */
   function getCurrentUserIdentity() {
+    // v12.36.708 Phase 1E: consult the MSAL 12h clock to refine the
+    // verification level. Three values:
+    //   'live'                — live MSAL session resolved this session
+    //   'cached'              — no live session, but cached identity is
+    //                            recent (MSAL last verified < 12h ago)
+    //   'cached-msal-expired' — no live session AND MSAL last verified
+    //                            > 12h ago. Honest about the staleness
+    //                            gradient. Per spec v708 §5.
+    // The PIN/biometric unlock is a separate proof from MSAL; this field
+    // only describes the Microsoft side. When v708 1B's splash UX ships,
+    // 'cached-msal-expired' will be a transient state at app entry
+    // (caught by shouldForceMsalReauth and resolved via interactive
+    // sign-in before any audited write fires). It remains reachable for
+    // offline-at-bedside writes where MSAL re-auth is not possible.
+    let msalExpired = false;
+    try {
+      if (window.HAHMobile && window.HAHMobile.msalClock) {
+        msalExpired = window.HAHMobile.msalClock.shouldForceMsalReauth();
+      }
+    } catch (_) {}
+
     if (live.oid) {
       const verifiedAtMs = live.verifiedAt ? Date.parse(live.verifiedAt) : Date.now();
       return {
         oid: live.oid,
         displayName: live.displayName || FALLBACK_NAME,
         role: live.role || null,
-        verified: 'live',
+        verified: msalExpired ? 'cached-msal-expired' : 'live',
         ageMs: Math.max(0, Date.now() - verifiedAtMs)
       };
     }
@@ -25235,7 +25451,7 @@ window.HAHMobile = window.HAHMobile || {};
       oid: cached.oid,
       displayName: cached.displayName || FALLBACK_NAME,
       role: cached.role || null,
-      verified: 'cached',
+      verified: msalExpired ? 'cached-msal-expired' : 'cached',
       ageMs: Math.max(0, Date.now() - verifiedAtMs)
     };
   }
@@ -25355,10 +25571,12 @@ window.HAHMobile = window.HAHMobile || {};
     if (emailEl) emailEl.textContent = (live && live.email) || '';
     const statusEl = $('headerAvatarFlyoutStatus');
     if (statusEl) {
-      if (ident.verified === 'cached') {
-        statusEl.textContent = `Cached identity — last verified ${formatAgeFromMs(ident.ageMs)}.`;
+      if (ident.verified === 'cached-msal-expired') {
+        statusEl.textContent = `Microsoft sign-in expired \u2014 last verified ${formatAgeFromMs(ident.ageMs)}. Reconnect when online.`;
+      } else if (ident.verified === 'cached') {
+        statusEl.textContent = `Cached identity \u2014 last verified ${formatAgeFromMs(ident.ageMs)}.`;
       } else {
-        statusEl.textContent = 'Verified — live session.';
+        statusEl.textContent = 'Verified \u2014 live session.';
       }
     }
   }
@@ -25428,6 +25646,126 @@ window.HAHMobile = window.HAHMobile || {};
     bindAvatarUiOnce();
     renderAvatar();
   }
+})();
+
+</script><script>
+/* ─── H@H Companion — MSAL 12h clock (v12.36.708 / Phase 1A)
+   The Microsoft re-authentication window. SEPARATE from the PIN/biometric
+   lock timer in 05-security.js — they do different jobs:
+
+     - PIN lock: "is this the device's authorised user?" (10-min idle)
+     - MSAL clock: "is this still the same Microsoft identity?" (12-hour)
+
+   They both run; both must succeed for the audit attribution to be 'live'.
+   Failure modes differ — PIN failure locks the device-side; MSAL clock
+   expiry forces a full sign-in redirect.
+
+   Public API (window.HAHMobile.msalClock):
+
+     markMsalFullyVerified()     Called from 00-core.js when an interactive
+                                 MSAL completes successfully. Updates the
+                                 timestamp. ONLY interactive auth resets
+                                 the clock — silent token refresh and
+                                 select_account flows do NOT reset it.
+
+     shouldForceMsalReauth()     → boolean. Reads the timestamp. True if
+                                 absent OR ≥ 12h old. Called by the
+                                 splash flow (Phase 1B) to decide
+                                 whether to force interactive sign-in.
+
+     getMsalClockState()         → { lastVerifiedAt, ageMs, expired,
+                                     expiresInMs }
+                                 Diagnostic accessor. Used by the avatar
+                                 flyout status line, and by audit entries
+                                 in Phase 2 to stamp the 'cached-msal-
+                                 expired' verification level (Phase 1E).
+
+     clearMsalClock()            Wipes the timestamp. Called by the
+                                 strict-failure handler in Phase 1C and
+                                 by signOutMicrosoft in 00-core.js.
+
+   Constants:
+     MSAL_REAUTH_WINDOW_MS = 12 * 60 * 60 * 1000   // 12 hours, per Henry's
+                                                   // Q1 answer ("12 hours
+                                                   // fixed, matches Epic").
+
+   Storage:
+     localStorage.hah_msal_last_full_auth — ISO timestamp string.
+
+   v708 Phase 1A scope: infrastructure only. No UI. No call sites in
+   05-security.js. shouldForceMsalReauth() is exported and ready for
+   Phase 1B's splash UX to consume. markMsalFullyVerified() is wired
+   into 00-core.js's handleRedirectPromise success path.
+────────────────────────────────────────────────────────────────────────── */
+
+window.HAHMobile = window.HAHMobile || {};
+
+(function () {
+  'use strict';
+
+  const STORAGE_KEY = 'hah_msal_last_full_auth';
+  const MSAL_REAUTH_WINDOW_MS = 12 * 60 * 60 * 1000;
+
+  function readTimestamp() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const ms = Date.parse(raw);
+      if (!Number.isFinite(ms)) return null;
+      return ms;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function writeTimestamp(isoString) {
+    try {
+      localStorage.setItem(STORAGE_KEY, isoString);
+    } catch (_) {}
+  }
+
+  function markMsalFullyVerified() {
+    writeTimestamp(new Date().toISOString());
+  }
+
+  function shouldForceMsalReauth() {
+    const ts = readTimestamp();
+    if (ts === null) return true;
+    return (Date.now() - ts) >= MSAL_REAUTH_WINDOW_MS;
+  }
+
+  function getMsalClockState() {
+    const ts = readTimestamp();
+    if (ts === null) {
+      return {
+        lastVerifiedAt: null,
+        ageMs: null,
+        expired: true,
+        expiresInMs: 0
+      };
+    }
+    const ageMs = Math.max(0, Date.now() - ts);
+    return {
+      lastVerifiedAt: new Date(ts).toISOString(),
+      ageMs: ageMs,
+      expired: ageMs >= MSAL_REAUTH_WINDOW_MS,
+      expiresInMs: Math.max(0, MSAL_REAUTH_WINDOW_MS - ageMs)
+    };
+  }
+
+  function clearMsalClock() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (_) {}
+  }
+
+  window.HAHMobile.msalClock = {
+    markMsalFullyVerified,
+    shouldForceMsalReauth,
+    getMsalClockState,
+    clearMsalClock,
+    MSAL_REAUTH_WINDOW_MS  // exported for tests / diagnostics
+  };
 })();
 
 </script></body>
