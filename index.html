@@ -3144,7 +3144,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_708_2_splash_gate_release.html; source=hospital_at_home_v12_36_708_2_splash_gate_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_708_3_no_cold_pin_release.html; source=hospital_at_home_v12_36_708_3_no_cold_pin_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3509,7 +3509,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_708_2_splash_gate_release.html</div><div>Source: hospital_at_home_v12_36_708_2_splash_gate_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_708_3_no_cold_pin_release.html</div><div>Source: hospital_at_home_v12_36_708_3_no_cold_pin_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -5489,9 +5489,8 @@ async function ensureMsalApp(){
       // has just successfully signed in to Microsoft for the first time
       // on this device (no PIN set in localStorage), launch the existing
       // PIN setup flow before app reveal. Subsequent launches skip this
-      // entirely — the user just unlocks with their existing PIN. Per
-      // v708 spec §6: this is the ONLY time we ask the user a security
-      // question. Reuses 05-security.js beginSetupFlow().
+      // entirely — the user just signs into Microsoft and the app
+      // reveals (no PIN gate on cold start per v708.3).
       try{
         if(typeof isPinSet === 'function' && !isPinSet() && typeof beginSetupFlow === 'function'){
           // Defer slightly so the existing post-MSAL handlers (sync,
@@ -5499,15 +5498,12 @@ async function ensureMsalApp(){
           // flow shows the lock screen overlay; deferring avoids
           // racing with whatever the redirect-return handler is doing.
           setTimeout(()=>{ try{ beginSetupFlow(); }catch(_){} }, 400);
-        } else if(typeof isPinSet === 'function' && isPinSet() && typeof beginUnlockFlow === 'function'){
-          // v12.36.708.2: PIN is set AND MSAL just completed. The
-          // startup PIN prompt was suppressed by initSecurity (because
-          // MSAL was required); now that MSAL has succeeded, fire the
-          // PIN unlock screen explicitly. The MSAL gate in
-          // finishUnlockSequence will see msalRequired=false (clock was
-          // just marked fresh above) and allow unlock to complete.
-          setTimeout(()=>{ try{ beginUnlockFlow(false); }catch(_){} }, 400);
         }
+        // v12.36.708.3 NOTE: the post-MSAL beginUnlockFlow() trigger
+        // that was added in v708.2 is removed here. Cold-start PIN is
+        // no longer required; idle re-lock (10-min timer +
+        // visibilitychange handler in 05-security.js) is the only path
+        // to PIN-after-MSAL now.
       }catch(_pinErr){}
       // If we were mid-import when redirect was triggered, resume it.
       // v706.x: previously this fired importHandoverRows() on a blind
@@ -5567,10 +5563,21 @@ async function signInMicrosoft(){
     setGraphPostAuthReturn();
     setGraphAuthReturnSnapshotShieldBypass(true);
     try{
-      // v12.36.708 Phase 1A: prompt='login' (was 'select_account') so
-      // Microsoft actually verifies credentials each time rather than
-      // using a session cookie shortcut. Matches desktop v0.8.234.
-      await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'login'});
+      // v12.36.708.3: reverted to prompt='select_account' from the
+      // earlier 'login' (v708 1A). 'prompt=login' was producing a
+      // "We didn't get an approval" timeout on iOS PWA + cellular every
+      // time, because the platform's strict reauth-ceremony completion
+      // check races the Authenticator-on-same-device round-trip even
+      // when the approval visibly succeeded. The desktop spec said to
+      // mirror desktop v0.8.234's 'login' but desktop's environment
+      // (different platform, faster Authenticator round-trip) made the
+      // trade cheap there; on iOS PWA it's expensive (broken UX).
+      // The 12h MSAL clock still forces interactive auth twice daily;
+      // strict 5-strike PIN failure still wipes cached identity and
+      // forces re-credential entry. 'select_account' preserves the
+      // account picker so a wrong account cannot be silently used.
+      // Governance posture preserved; UX bug fixed.
+      await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'select_account'});
     }catch(e){
       setGraphAuthReturnSnapshotShieldBypass(false);
       throw e;
@@ -13044,25 +13051,31 @@ function initSecurity(){
   });
 
   if(isPinSet()){
-    // v12.36.708.2: if MSAL re-auth is required, do NOT show the PIN
-    // unlock screen on startup. The splash sign-in surface (in
-    // 07-startup.js) is the entry point in that case. Showing PIN now
-    // would just stack a lock screen on top of the splash, and the
-    // MSAL gate in finishUnlockSequence would refuse to let the user in
-    // anyway. After MSAL completes (handleRedirectPromise resets the
-    // clock), the user can be sent to PIN unlock by the post-MSAL flow.
-    let msalReauthNeeded = true;
-    try{
-      if(window.HAHMobile && window.HAHMobile.msalClock && typeof window.HAHMobile.msalClock.shouldForceMsalReauth === 'function'){
-        msalReauthNeeded = window.HAHMobile.msalClock.shouldForceMsalReauth();
-      }
-    }catch(_e){}
-    if(!msalReauthNeeded){
-      captureLockReturnState();
-      showLockScreenForFlow(PIN_FLOW.UNLOCK, {capture:false});
-    }
-    // If msalReauthNeeded, do nothing here — splash handles it.
+    // v12.36.708.3: PIN-on-cold-start is DROPPED. Per Henry's decision,
+    // PIN no longer gates cold start — MSAL is the cold-start gate, and
+    // PIN earns its keep on idle re-lock (10-min timer + visibilitychange
+    // handler below) and the first-time setup flow. Rationale: PIN
+    // immediately after a fresh MSAL sign-in is redundant friction (you
+    // just proved you're you to Microsoft 5 seconds ago); and within the
+    // 12h MSAL window, cold-starting from a known-authenticated state
+    // doesn't add meaningful local security over MSAL alone.
+    //
+    // The two paths that still trigger PIN:
+    //   1. resetLockTimer() → 10-min foreground-idle elapsed → beginUnlockFlow
+    //   2. visibilitychange → background >10 min → beginUnlockFlow
+    //   3. (Plus belt-and-braces: if any code does call beginUnlockFlow
+    //      and MSAL has expired in the meantime, finishUnlockSequence
+    //      refuses to complete and re-reveals the splash.)
+    //
+    // No startup PIN prompt fires here.
   } else if(!localStorage.getItem('hah_pin_skipped')){
+    // First-time PIN setup is preserved. This fires when no PIN is set
+    // AND the user hasn't explicitly skipped onboarding. Note: the
+    // post-MSAL-success path in 00-core.js (Phase 1D wiring) is the
+    // primary trigger for first-time PIN setup; this branch handles
+    // edge cases where the user reaches initSecurity without going
+    // through the post-MSAL handler (e.g. development environment, or
+    // a future flow we haven't anticipated). Safe-to-keep.
     showLockScreenForFlow(PIN_FLOW.SET_ENTER, {capture:false});
   }
   resetLockTimer();
@@ -13247,8 +13260,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_708_2_splash_gate_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_708_2_splash_gate_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_708_3_no_cold_pin_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_708_3_no_cold_pin_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
