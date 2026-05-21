@@ -3060,6 +3060,20 @@ body.hah-nav-stack .nav.nav-patient{
 .app-splash-signin-status{font-size:13px;color:rgba(255,255,255,.85);text-align:center;min-height:1.2em;line-height:1.3;padding:0 8px}
 .app-splash-signin-status:empty{visibility:hidden}
 
+/* v12.36.708 Phase 1B fix: when MSAL sign-in is required, dim the icon
+   button so it reads as not-the-action and shake the sign-in surface
+   if the icon is tapped (deliberate non-response feedback rather than
+   silent ignore, which would feel like a bug). */
+#appSplash.splash-msal-required .app-splash-logo-button{opacity:.55;cursor:default}
+#appSplash.splash-msal-required .app-splash-logo-button:active{transform:none}
+.app-splash-signin-shake{animation:appSplashSigninShake .42s cubic-bezier(.36,.07,.19,.97) both}
+@keyframes appSplashSigninShake{
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(3px); }
+  30%, 50%, 70% { transform: translateX(-5px); }
+  40%, 60% { transform: translateX(5px); }
+}
+
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -15293,6 +15307,29 @@ function queueOnboardingAfterSplash(){
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>openOnboarding(false)); });
 }
 function handleAppSplashIconTap(){
+  // v12.36.708 Phase 1B fix: when the splash sign-in surface is showing
+  // (MSAL clock expired or no account), the icon-tap must NOT bypass to
+  // dismissAppSplash() — that would let the user skip MSAL entirely and
+  // (post-Phase-2) write audit entries attributed to stale identity. The
+  // wall must be the wall. Within the 12h MSAL window the icon-tap still
+  // works as before (PIN unlock flow).
+  try{
+    const clock = (window.HAHMobile && window.HAHMobile.msalClock) || null;
+    if(clock && clock.shouldForceMsalReauth()){
+      // Provide a small visual cue so the non-response is recognisable
+      // as deliberate rather than a bug. The CSS keyframe shake is
+      // shared with the lock-screen's incorrect-PIN feedback.
+      const surface = document.getElementById('appSplashSignin');
+      if(surface){
+        surface.classList.remove('app-splash-signin-shake');
+        // Force reflow so the class re-add re-triggers the animation
+        // even on a rapid second tap.
+        void surface.offsetWidth;
+        surface.classList.add('app-splash-signin-shake');
+      }
+      return;
+    }
+  }catch(_clockErr){}
   const shouldLaunchSetup = typeof isPinSet==='function' ? (!isPinSet() && shouldShowOnboarding()) : shouldShowOnboarding();
   if(shouldLaunchSetup){
     queueOnboardingAfterSplash();
@@ -15342,7 +15379,16 @@ function initAppSplashSigninSurface(){
     // Cohabit with the brand reveal: defer the button surface until
     // after the splash-ready class lands so it animates in alongside
     // the brand stack rather than appearing pre-animation.
-    setTimeout(()=>{ surface.classList.remove('hidden'); }, 280);
+    setTimeout(()=>{
+      surface.classList.remove('hidden');
+      // Visually dim the icon button so it reads as not-the-action.
+      // The icon's click handler also early-outs in this state (see
+      // handleAppSplashIconTap), so tapping it just shakes the sign-in
+      // surface. The class is applied here rather than in CSS-by-state
+      // so it stays robust to splash flow variations.
+      const splash = document.getElementById('appSplash');
+      if(splash) splash.classList.add('splash-msal-required');
+    }, 280);
     if(btn.dataset.bound === '1') return;
     btn.dataset.bound = '1';
     btn.addEventListener('click', async function(){
