@@ -3144,7 +3144,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_708_signin_pin_release.html; source=hospital_at_home_v12_36_708_signin_pin_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_708_1_msal_gate_release.html; source=hospital_at_home_v12_36_708_1_msal_gate_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3509,7 +3509,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_708_signin_pin_release.html</div><div>Source: hospital_at_home_v12_36_708_signin_pin_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_708_1_msal_gate_release.html</div><div>Source: hospital_at_home_v12_36_708_1_msal_gate_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -5602,24 +5602,17 @@ async function signOutMicrosoft(){
 async function getGraphAccessToken(){
   const app=await ensureMsalApp();
   if(!graphAccount || !graphAccount.homeAccountId){
-    // No account — trigger redirect sign-in, flag that import should resume after
-    localStorage.setItem('hah_pending_import','1');
-    setGraphPostAuthReturn();
-    setGraphAuthReturnSnapshotShieldBypass(true);
-    try{
-      // v12.36.708 Phase 1A: prompt='login' (was 'select_account') so
-      // Microsoft actually verifies credentials each time. Matches
-      // desktop v0.8.234. The lazy sync-triggered fallback path now
-      // also goes through full credential verification — note that
-      // 1B's splash UX will normally pre-empt this by forcing MSAL
-      // sign-in at app entry, so this code path mainly fires on the
-      // edge case of an in-session token expiry without account.
-      await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'login'});
-    }catch(e){
-      setGraphAuthReturnSnapshotShieldBypass(false);
-      throw e;
-    }
-    return; // Page will redirect
+    // v12.36.708.1: previously this auto-fired loginRedirect, which raced
+    // the splash sign-in surface and bypassed it (user saw "Loading..."
+    // → Microsoft, never the splash button). With the v708 splash UX as
+    // the canonical sign-in entry point, this lazy fallback must NOT
+    // auto-redirect. Throw a typed error instead; sync paths that catch
+    // it can surface a "Sign in first" message, and the splash itself
+    // already gates entry on the MSAL clock so the user has already
+    // been routed through sign-in if they're at this point.
+    const err = new Error('No Microsoft account — sign in via the app splash.');
+    err.code = 'NO_ACCOUNT';
+    throw err;
   }
   try{
     const accountObj = app.getAllAccounts().find(a=>a.homeAccountId===graphAccount.homeAccountId) || app.getAllAccounts()[0] || graphAccount;
@@ -12594,6 +12587,48 @@ function shouldSuppressPostUnlockInteraction(){
 }
 
 function finishUnlockSequence(){
+  // v12.36.708.1: MSAL gate. PIN proves "device's authorised user is
+  // present" but does NOT prove "Microsoft identity is currently
+  // verified". Per the v708 spec §3.3 and Henry's strict-mode decision,
+  // PIN unlock must NOT complete if the MSAL 12h clock has expired.
+  // Instead, route back to the splash sign-in surface — the wall must
+  // be the wall.
+  //
+  // Safe-default: if the msalClock module is somehow not loaded (script
+  // ordering, partial bundle, etc.), assume MSAL IS required rather than
+  // assume it's fine. Failing closed is the right direction for a
+  // governance gate.
+  let msalRequired = true;
+  try{
+    if(window.HAHMobile && window.HAHMobile.msalClock && typeof window.HAHMobile.msalClock.shouldForceMsalReauth === 'function'){
+      msalRequired = window.HAHMobile.msalClock.shouldForceMsalReauth();
+    }
+  }catch(_clockErr){
+    msalRequired = true; // belt-and-braces
+  }
+  if(msalRequired){
+    // Don't unlock. Instead show the splash sign-in surface so the
+    // user can complete MSAL re-auth. We DON'T auto-redirect here
+    // because the user is mid-PIN-entry and a sudden navigation would
+    // be jarring; we let them tap the visible button.
+    setPinError('Microsoft sign-in required. Please reconnect.');
+    pinSession.busy = false;
+    // Surface the splash sign-in button if it's not already visible.
+    // The splash may have been dismissed by the time PIN appeared,
+    // so we re-reveal the splash with the sign-in surface.
+    try{
+      const splash = document.getElementById('appSplash');
+      const surface = document.getElementById('appSplashSignin');
+      if(splash && surface){
+        splash.classList.remove('hidden');
+        splash.classList.add('splash-msal-required');
+        surface.classList.remove('hidden');
+        const statusEl = document.getElementById('appSplashSigninStatus');
+        if(statusEl) statusEl.textContent = 'Microsoft sign-in required to unlock the app.';
+      }
+    }catch(_uiErr){}
+    return;
+  }
   unlockUiSuppressUntil = Date.now() + 650;
   pinSession.unlocking = true;
   pinSession.busy = true;
@@ -13188,8 +13223,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_708_signin_pin_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_708_signin_pin_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_708_1_msal_gate_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_708_1_msal_gate_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
