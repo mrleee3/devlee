@@ -3144,7 +3144,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_708_1_msal_gate_release.html; source=hospital_at_home_v12_36_708_1_msal_gate_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_708_2_splash_gate_release.html; source=hospital_at_home_v12_36_708_2_splash_gate_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3509,7 +3509,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_708_1_msal_gate_release.html</div><div>Source: hospital_at_home_v12_36_708_1_msal_gate_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_708_2_splash_gate_release.html</div><div>Source: hospital_at_home_v12_36_708_2_splash_gate_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -5499,6 +5499,14 @@ async function ensureMsalApp(){
           // flow shows the lock screen overlay; deferring avoids
           // racing with whatever the redirect-return handler is doing.
           setTimeout(()=>{ try{ beginSetupFlow(); }catch(_){} }, 400);
+        } else if(typeof isPinSet === 'function' && isPinSet() && typeof beginUnlockFlow === 'function'){
+          // v12.36.708.2: PIN is set AND MSAL just completed. The
+          // startup PIN prompt was suppressed by initSecurity (because
+          // MSAL was required); now that MSAL has succeeded, fire the
+          // PIN unlock screen explicitly. The MSAL gate in
+          // finishUnlockSequence will see msalRequired=false (clock was
+          // just marked fresh above) and allow unlock to complete.
+          setTimeout(()=>{ try{ beginUnlockFlow(false); }catch(_){} }, 400);
         }
       }catch(_pinErr){}
       // If we were mid-import when redirect was triggered, resume it.
@@ -13036,8 +13044,24 @@ function initSecurity(){
   });
 
   if(isPinSet()){
-    captureLockReturnState();
-    showLockScreenForFlow(PIN_FLOW.UNLOCK, {capture:false});
+    // v12.36.708.2: if MSAL re-auth is required, do NOT show the PIN
+    // unlock screen on startup. The splash sign-in surface (in
+    // 07-startup.js) is the entry point in that case. Showing PIN now
+    // would just stack a lock screen on top of the splash, and the
+    // MSAL gate in finishUnlockSequence would refuse to let the user in
+    // anyway. After MSAL completes (handleRedirectPromise resets the
+    // clock), the user can be sent to PIN unlock by the post-MSAL flow.
+    let msalReauthNeeded = true;
+    try{
+      if(window.HAHMobile && window.HAHMobile.msalClock && typeof window.HAHMobile.msalClock.shouldForceMsalReauth === 'function'){
+        msalReauthNeeded = window.HAHMobile.msalClock.shouldForceMsalReauth();
+      }
+    }catch(_e){}
+    if(!msalReauthNeeded){
+      captureLockReturnState();
+      showLockScreenForFlow(PIN_FLOW.UNLOCK, {capture:false});
+    }
+    // If msalReauthNeeded, do nothing here — splash handles it.
   } else if(!localStorage.getItem('hah_pin_skipped')){
     showLockScreenForFlow(PIN_FLOW.SET_ENTER, {capture:false});
   }
@@ -13223,8 +13247,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_708_1_msal_gate_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_708_1_msal_gate_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_708_2_splash_gate_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_708_2_splash_gate_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -15377,6 +15401,20 @@ function shouldSkipAppSplashOnLaunch(){
   try{ return localStorage.getItem(SKIP_SPLASH_KEY) === '1'; }catch(e){ return false; }
 }
 
+// v12.36.708.2: single source of truth for "MSAL re-auth is required at
+// app entry." Used to OVERRIDE the skip-splash paths (returning-user
+// flag, post-auth-restore) so the splash sign-in surface always gets a
+// chance to render when there's no fresh Microsoft session. Safe-default:
+// missing module → assume MSAL required (fails closed).
+function isMsalReauthRequired(){
+  try{
+    if(window.HAHMobile && window.HAHMobile.msalClock && typeof window.HAHMobile.msalClock.shouldForceMsalReauth === 'function'){
+      return window.HAHMobile.msalClock.shouldForceMsalReauth();
+    }
+  }catch(_e){}
+  return true; // fail closed
+}
+
 function initAppSplash(){
   if(appSplashDismissed) return;
   const splash=$("appSplash");
@@ -15454,8 +15492,19 @@ document.addEventListener("DOMContentLoaded",function(){
   }
   initAppSnapshotShield();
   initBackgroundFlush();
-  if((pendingGraphPostAuthRestore && pendingGraphPostAuthRestore.skipSplash) || shouldSkipAppSplashOnLaunch()) skipAppSplashImmediately();
-  else initAppSplash();
+  // v12.36.708.2: MSAL reauth required is an absolute override of any
+  // skip-splash path. The brand splash must show so its sign-in surface
+  // can render — otherwise the user lands on PIN with no way to sign in
+  // to Microsoft, which strict-mode (Henry's Q1 answer to the bypass
+  // followup) correctly refuses to unlock past.
+  const msalReauthNeeded = isMsalReauthRequired();
+  if(msalReauthNeeded){
+    initAppSplash();
+  } else if((pendingGraphPostAuthRestore && pendingGraphPostAuthRestore.skipSplash) || shouldSkipAppSplashOnLaunch()){
+    skipAppSplashImmediately();
+  } else {
+    initAppSplash();
+  }
   if(pendingGraphPostAuthRestore){
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 120);
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 600);
