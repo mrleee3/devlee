@@ -3144,7 +3144,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_708_3_no_cold_pin_release.html; source=hospital_at_home_v12_36_708_3_no_cold_pin_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_709_state_machine_release.html; source=hospital_at_home_v12_36_709_state_machine_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3509,7 +3509,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_708_3_no_cold_pin_release.html</div><div>Source: hospital_at_home_v12_36_708_3_no_cold_pin_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_709_state_machine_release.html</div><div>Source: hospital_at_home_v12_36_709_state_machine_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -5632,6 +5632,20 @@ async function getGraphAccessToken(){
   try{
     const accountObj = app.getAllAccounts().find(a=>a.homeAccountId===graphAccount.homeAccountId) || app.getAllAccounts()[0] || graphAccount;
     const token=await app.acquireTokenSilent({scopes:GRAPH_SCOPES, account:accountObj});
+    // v12.36.709 Step 1 (clock invariant fix): a successful
+    // acquireTokenSilent IS the definitive 'Microsoft just confirmed
+    // this account is currently authenticated' signal. The v708 spec
+    // wrongly excluded silent restore from clock-reset; that produced
+    // the 'still having to sign in' bug Henry hit, because the clock
+    // would look stale even when Microsoft's refresh-token-based silent
+    // restore was succeeding cleanly. The clock's real meaning is 'when
+    // did Microsoft most recently confirm this account to me?' — silent
+    // restore is exactly that proof. Mark the clock fresh here.
+    try{
+      if(window.HAHMobile && window.HAHMobile.msalClock && token && token.accessToken){
+        window.HAHMobile.msalClock.markMsalFullyVerified();
+      }
+    }catch(_clockErr){}
     // v12.36.707 Phase 1: refresh identity with the fresh access token.
     // First call from a silent-resume cold start typically lands here —
     // this is the moment Graph /me can be reached for displayName +
@@ -12380,6 +12394,15 @@ function escalateStrictFailure(){
     if(window.HAHMobile && window.HAHMobile.msalClock) window.HAHMobile.msalClock.clearMsalClock();
   }catch(_clockErr){}
   resetPinFailCount();
+  // v12.36.709 Step 4 Hook 5: notify state machine of the wipe. State
+  // transitions to SIGNIN_REQUIRED so the next entry into the splash
+  // (or the current splash re-reveal in finishUnlockSequence) is
+  // consistent with state machine truth.
+  try{
+    if(window.HAHMobile && window.HAHMobile.startupState){
+      window.HAHMobile.startupState.handleStrictFailWipe();
+    }
+  }catch(_smErr){}
   setPinError('Too many failed attempts. Please sign in with Microsoft to continue.');
   // The lock screen stays visible; the splash UX (Phase 1B) detects the
   // wiped state on next entry and routes through Microsoft sign-in.
@@ -12659,12 +12682,33 @@ function finishUnlockSequence(){
     restoreLockReturnState();
     lastActiveTime = Date.now();
     resetLockTimer();
+    // v12.36.709 Step 4 Hook 4: notify state machine of successful
+    // unlock. State machine transitions IDLE_LOCKED → APP_READY.
+    try{
+      if(window.HAHMobile && window.HAHMobile.startupState){
+        window.HAHMobile.startupState.handleUnlockSuccess();
+      }
+    }catch(_smErr){}
   }, 260);
 }
 
 function closePinOverlayWithoutUnlock(){
   hideLockScreenNow();
   resetLockTimer();
+  // v12.36.709 Step 4 Hook 6: if this close fires after PIN was just set
+  // (first-time setup completion) and the state machine is currently
+  // in FIRST_TIME_SETUP, transition it to APP_READY. The discriminator
+  // is the state machine's current state — only fire if it was waiting
+  // on this completion. Other closes (e.g. user dismissing change-pin)
+  // are no-ops for the state machine.
+  try{
+    if(window.HAHMobile && window.HAHMobile.startupState){
+      const sm = window.HAHMobile.startupState;
+      if(sm.getState && sm.STATES && sm.getState() === sm.STATES.FIRST_TIME_SETUP && isPinSet()){
+        sm.handleFirstTimeSetupComplete();
+      }
+    }
+  }catch(_smErr){}
 }
 
 function beginSetupFlow(){
@@ -12972,6 +13016,16 @@ function resetLockTimer(){
   if(!isPinSet()) return;
   if(isLockScreenVisible()) return;
   lockTimer = setTimeout(()=>{
+    // v12.36.709 Step 4 Hook 3a: notify the state machine of the idle
+    // event before showing the lock UI. The state machine routes APP_READY
+    // → IDLE_LOCKED. The actual UI continues to be driven by the existing
+    // showLockScreenForFlow call below — state machine is informational
+    // for now (Step 5 will move UI ownership in).
+    try{
+      if(window.HAHMobile && window.HAHMobile.startupState){
+        window.HAHMobile.startupState.handleIdleTimeout();
+      }
+    }catch(_smErr){}
     captureLockReturnState();
     showLockScreenForFlow(PIN_FLOW.UNLOCK, {capture:false});
   }, PIN_TIMEOUT_MS);
@@ -13043,6 +13097,14 @@ function initSecurity(){
     if(document.hidden) return;
     if(!isPinSet()) return;
     if(Date.now() - lastActiveTime > PIN_TIMEOUT_MS){
+      // v12.36.709 Step 4 Hook 3b: notify the state machine of the
+      // visibility-resume-stale event. The state machine routes APP_READY
+      // → IDLE_LOCKED. UI driven by the existing showLockScreenForFlow.
+      try{
+        if(window.HAHMobile && window.HAHMobile.startupState){
+          window.HAHMobile.startupState.handleVisibilityResume(Date.now() - lastActiveTime);
+        }
+      }catch(_smErr){}
       captureLockReturnState();
       showLockScreenForFlow(PIN_FLOW.UNLOCK, {capture:false});
     } else {
@@ -13260,8 +13322,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_708_3_no_cold_pin_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_708_3_no_cold_pin_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_709_state_machine_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_709_state_machine_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -15482,8 +15544,16 @@ function initAppSplashSigninSurface(){
       btn.disabled = true;
       if(status) status.textContent = 'Reconnecting to OneDrive\u2026';
       try{
-        if(typeof signInMicrosoft === 'function'){
-          // Page will redirect; execution does not return to this line.
+        // v12.36.709 Step 4 Hook 2: route through the state machine so
+        // BOOT-side state stays consistent (the tap transitions to
+        // REDIRECTING; failure routes back to SIGNIN_REQUIRED). The
+        // state machine's handleSignInTap internally calls
+        // signInMicrosoft, which navigates the page away. Fallback to
+        // calling signInMicrosoft directly if the state machine isn't
+        // wired for any reason (defensive — should not happen in v709).
+        if(window.HAHMobile && window.HAHMobile.startupState && typeof window.HAHMobile.startupState.handleSignInTap === 'function'){
+          window.HAHMobile.startupState.handleSignInTap();
+        } else if(typeof signInMicrosoft === 'function'){
           await signInMicrosoft();
         }
       }catch(e){
@@ -15497,6 +15567,18 @@ function initAppSplashSigninSurface(){
 }
 
 document.addEventListener("DOMContentLoaded",function(){
+  // v12.36.709 Step 4: kick off the startup state machine immediately.
+  // It owns the MSAL bootstrap (explicit silent restore at app entry —
+  // the v708 race fix) and is the source of truth for SIGNIN_REQUIRED
+  // / ACCOUNT_RESOLVED / APP_READY / FIRST_TIME_SETUP / IDLE_LOCKED.
+  // Subscribers below drive the splash + lock-screen UI in response.
+  // Fire-and-forget — start() returns a promise that resolves to the
+  // interactive state but UI hooks subscribe to all transitions.
+  try{
+    if(window.HAHMobile && window.HAHMobile.startupState){
+      window.HAHMobile.startupState.start();
+    }
+  }catch(_smErr){}
   if(typeof consumeGraphAuthReturnSnapshotShieldBypass==='function') consumeGraphAuthReturnSnapshotShieldBypass();
   const pendingGraphPostAuthRestore=getGraphPostAuthUiRestore();
   if(pendingGraphPostAuthRestore && pendingGraphPostAuthRestore.skipSplash) showGraphAuthReturnCover();
@@ -25908,6 +25990,346 @@ window.HAHMobile = window.HAHMobile || {};
     getMsalClockState,
     clearMsalClock,
     MSAL_REAUTH_WINDOW_MS  // exported for tests / diagnostics
+  };
+})();
+
+</script><script>
+/* ─── H@H Companion — Startup state machine (v12.36.709 / Step 2)
+   The single source of truth for the app's entry flow. Replaces the
+   three-way decision tree that v708 accumulated across 00-core.js,
+   05-security.js, and 07-startup.js — each of which made its own
+   half-informed call about MSAL state and raced the others.
+
+   Why this exists, in plain terms:
+     v708 had splash, initSecurity, and MSAL each deciding independently
+     whether to gate the user. Each gate was patched as a bug surfaced.
+     The pattern was symptom-fixing, not root-causing. The root cause was
+     that there was no single owner of 'has the user been authenticated
+     enough to use the app?' and so async MSAL completion raced sync
+     localStorage reads at DOMContentLoaded time. This module is the
+     owner.
+
+   States (see v709 spec §2.1 for the full diagram):
+     BOOT                 — page loaded, splash showing brand reveal.
+     MSAL_BOOTSTRAP       — running the MSAL silent-restore probe.
+     ACCOUNT_RESOLVED     — Microsoft has confirmed an account.
+     SIGNIN_REQUIRED      — no account; splash shows Sign-in button.
+     REDIRECTING          — user tapped Sign in, page navigating out.
+                            (Page reload puts us back at BOOT.)
+     FIRST_TIME_SETUP     — PIN not set; setup flow runs.
+     APP_READY            — app interactive; all serial-chain init done.
+     IDLE_LOCKED          — entered from APP_READY only; PIN required.
+
+   Transition table is the law: §2.2 of the spec. No transitions outside
+   the table; no module reaches into the machine to flip state.
+
+   Public API (window.HAHMobile.startupState):
+     start()                  — kick off BOOT → MSAL_BOOTSTRAP → ...
+                                 returns a Promise that resolves when
+                                 the machine reaches APP_READY or
+                                 FIRST_TIME_SETUP (i.e. user-interactive).
+     getState()               — current state name (string).
+     subscribe(fn)            — fire fn(newState, prevState) on each
+                                 transition. Returns unsubscribe.
+     handleSignInTap()        — called by splash sign-in button.
+     handleSignOut()          — called by avatar flyout sign-out.
+     handleIdleTimeout()      — called by 05-security idle timer.
+     handleStrictFailWipe()   — called by 05-security at 5th PIN fail.
+     handleVisibilityResume() — called on visibilitychange to visible.
+
+   What this module does NOT do:
+     - Touch the DOM. UI updates happen in subscribers (Step 4 wiring).
+     - Own the splash UI. That stays in 07-startup.js.
+     - Own the PIN UI. That stays in 05-security.js.
+     - Own MSAL config or token cache. That stays in 00-core.js.
+
+   It owns the FLOW, not the surfaces.
+────────────────────────────────────────────────────────────────────────── */
+
+window.HAHMobile = window.HAHMobile || {};
+
+(function () {
+  'use strict';
+
+  const STATES = Object.freeze({
+    BOOT: 'BOOT',
+    MSAL_BOOTSTRAP: 'MSAL_BOOTSTRAP',
+    ACCOUNT_RESOLVED: 'ACCOUNT_RESOLVED',
+    SIGNIN_REQUIRED: 'SIGNIN_REQUIRED',
+    REDIRECTING: 'REDIRECTING',
+    FIRST_TIME_SETUP: 'FIRST_TIME_SETUP',
+    APP_READY: 'APP_READY',
+    IDLE_LOCKED: 'IDLE_LOCKED'
+  });
+
+  let currentState = STATES.BOOT;
+  let interactiveResolve = null;
+  let interactivePromise = null;
+  const subscribers = new Set();
+
+  function transition(nextState, reason) {
+    if (currentState === nextState) return;
+    const prev = currentState;
+    currentState = nextState;
+    // Subscribers fire AFTER the state has been set, so getState() inside
+    // a subscriber returns the new state (not the old one). Order
+    // matters for UI integration in Step 4.
+    subscribers.forEach((fn) => {
+      try { fn(nextState, prev, reason || null); } catch (_) {}
+    });
+    // Resolve the interactive-ready promise the first time we reach a
+    // user-interactive state. APP_READY and FIRST_TIME_SETUP both qualify
+    // (in FIRST_TIME_SETUP the lock screen is showing the PIN setup flow,
+    // which is itself an interactive surface).
+    if (interactiveResolve && (nextState === STATES.APP_READY || nextState === STATES.FIRST_TIME_SETUP)) {
+      const r = interactiveResolve;
+      interactiveResolve = null;
+      try { r(nextState); } catch (_) {}
+    }
+  }
+
+  function getState() {
+    return currentState;
+  }
+
+  function subscribe(fn) {
+    if (typeof fn !== 'function') return function () {};
+    subscribers.add(fn);
+    return function unsubscribe() { subscribers.delete(fn); };
+  }
+
+  // ── MSAL bootstrap (the load-bearing fix from v708's patchwork) ────
+  //
+  // The state machine OWNS the MSAL silent-restore call at app entry.
+  // Previously it raced DOMContentLoaded's splash decision; here we
+  // await it explicitly so the splash decision is made on real state,
+  // not on whatever was in localStorage at parse time.
+  //
+  // Two outcomes that matter:
+  //   1. acquireTokenSilent succeeds  →  ACCOUNT_RESOLVED
+  //      (the clock-fresh side effect happens inside getGraphAccessToken,
+  //      see Step 1 wiring in 00-core.js)
+  //   2. Anything else  →  SIGNIN_REQUIRED
+  //
+  // This call is idempotent on subsequent invocations because
+  // ensureMsalApp caches the MSAL instance and getGraphAccessToken's
+  // first call populates graphAccount + the clock; later calls find
+  // an already-resolved state and return quickly.
+  async function runMsalBootstrap() {
+    if (currentState !== STATES.BOOT) return;
+    transition(STATES.MSAL_BOOTSTRAP, 'start');
+
+    // Honest limit: if MSAL isn't wired (downloaded-file mode, no
+    // clientId configured, library failed to load), we cannot resolve
+    // an account and shouldn't pretend otherwise. Route to
+    // SIGNIN_REQUIRED so the splash surfaces the issue — its "Sign in"
+    // button will then trip its own error path with a clear message.
+    let app = null;
+    try {
+      if (typeof ensureMsalApp !== 'function') {
+        transition(STATES.SIGNIN_REQUIRED, 'no-msal-fn');
+        return;
+      }
+      app = await ensureMsalApp();
+    } catch (_) {
+      transition(STATES.SIGNIN_REQUIRED, 'msal-init-failed');
+      return;
+    }
+    if (!app) {
+      transition(STATES.SIGNIN_REQUIRED, 'no-msal-app');
+      return;
+    }
+
+    // ensureMsalApp has already run handleRedirectPromise inside it. If
+    // we got here because the user just returned from a Microsoft
+    // redirect, graphAccount is now set, identity is applied, the clock
+    // has been marked fresh (by the v707/v708 wiring in
+    // handleRedirectPromise), and we can proceed directly to
+    // ACCOUNT_RESOLVED.
+    const hasAccount = (typeof graphAccount !== 'undefined') && graphAccount && graphAccount.homeAccountId;
+    if (!hasAccount) {
+      // No cached account at all. Definitely needs sign-in.
+      transition(STATES.SIGNIN_REQUIRED, 'no-account');
+      return;
+    }
+
+    // We have a cached account. Now the question is: does Microsoft
+    // still consider it authenticated? acquireTokenSilent is the answer.
+    // This is THE behaviour change v709 introduces vs v708: silent
+    // restore at app entry, not lazily on first sync. The cost is a
+    // network round-trip at cold start (a few hundred ms); the benefit
+    // is correctness — the splash decision matches Microsoft's view of
+    // the account, not whatever's stale in localStorage.
+    //
+    // Honest limit: if the network is down, this throws. We treat that
+    // as 'cannot confirm Microsoft thinks the account is live' and
+    // route to SIGNIN_REQUIRED. The splash will then surface a network
+    // error when the user taps Sign in. This is strict-mode (Henry's
+    // v708 Q5 answer) carrying through to v709.
+    let tokenOk = false;
+    try {
+      if (typeof getGraphAccessToken === 'function') {
+        const token = await getGraphAccessToken();
+        tokenOk = !!token;
+      }
+    } catch (_e) {
+      tokenOk = false;
+    }
+
+    if (tokenOk) {
+      transition(STATES.ACCOUNT_RESOLVED, 'silent-ok');
+    } else {
+      transition(STATES.SIGNIN_REQUIRED, 'silent-failed');
+    }
+  }
+
+  // ── ACCOUNT_RESOLVED → APP_READY or FIRST_TIME_SETUP ──────────────
+  //
+  // The branch the v708 spec §7.4 flagged as a verify-not-assume
+  // question. Three cases observed in trace:
+  //   - PIN set                                    → APP_READY
+  //   - PIN not set AND onboarding due             → FIRST_TIME_SETUP
+  //     (existing onboarding flow handles PIN setup at its end)
+  //   - PIN not set AND onboarding NOT due         → FIRST_TIME_SETUP
+  //     (just the PIN setup flow, no onboarding)
+  // The state is the same (FIRST_TIME_SETUP); only the flow that runs
+  // inside it differs, decided by the caller via the existing
+  // shouldShowOnboarding logic in 07-startup.js.
+  function resolveAccount() {
+    if (currentState !== STATES.ACCOUNT_RESOLVED) return;
+    let pinSet = false;
+    try {
+      if (typeof isPinSet === 'function') pinSet = isPinSet();
+    } catch (_) {}
+    if (pinSet) {
+      transition(STATES.APP_READY, 'pin-already-set');
+    } else {
+      transition(STATES.FIRST_TIME_SETUP, 'pin-needs-setup');
+    }
+  }
+
+  // ── Public event handlers ─────────────────────────────────────────
+
+  function handleSignInTap() {
+    if (currentState !== STATES.SIGNIN_REQUIRED) {
+      // Defensive: should never fire from any other state because the
+      // sign-in button is only rendered in SIGNIN_REQUIRED. Belt-and-
+      // braces ignore rather than crash.
+      return;
+    }
+    transition(STATES.REDIRECTING, 'user-signin-tap');
+    // The actual redirect call lives in 00-core.js. We don't await it
+    // because it navigates the page away — execution doesn't return.
+    try {
+      if (typeof signInMicrosoft === 'function') {
+        signInMicrosoft();
+      }
+    } catch (_) {
+      // If it threw synchronously, fall back to SIGNIN_REQUIRED so the
+      // user can try again.
+      transition(STATES.SIGNIN_REQUIRED, 'signin-throw');
+    }
+  }
+
+  function handleSignOut() {
+    // Sign-out is reachable from APP_READY (avatar flyout) and from
+    // IDLE_LOCKED (theoretical — no UI currently exposes it there, but
+    // we accept it defensively). After cleanup, we don't transition to
+    // any state ourselves — signOutMicrosoft triggers a page reload
+    // (per existing v708 wiring), which puts us back at BOOT naturally.
+    try {
+      if (typeof signOutMicrosoft === 'function') signOutMicrosoft();
+    } catch (_) {}
+  }
+
+  function handleIdleTimeout() {
+    if (currentState !== STATES.APP_READY) return;
+    transition(STATES.IDLE_LOCKED, 'idle-timeout');
+  }
+
+  function handleVisibilityResume(msSinceLastActive) {
+    // Called when the app comes back to foreground. If we were already
+    // APP_READY and have been backgrounded >10 min, transition to
+    // IDLE_LOCKED. Otherwise no-op. The state machine doesn't own the
+    // visibilitychange handler itself; 05-security does (existing
+    // wiring). This function exists so the existing handler can ask
+    // the state machine what to do.
+    if (currentState !== STATES.APP_READY) return;
+    if (typeof PIN_TIMEOUT_MS === 'number' && msSinceLastActive > PIN_TIMEOUT_MS) {
+      transition(STATES.IDLE_LOCKED, 'visibility-resume-stale');
+    }
+  }
+
+  function handleUnlockSuccess() {
+    // Called by 05-security.js's finishUnlockSequence when PIN/biometric
+    // unlock completes successfully. Returns IDLE_LOCKED → APP_READY.
+    // The MSAL clock check inside finishUnlockSequence (v708.1 belt-
+    // and-braces) is preserved — if the clock has expired during the
+    // idle period, finishUnlockSequence refuses and routes back to
+    // splash. So if we reach here, MSAL is still valid.
+    if (currentState !== STATES.IDLE_LOCKED) return;
+    transition(STATES.APP_READY, 'unlock-success');
+  }
+
+  function handleStrictFailWipe() {
+    // Called by 05-security.js's escalateStrictFailure at the 5th PIN
+    // fail. Identity has been wiped, MSAL clock cleared. State goes to
+    // SIGNIN_REQUIRED so the splash sign-in button is the next thing
+    // the user sees (after the lock screen's error message). The
+    // existing escalation message stays visible until the user closes-
+    // and-reopens; we don't auto-force a reload here.
+    transition(STATES.SIGNIN_REQUIRED, 'strict-fail-wipe');
+  }
+
+  function handleFirstTimeSetupComplete() {
+    // Called by 05-security.js when beginSetupFlow finishes (PIN set,
+    // biometric offered, user dismissed). FIRST_TIME_SETUP → APP_READY.
+    if (currentState !== STATES.FIRST_TIME_SETUP) return;
+    transition(STATES.APP_READY, 'first-time-setup-done');
+  }
+
+  // ── Entry point ─────────────────────────────────────────────────────
+
+  function start() {
+    if (interactivePromise) return interactivePromise;
+    interactivePromise = new Promise((resolve) => { interactiveResolve = resolve; });
+    // Run MSAL_BOOTSTRAP asynchronously; the start() promise resolves
+    // when we reach a user-interactive state.
+    runMsalBootstrap().then(() => {
+      // Bootstrap finished. If we ended in ACCOUNT_RESOLVED, branch on
+      // PIN status now.
+      if (currentState === STATES.ACCOUNT_RESOLVED) {
+        resolveAccount();
+      }
+      // If we ended in SIGNIN_REQUIRED, we stay there — the splash
+      // sign-in surface (Step 4) is rendered by a subscriber on the
+      // transition into SIGNIN_REQUIRED.
+    }).catch(() => {
+      // Bootstrap throwing is treated as 'cannot resolve' → SIGNIN_REQUIRED.
+      // We only get here if runMsalBootstrap's outer error handling
+      // missed something, which shouldn't happen — but belt-and-braces.
+      if (currentState !== STATES.SIGNIN_REQUIRED) {
+        transition(STATES.SIGNIN_REQUIRED, 'bootstrap-threw');
+      }
+    });
+    return interactivePromise;
+  }
+
+  // Read-only state name accessor for diagnostics / tests.
+  function STATES_VIEW() { return STATES; }
+
+  window.HAHMobile.startupState = {
+    start,
+    getState,
+    subscribe,
+    handleSignInTap,
+    handleSignOut,
+    handleIdleTimeout,
+    handleVisibilityResume,
+    handleUnlockSuccess,
+    handleStrictFailWipe,
+    handleFirstTimeSetupComplete,
+    STATES: STATES_VIEW()
   };
 })();
 
