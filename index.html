@@ -3046,34 +3046,6 @@ body.hah-nav-stack .nav.nav-patient{
 .header-avatar-flyout-signout{display:block;width:100%;margin-top:12px;padding:10px;border-radius:10px;border:0;background:transparent;color:#dc2626;font-size:14px;font-weight:600;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .header-avatar-flyout-signout:active{background:rgba(220,38,38,.08)}
 
-/* v12.36.708 Phase 1B — Splash sign-in surface (Option A progressive states).
-   Appears below the brand stack when MSAL clock is expired (>12h since
-   last interactive Microsoft auth) or no account is signed in. Hidden
-   when MSAL is still within the 12h window. Aim is iOS-native: a single
-   prominent blue button + a small status line below for the
-   'Reconnecting...' interstitial state. */
-.app-splash-signin{margin-top:30px;display:flex;flex-direction:column;align-items:center;gap:14px;width:min(280px,80vw)}
-.app-splash-signin.hidden{display:none!important}
-.app-splash-signin-btn{appearance:none;-webkit-appearance:none;border:0;background:rgba(255,255,255,.92);color:#0a2540;font-size:16px;font-weight:600;padding:14px 22px;border-radius:12px;width:100%;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 8px 24px rgba(0,0,0,.18);letter-spacing:.01em;line-height:1.2}
-.app-splash-signin-btn:active{transform:scale(.98);background:rgba(255,255,255,.86)}
-.app-splash-signin-btn:disabled{opacity:.55;cursor:default}
-.app-splash-signin-status{font-size:13px;color:rgba(255,255,255,.85);text-align:center;min-height:1.2em;line-height:1.3;padding:0 8px}
-.app-splash-signin-status:empty{visibility:hidden}
-
-/* v12.36.708 Phase 1B fix: when MSAL sign-in is required, dim the icon
-   button so it reads as not-the-action and shake the sign-in surface
-   if the icon is tapped (deliberate non-response feedback rather than
-   silent ignore, which would feel like a bug). */
-#appSplash.splash-msal-required .app-splash-logo-button{opacity:.55;cursor:default}
-#appSplash.splash-msal-required .app-splash-logo-button:active{transform:none}
-.app-splash-signin-shake{animation:appSplashSigninShake .42s cubic-bezier(.36,.07,.19,.97) both}
-@keyframes appSplashSigninShake{
-  10%, 90% { transform: translateX(-2px); }
-  20%, 80% { transform: translateX(3px); }
-  30%, 50%, 70% { transform: translateX(-5px); }
-  40%, 60% { transform: translateX(5px); }
-}
-
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -3144,7 +3116,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_709_state_machine_release.html; source=hospital_at_home_v12_36_709_state_machine_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_707_identity_phase1_release.html; source=hospital_at_home_v12_36_707_identity_phase1_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3185,10 +3157,6 @@ body.hah-nav-stack .nav.nav-patient{
 <div aria-label="Clinical workflow, simplified." class="app-splash-tagline" id="appSplashTagline"><span class="app-splash-tagline-main">Clinical workflow</span><span class="app-splash-tagline-tail">simplified</span></div>
 </div>
 <div class="app-splash-company app-splash-animate">LK Medica Software Solutions</div>
-<div class="app-splash-signin hidden" id="appSplashSignin" aria-live="polite">
-<button class="app-splash-signin-btn" id="appSplashSigninBtn" type="button">Sign in with Microsoft</button>
-<div class="app-splash-signin-status" id="appSplashSigninStatus"></div>
-</div>
 </div>
 </div>
 <div class="hidden" id="lockScreen">
@@ -3509,7 +3477,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_709_state_machine_release.html</div><div>Source: hospital_at_home_v12_36_709_state_machine_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_707_identity_phase1_release.html</div><div>Source: hospital_at_home_v12_36_707_identity_phase1_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -5463,17 +5431,6 @@ async function ensureMsalApp(){
     if(res && res.account){
       graphAccount=res.account;
       localStorage.setItem(GRAPH_ACCOUNT_KEY, JSON.stringify({username:res.account.username||'', homeAccountId:res.account.homeAccountId||''}));
-      // v12.36.708 Phase 1A: an interactive MSAL redirect just completed
-      // successfully — reset the 12h MSAL re-auth clock. Only THIS path
-      // (handleRedirectPromise success, which means loginRedirect or
-      // acquireTokenRedirect returned with an authenticated account)
-      // resets the clock. Silent token refresh and select_account flows
-      // do NOT reset it.
-      try{
-        if(window.HAHMobile && window.HAHMobile.msalClock){
-          window.HAHMobile.msalClock.markMsalFullyVerified();
-        }
-      }catch(_clockErr){}
       // v12.36.707 Phase 1: notify the mobile identity module that a Microsoft
       // account has been resolved live. Best-effort — failures are silent
       // (the identity module's `applyAccount` swallows Graph errors and
@@ -5485,26 +5442,6 @@ async function ensureMsalApp(){
           window.HAHMobile.identity.applyAccount(res.account, res.accessToken || null).catch(()=>{});
         }
       }catch(_idErr){}
-      // v12.36.708 Phase 1D: first-time PIN/biometric setup. If the user
-      // has just successfully signed in to Microsoft for the first time
-      // on this device (no PIN set in localStorage), launch the existing
-      // PIN setup flow before app reveal. Subsequent launches skip this
-      // entirely — the user just signs into Microsoft and the app
-      // reveals (no PIN gate on cold start per v708.3).
-      try{
-        if(typeof isPinSet === 'function' && !isPinSet() && typeof beginSetupFlow === 'function'){
-          // Defer slightly so the existing post-MSAL handlers (sync,
-          // import resume, etc) get a chance to run first. The setup
-          // flow shows the lock screen overlay; deferring avoids
-          // racing with whatever the redirect-return handler is doing.
-          setTimeout(()=>{ try{ beginSetupFlow(); }catch(_){} }, 400);
-        }
-        // v12.36.708.3 NOTE: the post-MSAL beginUnlockFlow() trigger
-        // that was added in v708.2 is removed here. Cold-start PIN is
-        // no longer required; idle re-lock (10-min timer +
-        // visibilitychange handler in 05-security.js) is the only path
-        // to PIN-after-MSAL now.
-      }catch(_pinErr){}
       // If we were mid-import when redirect was triggered, resume it.
       // v706.x: previously this fired importHandoverRows() on a blind
       // 300ms timer and never navigated, so after the ~daily token-expiry
@@ -5563,20 +5500,6 @@ async function signInMicrosoft(){
     setGraphPostAuthReturn();
     setGraphAuthReturnSnapshotShieldBypass(true);
     try{
-      // v12.36.708.3: reverted to prompt='select_account' from the
-      // earlier 'login' (v708 1A). 'prompt=login' was producing a
-      // "We didn't get an approval" timeout on iOS PWA + cellular every
-      // time, because the platform's strict reauth-ceremony completion
-      // check races the Authenticator-on-same-device round-trip even
-      // when the approval visibly succeeded. The desktop spec said to
-      // mirror desktop v0.8.234's 'login' but desktop's environment
-      // (different platform, faster Authenticator round-trip) made the
-      // trade cheap there; on iOS PWA it's expensive (broken UX).
-      // The 12h MSAL clock still forces interactive auth twice daily;
-      // strict 5-strike PIN failure still wipes cached identity and
-      // forces re-credential entry. 'select_account' preserves the
-      // account picker so a wrong account cannot be silently used.
-      // Governance posture preserved; UX bug fixed.
       await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'select_account'});
     }catch(e){
       setGraphAuthReturnSnapshotShieldBypass(false);
@@ -5599,11 +5522,6 @@ async function signOutMicrosoft(){
     try{
       if(window.HAHMobile && window.HAHMobile.identity) window.HAHMobile.identity.clear();
     }catch(_idErr){}
-    // v12.36.708 Phase 1A: clear the MSAL 12h re-auth clock so the next
-    // entry forces a full interactive sign-in.
-    try{
-      if(window.HAHMobile && window.HAHMobile.msalClock) window.HAHMobile.msalClock.clearMsalClock();
-    }catch(_clockErr){}
     if(acc){
       await app.logoutRedirect({account:acc, postLogoutRedirectUri:getCurrentPageUrl()});
     } else {
@@ -5617,35 +5535,21 @@ async function signOutMicrosoft(){
 async function getGraphAccessToken(){
   const app=await ensureMsalApp();
   if(!graphAccount || !graphAccount.homeAccountId){
-    // v12.36.708.1: previously this auto-fired loginRedirect, which raced
-    // the splash sign-in surface and bypassed it (user saw "Loading..."
-    // → Microsoft, never the splash button). With the v708 splash UX as
-    // the canonical sign-in entry point, this lazy fallback must NOT
-    // auto-redirect. Throw a typed error instead; sync paths that catch
-    // it can surface a "Sign in first" message, and the splash itself
-    // already gates entry on the MSAL clock so the user has already
-    // been routed through sign-in if they're at this point.
-    const err = new Error('No Microsoft account — sign in via the app splash.');
-    err.code = 'NO_ACCOUNT';
-    throw err;
+    // No account — trigger redirect sign-in, flag that import should resume after
+    localStorage.setItem('hah_pending_import','1');
+    setGraphPostAuthReturn();
+    setGraphAuthReturnSnapshotShieldBypass(true);
+    try{
+      await app.loginRedirect({scopes:GRAPH_SCOPES, prompt:'select_account'});
+    }catch(e){
+      setGraphAuthReturnSnapshotShieldBypass(false);
+      throw e;
+    }
+    return; // Page will redirect
   }
   try{
     const accountObj = app.getAllAccounts().find(a=>a.homeAccountId===graphAccount.homeAccountId) || app.getAllAccounts()[0] || graphAccount;
     const token=await app.acquireTokenSilent({scopes:GRAPH_SCOPES, account:accountObj});
-    // v12.36.709 Step 1 (clock invariant fix): a successful
-    // acquireTokenSilent IS the definitive 'Microsoft just confirmed
-    // this account is currently authenticated' signal. The v708 spec
-    // wrongly excluded silent restore from clock-reset; that produced
-    // the 'still having to sign in' bug Henry hit, because the clock
-    // would look stale even when Microsoft's refresh-token-based silent
-    // restore was succeeding cleanly. The clock's real meaning is 'when
-    // did Microsoft most recently confirm this account to me?' — silent
-    // restore is exactly that proof. Mark the clock fresh here.
-    try{
-      if(window.HAHMobile && window.HAHMobile.msalClock && token && token.accessToken){
-        window.HAHMobile.msalClock.markMsalFullyVerified();
-      }
-    }catch(_clockErr){}
     // v12.36.707 Phase 1: refresh identity with the fresh access token.
     // First call from a silent-resume cold start typically lands here —
     // this is the moment Graph /me can be reached for displayName +
@@ -12351,67 +12255,6 @@ function isPinSet(){ return !!localStorage.getItem(PIN_KEY); }
 function isBiometricEnabled(){ return localStorage.getItem(BIOMETRIC_KEY) === '1'; }
 function isBiometricAvailable(){ return !!(window.PublicKeyCredential && window.location.hostname); }
 
-// v12.36.708 Phase 1C: strict failure handling. Tracks consecutive failed
-// PIN/biometric UNLOCK attempts (NOT change/remove — those are settings
-// operations where the user is already inside the app). After 5 failures,
-// wipe the cached identity, the MSAL clock, and force a full Microsoft
-// sign-in. Per Henry's Q4 answer.
-const PIN_FAIL_COUNT_KEY = 'hah_pin_fail_count';
-const MAX_PIN_FAIL_ATTEMPTS = 5;
-
-function getPinFailCount(){
-  try{
-    const raw = localStorage.getItem(PIN_FAIL_COUNT_KEY);
-    const n = parseInt(raw, 10);
-    return Number.isFinite(n) && n > 0 ? n : 0;
-  }catch(_){ return 0; }
-}
-function incrementPinFailCount(){
-  const next = getPinFailCount() + 1;
-  try{ localStorage.setItem(PIN_FAIL_COUNT_KEY, String(next)); }catch(_){}
-  return next;
-}
-function resetPinFailCount(){
-  try{ localStorage.removeItem(PIN_FAIL_COUNT_KEY); }catch(_){}
-}
-function pinFailAttemptsRemaining(){
-  return Math.max(0, MAX_PIN_FAIL_ATTEMPTS - getPinFailCount());
-}
-
-// Trigger the strict-failure escalation: wipe cached identity, clear the
-// MSAL re-auth clock, clear the failure counter, and signal that the next
-// app entry needs a full Microsoft sign-in. The actual MSAL redirect is
-// triggered by the splash UX flow (Phase 1B) on next launch — we do NOT
-// redirect here because the user is currently mid-PIN-entry and a sudden
-// redirect from inside the lock screen would be jarring. Instead we
-// surface a clear message and the user explicitly triggers re-auth.
-function escalateStrictFailure(){
-  try{ localStorage.removeItem('hah_cached_identity'); }catch(_){}
-  try{
-    if(window.HAHMobile && window.HAHMobile.identity) window.HAHMobile.identity.clear();
-  }catch(_idErr){}
-  try{
-    if(window.HAHMobile && window.HAHMobile.msalClock) window.HAHMobile.msalClock.clearMsalClock();
-  }catch(_clockErr){}
-  resetPinFailCount();
-  // v12.36.709 Step 4 Hook 5: notify state machine of the wipe. State
-  // transitions to SIGNIN_REQUIRED so the next entry into the splash
-  // (or the current splash re-reveal in finishUnlockSequence) is
-  // consistent with state machine truth.
-  try{
-    if(window.HAHMobile && window.HAHMobile.startupState){
-      window.HAHMobile.startupState.handleStrictFailWipe();
-    }
-  }catch(_smErr){}
-  setPinError('Too many failed attempts. Please sign in with Microsoft to continue.');
-  // The lock screen stays visible; the splash UX (Phase 1B) detects the
-  // wiped state on next entry and routes through Microsoft sign-in.
-  // For now (1C-only state, before 1B ships), the lock UI shows the
-  // escalation message but stays in place — that's acceptable behaviour
-  // since 1C and 1B ship in the same release pair (v708) and never
-  // independently.
-}
-
 function isSplashScreenSkipped(){
   try{ return localStorage.getItem(SKIP_SPLASH_KEY) === '1'; }catch(e){ return false; }
 }
@@ -12625,48 +12468,6 @@ function shouldSuppressPostUnlockInteraction(){
 }
 
 function finishUnlockSequence(){
-  // v12.36.708.1: MSAL gate. PIN proves "device's authorised user is
-  // present" but does NOT prove "Microsoft identity is currently
-  // verified". Per the v708 spec §3.3 and Henry's strict-mode decision,
-  // PIN unlock must NOT complete if the MSAL 12h clock has expired.
-  // Instead, route back to the splash sign-in surface — the wall must
-  // be the wall.
-  //
-  // Safe-default: if the msalClock module is somehow not loaded (script
-  // ordering, partial bundle, etc.), assume MSAL IS required rather than
-  // assume it's fine. Failing closed is the right direction for a
-  // governance gate.
-  let msalRequired = true;
-  try{
-    if(window.HAHMobile && window.HAHMobile.msalClock && typeof window.HAHMobile.msalClock.shouldForceMsalReauth === 'function'){
-      msalRequired = window.HAHMobile.msalClock.shouldForceMsalReauth();
-    }
-  }catch(_clockErr){
-    msalRequired = true; // belt-and-braces
-  }
-  if(msalRequired){
-    // Don't unlock. Instead show the splash sign-in surface so the
-    // user can complete MSAL re-auth. We DON'T auto-redirect here
-    // because the user is mid-PIN-entry and a sudden navigation would
-    // be jarring; we let them tap the visible button.
-    setPinError('Microsoft sign-in required. Please reconnect.');
-    pinSession.busy = false;
-    // Surface the splash sign-in button if it's not already visible.
-    // The splash may have been dismissed by the time PIN appeared,
-    // so we re-reveal the splash with the sign-in surface.
-    try{
-      const splash = document.getElementById('appSplash');
-      const surface = document.getElementById('appSplashSignin');
-      if(splash && surface){
-        splash.classList.remove('hidden');
-        splash.classList.add('splash-msal-required');
-        surface.classList.remove('hidden');
-        const statusEl = document.getElementById('appSplashSigninStatus');
-        if(statusEl) statusEl.textContent = 'Microsoft sign-in required to unlock the app.';
-      }
-    }catch(_uiErr){}
-    return;
-  }
   unlockUiSuppressUntil = Date.now() + 650;
   pinSession.unlocking = true;
   pinSession.busy = true;
@@ -12682,33 +12483,12 @@ function finishUnlockSequence(){
     restoreLockReturnState();
     lastActiveTime = Date.now();
     resetLockTimer();
-    // v12.36.709 Step 4 Hook 4: notify state machine of successful
-    // unlock. State machine transitions IDLE_LOCKED → APP_READY.
-    try{
-      if(window.HAHMobile && window.HAHMobile.startupState){
-        window.HAHMobile.startupState.handleUnlockSuccess();
-      }
-    }catch(_smErr){}
   }, 260);
 }
 
 function closePinOverlayWithoutUnlock(){
   hideLockScreenNow();
   resetLockTimer();
-  // v12.36.709 Step 4 Hook 6: if this close fires after PIN was just set
-  // (first-time setup completion) and the state machine is currently
-  // in FIRST_TIME_SETUP, transition it to APP_READY. The discriminator
-  // is the state machine's current state — only fire if it was waiting
-  // on this completion. Other closes (e.g. user dismissing change-pin)
-  // are no-ops for the state machine.
-  try{
-    if(window.HAHMobile && window.HAHMobile.startupState){
-      const sm = window.HAHMobile.startupState;
-      if(sm.getState && sm.STATES && sm.getState() === sm.STATES.FIRST_TIME_SETUP && isPinSet()){
-        sm.handleFirstTimeSetupComplete();
-      }
-    }
-  }catch(_smErr){}
 }
 
 function beginSetupFlow(){
@@ -12740,23 +12520,10 @@ async function completePinEntry(entered, flow, nonce){
   if(flow === PIN_FLOW.UNLOCK){
     if(await verifyCurrentPin(entered)){
       if(nonce !== pinSession.nonce) return;
-      // v12.36.708 Phase 1C: successful UNLOCK clears the failure counter.
-      resetPinFailCount();
       finishUnlockSequence();
     } else {
       if(isNedryEnabled()) playIncorrectPinSound();
-      // v12.36.708 Phase 1C: increment failure counter; escalate at 5.
-      const next = incrementPinFailCount();
-      if(next >= MAX_PIN_FAIL_ATTEMPTS){
-        escalateStrictFailure();
-      } else {
-        const remaining = MAX_PIN_FAIL_ATTEMPTS - next;
-        if(remaining <= 2){
-          setPinError(`Incorrect PIN. ${remaining} attempt${remaining===1?'':'s'} remaining before Microsoft sign-in is required.`);
-        } else {
-          setPinError('Incorrect PIN. Try again.');
-        }
-      }
+      setPinError('Incorrect PIN. Try again.');
     }
     return;
   }
@@ -12913,33 +12680,12 @@ async function handleBiometricBtn(){
   }
   if(pinSession.flow !== PIN_FLOW.UNLOCK) return;
   pinSession.busy = true;
-  // v12.36.708 Phase 1C: biometric UNLOCK failures count toward the same
-  // 5-strike budget as PIN failures. Same governance signal — biometric
-  // refusing to authenticate is the same class of event as PIN failing.
-  // User can always fall back to typing the PIN.
-  function biometricFail(msg){
-    const next = incrementPinFailCount();
-    if(next >= MAX_PIN_FAIL_ATTEMPTS){
-      escalateStrictFailure();
-    } else {
-      const remaining = MAX_PIN_FAIL_ATTEMPTS - next;
-      if(remaining <= 2){
-        setPinError(`${msg} ${remaining} attempt${remaining===1?'':'s'} remaining before Microsoft sign-in is required.`);
-      } else {
-        setPinError(msg + ' Enter your PIN.');
-      }
-    }
-  }
   try{
     const ok = await authenticateBiometric();
-    if(ok){
-      resetPinFailCount();
-      finishUnlockSequence();
-    } else {
-      biometricFail('Face ID failed.');
-    }
+    if(ok) finishUnlockSequence();
+    else setPinError('Face ID failed. Enter your PIN.');
   }catch(e){
-    biometricFail('Face ID failed.');
+    setPinError('Face ID failed. Enter your PIN.');
   }
 }
 
@@ -13016,16 +12762,6 @@ function resetLockTimer(){
   if(!isPinSet()) return;
   if(isLockScreenVisible()) return;
   lockTimer = setTimeout(()=>{
-    // v12.36.709 Step 4 Hook 3a: notify the state machine of the idle
-    // event before showing the lock UI. The state machine routes APP_READY
-    // → IDLE_LOCKED. The actual UI continues to be driven by the existing
-    // showLockScreenForFlow call below — state machine is informational
-    // for now (Step 5 will move UI ownership in).
-    try{
-      if(window.HAHMobile && window.HAHMobile.startupState){
-        window.HAHMobile.startupState.handleIdleTimeout();
-      }
-    }catch(_smErr){}
     captureLockReturnState();
     showLockScreenForFlow(PIN_FLOW.UNLOCK, {capture:false});
   }, PIN_TIMEOUT_MS);
@@ -13097,14 +12833,6 @@ function initSecurity(){
     if(document.hidden) return;
     if(!isPinSet()) return;
     if(Date.now() - lastActiveTime > PIN_TIMEOUT_MS){
-      // v12.36.709 Step 4 Hook 3b: notify the state machine of the
-      // visibility-resume-stale event. The state machine routes APP_READY
-      // → IDLE_LOCKED. UI driven by the existing showLockScreenForFlow.
-      try{
-        if(window.HAHMobile && window.HAHMobile.startupState){
-          window.HAHMobile.startupState.handleVisibilityResume(Date.now() - lastActiveTime);
-        }
-      }catch(_smErr){}
       captureLockReturnState();
       showLockScreenForFlow(PIN_FLOW.UNLOCK, {capture:false});
     } else {
@@ -13113,31 +12841,9 @@ function initSecurity(){
   });
 
   if(isPinSet()){
-    // v12.36.708.3: PIN-on-cold-start is DROPPED. Per Henry's decision,
-    // PIN no longer gates cold start — MSAL is the cold-start gate, and
-    // PIN earns its keep on idle re-lock (10-min timer + visibilitychange
-    // handler below) and the first-time setup flow. Rationale: PIN
-    // immediately after a fresh MSAL sign-in is redundant friction (you
-    // just proved you're you to Microsoft 5 seconds ago); and within the
-    // 12h MSAL window, cold-starting from a known-authenticated state
-    // doesn't add meaningful local security over MSAL alone.
-    //
-    // The two paths that still trigger PIN:
-    //   1. resetLockTimer() → 10-min foreground-idle elapsed → beginUnlockFlow
-    //   2. visibilitychange → background >10 min → beginUnlockFlow
-    //   3. (Plus belt-and-braces: if any code does call beginUnlockFlow
-    //      and MSAL has expired in the meantime, finishUnlockSequence
-    //      refuses to complete and re-reveals the splash.)
-    //
-    // No startup PIN prompt fires here.
+    captureLockReturnState();
+    showLockScreenForFlow(PIN_FLOW.UNLOCK, {capture:false});
   } else if(!localStorage.getItem('hah_pin_skipped')){
-    // First-time PIN setup is preserved. This fires when no PIN is set
-    // AND the user hasn't explicitly skipped onboarding. Note: the
-    // post-MSAL-success path in 00-core.js (Phase 1D wiring) is the
-    // primary trigger for first-time PIN setup; this branch handles
-    // edge cases where the user reaches initSecurity without going
-    // through the post-MSAL handler (e.g. development environment, or
-    // a future flow we haven't anticipated). Safe-to-keep.
     showLockScreenForFlow(PIN_FLOW.SET_ENTER, {capture:false});
   }
   resetLockTimer();
@@ -13322,8 +13028,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_709_state_machine_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_709_state_machine_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_707_identity_phase1_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_707_identity_phase1_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -15441,29 +15147,6 @@ function queueOnboardingAfterSplash(){
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>openOnboarding(false)); });
 }
 function handleAppSplashIconTap(){
-  // v12.36.708 Phase 1B fix: when the splash sign-in surface is showing
-  // (MSAL clock expired or no account), the icon-tap must NOT bypass to
-  // dismissAppSplash() — that would let the user skip MSAL entirely and
-  // (post-Phase-2) write audit entries attributed to stale identity. The
-  // wall must be the wall. Within the 12h MSAL window the icon-tap still
-  // works as before (PIN unlock flow).
-  try{
-    const clock = (window.HAHMobile && window.HAHMobile.msalClock) || null;
-    if(clock && clock.shouldForceMsalReauth()){
-      // Provide a small visual cue so the non-response is recognisable
-      // as deliberate rather than a bug. The CSS keyframe shake is
-      // shared with the lock-screen's incorrect-PIN feedback.
-      const surface = document.getElementById('appSplashSignin');
-      if(surface){
-        surface.classList.remove('app-splash-signin-shake');
-        // Force reflow so the class re-add re-triggers the animation
-        // even on a rapid second tap.
-        void surface.offsetWidth;
-        surface.classList.add('app-splash-signin-shake');
-      }
-      return;
-    }
-  }catch(_clockErr){}
   const shouldLaunchSetup = typeof isPinSet==='function' ? (!isPinSet() && shouldShowOnboarding()) : shouldShowOnboarding();
   if(shouldLaunchSetup){
     queueOnboardingAfterSplash();
@@ -15476,20 +15159,6 @@ function shouldSkipAppSplashOnLaunch(){
   try{ return localStorage.getItem(SKIP_SPLASH_KEY) === '1'; }catch(e){ return false; }
 }
 
-// v12.36.708.2: single source of truth for "MSAL re-auth is required at
-// app entry." Used to OVERRIDE the skip-splash paths (returning-user
-// flag, post-auth-restore) so the splash sign-in surface always gets a
-// chance to render when there's no fresh Microsoft session. Safe-default:
-// missing module → assume MSAL required (fails closed).
-function isMsalReauthRequired(){
-  try{
-    if(window.HAHMobile && window.HAHMobile.msalClock && typeof window.HAHMobile.msalClock.shouldForceMsalReauth === 'function'){
-      return window.HAHMobile.msalClock.shouldForceMsalReauth();
-    }
-  }catch(_e){}
-  return true; // fail closed
-}
-
 function initAppSplash(){
   if(appSplashDismissed) return;
   const splash=$("appSplash");
@@ -15498,87 +15167,9 @@ function initAppSplash(){
   iconButton.dataset.bound='1';
   iconButton.addEventListener('click', handleAppSplashIconTap, {passive:true});
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ splash.classList.add('splash-ready'); }); });
-  // v12.36.708 Phase 1B: splash sign-in surface (Option A progressive
-  // states). After the brand reveal, check the 12h MSAL clock:
-  //   - If expired (or never set), reveal the "Sign in with Microsoft"
-  //     button below the brand stack.
-  //   - If still within the 12h window, the splash dismisses normally
-  //     (either via icon tap or via the existing splash transition path).
-  // The button triggers signInMicrosoft() (defined in 00-core.js), which
-  // does a full interactive loginRedirect with prompt='login'. On return,
-  // handleRedirectPromise marks the MSAL clock fresh (Phase 1A) and the
-  // splash dismisses to the lock screen (if PIN set) or first-time setup
-  // (Phase 1D).
-  initAppSplashSigninSurface();
-}
-
-function initAppSplashSigninSurface(){
-  try{
-    const surface = document.getElementById('appSplashSignin');
-    const btn = document.getElementById('appSplashSigninBtn');
-    const status = document.getElementById('appSplashSigninStatus');
-    if(!surface || !btn) return;
-    // Only show the surface when MSAL is genuinely expired. If the
-    // mobile MSAL clock module isn't loaded yet (race during script
-    // boot), default-safe: don't show the button — the existing lazy
-    // sync-triggered loginRedirect will catch the case if needed.
-    const clock = (window.HAHMobile && window.HAHMobile.msalClock) || null;
-    if(!clock || !clock.shouldForceMsalReauth()) return;
-    // Cohabit with the brand reveal: defer the button surface until
-    // after the splash-ready class lands so it animates in alongside
-    // the brand stack rather than appearing pre-animation.
-    setTimeout(()=>{
-      surface.classList.remove('hidden');
-      // Visually dim the icon button so it reads as not-the-action.
-      // The icon's click handler also early-outs in this state (see
-      // handleAppSplashIconTap), so tapping it just shakes the sign-in
-      // surface. The class is applied here rather than in CSS-by-state
-      // so it stays robust to splash flow variations.
-      const splash = document.getElementById('appSplash');
-      if(splash) splash.classList.add('splash-msal-required');
-    }, 280);
-    if(btn.dataset.bound === '1') return;
-    btn.dataset.bound = '1';
-    btn.addEventListener('click', async function(){
-      if(btn.disabled) return;
-      btn.disabled = true;
-      if(status) status.textContent = 'Reconnecting to OneDrive\u2026';
-      try{
-        // v12.36.709 Step 4 Hook 2: route through the state machine so
-        // BOOT-side state stays consistent (the tap transitions to
-        // REDIRECTING; failure routes back to SIGNIN_REQUIRED). The
-        // state machine's handleSignInTap internally calls
-        // signInMicrosoft, which navigates the page away. Fallback to
-        // calling signInMicrosoft directly if the state machine isn't
-        // wired for any reason (defensive — should not happen in v709).
-        if(window.HAHMobile && window.HAHMobile.startupState && typeof window.HAHMobile.startupState.handleSignInTap === 'function'){
-          window.HAHMobile.startupState.handleSignInTap();
-        } else if(typeof signInMicrosoft === 'function'){
-          await signInMicrosoft();
-        }
-      }catch(e){
-        // signInMicrosoft surfaces its own error via setGraphStatus; on
-        // failure surface here too so the user knows what's happening.
-        btn.disabled = false;
-        if(status) status.textContent = 'Sign-in failed. Tap to try again.';
-      }
-    }, {passive:true});
-  }catch(_e){}
 }
 
 document.addEventListener("DOMContentLoaded",function(){
-  // v12.36.709 Step 4: kick off the startup state machine immediately.
-  // It owns the MSAL bootstrap (explicit silent restore at app entry —
-  // the v708 race fix) and is the source of truth for SIGNIN_REQUIRED
-  // / ACCOUNT_RESOLVED / APP_READY / FIRST_TIME_SETUP / IDLE_LOCKED.
-  // Subscribers below drive the splash + lock-screen UI in response.
-  // Fire-and-forget — start() returns a promise that resolves to the
-  // interactive state but UI hooks subscribe to all transitions.
-  try{
-    if(window.HAHMobile && window.HAHMobile.startupState){
-      window.HAHMobile.startupState.start();
-    }
-  }catch(_smErr){}
   if(typeof consumeGraphAuthReturnSnapshotShieldBypass==='function') consumeGraphAuthReturnSnapshotShieldBypass();
   const pendingGraphPostAuthRestore=getGraphPostAuthUiRestore();
   if(pendingGraphPostAuthRestore && pendingGraphPostAuthRestore.skipSplash) showGraphAuthReturnCover();
@@ -15587,19 +15178,8 @@ document.addEventListener("DOMContentLoaded",function(){
   }
   initAppSnapshotShield();
   initBackgroundFlush();
-  // v12.36.708.2: MSAL reauth required is an absolute override of any
-  // skip-splash path. The brand splash must show so its sign-in surface
-  // can render — otherwise the user lands on PIN with no way to sign in
-  // to Microsoft, which strict-mode (Henry's Q1 answer to the bypass
-  // followup) correctly refuses to unlock past.
-  const msalReauthNeeded = isMsalReauthRequired();
-  if(msalReauthNeeded){
-    initAppSplash();
-  } else if((pendingGraphPostAuthRestore && pendingGraphPostAuthRestore.skipSplash) || shouldSkipAppSplashOnLaunch()){
-    skipAppSplashImmediately();
-  } else {
-    initAppSplash();
-  }
+  if((pendingGraphPostAuthRestore && pendingGraphPostAuthRestore.skipSplash) || shouldSkipAppSplashOnLaunch()) skipAppSplashImmediately();
+  else initAppSplash();
   if(pendingGraphPostAuthRestore){
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 120);
     setTimeout(()=>{ try{ applyGraphPostAuthUiRestore(); }catch(e){} }, 600);
@@ -25638,34 +25218,13 @@ window.HAHMobile = window.HAHMobile || {};
    * bounds how stale a 'cached' entry can be.
    */
   function getCurrentUserIdentity() {
-    // v12.36.708 Phase 1E: consult the MSAL 12h clock to refine the
-    // verification level. Three values:
-    //   'live'                — live MSAL session resolved this session
-    //   'cached'              — no live session, but cached identity is
-    //                            recent (MSAL last verified < 12h ago)
-    //   'cached-msal-expired' — no live session AND MSAL last verified
-    //                            > 12h ago. Honest about the staleness
-    //                            gradient. Per spec v708 §5.
-    // The PIN/biometric unlock is a separate proof from MSAL; this field
-    // only describes the Microsoft side. When v708 1B's splash UX ships,
-    // 'cached-msal-expired' will be a transient state at app entry
-    // (caught by shouldForceMsalReauth and resolved via interactive
-    // sign-in before any audited write fires). It remains reachable for
-    // offline-at-bedside writes where MSAL re-auth is not possible.
-    let msalExpired = false;
-    try {
-      if (window.HAHMobile && window.HAHMobile.msalClock) {
-        msalExpired = window.HAHMobile.msalClock.shouldForceMsalReauth();
-      }
-    } catch (_) {}
-
     if (live.oid) {
       const verifiedAtMs = live.verifiedAt ? Date.parse(live.verifiedAt) : Date.now();
       return {
         oid: live.oid,
         displayName: live.displayName || FALLBACK_NAME,
         role: live.role || null,
-        verified: msalExpired ? 'cached-msal-expired' : 'live',
+        verified: 'live',
         ageMs: Math.max(0, Date.now() - verifiedAtMs)
       };
     }
@@ -25676,7 +25235,7 @@ window.HAHMobile = window.HAHMobile || {};
       oid: cached.oid,
       displayName: cached.displayName || FALLBACK_NAME,
       role: cached.role || null,
-      verified: msalExpired ? 'cached-msal-expired' : 'cached',
+      verified: 'cached',
       ageMs: Math.max(0, Date.now() - verifiedAtMs)
     };
   }
@@ -25796,12 +25355,10 @@ window.HAHMobile = window.HAHMobile || {};
     if (emailEl) emailEl.textContent = (live && live.email) || '';
     const statusEl = $('headerAvatarFlyoutStatus');
     if (statusEl) {
-      if (ident.verified === 'cached-msal-expired') {
-        statusEl.textContent = `Microsoft sign-in expired \u2014 last verified ${formatAgeFromMs(ident.ageMs)}. Reconnect when online.`;
-      } else if (ident.verified === 'cached') {
-        statusEl.textContent = `Cached identity \u2014 last verified ${formatAgeFromMs(ident.ageMs)}.`;
+      if (ident.verified === 'cached') {
+        statusEl.textContent = `Cached identity — last verified ${formatAgeFromMs(ident.ageMs)}.`;
       } else {
-        statusEl.textContent = 'Verified \u2014 live session.';
+        statusEl.textContent = 'Verified — live session.';
       }
     }
   }
@@ -25871,466 +25428,6 @@ window.HAHMobile = window.HAHMobile || {};
     bindAvatarUiOnce();
     renderAvatar();
   }
-})();
-
-</script><script>
-/* ─── H@H Companion — MSAL 12h clock (v12.36.708 / Phase 1A)
-   The Microsoft re-authentication window. SEPARATE from the PIN/biometric
-   lock timer in 05-security.js — they do different jobs:
-
-     - PIN lock: "is this the device's authorised user?" (10-min idle)
-     - MSAL clock: "is this still the same Microsoft identity?" (12-hour)
-
-   They both run; both must succeed for the audit attribution to be 'live'.
-   Failure modes differ — PIN failure locks the device-side; MSAL clock
-   expiry forces a full sign-in redirect.
-
-   Public API (window.HAHMobile.msalClock):
-
-     markMsalFullyVerified()     Called from 00-core.js when an interactive
-                                 MSAL completes successfully. Updates the
-                                 timestamp. ONLY interactive auth resets
-                                 the clock — silent token refresh and
-                                 select_account flows do NOT reset it.
-
-     shouldForceMsalReauth()     → boolean. Reads the timestamp. True if
-                                 absent OR ≥ 12h old. Called by the
-                                 splash flow (Phase 1B) to decide
-                                 whether to force interactive sign-in.
-
-     getMsalClockState()         → { lastVerifiedAt, ageMs, expired,
-                                     expiresInMs }
-                                 Diagnostic accessor. Used by the avatar
-                                 flyout status line, and by audit entries
-                                 in Phase 2 to stamp the 'cached-msal-
-                                 expired' verification level (Phase 1E).
-
-     clearMsalClock()            Wipes the timestamp. Called by the
-                                 strict-failure handler in Phase 1C and
-                                 by signOutMicrosoft in 00-core.js.
-
-   Constants:
-     MSAL_REAUTH_WINDOW_MS = 12 * 60 * 60 * 1000   // 12 hours, per Henry's
-                                                   // Q1 answer ("12 hours
-                                                   // fixed, matches Epic").
-
-   Storage:
-     localStorage.hah_msal_last_full_auth — ISO timestamp string.
-
-   v708 Phase 1A scope: infrastructure only. No UI. No call sites in
-   05-security.js. shouldForceMsalReauth() is exported and ready for
-   Phase 1B's splash UX to consume. markMsalFullyVerified() is wired
-   into 00-core.js's handleRedirectPromise success path.
-────────────────────────────────────────────────────────────────────────── */
-
-window.HAHMobile = window.HAHMobile || {};
-
-(function () {
-  'use strict';
-
-  const STORAGE_KEY = 'hah_msal_last_full_auth';
-  const MSAL_REAUTH_WINDOW_MS = 12 * 60 * 60 * 1000;
-
-  function readTimestamp() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return null;
-      const ms = Date.parse(raw);
-      if (!Number.isFinite(ms)) return null;
-      return ms;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  function writeTimestamp(isoString) {
-    try {
-      localStorage.setItem(STORAGE_KEY, isoString);
-    } catch (_) {}
-  }
-
-  function markMsalFullyVerified() {
-    writeTimestamp(new Date().toISOString());
-  }
-
-  function shouldForceMsalReauth() {
-    const ts = readTimestamp();
-    if (ts === null) return true;
-    return (Date.now() - ts) >= MSAL_REAUTH_WINDOW_MS;
-  }
-
-  function getMsalClockState() {
-    const ts = readTimestamp();
-    if (ts === null) {
-      return {
-        lastVerifiedAt: null,
-        ageMs: null,
-        expired: true,
-        expiresInMs: 0
-      };
-    }
-    const ageMs = Math.max(0, Date.now() - ts);
-    return {
-      lastVerifiedAt: new Date(ts).toISOString(),
-      ageMs: ageMs,
-      expired: ageMs >= MSAL_REAUTH_WINDOW_MS,
-      expiresInMs: Math.max(0, MSAL_REAUTH_WINDOW_MS - ageMs)
-    };
-  }
-
-  function clearMsalClock() {
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch (_) {}
-  }
-
-  window.HAHMobile.msalClock = {
-    markMsalFullyVerified,
-    shouldForceMsalReauth,
-    getMsalClockState,
-    clearMsalClock,
-    MSAL_REAUTH_WINDOW_MS  // exported for tests / diagnostics
-  };
-})();
-
-</script><script>
-/* ─── H@H Companion — Startup state machine (v12.36.709 / Step 2)
-   The single source of truth for the app's entry flow. Replaces the
-   three-way decision tree that v708 accumulated across 00-core.js,
-   05-security.js, and 07-startup.js — each of which made its own
-   half-informed call about MSAL state and raced the others.
-
-   Why this exists, in plain terms:
-     v708 had splash, initSecurity, and MSAL each deciding independently
-     whether to gate the user. Each gate was patched as a bug surfaced.
-     The pattern was symptom-fixing, not root-causing. The root cause was
-     that there was no single owner of 'has the user been authenticated
-     enough to use the app?' and so async MSAL completion raced sync
-     localStorage reads at DOMContentLoaded time. This module is the
-     owner.
-
-   States (see v709 spec §2.1 for the full diagram):
-     BOOT                 — page loaded, splash showing brand reveal.
-     MSAL_BOOTSTRAP       — running the MSAL silent-restore probe.
-     ACCOUNT_RESOLVED     — Microsoft has confirmed an account.
-     SIGNIN_REQUIRED      — no account; splash shows Sign-in button.
-     REDIRECTING          — user tapped Sign in, page navigating out.
-                            (Page reload puts us back at BOOT.)
-     FIRST_TIME_SETUP     — PIN not set; setup flow runs.
-     APP_READY            — app interactive; all serial-chain init done.
-     IDLE_LOCKED          — entered from APP_READY only; PIN required.
-
-   Transition table is the law: §2.2 of the spec. No transitions outside
-   the table; no module reaches into the machine to flip state.
-
-   Public API (window.HAHMobile.startupState):
-     start()                  — kick off BOOT → MSAL_BOOTSTRAP → ...
-                                 returns a Promise that resolves when
-                                 the machine reaches APP_READY or
-                                 FIRST_TIME_SETUP (i.e. user-interactive).
-     getState()               — current state name (string).
-     subscribe(fn)            — fire fn(newState, prevState) on each
-                                 transition. Returns unsubscribe.
-     handleSignInTap()        — called by splash sign-in button.
-     handleSignOut()          — called by avatar flyout sign-out.
-     handleIdleTimeout()      — called by 05-security idle timer.
-     handleStrictFailWipe()   — called by 05-security at 5th PIN fail.
-     handleVisibilityResume() — called on visibilitychange to visible.
-
-   What this module does NOT do:
-     - Touch the DOM. UI updates happen in subscribers (Step 4 wiring).
-     - Own the splash UI. That stays in 07-startup.js.
-     - Own the PIN UI. That stays in 05-security.js.
-     - Own MSAL config or token cache. That stays in 00-core.js.
-
-   It owns the FLOW, not the surfaces.
-────────────────────────────────────────────────────────────────────────── */
-
-window.HAHMobile = window.HAHMobile || {};
-
-(function () {
-  'use strict';
-
-  const STATES = Object.freeze({
-    BOOT: 'BOOT',
-    MSAL_BOOTSTRAP: 'MSAL_BOOTSTRAP',
-    ACCOUNT_RESOLVED: 'ACCOUNT_RESOLVED',
-    SIGNIN_REQUIRED: 'SIGNIN_REQUIRED',
-    REDIRECTING: 'REDIRECTING',
-    FIRST_TIME_SETUP: 'FIRST_TIME_SETUP',
-    APP_READY: 'APP_READY',
-    IDLE_LOCKED: 'IDLE_LOCKED'
-  });
-
-  let currentState = STATES.BOOT;
-  let interactiveResolve = null;
-  let interactivePromise = null;
-  const subscribers = new Set();
-
-  function transition(nextState, reason) {
-    if (currentState === nextState) return;
-    const prev = currentState;
-    currentState = nextState;
-    // Subscribers fire AFTER the state has been set, so getState() inside
-    // a subscriber returns the new state (not the old one). Order
-    // matters for UI integration in Step 4.
-    subscribers.forEach((fn) => {
-      try { fn(nextState, prev, reason || null); } catch (_) {}
-    });
-    // Resolve the interactive-ready promise the first time we reach a
-    // user-interactive state. APP_READY and FIRST_TIME_SETUP both qualify
-    // (in FIRST_TIME_SETUP the lock screen is showing the PIN setup flow,
-    // which is itself an interactive surface).
-    if (interactiveResolve && (nextState === STATES.APP_READY || nextState === STATES.FIRST_TIME_SETUP)) {
-      const r = interactiveResolve;
-      interactiveResolve = null;
-      try { r(nextState); } catch (_) {}
-    }
-  }
-
-  function getState() {
-    return currentState;
-  }
-
-  function subscribe(fn) {
-    if (typeof fn !== 'function') return function () {};
-    subscribers.add(fn);
-    return function unsubscribe() { subscribers.delete(fn); };
-  }
-
-  // ── MSAL bootstrap (the load-bearing fix from v708's patchwork) ────
-  //
-  // The state machine OWNS the MSAL silent-restore call at app entry.
-  // Previously it raced DOMContentLoaded's splash decision; here we
-  // await it explicitly so the splash decision is made on real state,
-  // not on whatever was in localStorage at parse time.
-  //
-  // Two outcomes that matter:
-  //   1. acquireTokenSilent succeeds  →  ACCOUNT_RESOLVED
-  //      (the clock-fresh side effect happens inside getGraphAccessToken,
-  //      see Step 1 wiring in 00-core.js)
-  //   2. Anything else  →  SIGNIN_REQUIRED
-  //
-  // This call is idempotent on subsequent invocations because
-  // ensureMsalApp caches the MSAL instance and getGraphAccessToken's
-  // first call populates graphAccount + the clock; later calls find
-  // an already-resolved state and return quickly.
-  async function runMsalBootstrap() {
-    if (currentState !== STATES.BOOT) return;
-    transition(STATES.MSAL_BOOTSTRAP, 'start');
-
-    // Honest limit: if MSAL isn't wired (downloaded-file mode, no
-    // clientId configured, library failed to load), we cannot resolve
-    // an account and shouldn't pretend otherwise. Route to
-    // SIGNIN_REQUIRED so the splash surfaces the issue — its "Sign in"
-    // button will then trip its own error path with a clear message.
-    let app = null;
-    try {
-      if (typeof ensureMsalApp !== 'function') {
-        transition(STATES.SIGNIN_REQUIRED, 'no-msal-fn');
-        return;
-      }
-      app = await ensureMsalApp();
-    } catch (_) {
-      transition(STATES.SIGNIN_REQUIRED, 'msal-init-failed');
-      return;
-    }
-    if (!app) {
-      transition(STATES.SIGNIN_REQUIRED, 'no-msal-app');
-      return;
-    }
-
-    // ensureMsalApp has already run handleRedirectPromise inside it. If
-    // we got here because the user just returned from a Microsoft
-    // redirect, graphAccount is now set, identity is applied, the clock
-    // has been marked fresh (by the v707/v708 wiring in
-    // handleRedirectPromise), and we can proceed directly to
-    // ACCOUNT_RESOLVED.
-    const hasAccount = (typeof graphAccount !== 'undefined') && graphAccount && graphAccount.homeAccountId;
-    if (!hasAccount) {
-      // No cached account at all. Definitely needs sign-in.
-      transition(STATES.SIGNIN_REQUIRED, 'no-account');
-      return;
-    }
-
-    // We have a cached account. Now the question is: does Microsoft
-    // still consider it authenticated? acquireTokenSilent is the answer.
-    // This is THE behaviour change v709 introduces vs v708: silent
-    // restore at app entry, not lazily on first sync. The cost is a
-    // network round-trip at cold start (a few hundred ms); the benefit
-    // is correctness — the splash decision matches Microsoft's view of
-    // the account, not whatever's stale in localStorage.
-    //
-    // Honest limit: if the network is down, this throws. We treat that
-    // as 'cannot confirm Microsoft thinks the account is live' and
-    // route to SIGNIN_REQUIRED. The splash will then surface a network
-    // error when the user taps Sign in. This is strict-mode (Henry's
-    // v708 Q5 answer) carrying through to v709.
-    let tokenOk = false;
-    try {
-      if (typeof getGraphAccessToken === 'function') {
-        const token = await getGraphAccessToken();
-        tokenOk = !!token;
-      }
-    } catch (_e) {
-      tokenOk = false;
-    }
-
-    if (tokenOk) {
-      transition(STATES.ACCOUNT_RESOLVED, 'silent-ok');
-    } else {
-      transition(STATES.SIGNIN_REQUIRED, 'silent-failed');
-    }
-  }
-
-  // ── ACCOUNT_RESOLVED → APP_READY or FIRST_TIME_SETUP ──────────────
-  //
-  // The branch the v708 spec §7.4 flagged as a verify-not-assume
-  // question. Three cases observed in trace:
-  //   - PIN set                                    → APP_READY
-  //   - PIN not set AND onboarding due             → FIRST_TIME_SETUP
-  //     (existing onboarding flow handles PIN setup at its end)
-  //   - PIN not set AND onboarding NOT due         → FIRST_TIME_SETUP
-  //     (just the PIN setup flow, no onboarding)
-  // The state is the same (FIRST_TIME_SETUP); only the flow that runs
-  // inside it differs, decided by the caller via the existing
-  // shouldShowOnboarding logic in 07-startup.js.
-  function resolveAccount() {
-    if (currentState !== STATES.ACCOUNT_RESOLVED) return;
-    let pinSet = false;
-    try {
-      if (typeof isPinSet === 'function') pinSet = isPinSet();
-    } catch (_) {}
-    if (pinSet) {
-      transition(STATES.APP_READY, 'pin-already-set');
-    } else {
-      transition(STATES.FIRST_TIME_SETUP, 'pin-needs-setup');
-    }
-  }
-
-  // ── Public event handlers ─────────────────────────────────────────
-
-  function handleSignInTap() {
-    if (currentState !== STATES.SIGNIN_REQUIRED) {
-      // Defensive: should never fire from any other state because the
-      // sign-in button is only rendered in SIGNIN_REQUIRED. Belt-and-
-      // braces ignore rather than crash.
-      return;
-    }
-    transition(STATES.REDIRECTING, 'user-signin-tap');
-    // The actual redirect call lives in 00-core.js. We don't await it
-    // because it navigates the page away — execution doesn't return.
-    try {
-      if (typeof signInMicrosoft === 'function') {
-        signInMicrosoft();
-      }
-    } catch (_) {
-      // If it threw synchronously, fall back to SIGNIN_REQUIRED so the
-      // user can try again.
-      transition(STATES.SIGNIN_REQUIRED, 'signin-throw');
-    }
-  }
-
-  function handleSignOut() {
-    // Sign-out is reachable from APP_READY (avatar flyout) and from
-    // IDLE_LOCKED (theoretical — no UI currently exposes it there, but
-    // we accept it defensively). After cleanup, we don't transition to
-    // any state ourselves — signOutMicrosoft triggers a page reload
-    // (per existing v708 wiring), which puts us back at BOOT naturally.
-    try {
-      if (typeof signOutMicrosoft === 'function') signOutMicrosoft();
-    } catch (_) {}
-  }
-
-  function handleIdleTimeout() {
-    if (currentState !== STATES.APP_READY) return;
-    transition(STATES.IDLE_LOCKED, 'idle-timeout');
-  }
-
-  function handleVisibilityResume(msSinceLastActive) {
-    // Called when the app comes back to foreground. If we were already
-    // APP_READY and have been backgrounded >10 min, transition to
-    // IDLE_LOCKED. Otherwise no-op. The state machine doesn't own the
-    // visibilitychange handler itself; 05-security does (existing
-    // wiring). This function exists so the existing handler can ask
-    // the state machine what to do.
-    if (currentState !== STATES.APP_READY) return;
-    if (typeof PIN_TIMEOUT_MS === 'number' && msSinceLastActive > PIN_TIMEOUT_MS) {
-      transition(STATES.IDLE_LOCKED, 'visibility-resume-stale');
-    }
-  }
-
-  function handleUnlockSuccess() {
-    // Called by 05-security.js's finishUnlockSequence when PIN/biometric
-    // unlock completes successfully. Returns IDLE_LOCKED → APP_READY.
-    // The MSAL clock check inside finishUnlockSequence (v708.1 belt-
-    // and-braces) is preserved — if the clock has expired during the
-    // idle period, finishUnlockSequence refuses and routes back to
-    // splash. So if we reach here, MSAL is still valid.
-    if (currentState !== STATES.IDLE_LOCKED) return;
-    transition(STATES.APP_READY, 'unlock-success');
-  }
-
-  function handleStrictFailWipe() {
-    // Called by 05-security.js's escalateStrictFailure at the 5th PIN
-    // fail. Identity has been wiped, MSAL clock cleared. State goes to
-    // SIGNIN_REQUIRED so the splash sign-in button is the next thing
-    // the user sees (after the lock screen's error message). The
-    // existing escalation message stays visible until the user closes-
-    // and-reopens; we don't auto-force a reload here.
-    transition(STATES.SIGNIN_REQUIRED, 'strict-fail-wipe');
-  }
-
-  function handleFirstTimeSetupComplete() {
-    // Called by 05-security.js when beginSetupFlow finishes (PIN set,
-    // biometric offered, user dismissed). FIRST_TIME_SETUP → APP_READY.
-    if (currentState !== STATES.FIRST_TIME_SETUP) return;
-    transition(STATES.APP_READY, 'first-time-setup-done');
-  }
-
-  // ── Entry point ─────────────────────────────────────────────────────
-
-  function start() {
-    if (interactivePromise) return interactivePromise;
-    interactivePromise = new Promise((resolve) => { interactiveResolve = resolve; });
-    // Run MSAL_BOOTSTRAP asynchronously; the start() promise resolves
-    // when we reach a user-interactive state.
-    runMsalBootstrap().then(() => {
-      // Bootstrap finished. If we ended in ACCOUNT_RESOLVED, branch on
-      // PIN status now.
-      if (currentState === STATES.ACCOUNT_RESOLVED) {
-        resolveAccount();
-      }
-      // If we ended in SIGNIN_REQUIRED, we stay there — the splash
-      // sign-in surface (Step 4) is rendered by a subscriber on the
-      // transition into SIGNIN_REQUIRED.
-    }).catch(() => {
-      // Bootstrap throwing is treated as 'cannot resolve' → SIGNIN_REQUIRED.
-      // We only get here if runMsalBootstrap's outer error handling
-      // missed something, which shouldn't happen — but belt-and-braces.
-      if (currentState !== STATES.SIGNIN_REQUIRED) {
-        transition(STATES.SIGNIN_REQUIRED, 'bootstrap-threw');
-      }
-    });
-    return interactivePromise;
-  }
-
-  // Read-only state name accessor for diagnostics / tests.
-  function STATES_VIEW() { return STATES; }
-
-  window.HAHMobile.startupState = {
-    start,
-    getState,
-    subscribe,
-    handleSignInTap,
-    handleSignOut,
-    handleIdleTimeout,
-    handleVisibilityResume,
-    handleUnlockSuccess,
-    handleStrictFailWipe,
-    handleFirstTimeSetupComplete,
-    STATES: STATES_VIEW()
-  };
 })();
 
 </script></body>
