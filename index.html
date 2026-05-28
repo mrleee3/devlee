@@ -3116,7 +3116,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_707_identity_phase1_release.html; source=hospital_at_home_v12_36_707_identity_phase1_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_708_patient_page_jump_fix_release.html; source=hospital_at_home_v12_36_708_patient_page_jump_fix_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3477,7 +3477,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_707_identity_phase1_release.html</div><div>Source: hospital_at_home_v12_36_707_identity_phase1_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_708_patient_page_jump_fix_release.html</div><div>Source: hospital_at_home_v12_36_708_patient_page_jump_fix_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -11226,13 +11226,25 @@ function HAH_openPatientStart(id, opts){
   detailLoadedForCurrentPatient = true;
   const openMode = resolveOpenMode(ctx);
   applyOpenMode(ctx, openMode);
+  // v12.36.708: visual post-work (condition panel + section jump bar) was
+  // previously running in SETTLE (after the slide arrives), which caused a
+  // downward content jump when either panel had visible content. The
+  // section jump bar in particular adds 48px of padding-top to
+  // #patientDetail via the body.section-jump-bar-visible class, and the
+  // condition panel inserts a host element with whatever conditions are
+  // matched. Both were violating the v705 "SETTLE is non-visual" promise.
+  // Moved here to START so both are rendered before the controller
+  // animateTo() begins, restoring the v705 design where the patient page
+  // slides in fully rendered.
+  runOpenVisualWork();
   try{ const _d=$("patientDetail"); if(_d) _d.classList.remove('hah-open-loading'); }catch(_){}
 }
 
 // Discrete SETTLE (open). Called by the controller when progress reaches 1.
-// Heavy populate now happens in START (see note there), so SETTLE only
-// does post-work (non-visual: saveData, calculateNews, board card, badges,
-// condition panel, jump bar). Guarded against navigating away mid-slide.
+// Heavy populate AND visual post-work both happen in START now (see notes
+// there); SETTLE does only genuinely non-visual post-work (saveData,
+// calculateNews, board card, header task button, nav badge). Guarded
+// against navigating away mid-slide.
 function HAH_openPatientSettle(id){
   if(currentPatient !== id) return;
   const p = patients[id];
@@ -11258,7 +11270,13 @@ function runOpenInPlace(ctx){
   const openMode = resolveOpenMode(ctx);
   applyOpenMode(ctx, openMode);
   if(typeof updateHeaderForPatient==='function') updateHeaderForPatient();
+  // v12.36.708: visual work split from post-work. In-place refresh still
+  // needs both, since this is the no-slide path used by WebSocket sync —
+  // any inbound state change should update the condition panel and the
+  // section jump bar visibility. Order preserved from the original
+  // runOpenPostWork: non-visual first, visual second.
   runOpenPostWork();
+  runOpenVisualWork();
 }
 
 // v12.36.696: extracted mode resolution so the same logic serves both
@@ -11297,6 +11315,13 @@ function applyOpenMode(ctx, openMode){
 // v12.36.696: post-work that doesn't need to be visible. saveData hits
 // localStorage; render functions touch DOM for off-screen/non-critical
 // cards. Runs after the populate phase completes.
+// v12.36.708: split into non-visual post-work (here) and visual work
+// (runOpenVisualWork below). The two visual renders previously ran in
+// SETTLE and caused a downward content jump when either had content to
+// show. They're now called from START (slide path) and from
+// runOpenInPlace (no-slide same-patient refresh path). This function
+// retains the genuinely non-visual work — none of these calls insert or
+// reveal DOM in #patientDetail.
 function runOpenPostWork(){
   saveData();
   calculateNews();
@@ -11306,6 +11331,13 @@ function runOpenPostWork(){
   // v697: renderBloodsSummaryCard moved into setFieldValuesHeavy (called
   // from runOpenPopulate before this function). Removed from here to
   // avoid double-render.
+}
+
+// v12.36.708: visual post-work, extracted from runOpenPostWork. Called
+// from HAH_openPatientStart (before slide) and runOpenInPlace (no slide).
+// NOT called from HAH_openPatientSettle (which would re-introduce the
+// post-landing jump these renders cause).
+function runOpenVisualWork(){
   if(typeof window.HAH_renderConditionPanel==='function'){ try{ window.HAH_renderConditionPanel(); }catch(e){} }
   if(typeof window.HAH_renderSectionJumpBar==='function'){ try{ window.HAH_renderSectionJumpBar(); }catch(e){} }
 }
@@ -13028,8 +13060,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_707_identity_phase1_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_707_identity_phase1_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_708_patient_page_jump_fix_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_708_patient_page_jump_fix_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
