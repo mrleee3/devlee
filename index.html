@@ -24104,7 +24104,13 @@ window.HAH.modules.sectionJumpBar = true;
     }
     .section-jump-tab.is-active{
       color:#111827;
-      font-weight:500;
+      /* v12.36.708: removed font-weight:500 here. The weight change made
+         the active tab render slightly wider than its inactive state,
+         which shifted the width of the whole tab row (each tab is
+         flex-shrink:0 / white-space:nowrap, so its box is exactly its
+         content width). Active state is signalled by colour (#6b7280 →
+         #111827) plus the blue underline — matching Apple's tab-bar
+         convention, which does not bold the active item. */
     }
     .section-jump-tab:active{opacity:0.55}
 
