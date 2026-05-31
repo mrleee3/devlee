@@ -3046,6 +3046,33 @@ body.hah-nav-stack .nav.nav-patient{
 .header-avatar-flyout-signout{display:block;width:100%;margin-top:12px;padding:10px;border-radius:10px;border:0;background:transparent;color:#dc2626;font-size:14px;font-weight:600;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .header-avatar-flyout-signout:active{background:rgba(220,38,38,.08)}
 
+/* v12.36.709 in-patient task sheet (B-lite): list pane + locked patient row + back/subtitle */
+.task-overlay-titlewrap{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.task-overlay-subtitle{font-size:13px;font-weight:600;color:#667085;line-height:1.2}
+.task-overlay-back{width:34px;height:34px;border:none;border-radius:999px;background:#f3f4f6;color:#0a84ff;display:inline-flex;align-items:center;justify-content:center;padding:0;flex:0 0 auto}
+.task-overlay-back svg{width:20px;height:20px}
+.task-list-pane{display:flex;flex-direction:column;gap:10px}
+.task-list-rows{display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 1px rgba(15,23,42,.06)}
+.task-list-rows .task-item{border-bottom:1px solid rgba(15,23,42,.06)}
+.task-list-rows .task-item:last-child{border-bottom:none}
+.task-list-pane .task-item-note{display:block;margin-top:3px;font-size:13.5px;font-weight:500;line-height:1.35;color:#475467;word-break:break-word}
+.task-list-pane .task-item{grid-template-columns:auto minmax(0,1fr);align-items:start}
+.task-list-pane .task-item-main{flex-direction:column;align-items:flex-start;gap:0}
+.task-list-add-cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border:1.5px dashed rgba(10,132,255,.4);border-radius:14px;background:rgba(10,132,255,.04);color:#0a84ff;font-size:16px;font-weight:800;line-height:1}
+.task-list-add-cta:active{transform:scale(.99)}
+.task-list-add-cta svg{width:20px;height:20px}
+.task-list-done{margin-top:2px}
+.task-patient-locked{display:flex;align-items:center;gap:10px;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#f7f8fa}
+.task-patient-locked-main{min-width:0;flex:1}
+.task-patient-locked-name{font-size:16px;font-weight:700;color:#111827;line-height:1.2;word-break:break-word}
+.task-patient-locked-meta{margin-top:2px;font-size:13px;font-weight:600;color:#667085;line-height:1.25}
+.task-patient-locked-tag{flex:0 0 auto;font-size:12px;font-weight:700;color:#475467;background:#eef0f3;padding:4px 10px;border-radius:999px}
+.task-list-meta{display:flex;align-items:center;gap:8px;margin-top:3px;font-size:13px;color:#667085;line-height:1.2}
+.task-list-time{font-weight:600}
+.task-list-pill{display:inline-flex;align-items:center;font-size:11px;font-weight:800;letter-spacing:.2px;padding:2px 8px;border-radius:999px}
+.task-list-pill.urgent{background:#fff1f0;color:#dc2626}
+.task-list-item.is-done .task-list-meta{opacity:.8}
+
 </style>
 <style>
 /* H@H UI standards: patient-page typography and helper text live here. */
@@ -3116,7 +3143,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_708_patient_page_jump_fix_release.html; source=hospital_at_home_v12_36_708_patient_page_jump_fix_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_709_inpatient_task_sheet_release.html; source=hospital_at_home_v12_36_709_inpatient_task_sheet_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3477,7 +3504,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_708_patient_page_jump_fix_release.html</div><div>Source: hospital_at_home_v12_36_708_patient_page_jump_fix_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_709_inpatient_task_sheet_release.html</div><div>Source: hospital_at_home_v12_36_709_inpatient_task_sheet_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3872,7 +3899,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="patient-context-sep"></div>
 <button class="patient-context-action danger" id="medContextDeleteBtn" type="button"><span>Delete medication</span><span class="patient-context-right">×</span></button>
 </div>
-</div><div aria-hidden="true" class="task-overlay hidden" id="taskOverlay"><div class="task-overlay-backdrop" id="taskOverlayBackdrop"></div><div aria-labelledby="taskOverlayTitle" aria-modal="true" class="card task-overlay-modal" id="taskOverlayModal" role="dialog"><div class="task-overlay-head"><h3 id="taskOverlayTitle">Add task</h3><button aria-label="Close tasks" class="task-overlay-close" id="taskOverlayCloseBtn" type="button">×</button></div><div class="task-overlay-body"><div class="task-field"><label for="taskTextInput">Task</label><input autocapitalize="sentences" autocomplete="off" enterkeyhint="done" id="taskTextInput" placeholder="Enter task" type="text"/></div><div class="task-field"><label for="taskPatientSelect">Linked patient</label><select id="taskPatientSelect"></select></div><div class="task-field"><label>Urgency</label><input id="taskUrgentInput" type="hidden" value="0"/><div class="task-chip-row"><button class="choice-btn task-chip-btn selected" data-task-urgent="0" type="button">Not urgent</button><button class="choice-btn task-chip-btn" data-task-urgent="1" type="button">Urgent</button></div></div><div class="task-field"><label for="taskNoteInput">Note</label><textarea id="taskNoteInput" placeholder="Optional short note"></textarea></div></div><div class="task-overlay-footer"><button class="danger hidden" id="taskDeleteBtn" type="button">Delete</button><div class="task-overlay-actions"><button id="taskCancelBtn" type="button">Cancel</button><button class="primary" id="taskSaveBtn" type="button">Save</button></div></div></div></div>
+</div><div aria-hidden="true" class="task-overlay hidden" id="taskOverlay"><div class="task-overlay-backdrop" id="taskOverlayBackdrop"></div><div aria-labelledby="taskOverlayTitle" aria-modal="true" class="card task-overlay-modal" id="taskOverlayModal" role="dialog"><div class="task-overlay-head"><button aria-label="Back to task list" class="task-overlay-back hidden" id="taskOverlayBackBtn" type="button"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="task-overlay-titlewrap"><h3 id="taskOverlayTitle">Add task</h3><div class="task-overlay-subtitle hidden" id="taskOverlaySubtitle"></div></div><button aria-label="Close tasks" class="task-overlay-close" id="taskOverlayCloseBtn" type="button">×</button></div><div class="task-overlay-body"><div class="task-list-pane hidden" id="taskListPane"></div><div class="task-form-pane" id="taskFormPane"><div class="task-field"><label for="taskTextInput">Task</label><input autocapitalize="sentences" autocomplete="off" enterkeyhint="done" id="taskTextInput" placeholder="Enter task" type="text"/></div><div class="task-field" id="taskPatientField"><label for="taskPatientSelect">Linked patient</label><select id="taskPatientSelect"></select><div class="task-patient-locked hidden" id="taskPatientLocked"><div class="task-patient-locked-main"><div class="task-patient-locked-name" id="taskPatientLockedName">Patient</div><div class="task-patient-locked-meta" id="taskPatientLockedMeta"></div></div><span class="task-patient-locked-tag">This patient</span></div></div><div class="task-field"><label>Urgency</label><input id="taskUrgentInput" type="hidden" value="0"/><div class="task-chip-row"><button class="choice-btn task-chip-btn selected" data-task-urgent="0" type="button">Not urgent</button><button class="choice-btn task-chip-btn" data-task-urgent="1" type="button">Urgent</button></div></div><div class="task-field"><label for="taskNoteInput">Note</label><textarea id="taskNoteInput" placeholder="Optional short note"></textarea></div></div></div><div class="task-overlay-footer" id="taskOverlayFormFooter"><button class="danger hidden" id="taskDeleteBtn" type="button">Delete</button><div class="task-overlay-actions"><button id="taskCancelBtn" type="button">Cancel</button><button class="primary" id="taskSaveBtn" type="button">Save</button></div></div><div class="task-overlay-footer hidden" id="taskOverlayListFooter"><div class="task-overlay-actions"><button class="primary" id="taskListDoneBtn" type="button">Done</button></div></div></div></div>
 <div class="weight-history-backdrop hidden" id="renalReviewBackdrop"></div>
 <div aria-labelledby="renalReviewTitle" aria-modal="true" class="weight-history-modal renal-review-modal hidden" id="renalReviewModal" role="dialog">
 <button aria-label="Close medication alerts" class="weight-history-close" id="renalReviewCloseBtn" type="button">×</button>
@@ -13060,8 +13087,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_708_patient_page_jump_fix_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_708_patient_page_jump_fix_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_709_inpatient_task_sheet_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_709_inpatient_task_sheet_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13452,6 +13479,15 @@ let taskDoneExpanded = false;
 let taskEditingId = null;
 let taskOverlayLastFocus = null;
 const taskAnimatingIds = new Set();
+// v12.36.709: in-patient task sheet (B-lite). The overlay now has two
+// panes — a list of the current patient's tasks and the add/edit form.
+// taskOverlayMode tracks which pane is showing; taskOverlayPatientScope
+// holds the patient the sheet is scoped to (null = global/unscoped, opened
+// from the main Tasks tab Add button). taskListDoneExpanded controls the
+// in-list Done section disclosure independently of the global page.
+let taskOverlayMode = 'form';
+let taskOverlayPatientScope = null;
+let taskListDoneExpanded = false;
 
 function getDefaultTasks(){
   const now = Date.now();
@@ -13602,6 +13638,12 @@ function refreshTaskDependentUi(opts={}){
   if(typeof updateNavPatientTasksBadge==='function') updateNavPatientTasksBadge();
   if(typeof renderPatientBoardCard==='function' && $('patientDetail') && !$('patientDetail').classList.contains('hidden')) renderPatientBoardCard();
   if(opts.renderTasks !== false && $('tasks') && !$('tasks').classList.contains('hidden')) renderTasksPage();
+  // v12.36.709: keep the in-patient task sheet list in sync when a toggle
+  // or edit fires while it's showing (e.g. completing a task from the list).
+  if(taskOverlayMode === 'list' && taskOverlayPatientScope && $('taskOverlay') && !$('taskOverlay').classList.contains('hidden')){
+    updateTaskOverlaySubtitle(taskOverlayPatientScope);
+    renderTaskListPane(taskOverlayPatientScope);
+  }
 }
 function compareTasksOpen(a, b){
   if(taskIsUrgent(a) !== taskIsUrgent(b)) return taskIsUrgent(a) ? -1 : 1;
@@ -13866,33 +13908,51 @@ function updateTaskUrgentButtons(){
     btn.setAttribute('aria-pressed', active ? 'true' : 'false');
   });
 }
-function fillTaskOverlay(task=null, patientId=null){
+function fillTaskOverlay(task=null, patientId=null, opts={}){
   const editing = !!task;
   if($('taskOverlayTitle')) $('taskOverlayTitle').textContent = editing ? 'Edit task' : 'Add task';
   if($('taskTextInput')) $('taskTextInput').value = editing ? (task.text || '') : '';
   if($('taskNoteInput')) $('taskNoteInput').value = editing ? (task.note || '') : '';
   if($('taskUrgentInput')) $('taskUrgentInput').value = taskIsUrgent(task) ? '1' : '0';
-  populateTaskPatientSelect(editing ? task.patientId : patientId);
+  const effectivePatientId = editing ? task.patientId : patientId;
+  populateTaskPatientSelect(effectivePatientId);
+  // v12.36.709: when locked to a patient (in-patient add/edit), hide the
+  // <select> and show a read-only row instead. The select still carries
+  // the value so collectTaskOverlayPayload reads it unchanged.
+  const lockId = (opts && opts.lockPatient != null) ? Number(opts.lockPatient) : null;
+  const select = $('taskPatientSelect');
+  const locked = $('taskPatientLocked');
+  if(lockId && patients[lockId]){
+    if(select){ select.value = String(lockId); select.classList.add('hidden'); }
+    if(locked){
+      locked.classList.remove('hidden');
+      const p = patients[lockId] || {};
+      const meta = [ageSex(p.age, p.sex), referralLabel(p.referralSource)].filter(Boolean).join(' • ');
+      if($('taskPatientLockedName')) $('taskPatientLockedName').textContent = p.name || 'Patient';
+      if($('taskPatientLockedMeta')) $('taskPatientLockedMeta').textContent = meta;
+    }
+  } else {
+    if(select) select.classList.remove('hidden');
+    if(locked) locked.classList.add('hidden');
+  }
   updateTaskUrgentButtons();
   if($('taskDeleteBtn')) $('taskDeleteBtn').classList.toggle('hidden', !editing);
 }
 function openTaskOverlay(opts={}){
   const overlay = $('taskOverlay');
   if(!overlay) return;
-  const task = opts.taskId ? getTaskById(opts.taskId) : null;
-  taskEditingId = task ? task.id : null;
   taskOverlayLastFocus = document.activeElement;
-  fillTaskOverlay(task, opts.patientId == null ? null : opts.patientId);
   document.body.classList.add('task-overlay-open');
   overlay.classList.remove('hidden');
   overlay.setAttribute('aria-hidden', 'false');
-  requestAnimationFrame(()=>{
-    const input = $('taskTextInput');
-    if(input){
-      try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
-      if(input.select && !task) input.select();
-    }
-  });
+  // v12.36.709: listForPatient opens the in-patient LIST pane; otherwise
+  // open the FORM pane directly (global add, or edit via taskId).
+  if(opts.listForPatient){
+    showTaskListPane(opts.listForPatient);
+  } else {
+    taskOverlayPatientScope = null;
+    showTaskFormPane({ taskId: opts.taskId || null, patientId: opts.patientId == null ? null : opts.patientId, fromList:false });
+  }
 }
 function closeTaskOverlay(refocus=true){
   const overlay = $('taskOverlay');
@@ -13901,6 +13961,10 @@ function closeTaskOverlay(refocus=true){
   overlay.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('task-overlay-open');
   taskEditingId = null;
+  // v12.36.709: reset pane state so the next open starts clean.
+  taskOverlayMode = 'form';
+  taskOverlayPatientScope = null;
+  taskListDoneExpanded = false;
   if(refocus !== false){
     const target = (taskOverlayLastFocus && taskOverlayLastFocus.focus) ? taskOverlayLastFocus : $('tasksAddBtn');
     if(target && target.focus){
@@ -13952,7 +14016,13 @@ function saveTaskFromOverlay(){
   }
   fireTaskHaptic();
   refreshTaskDependentUi();
-  closeTaskOverlay();
+  // v12.36.709: if we came from the in-patient list, go back to it
+  // (now refreshed) rather than closing the whole sheet. Otherwise close.
+  if(taskOverlayPatientScope){
+    showTaskListPane(taskOverlayPatientScope);
+  } else {
+    closeTaskOverlay();
+  }
 }
 function deleteTask(taskId){
   const task = getTaskById(taskId);
@@ -14007,11 +14077,151 @@ function toggleTaskDone(taskId, opts={}){
   animateTaskComplete(taskId, opts.triggerEl || null);
 }
 
+// v12.36.709: tasks belonging to one patient, open first then done, each
+// sorted by the same comparators used on the global page.
+function getPatientTasks(patientId){
+  const id = Number(patientId || 0);
+  if(!id) return { open: [], done: [] };
+  const mine = tasks.filter(t=>Number(t.patientId || 0) === id);
+  return {
+    open: mine.filter(t=>!t.done).sort(compareTasksOpen),
+    done: mine.filter(t=>t.done).sort(compareTasksDone)
+  };
+}
+
+// v12.36.709: render the in-patient task list into #taskListPane. Reuses
+// taskItemMarkup / taskToggleButtonMarkup so rows match the global page.
+function renderTaskListPane(patientId){
+  const pane = $('taskListPane');
+  if(!pane) return;
+  const id = Number(patientId || 0);
+  const { open, done } = getPatientTasks(id);
+
+  let html = '';
+  if(open.length){
+    html += `<div class="task-list-rows">${open.map(t=>taskListItemMarkup(t)).join('')}</div>`;
+  } else {
+    html += taskEmptyMarkup('No open tasks', 'Nothing outstanding for this patient.');
+  }
+
+  html += `<button class="task-list-add-cta" id="taskListAddCta" type="button"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Add task</button>`;
+
+  if(done.length){
+    html += `<div class="task-group done-group task-list-done"><button class="task-done-toggle${taskListDoneExpanded ? ' expanded' : ''}" id="taskListDoneToggle" type="button" aria-expanded="${taskListDoneExpanded ? 'true' : 'false'}"><span>Done (${done.length})</span><span class="task-done-chevron">›</span></button><div class="task-done-body${taskListDoneExpanded ? '' : ' hidden'}" id="taskListDoneBody">${done.map(t=>taskListItemMarkup(t, { done:true })).join('')}</div></div>`;
+  }
+
+  pane.innerHTML = html;
+
+  // Wire row taps (open for edit), toggles (complete/reopen), add, done toggle.
+  pane.querySelectorAll('[data-task-open]').forEach(row=>{
+    row.onclick = ev=>{
+      if(ev.target && ev.target.closest('[data-task-toggle]')) return;
+      showTaskFormPane({ taskId: row.dataset.taskOpen, fromList:true });
+    };
+  });
+  pane.querySelectorAll('[data-task-toggle]').forEach(btn=>{
+    btn.onclick = ev=>{
+      ev.stopPropagation();
+      toggleTaskDone(btn.dataset.taskToggle, { triggerEl: btn });
+    };
+  });
+  const addCta = $('taskListAddCta');
+  if(addCta) addCta.onclick = ()=>showTaskFormPane({ patientId: id, fromList:true });
+  const doneToggle = $('taskListDoneToggle');
+  if(doneToggle) doneToggle.onclick = ()=>{ taskListDoneExpanded = !taskListDoneExpanded; renderTaskListPane(id); };
+}
+
+// v12.36.709: update the sheet subtitle (open/urgent/done counts) for the
+// scoped patient, shown in list mode under the title.
+function updateTaskOverlaySubtitle(patientId){
+  const sub = $('taskOverlaySubtitle');
+  if(!sub) return;
+  const { open, done } = getPatientTasks(patientId);
+  const urgent = open.filter(taskIsUrgent).length;
+  sub.textContent = `${open.length} open • ${urgent} urgent • ${done.length} done`;
+}
+
+// v12.36.709: swap the overlay to LIST mode for a patient.
+function showTaskListPane(patientId){
+  const id = Number(patientId || 0);
+  taskOverlayMode = 'list';
+  taskOverlayPatientScope = id || null;
+  taskEditingId = null;
+  const patient = id ? patients[id] : null;
+  if($('taskOverlayTitle')) $('taskOverlayTitle').textContent = 'Tasks';
+  if($('taskOverlaySubtitle')) $('taskOverlaySubtitle').classList.remove('hidden');
+  updateTaskOverlaySubtitle(id);
+  renderTaskListPane(id);
+  if($('taskListPane')) $('taskListPane').classList.remove('hidden');
+  if($('taskFormPane')) $('taskFormPane').classList.add('hidden');
+  if($('taskOverlayFormFooter')) $('taskOverlayFormFooter').classList.add('hidden');
+  if($('taskOverlayListFooter')) $('taskOverlayListFooter').classList.remove('hidden');
+  if($('taskOverlayBackBtn')) $('taskOverlayBackBtn').classList.add('hidden');
+}
+
+// v12.36.709: swap the overlay to FORM mode. When fromList is true the
+// back button returns to the list rather than closing the sheet.
+function showTaskFormPane(opts={}){
+  const task = opts.taskId ? getTaskById(opts.taskId) : null;
+  taskOverlayMode = 'form';
+  taskEditingId = task ? task.id : null;
+  const lockPatientId = (opts.patientId != null) ? opts.patientId
+                      : (task ? task.patientId : null);
+  const lockToScope = !!opts.fromList && !!taskOverlayPatientScope;
+  fillTaskOverlay(task, lockPatientId == null ? null : lockPatientId, {
+    lockPatient: lockToScope ? taskOverlayPatientScope : null
+  });
+  if($('taskOverlaySubtitle')) $('taskOverlaySubtitle').classList.add('hidden');
+  if($('taskListPane')) $('taskListPane').classList.add('hidden');
+  if($('taskFormPane')) $('taskFormPane').classList.remove('hidden');
+  if($('taskOverlayListFooter')) $('taskOverlayListFooter').classList.add('hidden');
+  if($('taskOverlayFormFooter')) $('taskOverlayFormFooter').classList.remove('hidden');
+  // Back button shows only when we arrived here from the in-patient list.
+  if($('taskOverlayBackBtn')) $('taskOverlayBackBtn').classList.toggle('hidden', !lockToScope);
+  requestAnimationFrame(()=>{
+    const input = $('taskTextInput');
+    if(input){
+      try{ input.focus({preventScroll:true}); }catch(_e){ input.focus(); }
+      if(input.select && !task) input.select();
+    }
+  });
+}
+
+// v12.36.709: richer row for the in-patient list pane. Unlike the dense
+// global taskItemMarkup (title only), this shows an urgency pill, the
+// created/completed time, and any note — appropriate when focused on one
+// patient. Keeps the same data-task-open / data-task-toggle hooks so the
+// existing toggle + open wiring works unchanged.
+function taskListItemMarkup(task, opts={}){
+  const done = !!opts.done;
+  const urgentPill = (!done && taskIsUrgent(task)) ? `<span class="task-list-pill urgent">Urgent</span>` : '';
+  const timeText = done
+    ? `Completed ${escapeHtml(taskTimeLabel(task.completedAt || task.createdAt))}`
+    : `Added ${escapeHtml(taskTimeLabel(task.createdAt))}`;
+  const note = task.note ? `<div class="task-item-note">${escapeHtml(task.note)}</div>` : '';
+  return `
+    <div class="task-item task-list-item${done ? ' is-done' : ''}" data-task-open="${escapeHtml(task.id)}" data-task-id="${escapeHtml(task.id)}">
+      <div class="task-item-leading">${taskToggleButtonMarkup(task, opts)}</div>
+      <div class="task-item-main">
+        <div class="task-item-title">${escapeHtml(task.text)}</div>
+        <div class="task-list-meta">${urgentPill}<span class="task-list-time">${timeText}</span></div>
+        ${note}
+      </div>
+    </div>`;
+}
+
 function openTaskOverlayForPatient(patientId, opts={}){
   const id = Number(patientId || 0);
   const safePatientId = id && patients[id] ? id : null;
   if(opts && opts.showTasksSection) showSection('tasks');
-  openTaskOverlay({ patientId: safePatientId });
+  // v12.36.709: in-patient entry now opens the LIST pane scoped to the
+  // patient, not the add form directly. If for some reason the patient
+  // is invalid, fall back to the unscoped add form (old behaviour).
+  if(safePatientId){
+    openTaskOverlay({ listForPatient: safePatientId });
+  } else {
+    openTaskOverlay();
+  }
 }
 function initTasksUI(){
   const addBtn = $('tasksAddBtn');
@@ -14032,7 +14242,23 @@ function initTasksUI(){
   const cancelBtn = $('taskCancelBtn');
   if(cancelBtn && cancelBtn.dataset.bound !== '1'){
     cancelBtn.dataset.bound = '1';
-    cancelBtn.onclick = ()=>closeTaskOverlay();
+    cancelBtn.onclick = ()=>{
+      // v12.36.709: if we're in a patient-scoped sheet, Cancel returns to
+      // the list (matching Back); otherwise it closes the sheet.
+      if(taskOverlayPatientScope){ showTaskListPane(taskOverlayPatientScope); }
+      else { closeTaskOverlay(); }
+    };
+  }
+  // v12.36.709: back button (form → list) and list-footer Done (close sheet).
+  const backBtn = $('taskOverlayBackBtn');
+  if(backBtn && backBtn.dataset.bound !== '1'){
+    backBtn.dataset.bound = '1';
+    backBtn.onclick = ()=>{ if(taskOverlayPatientScope) showTaskListPane(taskOverlayPatientScope); else closeTaskOverlay(); };
+  }
+  const listDoneBtn = $('taskListDoneBtn');
+  if(listDoneBtn && listDoneBtn.dataset.bound !== '1'){
+    listDoneBtn.dataset.bound = '1';
+    listDoneBtn.onclick = ()=>closeTaskOverlay();
   }
   const backdrop = $('taskOverlayBackdrop');
   if(backdrop && backdrop.dataset.bound !== '1'){
