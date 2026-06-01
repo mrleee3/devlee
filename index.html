@@ -13958,6 +13958,22 @@ function updateNavTasksBadge(){
       });
     }
   }catch(_e){ console.log('[badge] paint error', String(_e)); }
+  // v12.36.709 TEMP DIAGNOSTIC 3: what element is actually on top at the
+  // badge's centre? If it's not the badge, something is covering it.
+  try{
+    if(openCount){
+      const r = badge.getBoundingClientRect();
+      const cx = Math.round(r.x + r.width/2), cy = Math.round(r.y + r.height/2);
+      const top = document.elementFromPoint(cx, cy);
+      const describe = el => el ? (el.tagName.toLowerCase() + (el.id?('#'+el.id):'') + (el.className && typeof el.className==='string'?('.'+el.className.trim().replace(/\s+/g,'.')):'')) : 'null';
+      console.log('[badge] hittest', {
+        at: { cx, cy },
+        topEl: describe(top),
+        isBadgeOrAncestor: !!(top && (top === badge || badge.contains(top) || top.contains(badge))),
+        parentChain: (function(){ let out=[], e=badge; for(let i=0;i<5 && e;i++){ out.push(describe(e)); e=e.parentElement; } return out; })()
+      });
+    }
+  }catch(_e){ console.log('[badge] hittest error', String(_e)); }
 }
 function updateNavPatientTasksBadge(){
   const badge = $('navPatientTasksBadge');
