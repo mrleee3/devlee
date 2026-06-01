@@ -3143,7 +3143,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_709_badge_diagnostic_release.html; source=hospital_at_home_v12_36_709_badge_diagnostic_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_709_inpatient_task_sheet_release.html; source=hospital_at_home_v12_36_709_inpatient_task_sheet_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3504,7 +3504,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_709_badge_diagnostic_release.html</div><div>Source: hospital_at_home_v12_36_709_badge_diagnostic_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_709_inpatient_task_sheet_release.html</div><div>Source: hospital_at_home_v12_36_709_inpatient_task_sheet_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -4097,10 +4097,7 @@ window.HAH.modules.debugConsole = true;
   const MAX_ENTRIES = 200;
 
   function isEnabled() {
-    // v12.36.709 DIAGNOSTIC BUILD: forced on so it shows with no setup.
-    // REVERT to the localStorage-gated version below before any clean build:
-    //   try { return localStorage.getItem(SHOW_KEY) === '1'; } catch (_) { return false; }
-    return true;
+    try { return localStorage.getItem(SHOW_KEY) === '1'; } catch (_) { return false; }
   }
 
   // Bail out completely (and do not patch console) unless explicitly enabled.
@@ -13338,8 +13335,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_709_badge_diagnostic_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_709_badge_diagnostic_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_709_inpatient_task_sheet_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_709_inpatient_task_sheet_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13921,17 +13918,6 @@ function formatTaskBadgeCount(count){
 function updateNavTasksBadge(){
   const badge = $('navTasksBadge');
   const btn = $('navTasks');
-  // v12.36.709 TEMP DIAGNOSTIC (remove after badge issue diagnosed):
-  try{
-    const _c = (typeof getTaskCounts==='function') ? getTaskCounts() : null;
-    console.log('[badge] updateNavTasksBadge', {
-      badgeFound: !!badge,
-      btnFound: !!btn,
-      totalTasks: Array.isArray(tasks) ? tasks.length : 'tasks-not-array',
-      counts: _c,
-      sampleTask: Array.isArray(tasks) && tasks[0] ? { done: tasks[0].done, text: String(tasks[0].text||'').slice(0,20), patientId: tasks[0].patientId } : null
-    });
-  }catch(_e){ console.log('[badge] diagnostic error', _e); }
   if(!badge || !btn) return;
   const counts = getTaskCounts();
   const openCount = counts.open || 0;
@@ -13940,40 +13926,6 @@ function updateNavTasksBadge(){
   btn.title = label;
   badge.textContent = formatTaskBadgeCount(openCount);
   badge.classList.toggle('hidden', !openCount);
-  // v12.36.709 TEMP DIAGNOSTIC (remove after diagnosed):
-  console.log('[badge] result', { openCount, badgeText: badge.textContent, hasHiddenClass: badge.classList.contains('hidden') });
-  // v12.36.709 TEMP DIAGNOSTIC 2: computed geometry + paint, to tell apart
-  // "logic works but element is visually hidden/covered/offscreen".
-  try{
-    if(openCount){
-      const cs = getComputedStyle(badge);
-      const r = badge.getBoundingClientRect();
-      const beforeCs = getComputedStyle(badge, '::before');
-      console.log('[badge] paint', {
-        display: cs.display, visibility: cs.visibility, opacity: cs.opacity,
-        bg: cs.backgroundColor, color: cs.color, zIndex: cs.zIndex,
-        rect: { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height) },
-        inViewport: r.x >= 0 && r.y >= 0 && r.right <= innerWidth && r.bottom <= innerHeight,
-        beforeBg: beforeCs.backgroundColor, beforeZ: beforeCs.zIndex, beforeContent: beforeCs.content
-      });
-    }
-  }catch(_e){ console.log('[badge] paint error', String(_e)); }
-  // v12.36.709 TEMP DIAGNOSTIC 3: what element is actually on top at the
-  // badge's centre? If it's not the badge, something is covering it.
-  try{
-    if(openCount){
-      const r = badge.getBoundingClientRect();
-      const cx = Math.round(r.x + r.width/2), cy = Math.round(r.y + r.height/2);
-      const top = document.elementFromPoint(cx, cy);
-      const describe = el => el ? (el.tagName.toLowerCase() + (el.id?('#'+el.id):'') + (el.className && typeof el.className==='string'?('.'+el.className.trim().replace(/\s+/g,'.')):'')) : 'null';
-      console.log('[badge] hittest', {
-        at: { cx, cy },
-        topEl: describe(top),
-        isBadgeOrAncestor: !!(top && (top === badge || badge.contains(top) || top.contains(badge))),
-        parentChain: (function(){ let out=[], e=badge; for(let i=0;i<5 && e;i++){ out.push(describe(e)); e=e.parentElement; } return out; })()
-      });
-    }
-  }catch(_e){ console.log('[badge] hittest error', String(_e)); }
 }
 function updateNavPatientTasksBadge(){
   const badge = $('navPatientTasksBadge');
@@ -14592,34 +14544,6 @@ function initTasksUI(){
   updateHeaderTaskButton();
   updateNavTasksBadge();
 }
-
-// v12.36.709 TEMP DIAGNOSTIC: post-splash badge hittest. Fires 4s after
-// load (splash is long gone by then) so we capture the badge's real
-// on-screen state during actual use, not during boot. Also exposed as
-// window.__badgeCheck() to re-run any time by tapping a wired control.
-function __badgeHitTest(tag){
-  try{
-    const badge = $('navTasksBadge');
-    if(!badge){ console.log('[badge] '+tag+' no element'); return; }
-    const splash = document.getElementById('appSplash');
-    const r = badge.getBoundingClientRect();
-    const cx = Math.round(r.x + r.width/2), cy = Math.round(r.y + r.height/2);
-    const top = document.elementFromPoint(cx, cy);
-    const describe = el => el ? (el.tagName.toLowerCase() + (el.id?('#'+el.id):'') + (el.className && typeof el.className==='string'?('.'+el.className.trim().replace(/\s+/g,'.')):'')) : 'null';
-    console.log('[badge] '+tag, {
-      hidden: badge.classList.contains('hidden'),
-      text: badge.textContent,
-      rect: { x:Math.round(r.x), y:Math.round(r.y), w:Math.round(r.width), h:Math.round(r.height) },
-      topEl: describe(top),
-      isBadge: !!(top && (top===badge || badge.contains(top))),
-      splashClasses: splash ? splash.className : 'no-splash-el',
-      splashVisible: splash ? getComputedStyle(splash).visibility : 'n/a'
-    });
-  }catch(e){ console.log('[badge] '+tag+' error', String(e)); }
-}
-window.__badgeCheck = function(){ __badgeHitTest('manual'); };
-setTimeout(()=>__badgeHitTest('delayed-4s'), 4000);
-setTimeout(()=>__badgeHitTest('delayed-8s'), 8000);
 
 </script><script>
 window.HAH = window.HAH || { modules: {} };
