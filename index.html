@@ -3143,7 +3143,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_709_inpatient_task_sheet_release.html; source=hospital_at_home_v12_36_709_inpatient_task_sheet_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_709_badge_diagnostic_release.html; source=hospital_at_home_v12_36_709_badge_diagnostic_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3504,7 +3504,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_709_inpatient_task_sheet_release.html</div><div>Source: hospital_at_home_v12_36_709_inpatient_task_sheet_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_709_badge_diagnostic_release.html</div><div>Source: hospital_at_home_v12_36_709_badge_diagnostic_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -4060,6 +4060,257 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 </div>
 <div aria-hidden="true" class="note-toolbar hidden" id="noteToolbar"><div class="note-toolbar-inner"><div class="note-toolbar-group"><button aria-label="Insert numbered point" class="note-toolbar-btn" data-note-tool="number" type="button">1.</button><button aria-label="Insert hyphen bullet" class="note-toolbar-btn" data-note-tool="bullet" type="button">-</button><button aria-label="Insert paragraph break" class="note-toolbar-btn" data-note-tool="paragraph" type="button">↵</button></div><div class="note-toolbar-group"><button aria-label="Insert current time" class="note-toolbar-btn wide" data-note-tool="time" type="button">Time</button><button aria-label="Insert check mark" class="note-toolbar-btn" data-note-tool="check" type="button">✓</button></div><div class="note-toolbar-group note-toolbar-group--end"><button aria-label="Undo toolbar edit" class="note-toolbar-btn wide" data-note-tool="undo" type="button">Undo</button><button aria-label="Done editing note" class="note-toolbar-btn wide done" data-note-tool="done" type="button">Done</button></div></div></div><div aria-hidden="true" class="exam-findings-overlay hidden" id="deepgramCommandsOverlay"><div class="exam-findings-backdrop" id="deepgramCommandsBackdrop"></div><div aria-labelledby="deepgramCommandsTitle" aria-modal="true" class="exam-findings-modal deepgram-commands-modal" role="dialog"><div class="exam-findings-head"><h3 id="deepgramCommandsTitle">Dictation commands</h3><button aria-label="Close commands" class="exam-findings-close" id="deepgramCommandsCloseBtn" type="button">×</button></div><div class="exam-findings-body deepgram-commands-body"><div class="exam-findings-card deepgram-commands-card"><div class="deepgram-commands-group"><div class="exam-findings-group-title">Structured notes</div><div class="deepgram-command-row"><div class="deepgram-command-phrase">start issues</div><div class="deepgram-command-desc">Starts a numbered list with <strong>1.</strong></div></div><div class="deepgram-command-row"><div class="deepgram-command-phrase">next issue</div><div class="deepgram-command-desc">Blank line, then the next numbered item</div></div><div class="deepgram-command-row"><div class="deepgram-command-phrase">next point</div><div class="deepgram-command-desc">New line with <strong>- </strong></div></div><div class="deepgram-command-row"><div class="deepgram-command-phrase">new paragraph</div><div class="deepgram-command-desc">Blank line within the current section</div></div><div class="deepgram-command-row"><div class="deepgram-command-phrase">end issues</div><div class="deepgram-command-desc">Ends the numbered list</div></div></div><div class="deepgram-commands-group"><div class="exam-findings-group-title">Punctuation</div><div class="deepgram-command-chips"><span class="exam-findings-chip">comma</span><span class="exam-findings-chip">period</span><span class="exam-findings-chip">colon</span><span class="exam-findings-chip">question mark</span><span class="exam-findings-chip">exclamation mark</span><span class="exam-findings-chip">new line</span><span class="exam-findings-chip">new paragraph</span></div></div><div class="deepgram-commands-group"><div class="exam-findings-group-title">Custom phrases</div><div class="tiny muted">Use <strong>spoken = written</strong>, for example <strong>use and ease = U&amp;Es</strong> or <strong>heff peff = HFpEF</strong>.</div></div></div></div></div></div>
 <script>
+// 29-debug-console.js  (mobile)
+//
+// General-purpose floating debug console for on-device log reading when no
+// Mac / Web Inspector is available. Mirrors console.log / warn / error /
+// info into a draggable, position-persisted overlay, and still passes
+// everything through to the real console.
+//
+// ── Enable (paste into the address bar of the running app, or run in any
+//    console you DO have access to) ───────────────────────────────────────
+//   localStorage.setItem('hah_debug_console','1'); location.reload();
+// ── Disable ────────────────────────────────────────────────────────────────
+//   localStorage.removeItem('hah_debug_console'); location.reload();
+//
+// Off by default — never renders for normal users. Safe to ship; it does
+// nothing at all unless the flag is set.
+//
+// Interactions:
+//   • tap the header bar  → expand / collapse the log list
+//   • drag the header bar  → reposition (persisted)
+//   • Copy button          → copies all visible log lines to the clipboard
+//   • Clear button         → empties the list
+//
+// This module is intentionally standalone (no app deps) so it can be lifted
+// into the desktop build or any other project unchanged. See
+// docs/DEBUG_CONSOLE.md for the reusable-template notes.
+
+window.HAH = window.HAH || { modules: {} };
+window.HAH.modules.debugConsole = true;
+
+(function () {
+  'use strict';
+
+  const SHOW_KEY = 'hah_debug_console';
+  const POS_KEY = 'hah_debug_console_pos';
+  const MAX_ENTRIES = 200;
+
+  function isEnabled() {
+    // v12.36.709 DIAGNOSTIC BUILD: forced on so it shows with no setup.
+    // REVERT to the localStorage-gated version below before any clean build:
+    //   try { return localStorage.getItem(SHOW_KEY) === '1'; } catch (_) { return false; }
+    return true;
+  }
+
+  // Bail out completely (and do not patch console) unless explicitly enabled.
+  if (!isEnabled()) return;
+
+  let panelEl = null, headerEl = null, listEl = null, countEl = null;
+  let expanded = true;
+  const entries = [];
+
+  function fmtTime(ts) {
+    const d = new Date(ts);
+    return d.toTimeString().slice(0, 8) + '.' + String(d.getMilliseconds()).padStart(3, '0');
+  }
+
+  function stringifyArg(a) {
+    if (a == null) return String(a);
+    if (typeof a === 'string') return a;
+    if (typeof a === 'number' || typeof a === 'boolean') return String(a);
+    try { return JSON.stringify(a); } catch (_) { return String(a); }
+  }
+
+  function colorFor(level) {
+    if (level === 'error') return '#f87171';
+    if (level === 'warn') return '#fbbf24';
+    if (level === 'info') return '#60a5fa';
+    return '#e5e7eb';
+  }
+
+  function ensurePanel() {
+    if (panelEl) return panelEl;
+    panelEl = document.createElement('div');
+    panelEl.id = 'hahDebugConsole';
+
+    let pos = null;
+    try { pos = JSON.parse(localStorage.getItem(POS_KEY) || 'null'); } catch (_) {}
+
+    panelEl.style.cssText = [
+      'position:fixed', 'z-index:100000',
+      'font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif',
+      'font-size:11px', 'line-height:1.3',
+      'background:rgba(17,24,39,0.94)', 'color:#f3f4f6',
+      'border-radius:10px', 'box-shadow:0 6px 20px rgba(0,0,0,0.45)',
+      'backdrop-filter:saturate(140%) blur(8px)',
+      '-webkit-backdrop-filter:saturate(140%) blur(8px)',
+      'border:1px solid rgba(255,255,255,0.10)', 'overflow:hidden',
+      'width:min(94vw,420px)', 'user-select:none', '-webkit-user-select:none',
+      'touch-action:none'
+    ].join(';');
+
+    if (pos && Number.isFinite(pos.x) && Number.isFinite(pos.y)) {
+      panelEl.style.left = pos.x + 'px';
+      panelEl.style.top = pos.y + 'px';
+    } else {
+      panelEl.style.left = '8px';
+      panelEl.style.top = 'calc(env(safe-area-inset-top,0px) + 8px)';
+    }
+
+    headerEl = document.createElement('div');
+    headerEl.style.cssText = 'padding:7px 10px;display:flex;align-items:center;gap:8px;white-space:nowrap;cursor:grab;background:rgba(255,255,255,0.04)';
+    headerEl.innerHTML =
+      '<span style="font-weight:700;color:#93c5fd">DEBUG</span>' +
+      '<span id="hahDbgCount" style="opacity:.7;font-variant-numeric:tabular-nums">0</span>' +
+      '<span style="flex:1"></span>' +
+      '<button id="hahDbgCopy" style="all:unset;cursor:pointer;padding:2px 8px;border-radius:6px;background:rgba(96,165,250,.22);color:#bfdbfe;font-weight:700">Copy</button>' +
+      '<button id="hahDbgClear" style="all:unset;cursor:pointer;padding:2px 8px;border-radius:6px;background:rgba(248,113,113,.18);color:#fecaca;font-weight:700">Clear</button>' +
+      '<button id="hahDbgHide" style="all:unset;cursor:pointer;padding:2px 8px;border-radius:6px;background:rgba(255,255,255,.08);color:#e5e7eb;font-weight:700">×</button>';
+    panelEl.appendChild(headerEl);
+    countEl = headerEl.querySelector('#hahDbgCount');
+
+    listEl = document.createElement('div');
+    listEl.style.cssText = 'padding:6px 10px 9px;border-top:1px solid rgba(255,255,255,0.08);max-height:46vh;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10.5px;-webkit-overflow-scrolling:touch';
+    panelEl.appendChild(listEl);
+
+    wireHeader();
+    wireButtons();
+
+    (document.body || document.documentElement).appendChild(panelEl);
+    return panelEl;
+  }
+
+  function wireButtons() {
+    headerEl.querySelector('#hahDbgCopy').addEventListener('click', function (e) {
+      e.stopPropagation();
+      const text = entries.map(en => `[${fmtTime(en.ts)}] ${en.level}: ${en.text}`).join('\n');
+      const done = () => { const b = headerEl.querySelector('#hahDbgCopy'); if (b) { const o = b.textContent; b.textContent = 'Copied'; setTimeout(() => { b.textContent = o; }, 1200); } };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done));
+        } else { fallbackCopy(text, done); }
+      } catch (_) { fallbackCopy(text, done); }
+    });
+    headerEl.querySelector('#hahDbgClear').addEventListener('click', function (e) {
+      e.stopPropagation();
+      entries.length = 0;
+      render();
+    });
+    headerEl.querySelector('#hahDbgHide').addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (panelEl) panelEl.style.display = 'none';
+    });
+  }
+
+  function fallbackCopy(text, done) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (done) done();
+    } catch (_) {}
+  }
+
+  function wireHeader() {
+    let pressTimer = null, dragging = false, moved = false;
+    let startX = 0, startY = 0, originLeft = 0, originTop = 0;
+
+    function onDown(clientX, clientY) {
+      dragging = false; moved = false;
+      startX = clientX; startY = clientY;
+      const rect = panelEl.getBoundingClientRect();
+      originLeft = rect.left; originTop = rect.top;
+      pressTimer = setTimeout(() => { dragging = true; headerEl.style.cursor = 'grabbing'; }, 140);
+    }
+    function onMove(clientX, clientY) {
+      const dx = clientX - startX, dy = clientY - startY;
+      if (!dragging && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) { dragging = true; clearTimeout(pressTimer); }
+      if (!dragging) return;
+      moved = true;
+      let nx = originLeft + dx, ny = originTop + dy;
+      const maxX = window.innerWidth - panelEl.offsetWidth - 4;
+      const maxY = window.innerHeight - 40;
+      nx = Math.max(4, Math.min(nx, maxX));
+      ny = Math.max(4, Math.min(ny, maxY));
+      panelEl.style.left = nx + 'px';
+      panelEl.style.top = ny + 'px';
+      panelEl.style.bottom = 'auto';
+    }
+    function onUp() {
+      clearTimeout(pressTimer);
+      headerEl.style.cursor = 'grab';
+      if (dragging && moved) {
+        try { localStorage.setItem(POS_KEY, JSON.stringify({ x: panelEl.offsetLeft, y: panelEl.offsetTop })); } catch (_) {}
+      } else {
+        // treat as tap → toggle expand
+        expanded = !expanded;
+        listEl.style.display = expanded ? 'block' : 'none';
+      }
+      dragging = false;
+    }
+
+    headerEl.addEventListener('touchstart', e => { const t = e.touches[0]; onDown(t.clientX, t.clientY); }, { passive: true });
+    headerEl.addEventListener('touchmove', e => { const t = e.touches[0]; onMove(t.clientX, t.clientY); }, { passive: true });
+    headerEl.addEventListener('touchend', onUp);
+    headerEl.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+    window.addEventListener('mousemove', e => { if (panelEl && (e.buttons & 1)) onMove(e.clientX, e.clientY); });
+    window.addEventListener('mouseup', () => { if (panelEl) onUp(); });
+  }
+
+  function render() {
+    if (!listEl) return;
+    if (countEl) countEl.textContent = String(entries.length);
+    listEl.innerHTML = entries.map(en =>
+      `<div style="padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:${colorFor(en.level)};word-break:break-word"><span style="opacity:.55">${fmtTime(en.ts)}</span> ${escapeHtml(en.text)}</div>`
+    ).join('');
+    listEl.scrollTop = listEl.scrollHeight;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  }
+
+  function push(level, args) {
+    const text = Array.prototype.map.call(args, stringifyArg).join(' ');
+    entries.push({ ts: Date.now(), level, text });
+    if (entries.length > MAX_ENTRIES) entries.shift();
+    ensurePanel();
+    if (panelEl.style.display === 'none') panelEl.style.display = '';
+    render();
+  }
+
+  // Patch console, preserving pass-through to the originals.
+  const orig = {};
+  ['log', 'info', 'warn', 'error'].forEach(function (level) {
+    orig[level] = console[level] ? console[level].bind(console) : function () {};
+    console[level] = function () {
+      try { push(level === 'log' ? 'log' : level, arguments); } catch (_) {}
+      try { orig[level].apply(null, arguments); } catch (_) {}
+    };
+  });
+
+  // Catch uncaught errors too.
+  window.addEventListener('error', function (e) {
+    try { push('error', ['[uncaught]', e.message, '@', (e.filename || '') + ':' + (e.lineno || '')]); } catch (_) {}
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    try { push('error', ['[promise]', (e.reason && e.reason.message) || e.reason]); } catch (_) {}
+  });
+
+  function init() {
+    ensurePanel();
+    push('info', ['debug console ready — tap header to collapse, drag to move, Copy to export']);
+  }
+  if (document.body) init();
+  else document.addEventListener('DOMContentLoaded', init);
+})();
+
+</script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.core = true;
 const STORAGE_KEY="hah_prototype_v12_36_162_pin_rebuild_data", UNDO_KEY="hah_prototype_v12_36_162_pin_rebuild_undo", NHS_EMAIL_KEY="hah_nhs_email", GRAPH_SETTINGS_KEY="hah_graph_settings", GRAPH_ACCOUNT_KEY="hah_graph_account", XAI_SETTINGS_KEY="hah_xai_settings", GEMINI_SETTINGS_KEY="hah_gemini_settings", PULSE_SETTINGS_KEY="hah_pulse_settings", ANTHROPIC_SETTINGS_KEY="hah_anthropic_settings", DEEPGRAM_SETTINGS_KEY="hah_deepgram_settings", CLINICAL_REVIEW_SETTINGS_KEY="hah_clinical_review_settings", PATIENT_LIST_DISPLAY_SETTINGS_KEY="hah_patient_list_display_settings", OPTIONS_SECTION_KEY="hah_options_open_section";
@@ -13087,8 +13338,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_709_inpatient_task_sheet_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_709_inpatient_task_sheet_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_709_badge_diagnostic_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_709_badge_diagnostic_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -13670,6 +13921,17 @@ function formatTaskBadgeCount(count){
 function updateNavTasksBadge(){
   const badge = $('navTasksBadge');
   const btn = $('navTasks');
+  // v12.36.709 TEMP DIAGNOSTIC (remove after badge issue diagnosed):
+  try{
+    const _c = (typeof getTaskCounts==='function') ? getTaskCounts() : null;
+    console.log('[badge] updateNavTasksBadge', {
+      badgeFound: !!badge,
+      btnFound: !!btn,
+      totalTasks: Array.isArray(tasks) ? tasks.length : 'tasks-not-array',
+      counts: _c,
+      sampleTask: Array.isArray(tasks) && tasks[0] ? { done: tasks[0].done, text: String(tasks[0].text||'').slice(0,20), patientId: tasks[0].patientId } : null
+    });
+  }catch(_e){ console.log('[badge] diagnostic error', _e); }
   if(!badge || !btn) return;
   const counts = getTaskCounts();
   const openCount = counts.open || 0;
@@ -13678,6 +13940,8 @@ function updateNavTasksBadge(){
   btn.title = label;
   badge.textContent = formatTaskBadgeCount(openCount);
   badge.classList.toggle('hidden', !openCount);
+  // v12.36.709 TEMP DIAGNOSTIC (remove after diagnosed):
+  console.log('[badge] result', { openCount, badgeText: badge.textContent, hasHiddenClass: badge.classList.contains('hidden') });
 }
 function updateNavPatientTasksBadge(){
   const badge = $('navPatientTasksBadge');
