@@ -13942,6 +13942,22 @@ function updateNavTasksBadge(){
   badge.classList.toggle('hidden', !openCount);
   // v12.36.709 TEMP DIAGNOSTIC (remove after diagnosed):
   console.log('[badge] result', { openCount, badgeText: badge.textContent, hasHiddenClass: badge.classList.contains('hidden') });
+  // v12.36.709 TEMP DIAGNOSTIC 2: computed geometry + paint, to tell apart
+  // "logic works but element is visually hidden/covered/offscreen".
+  try{
+    if(openCount){
+      const cs = getComputedStyle(badge);
+      const r = badge.getBoundingClientRect();
+      const beforeCs = getComputedStyle(badge, '::before');
+      console.log('[badge] paint', {
+        display: cs.display, visibility: cs.visibility, opacity: cs.opacity,
+        bg: cs.backgroundColor, color: cs.color, zIndex: cs.zIndex,
+        rect: { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height) },
+        inViewport: r.x >= 0 && r.y >= 0 && r.right <= innerWidth && r.bottom <= innerHeight,
+        beforeBg: beforeCs.backgroundColor, beforeZ: beforeCs.zIndex, beforeContent: beforeCs.content
+      });
+    }
+  }catch(_e){ console.log('[badge] paint error', String(_e)); }
 }
 function updateNavPatientTasksBadge(){
   const badge = $('navPatientTasksBadge');
