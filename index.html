@@ -2628,7 +2628,7 @@ body.hah-nav-stack .nav.nav-patient{
 .task-overlay-grab{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:9px 0 3px;cursor:grab;touch-action:none}
 .task-overlay-grab span{width:38px;height:5px;border-radius:3px;background:#d1d5db;transition:background .15s ease}
 .task-overlay-grab:active span{background:#b6bcc4}
-@media (prefers-reduced-motion: reduce){.task-overlay-modal{transition:none}.task-overlay-backdrop{transition:none}}.task-overlay-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 14px 12px;border-bottom:1px solid rgba(15,23,42,.06)}.task-overlay-head h3{margin:0;font-size:20px;line-height:1.2}.task-overlay-close{width:34px;height:34px;border:none;border-radius:999px;background:#f3f4f6;color:#111827;display:inline-flex;align-items:center;justify-content:center;font-size:24px;line-height:1;padding:0}.task-overlay-body{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch}.task-field{display:flex;flex-direction:column;gap:8px}.task-field label{margin:0;font-size:13px;font-weight:800;color:#111827}.task-field input,.task-field select,.task-field textarea{margin:0}.task-field textarea{min-height:94px;resize:vertical}.task-chip-row{display:flex;flex-wrap:wrap;gap:8px}.task-chip-btn{min-height:42px;padding:10px 12px;font-size:13px;font-weight:800}.task-overlay-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-top:1px solid rgba(15,23,42,.06);padding-bottom:calc(14px + env(safe-area-inset-bottom))}.task-overlay-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex:1}.task-overlay-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none}@keyframes task-check-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@keyframes task-card-slide-out{0%{opacity:1;transform:translateX(0) scale(1)}70%{opacity:1;transform:translateX(26px) scale(.995)}100%{opacity:0;transform:translateX(56px) scale(.985)}}@keyframes task-row-slide-out{0%{opacity:1;transform:translateX(0)}70%{opacity:1;transform:translateX(22px)}100%{opacity:0;transform:translateX(48px)}}
+@media (prefers-reduced-motion: reduce){.task-overlay-modal{transition:none}.task-overlay-backdrop{transition:none}}.task-overlay-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 14px 12px;border-bottom:1px solid rgba(15,23,42,.06)}.task-overlay-head h3{margin:0;font-size:20px;line-height:1.2}.task-overlay-close{width:34px;height:34px;border:none;border-radius:999px;background:#f3f4f6;color:#111827;display:inline-flex;align-items:center;justify-content:center;font-size:24px;line-height:1;padding:0}.task-overlay-body{flex:1;overflow:auto;padding:14px 16px;display:flex;flex-direction:column;gap:16px;-webkit-overflow-scrolling:touch}.task-field{display:flex;flex-direction:column;gap:7px}.task-field label{margin:0;font-size:13px;font-weight:700;color:#374151}.task-field input,.task-field select,.task-field textarea{margin:0}.task-field textarea{min-height:84px;resize:vertical}.task-chip-row{display:flex;gap:8px}.task-chip-btn{flex:1;min-height:44px;padding:11px 12px;font-size:15px;font-weight:700}.task-overlay-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-top:1px solid rgba(15,23,42,.06);padding-bottom:calc(14px + env(safe-area-inset-bottom))}.task-overlay-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex:1}.task-overlay-open .nav{transform:translateY(calc(100% + env(safe-area-inset-bottom) + 16px));opacity:0;pointer-events:none}@keyframes task-check-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@keyframes task-card-slide-out{0%{opacity:1;transform:translateX(0) scale(1)}70%{opacity:1;transform:translateX(26px) scale(.995)}100%{opacity:0;transform:translateX(56px) scale(.985)}}@keyframes task-row-slide-out{0%{opacity:1;transform:translateX(0)}70%{opacity:1;transform:translateX(22px)}100%{opacity:0;transform:translateX(48px)}}
 
 
 /* Patient log card (Summary tab) — replaces the v12.36.668 "Last board round" surface.
@@ -3068,11 +3068,11 @@ body.hah-nav-stack .nav.nav-patient{
 .task-list-add-cta:active{transform:scale(.99)}
 .task-list-add-cta svg{width:20px;height:20px}
 .task-list-done{margin-top:2px}
-.task-patient-locked{display:flex;align-items:center;gap:10px;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#f7f8fa}
+.task-patient-locked{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f7f8fa}
 .task-patient-locked-main{min-width:0;flex:1}
-.task-patient-locked-name{font-size:16px;font-weight:700;color:#111827;line-height:1.2;word-break:break-word}
-.task-patient-locked-meta{margin-top:2px;font-size:13px;font-weight:600;color:#667085;line-height:1.25}
-.task-patient-locked-tag{flex:0 0 auto;font-size:12px;font-weight:700;color:#475467;background:#eef0f3;padding:4px 10px;border-radius:999px}
+.task-patient-locked-name{font-size:15px;font-weight:600;color:#111827;line-height:1.2;word-break:break-word}
+.task-patient-locked-meta{margin-top:2px;font-size:12.5px;font-weight:500;color:#8a93a2;line-height:1.25}
+.task-patient-locked-tag{flex:0 0 auto;font-size:11px;font-weight:700;color:#667085;background:#eef0f3;padding:3px 9px;border-radius:999px}
 .task-list-meta{display:flex;align-items:center;gap:8px;margin-top:3px;font-size:13px;color:#667085;line-height:1.2}
 .task-list-time{font-weight:600}
 .task-list-pill{display:inline-flex;align-items:center;font-size:11px;font-weight:800;letter-spacing:.2px;padding:2px 8px;border-radius:999px}
@@ -3149,7 +3149,7 @@ body.hah-nav-stack .nav.nav-patient{
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_710_task_sheet_slideup_release.html; source=hospital_at_home_v12_36_710_task_sheet_slideup_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_711_task_sheet_refine_release.html; source=hospital_at_home_v12_36_711_task_sheet_refine_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3510,7 +3510,7 @@ body.hah-nav-stack .nav.nav-patient{
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_710_task_sheet_slideup_release.html</div><div>Source: hospital_at_home_v12_36_710_task_sheet_slideup_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_711_task_sheet_refine_release.html</div><div>Source: hospital_at_home_v12_36_711_task_sheet_refine_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -3905,7 +3905,7 @@ h b a one c = HbA1c" spellcheck="false" style="min-height:108px"></textarea>
 <div class="patient-context-sep"></div>
 <button class="patient-context-action danger" id="medContextDeleteBtn" type="button"><span>Delete medication</span><span class="patient-context-right">×</span></button>
 </div>
-</div><div aria-hidden="true" class="task-overlay hidden" id="taskOverlay"><div class="task-overlay-backdrop" id="taskOverlayBackdrop"></div><div aria-labelledby="taskOverlayTitle" aria-modal="true" class="card task-overlay-modal" id="taskOverlayModal" role="dialog"><div class="task-overlay-grab" id="taskOverlayGrab" aria-hidden="true"><span></span></div><div class="task-overlay-head"><button aria-label="Back to task list" class="task-overlay-back hidden" id="taskOverlayBackBtn" type="button"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="task-overlay-titlewrap"><h3 id="taskOverlayTitle">Add task</h3><div class="task-overlay-subtitle hidden" id="taskOverlaySubtitle"></div></div><button aria-label="Close tasks" class="task-overlay-close" id="taskOverlayCloseBtn" type="button">×</button></div><div class="task-overlay-body"><div class="task-list-pane hidden" id="taskListPane"></div><div class="task-form-pane" id="taskFormPane"><div class="task-field"><label for="taskTextInput">Task</label><input autocapitalize="sentences" autocomplete="off" enterkeyhint="done" id="taskTextInput" placeholder="Enter task" type="text"/></div><div class="task-field" id="taskPatientField"><label for="taskPatientSelect">Linked patient</label><select id="taskPatientSelect"></select><div class="task-patient-locked hidden" id="taskPatientLocked"><div class="task-patient-locked-main"><div class="task-patient-locked-name" id="taskPatientLockedName">Patient</div><div class="task-patient-locked-meta" id="taskPatientLockedMeta"></div></div><span class="task-patient-locked-tag">This patient</span></div></div><div class="task-field"><label>Urgency</label><input id="taskUrgentInput" type="hidden" value="0"/><div class="task-chip-row"><button class="choice-btn task-chip-btn selected" data-task-urgent="0" type="button">Not urgent</button><button class="choice-btn task-chip-btn" data-task-urgent="1" type="button">Urgent</button></div></div><div class="task-field"><label for="taskNoteInput">Note</label><textarea id="taskNoteInput" placeholder="Optional short note"></textarea></div></div></div><div class="task-overlay-footer" id="taskOverlayFormFooter"><button class="danger hidden" id="taskDeleteBtn" type="button">Delete</button><div class="task-overlay-actions"><button id="taskCancelBtn" type="button">Cancel</button><button class="primary" id="taskSaveBtn" type="button">Save</button></div></div><div class="task-overlay-footer hidden" id="taskOverlayListFooter"><div class="task-overlay-actions"><button class="primary" id="taskListDoneBtn" type="button">Done</button></div></div></div></div>
+</div><div aria-hidden="true" class="task-overlay hidden" id="taskOverlay"><div class="task-overlay-backdrop" id="taskOverlayBackdrop"></div><div aria-labelledby="taskOverlayTitle" aria-modal="true" class="card task-overlay-modal" id="taskOverlayModal" role="dialog"><div class="task-overlay-grab" id="taskOverlayGrab" aria-hidden="true"><span></span></div><div class="task-overlay-head"><button aria-label="Back to task list" class="task-overlay-back hidden" id="taskOverlayBackBtn" type="button"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="task-overlay-titlewrap"><h3 id="taskOverlayTitle">Add task</h3><div class="task-overlay-subtitle hidden" id="taskOverlaySubtitle"></div></div><button aria-label="Close tasks" class="task-overlay-close" id="taskOverlayCloseBtn" type="button">×</button></div><div class="task-overlay-body"><div class="task-list-pane hidden" id="taskListPane"></div><div class="task-form-pane" id="taskFormPane"><div class="task-field"><label for="taskTextInput">Task</label><input autocapitalize="sentences" autocomplete="off" enterkeyhint="done" id="taskTextInput" placeholder="Enter task" type="text"/></div><div class="task-field" id="taskPatientField"><label for="taskPatientSelect">Linked patient</label><select id="taskPatientSelect"></select><div class="task-patient-locked hidden" id="taskPatientLocked"><div class="task-patient-locked-main"><div class="task-patient-locked-name" id="taskPatientLockedName">Patient</div><div class="task-patient-locked-meta" id="taskPatientLockedMeta"></div></div><span class="task-patient-locked-tag">This patient</span></div></div><div class="task-field"><label>Urgency</label><input id="taskUrgentInput" type="hidden" value="0"/><div class="task-chip-row"><button class="choice-btn task-chip-btn selected" data-task-urgent="0" type="button">Not urgent</button><button class="choice-btn task-chip-btn" data-task-urgent="1" type="button">Urgent</button></div></div><div class="task-field"><label for="taskNoteInput">Note</label><textarea id="taskNoteInput" placeholder="Optional short note"></textarea></div></div></div><div class="task-overlay-footer" id="taskOverlayFormFooter"><button class="danger hidden" id="taskDeleteBtn" type="button">Delete</button><div class="task-overlay-actions"><button class="primary" id="taskSaveBtn" type="button">Save</button></div></div></div></div>
 <div class="weight-history-backdrop hidden" id="renalReviewBackdrop"></div>
 <div aria-labelledby="renalReviewTitle" aria-modal="true" class="weight-history-modal renal-review-modal hidden" id="renalReviewModal" role="dialog">
 <button aria-label="Close medication alerts" class="weight-history-close" id="renalReviewCloseBtn" type="button">×</button>
@@ -13341,8 +13341,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_710_task_sheet_slideup_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_710_task_sheet_slideup_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_711_task_sheet_refine_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_711_task_sheet_refine_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -14437,8 +14437,9 @@ function showTaskListPane(patientId){
   renderTaskListPane(id);
   if($('taskListPane')) $('taskListPane').classList.remove('hidden');
   if($('taskFormPane')) $('taskFormPane').classList.add('hidden');
+  // v12.36.710: list mode has no footer — grab handle + × are the close
+  // affordances. Hide the form footer.
   if($('taskOverlayFormFooter')) $('taskOverlayFormFooter').classList.add('hidden');
-  if($('taskOverlayListFooter')) $('taskOverlayListFooter').classList.remove('hidden');
   if($('taskOverlayBackBtn')) $('taskOverlayBackBtn').classList.add('hidden');
 }
 
@@ -14457,7 +14458,6 @@ function showTaskFormPane(opts={}){
   if($('taskOverlaySubtitle')) $('taskOverlaySubtitle').classList.add('hidden');
   if($('taskListPane')) $('taskListPane').classList.add('hidden');
   if($('taskFormPane')) $('taskFormPane').classList.remove('hidden');
-  if($('taskOverlayListFooter')) $('taskOverlayListFooter').classList.add('hidden');
   if($('taskOverlayFormFooter')) $('taskOverlayFormFooter').classList.remove('hidden');
   // Back button shows only when we arrived here from the in-patient list.
   if($('taskOverlayBackBtn')) $('taskOverlayBackBtn').classList.toggle('hidden', !lockToScope);
@@ -14522,26 +14522,11 @@ function initTasksUI(){
     closeBtn.dataset.bound = '1';
     closeBtn.onclick = ()=>closeTaskOverlay();
   }
-  const cancelBtn = $('taskCancelBtn');
-  if(cancelBtn && cancelBtn.dataset.bound !== '1'){
-    cancelBtn.dataset.bound = '1';
-    cancelBtn.onclick = ()=>{
-      // v12.36.709: if we're in a patient-scoped sheet, Cancel returns to
-      // the list (matching Back); otherwise it closes the sheet.
-      if(taskOverlayPatientScope){ showTaskListPane(taskOverlayPatientScope); }
-      else { closeTaskOverlay(); }
-    };
-  }
-  // v12.36.709: back button (form → list) and list-footer Done (close sheet).
+  // v12.36.710: back button (form → list when scoped, else closes).
   const backBtn = $('taskOverlayBackBtn');
   if(backBtn && backBtn.dataset.bound !== '1'){
     backBtn.dataset.bound = '1';
     backBtn.onclick = ()=>{ if(taskOverlayPatientScope) showTaskListPane(taskOverlayPatientScope); else closeTaskOverlay(); };
-  }
-  const listDoneBtn = $('taskListDoneBtn');
-  if(listDoneBtn && listDoneBtn.dataset.bound !== '1'){
-    listDoneBtn.dataset.bound = '1';
-    listDoneBtn.onclick = ()=>closeTaskOverlay();
   }
   const backdrop = $('taskOverlayBackdrop');
   if(backdrop && backdrop.dataset.bound !== '1'){
