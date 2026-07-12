@@ -3215,7 +3215,7 @@ textarea.is-pulled{background:#fff8e1;border-color:#f4d27a}
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_718_etag_concurrency_release.html; source=hospital_at_home_v12_36_718_etag_concurrency_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_719_ui_smoothness_release.html; source=hospital_at_home_v12_36_719_ui_smoothness_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3577,7 +3577,7 @@ textarea.is-pulled{background:#fff8e1;border-color:#f4d27a}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_718_etag_concurrency_release.html</div><div>Source: hospital_at_home_v12_36_718_etag_concurrency_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_719_ui_smoothness_release.html</div><div>Source: hospital_at_home_v12_36_719_ui_smoothness_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -4572,6 +4572,10 @@ function updatePatientMetricsUI(){
   });
 }
 function clearAppLocalData(){
+  // v12.36.719: drop any queued debounced saveData write — if its timer
+  // fired between the removeItem below and the reload, it would write the
+  // in-memory dataset straight back over the wipe.
+  try{ if(typeof cancelPendingSaveData==='function') cancelPendingSaveData(); }catch(_){}
   const keysToRemove=[
     STORAGE_KEY,
     UNDO_KEY,
@@ -8120,7 +8124,73 @@ function openJsonFolderLink(){
 window.HAH.sharedJsonStore={testJsonConnection,initialiseJsonStore,loadJsonPatientDataset,applyJsonDatasetToMobile,importHandoverRows,clearJsonPatientCache,loadJsonService,loadJsonPatient,saveJsonPatient,appendJsonAudit};
 
 </script><script>
-function saveData(t="Saved locally"){try{if(currentPatient && patients[currentPatient]) patients[currentPatient]._lastSavedAt = new Date().toISOString();localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,tasks:typeof tasks!=='undefined'?tasks:[],patientSortMode,patientSortDirection}));setSaveStatus(t); if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient(); if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'}); if(typeof updateClinicalSyncFooter==='function') updateClinicalSyncFooter();}catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}}
+// ─── v12.36.719 — saveData debounce (BEGIN) ──────────────────────────────────
+// saveData stringifies the ENTIRE dataset — every patient including their
+// embedded jsonRecord (full timelines, med histories) — synchronously into
+// localStorage. It's called from everywhere, including (pre-v719) every
+// keystroke via calculateNews's old tail, and from the nav-tab handlers right
+// as a section transition starts, so the stringify landed on the animation's
+// first frames. Split: the cheap user-visible side effects (status line,
+// sync footer, OneNote scheduling, _lastSavedAt stamp) stay immediate; the
+// stringify+setItem runs on a 250ms trailing debounce with a 1.2s max-wait so
+// continuous activity can't postpone persistence indefinitely.
+// Data-safety: flushPendingSaveData() is wired into initBackgroundFlush
+// (visibilitychange→hidden / pagehide / freeze, 07-startup) and the
+// update-reload path (06-runtime). cancelPendingSaveData() is called by
+// clearAppLocalData (00-core) so a queued write can't resurrect wiped data.
+const SAVE_DATA_DEBOUNCE_MS=250;
+const SAVE_DATA_MAX_WAIT_MS=1200;
+let _saveDataTimer=0;
+let _saveDataFirstQueuedAt=0;
+let _saveDataPendingMsg="Saved locally";
+function persistDataToStorage(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify({patients,currentPatient,deletedPatients,eventLogEntries,tasks:typeof tasks!=='undefined'?tasks:[],patientSortMode,patientSortDirection}));
+  }catch(e){
+    if(typeof setSaveStatus==='function') setSaveStatus("Save failed");
+  }
+}
+function flushPendingSaveData(){
+  if(!_saveDataTimer) return;
+  clearTimeout(_saveDataTimer);
+  _saveDataTimer=0;
+  _saveDataFirstQueuedAt=0;
+  persistDataToStorage();
+}
+function cancelPendingSaveData(){
+  if(!_saveDataTimer) return;
+  clearTimeout(_saveDataTimer);
+  _saveDataTimer=0;
+  _saveDataFirstQueuedAt=0;
+}
+function saveData(t="Saved locally"){
+  try{
+    _saveDataPendingMsg=t;
+    if(currentPatient && patients[currentPatient]) patients[currentPatient]._lastSavedAt = new Date().toISOString();
+    setSaveStatus(t);
+    if(typeof updateOneNoteUiForCurrentPatient==='function') updateOneNoteUiForCurrentPatient();
+    if(typeof scheduleOneNoteSyncForCurrentPatient==='function') scheduleOneNoteSyncForCurrentPatient({reason:'saveData'});
+    if(typeof updateClinicalSyncFooter==='function') updateClinicalSyncFooter();
+    const now=Date.now();
+    if(!_saveDataFirstQueuedAt) _saveDataFirstQueuedAt=now;
+    if(now-_saveDataFirstQueuedAt>=SAVE_DATA_MAX_WAIT_MS){
+      // Continuous activity has kept the trailing timer resetting for over
+      // a second — persist now rather than let the window keep sliding.
+      clearTimeout(_saveDataTimer);
+      _saveDataTimer=0;
+      _saveDataFirstQueuedAt=0;
+      persistDataToStorage();
+      return;
+    }
+    clearTimeout(_saveDataTimer);
+    _saveDataTimer=setTimeout(()=>{
+      _saveDataTimer=0;
+      _saveDataFirstQueuedAt=0;
+      persistDataToStorage();
+    }, SAVE_DATA_DEBOUNCE_MS);
+  }catch(e){if(typeof setSaveStatus==='function') setSaveStatus("Save failed")}
+}
+// ─── v12.36.719 — saveData debounce (END) ────────────────────────────────────
 
 const HAH_UI_STATE_KEY='hah_v12_36_ui_state';
 let hahUiStateCache=null;
@@ -8191,6 +8261,7 @@ function showSection(id) {
   hideAll();
   $(id).classList.remove("hidden");
   if(id === "patients"){
+    if(typeof renderPatientListIfDirty==='function') renderPatientListIfDirty(); // v12.36.719
     try{ window.scrollTo(0,0); }catch(e){}
     if(typeof restoreSectionScroll==='function') restoreSectionScroll('patients');
   }
@@ -9297,7 +9368,47 @@ function handlePatientSearchInput(value){
   patientSearchQuery = String(value || '');
   patientSearchVisible = true;
   updatePatientSearchUI();
-  renderPatientList();
+  // v12.36.719: was a full renderPatientList() per keystroke — innerHTML=""
+  // and a complete rebuild of every swipe-shell card. Now coalesced to one
+  // pass per frame, and the pass toggles .hidden on the existing cards
+  // instead of tearing them down: no listener rebinding, no layout storm,
+  // scroll position survives. Sort order is query-independent so the card
+  // order never changes under a filter. Falls back to a full render if the
+  // list hasn't been built yet.
+  schedulePatientSearchFilter();
+}
+let _patientSearchFilterRaf=0;
+function schedulePatientSearchFilter(){
+  if(_patientSearchFilterRaf) return;
+  _patientSearchFilterRaf=requestAnimationFrame(()=>{ _patientSearchFilterRaf=0; applyPatientSearchFilter(); });
+}
+function applyPatientSearchFilter(){
+  const list=$("patientList");
+  if(!list) return;
+  const shells=list.querySelectorAll('.swipe-shell[data-patient-id]');
+  const patientCount=Object.keys(patients||{}).length;
+  if(!shells.length && patientCount){ renderPatientList(); return; }
+  let visible=0;
+  shells.forEach(shell=>{
+    const id=shell.getAttribute('data-patient-id');
+    const p=patients[id];
+    const match=!!p && patientMatchesSearch(p);
+    shell.classList.toggle('hidden', !match);
+    if(match) visible++;
+  });
+  let empty=document.getElementById('patientSearchEmptyCard');
+  if(!visible && patientCount){
+    if(!empty){
+      empty=document.createElement('div');
+      empty.id='patientSearchEmptyCard';
+      empty.className='card';
+      empty.style.padding='14px 16px';
+      list.appendChild(empty);
+    }
+    empty.innerHTML=`<div class="tiny muted">${patientSearchQuery.trim() ? `No patients match “${escapeHtml(patientSearchQuery.trim())}”.` : "No patients yet."}</div>`;
+  }else if(empty){
+    empty.remove();
+  }
 }
 function getPatientListIssuesPreview(patient){
   const raw = String(patient && patient.form && patient.form.issues || '');
@@ -9864,6 +9975,7 @@ function toggleDnacprFormSeen(){
 }
 
 function renderPatientList() {
+  try{ _patientListDirty=false; }catch(_){ /* 04-medications not evaluated yet (startup) */ }
   const list = $("patientList");
   if(typeof updatePatientMetricsUI === "function") updatePatientMetricsUI();
   list.innerHTML = "";
@@ -10179,7 +10291,7 @@ function toggleVisitSelection(id) {
 function renderIVDrugButtons(div){const input=div.querySelector(".iv-medication"); const current=(input?.value||"").trim(); div.querySelectorAll("[data-drug]").forEach(btn=>{const drug=btn.dataset.drug||''; btn.classList.toggle('active', current===drug); btn.onclick=()=>{const next=((input?.value||'').trim()===drug)?'':drug; if(input) input.value=next; renderIVDrugButtons(div); renderDoseButtons(div,next); calculateNews();};});}
 function renderDoseButtons(div, drug){const holder=div.querySelector(".dose-preset-row"); if(!holder) return; const selected=(div.querySelector(".iv-dose")?.value||'').trim(); const activeDrug=String(drug||'').trim(); holder.innerHTML=""; (DOSE_PRESETS[activeDrug]||[]).forEach(d=>{const btn=document.createElement("button"); btn.type="button"; btn.className="dose-btn"+(selected===d?' active':''); btn.textContent=d; btn.onclick=()=>{const input=div.querySelector(".iv-dose"); const next=((input?.value||'').trim()===d)?'':d; if(input) input.value=next; renderDoseButtons(div,(div.querySelector('.iv-medication')?.value||'').trim()); calculateNews();}; holder.appendChild(btn)})}
 function syncIVEntryButtonState(div){if(!div) return; renderIVDrugButtons(div); renderDoseButtons(div,(div.querySelector('.iv-medication')?.value||'').trim());}
-function createIVEntry(entry={medication:"",dose:"",serialExpiry:"",details:""}){const div=document.createElement("div"); div.className="iv-entry"; div.innerHTML=`<label>Medication</label><input class="iv-medication" type="text" value="${escapeHtml(entry.medication||"")}" enterkeyhint="next" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Start typing drug name"><div class="drug-preset-row">${DRUG_PRESETS.map(d=>`<button type="button" class="drug-btn" data-drug="${d}">${d}</button>`).join("")}</div><div class="iv-dual-row"><div class="iv-dual-field iv-dose-field"><label>Dose</label><input class="iv-dose" type="text" value="${escapeHtml(entry.dose||"")}" enterkeyhint="next" placeholder="Dose"></div><div class="iv-dual-field iv-batch-field"><label>Batch/expiry</label><input class="iv-serial-expiry" type="text" value="${escapeHtml(entry.serialExpiry||"")}" enterkeyhint="next" placeholder="Batch and expiry"></div></div><div class="dose-preset-row"></div><label class="iv-details-label">Details</label><input class="iv-details" type="text" value="${escapeHtml(entry.details||"")}" enterkeyhint="next" placeholder="Optional notes">`; $("ivContainer").appendChild(div); const medicationInput=div.querySelector('.iv-medication'); const doseInput=div.querySelector('.iv-dose'); div.querySelectorAll("input").forEach(inp=>{inp.addEventListener("input",()=>{if(inp===medicationInput){renderIVDrugButtons(div); renderDoseButtons(div,medicationInput.value||'');}else if(inp===doseInput){renderDoseButtons(div,medicationInput?.value||'');} calculateNews();}); inp.addEventListener("change",()=>{if(inp===medicationInput){renderIVDrugButtons(div); renderDoseButtons(div,medicationInput.value||'');}else if(inp===doseInput){renderDoseButtons(div,medicationInput?.value||'');} calculateNews();});}); syncIVEntryButtonState(div); updateIVDeleteButton(); attachIVOverlayFieldNav()}
+function createIVEntry(entry={medication:"",dose:"",serialExpiry:"",details:""}){const div=document.createElement("div"); div.className="iv-entry"; div.innerHTML=`<label>Medication</label><input class="iv-medication" type="text" value="${escapeHtml(entry.medication||"")}" enterkeyhint="next" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Start typing drug name"><div class="drug-preset-row">${DRUG_PRESETS.map(d=>`<button type="button" class="drug-btn" data-drug="${d}">${d}</button>`).join("")}</div><div class="iv-dual-row"><div class="iv-dual-field iv-dose-field"><label>Dose</label><input class="iv-dose" type="text" value="${escapeHtml(entry.dose||"")}" enterkeyhint="next" placeholder="Dose"></div><div class="iv-dual-field iv-batch-field"><label>Batch/expiry</label><input class="iv-serial-expiry" type="text" value="${escapeHtml(entry.serialExpiry||"")}" enterkeyhint="next" placeholder="Batch and expiry"></div></div><div class="dose-preset-row"></div><label class="iv-details-label">Details</label><input class="iv-details" type="text" value="${escapeHtml(entry.details||"")}" enterkeyhint="next" placeholder="Optional notes">`; $("ivContainer").appendChild(div); const medicationInput=div.querySelector('.iv-medication'); const doseInput=div.querySelector('.iv-dose'); div.querySelectorAll("input").forEach(inp=>{inp.addEventListener("input",()=>{if(inp===medicationInput){renderIVDrugButtons(div); renderDoseButtons(div,medicationInput.value||'');}else if(inp===doseInput){renderDoseButtons(div,medicationInput?.value||'');} scheduleCalculateNews();}); inp.addEventListener("change",()=>{if(inp===medicationInput){renderIVDrugButtons(div); renderDoseButtons(div,medicationInput.value||'');}else if(inp===doseInput){renderDoseButtons(div,medicationInput?.value||'');} scheduleCalculateNews();});}); syncIVEntryButtonState(div); updateIVDeleteButton(); attachIVOverlayFieldNav()}
 function getIVEntries(){return Array.from(document.querySelectorAll(".iv-entry")).map(div=>({medication:div.querySelector(".iv-medication").value,dose:div.querySelector(".iv-dose").value,serialExpiry:div.querySelector(".iv-serial-expiry").value,details:(div.querySelector('.iv-details')?.value||'')}))}
 function updateIVDeleteButton(){
   const count = document.querySelectorAll("#ivContainer .iv-entry").length;
@@ -10859,8 +10971,8 @@ function createMedEntry(entry={name:"",dose:"",frequency:"",details:"",collapsed
   if(typeof updateMedicationReferenceCacheForEntry==='function') updateMedicationReferenceCacheForEntry(div);
   div.querySelector('.med-entry-delete').addEventListener('click',()=>deleteMedEntryByElement(div));
   div.querySelectorAll('input').forEach(inp=>{
-    inp.addEventListener('input',()=>{ if(inp.classList.contains('med-name') || inp.classList.contains('med-dose') || inp.classList.contains('med-frequency')) renderMedPresetButtons(div); if(typeof updateMedicationReferenceCacheForEntry==='function') updateMedicationReferenceCacheForEntry(div); refreshMedEntryHeader(div); updateMedSummary(); calculateNews(); });
-    inp.addEventListener('change',()=>{ if(inp.classList.contains('med-name') || inp.classList.contains('med-dose') || inp.classList.contains('med-frequency')) renderMedPresetButtons(div); if(typeof updateMedicationReferenceCacheForEntry==='function') updateMedicationReferenceCacheForEntry(div); refreshMedEntryHeader(div); updateMedSummary(); calculateNews(); });
+    inp.addEventListener('input',()=>{ if(inp.classList.contains('med-name') || inp.classList.contains('med-dose') || inp.classList.contains('med-frequency')) renderMedPresetButtons(div); if(typeof updateMedicationReferenceCacheForEntry==='function') updateMedicationReferenceCacheForEntry(div); refreshMedEntryHeader(div); updateMedSummary(); scheduleCalculateNews(); });
+    inp.addEventListener('change',()=>{ if(inp.classList.contains('med-name') || inp.classList.contains('med-dose') || inp.classList.contains('med-frequency')) renderMedPresetButtons(div); if(typeof updateMedicationReferenceCacheForEntry==='function') updateMedicationReferenceCacheForEntry(div); refreshMedEntryHeader(div); updateMedSummary(); scheduleCalculateNews(); });
   });
 }
 function deleteMedEntryByElement(div){
@@ -12322,6 +12434,73 @@ function updateObsColours(){
   setObsFieldState("bm", bmAb);
 }
 
+// ─── v12.36.719 — coalesced field-commit pipeline (BEGIN) ────────────────────
+// calculateNews used to end with `saveCurrentPatientForm(); saveData();
+// renderPatientList(); generateClinicalOutput()` — and because every clinical
+// field's input listener (plus ~40 other call sites: preset buttons, scan
+// appliers, overlay closes) funnels through calculateNews, EVERY KEYSTROKE in
+// EVERY field was doing a full-dataset localStorage stringify, a complete
+// patient-list innerHTML rebuild, and a clinical-output regeneration. During
+// Deepgram dictation (interim results stream as input events) that pipeline
+// ran continuously. The scorer had quietly become the app's autosave hook.
+//
+// The fix keeps that contract — every existing call site still gets
+// persist + output refresh, unchanged semantics — but makes the tail cheap:
+//   • form save + output regen coalesce to once per animation frame;
+//   • the localStorage stringify defers behind saveData's trailing debounce
+//     (see 03-ui-actions), so it leaves the keystroke path entirely;
+//   • the patient-list rebuild leaves the typing path altogether: while the
+//     detail pane is open the list is hidden behind it, so per-keystroke
+//     rebuilds were pure waste. The list is marked dirty instead and
+//     re-rendered at the moments it's about to become visible (nav taps,
+//     back button, edge-swipe start, showSection('patients')).
+// Data-safety: rAF does not fire while the page is hidden, so
+// flushScheduledFieldCommit() is wired into initBackgroundFlush's
+// visibilitychange/pagehide/freeze hooks (07-startup) and the update-reload
+// path (06-runtime) — the same discipline as the v12.36.6xx push flush.
+let _fieldCommitRaf=0;
+let _fieldCommitPatient=null;
+let _patientListDirty=false;
+function markPatientListDirty(){ _patientListDirty=true; }
+function renderPatientListIfDirty(){
+  if(!_patientListDirty) return;
+  _patientListDirty=false;
+  if(typeof renderPatientList==='function') renderPatientList();
+}
+function runClinicalFieldCommit(){
+  // The frame may fire after the world moved on — pane closed, or a
+  // different patient opened. saveCurrentPatientForm has its own
+  // detailLoadedForCurrentPatient guard; the patient check here stops a
+  // stale frame writing patient A's DOM values into patient B's form.
+  if(!detailLoadedForCurrentPatient || !patients[currentPatient]) return;
+  if(_fieldCommitPatient!==null && String(_fieldCommitPatient)!==String(currentPatient)) return;
+  saveCurrentPatientForm();
+  if(typeof generateClinicalOutput==='function') generateClinicalOutput();
+  markPatientListDirty();
+  saveData("Saved locally");
+}
+function scheduleClinicalFieldCommit(){
+  _fieldCommitPatient=currentPatient;
+  if(_fieldCommitRaf) return;
+  _fieldCommitRaf=requestAnimationFrame(()=>{ _fieldCommitRaf=0; runClinicalFieldCommit(); });
+}
+function flushScheduledFieldCommit(){
+  if(!_fieldCommitRaf) return;
+  try{ cancelAnimationFrame(_fieldCommitRaf); }catch(_){}
+  _fieldCommitRaf=0;
+  runClinicalFieldCommit();
+}
+// High-frequency input wiring (the 31-field listener block in 07-startup and
+// the dynamic med/IV row inputs) goes through this rather than calling
+// calculateNews directly: 'input' + 'change' double-fires and dictation
+// interim spam collapse to one recompute per frame. Discrete actions (button
+// taps, scan appliers, overlay closes) keep calling calculateNews()
+// synchronously — one call, nothing to coalesce.
+function scheduleCalculateNews(){
+  if(scheduleCalculateNews._raf) return;
+  scheduleCalculateNews._raf=requestAnimationFrame(()=>{ scheduleCalculateNews._raf=0; calculateNews(); });
+}
+// ─── v12.36.719 — coalesced field-commit pipeline (END) ──────────────────────
 function calculateNews(){
   const rr=$("rr").value, spo2=$("spo2").value, temp=$("temp").value, bp=$("bp").value, hr=$("hr").value;
   const sbp=getSystolicFromBP(bp), dbp=getDiastolicFromBP(bp), onOxygen=$("oxygen").value==="2";
@@ -12366,7 +12545,10 @@ function calculateNews(){
   updateObsColours();
   if(typeof renderBloodsSummaryCard==='function') renderBloodsSummaryCard();
   if(typeof updateAcpCardUI==='function') updateAcpCardUI();
-  saveCurrentPatientForm(); saveData(); renderPatientList(); generateClinicalOutput()
+  // v12.36.719: was `saveCurrentPatientForm(); saveData(); renderPatientList();
+  // generateClinicalOutput()` run synchronously on every call — see the
+  // pipeline block above this function for why that moved.
+  scheduleClinicalFieldCommit();
 }
 
 function getScoreSummaryLine(){
@@ -13930,8 +14112,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_718_etag_concurrency_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_718_etag_concurrency_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_719_ui_smoothness_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_719_ui_smoothness_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -14042,6 +14224,10 @@ async function applyGithubUpdateReload(){
   const cfg=parseGitHubPagesRepoFromLocation();
   const pendingSha=String(sessionStorage.getItem(GITHUB_UPDATE_PENDING_SHA_KEY)||localStorage.getItem(GITHUB_UPDATE_PENDING_SHA_KEY)||'').trim();
   if(!cfg || !pendingSha) return;
+  // v12.36.719: land any coalesced form commit and the debounced
+  // localStorage write before we reload out from under them.
+  try{ if(typeof flushScheduledFieldCommit==='function') flushScheduledFieldCommit(); }catch(_){}
+  try{ if(typeof flushPendingSaveData==='function') flushPendingSaveData(); }catch(_){}
   const btn=document.getElementById('githubUpdateNowBtn');
   if(btn){ btn.disabled=true; btn.textContent='Updating…'; }
   localStorage.setItem(GITHUB_UPDATE_SHA_KEY, pendingSha);
@@ -14133,6 +14319,9 @@ function HAH_closePatientSettle(closingId){
 function goBackToPatientList(opts){
   if(detailLoadedForCurrentPatient && typeof rememberCurrentPatientUiState==='function') rememberCurrentPatientUiState(true);
   if(detailLoadedForCurrentPatient) saveCurrentPatientForm();
+  // v12.36.719: the list underlay no longer refreshes per keystroke, so
+  // bring it up to date now, before it slides into view.
+  if(typeof renderPatientListIfDirty==='function') renderPatientListIfDirty();
   // v12.36.691: clear auto-reopen activity record on explicit back-nav.
   if(typeof clearLastPatientActivity === 'function') clearLastPatientActivity();
   if(typeof exitPatientReorderMode === 'function') exitPatientReorderMode();
@@ -14190,6 +14379,9 @@ function initPatientDetailEdgeSwipe(){
     const t=e.touches[0];
     if(t.clientX>28) return;
     if(e.target.closest("input, textarea, select, button, .choice-btn, .flow-btn, .drug-btn, .dose-btn, .med-dose-btn, .med-frequency-btn, .med-prn-btn")) return;
+    // v12.36.719: the drag reveals the list underlay — refresh it (no-op
+    // when clean) before any frames of it are shown.
+    if(typeof renderPatientListIfDirty==='function') renderPatientListIfDirty();
     detailEdgeSwipeState={startX:t.clientX,startY:t.clientY,dragging:false,dx:0};
     syncSharedHeaderHeight();
     if(window.HAHPageTransition) window.HAHPageTransition.gestureStart();
@@ -15965,11 +16157,21 @@ function initBackgroundFlush(){
     const now = Date.now();
     if (now - lastFlushAt < 250) return;
     lastFlushAt = now;
+    // v12.36.719: rAF doesn't fire while hidden, so run any pending
+    // coalesced field commit synchronously before the form-save below
+    // (it includes one), then make sure the debounced localStorage
+    // write actually lands before iOS suspends us.
+    try {
+      if (typeof flushScheduledFieldCommit === 'function') flushScheduledFieldCommit();
+    } catch(_) {}
     try {
       if (typeof detailLoadedForCurrentPatient !== 'undefined' && detailLoadedForCurrentPatient
           && typeof saveCurrentPatientForm === 'function') {
         saveCurrentPatientForm();
       }
+    } catch(_) {}
+    try {
+      if (typeof flushPendingSaveData === 'function') flushPendingSaveData();
     } catch(_) {}
     try {
       if (typeof flushPendingPushes === 'function') {
@@ -16748,7 +16950,11 @@ document.addEventListener("DOMContentLoaded",function(){
       if(isNoteToolbarTarget(e.target)) syncNoteToolbarSelection(e.target);
     }, true);
   });
-  ["rr","spo2","oxygen","temp","bp","bpLying","bpStanding1","bpStanding3","bpPosturalSymptoms","hr","hrPulse","weight","bm","bmTiming","bmTimingTime","bmTarget","conscious","confusion","issues","bloods","currently","pmh","socialHistory","examination","medsGiven","ivGiven","ivVIP","plan","forDischargeSummary","oxygenFlowOther","ceilingOfCare","acpNotes"].forEach(id=>{$(id).addEventListener("input",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()}); $(id).addEventListener("change",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); calculateNews()})});
+  // v12.36.719: these fire calculateNews via the rAF scheduler — 'input' +
+  // 'change' double-fires and dictation interim streams collapse to one
+  // recompute per frame. Side-effect toggles stay synchronous (they gate
+  // section visibility, which should track the tap instantly).
+  ["rr","spo2","oxygen","temp","bp","bpLying","bpStanding1","bpStanding3","bpPosturalSymptoms","hr","hrPulse","weight","bm","bmTiming","bmTimingTime","bmTarget","conscious","confusion","issues","bloods","currently","pmh","socialHistory","examination","medsGiven","ivGiven","ivVIP","plan","forDischargeSummary","oxygenFlowOther","ceilingOfCare","acpNotes"].forEach(id=>{$(id).addEventListener("input",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); scheduleCalculateNews()}); $(id).addEventListener("change",()=>{if(id==="ivGiven") updateIVFields(); if(id==="medsGiven") updateMedsFields(); if(id==="oxygen") updateOxygenFields(); scheduleCalculateNews()})});
   document.querySelectorAll("[data-flow]").forEach(btn=>{
     btn.onclick=()=>{
         document.querySelectorAll(".flow-btn").forEach(b=>b.classList.remove("active"));
