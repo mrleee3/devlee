@@ -2540,8 +2540,13 @@ body.hah-ghost-armed #appHeaderGhost{ visibility:visible; }
   transform:translateX(-24px);
   pointer-events:none;
   box-shadow:-12px 0 32px rgba(15,23,42,.16);
-  opacity:var(--hah-tp,0);
+  /* v723: no longer follows --hah-tp per frame (the variable is only
+     written at the endpoints now). Visible whenever a patient transition
+     or view is active; hidden at rest on the list where the off-screen
+     panel's shadow strip would otherwise peek in at the right edge. */
+  opacity:0;
 }
+body.hah-nav-stack #patientDetail.detail-overlay-active::after{ opacity:1; }
 
 /* Patient list underlay: parallaxes left.
  * translateX = tp * -28%   → tp0: 0, tp1: -28% */
@@ -3216,7 +3221,7 @@ textarea.is-pulled{background:#fff8e1;border-color:#f4d27a}
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_722_back_swipe_release.html; source=hospital_at_home_v12_36_722_back_swipe_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_723_swipe_fps_release.html; source=hospital_at_home_v12_36_723_swipe_fps_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3578,7 +3583,7 @@ textarea.is-pulled{background:#fff8e1;border-color:#f4d27a}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_722_back_swipe_release.html</div><div>Source: hospital_at_home_v12_36_722_back_swipe_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_723_swipe_fps_release.html</div><div>Source: hospital_at_home_v12_36_723_swipe_fps_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -14149,8 +14154,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_722_back_swipe_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_722_back_swipe_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_723_swipe_fps_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_723_swipe_fps_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -25977,17 +25982,59 @@ window.HAH.modules.pageTransition = true;
   }
 
   /* --- The single writer. Every animated element = f(progress). ---------- */
+  // v12.36.723: the seven elements that move. Cached lazily; cleared if a
+  // lookup misses so a late-created element (section bar) is picked up.
+  var MOVERS = null;
+  function movers(){
+    if(MOVERS && MOVERS.ok) return MOVERS;
+    var q = function(sel){ return document.querySelector(sel); };
+    MOVERS = {
+      header: q('#appHeader'), ghost: q('#appHeaderGhost'), detail: q('#patientDetail'),
+      list: q('#patients'), navGlobal: q('.nav.nav-global'), navPatient: q('.nav.nav-patient'),
+      bar: q('#sectionJumpBar')
+    };
+    MOVERS.ok = !!(MOVERS.header && MOVERS.ghost && MOVERS.detail && MOVERS.list && MOVERS.navGlobal && MOVERS.navPatient && MOVERS.bar);
+    return MOVERS;
+  }
+  function setT(el, x){ if(el) el.style.transform = x; }
+
   function applyProgress(p){
     p = p < 0 ? 0 : (p > 1 ? 1 : p);
     var root = document.documentElement;
     if(!root) return;
-    // One variable. CSS derives every transform/opacity from it via calc().
-    // Writing a unitless number keeps the CSS calc() expressions simple and
-    // avoids per-property JS string building. v705: collapsed the old
-    // separate --hah-tp-shadow (always == --hah-tp) into this single write
-    // to halve per-frame style-property mutations.
-    root.style.setProperty('--hah-tp', p === 0 ? '0' : (p === 1 ? '1' : p.toFixed(4)));
     state.progress = p;
+    var m = movers();
+    if(p === 0 || p === 1){
+      // Endpoints: hand ownership back to the stylesheet. The class-gated
+      // rest rules (hah-nav-stack, detail-overlay-active, ...) resolve
+      // every element from the variable exactly as v705 designed, and the
+      // one whole-document style recalc this costs coincides with the
+      // discrete START/SETTLE class flips that already force one.
+      root.style.setProperty('--hah-tp', p === 0 ? '0' : '1');
+      setT(m.header,''); setT(m.ghost,''); setT(m.detail,''); setT(m.list,'');
+      setT(m.navGlobal,''); setT(m.navPatient,''); setT(m.bar,'');
+      return;
+    }
+    // Mid-transition (every gesture touchmove / every rAF tick): write the
+    // transforms inline on the seven movers and leave --hah-tp alone.
+    //
+    // Why: --hah-tp is an inherited custom property on :root, so each write
+    // invalidated the computed style of EVERY element in the document
+    // (~3,300 nodes with a 30-patient list) before the compositor could
+    // move anything — measured ~5 ms/frame in desktop Chromium, i.e. the
+    // 30 fps swipe on the phone. An inline transform on a composited
+    // element is a compositor-only update: ~0.1 ms for all seven. The
+    // formulas are copied from the stylesheet rules verbatim.
+    var inv = 1 - p;
+    var sIn  = 'translate3d(' + (inv * 100).toFixed(3) + '%,0,0)';   // incoming from right
+    var sPar = 'translate3d(' + (p * -28).toFixed(3) + '%,0,0)';     // parallax left
+    setT(m.header, sIn + ' translateZ(0)');
+    setT(m.ghost, sPar);
+    setT(m.detail, sIn);
+    setT(m.list, sPar);
+    setT(m.navGlobal, 'translate3d(' + (p * -100).toFixed(3) + '%,0,0)');
+    setT(m.navPatient, sIn);
+    setT(m.bar, sIn);
   }
 
   /* --- Driver 1: timed animation (tap-open, button-close) ---------------- */
