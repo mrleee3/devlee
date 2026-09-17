@@ -3216,7 +3216,7 @@ textarea.is-pulled{background:#fff8e1;border-color:#f4d27a}
 #patientDetail #bloodsSummaryCard.is-collapsed .bloods-panel{display:none!important}
 
 </style></head>
-<!-- HAH build: release=hospital_at_home_v12_36_721_back_swipe_release.html; source=hospital_at_home_v12_36_721_back_swipe_source.zip -->
+<!-- HAH build: release=hospital_at_home_v12_36_722_back_swipe_release.html; source=hospital_at_home_v12_36_722_back_swipe_source.zip -->
 <body style="background:#0a84ff;">
 <div aria-hidden="true" id="appSnapshotShield"></div>
 <div aria-hidden="true" id="graphAuthReturnCover">
@@ -3578,7 +3578,7 @@ textarea.is-pulled{background:#fff8e1;border-color:#f4d27a}
 <div class="card">
 <button class="danger fullwidth" id="resetDemoBtn">Reset demo</button>
 </div>
-<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_721_back_swipe_release.html</div><div>Source: hospital_at_home_v12_36_721_back_swipe_source.zip</div></div>
+<div id="appFileNameLabel" style="margin-top:2px;margin-bottom:10px;text-align:center;word-break:break-word;opacity:.68;font-size:10px;line-height:1.2;color:#6b7280;padding:0 8px;"><div>Release: hospital_at_home_v12_36_722_back_swipe_release.html</div><div>Source: hospital_at_home_v12_36_722_back_swipe_source.zip</div></div>
 </div>
 
 <div class="options-page-panel hidden" data-options-page="security">
@@ -14149,8 +14149,8 @@ function setPatientDetailStackActive(active){
 </script><script>
 window.HAH = window.HAH || { modules: {} };
 window.HAH.modules.runtime = true;
-const APP_BUILD_FILENAME='hospital_at_home_v12_36_721_back_swipe_release.html';
-const APP_SOURCE_FILENAME='hospital_at_home_v12_36_721_back_swipe_source.zip';
+const APP_BUILD_FILENAME='hospital_at_home_v12_36_722_back_swipe_release.html';
+const APP_SOURCE_FILENAME='hospital_at_home_v12_36_722_back_swipe_source.zip';
 const APP_BUILD_ID=((APP_BUILD_FILENAME.match(/(v\d+(?:_\d+)*)/i)||[])[1]) || APP_BUILD_FILENAME.replace(/\.html?$/i,'');
 const GITHUB_UPDATE_SHA_KEY='hah_github_pages_index_sha';
 const GITHUB_UPDATE_PENDING_SHA_KEY='hah_github_pages_pending_sha';
@@ -14189,6 +14189,15 @@ function updateAppFileNameLabel(){
   sourceLine.textContent=`Source: ${APP_SOURCE_FILENAME}`;
   el.appendChild(releaseLine);
   el.appendChild(sourceLine);
+  // v12.36.722: session diagnostics for the native back-swipe question —
+  // how many history entries this session has (1 = native gesture inert)
+  // and whether the shell is being served by the service worker.
+  try{
+    const diag=document.createElement('div');
+    const swOn=!!(navigator.serviceWorker && navigator.serviceWorker.controller);
+    diag.textContent=`Session: history ${window.history?history.length:'?'} · shell cache ${swOn?'on':'off'}`;
+    el.appendChild(diag);
+  }catch(_){}
 }
 function parseGitHubPagesRepoFromLocation(){
   try{
@@ -14347,6 +14356,8 @@ async function checkForAppUpdate(force=false){
  * ===========================================================================*/
 
 function HAH_closePatientSettle(closingId){
+  // v12.36.722: list is about to be the visible page — refresh the back-swipe sentinel snapshot.
+  try{ if(typeof window.HAH_armHistorySentinel==='function') setTimeout(()=>window.HAH_armHistorySentinel(), 50); }catch(_){}
   // Discrete SETTLE for close. Runs when controller progress hits 0 — i.e.
   // #appHeader (patient content) is fully off-screen right and the ghost
   // (list content) has slid into its place. Only NOW is it safe to reset
@@ -17253,16 +17264,32 @@ document.addEventListener("DOMContentLoaded",function(){
   updateAppFileNameLabel();
   if(typeof requestPersistentStorage==='function') requestPersistentStorage();
   checkForAppUpdate();
-  // v12.36.721: if this session already has back-history (e.g. an older
-  // build's sign-in redirect, a mailto: hand-off), WebKit's native edge
-  // back-swipe is live and would navigate the PWA away from itself. Keep a
-  // sentinel entry on top: a completed native swipe then lands on popstate,
-  // which we turn into the app's own "back" and immediately re-arm. When
-  // history is a single entry we deliberately push nothing — pushing would
-  // be what *enables* the native gesture.
+  // v12.36.721/722: WebKit's native edge back-swipe is live whenever the
+  // standalone PWA has more than one history entry (a sign-in round trip,
+  // a mailto: hand-off). It cannot be disabled from JS and its animation
+  // cannot be suppressed, so three mitigations, all inert when history is a
+  // single entry (pushing anything then would be what ENABLES the gesture):
+  //   1. Log the situation so a device report can say which it is.
+  //   2. Ask WebKit not to start the gesture: a non-passive touchstart in
+  //      the outer 24px that calls preventDefault(). Honoured by some iOS
+  //      versions, ignored by others — unverified, harmless either way.
+  //   3. Keep a sentinel entry on top so a completed native swipe lands on
+  //      popstate (the app's own "back") and re-arms, instead of leaving
+  //      the app. The sentinel is (re)pushed only while the patient LIST is
+  //      on screen, because WebKit snapshots the page at pushState time and
+  //      that snapshot is what the native swipe reveals behind the card:
+  //      v721 pushed it at boot, so the reveal showed the splash screen.
+  try{ console.log('[H@H] history.length at boot: '+((window.history&&history.length)||'?')); }catch(_){}
   try{
-    if(window.history && history.length>1 && !history.state?.hahSentinel){
-      history.pushState({hahSentinel:true},'',window.location.href);
+    if(window.history && history.length>1){
+      let _sentinelPushes=0;
+      window.HAH_armHistorySentinel=function(){
+        try{
+          if(document.body.classList.contains('detail-view-active')) return;
+          if(_sentinelPushes<30){ history.pushState({hahSentinel:true},'',window.location.href); _sentinelPushes++; }
+          else history.replaceState({hahSentinel:true},'',window.location.href);
+        }catch(_){}
+      };
       window.addEventListener('popstate',()=>{
         try{
           const detail=$('patientDetail');
@@ -17271,6 +17298,21 @@ document.addEventListener("DOMContentLoaded",function(){
         }catch(_){}
         try{ history.pushState({hahSentinel:true},'',window.location.href); }catch(_){}
       });
+      document.addEventListener('touchstart',(e)=>{
+        try{
+          const t=e.touches && e.touches[0];
+          if(t && t.clientX<=24 && e.cancelable) e.preventDefault();
+        }catch(_){}
+      },{passive:false, capture:true});
+      // First arm once the list is actually visible (splash/lock gone).
+      const _armWhenListVisible=()=>{
+        const splash=$('appSplash'); const lock=$('lockScreen');
+        const splashGone=!splash || getComputedStyle(splash).display==='none' || getComputedStyle(splash).visibility==='hidden' || getComputedStyle(splash).opacity==='0';
+        const lockGone=!lock || lock.classList.contains('hidden') || getComputedStyle(lock).display==='none';
+        if(splashGone && lockGone){ window.HAH_armHistorySentinel(); return; }
+        setTimeout(_armWhenListVisible, 400);
+      };
+      setTimeout(_armWhenListVisible, 600);
     }
   }catch(_){}
   // Register the shell cache after boot work, never in its way.
